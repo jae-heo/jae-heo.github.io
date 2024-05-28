@@ -18,7 +18,7 @@ data_en = load_data('data/en.yml')
 data_ko = load_data('data/ko.yml')
 
 # HTML 파일 생성
-output_dir = 'docs'
+output_dir = 'docs'  # docs 폴더로 설정
 os.makedirs(output_dir, exist_ok=True)
 
 with open(os.path.join(output_dir, 'index_en.html'), 'w') as f:
