@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ header.title }}</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon 링크 추가 -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <header>
         <h1>{{ header.title }}</h1>
         <nav>
             <ul>
-                <li><a href="index.html" {% if lang == 'en' %}class="active"{% endif %}>English</a></li>
-                <li><a href="index_ko.html" {% if lang == 'ko' %}class="active"{% endif %}>한국어</a></li>
+                <li><a href="index.html">English</a></li>
+                <li><a href="index_ko.html">한국어</a></li>
             </ul>
         </nav>
     </header>
@@ -38,6 +38,9 @@
     <section id="contact">
         <h2>{{ sections.contact.title }}</h2>
         <p>{{ sections.contact.content }}</p>
+        <p>Email: <a href="mailto:{{ sections.contact.email }}">{{ sections.contact.email }}</a></p>
+        <p>Phone: <a href="tel:{{ sections.contact.phone }}">{{ sections.contact.phone }}</a></p>
+        <p>GitHub: <a href="{{ sections.contact.github }}" target="_blank">{{ sections.contact.github }}</a></p>
     </section>
     <footer>
         <p>{{ footer.copyright }}</p>

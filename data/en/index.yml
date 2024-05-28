@@ -12,6 +12,9 @@ sections:
     title: "Projects"
   contact:
     title: "Contact"
-    content: "Contact information written in English."
+    content: ""
+    email: "your.email@example.com"
+    phone: "010-1234-5678"
+    github: "https://github.com/yourusername"
 footer:
   copyright: "© 2024 Jaeyoung Heo"

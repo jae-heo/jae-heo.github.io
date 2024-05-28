@@ -12,6 +12,9 @@ sections:
     title: "프로젝트"
   contact:
     title: "연락처"
-    content: "연락처 정보를 한국어로 작성합니다."
+    content: ""
+    email: "your.email@example.com"
+    phone: "010-1234-5678"
+    github: "https://github.com/yourusername"
 footer:
   copyright: "© 2024 허재영"
