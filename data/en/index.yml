@@ -1,0 +1,17 @@
+header:
+  title: "Jaeyoung Heo"
+  nav:
+    about: "About Me"
+    projects: "Projects"
+    contact: "Contact"
+sections:
+  about:
+    title: "About Me"
+    content: "Hello, I'm Jaeyoung Heo.<br>I recently graduated from Soongsil University with a degree in Computer Science.<br>I have a strong interest in IT infrastructure automation and management, and I have gained relevant knowledge through various projects.<br>Although I am a newcomer, I am eagerly seeking opportunities to learn, grow, and contribute to the infrastructure team."
+  projects:
+    title: "Projects"
+  contact:
+    title: "Contact"
+    content: "Contact information written in English."
+footer:
+  copyright: "© 2024 Jaeyoung Heo"

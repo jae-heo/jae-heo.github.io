@@ -20,13 +20,20 @@
     <section id="about">
         <h2>{{ sections.about.title }}</h2>
         <div class="about-content">
-            <p>{{ sections.about.content }}</p>
+            <p>{{ sections.about.content | safe }}</p>
             <img src="me.jpeg" alt="me">
         </div>
     </section>
     <section id="projects">
         <h2>{{ sections.projects.title }}</h2>
-        <p>{{ sections.projects.content }}</p>
+        <ul>
+            {% for project in projects %}
+            <li>
+                <a href="{{ project.link }}">{{ project.title }}</a>
+                <p>{{ project.description }}</p>
+            </li>
+            {% endfor %}
+        </ul>
     </section>
     <section id="contact">
         <h2>{{ sections.contact.title }}</h2>

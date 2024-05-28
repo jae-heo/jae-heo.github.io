@@ -1,0 +1,17 @@
+header:
+  title: "허재영"
+  nav:
+    about: "소개"
+    projects: "프로젝트"
+    contact: "연락처"
+sections:
+  about:
+    title: "소개"
+    content: "안녕하세요, 허재영입니다.<br>저는 최근에 숭실대학교에서 컴퓨터 학부를 졸업했습니다.<br>특히 IT 인프라 자동화 및 관리에 대한 강한 관심을 가지고 있으며, 다양한 프로젝트를 통해 관련 지식을 쌓았습니다.<br>저는 신입이지만, 인프라 팀에서 배우고 성장하며 기여할 수 있는 기회를 열심히 찾고 있습니다."
+  projects:
+    title: "프로젝트"
+  contact:
+    title: "연락처"
+    content: "연락처 정보를 한국어로 작성합니다."
+footer:
+  copyright: "© 2024 허재영"

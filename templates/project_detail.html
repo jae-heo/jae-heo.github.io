@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <h1>{{ title }}</h1>
+        <nav>
+            <ul>
+                {% if lang == 'ko' %}
+                <li><a href="index_ko.html">한국어</a></li>
+                {% else %}
+                <li><a href="index.html">Home</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <section id="project-details">
+        <h2>{{ overview_title }}</h2>
+        <p>{{ overview }}</p>
+        
+        <h2>{{ role_title }}</h2>
+        <p>{{ role }}</p>
+        
+        <h2>{{ technologies_title }}</h2>
+        <ul>
+            {% for tech in technologies %}
+            <li>{{ tech }}</li>
+            {% endfor %}
+        </ul>
+        
+        <h2>{{ results_title }}</h2>
+        <p>{{ results }}</p>
+        
+        <h2>{{ repository_title }}</h2>
+        <p><a href="{{ repository }}">GitHub 리포지토리</a></p>
+    </section>
+    <footer>
+        <p>© 2024 허재영</p>
+    </footer>
+</body>
+</html>
