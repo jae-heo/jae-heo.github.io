@@ -1,5 +1,5 @@
 header:
-  title: 내 포트폴리오
+  title: 허재영
   nav:
     about: 소개
     projects: 프로젝트
@@ -15,4 +15,4 @@ sections:
     title: 연락처
     content: 연락처 정보를 한국어로 작성합니다.
 footer:
-  copyright: "© 2024 Your Name"
+  copyright: "© 2024 허재영"

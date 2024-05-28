@@ -1,5 +1,5 @@
 header:
-  title: My Portfolio
+  title: Jaeyoung Heo
   nav:
     about: About Me
     projects: Projects
@@ -15,4 +15,4 @@ sections:
     title: Contact
     content: Your contact information in English.
 footer:
-  copyright: "© 2024 Your Name"
+  copyright: "© 2024 Jaeyoung Heo"
