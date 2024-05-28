@@ -21,8 +21,10 @@ data_ko = load_data('data/ko.yml')
 output_dir = 'docs'  # docs 폴더로 설정
 os.makedirs(output_dir, exist_ok=True)
 
-with open(os.path.join(output_dir, 'index_en.html'), 'w') as f:
+# 기본 index.html 파일 생성 (영어 페이지로 설정)
+with open(os.path.join(output_dir, 'index.html'), 'w') as f:
     f.write(template.render(**data_en, lang='en'))
 
+# 한국어 페이지 생성
 with open(os.path.join(output_dir, 'index_ko.html'), 'w') as f:
     f.write(template.render(**data_ko, lang='ko'))
