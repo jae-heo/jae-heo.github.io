@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ header.title }}</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon 링크 추가 -->
 </head>
 <body>
     <header>
@@ -18,7 +19,10 @@
     </header>
     <section id="about">
         <h2>{{ sections.about.title }}</h2>
-        <p>{{ sections.about.content }}</p>
+        <div class="about-content">
+            <p>{{ sections.about.content }}</p>
+            <img src="me.jpeg" alt="me">
+        </div>
     </section>
     <section id="projects">
         <h2>{{ sections.projects.title }}</h2>
