@@ -1,5 +1,5 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f5f5f5;
@@ -9,22 +9,24 @@ body {
 header {
     background-color: #0d4452;
     color: white;
-    padding: 1rem 0;
+    padding: 1rem;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative; /* 상대 위치 설정 */
+    position: relative;
 }
 
 nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    position: absolute; /* 절대 위치 설정 */
-    top: 50%; /* 상단에서 50% 내려옴 */
-    right: 1rem; /* 오른쪽에서 1rem 떨어짐 */
-    transform: translateY(-50%); /* 수직 중앙 정렬 */
     display: flex;
-    gap: 0.5rem; /* 아이템 간의 간격 */
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
 }
 
 nav ul li {
@@ -35,14 +37,15 @@ nav ul li a {
     text-decoration: none;
     color: white;
     font-weight: bold;
-    padding: 0.25rem 0.5rem; /* 패딩을 줄여서 크기 작게 */
+    padding: 0.5rem 1rem;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
-    font-size: 0.875rem; /* 폰트 크기 줄이기 */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 0.875rem;
 }
 
 nav ul li a:hover {
     background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
 }
 
 nav ul li a.active {
@@ -56,6 +59,11 @@ section {
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+section:hover {
+    transform: translateY(-10px);
 }
 
 section h2 {
@@ -70,6 +78,7 @@ section p {
 .about-content {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* 수평 공간을 균등하게 분배 */
 }
 
 .about-content p {
@@ -78,17 +87,65 @@ section p {
 }
 
 .about-content img {
-    max-width: 150px; /* 이미지를 적절한 크기로 설정 */
+    max-width: 150px;
     border-radius: 50%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 1rem; /* 이미지와 텍스트 사이에 공간 추가 */
 }
 
 footer {
     text-align: center;
-    padding: 1rem 0;
+    padding: 1rem;
     background-color: #0d4452;
     color: white;
-    bottom: 0;
-    width: 100%;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .about-content {
+        flex-direction: row;
+    }
+
+    nav ul {
+        position: absolute;
+        top: 50%;
+        right: 2rem;
+        transform: translateY(-50%);
+    }
+
+    nav ul li a {
+        padding: 0.25rem 0.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 767px) {
+    nav ul {
+        justify-content: center;
+        position: static;
+        transform: none;
+    }
+
+    header {
+        padding: 1rem 0;
+    }
+
+    section {
+        margin: 1rem;
+    }
+
+    .about-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-content p {
+        margin-right: 0;
+    }
+
+    .about-content img {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
 }
