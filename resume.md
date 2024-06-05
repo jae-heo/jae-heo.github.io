@@ -1,14 +1,67 @@
 ---
 layout: page
-title: Résumé
-subtitle: An awesome person
+title: Resume
+subtitle: DevOps
 ---
 
 <span style="float: right; "><a href="{{ '/assets/resume.pdf' | prepend: site.baseurl }}"><strong>> Download as PDF</strong></a> </span>
 <br>
 
 ### SKILLS
-``` Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sed porttitor mi. In bibendum tortor nec massa finibus, id ultricies urna pulvinar. Sed congue blandit est non sagittis. In eget lobortis ipsum. Quisque id nisl nisl. Donec nec dapibus diam. Donec vel euismod nisi.  ```  
+<style>
+  .skills-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .skills-item {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  .skills-item ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+</style>
+
+<div class="skills-container">
+  <div class="skills-item">
+    <strong>Programming Languages</strong>
+    <ul>
+      <li>Python</li>
+      <li>Java</li>
+      <li>C</li>
+      <li>Rust (learning)</li>
+    </ul>
+  </div>
+  <div class="skills-item">
+    <strong>DevOps Tools</strong>
+    <ul>
+      <li>Docker</li>
+      <li>Cloud Platforms (GCP, AWS)</li>
+      <li>Github Actions</li>
+      <li>Prometheus</li>
+      <li>Grafana</li>
+    </ul>
+  </div>
+  <div class="skills-item">
+    <strong>Backend</strong>
+    <ul>
+      <li>FastAPI</li>
+      <li>JWT</li>
+      <li>Database (PostgreSQL, MSSQL)</li>
+    </ul>
+  </div>
+  <div class="skills-item">
+    <strong>Working On</strong>
+    <ul>
+      <li>Kubernetes</li>
+      <li>Ansible</li>
+      <li>Terraform</li>
+    </ul>
+  </div>
+</div>
 
 ### PROJECTS
 **Title** - Description - Place <span style="float: right; ">Time span</span>  
