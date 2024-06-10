@@ -42,51 +42,88 @@
       font-weight: 400; }
 
   strong {
-    color: #16a085; }
+    color: #16a085;
+    font-weight: 500;  }
 
   .wrapper {
     max-width: 800px;
     margin: 60px auto; }
 
 /* =Header *//*************************************************************/
-  .header {
-    overflow: hidden; }
+.header {
+  overflow: hidden;
+}
 
-  .navigation {
-    float: left; }
+.navigation {
+  float: left;
+}
 
-  .logo {
-    font-size: 300%;
-    font-weight: 700;
-    color: #16a085;
-    display: block; }
+.logo {
+  font-size: 300%;
+  font-weight: 700;
+  color: #16a085;
+  display: block;
+}
 
-  .menu {
-    color: #828282;
-    font-size: 150%;
-    margin: 0px;
-    margin-top: 6px;
-    padding: 0px;
-    list-style-type: none; }
+.menu {
+  color: #828282;
+  font-size: 150%;
+  margin: 0px;
+  margin-top: 6px;
+  padding: 0px;
+  list-style-type: none;
+}
 
-  .menu__entry {
-    display: inline-block;
-    margin-right: 35px; }
-    .menu__entry:last-child {
-      margin-right: 0px; }
+.menu__entry {
+  display: inline-block;
+  margin-right: 35px;
+}
+.menu__entry:last-child {
+  margin-right: 0px;
+}
 
-  .menu__entry a {
-    font-weight: 400; }
+.menu__entry a {
+  font-weight: 400;
+}
 
-  .social-links {
-    float: right;
-    font-size: 150%;
-    color: #828282;
-    list-style-type: none; }
+.social-links {
+  float: right;
+  font-size: 150%;
+  color: #828282;
+  list-style-type: none;
+}
 
-  .social-links__entry {
-    display: inline-block;
-    margin-left: 10px; }
+.social-links__entry {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.language-selector {
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 50%; /* 언어 선택 버튼 크기 조절 */
+}
+
+.language-selector a {
+  text-decoration: none;
+  color: #828282;
+  margin-left: 5px;
+}
+
+.language-selector a {
+  text-decoration: none;
+  color: #828282;
+  margin: 0 5px; /* 좌우 공백을 동일하게 설정 */
+}
+
+.language-selector span {
+  margin: 0 5px; /* | 기호의 좌우 공백을 동일하게 설정 */
+}
+
+
+.language-selector a:hover {
+  text-decoration: underline;
+}
 
 /* =Titles *//*************************************************************/
   .page-title {
@@ -94,11 +131,11 @@
     text-align: center; }
 
   .page-title__text {
-    font-weight: 700;
-    font-size: 150%; }
+    font-weight: 600;
+    font-size: 110%; }
 
   .page-title__subtitle {
-    font-weight: 400;
+    font-weight: 300;
     font-size: 75%;
     color: #828282; }
 
@@ -109,7 +146,7 @@
 
   .post-teaser {
     margin-bottom: 15px;
-    font-weight: 700; }
+    font-weight: 300; }
 
   .post-teaser__title {
     font-size: 100%;
@@ -128,7 +165,7 @@
 
   .empty-post-list {
     font-size: 150%;
-    font-weight: 700;
+    font-weight: 300;
     color: #333333;
     text-align: center; }
 

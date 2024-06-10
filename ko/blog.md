@@ -5,12 +5,12 @@ subtitle: Welcome to Jae's tech blog
 ---
 
 <div>
-{% assign postsCategory = site.posts | group_by_exp:"post", "post.categories"  %}
+{% assign postsCategory = site.posts | where: "lang", "ko" | group_by_exp:"post", "post.categories"  %}
 {% for category in postsCategory %}
 <h4 class="post-teaser__month">
 <strong>
 {% if category.name %} 
-- - - - -  {{ category.name }} - - - - - 
+- - - - -  {{ category.name[1]}} - - - - - 
 {% else %} 
 {{ Print }} 
 {% endif %}

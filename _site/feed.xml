@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-10T19:11:06+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-10T22:00:38+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
 </subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry><title type="html">Adding Comment Functionality with Utterances</title><link href="http://localhost:4000/tutorial/2024/06/10/hi.html" rel="alternate" type="text/html" title="Adding Comment Functionality with Utterances" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/tutorial/2024/06/10/hi</id><content type="html" xml:base="http://localhost:4000/tutorial/2024/06/10/hi.html"><![CDATA[<p>Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I’ll walk you through how to add Utterances to your Jekyll blog.</p>
 
 <h3 id="what-is-utterances">What is Utterances?</h3>
@@ -53,7 +53,61 @@
   <li>Open your Jekyll blog project.</li>
   <li>Navigate to the <code class="language-plaintext highlighter-rouge">_layouts</code> directory and open <code class="language-plaintext highlighter-rouge">post.html</code> (or the layout file you use for posts).</li>
   <li>Paste the Utterances script where you want the comments to appear. For example:</li>
-</ol>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="tutorial" /><summary type="html"><![CDATA[Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I’ll walk you through how to add Utterances to your Jekyll blog.]]></summary></entry><entry><title type="html">Welcome to My Tech Blog!</title><link href="http://localhost:4000/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="Welcome to My Tech Blog!" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="http://localhost:4000/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>Hello, and welcome to my tech blog!</p>
+</ol>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="tutorial" /><summary type="html"><![CDATA[Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I’ll walk you through how to add Utterances to your Jekyll blog.]]></summary></entry><entry xml:lang="en"><title type="html">Adding Comment Functionality to Your GitHub Blog Using Utterances</title><link href="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Adding Comment Functionality to Your GitHub Blog Using Utterances" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I’ll walk you through how to add Utterances to your Jekyll blog.</p>
+
+<h3 id="what-is-utterances">What is Utterances?</h3>
+
+<p>Utterances is a lightweight comments widget built on GitHub Issues. It allows you to integrate comments into your blog by linking to a GitHub repository where each post corresponds to an issue. This way, you can leverage GitHub’s robust issue management system for handling comments.</p>
+
+<h3 id="advantages-of-using-utterances">Advantages of Using Utterances</h3>
+
+<ol>
+  <li><strong>Simple Setup</strong>: Integrates easily with any static site generator.</li>
+  <li><strong>GitHub Integration</strong>: Utilizes GitHub’s existing issue tracking and notification system.</li>
+  <li><strong>Free and Open Source</strong>: No cost involved and you can customize it if needed.</li>
+  <li><strong>Markdown Support</strong>: Comments support GitHub-flavored Markdown.</li>
+  <li><strong>Spam Prevention</strong>: Users must sign in with GitHub, reducing spam.</li>
+</ol>
+
+<h3 id="disadvantages-of-using-utterances">Disadvantages of Using Utterances</h3>
+
+<ol>
+  <li><strong>GitHub Account Required</strong>: Commenters must have a GitHub account.</li>
+  <li><strong>Public Repository</strong>: Utterances works only with public repositories.</li>
+  <li><strong>Mixed Issues</strong>: Comments and project issues might mix if not managed properly.</li>
+</ol>
+
+<h3 id="step-by-step-guide-to-adding-utterances">Step-by-Step Guide to Adding Utterances</h3>
+
+<h4 id="step-1-create-a-github-repository">Step 1: Create a GitHub Repository</h4>
+
+<p>First, you need a GitHub repository to store the comments. You can use an existing repository or create a new one dedicated to comments.</p>
+
+<ol>
+  <li>Go to <a href="https://github.com">GitHub</a> and sign in.</li>
+  <li>Click on the “New” button to create a new repository.</li>
+  <li>Name your repository, for example, <code class="language-plaintext highlighter-rouge">blog-comments</code>.</li>
+  <li>Set the repository to public.</li>
+  <li>Click “Create repository”.</li>
+</ol>
+
+<h4 id="step-2-configure-utterances">Step 2: Configure Utterances</h4>
+
+<ol>
+  <li>Visit the <a href="https://utteranc.es/">Utterances website</a>.</li>
+  <li>Scroll down to the configuration section.</li>
+  <li>Select the repository you created for comments.</li>
+  <li>Choose the issue term you want to use (e.g., pathname, URL, title).</li>
+  <li>Copy the provided script.</li>
+</ol>
+
+<h4 id="step-3-add-utterances-to-your-jekyll-blog">Step 3: Add Utterances to Your Jekyll Blog</h4>
+
+<ol>
+  <li>Open your Jekyll blog project.</li>
+  <li>Navigate to the <code class="language-plaintext highlighter-rouge">_layouts</code> directory and open <code class="language-plaintext highlighter-rouge">post.html</code> (or the layout file you use for posts).</li>
+  <li>Paste the Utterances script where you want the comments to appear. For example:</li>
+</ol>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><summary type="html"><![CDATA[Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I’ll walk you through how to add Utterances to your Jekyll blog.]]></summary></entry><entry xml:lang="en"><title type="html">Welcome to My Tech Blog!</title><link href="http://localhost:4000/en/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="Welcome to My Tech Blog!" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/en/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="http://localhost:4000/en/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>Hello, and welcome to my tech blog!</p>
 
 <h3 id="about-this-blog">About This Blog</h3>
 
@@ -78,4 +132,85 @@
 <p>Thank you for visiting my blog. Stay tuned for the first series of posts coming soon!</p>
 
 <p>Best,<br />
-Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="general" /><summary type="html"><![CDATA[Hello, and welcome to my tech blog!]]></summary></entry></feed>
+Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="general" /><summary type="html"><![CDATA[Hello, and welcome to my tech blog!]]></summary></entry><entry xml:lang="ko"><title type="html">Utterances를 이용해 깃허브 블로그 댓글 기능 추가</title><link href="http://localhost:4000/ko/%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Utterances를 이용해 깃허브 블로그 댓글 기능 추가" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/ko/%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="http://localhost:4000/ko/%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다.
+이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.</p>
+
+<h3 id="utterances란-무엇인가요">Utterances란 무엇인가요?</h3>
+
+<p>Utterances는 GitHub Issues를 기반으로 한 가벼운 댓글 위젯입니다. 깃허브의 이슈를 이용해 댓글을 작성할 수 있도록 합니다.</p>
+
+<h3 id="utterances의-장점">Utterances의 장점</h3>
+
+<ol>
+  <li><strong>간단한 설정</strong>: 어떤 정적 사이트 생성기와도 쉽게 통합됩니다.</li>
+  <li><strong>GitHub 통합</strong>: GitHub의 기존 이슈 추적 및 알림 시스템을 활용합니다.</li>
+  <li><strong>무료 및 오픈 소스</strong>: 비용이 들지 않으며 필요에 따라 커스터마이징이 가능합니다.</li>
+  <li><strong>마크다운 지원</strong>: 댓글이 GitHub-flavored Markdown을 지원합니다.</li>
+  <li><strong>스팸 방지</strong>: 사용자가 GitHub에 로그인해야 하므로 스팸이 줄어듭니다.</li>
+</ol>
+
+<h3 id="utterances의-단점">Utterances의 단점</h3>
+
+<ol>
+  <li><strong>GitHub 계정 필요</strong>: 댓글 작성자는 GitHub 계정이 있어야 합니다.</li>
+  <li><strong>공개 리포지토리</strong>: Utterances는 공개 리포지토리에서만 작동합니다.</li>
+  <li><strong>혼합된 이슈</strong>: 댓글과 프로젝트 이슈가 제대로 관리되지 않으면 혼합될 수 있습니다.</li>
+</ol>
+
+<h3 id="utterances-추가하는-단계별-가이드">Utterances 추가하는 단계별 가이드</h3>
+
+<h4 id="1단계-github-리포지토리-생성">1단계: GitHub 리포지토리 생성</h4>
+
+<p>먼저 댓글을 저장할 GitHub 리포지토리가 필요합니다. 기존 리포지토리를 사용할 수도 있고, 댓글 전용 새 리포지토리를 만들 수도 있습니다.</p>
+
+<ol>
+  <li><a href="https://github.com" target="_blank">GitHub</a>에 접속하여 로그인합니다.</li>
+  <li>“New” 버튼을 클릭하여 새 리포지토리를 만듭니다.</li>
+  <li>리포지토리 이름을 예를 들어 <code class="language-plaintext highlighter-rouge">blog-comments</code>로 설정합니다.</li>
+  <li>리포지토리를 공개로 설정합니다.</li>
+  <li>“Create repository”를 클릭합니다.</li>
+</ol>
+
+<h4 id="2단계-utterances-설정">2단계: Utterances 설정</h4>
+
+<ol>
+  <li><a href="https://utteranc.es/">Utterances 웹사이트</a>를 방문합니다.</li>
+  <li>아래로 스크롤하여 설정 섹션으로 이동합니다.</li>
+  <li>댓글용으로 생성한 리포지토리를 선택합니다.
+<img src="image.png" alt="alt text" /></li>
+  <li>사용할 이슈 항목(term)을 선택합니다 (예: 경로명, URL, 제목).</li>
+  <li>제공된 스크립트를 복사합니다.</li>
+</ol>
+
+<h4 id="3단계-jekyll-블로그에-utterances-추가">3단계: Jekyll 블로그에 Utterances 추가</h4>
+
+<ol>
+  <li>Jekyll 블로그 프로젝트를 엽니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">_layouts</code> 디렉토리로 이동하여 <code class="language-plaintext highlighter-rouge">post.html</code> (또는 게시물 레이아웃 파일)을 엽니다.</li>
+  <li>댓글이 나타나길 원하는 위치에 Utterances 스크립트를 붙여넣습니다. 예를 들어:</li>
+</ol>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="튜토리얼" /><summary type="html"><![CDATA[깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다. 이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.]]></summary></entry><entry xml:lang="ko"><title type="html">Welcome to My Tech Blog!</title><link href="http://localhost:4000/ko/%EC%9D%BC%EB%B0%98/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="Welcome to My Tech Blog!" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/ko/%EC%9D%BC%EB%B0%98/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="http://localhost:4000/ko/%EC%9D%BC%EB%B0%98/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>Hello, and welcome to my tech blog!</p>
+
+<h3 id="about-this-blog">About This Blog</h3>
+
+<p>I’m excited to launch this blog where I will be sharing insights, tutorials, and discussions on various tech topics. The primary focus of this blog will be on software development, cloud computing, and emerging technologies. Whether you’re a seasoned developer or just starting out, I hope you’ll find something valuable here.</p>
+
+<h3 id="about-me">About Me</h3>
+
+<p>My name is Jaeyoung Heo, and I am passionate about technology and software development. Although I am just starting my journey in the tech industry, I am eager to learn and grow. I created this blog to share what I learn along the way, document my progress, and connect with others in the tech community.</p>
+
+<h3 id="what-to-expect">What to Expect</h3>
+
+<ul>
+  <li><strong>Learning Journey</strong>: I’ll be sharing my experiences as I learn new technologies, programming languages, and frameworks.</li>
+  <li><strong>Tutorials and Guides</strong>: Step-by-step guides to help you understand and implement various technologies.</li>
+  <li><strong>Projects</strong>: I’ll be showcasing projects I’m working on and sharing the lessons learned from them.</li>
+</ul>
+
+<h3 id="lets-connect">Let’s Connect!</h3>
+
+<p>I highly value feedback and would love to hear your thoughts on my posts. Feel free to leave comments, or connect with me via the email, GitHub, or LinkedIn buttons on the top right corner of this page.</p>
+
+<p>Thank you for visiting my blog. Stay tuned for the first series of posts coming soon!</p>
+
+<p>Best,<br />
+Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="일반" /><summary type="html"><![CDATA[Hello, and welcome to my tech blog!]]></summary></entry></feed>

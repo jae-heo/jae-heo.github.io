@@ -4,6 +4,7 @@ title: "Welcome to My Tech Blog!"
 subtitle: "Exploring the world of technology, one post at a time."
 date: 2024-06-10 18:00:00 +0900
 categories: ["general"]
+lang: en
 ---
 
 Hello, and welcome to my tech blog!
