@@ -29,10 +29,9 @@ subtitle: DevOps
   <div class="skills-item">
     <strong>Programming Languages</strong>
     <ul>
-      <li>Python</li>
-      <li>Java</li>
-      <li>C</li>
-      <li>Rust (learning)</li>
+      <li>Primary: Python</li>
+      <li>Secondary: Java/C</li>
+      <li>Learning: Rust</li>
     </ul>
   </div>
   <div class="skills-item">
@@ -41,8 +40,7 @@ subtitle: DevOps
       <li>Docker</li>
       <li>Cloud Platforms (GCP, AWS)</li>
       <li>Github Actions</li>
-      <li>Prometheus</li>
-      <li>Grafana</li>
+      <li>Terraform</li>
     </ul>
   </div>
   <div class="skills-item">
@@ -58,7 +56,9 @@ subtitle: DevOps
     <ul>
       <li>Kubernetes</li>
       <li>Ansible</li>
-      <li>Terraform</li>
+
+      <li>Prometheus</li>
+      <li>Grafana</li>
     </ul>
   </div>
 </div>
