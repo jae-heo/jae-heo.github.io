@@ -1,59 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-10T22:00:38+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
-</subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry><title type="html">Adding Comment Functionality with Utterances</title><link href="http://localhost:4000/tutorial/2024/06/10/hi.html" rel="alternate" type="text/html" title="Adding Comment Functionality with Utterances" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/tutorial/2024/06/10/hi</id><content type="html" xml:base="http://localhost:4000/tutorial/2024/06/10/hi.html"><![CDATA[<p>Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I’ll walk you through how to add Utterances to your Jekyll blog.</p>
-
-<h3 id="what-is-utterances">What is Utterances?</h3>
-
-<p>Utterances is a lightweight comments widget built on GitHub Issues. It allows you to integrate comments into your blog by linking to a GitHub repository where each post corresponds to an issue. This way, you can leverage GitHub’s robust issue management system for handling comments.</p>
-
-<h3 id="advantages-of-using-utterances">Advantages of Using Utterances</h3>
-
-<ol>
-  <li><strong>Simple Setup</strong>: Integrates easily with any static site generator.</li>
-  <li><strong>GitHub Integration</strong>: Utilizes GitHub’s existing issue tracking and notification system.</li>
-  <li><strong>Free and Open Source</strong>: No cost involved and you can customize it if needed.</li>
-  <li><strong>Markdown Support</strong>: Comments support GitHub-flavored Markdown.</li>
-  <li><strong>Spam Prevention</strong>: Users must sign in with GitHub, reducing spam.</li>
-</ol>
-
-<h3 id="disadvantages-of-using-utterances">Disadvantages of Using Utterances</h3>
-
-<ol>
-  <li><strong>GitHub Account Required</strong>: Commenters must have a GitHub account.</li>
-  <li><strong>Public Repository</strong>: Utterances works only with public repositories.</li>
-  <li><strong>Mixed Issues</strong>: Comments and project issues might mix if not managed properly.</li>
-</ol>
-
-<h3 id="step-by-step-guide-to-adding-utterances">Step-by-Step Guide to Adding Utterances</h3>
-
-<h4 id="step-1-create-a-github-repository">Step 1: Create a GitHub Repository</h4>
-
-<p>First, you need a GitHub repository to store the comments. You can use an existing repository or create a new one dedicated to comments.</p>
-
-<ol>
-  <li>Go to <a href="https://github.com">GitHub</a> and sign in.</li>
-  <li>Click on the “New” button to create a new repository.</li>
-  <li>Name your repository, for example, <code class="language-plaintext highlighter-rouge">blog-comments</code>.</li>
-  <li>Set the repository to public.</li>
-  <li>Click “Create repository”.</li>
-</ol>
-
-<h4 id="step-2-configure-utterances">Step 2: Configure Utterances</h4>
-
-<ol>
-  <li>Visit the <a href="https://utteranc.es/">Utterances website</a>.</li>
-  <li>Scroll down to the configuration section.</li>
-  <li>Select the repository you created for comments.</li>
-  <li>Choose the issue term you want to use (e.g., pathname, URL, title).</li>
-  <li>Copy the provided script.</li>
-</ol>
-
-<h4 id="step-3-add-utterances-to-your-jekyll-blog">Step 3: Add Utterances to Your Jekyll Blog</h4>
-
-<ol>
-  <li>Open your Jekyll blog project.</li>
-  <li>Navigate to the <code class="language-plaintext highlighter-rouge">_layouts</code> directory and open <code class="language-plaintext highlighter-rouge">post.html</code> (or the layout file you use for posts).</li>
-  <li>Paste the Utterances script where you want the comments to appear. For example:</li>
-</ol>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="tutorial" /><summary type="html"><![CDATA[Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I’ll walk you through how to add Utterances to your Jekyll blog.]]></summary></entry><entry xml:lang="en"><title type="html">Adding Comment Functionality to Your GitHub Blog Using Utterances</title><link href="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Adding Comment Functionality to Your GitHub Blog Using Utterances" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I’ll walk you through how to add Utterances to your Jekyll blog.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-10T22:17:38+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
+</subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="en"><title type="html">Adding Comment Functionality to Your GitHub Blog Using Utterances</title><link href="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Adding Comment Functionality to Your GitHub Blog Using Utterances" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I’ll walk you through how to add Utterances to your Jekyll blog.</p>
 
 <h3 id="what-is-utterances">What is Utterances?</h3>
 
@@ -177,7 +123,7 @@ Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyo
   <li><a href="https://utteranc.es/">Utterances 웹사이트</a>를 방문합니다.</li>
   <li>아래로 스크롤하여 설정 섹션으로 이동합니다.</li>
   <li>댓글용으로 생성한 리포지토리를 선택합니다.
-<img src="image.png" alt="alt text" /></li>
+<img src="/assets/img/image.png" alt="alt text" /></li>
   <li>사용할 이슈 항목(term)을 선택합니다 (예: 경로명, URL, 제목).</li>
   <li>제공된 스크립트를 복사합니다.</li>
 </ol>

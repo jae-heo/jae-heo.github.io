@@ -45,7 +45,7 @@ Utterances는 GitHub Issues를 기반으로 한 가벼운 댓글 위젯입니다
 1. [Utterances 웹사이트](https://utteranc.es/)를 방문합니다.
 2. 아래로 스크롤하여 설정 섹션으로 이동합니다.
 3. 댓글용으로 생성한 리포지토리를 선택합니다.
-![alt text](image.png)
+![alt text](/assets/img/image.png)
 4. 사용할 이슈 항목(term)을 선택합니다 (예: 경로명, URL, 제목).
 5. 제공된 스크립트를 복사합니다.
 
