@@ -4,28 +4,29 @@ title: "Adding Comment Functionality to Your GitHub Blog Using Utterances"
 subtitle: "How to manage blog comments using GitHub Issues"
 date: 2024-06-10 18:00:00 +0900
 categories: ["tutorial"]
-lang: en
+lang: ko
 ---
 
-Managing comments on a static blog can be challenging, especially without a backend server. However, Utterances provides an elegant solution by using GitHub Issues for comment management. In this tutorial, I'll walk you through how to add Utterances to your Jekyll blog.
+In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons.
+This article introduces Utterances, an elegant solution for managing comments using GitHub Issues. In this tutorial, we will explain how to add Utterances to a GitHub blog using Jekyll.
 
 ### What is Utterances?
 
-Utterances is a lightweight comments widget built on GitHub Issues. It allows you to integrate comments into your blog by linking to a GitHub repository where each post corresponds to an issue. This way, you can leverage GitHub's robust issue management system for handling comments.
+Utterances is a lightweight comment widget based on GitHub Issues. It allows you to write comments using GitHub Issues.
 
-### Advantages of Using Utterances
+### Advantages of Utterances
 
-1. **Simple Setup**: Integrates easily with any static site generator.
+1. **Simple Setup**: Easily integrates with any static site generator.
 2. **GitHub Integration**: Utilizes GitHub's existing issue tracking and notification system.
-3. **Free and Open Source**: No cost involved and you can customize it if needed.
+3. **Free and Open Source**: It is free and customizable as needed.
 4. **Markdown Support**: Comments support GitHub-flavored Markdown.
-5. **Spam Prevention**: Users must sign in with GitHub, reducing spam.
+5. **Spam Prevention**: Users must log in with GitHub, reducing spam.
 
-### Disadvantages of Using Utterances
+### Disadvantages of Utterances
 
 1. **GitHub Account Required**: Commenters must have a GitHub account.
-2. **Public Repository**: Utterances works only with public repositories.
-3. **Mixed Issues**: Comments and project issues might mix if not managed properly.
+2. **Public Repository**: Utterances only works with public repositories.
+3. **Mixed Issues**: Comments and project issues may mix if not managed properly.
 
 ### Step-by-Step Guide to Adding Utterances
 
@@ -33,9 +34,9 @@ Utterances is a lightweight comments widget built on GitHub Issues. It allows yo
 
 First, you need a GitHub repository to store the comments. You can use an existing repository or create a new one dedicated to comments.
 
-1. Go to [GitHub](https://github.com) and sign in.
-2. Click on the "New" button to create a new repository.
-3. Name your repository, for example, `blog-comments`.
+1. Log in to [GitHub](https://github.com){:target="_blank"}.
+2. Click the "New" button to create a new repository.
+3. Name the repository, such as `blog-comments`.
 4. Set the repository to public.
 5. Click "Create repository".
 
@@ -43,12 +44,24 @@ First, you need a GitHub repository to store the comments. You can use an existi
 
 1. Visit the [Utterances website](https://utteranc.es/).
 2. Scroll down to the configuration section.
-3. Select the repository you created for comments.
-4. Choose the issue term you want to use (e.g., pathname, URL, title).
-5. Copy the provided script.
+
+{% include image.html src="/assets/img/utterances_configuration.png" alt="alt text" width="500" %}
+
+3. Enter the repository you created for comments.
+4. Select the issue term format.
+
+{% include image.html src="/assets/img/post_comment_example.png" alt="alt text" width="500" %}
+{% include image.html src="/assets/img/comment_issue_example.png" alt="alt text" width="700" caption="Example of an issue created when a comment is posted" %}
+
+5. Choose a theme that matches your blog.
+6. Copy the provided script.
+
+{% include image.html src="/assets/img/utterances_setting.png" alt="alt text" width="500" %}
 
 #### Step 3: Add Utterances to Your Jekyll Blog
 
 1. Open your Jekyll blog project.
 2. Navigate to the `_layouts` directory and open `post.html` (or the layout file you use for posts).
-3. Paste the Utterances script where you want the comments to appear. For example:
+3. Paste the Utterances script where you want the comments to appear.
+
+{% include image.html src="/assets/img/layout_file_example.png" alt="alt text" width="500" caption="Example of a layout file" %}

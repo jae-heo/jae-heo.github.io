@@ -3,7 +3,7 @@ layout: post
 title: "Utterances를 이용해 깃허브 블로그 댓글 기능 추가"
 subtitle: "GitHub Issues를 사용하여 블로그 댓글 관리하는 방법"
 date: 2024-06-10 18:00:00 +0900
-categories: ["튜토리얼"]
+categories: ["tutorial"]
 lang: ko
 ---
 
@@ -36,7 +36,7 @@ Utterances는 GitHub Issues를 기반으로 한 가벼운 댓글 위젯입니다
 
 1. [GitHub](https://github.com){:target="_blank"}에 접속하여 로그인합니다.
 2. "New" 버튼을 클릭하여 새 리포지토리를 만듭니다.
-3. 리포지토리 이름을 예를 들어 `blog-comments`로 설정합니다.
+3. 리포지토리 이름을 `blog-comments` 등으로 설정합니다.
 4. 리포지토리를 공개로 설정합니다.
 5. "Create repository"를 클릭합니다.
 
@@ -44,13 +44,23 @@ Utterances는 GitHub Issues를 기반으로 한 가벼운 댓글 위젯입니다
 
 1. [Utterances 웹사이트](https://utteranc.es/)를 방문합니다.
 2. 아래로 스크롤하여 설정 섹션으로 이동합니다.
-3. 댓글용으로 생성한 리포지토리를 선택합니다.
-![alt text](/assets/img/image.png)
-4. 사용할 이슈 항목(term)을 선택합니다 (예: 경로명, URL, 제목).
-5. 제공된 스크립트를 복사합니다.
+
+{% include image.html src="/assets/img/utterances_configuration.png" alt="alt text" width="500" %}
+
+3. 댓글용으로 생성한 리포지토리를 입력합니다.
+4. 생성되는 이슈의 형식을 지정합니다.
+
+{% include image.html src="/assets/img/post_comment_example.png" alt="alt text" width="500" %}
+{% include image.html src="/assets/img/comment_issue_example.png" alt="alt text" width="700" caption="댓글을 달았을 경우 생성되는 이슈의 예시" %}
+
+5. 블로그에 맞는 테마를 선택합니다.
+6. 제공된 스크립트를 복사합니다.
+
+{% include image.html src="/assets/img/utterances_setting.png" alt="alt text" width="500" %}
 
 #### 3단계: Jekyll 블로그에 Utterances 추가
 
 1. Jekyll 블로그 프로젝트를 엽니다.
 2. `_layouts` 디렉토리로 이동하여 `post.html` (또는 게시물 레이아웃 파일)을 엽니다.
-3. 댓글이 나타나길 원하는 위치에 Utterances 스크립트를 붙여넣습니다. 예를 들어:
+3. 댓글이 나타나길 원하는 위치에 Utterances 스크립트를 붙여넣습니다.
+{% include image.html src="/assets/img/layout_file_example.png" alt="alt text" width="500" caption="레이아웃 파일 예시" %}
