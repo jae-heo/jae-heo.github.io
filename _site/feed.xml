@@ -1,5 +1,71 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-11T01:55:46+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
-</subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="ko"><title type="html">Adding Comment Functionality to Your GitHub Blog Using Utterances</title><link href="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Adding Comment Functionality to Your GitHub Blog Using Utterances" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-06-11T13:43:36+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
+</subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="ko"><title type="html">프로젝트 님블 (Nimble)</title><link href="http://localhost:4000/ko/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="프로젝트 님블 (Nimble)" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>http://localhost:4000/ko/project/2024/06/11/nimble-project</id><content type="html" xml:base="http://localhost:4000/ko/project/2024/06/11/nimble-project.html"><![CDATA[<h3 id="프로젝트-님블-소개">프로젝트 님블 소개</h3>
+
+<p>프로젝트 님블(Nimble)은 디지털 마케팅 자동화를 목표로 하는 프로젝트입니다. 현대의 디지털 마케팅 환경은 AI의 도입으로 빠르게 변화하고 있으며, 이에 발맞추어 효율적이고 효과적인 마케팅 전략을 세우기 위해서는 자동화가 필수적입니다. 님블은 이러한 필요성에 부응하여 개발된 솔루션입니다.</p>
+
+<h3 id="주요-기능">주요 기능</h3>
+
+<ol>
+  <li><strong>자동화된 마케팅 관리</strong>
+    <ul>
+      <li>프로젝트 님블은 다양한 디지털 마케팅을 End-to-end로 자동화합니다.</li>
+    </ul>
+  </li>
+  <li><strong>생성형 AI 기반 마케팅</strong>
+    <ul>
+      <li>인공지능 기술을 활용하여 실시간으로 변화하는 SEO, Trends를 분석하고 적용합니다.</li>
+    </ul>
+  </li>
+  <li><strong>워크플로우 자동화</strong>
+    <ul>
+      <li>반복적인 마케팅 작업을 자동화하여 마케터들이 보다 창의적인 작업에 집중할 수 있도록 지원합니다. 이메일 발송, 소셜 미디어 포스팅, 광고 배포 등의 작업이 자동으로 처리됩니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="기대-효과">기대 효과</h3>
+
+<ul>
+  <li><strong>효율성 향상</strong>
+    <ul>
+      <li>자동화를 통해 마케팅 작업의 효율성이 크게 향상됩니다. 이는 시간과 자원의 절약으로 이어지며, 더 많은 캠페인을 동시에 관리할 수 있게 합니다.</li>
+    </ul>
+  </li>
+  <li><strong>정확한 타겟팅</strong>
+    <ul>
+      <li>실시간 데이터 분석과 AI 기반 개인화를 통해 더욱 정확한 타겟팅이 가능합니다. 이는 고객 만족도와 전환율을 높이는 데 기여합니다.</li>
+    </ul>
+  </li>
+  <li><strong>비용 절감</strong>
+    <ul>
+      <li>자동화를 통해 인건비와 운영 비용이 절감됩니다. 이는 기업이 더 적은 비용으로 더 많은 마케팅 활동을 수행할 수 있게 합니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="활용-사례">활용 사례</h3>
+
+<ul>
+  <li><strong>전자상거래</strong>
+    <ul>
+      <li>프로젝트 님블을 통해 전자상거래 업체는 개인화된 상품 추천과 이메일 마케팅을 자동화하여 매출을 증대시킬 수 있습니다.</li>
+    </ul>
+  </li>
+  <li><strong>소셜 미디어 마케팅</strong>
+    <ul>
+      <li>소셜 미디어 채널에서의 게시물 스케줄링과 분석을 자동화하여, 효율적인 소셜 미디어 마케팅을 수행할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li><strong>B2B 마케팅</strong>
+    <ul>
+      <li>B2B 기업은 님블을 활용하여 리드 생성과 육성 캠페인을 자동화하고, 보다 효과적인 마케팅 전략을 수립할 수 있습니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="결론">결론</h3>
+
+<p>프로젝트 님블은 디지털 마케팅의 새로운 가능성을 열어주는 강력한 도구입니다. 자동화된 캠페인 관리, 실시간 데이터 분석, AI 기반 개인화, 워크플로우 자동화를 통해 마케터들은 더 효율적이고 효과적인 마케팅을 수행할 수 있습니다. 프로젝트 님블과 함께 디지털 마케팅의 미래를 경험해보세요.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><summary type="html"><![CDATA[프로젝트 님블 소개]]></summary></entry><entry xml:lang="en"><title type="html">Adding Comment Functionality to Your GitHub Blog Using Utterances</title><link href="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Adding Comment Functionality to Your GitHub Blog Using Utterances" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="http://localhost:4000/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons.
 This article introduces Utterances, an elegant solution for managing comments using GitHub Issues. In this tutorial, we will explain how to add Utterances to a GitHub blog using Jekyll.</p>
 
 <h3 id="what-is-utterances">What is Utterances?</h3>

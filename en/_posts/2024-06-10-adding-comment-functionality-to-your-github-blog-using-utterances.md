@@ -4,7 +4,7 @@ title: "Adding Comment Functionality to Your GitHub Blog Using Utterances"
 subtitle: "How to manage blog comments using GitHub Issues"
 date: 2024-06-10 18:00:00 +0900
 categories: ["tutorial"]
-lang: ko
+lang: en
 ---
 
 In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons.
