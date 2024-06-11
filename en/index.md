@@ -4,6 +4,7 @@ title: Hello
 subtitle: My name is Jaeyoung Heo
 sitemap:
   priority: 0.9
+lang: en
 ---
 
 <img src="{{ '/assets/img/me.jpeg' | prepend: site.baseurl }}" id="about-img">

@@ -2,6 +2,7 @@
 layout: page
 title: 이력서
 subtitle: DevOps
+lang: ko
 ---
 
 <span style="float: right; "><a href="{{ '/assets/resume.pdf' | prepend: site.baseurl }}"><strong>> PDF로 다운로드</strong></a> </span>
@@ -52,7 +53,7 @@ subtitle: DevOps
     </ul>
   </div>
   <div class="skills-item">
-    <strong>작업 중</strong>
+    <strong>학습 중</strong>
     <ul>
       <li>쿠버네티스</li>
       <li>앤서블</li>
@@ -63,11 +64,12 @@ subtitle: DevOps
 </div>
 
 ### 프로젝트
-**님블 - 디지털 마케팅 자동화** <span style="float: right; ">2024.01 ~ 2024.06</span>  
-펠렌테스케 유스모드 오디오 넥 몰리스 루트룸. 눌라 파실리시. 인 학 하바타세 플라테아 딕텀스트. 에티암 파실리시스 벨리트 벨리트, 아이 다피부스 라쿠스 비벤둠 넥. 프로인 유스모드 토르토르 논 눙크 루투스, 우트 바리우스 마우리스트리스퀴.  
+**님블 - 디지털 마케팅 자동화**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/nimble-project.html" style="float: right; text-decoration: underline; margin-left: 30px">링크</a><span style="float: right; ">2024.01 ~ 진행 중</span>  
 
-**구글 클라우드 모듈 - 사용성 개선**<span style="float: right; ">2024.05 ~</span>  
-펠렌테스케 유스모드 오디오 넥 몰리스 루트룸. 눌라 파실리시. 인 학 하바타세 플라테아 딕텀스트. 에티암 파실리시스 벨리트 벨리트, 아이 다피부스 라쿠스 비벤둠 넥. 프로인 유스모드 토르토르 논 눙크 루투스, 우트 바리우스 마우리스트리스퀴.  
+프로젝트 님블(Nimble)은 디지털 마케팅 자동화를 목표로 하는 프로젝트입니다. 현대의 디지털 마케팅 환경은 AI의 도입으로 빠르게 변화하고 있으며, 이에 발맞추어 효율적이고 효과적인 마케팅 전략을 세우기 위해서는 자동화가 필수적입니다. 님블은 이러한 필요성에 부응하여 개발된 솔루션입니다.
+
+**구글 클라우드 모듈 - 사용성 개선**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/nimble-project.html" style="float: right; text-decoration: underline; margin-left: 30px">링크</a><span style="float: right; ">2024.05 ~ 진행 중</span>  
+구글 클라우드 모듈의 사용성을 개선하여 사용자 경험을 향상시키고, 더 많은 사용자가 쉽게 접근하고 활용할 수 있도록 하는 것을 목표로 합니다.
 
 ### 학력
 

@@ -2,6 +2,7 @@
 layout: page
 title: Blog
 subtitle: Welcome to Jae's tech blog
+lang: ko
 ---
 
 <div>

@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title> 프로젝트 님블 (Nimble) — 디지털 마케팅의 자동화를 꿈꾸다.  | Jaeyoung Heo</title>
+<title> 구글 클라우드 모듈 사용성 개선 — 구글 클라우드를 코드로 간편하게 다루다.  | Jaeyoung Heo</title>
 <meta name="description" content="A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
 ">
 <meta name="keywords" content="">
-<link rel="canonical" href="/ko/project/2024/06/11/nimble-project.html">
+<link rel="canonical" href="/ko/project/2024/06/11/gcp-improvement.html">
 <link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
 <link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
 <link rel="stylesheet" href="/assets/css/main.css">
@@ -64,17 +64,17 @@
     </li>
     
     <li class="language-selector">
-      <a href="/en/project/2024/06/11/nimble-project.html"><strong>EN</strong></a> |
-      <a href="/ko/project/2024/06/11/nimble-project.html"><strong>KO</strong></a>
+      <a href="/en/project/2024/06/11/gcp-improvement.html"><strong>EN</strong></a> |
+      <a href="/ko/project/2024/06/11/gcp-improvement.html"><strong>KO</strong></a>
     </li>
   </ul>
 </header>
 <h1 class="page-title">
-<div class="page-title__text">프로젝트 님블 (Nimble)</div>
-<div class="page-title__subtitle">디지털 마케팅의 자동화를 꿈꾸다.</div>
+<div class="page-title__text">구글 클라우드 모듈 사용성 개선</div>
+<div class="page-title__subtitle">구글 클라우드를 코드로 간편하게 다루다.</div>
 </h1>
 
-<h3 id="프로젝트-님블-소개">프로젝트 님블 소개</h3>
+<h3 id="구글-클라우드-모듈-프로젝트-소개">구글 클라우드 모듈 프로젝트 소개</h3>
 
 <p>프로젝트 님블(Nimble)은 디지털 마케팅 자동화를 목표로 하는 프로젝트입니다. 현대의 디지털 마케팅 환경은 AI의 도입으로 빠르게 변화하고 있으며, 이에 발맞추어 효율적이고 효과적인 마케팅 전략을 세우기 위해서는 자동화가 필수적입니다. 님블은 이러한 필요성에 부응하여 개발된 솔루션입니다.</p>
 
@@ -115,61 +115,6 @@
 
 <h3 id="프로젝트-구조">프로젝트 구조</h3>
 
-<h4 id="1차-설계">1차 설계</h4>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/nimble_architecture_phase1.png" alt="1차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-</div>
-<p>엔드유저의 시스템에서 로직이 직접 실행되는 구조로 설계되었습니다. 사용자는 관리자에게 라이센스를 구입하거나 요청하며, 관리자는 라이센스를 부여하고 클라이언트 프로그램을 제공합니다. 매일 실행되는 코어 로직은 실행할 때마다 라이센스 서버에 자신의 키값을 통해 유효성을 검증합니다.</p>
-
-<p><strong>인프라 관리</strong></p>
-<ul>
-  <li>Git을 통한 코드 관리</li>
-  <li>콘솔 및 SSH를 통한 GCP 인스턴스 관리</li>
-</ul>
-
-<p><strong>피드백</strong></p>
-<ul>
-  <li>사용자가 직접 프로그램을 구동하는 것이 부담스럽습니다.</li>
-  <li>업데이트가 있을 때마다 기존 클라이언트에게 새로운 프로그램을 배포하는 것이 어렵습니다.</li>
-  <li>관리자 또한 라이센스를 직접 관리하는 것이 불편합니다.</li>
-</ul>
-
-<h4 id="2차-설계">2차 설계</h4>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/nimble_architecture_phase2.png" alt="2차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-</div>
-<p>1차 피드백을 기반으로 발전된 설계입니다. 사용자는 결제 시 필요한 정보를 입력하면, 결제 플랫폼에서 API를 자동으로 호출하게 됩니다. 이후 필요한 작업들은 모두 서버 상에서 자동으로 실행됩니다.</p>
-
-<p><strong>인프라 관리</strong></p>
-<ul>
-  <li>Git을 통한 코드 관리</li>
-  <li>GitHub Actions을 통한 배포</li>
-  <li>GCP API Client를 이용한 코드 기반 인프라 관리</li>
-</ul>
-
-<p><strong>피드백</strong></p>
-<ul>
-  <li>인프라 유지 비용이 증가합니다.</li>
-  <li>복잡도가 증가하여 개발자에게 부담이 됩니다.</li>
-</ul>
-
-<h4 id="3차-설계">3차 설계</h4>
-
-<p>최종 단계에서는 전체 시스템을 통합하고, 테스트 및 최적화를 진행합니다.</p>
-<ul>
-  <li><strong>시스템 통합</strong>: 개별 모듈을 통합하여 전체 시스템을 구성합니다.</li>
-  <li><strong>성능 최적화</strong>: 시스템의 성능을 최적화하여 빠르고 안정적으로 동작하도록 합니다.</li>
-  <li><strong>테스트 및 검증</strong>: 전체 시스템을 테스트하고, 발견된 문제를 수정합니다.</li>
-</ul>
-
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/nimble_architecture_phase3.png" alt="3차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-</div>
-
-<p>프로젝트의 각 설계 단계는 점진적으로 상세화되고, 구체화되며, 최종적으로 효율적이고 효과적인 디지털 마케팅 자동화 솔루션을 제공합니다.</p>
 
 
 <section id="comments">
