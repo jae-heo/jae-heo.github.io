@@ -1,33 +1,33 @@
 ---
 layout: post
-title: "Welcome to My Tech Blog!"
-subtitle: "Exploring the world of technology, one post at a time."
+title: "기술 블로그를 시작합니다."
+subtitle: "DevOps로의 여정"
 date: 2024-06-10 18:00:00 +0900
 categories: ["general"]
 lang: ko
 ---
 
-Hello, and welcome to my tech blog!
+안녕하세요, 블로그에 오신 것을 환영합니다!
 
-### About This Blog
+### 블로그 소개
 
-I'm excited to launch this blog where I will be sharing insights, tutorials, and discussions on various tech topics. The primary focus of this blog will be on software development, cloud computing, and emerging technologies. Whether you're a seasoned developer or just starting out, I hope you'll find something valuable here.
+블로그를 시작하게 되어 설렙니다. 여기서는 다양한 기술 주제에 대한 글을 공유할 예정입니다. 이 블로그의 주요 주제는 소프트웨어 개발, 클라우드 컴퓨팅 등에 맞춰질 것입니다. 여러분이 경험 많은 개발자이든 이제 막 시작한 초보자이든, 이곳에서 유용한 정보를 찾길 바랍니다.
 
-### About Me
+### 저에 대해
 
-My name is Jaeyoung Heo, and I am passionate about technology and software development. Although I am just starting my journey in the tech industry, I am eager to learn and grow. I created this blog to share what I learn along the way, document my progress, and connect with others in the tech community.
+제 이름은 허재영입니다. 저는 기술과 소프트웨어 개발에 대한 열정을 가지고 있습니다. 비록 기술 업계에서의 여정을 이제 막 시작했지만, 배우고 성장하기를 갈망하고 있습니다. 이 블로그를 통해 배운 것을 공유하고, 진행 상황을 기록하며, 다른 사람들과 연결되기를 희망합니다.
 
-### What to Expect
+### 이런 글들을 올릴 예정입니다.
 
-- **Learning Journey**: I'll be sharing my experiences as I learn new technologies, programming languages, and frameworks.
-- **Tutorials and Guides**: Step-by-step guides to help you understand and implement various technologies.
-- **Projects**: I'll be showcasing projects I'm working on and sharing the lessons learned from them.
+- **학습로그**: 새로운 기술, 프로그래밍 언어, 프레임워크를 배우면서 경험을 공유할 것입니다.
+- **튜토리얼과 가이드**: 다양한 기술을 이해하고 구현하는 데 도움이 되는 단계별 가이드를 제공할 것입니다.
+- **프로젝트**: 제가 작업 중인 프로젝트를 소개하고, 그로부터 얻은 교훈을 공유할 것입니다.
 
-### Let's Connect!
+### 같이 소통해요.
 
-I highly value feedback and would love to hear your thoughts on my posts. Feel free to leave comments, or connect with me via the email, GitHub, or LinkedIn buttons on the top right corner of this page.
+피드백을 매우 소중하게 생각하며, 제 포스트에 대한 여러분의 의견을 듣고 싶습니다. 댓글을 남기시거나, 페이지 우측 상단의 이메일, GitHub, LinkedIn 버튼을 통해 같이 소통해요.
 
-Thank you for visiting my blog. Stay tuned for the first series of posts coming soon!
+제 블로그를 방문해 주셔서 감사합니다. 곧 첫 번째 글로 찾아뵙겠습니다.
 
-Best,  
-Jaeyoung Heo
+감사합니다.
+허재영 드림.

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Project Nimble — Pursuing Automation in Digital Marketing  | Jaeyoung Heo</title>
+<meta name="description" content="A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
+">
+<meta name="keywords" content="">
+<link rel="canonical" href="/en/project/2024/06/11/nimble-project.html">
+<link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/agate.css">
+
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XDPCR56GW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XDPCR56GW');
+</script>
+</head>
+<body>
+<div class="wrapper">
+<header class="header">
+  <div class="navigation">
+    <a href="/en" class="logo">Jaeyoung Heo</a>
+    <ul class="menu">
+      <li class="menu__entry">
+        <a href="/en/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/blog">Blog</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="social-links">
+    
+    <li class="social-links__entry">
+      <a href="mailto:gjwodud119@gmail.com" target="_blank">
+        <i class="fa fa-envelope-square"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://github.com/jae-heo" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://in.linkedin.com/in/jaeyoung-heo-664033282" target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    
+    <li class="language-selector">
+      <a href="/en/project/2024/06/11/nimble-project.html"><strong>EN</strong></a> |
+      <a href="/ko/project/2024/06/11/nimble-project.html"><strong>KO</strong></a>
+    </li>
+  </ul>
+</header>
+<h1 class="page-title">
+<div class="page-title__text">Project Nimble</div>
+<div class="page-title__subtitle">Pursuing Automation in Digital Marketing</div>
+</h1>
+
+<h3 id="introduction-to-project-nimble">Introduction to Project Nimble</h3>
+
+<p>Project Nimble aims to automate digital marketing. The modern digital marketing environment is rapidly evolving with the adoption of AI, and automation is essential to establish efficient and effective marketing strategies. Nimble is a solution developed to meet this need.</p>
+
+<h3 id="key-features">Key Features</h3>
+
+<ol>
+  <li><strong>Automated Marketing Management</strong>
+    <ul>
+      <li>Project Nimble automates various digital marketing processes end-to-end.</li>
+    </ul>
+  </li>
+  <li><strong>AI-Driven Marketing</strong>
+    <ul>
+      <li>Utilizes AI technology to analyze and apply real-time changes in SEO and trends.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="expected-benefits">Expected Benefits</h3>
+
+<ul>
+  <li><strong>Increased Efficiency</strong>
+    <ul>
+      <li>Automation allows clients to focus on their core tasks.</li>
+    </ul>
+  </li>
+  <li><strong>Accurate Marketing</strong>
+    <ul>
+      <li>Real-time data analysis and AI-driven insights enable effective marketing strategies.</li>
+    </ul>
+  </li>
+  <li><strong>Cost Reduction</strong>
+    <ul>
+      <li>Automation and infrastructure optimization reduce labor and operational costs.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="my-role">My Role</h3>
+
+<ul>
+  <li><strong>Core Logic Development</strong>
+    <ul>
+      <li>Implement the core logic used in the project.</li>
+    </ul>
+  </li>
+  <li><strong>Infrastructure Setup and Management</strong>
+    <ul>
+      <li>Build and manage the infrastructure for the service.</li>
+      <li>Establish a development environment for maintenance.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="project-structure">Project Structure</h3>
+
+<h4 id="phase-1-design">Phase 1 Design</h4>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/nimble_architecture_phase1.png" alt="Phase 1 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+</div>
+<p>The initial design involves running the logic directly on the end-user’s system. Users purchase or request licenses from the administrator, who then grants the licenses and provides the client program. The core logic, which runs daily, verifies its validity with the license server using its key upon each execution.</p>
+
+<p><strong>Infrastructure Management</strong></p>
+<ul>
+  <li>Code management using Git</li>
+  <li>GCP instance management via console and SSH</li>
+</ul>
+
+<p><strong>Feedback</strong></p>
+<ul>
+  <li>Users find it burdensome to run the program themselves.</li>
+  <li>It is challenging to distribute new programs to existing clients whenever updates are available.</li>
+  <li>Administrators find it inconvenient to manage licenses manually.</li>
+</ul>
+
+<h4 id="phase-2-design">Phase 2 Design</h4>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/nimble_architecture_phase2.png" alt="Phase 2 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+</div>
+<p>The design evolved based on feedback from Phase 1. When users enter the necessary information at the point of purchase, the payment platform automatically calls the API. Subsequently, all necessary tasks are executed automatically on the server.</p>
+
+<p><strong>Infrastructure Management</strong></p>
+<ul>
+  <li>Code management using Git</li>
+  <li>Deployment using GitHub Actions</li>
+  <li>Code-based infrastructure management using GCP API Client</li>
+</ul>
+
+<p><strong>Feedback</strong></p>
+<ul>
+  <li>Increased infrastructure maintenance costs.</li>
+  <li>Increased complexity, leading to a burden on developers.</li>
+</ul>
+
+<h4 id="phase-3-design-in-progress">Phase 3 Design (In Progress)</h4>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/nimble_architecture_phase3.png" alt="Phase 3 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+</div>
+<p>The design has further evolved based on feedback from Phase 2. This phase is still in progress.</p>
+
+<p><strong>Infrastructure Management</strong></p>
+<ul>
+  <li>Code management using Git</li>
+  <li>Deployment using GitHub Actions</li>
+  <li>Introduction of IaC concepts using Terraform</li>
+</ul>
+
+
+<section id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="jae-heo/jae-heo.github.io"
+            issue-term="pathname"
+            label="Comment"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</section>
+
+<div class="about">
+<div class="about__divider">*****</div>
+<div class="about__text">
+<strong> &copy; 2024 Jaeyoung Heo. </strong>
+</div>
+</div>
+
+
+</div>
+<script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

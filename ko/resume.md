@@ -68,7 +68,7 @@ lang: ko
 
 프로젝트 님블(Nimble)은 디지털 마케팅 자동화를 목표로 하는 프로젝트입니다. 현대의 디지털 마케팅 환경은 AI의 도입으로 빠르게 변화하고 있으며, 이에 발맞추어 효율적이고 효과적인 마케팅 전략을 세우기 위해서는 자동화가 필수적입니다. 님블은 이러한 필요성에 부응하여 개발된 솔루션입니다.
 
-**구글 클라우드 모듈 - 사용성 개선**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/nimble-project.html" style="float: right; text-decoration: underline; margin-left: 30px">링크</a><span style="float: right; ">2024.05 ~ 진행 중</span>  
+**구글 클라우드 모듈 - 사용성 개선**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/gcp-improvement.html" style="float: right; text-decoration: underline; margin-left: 30px">링크</a><span style="float: right; ">2024.05 ~ 진행 중</span>  
 구글 클라우드 모듈의 사용성을 개선하여 사용자 경험을 향상시키고, 더 많은 사용자가 쉽게 접근하고 활용할 수 있도록 하는 것을 목표로 합니다.
 
 ### 학력
