@@ -43,7 +43,8 @@
 
   strong {
     color: #16a085;
-    font-weight: 500;  }
+    font-weight: 500;
+    font-size: 17px  }
 
   .wrapper {
     max-width: 800px;

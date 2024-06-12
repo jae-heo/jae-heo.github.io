@@ -30,25 +30,26 @@ lang: ko
 - **비용 절감**
     - 자동화 및 인프라 고도화를 통해 인건비와 운영 비용이 절감됩니다.
 
-### 나의 역할
+### 나의 역할 및 사용기술
 
-- **코어로직 구축**
-    - 사용되는 코어로직을 구현합니다.
+- **알고리즘 구현**
+    - Selenium
+    - GPT API
 
 - **인프라 구축 및 관리**
-    - 서비스를 위한 인프라를 구축하고 관리합니다.
-    - 유지보수를 위한 개발환경을 구축합니다.
-
+    - Github Action
+    - GCP
+    - Docker
+    - Airflow
+    - Database (sqlite, postgresql)
+    - Linux
+    - Terraform
 
 ### 프로젝트 구조
 
 #### 1차 설계
 {% include image.html src="/assets/img/nimble_architecture_phase1.png" alt="1차 설계" width="700" %}
 엔드유저의 시스템에서 로직이 직접 실행되는 구조로 설계되었습니다. 사용자는 관리자에게 라이센스를 구입하거나 요청하며, 관리자는 라이센스를 부여하고 클라이언트 프로그램을 제공합니다. 매일 실행되는 코어 로직은 실행할 때마다 라이센스 서버에 자신의 키값을 통해 유효성을 검증합니다.
-
-**인프라 관리**
-- Git을 통한 코드 관리
-- 콘솔 및 SSH를 통한 GCP 인스턴스 관리
 
 **피드백**
 - 사용자가 직접 프로그램을 구동하는 것이 부담스럽습니다.
@@ -59,11 +60,6 @@ lang: ko
 {% include image.html src="/assets/img/nimble_architecture_phase2.png" alt="2차 설계" width="700" %}
 1차 피드백을 기반으로 발전된 설계입니다. 사용자는 결제 시 필요한 정보를 입력하면, 결제 플랫폼에서 API를 자동으로 호출하게 됩니다. 이후 필요한 작업들은 모두 서버 상에서 자동으로 실행됩니다.
 
-**인프라 관리**
-- Git을 통한 코드 관리
-- GitHub Actions을 통한 배포
-- GCP API Client를 이용한 코드 기반 인프라 관리
-
 **피드백**
 - 인프라 유지 비용이 증가합니다.
 - 복잡도가 증가하여 개발자에게 부담이 됩니다.
@@ -71,8 +67,3 @@ lang: ko
 #### 3차 설계 (구현 진행중)
 {% include image.html src="/assets/img/nimble_architecture_phase3.png" alt="3차 설계" width="700" %}
 2차 피드백을 기반으로 발전된 설계입니다. 아직 구현중에 있습니다.
-
-**인프라 관리**
-- Git을 통한 코드 관리
-- GitHub Actions을 통한 배포
-- Terraform을 이용한 IaC 개념 도입

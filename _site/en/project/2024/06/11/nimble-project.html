@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title> Project Nimble — Pursuing Automation in Digital Marketing  | Jaeyoung Heo</title>
+<title> Project Nimble — Dreaming of Automation in Digital Marketing  | Jaeyoung Heo</title>
 <meta name="description" content="A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
 ">
 <meta name="keywords" content="">
@@ -71,24 +71,24 @@
 </header>
 <h1 class="page-title">
 <div class="page-title__text">Project Nimble</div>
-<div class="page-title__subtitle">Pursuing Automation in Digital Marketing</div>
+<div class="page-title__subtitle">Dreaming of Automation in Digital Marketing</div>
 </h1>
 
 <h3 id="introduction-to-project-nimble">Introduction to Project Nimble</h3>
 
-<p>Project Nimble aims to automate digital marketing. The modern digital marketing environment is rapidly evolving with the adoption of AI, and automation is essential to establish efficient and effective marketing strategies. Nimble is a solution developed to meet this need.</p>
+<p>Project Nimble aims to automate digital marketing. The digital marketing environment is rapidly changing with the adoption of AI, and automation is essential for creating efficient and effective marketing strategies. Nimble is a solution developed to meet this need.</p>
 
 <h3 id="key-features">Key Features</h3>
 
 <ol>
   <li><strong>Automated Marketing Management</strong>
     <ul>
-      <li>Project Nimble automates various digital marketing processes end-to-end.</li>
+      <li>Project Nimble automates various digital marketing tasks end-to-end.</li>
     </ul>
   </li>
-  <li><strong>AI-Driven Marketing</strong>
+  <li><strong>Generative AI-based Marketing</strong>
     <ul>
-      <li>Utilizes AI technology to analyze and apply real-time changes in SEO and trends.</li>
+      <li>Utilizes AI technology to analyze and apply real-time SEO and trends.</li>
     </ul>
   </li>
 </ol>
@@ -103,28 +103,34 @@
   </li>
   <li><strong>Accurate Marketing</strong>
     <ul>
-      <li>Real-time data analysis and AI-driven insights enable effective marketing strategies.</li>
+      <li>Conducts efficient marketing through real-time data analysis and AI-based insights.</li>
     </ul>
   </li>
   <li><strong>Cost Reduction</strong>
     <ul>
-      <li>Automation and infrastructure optimization reduce labor and operational costs.</li>
+      <li>Reduces labor and operational costs through automation and advanced infrastructure.</li>
     </ul>
   </li>
 </ul>
 
-<h3 id="my-role">My Role</h3>
+<h3 id="my-role-and-technologies-used">My Role and Technologies Used</h3>
 
 <ul>
-  <li><strong>Core Logic Development</strong>
+  <li><strong>Algorithm Implementation</strong>
     <ul>
-      <li>Implement the core logic used in the project.</li>
+      <li>Selenium</li>
+      <li>GPT API</li>
     </ul>
   </li>
   <li><strong>Infrastructure Setup and Management</strong>
     <ul>
-      <li>Build and manage the infrastructure for the service.</li>
-      <li>Establish a development environment for maintenance.</li>
+      <li>Github Action</li>
+      <li>GCP</li>
+      <li>Docker</li>
+      <li>Airflow</li>
+      <li>Database (sqlite, postgresql)</li>
+      <li>Linux</li>
+      <li>Terraform</li>
     </ul>
   </li>
 </ul>
@@ -136,19 +142,13 @@
   <img src="/assets/img/nimble_architecture_phase1.png" alt="Phase 1 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>The initial design involves running the logic directly on the end-user’s system. Users purchase or request licenses from the administrator, who then grants the licenses and provides the client program. The core logic, which runs daily, verifies its validity with the license server using its key upon each execution.</p>
-
-<p><strong>Infrastructure Management</strong></p>
-<ul>
-  <li>Code management using Git</li>
-  <li>GCP instance management via console and SSH</li>
-</ul>
+<p>The system was designed to execute logic directly on the end-user’s system. Users purchase or request a license from the administrator, who then grants the license and provides the client program. The core logic, executed daily, verifies its validity with the license server using its key each time it runs.</p>
 
 <p><strong>Feedback</strong></p>
 <ul>
   <li>Users find it burdensome to run the program themselves.</li>
-  <li>It is challenging to distribute new programs to existing clients whenever updates are available.</li>
-  <li>Administrators find it inconvenient to manage licenses manually.</li>
+  <li>Distributing new programs to existing clients with each update is challenging.</li>
+  <li>Administrators find manual license management inconvenient.</li>
 </ul>
 
 <h4 id="phase-2-design">Phase 2 Design</h4>
@@ -156,19 +156,12 @@
   <img src="/assets/img/nimble_architecture_phase2.png" alt="Phase 2 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>The design evolved based on feedback from Phase 1. When users enter the necessary information at the point of purchase, the payment platform automatically calls the API. Subsequently, all necessary tasks are executed automatically on the server.</p>
-
-<p><strong>Infrastructure Management</strong></p>
-<ul>
-  <li>Code management using Git</li>
-  <li>Deployment using GitHub Actions</li>
-  <li>Code-based infrastructure management using GCP API Client</li>
-</ul>
+<p>This design evolved from the feedback received in Phase 1. Users enter the required information during payment, and the payment platform automatically calls the API. Subsequent tasks are executed automatically on the server.</p>
 
 <p><strong>Feedback</strong></p>
 <ul>
   <li>Increased infrastructure maintenance costs.</li>
-  <li>Increased complexity, leading to a burden on developers.</li>
+  <li>Increased complexity burdens developers.</li>
 </ul>
 
 <h4 id="phase-3-design-in-progress">Phase 3 Design (In Progress)</h4>
@@ -176,14 +169,7 @@
   <img src="/assets/img/nimble_architecture_phase3.png" alt="Phase 3 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>The design has further evolved based on feedback from Phase 2. This phase is still in progress.</p>
-
-<p><strong>Infrastructure Management</strong></p>
-<ul>
-  <li>Code management using Git</li>
-  <li>Deployment using GitHub Actions</li>
-  <li>Introduction of IaC concepts using Terraform</li>
-</ul>
+<p>This design further evolves from the feedback received in Phase 2. It is currently being implemented.</p>
 
 
 <section id="comments">

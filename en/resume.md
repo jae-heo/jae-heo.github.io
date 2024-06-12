@@ -1,11 +1,11 @@
 ---
 layout: page
 title: Resume
-subtitle: DevOps
+subtitle: Developer
 lang: en
 ---
 
-<span style="float: right; "><a href="{{ '/assets/resume.pdf' | prepend: site.baseurl }}"><strong>> Download PDF</strong></a> </span>
+<span style="float: right;"><a href="{{ '/assets/resume.pdf' | prepend: site.baseurl }}"><strong>> Download PDF</strong></a></span>
 <br>
 
 ### Skills
@@ -53,7 +53,7 @@ lang: en
     </ul>
   </div>
   <div class="skills-item">
-    <strong>Currently Learning</strong>
+    <strong>Future Learning</strong>
     <ul>
       <li>Kubernetes</li>
       <li>Ansible</li>
@@ -64,31 +64,26 @@ lang: en
 </div>
 
 ### Projects
-**Nimble - Digital Marketing Automation**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/nimble-project.html" style="float: right; text-decoration: underline; margin-left: 30px">Link</a><span style="float: right; ">2024.01 ~ Ongoing</span>  
+**Nimble - Digital Marketing Automation**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/nimble-project.html" style="float: right; text-decoration: underline; margin-left: 30px">Link</a><span style="float: right;">2024.01 ~ Ongoing</span>  
 
-Project Nimble aims to automate digital marketing. In today's rapidly changing digital marketing environment with the adoption of AI, automation is essential for setting efficient and effective marketing strategies. Nimble is a solution developed to meet this need.
+Project Nimble aims to automate digital marketing. As the digital marketing environment rapidly evolves with the adoption of AI, automation is essential for efficient and effective marketing strategies. Nimble is a solution developed to meet this need.
 
-**Google Cloud Module - Usability Improvement**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/gcp-improvement.html" style="float: right; text-decoration: underline; margin-left: 30px">Link</a><span style="float: right; ">2024.05 ~ Ongoing</span>  
-The goal of this project is to improve the usability of Google Cloud modules, enhancing user experience and making them more accessible and easier to use.
+**Google Cloud Module - Usability Improvement**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/gcp-improvement.html" style="float: right; text-decoration: underline; margin-left: 30px">Link</a><span style="float: right;">2024.05 ~ Ongoing</span>  
+This project aims to improve the usability of Google Cloud modules, enhancing user experience and making the platform more accessible and easier to use for a broader audience.
 
 ### Education
 
-**Soongsil University** <span style="float: right; ">2016.03 ~ 2023.02</span>  
-Major: Computer Science
+**Soongsil University** <span style="float: right;">2016.03 ~ 2023.02</span>  
+Major: Department of Computer Science
+
 ### Experience
 
-Consultant - **DXT** <span style="float: right; ">2022.09 ~ 2023.10</span>  
-_Description: Phasellus a tellus volutpat, ornare sapien et, lacinia erat. Suspendisse congue, enim vitae mattis pulvinar, eros lacus porttitor neque, eu sodales nibh metus nec arcu. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;_  
-Technologies used  
+**Consultant - DXT** <span style="float: right;">2022.09 ~ 2023.10</span>  
+As a Junior Consultant at DXT, I developed a bio production process management solution, improving the existing workflow managed through Excel, and reducing BOM management workload by 50%. Additionally, I designed and implemented an ASPICE-compliant solution for managing autonomous vehicle electronic components, achieving a 70% cost reduction through B2B cloud deployment.
 
-Intern - **Westmoon** <span style="float: right; ">2022.06 ~ 2022.08</span>  
-_Description: Phasellus a tellus volutpat, ornare sapien et, lacinia erat. Suspendisse congue, enim vitae mattis pulvinar, eros lacus porttitor neque, eu sodales nibh metus nec arcu. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae;_  
-Technologies used  
+**Intern - WESTMOON** <span style="float: right;">2022.06 ~ 2022.08</span>  
+At WESTMOON's development team, I maintained backend applications, including repairing a Node.js video streaming server and improving the admin page. I also developed an annotation tool for rehabilitation datasets using PyQT5, collaborating with the rehabilitation team to design annotation rules.
 
 ### Military Service
 
-**Army** - Discharged as Sergeant <span style="float: right; ">2018.09 ~ 2020.04</span>  
-
-### Awards and Interests
-
-- Etiam luctus ante quis est dictum faucibus.
+Army Discharge - Rank: Sergeant <span style="float: right;">2018.09 ~ 2020.04</span>

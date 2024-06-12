@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Project Nimble"
-subtitle: "Pursuing Automation in Digital Marketing"
+subtitle: "Dreaming of Automation in Digital Marketing"
 date: 2024-06-11 02:00:00 +0900
 categories: ["project"]
 lang: en
@@ -9,15 +9,15 @@ lang: en
 
 ### Introduction to Project Nimble
 
-Project Nimble aims to automate digital marketing. The modern digital marketing environment is rapidly evolving with the adoption of AI, and automation is essential to establish efficient and effective marketing strategies. Nimble is a solution developed to meet this need.
+Project Nimble aims to automate digital marketing. The digital marketing environment is rapidly changing with the adoption of AI, and automation is essential for creating efficient and effective marketing strategies. Nimble is a solution developed to meet this need.
 
 ### Key Features
 
 1. **Automated Marketing Management**
-    - Project Nimble automates various digital marketing processes end-to-end.
+    - Project Nimble automates various digital marketing tasks end-to-end.
 
-2. **AI-Driven Marketing**
-    - Utilizes AI technology to analyze and apply real-time changes in SEO and trends.
+2. **Generative AI-based Marketing**
+    - Utilizes AI technology to analyze and apply real-time SEO and trends.
 
 ### Expected Benefits
 
@@ -25,53 +25,45 @@ Project Nimble aims to automate digital marketing. The modern digital marketing 
     - Automation allows clients to focus on their core tasks.
 
 - **Accurate Marketing**
-    - Real-time data analysis and AI-driven insights enable effective marketing strategies.
+    - Conducts efficient marketing through real-time data analysis and AI-based insights.
 
 - **Cost Reduction**
-    - Automation and infrastructure optimization reduce labor and operational costs.
+    - Reduces labor and operational costs through automation and advanced infrastructure.
 
-### My Role
+### My Role and Technologies Used
 
-- **Core Logic Development**
-    - Implement the core logic used in the project.
+- **Algorithm Implementation**
+    - Selenium
+    - GPT API
 
 - **Infrastructure Setup and Management**
-    - Build and manage the infrastructure for the service.
-    - Establish a development environment for maintenance.
+    - Github Action
+    - GCP
+    - Docker
+    - Airflow
+    - Database (sqlite, postgresql)
+    - Linux
+    - Terraform
 
 ### Project Structure
 
 #### Phase 1 Design
 {% include image.html src="/assets/img/nimble_architecture_phase1.png" alt="Phase 1 Design" width="700" %}
-The initial design involves running the logic directly on the end-user's system. Users purchase or request licenses from the administrator, who then grants the licenses and provides the client program. The core logic, which runs daily, verifies its validity with the license server using its key upon each execution.
-
-**Infrastructure Management**
-- Code management using Git
-- GCP instance management via console and SSH
+The system was designed to execute logic directly on the end-user's system. Users purchase or request a license from the administrator, who then grants the license and provides the client program. The core logic, executed daily, verifies its validity with the license server using its key each time it runs.
 
 **Feedback**
 - Users find it burdensome to run the program themselves.
-- It is challenging to distribute new programs to existing clients whenever updates are available.
-- Administrators find it inconvenient to manage licenses manually.
+- Distributing new programs to existing clients with each update is challenging.
+- Administrators find manual license management inconvenient.
 
 #### Phase 2 Design
 {% include image.html src="/assets/img/nimble_architecture_phase2.png" alt="Phase 2 Design" width="700" %}
-The design evolved based on feedback from Phase 1. When users enter the necessary information at the point of purchase, the payment platform automatically calls the API. Subsequently, all necessary tasks are executed automatically on the server.
-
-**Infrastructure Management**
-- Code management using Git
-- Deployment using GitHub Actions
-- Code-based infrastructure management using GCP API Client
+This design evolved from the feedback received in Phase 1. Users enter the required information during payment, and the payment platform automatically calls the API. Subsequent tasks are executed automatically on the server.
 
 **Feedback**
 - Increased infrastructure maintenance costs.
-- Increased complexity, leading to a burden on developers.
+- Increased complexity burdens developers.
 
 #### Phase 3 Design (In Progress)
 {% include image.html src="/assets/img/nimble_architecture_phase3.png" alt="Phase 3 Design" width="700" %}
-The design has further evolved based on feedback from Phase 2. This phase is still in progress.
-
-**Infrastructure Management**
-- Code management using Git
-- Deployment using GitHub Actions
-- Introduction of IaC concepts using Terraform
+This design further evolves from the feedback received in Phase 2. It is currently being implemented.
