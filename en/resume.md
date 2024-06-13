@@ -24,15 +24,27 @@ lang: en
     list-style-type: none;
     padding-left: 0;
   }
+  .skills-item-full {
+    grid-column: span 2;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .skills-item-full ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
 </style>
-
 <div class="skills-container">
   <div class="skills-item">
     <strong>Programming Languages</strong>
     <ul>
-      <li>Main: Python</li>
-      <li>Secondary: Java/C</li>
-      <li>Learning: Rust</li>
+      <li>Main Language: Python</li>
+      <li>Secondary Languages: Java/C</li>
+      <li>Currently Learning: Rust</li>
     </ul>
   </div>
   <div class="skills-item">
@@ -60,6 +72,29 @@ lang: en
       <li>Prometheus</li>
       <li>Grafana</li>
     </ul>
+  </div>
+  <div class="skills-item-full">
+    <div>
+      <ul>
+      <strong>Miscellaneous</strong>
+        <li>PYQT5</li>
+        <li>Selenium</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li>&nbsp;</li>
+        <li>Pytorch</li>
+        <li>OpenCV</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li>&nbsp;</li>
+        <li>Git</li>
+        <li></li>
+      </ul>
+    </div>
   </div>
 </div>
 
