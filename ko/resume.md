@@ -37,6 +37,9 @@ lang: ko
     list-style-type: none;
     padding-left: 0;
   }
+  .skills-item-full div {
+    margin-top: -20px
+  }
 </style>
 
 <div class="skills-container">
@@ -78,26 +81,39 @@ lang: ko
     <div>
       <ul>
       <strong>기타</strong>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li>&nbsp;</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li>&nbsp;</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
         <li>PYQT5</li>
         <li>Selenium</li>
       </ul>
     </div>
     <div>
       <ul>
-        <li>&nbsp;</li>
         <li>Pytorch</li>
         <li>OpenCV</li>
       </ul>
     </div>
     <div>
       <ul>
-        <li>&nbsp;</li>
         <li>Git</li>
         <li></li>
       </ul>
     </div>
   </div>
 </div>
+
 
 ### 프로젝트
 **님블 - 디지털 마케팅 자동화**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/nimble-project.html" style="float: right; text-decoration: underline; margin-left: 30px">링크</a><span style="float: right; ">2024.01 ~ 진행 중</span>  

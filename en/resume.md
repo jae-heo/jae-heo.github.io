@@ -37,6 +37,9 @@ lang: en
     list-style-type: none;
     padding-left: 0;
   }
+  .skills-item-full div {
+    margin-top: -20px
+  }
 </style>
 <div class="skills-container">
   <div class="skills-item">
@@ -77,20 +80,32 @@ lang: en
     <div>
       <ul>
       <strong>Miscellaneous</strong>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li>&nbsp;</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li>&nbsp;</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
         <li>PYQT5</li>
         <li>Selenium</li>
       </ul>
     </div>
     <div>
       <ul>
-        <li>&nbsp;</li>
         <li>Pytorch</li>
         <li>OpenCV</li>
       </ul>
     </div>
     <div>
       <ul>
-        <li>&nbsp;</li>
         <li>Git</li>
         <li></li>
       </ul>
