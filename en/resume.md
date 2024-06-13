@@ -66,10 +66,10 @@ lang: en
 ### Projects
 **Nimble - Digital Marketing Automation**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/nimble-project.html" style="float: right; text-decoration: underline; margin-left: 30px">Link</a><span style="float: right;">2024.01 ~ Ongoing</span>  
 
-Project Nimble aims to automate digital marketing. As the digital marketing environment rapidly evolves with the adoption of AI, automation is essential for efficient and effective marketing strategies. Nimble is a solution developed to meet this need.
+Project Nimble aims to automate digital marketing. As the digital marketing environment rapidly evolves with the adoption of AI, automation is essential for creating efficient and effective marketing strategies. Nimble is a solution developed to meet this need.
 
-**Google Cloud Module - Usability Improvement**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/gcp-improvement.html" style="float: right; text-decoration: underline; margin-left: 30px">Link</a><span style="float: right;">2024.05 ~ Ongoing</span>  
-This project aims to improve the usability of Google Cloud modules, enhancing user experience and making the platform more accessible and easier to use for a broader audience.
+**Collision Prediction System**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/collision-prediction-system.html" style="float: right; text-decoration: underline; margin-left: 30px">Link</a><span style="float: right;">2024.02 ~ 2024.04</span>  
+The commercialization of autonomous delivery robots has increased the demand for cost-effective depth estimation technology. This project aimed to address this issue using monocular cameras. By leveraging deep learning AI, it overcomes limitations in adverse weather conditions and provides the expected benefit of preventing safety accidents.
 
 ### Education
 
@@ -79,10 +79,10 @@ Major: Department of Computer Science
 ### Experience
 
 **Consultant - DXT** <span style="float: right;">2022.09 ~ 2023.10</span>  
-As a Junior Consultant at DXT, I developed a bio production process management solution, improving the existing workflow managed through Excel, and reducing BOM management workload by 50%. Additionally, I designed and implemented an ASPICE-compliant solution for managing autonomous vehicle electronic components, achieving a 70% cost reduction through B2B cloud deployment.
+As a Junior Consultant, I developed a bio-production process management solution at DXT. This project improved the existing workflow, previously managed via files, reducing BOM management workload by 50%. Additionally, I designed and implemented an ASPICE-compliant solution for autonomous vehicle component management, achieving a 70% cost reduction through B2B cloud deployment.
 
 **Intern - WESTMOON** <span style="float: right;">2022.06 ~ 2022.08</span>  
-At WESTMOON's development team, I maintained backend applications, including repairing a Node.js video streaming server and improving the admin page. I also developed an annotation tool for rehabilitation datasets using PyQT5, collaborating with the rehabilitation team to design annotation rules.
+At WESTMOON, I was responsible for backend maintenance in the development team. This included maintaining a video streaming server using Node.js and improving the admin page. Additionally, I developed an annotation tool for rehabilitation datasets using PyQT5, collaborating with the rehabilitation team to design annotation rules.
 
 ### Military Service
 
