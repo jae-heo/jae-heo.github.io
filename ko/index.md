@@ -1,7 +1,7 @@
 ---
 layout: page
 title: 안녕하세요. 허재영입니다.
-subtitle: Backend/DevOps 개발자 지망생입니다.
+subtitle: 소프트웨어 개발자 지망생입니다.
 sitemap:
   priority: 0.9
 lang: ko
