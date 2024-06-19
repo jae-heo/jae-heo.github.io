@@ -1,7 +1,7 @@
 # Site settings
 title: Jaeyoung Heo
 description: >
-  A simple, minimal Jekyll theme for a personal web page and blog, focusing on white space and readability
+  Jaeyoung Heo's tech blog
 
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "https://jae-heo.github.io" # the base hostname & protocol for your site
