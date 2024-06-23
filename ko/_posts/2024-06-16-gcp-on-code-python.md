@@ -3,7 +3,7 @@ layout: post
 title: "코드로 다루는 GCP Compute Engine (파이썬)"
 subtitle: "Google API Client 라이브러리를 이용해 Compute Engine을 다뤄보자"
 date: 2024-06-16 14:00:00 +0900
-categories: ["project"]
+categories: ["tutorial"]
 lang: ko
 ---
 

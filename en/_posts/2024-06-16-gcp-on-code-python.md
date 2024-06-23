@@ -3,7 +3,7 @@ layout: post
 title: "Handling GCP Compute Engine with Code (Python)"
 subtitle: "Using Google API Client Library to Manage Compute Engine"
 date: 2024-06-16 14:00:00 +0900
-categories: ["project"]
+categories: ["tutorial"]
 lang: en
 ---
 
