@@ -166,7 +166,7 @@ operation = compute.instances().setMetadata(
 print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 ```
 
-### 활용방안
+### Use Cases
 
 - **Automated Instance Management**: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.
 - **Resource Optimization**: You can create instances only when needed and delete them afterward, creating a cost-effective solution.
