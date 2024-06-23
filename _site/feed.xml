@@ -1,54 +1,337 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-06-19T18:53:39+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
-</subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="en"><title type="html">Collision Prediction System</title><link href="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="Collision Prediction System" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
-  
-</div>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-06-24T01:53:34+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
+</subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="en"><title type="html">Handling GCP Compute Engine with Code (Python)</title><link href="https://jae-heo.github.io/en/project/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="Handling GCP Compute Engine with Code (Python)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+  <li><a href="#introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</a></li>
+  <li><a href="#introduction-to-google-api-client-library">Introduction to Google API Client Library</a>
+    <ol>
+      <li><a href="#instance-crud">Instance CRUD</a></li>
+      <li><a href="#fetching-instance-list">Fetching Instance List</a></li>
+      <li><a href="#adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</a></li>
+    </ol>
+  </li>
+  <li><a href="#use-cases">Use Cases</a></li>
+</ol>
 
-<h3 id="background">Background</h3>
+<h3 id="introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</h3>
+
+<p>GCP Compute Engine is a virtual machine service provided by Google Cloud Platform (GCP). It offers similar functionalities to Amazon AWS’s EC2 service. Users can easily manage virtual machines, and it supports various tools for scaling, security, monitoring, and more.</p>
+
+<h3 id="introduction-to-google-api-client-library">Introduction to Google API Client Library</h3>
+
+<p>Using the Google API Client Library, you can easily manage Compute Engine instances with Python. This library allows you to perform CRUD operations on instances, and since the operations are executed through code, they can be automated.</p>
+
+<h4 id="instance-crud">Instance CRUD</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
+<span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
+
+<span class="c1"># Obtain Google Cloud authentication credentials.
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
+
+<span class="c1"># Create a Compute Engine API client.
+</span><span class="n">service</span> <span class="o">=</span> <span class="n">discovery</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">compute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>  <span class="c1"># Enter your project ID.
+</span><span class="n">zone</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3-a</span><span class="sh">'</span>   <span class="c1"># Enter the zone you are using.
+</span>
+<span class="c1"># Instance creation code example
+</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span><span class="p">,</span>
+    <span class="sh">'</span><span class="s">machineType</span><span class="sh">'</span><span class="p">:</span> <span class="sa">f</span><span class="sh">'</span><span class="s">zones/</span><span class="si">{</span><span class="n">zone</span><span class="si">}</span><span class="s">/machineTypes/n1-standard-1</span><span class="sh">'</span><span class="p">,</span> <span class="c1"># Machine type can be set
+</span>    <span class="sh">'</span><span class="s">disks</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="sh">'</span><span class="s">boot</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">autoDelete</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">initializeParams</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">'</span><span class="s">sourceImage</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">projects/debian-cloud/global/images/family/debian-9</span><span class="sh">'</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="sh">'</span><span class="s">networkInterfaces</span><span class="sh">'</span><span class="p">:</span> <span class="p">[{</span>
+        <span class="sh">'</span><span class="s">network</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">global/networks/default</span><span class="sh">'</span>
+    <span class="p">}]</span>
+<span class="p">}</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">insert</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># Instance reading code example
+</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># Instance updating code example
+</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">description</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Updated instance</span><span class="sh">'</span>
+<span class="p">}</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">setMetadata</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># Instance deletion code example
+</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">delete</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="fetching-instance-list">Fetching Instance List</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
+from oauth2client.client import GoogleCredentials
+
+# Obtain Google Cloud authentication credentials.
+credentials = GoogleCredentials.get_application_default()
+
+# Create a Compute Engine API client.
+service = discovery.build('compute', 'v1', credentials=credentials)
+
+project = 'your-project-id'  # Enter your project ID.
+zone = 'asia-northeast3-a'   # Enter the zone you are using.
+
+# Create a request to fetch the list of instances.
+request = service.instances().list(project=project, zone=zone)
+
+# Execute the request and get the response.
+response = request.execute()
+
+# Print the list of instances.
+if 'items' in response:
+    for instance in response['items']:
+        print('Instance name:', instance['name'])
+        print('Instance status:', instance['status'])
+        print('Instance zone:', instance['zone'])
+        print()
+else:
+    print('No instances found.')
+</code></pre></div></div>
+
+<h4 id="adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
+from google.oauth2 import service_account
+
+# Obtain Google Cloud authentication credentials.
+credentials = GoogleCredentials.get_application_default()
+
+# Create a Compute Engine API client.
+service = discovery.build('compute', 'v1', credentials=credentials)
+
+project = 'your-project-id'  # Enter your project ID.
+zone = 'asia-northeast3-a'   # Enter the zone you are using.
+
+# Read the public key
+with open('public-key-path', 'r') as f:
+    public_key = f.read().strip()
+
+# Get the current metadata of the instance
+instance = compute.instances().get(project=PROJECT_ID, zone=ZONE, instance=INSTANCE_NAME).execute()
+metadata = instance.get('metadata', {})
+items = metadata.get('items', [])
+
+# Add SSH key metadata
+ssh_keys = None
+for item in items:
+    if item['key'] == 'ssh-keys':
+        ssh_keys = item
+        break
+
+if ssh_keys:
+    ssh_keys['value'] += f"\n{user_name}:{public_key}"
+else:
+    items.append({
+        'key': 'ssh-keys',
+        'value': f"{user_name}:{public_key}"
+    })
+
+metadata['items'] = items
+
+# Send a request to update the metadata
+operation = compute.instances().setMetadata(
+    project=PROJECT_ID,
+    zone=ZONE,
+    instance=INSTANCE_NAME,
+    body=metadata
+).execute()
+
+print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
+</code></pre></div></div>
+
+<h3 id="활용방안">활용방안</h3>
+
 <ul>
-  <li>The commercialization of delivery robots utilizing autonomous driving technology has significantly increased the demand for depth estimation technology.</li>
-  <li>Traditional distance estimation is possible with Lidar sensors, but they are expensive.</li>
-  <li>Videos captured on the streets often include people’s faces, making it difficult to use such data.</li>
-</ul>
+  <li><strong>Automated Instance Management</strong>: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.</li>
+  <li><strong>Resource Optimization</strong>: You can create instances only when needed and delete them afterward, creating a cost-effective solution.</li>
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><summary type="html"><![CDATA[Table of Contents Introduction to GCP Compute Engine Introduction to Google API Client Library Instance CRUD Fetching Instance List Adding SSH Keys to an Instance Use Cases]]></summary></entry><entry xml:lang="ko"><title type="html">코드로 다루는 GCP Compute Engine (파이썬)</title><link href="https://jae-heo.github.io/ko/project/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="코드로 다루는 GCP Compute Engine (파이썬)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="목차">목차</h2>
+<ol>
+  <li><a href="#gcp-compute-engine-소개">GCP Compute Engine 소개</a></li>
+  <li><a href="#google-api-client-library-소개">Google API Client Library 소개</a>
+    <ol>
+      <li><a href="#인스턴스-crud">인스턴스 CRUD</a></li>
+      <li><a href="#인스턴스-리스트-가져오기">인스턴스 리스트 가져오기</a></li>
+      <li><a href="#인스턴스에-ssh키-추가하기">인스턴스에 SSH키 추가하기</a></li>
+    </ol>
+  </li>
+  <li><a href="#활용방안">활용방안</a></li>
+</ol>
 
-<h3 id="expected-benefits">Expected Benefits</h3>
+<h3 id="gcp-compute-engine-소개">GCP Compute Engine 소개</h3>
+
+<p>GCP Compute Engine은 Google Cloud Platform(GCP)에서 제공하는 가상 머신 서비스입니다. 아마존 AWS의 EC2 서비스와 비슷한 기능을 제공합니다. 사용자는 가상머신을 손쉽게 관리할 수 있고, 스케일링, 보안, 모니터링 등 다양한 도구를 지원합니다.</p>
+
+<h3 id="google-api-client-library-소개">Google API Client Library 소개</h3>
+
+<p>Google API Client Library를 사용하면 파이썬으로 Compute Engine을 쉽게 다룰 수 있습니다. 이 라이브러리를 통해 인스턴스의 CRUD 작업을 실행할 수 있고, 코드로 실행하기 때문에 자동화가 가능합니다.</p>
+
+<h4 id="인스턴스-crud">인스턴스 CRUD</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
+from oauth2client.client import GoogleCredentials
+
+# Google Cloud 인증 정보를 얻습니다.
+credentials = GoogleCredentials.get_application_default()
+
+# Compute Engine API 클라이언트를 생성합니다.
+service = discovery.build('compute', 'v1', credentials=credentials)
+
+project = 'your-project-id'  # 프로젝트 ID를 입력합니다.
+zone = 'asia-northeast3-a'   # 사용 중인 존을 입력합니다.
+
+# 인스턴스 생성 코드 예제
+instance_body = {
+    'name': 'instance-name',
+    'machineType': f'zones/{zone}/machineTypes/n1-standard-1', # 머신 타입 설정 가능
+    'disks': [
+        {
+            'boot': True,
+            'autoDelete': True,
+            'initializeParams': {
+                'sourceImage': 'projects/debian-cloud/global/images/family/debian-9'
+            }
+        }
+    ],
+    'networkInterfaces': [{
+        'network': 'global/networks/default'
+    }]
+}
+request = service.instances().insert(project=project, zone=zone, body=instance_body)
+response = request.execute()
+print(response)
+
+
+# 인스턴스 읽기 코드 예제
+instance_name = 'instance-name'
+request = service.instances().get(project=project, zone=zone, instance=instance_name)
+response = request.execute()
+print(response)
+
+
+# 인스턴스 업데이트 코드 예제
+instance_body = {
+    'description': 'Updated instance'
+}
+
+request = service.instances().setMetadata(project=project, zone=zone, instance=instance, body=instance_body)
+response = request.execute()
+print(response)
+
+
+# 인스턴스 삭제 코드 예제
+instance_name = 'instance-name'
+request = service.instances().delete(project=project, zone=zone, instance=instance_name)
+response = request.execute()
+print(response)
+</code></pre></div></div>
+
+<h4 id="인스턴스-리스트-가져오기">인스턴스 리스트 가져오기</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
+from oauth2client.client import GoogleCredentials
+
+# Google Cloud 인증 정보를 얻습니다.
+credentials = GoogleCredentials.get_application_default()
+
+# Compute Engine API 클라이언트를 생성합니다.
+service = discovery.build('compute', 'v1', credentials=credentials)
+
+project = 'your-project-id'  # 프로젝트 ID를 입력합니다.
+zone = 'asia-northeast3-a'   # 사용 중인 존을 입력합니다.
+
+# 인스턴스 목록을 가져오는 요청을 만듭니다.
+request = service.instances().list(project=project, zone=zone)
+
+# 요청을 실행하여 응답을 얻습니다.
+response = request.execute()
+
+# 인스턴스 목록을 출력합니다.
+if 'items' in response:
+    for instance in response['items']:
+        print('Instance name:', instance['name'])
+        print('Instance status:', instance['status'])
+        print('Instance zone:', instance['zone'])
+        print()
+else:
+    print('No instances found.')
+</code></pre></div></div>
+
+<h4 id="인스턴스에-ssh키-추가하기">인스턴스에 SSH키 추가하기</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
+from google.oauth2 import service_account
+
+# Google Cloud 인증 정보를 얻습니다.
+credentials = GoogleCredentials.get_application_default()
+
+# Compute Engine API 클라이언트를 생성합니다.
+service = discovery.build('compute', 'v1', credentials=credentials)
+
+project = 'your-project-id'  # 프로젝트 ID를 입력합니다.
+zone = 'asia-northeast3-a'   # 사용 중인 존을 입력합니다.
+
+# 공개 키 읽기
+with open('public-key-path', 'r') as f:
+    public_key = f.read().strip()
+
+# 인스턴스의 현재 메타데이터 가져오기
+instance = compute.instances().get(project=PROJECT_ID, zone=ZONE, instance=INSTANCE_NAME).execute()
+metadata = instance.get('metadata', {})
+items = metadata.get('items', [])
+
+# SSH 키 메타데이터 추가
+ssh_keys = None
+for item in items:
+    if item['key'] == 'ssh-keys':
+        ssh_keys = item
+        break
+
+if ssh_keys:
+    ssh_keys['value'] += f"\n{user_name}:{public_key}"
+else:
+    items.append({
+        'key': 'ssh-keys',
+        'value': f"{user_name}:{public_key}"
+    })
+
+metadata['items'] = items
+
+# 메타데이터 업데이트 요청
+operation = compute.instances().setMetadata(
+    project=PROJECT_ID,
+    zone=ZONE,
+    instance=INSTANCE_NAME,
+    body=metadata
+).execute()
+
+print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
+</code></pre></div></div>
+
+<h3 id="활용방안">활용방안</h3>
+
 <ul>
-  <li>Prevent safety accidents through distance measurement technology using monocular cameras.</li>
-  <li>Overcome the limitations of monocular cameras in adverse weather conditions using deep learning.</li>
-  <li>Reduce costs by using monocular cameras instead of expensive Lidar sensors.</li>
-</ul>
-
-<h3 id="my-role">My Role</h3>
-<ul>
-  <li>Implementation of Python GUI app.</li>
-  <li>Implementation of real-time model serving server.</li>
-</ul>
-
-<h3 id="models-used">Models Used</h3>
-<ul>
-  <li>YoloWorld</li>
-  <li>Depth Anything</li>
-</ul>
-
-<h3 id="project-structure">Project Structure</h3>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/cps_architecture.png" alt="cps structure" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-</div>
-
-<h3 id="technologies-used">Technologies Used</h3>
-<ul>
-  <li>PYQT5</li>
-  <li>OpenCV</li>
-  <li>WebSockets</li>
-  <li>FastAPI</li>
-  <li>Lock</li>
-  <li>ONNX</li>
-  <li>Pytorch</li>
-</ul>
-
-<h3 id="project-link">Project Link</h3>
-<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
+  <li><strong>자동화된 인스턴스 관리</strong>: 콘솔에서 수동으로 인스턴스를 관리하는 대신, 코드를 사용해 관리를 자동화하여 효율성을 증가시킬 수 있습니다.</li>
+  <li><strong>리소스 최적화</strong>: 필요할때만 인스턴스를 생성하고 이후 삭제하는 등 비용 효율적인 기능을 만들 수 있습니다.</li>
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><summary type="html"><![CDATA[목차 GCP Compute Engine 소개 Google API Client Library 소개 인스턴스 CRUD 인스턴스 리스트 가져오기 인스턴스에 SSH키 추가하기 활용방안]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
   
 </div>
@@ -97,102 +380,56 @@
 </ul>
 
 <h3 id="프로젝트-자료">프로젝트 자료</h3>
-<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="en"><title type="html">Project Nimble</title><link href="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="Project Nimble" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html"><![CDATA[<h3 id="introduction-to-project-nimble">Introduction to Project Nimble</h3>
+<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="en"><title type="html">Collision Prediction System</title><link href="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="Collision Prediction System" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
+  
+</div>
 
-<p>Project Nimble aims to automate digital marketing. The digital marketing environment is rapidly changing with the adoption of AI, and automation is essential for creating efficient and effective marketing strategies. Nimble is a solution developed to meet this need.</p>
-
-<h3 id="key-features">Key Features</h3>
-
-<ol>
-  <li><strong>Automated Marketing Management</strong>
-    <ul>
-      <li>Project Nimble automates various digital marketing tasks end-to-end.</li>
-    </ul>
-  </li>
-  <li><strong>Generative AI-based Marketing</strong>
-    <ul>
-      <li>Utilizes AI technology to analyze and apply real-time SEO and trends.</li>
-    </ul>
-  </li>
-</ol>
-
-<h3 id="expected-benefits">Expected Benefits</h3>
-
+<h3 id="background">Background</h3>
 <ul>
-  <li><strong>Increased Efficiency</strong>
-    <ul>
-      <li>Automation allows clients to focus on their core tasks.</li>
-    </ul>
-  </li>
-  <li><strong>Accurate Marketing</strong>
-    <ul>
-      <li>Conducts efficient marketing through real-time data analysis and AI-based insights.</li>
-    </ul>
-  </li>
-  <li><strong>Cost Reduction</strong>
-    <ul>
-      <li>Reduces labor and operational costs through automation and advanced infrastructure.</li>
-    </ul>
-  </li>
+  <li>The commercialization of delivery robots utilizing autonomous driving technology has significantly increased the demand for depth estimation technology.</li>
+  <li>Traditional distance estimation is possible with Lidar sensors, but they are expensive.</li>
+  <li>Videos captured on the streets often include people’s faces, making it difficult to use such data.</li>
 </ul>
 
-<h3 id="my-role-and-technologies-used">My Role and Technologies Used</h3>
-
+<h3 id="expected-benefits">Expected Benefits</h3>
 <ul>
-  <li><strong>Algorithm Implementation</strong>
-    <ul>
-      <li>Selenium</li>
-      <li>GPT API</li>
-    </ul>
-  </li>
-  <li><strong>Infrastructure Setup and Management</strong>
-    <ul>
-      <li>Github Action</li>
-      <li>GCP</li>
-      <li>Docker</li>
-      <li>Airflow</li>
-      <li>Database (sqlite, postgresql)</li>
-      <li>Linux</li>
-      <li>Terraform</li>
-    </ul>
-  </li>
+  <li>Prevent safety accidents through distance measurement technology using monocular cameras.</li>
+  <li>Overcome the limitations of monocular cameras in adverse weather conditions using deep learning.</li>
+  <li>Reduce costs by using monocular cameras instead of expensive Lidar sensors.</li>
+</ul>
+
+<h3 id="my-role">My Role</h3>
+<ul>
+  <li>Implementation of Python GUI app.</li>
+  <li>Implementation of real-time model serving server.</li>
+</ul>
+
+<h3 id="models-used">Models Used</h3>
+<ul>
+  <li>YoloWorld</li>
+  <li>Depth Anything</li>
 </ul>
 
 <h3 id="project-structure">Project Structure</h3>
-
-<h4 id="phase-1-design">Phase 1 Design</h4>
 <div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/nimble_architecture_phase1.png" alt="Phase 1 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  <img src="/assets/img/cps_architecture.png" alt="cps structure" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>The system was designed to execute logic directly on the end-user’s system. Users purchase or request a license from the administrator, who then grants the license and provides the client program. The core logic, executed daily, verifies its validity with the license server using its key each time it runs.</p>
 
-<p><strong>Feedback</strong></p>
+<h3 id="technologies-used">Technologies Used</h3>
 <ul>
-  <li>Users find it burdensome to run the program themselves.</li>
-  <li>Distributing new programs to existing clients with each update is challenging.</li>
-  <li>Administrators find manual license management inconvenient.</li>
+  <li>PYQT5</li>
+  <li>OpenCV</li>
+  <li>WebSockets</li>
+  <li>FastAPI</li>
+  <li>Lock</li>
+  <li>ONNX</li>
+  <li>Pytorch</li>
 </ul>
 
-<h4 id="phase-2-design">Phase 2 Design</h4>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/nimble_architecture_phase2.png" alt="Phase 2 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-</div>
-<p>This design evolved from the feedback received in Phase 1. Users enter the required information during payment, and the payment platform automatically calls the API. Subsequent tasks are executed automatically on the server.</p>
-
-<p><strong>Feedback</strong></p>
-<ul>
-  <li>Increased infrastructure maintenance costs.</li>
-  <li>Increased complexity burdens developers.</li>
-</ul>
-
-<h4 id="phase-3-design-in-progress">Phase 3 Design (In Progress)</h4>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/nimble_architecture_phase3.png" alt="Phase 3 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-</div>
-<p>This design further evolves from the feedback received in Phase 2. It is currently being implemented.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><summary type="html"><![CDATA[Introduction to Project Nimble]]></summary></entry><entry xml:lang="ko"><title type="html">프로젝트 님블 (Nimble)</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="프로젝트 님블 (Nimble)" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html"><![CDATA[<h3 id="프로젝트-님블-소개">프로젝트 님블 소개</h3>
+<h3 id="project-link">Project Link</h3>
+<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="ko"><title type="html">프로젝트 님블 (Nimble)</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="프로젝트 님블 (Nimble)" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html"><![CDATA[<h3 id="프로젝트-님블-소개">프로젝트 님블 소개</h3>
 
 <p>프로젝트 님블(Nimble)은 디지털 마케팅 자동화를 목표로 하는 프로젝트입니다. 현대의 디지털 마케팅 환경은 AI의 도입으로 빠르게 변화하고 있으며, 이에 발맞추어 효율적이고 효과적인 마케팅 전략을 세우기 위해서는 자동화가 필수적입니다. 님블은 이러한 필요성에 부응하여 개발된 솔루션입니다.</p>
 
@@ -287,32 +524,102 @@
   <img src="/assets/img/nimble_architecture_phase3.png" alt="3차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>2차 피드백을 기반으로 발전된 설계입니다. 아직 구현중에 있습니다.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><summary type="html"><![CDATA[프로젝트 님블 소개]]></summary></entry><entry xml:lang="en"><title type="html">Starting a Tech Blog</title><link href="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="Starting a Tech Blog" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>Hello, and welcome to the blog!</p>
+<p>2차 피드백을 기반으로 발전된 설계입니다. 아직 구현중에 있습니다.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><summary type="html"><![CDATA[프로젝트 님블 소개]]></summary></entry><entry xml:lang="en"><title type="html">Project Nimble</title><link href="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="Project Nimble" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html"><![CDATA[<h3 id="introduction-to-project-nimble">Introduction to Project Nimble</h3>
 
-<h3 id="about-this-blog">About This Blog</h3>
+<p>Project Nimble aims to automate digital marketing. The digital marketing environment is rapidly changing with the adoption of AI, and automation is essential for creating efficient and effective marketing strategies. Nimble is a solution developed to meet this need.</p>
 
-<p>I’m excited to start this blog. Here, I will be sharing posts on various tech topics. The main focus of this blog will be on software development, cloud computing, and more. Whether you are an experienced developer or just starting out, I hope you’ll find valuable information here.</p>
+<h3 id="key-features">Key Features</h3>
 
-<h3 id="about-me">About Me</h3>
+<ol>
+  <li><strong>Automated Marketing Management</strong>
+    <ul>
+      <li>Project Nimble automates various digital marketing tasks end-to-end.</li>
+    </ul>
+  </li>
+  <li><strong>Generative AI-based Marketing</strong>
+    <ul>
+      <li>Utilizes AI technology to analyze and apply real-time SEO and trends.</li>
+    </ul>
+  </li>
+</ol>
 
-<p>My name is Jaeyoung Heo. I have a passion for technology and software development. Although I am just beginning my journey in the tech industry, I am eager to learn and grow. Through this blog, I hope to share what I learn, document my progress, and connect with others.</p>
-
-<h3 id="what-to-expect">What to Expect</h3>
+<h3 id="expected-benefits">Expected Benefits</h3>
 
 <ul>
-  <li><strong>Learning Log</strong>: I will share my experiences as I learn new technologies, programming languages, and frameworks.</li>
-  <li><strong>Tutorials and Guides</strong>: Step-by-step guides to help you understand and implement various technologies.</li>
-  <li><strong>Projects</strong>: I will showcase the projects I am working on and share the lessons learned from them.</li>
+  <li><strong>Increased Efficiency</strong>
+    <ul>
+      <li>Automation allows clients to focus on their core tasks.</li>
+    </ul>
+  </li>
+  <li><strong>Accurate Marketing</strong>
+    <ul>
+      <li>Conducts efficient marketing through real-time data analysis and AI-based insights.</li>
+    </ul>
+  </li>
+  <li><strong>Cost Reduction</strong>
+    <ul>
+      <li>Reduces labor and operational costs through automation and advanced infrastructure.</li>
+    </ul>
+  </li>
 </ul>
 
-<h3 id="lets-connect">Let’s Connect</h3>
+<h3 id="my-role-and-technologies-used">My Role and Technologies Used</h3>
 
-<p>I highly value feedback and would love to hear your thoughts on my posts. Feel free to leave comments or connect with me via the email, GitHub, or LinkedIn buttons at the top right corner of this page.</p>
+<ul>
+  <li><strong>Algorithm Implementation</strong>
+    <ul>
+      <li>Selenium</li>
+      <li>GPT API</li>
+    </ul>
+  </li>
+  <li><strong>Infrastructure Setup and Management</strong>
+    <ul>
+      <li>Github Action</li>
+      <li>GCP</li>
+      <li>Docker</li>
+      <li>Airflow</li>
+      <li>Database (sqlite, postgresql)</li>
+      <li>Linux</li>
+      <li>Terraform</li>
+    </ul>
+  </li>
+</ul>
 
-<p>Thank you for visiting my blog. I look forward to sharing my first post with you soon.</p>
+<h3 id="project-structure">Project Structure</h3>
 
-<p>Best regards,<br />
-Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="general" /><summary type="html"><![CDATA[Hello, and welcome to the blog!]]></summary></entry><entry xml:lang="ko"><title type="html">Utterances를 이용해 깃허브 블로그 댓글 기능 추가</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Utterances를 이용해 깃허브 블로그 댓글 기능 추가" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다.
+<h4 id="phase-1-design">Phase 1 Design</h4>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/nimble_architecture_phase1.png" alt="Phase 1 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+</div>
+<p>The system was designed to execute logic directly on the end-user’s system. Users purchase or request a license from the administrator, who then grants the license and provides the client program. The core logic, executed daily, verifies its validity with the license server using its key each time it runs.</p>
+
+<p><strong>Feedback</strong></p>
+<ul>
+  <li>Users find it burdensome to run the program themselves.</li>
+  <li>Distributing new programs to existing clients with each update is challenging.</li>
+  <li>Administrators find manual license management inconvenient.</li>
+</ul>
+
+<h4 id="phase-2-design">Phase 2 Design</h4>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/nimble_architecture_phase2.png" alt="Phase 2 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+</div>
+<p>This design evolved from the feedback received in Phase 1. Users enter the required information during payment, and the payment platform automatically calls the API. Subsequent tasks are executed automatically on the server.</p>
+
+<p><strong>Feedback</strong></p>
+<ul>
+  <li>Increased infrastructure maintenance costs.</li>
+  <li>Increased complexity burdens developers.</li>
+</ul>
+
+<h4 id="phase-3-design-in-progress">Phase 3 Design (In Progress)</h4>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/nimble_architecture_phase3.png" alt="Phase 3 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+</div>
+<p>This design further evolves from the feedback received in Phase 2. It is currently being implemented.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><summary type="html"><![CDATA[Introduction to Project Nimble]]></summary></entry><entry xml:lang="ko"><title type="html">Utterances를 이용해 깃허브 블로그 댓글 기능 추가</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Utterances를 이용해 깃허브 블로그 댓글 기능 추가" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다.
 이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.</p>
 
 <h3 id="utterances란-무엇인가요">Utterances란 무엇인가요?</h3>
@@ -401,7 +708,32 @@ Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyo
   
   <p style="font-style: italic; font-size: 0.9em; margin-top: 5px; text-align: center;">레이아웃 파일 예시</p>
   
-</div>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><summary type="html"><![CDATA[깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다. 이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.]]></summary></entry><entry xml:lang="ko"><title type="html">기술 블로그를 시작합니다.</title><link href="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="기술 블로그를 시작합니다." /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>안녕하세요, 블로그에 오신 것을 환영합니다!</p>
+</div>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><summary type="html"><![CDATA[깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다. 이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.]]></summary></entry><entry xml:lang="en"><title type="html">Starting a Tech Blog</title><link href="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="Starting a Tech Blog" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>Hello, and welcome to the blog!</p>
+
+<h3 id="about-this-blog">About This Blog</h3>
+
+<p>I’m excited to start this blog. Here, I will be sharing posts on various tech topics. The main focus of this blog will be on software development, cloud computing, and more. Whether you are an experienced developer or just starting out, I hope you’ll find valuable information here.</p>
+
+<h3 id="about-me">About Me</h3>
+
+<p>My name is Jaeyoung Heo. I have a passion for technology and software development. Although I am just beginning my journey in the tech industry, I am eager to learn and grow. Through this blog, I hope to share what I learn, document my progress, and connect with others.</p>
+
+<h3 id="what-to-expect">What to Expect</h3>
+
+<ul>
+  <li><strong>Learning Log</strong>: I will share my experiences as I learn new technologies, programming languages, and frameworks.</li>
+  <li><strong>Tutorials and Guides</strong>: Step-by-step guides to help you understand and implement various technologies.</li>
+  <li><strong>Projects</strong>: I will showcase the projects I am working on and share the lessons learned from them.</li>
+</ul>
+
+<h3 id="lets-connect">Let’s Connect</h3>
+
+<p>I highly value feedback and would love to hear your thoughts on my posts. Feel free to leave comments or connect with me via the email, GitHub, or LinkedIn buttons at the top right corner of this page.</p>
+
+<p>Thank you for visiting my blog. I look forward to sharing my first post with you soon.</p>
+
+<p>Best regards,<br />
+Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="general" /><summary type="html"><![CDATA[Hello, and welcome to the blog!]]></summary></entry><entry xml:lang="ko"><title type="html">기술 블로그를 시작합니다.</title><link href="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="기술 블로그를 시작합니다." /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>안녕하세요, 블로그에 오신 것을 환영합니다!</p>
 
 <h3 id="블로그-소개">블로그 소개</h3>
 

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Handling GCP Compute Engine with Code (Python) — Using Google API Client Library to Manage Compute Engine  | Jaeyoung Heo</title>
+<meta name="description" content="Jaeyoung Heo's tech blog
+">
+<meta name="keywords" content="">
+<link rel="canonical" href="/en/project/2024/06/16/gcp-on-code-python.html">
+<link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/agate.css">
+
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XDPCR56GW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XDPCR56GW');
+</script>
+</head>
+<body>
+<div class="wrapper">
+<header class="header">
+  <div class="navigation">
+    <a href="/en" class="logo">Jaeyoung Heo</a>
+    <ul class="menu">
+      <li class="menu__entry">
+        <a href="/en/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/blog">Blog</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="social-links">
+    
+    <li class="social-links__entry">
+      <a href="mailto:gjwodud119@gmail.com" target="_blank">
+        <i class="fa fa-envelope-square"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://github.com/jae-heo" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://in.linkedin.com/in/jaeyoung-heo-664033282" target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    
+    <li class="language-selector">
+      <a href="/en/project/2024/06/16/gcp-on-code-python.html"><strong>EN</strong></a> |
+      <a href="/ko/project/2024/06/16/gcp-on-code-python.html"><strong>KO</strong></a>
+    </li>
+  </ul>
+</header>
+<h1 class="page-title">
+<div class="page-title__text">Handling GCP Compute Engine with Code (Python)</div>
+<div class="page-title__subtitle">Using Google API Client Library to Manage Compute Engine</div>
+</h1>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+  <li><a href="#introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</a></li>
+  <li><a href="#introduction-to-google-api-client-library">Introduction to Google API Client Library</a>
+    <ol>
+      <li><a href="#instance-crud">Instance CRUD</a></li>
+      <li><a href="#fetching-instance-list">Fetching Instance List</a></li>
+      <li><a href="#adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</a></li>
+    </ol>
+  </li>
+  <li><a href="#use-cases">Use Cases</a></li>
+</ol>
+
+<h3 id="introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</h3>
+
+<p>GCP Compute Engine is a virtual machine service provided by Google Cloud Platform (GCP). It offers similar functionalities to Amazon AWS’s EC2 service. Users can easily manage virtual machines, and it supports various tools for scaling, security, monitoring, and more.</p>
+
+<h3 id="introduction-to-google-api-client-library">Introduction to Google API Client Library</h3>
+
+<p>Using the Google API Client Library, you can easily manage Compute Engine instances with Python. This library allows you to perform CRUD operations on instances, and since the operations are executed through code, they can be automated.</p>
+
+<h4 id="instance-crud">Instance CRUD</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
+<span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
+
+<span class="c1"># Obtain Google Cloud authentication credentials.
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
+
+<span class="c1"># Create a Compute Engine API client.
+</span><span class="n">service</span> <span class="o">=</span> <span class="n">discovery</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">compute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>  <span class="c1"># Enter your project ID.
+</span><span class="n">zone</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3-a</span><span class="sh">'</span>   <span class="c1"># Enter the zone you are using.
+</span>
+<span class="c1"># Instance creation code example
+</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span><span class="p">,</span>
+    <span class="sh">'</span><span class="s">machineType</span><span class="sh">'</span><span class="p">:</span> <span class="sa">f</span><span class="sh">'</span><span class="s">zones/</span><span class="si">{</span><span class="n">zone</span><span class="si">}</span><span class="s">/machineTypes/n1-standard-1</span><span class="sh">'</span><span class="p">,</span> <span class="c1"># Machine type can be set
+</span>    <span class="sh">'</span><span class="s">disks</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="sh">'</span><span class="s">boot</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">autoDelete</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">initializeParams</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">'</span><span class="s">sourceImage</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">projects/debian-cloud/global/images/family/debian-9</span><span class="sh">'</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="sh">'</span><span class="s">networkInterfaces</span><span class="sh">'</span><span class="p">:</span> <span class="p">[{</span>
+        <span class="sh">'</span><span class="s">network</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">global/networks/default</span><span class="sh">'</span>
+    <span class="p">}]</span>
+<span class="p">}</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">insert</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># Instance reading code example
+</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># Instance updating code example
+</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">description</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Updated instance</span><span class="sh">'</span>
+<span class="p">}</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">setMetadata</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># Instance deletion code example
+</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">delete</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="fetching-instance-list">Fetching Instance List</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
+from oauth2client.client import GoogleCredentials
+
+# Obtain Google Cloud authentication credentials.
+credentials = GoogleCredentials.get_application_default()
+
+# Create a Compute Engine API client.
+service = discovery.build('compute', 'v1', credentials=credentials)
+
+project = 'your-project-id'  # Enter your project ID.
+zone = 'asia-northeast3-a'   # Enter the zone you are using.
+
+# Create a request to fetch the list of instances.
+request = service.instances().list(project=project, zone=zone)
+
+# Execute the request and get the response.
+response = request.execute()
+
+# Print the list of instances.
+if 'items' in response:
+    for instance in response['items']:
+        print('Instance name:', instance['name'])
+        print('Instance status:', instance['status'])
+        print('Instance zone:', instance['zone'])
+        print()
+else:
+    print('No instances found.')
+</code></pre></div></div>
+
+<h4 id="adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
+from google.oauth2 import service_account
+
+# Obtain Google Cloud authentication credentials.
+credentials = GoogleCredentials.get_application_default()
+
+# Create a Compute Engine API client.
+service = discovery.build('compute', 'v1', credentials=credentials)
+
+project = 'your-project-id'  # Enter your project ID.
+zone = 'asia-northeast3-a'   # Enter the zone you are using.
+
+# Read the public key
+with open('public-key-path', 'r') as f:
+    public_key = f.read().strip()
+
+# Get the current metadata of the instance
+instance = compute.instances().get(project=PROJECT_ID, zone=ZONE, instance=INSTANCE_NAME).execute()
+metadata = instance.get('metadata', {})
+items = metadata.get('items', [])
+
+# Add SSH key metadata
+ssh_keys = None
+for item in items:
+    if item['key'] == 'ssh-keys':
+        ssh_keys = item
+        break
+
+if ssh_keys:
+    ssh_keys['value'] += f"\n{user_name}:{public_key}"
+else:
+    items.append({
+        'key': 'ssh-keys',
+        'value': f"{user_name}:{public_key}"
+    })
+
+metadata['items'] = items
+
+# Send a request to update the metadata
+operation = compute.instances().setMetadata(
+    project=PROJECT_ID,
+    zone=ZONE,
+    instance=INSTANCE_NAME,
+    body=metadata
+).execute()
+
+print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
+</code></pre></div></div>
+
+<h3 id="활용방안">활용방안</h3>
+
+<ul>
+  <li><strong>Automated Instance Management</strong>: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.</li>
+  <li><strong>Resource Optimization</strong>: You can create instances only when needed and delete them afterward, creating a cost-effective solution.</li>
+</ul>
+
+
+<section id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="jae-heo/jae-heo.github.io"
+            issue-term="pathname"
+            label="Comment"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</section>
+
+<div class="about">
+<div class="about__divider">*****</div>
+<div class="about__text">
+<strong> &copy; 2024 Jaeyoung Heo. </strong>
+</div>
+</div>
+
+
+</div>
+<script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
