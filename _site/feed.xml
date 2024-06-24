@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-06-24T18:53:04+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-06-25T01:06:03+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
 </subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="en"><title type="html">Handling GCP Compute Engine with Code (Python)</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="Handling GCP Compute Engine with Code (Python)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
 <ol>
   <li><a href="#introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</a></li>
@@ -331,7 +331,7 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 <ul>
   <li><strong>자동화된 인스턴스 관리</strong>: 콘솔에서 수동으로 인스턴스를 관리하는 대신, 코드를 사용해 관리를 자동화하여 효율성을 증가시킬 수 있습니다.</li>
   <li><strong>리소스 최적화</strong>: 필요할때만 인스턴스를 생성하고 이후 삭제하는 등 비용 효율적인 기능을 만들 수 있습니다.</li>
-</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><summary type="html"><![CDATA[목차 GCP Compute Engine 소개 Google API Client Library 소개 인스턴스 CRUD 인스턴스 리스트 가져오기 인스턴스에 SSH키 추가하기 활용방안]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="gcp" /><category term="python" /><summary type="html"><![CDATA[목차 GCP Compute Engine 소개 Google API Client Library 소개 인스턴스 CRUD 인스턴스 리스트 가져오기 인스턴스에 SSH키 추가하기 활용방안]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
   
 </div>
@@ -380,7 +380,7 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 </ul>
 
 <h3 id="프로젝트-자료">프로젝트 자료</h3>
-<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="en"><title type="html">Collision Prediction System</title><link href="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="Collision Prediction System" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
+<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><category term="opencv" /><category term="python" /><category term="deeplearning" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="en"><title type="html">Collision Prediction System</title><link href="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="Collision Prediction System" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
   
 </div>
@@ -524,7 +524,7 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
   <img src="/assets/img/nimble_architecture_phase3.png" alt="3차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>2차 피드백을 기반으로 발전된 설계입니다. 아직 구현중에 있습니다.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><summary type="html"><![CDATA[프로젝트 님블 소개]]></summary></entry><entry xml:lang="en"><title type="html">Project Nimble</title><link href="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="Project Nimble" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html"><![CDATA[<h3 id="introduction-to-project-nimble">Introduction to Project Nimble</h3>
+<p>2차 피드백을 기반으로 발전된 설계입니다. 아직 구현중에 있습니다.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><category term="selenium" /><category term="docker" /><category term="gcp" /><category term="cicd" /><category term="infra" /><summary type="html"><![CDATA[프로젝트 님블 소개]]></summary></entry><entry xml:lang="en"><title type="html">Project Nimble</title><link href="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="Project Nimble" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html"><![CDATA[<h3 id="introduction-to-project-nimble">Introduction to Project Nimble</h3>
 
 <p>Project Nimble aims to automate digital marketing. The digital marketing environment is rapidly changing with the adoption of AI, and automation is essential for creating efficient and effective marketing strategies. Nimble is a solution developed to meet this need.</p>
 
@@ -737,11 +737,11 @@ Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyo
 
 <h3 id="블로그-소개">블로그 소개</h3>
 
-<p>블로그를 시작하게 되어 설렙니다. 여기서는 다양한 기술 주제에 대한 글을 공유할 예정입니다. 이 블로그의 주요 주제는 소프트웨어 개발, 클라우드 컴퓨팅 등에 맞춰질 것입니다. 여러분이 경험 많은 개발자이든 이제 막 시작한 초보자이든, 이곳에서 유용한 정보를 찾길 바랍니다.</p>
+<p>블로그를 시작하니까 설레네요. 여기서는 여러 기술 주제에 대한 글을 공유할 예정입니다. 이 블로그의 주요 주제는 소프트웨어 개발, 클라우드 컴퓨팅 등에 맞춰질 것입니다. 여러분이 경험 많은 개발자이든 이제 막 시작한 초보자이든, 이곳에서 유용한 정보를 찾길 바랍니다.</p>
 
 <h3 id="저에-대해">저에 대해</h3>
 
-<p>제 이름은 허재영입니다. 저는 기술과 소프트웨어 개발에 대한 열정을 가지고 있습니다. 비록 기술 업계에서의 여정을 이제 막 시작했지만, 배우고 성장하기를 갈망하고 있습니다. 이 블로그를 통해 배운 것을 공유하고, 진행 상황을 기록하며, 다른 사람들과 연결되기를 희망합니다.</p>
+<p>제 이름은 허재영입니다. 저는 컴퓨터에 대한 열정을 가지고 있습니다. 개발자로서의 여정을 이제 막 시작했지만, 열심히 배우고 성장하고 있습니다. 이 블로그를 통해 배운 것을 공유하고, 진행 상황을 기록하며, 사람들과 소통하기를 희망합니다.</p>
 
 <h3 id="이런-글들을-올릴-예정입니다">이런 글들을 올릴 예정입니다.</h3>
 
@@ -751,9 +751,9 @@ Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyo
   <li><strong>프로젝트</strong>: 제가 작업 중인 프로젝트를 소개하고, 그로부터 얻은 교훈을 공유할 것입니다.</li>
 </ul>
 
-<h3 id="같이-소통해요">같이 소통해요.</h3>
+<h3 id="마치며">마치며</h3>
 
-<p>피드백을 매우 소중하게 생각하며, 제 포스트에 대한 여러분의 의견을 듣고 싶습니다. 댓글을 남기시거나, 페이지 우측 상단의 이메일, GitHub, LinkedIn 버튼을 통해 같이 소통해요.</p>
+<p>많은 피드백 부탁드립니다. 게시글에 대한 여러분의 의견을 듣고 싶습니다. 댓글을 남겨주시고, 페이지 우측 상단의 이메일, GitHub, LinkedIn 버튼을 통해 같이 소통했으면 좋겠습니다.</p>
 
 <p>제 블로그를 방문해 주셔서 감사합니다. 곧 첫 번째 글로 찾아뵙겠습니다.</p>
 
