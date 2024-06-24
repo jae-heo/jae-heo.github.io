@@ -3,7 +3,7 @@ layout: page
 title: Resume
 subtitle: Developer
 lang: ko
-last_modified_at: 2024-06-10 18:00:00 +0900
+date: 2024-06-10 18:00:00 +0900
 ---
 
 <span style="float: right; "><a href="{{ '/assets/resume.pdf' | prepend: site.baseurl }}"><strong>> PDF로 다운로드</strong></a> </span>
