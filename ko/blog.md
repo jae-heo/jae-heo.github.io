@@ -117,8 +117,8 @@ document.addEventListener("DOMContentLoaded", function() {
 }
 
 .tag-toggle.active {
-  border: 1px solid rgba(59, 32, 15, 0.3); /* 선택된 버튼 테두리 추가 */
-  padding: 3px 11px;
+  border: 2px solid rgba(59, 32, 15, 0.3); /* 선택된 버튼 테두리 추가 */
+  padding: 2px 10px;
 }
 
 .tag-toggle:hover {
