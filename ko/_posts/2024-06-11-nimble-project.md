@@ -3,6 +3,7 @@ layout: post
 title: "프로젝트 님블 (Nimble)"
 subtitle: "디지털 마케팅의 자동화를 꿈꾸다."
 date: 2024-06-11 02:00:00 +0900
+last_modified_at: 2024-06-11 02:00:00 +0900
 categories: ["project"]
 lang: ko
 ---

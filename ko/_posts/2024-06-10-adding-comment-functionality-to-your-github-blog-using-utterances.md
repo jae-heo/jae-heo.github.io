@@ -3,6 +3,7 @@ layout: post
 title: "Utterances를 이용해 깃허브 블로그 댓글 기능 추가"
 subtitle: "GitHub Issues를 사용하여 블로그 댓글 관리하는 방법"
 date: 2024-06-10 18:00:00 +0900
+last_modified_at: 2024-06-10 18:00:00 +0900
 categories: ["tutorial"]
 lang: ko
 ---

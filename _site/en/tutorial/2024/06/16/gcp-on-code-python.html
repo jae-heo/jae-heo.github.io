@@ -87,15 +87,15 @@
   <li><a href="#use-cases">Use Cases</a></li>
 </ol>
 
-<h3 id="introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</h3>
+<h2 id="introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</h2>
 
 <p>GCP Compute Engine is a virtual machine service provided by Google Cloud Platform (GCP). It offers similar functionalities to Amazon AWS’s EC2 service. Users can easily manage virtual machines, and it supports various tools for scaling, security, monitoring, and more.</p>
 
-<h3 id="introduction-to-google-api-client-library">Introduction to Google API Client Library</h3>
+<h2 id="introduction-to-google-api-client-library">Introduction to Google API Client Library</h2>
 
 <p>Using the Google API Client Library, you can easily manage Compute Engine instances with Python. This library allows you to perform CRUD operations on instances, and since the operations are executed through code, they can be automated.</p>
 
-<h4 id="instance-crud">Instance CRUD</h4>
+<h3 id="instance-crud">Instance CRUD</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
 <span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
@@ -155,7 +155,7 @@
 <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h4 id="fetching-instance-list">Fetching Instance List</h4>
+<h3 id="fetching-instance-list">Fetching Instance List</h3>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -185,7 +185,7 @@ else:
     print('No instances found.')
 </code></pre></div></div>
 
-<h4 id="adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</h4>
+<h3 id="adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</h3>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from google.oauth2 import service_account
 
@@ -235,7 +235,7 @@ operation = compute.instances().setMetadata(
 print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 </code></pre></div></div>
 
-<h3 id="use-cases">Use Cases</h3>
+<h2 id="use-cases">Use Cases</h2>
 
 <ul>
   <li><strong>Automated Instance Management</strong>: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.</li>

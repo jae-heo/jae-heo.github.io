@@ -3,6 +3,7 @@ layout: post
 title: "Handling GCP Compute Engine with Code (Python)"
 subtitle: "Using Google API Client Library to Manage Compute Engine"
 date: 2024-06-16 14:00:00 +0900
+last_modified_at: 2024-06-16 14:00:00 +0900
 categories: ["tutorial"]
 lang: en
 ---
@@ -15,15 +16,15 @@ lang: en
     3. [Adding SSH Keys to an Instance](#adding-ssh-keys-to-an-instance)
 3. [Use Cases](#use-cases)
 
-### Introduction to GCP Compute Engine
+## Introduction to GCP Compute Engine
 
 GCP Compute Engine is a virtual machine service provided by Google Cloud Platform (GCP). It offers similar functionalities to Amazon AWS's EC2 service. Users can easily manage virtual machines, and it supports various tools for scaling, security, monitoring, and more.
 
-### Introduction to Google API Client Library
+## Introduction to Google API Client Library
 
 Using the Google API Client Library, you can easily manage Compute Engine instances with Python. This library allows you to perform CRUD operations on instances, and since the operations are executed through code, they can be automated.
 
-#### Instance CRUD
+### Instance CRUD
 
 ```python
 from googleapiclient import discovery
@@ -84,7 +85,7 @@ response = request.execute()
 print(response)
 ```
 
-#### Fetching Instance List
+### Fetching Instance List
 ```
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
@@ -115,7 +116,7 @@ else:
     print('No instances found.')
 ```
 
-#### Adding SSH Keys to an Instance
+### Adding SSH Keys to an Instance
 ```
 from googleapiclient import discovery
 from google.oauth2 import service_account
@@ -166,7 +167,7 @@ operation = compute.instances().setMetadata(
 print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 ```
 
-### Use Cases
+## Use Cases
 
 - **Automated Instance Management**: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.
 - **Resource Optimization**: You can create instances only when needed and delete them afterward, creating a cost-effective solution.

@@ -3,6 +3,7 @@ layout: post
 title: "Adding Comment Functionality to Your GitHub Blog Using Utterances"
 subtitle: "How to manage blog comments using GitHub Issues"
 date: 2024-06-10 18:00:00 +0900
+last_modified_at: 2024-06-10 18:00:00 +0900
 categories: ["tutorial"]
 lang: en
 ---

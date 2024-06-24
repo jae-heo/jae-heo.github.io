@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-06-24T01:57:47+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-06-24T18:53:04+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
 </subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="en"><title type="html">Handling GCP Compute Engine with Code (Python)</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="Handling GCP Compute Engine with Code (Python)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
 <ol>
   <li><a href="#introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</a></li>
@@ -12,15 +12,15 @@
   <li><a href="#use-cases">Use Cases</a></li>
 </ol>
 
-<h3 id="introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</h3>
+<h2 id="introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</h2>
 
 <p>GCP Compute Engine is a virtual machine service provided by Google Cloud Platform (GCP). It offers similar functionalities to Amazon AWS’s EC2 service. Users can easily manage virtual machines, and it supports various tools for scaling, security, monitoring, and more.</p>
 
-<h3 id="introduction-to-google-api-client-library">Introduction to Google API Client Library</h3>
+<h2 id="introduction-to-google-api-client-library">Introduction to Google API Client Library</h2>
 
 <p>Using the Google API Client Library, you can easily manage Compute Engine instances with Python. This library allows you to perform CRUD operations on instances, and since the operations are executed through code, they can be automated.</p>
 
-<h4 id="instance-crud">Instance CRUD</h4>
+<h3 id="instance-crud">Instance CRUD</h3>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
 <span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
@@ -80,7 +80,7 @@
 <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h4 id="fetching-instance-list">Fetching Instance List</h4>
+<h3 id="fetching-instance-list">Fetching Instance List</h3>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -110,7 +110,7 @@ else:
     print('No instances found.')
 </code></pre></div></div>
 
-<h4 id="adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</h4>
+<h3 id="adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</h3>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from google.oauth2 import service_account
 
@@ -160,7 +160,7 @@ operation = compute.instances().setMetadata(
 print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 </code></pre></div></div>
 
-<h3 id="use-cases">Use Cases</h3>
+<h2 id="use-cases">Use Cases</h2>
 
 <ul>
   <li><strong>Automated Instance Management</strong>: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.</li>
@@ -178,15 +178,15 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
   <li><a href="#활용방안">활용방안</a></li>
 </ol>
 
-<h3 id="gcp-compute-engine-소개">GCP Compute Engine 소개</h3>
+<h2 id="gcp-compute-engine-소개">GCP Compute Engine 소개</h2>
 
 <p>GCP Compute Engine은 Google Cloud Platform(GCP)에서 제공하는 가상 머신 서비스입니다. 아마존 AWS의 EC2 서비스와 비슷한 기능을 제공합니다. 사용자는 가상머신을 손쉽게 관리할 수 있고, 스케일링, 보안, 모니터링 등 다양한 도구를 지원합니다.</p>
 
-<h3 id="google-api-client-library-소개">Google API Client Library 소개</h3>
+<h2 id="google-api-client-library-소개">Google API Client Library 소개</h2>
 
 <p>Google API Client Library를 사용하면 파이썬으로 Compute Engine을 쉽게 다룰 수 있습니다. 이 라이브러리를 통해 인스턴스의 CRUD 작업을 실행할 수 있고, 코드로 실행하기 때문에 자동화가 가능합니다.</p>
 
-<h4 id="인스턴스-crud">인스턴스 CRUD</h4>
+<h3 id="인스턴스-crud">인스턴스 CRUD</h3>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
@@ -246,7 +246,7 @@ response = request.execute()
 print(response)
 </code></pre></div></div>
 
-<h4 id="인스턴스-리스트-가져오기">인스턴스 리스트 가져오기</h4>
+<h3 id="인스턴스-리스트-가져오기">인스턴스 리스트 가져오기</h3>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -276,7 +276,7 @@ else:
     print('No instances found.')
 </code></pre></div></div>
 
-<h4 id="인스턴스에-ssh키-추가하기">인스턴스에 SSH키 추가하기</h4>
+<h3 id="인스턴스에-ssh키-추가하기">인스턴스에 SSH키 추가하기</h3>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from google.oauth2 import service_account
 
@@ -326,7 +326,7 @@ operation = compute.instances().setMetadata(
 print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 </code></pre></div></div>
 
-<h3 id="활용방안">활용방안</h3>
+<h2 id="활용방안">활용방안</h2>
 
 <ul>
   <li><strong>자동화된 인스턴스 관리</strong>: 콘솔에서 수동으로 인스턴스를 관리하는 대신, 코드를 사용해 관리를 자동화하여 효율성을 증가시킬 수 있습니다.</li>

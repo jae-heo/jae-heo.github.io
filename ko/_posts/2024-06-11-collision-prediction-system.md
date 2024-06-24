@@ -3,6 +3,7 @@ layout: post
 title: "충돌 예측 시스템"
 subtitle: "단안 카메라로 실시간 충돌을 예측하는 알림 시스템"
 date: 2024-06-11 13:00:00 +0900
+last_modified_at: 2024-06-11 13:00:00 +0900
 categories: ["project"]
 lang: ko
 ---

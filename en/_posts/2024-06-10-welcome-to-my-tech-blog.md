@@ -3,6 +3,7 @@ layout: post
 title: "Starting a Tech Blog"
 subtitle: "My Journey into DevOps"
 date: 2024-06-10 18:00:00 +0900
+last_modified_at: 2024-06-10 18:00:00 +0900
 categories: ["general"]
 lang: en
 ---

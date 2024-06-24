@@ -5,6 +5,7 @@ subtitle: 소프트웨어 개발자 지망생입니다.
 sitemap:
   priority: 0.9
 lang: ko
+date: 2024-06-10 18:00:00 +0900
 ---
 
 <img src="{{ '/assets/img/me.jpeg' | prepend: site.baseurl }}" id="about-img">

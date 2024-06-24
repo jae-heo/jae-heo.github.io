@@ -29,3 +29,4 @@ timezone: Asia/Seoul
 
 plugins:
   - jekyll-sitemap
+  - jekyll-last-modified-at

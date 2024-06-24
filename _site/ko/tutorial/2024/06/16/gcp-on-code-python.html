@@ -87,15 +87,15 @@
   <li><a href="#활용방안">활용방안</a></li>
 </ol>
 
-<h3 id="gcp-compute-engine-소개">GCP Compute Engine 소개</h3>
+<h2 id="gcp-compute-engine-소개">GCP Compute Engine 소개</h2>
 
 <p>GCP Compute Engine은 Google Cloud Platform(GCP)에서 제공하는 가상 머신 서비스입니다. 아마존 AWS의 EC2 서비스와 비슷한 기능을 제공합니다. 사용자는 가상머신을 손쉽게 관리할 수 있고, 스케일링, 보안, 모니터링 등 다양한 도구를 지원합니다.</p>
 
-<h3 id="google-api-client-library-소개">Google API Client Library 소개</h3>
+<h2 id="google-api-client-library-소개">Google API Client Library 소개</h2>
 
 <p>Google API Client Library를 사용하면 파이썬으로 Compute Engine을 쉽게 다룰 수 있습니다. 이 라이브러리를 통해 인스턴스의 CRUD 작업을 실행할 수 있고, 코드로 실행하기 때문에 자동화가 가능합니다.</p>
 
-<h4 id="인스턴스-crud">인스턴스 CRUD</h4>
+<h3 id="인스턴스-crud">인스턴스 CRUD</h3>
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
@@ -155,7 +155,7 @@ response = request.execute()
 print(response)
 </code></pre></div></div>
 
-<h4 id="인스턴스-리스트-가져오기">인스턴스 리스트 가져오기</h4>
+<h3 id="인스턴스-리스트-가져오기">인스턴스 리스트 가져오기</h3>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
@@ -185,7 +185,7 @@ else:
     print('No instances found.')
 </code></pre></div></div>
 
-<h4 id="인스턴스에-ssh키-추가하기">인스턴스에 SSH키 추가하기</h4>
+<h3 id="인스턴스에-ssh키-추가하기">인스턴스에 SSH키 추가하기</h3>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
 from google.oauth2 import service_account
 
@@ -235,7 +235,7 @@ operation = compute.instances().setMetadata(
 print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 </code></pre></div></div>
 
-<h3 id="활용방안">활용방안</h3>
+<h2 id="활용방안">활용방안</h2>
 
 <ul>
   <li><strong>자동화된 인스턴스 관리</strong>: 콘솔에서 수동으로 인스턴스를 관리하는 대신, 코드를 사용해 관리를 자동화하여 효율성을 증가시킬 수 있습니다.</li>

@@ -3,6 +3,7 @@ layout: page
 title: Blog
 subtitle: Welcome to Jae's tech blog
 lang: ko
+date: 2024-06-10 18:00:00 +0900
 ---
 
 <div>

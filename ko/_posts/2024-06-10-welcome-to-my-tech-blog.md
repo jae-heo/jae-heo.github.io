@@ -3,6 +3,7 @@ layout: post
 title: "기술 블로그를 시작합니다."
 subtitle: "DevOps로의 여정"
 date: 2024-06-10 18:00:00 +0900
+last_modified_at: 2024-06-10 18:00:00 +0900
 categories: ["general"]
 lang: ko
 ---

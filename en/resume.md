@@ -3,6 +3,7 @@ layout: page
 title: Resume
 subtitle: Developer
 lang: en
+date: 2024-06-10 18:00:00 +0900
 ---
 
 <span style="float: right;"><a href="{{ '/assets/resume.pdf' | prepend: site.baseurl }}"><strong>> Download PDF</strong></a></span>
