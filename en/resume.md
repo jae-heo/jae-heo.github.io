@@ -64,7 +64,6 @@ date: 2024-06-10 18:00:00 +0900
     <strong>Backend</strong>
     <ul>
       <li>FastAPI</li>
-      <li>JWT</li>
       <li>Databases (PostgreSQL, MSSQL)</li>
     </ul>
   </div>

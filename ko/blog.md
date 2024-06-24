@@ -29,7 +29,7 @@ date: 2024-06-24 18:00:00 +0900
 </div>
 
 <div id="post-list">
-  {% assign postsTag = site.posts | where: "lang", "ko" %}
+  {% assign postsTag = site.posts | where: "lang", page.lang %}
   {% for post in postsTag %}
     <ul class="list-posts" data-tags="{{ post.tags | join: ' ' | downcase }}" data-categories="{{ post.categories | join: ' ' | downcase }}">
       <li class="post-teaser">

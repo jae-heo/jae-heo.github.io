@@ -65,7 +65,6 @@ date: 2024-06-10 18:00:00 +0900
     <strong>백엔드</strong>
     <ul>
       <li>FastAPI</li>
-      <li>JWT</li>
       <li>데이터베이스 (PostgreSQL, MSSQL)</li>
     </ul>
   </div>
