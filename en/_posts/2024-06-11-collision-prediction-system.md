@@ -5,6 +5,7 @@ subtitle: "A Real-time Collision Prediction Alert System Using Monocular Cameras
 date: 2024-06-11 13:00:00 +0900
 last_modified_at: 2024-06-11 13:00:00 +0900
 categories: ["project"]
+tags: ["opencv", "python", "deeplearning"]
 lang: en
 ---
 {% include image.html src="/assets/img/cps_demo.gif" alt="cps_demo_gif" width="500" %}

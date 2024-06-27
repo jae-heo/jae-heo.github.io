@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-06-25T02:50:27+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-06-27T22:17:44+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
 </subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="en"><title type="html">Handling GCP Compute Engine with Code (Python)</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="Handling GCP Compute Engine with Code (Python)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
 <ol>
   <li><a href="#introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</a></li>
@@ -165,7 +165,7 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 <ul>
   <li><strong>Automated Instance Management</strong>: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.</li>
   <li><strong>Resource Optimization</strong>: You can create instances only when needed and delete them afterward, creating a cost-effective solution.</li>
-</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><summary type="html"><![CDATA[Table of Contents Introduction to GCP Compute Engine Introduction to Google API Client Library Instance CRUD Fetching Instance List Adding SSH Keys to an Instance Use Cases]]></summary></entry><entry xml:lang="ko"><title type="html">코드로 다루는 GCP Compute Engine (파이썬)</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="코드로 다루는 GCP Compute Engine (파이썬)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="목차">목차</h2>
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[Table of Contents Introduction to GCP Compute Engine Introduction to Google API Client Library Instance CRUD Fetching Instance List Adding SSH Keys to an Instance Use Cases]]></summary></entry><entry xml:lang="ko"><title type="html">코드로 다루는 GCP Compute Engine (파이썬)</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="코드로 다루는 GCP Compute Engine (파이썬)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="목차">목차</h2>
 <ol>
   <li><a href="#gcp-compute-engine-소개">GCP Compute Engine 소개</a></li>
   <li><a href="#google-api-client-library-소개">Google API Client Library 소개</a>
@@ -331,7 +331,7 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 <ul>
   <li><strong>자동화된 인스턴스 관리</strong>: 콘솔에서 수동으로 인스턴스를 관리하는 대신, 코드를 사용해 관리를 자동화하여 효율성을 증가시킬 수 있습니다.</li>
   <li><strong>리소스 최적화</strong>: 필요할때만 인스턴스를 생성하고 이후 삭제하는 등 비용 효율적인 기능을 만들 수 있습니다.</li>
-</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="gcp" /><category term="python" /><summary type="html"><![CDATA[목차 GCP Compute Engine 소개 Google API Client Library 소개 인스턴스 CRUD 인스턴스 리스트 가져오기 인스턴스에 SSH키 추가하기 활용방안]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[목차 GCP Compute Engine 소개 Google API Client Library 소개 인스턴스 CRUD 인스턴스 리스트 가져오기 인스턴스에 SSH키 추가하기 활용방안]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
   
 </div>
@@ -429,7 +429,27 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 </ul>
 
 <h3 id="project-link">Project Link</h3>
-<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="ko"><title type="html">프로젝트 님블 (Nimble)</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="프로젝트 님블 (Nimble)" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html"><![CDATA[<h3 id="프로젝트-님블-소개">프로젝트 님블 소개</h3>
+<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><category term="opencv" /><category term="python" /><category term="deeplearning" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="ko"><title type="html">프로젝트 님블 (Nimble)</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="프로젝트 님블 (Nimble)" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html"><![CDATA[<h2 id="목차">목차</h2>
+<ol>
+  <li><a href="#프로젝트-님블-소개">프로젝트 님블 소개</a>
+    <ol>
+      <li><a href="#주요-기능">주요 기능</a></li>
+      <li><a href="#기대-효과">기대 효과</a></li>
+      <li><a href="#나의-역할-및-사용기술">나의 역할 및 사용기술</a></li>
+    </ol>
+  </li>
+  <li><a href="#프로젝트-구조">프로젝트 구조</a>
+    <ol>
+      <li><a href="#1차-설계">1차 설계</a></li>
+      <li><a href="#2차-설계">2차 설계</a></li>
+      <li><a href="#3차-설계">3차 설계</a></li>
+    </ol>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="프로젝트-님블-소개">프로젝트 님블 소개</h2>
 
 <p>프로젝트 님블(Nimble)은 디지털 마케팅 자동화를 목표로 하는 프로젝트입니다. 현대의 디지털 마케팅 환경은 AI의 도입으로 빠르게 변화하고 있으며, 이에 발맞추어 효율적이고 효과적인 마케팅 전략을 세우기 위해서는 자동화가 필수적입니다. 님블은 이러한 필요성에 부응하여 개발된 솔루션입니다.</p>
 
@@ -473,8 +493,8 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 <ul>
   <li><strong>알고리즘 구현</strong>
     <ul>
+      <li>Python</li>
       <li>Selenium</li>
-      <li>GPT API</li>
     </ul>
   </li>
   <li><strong>인프라 구축 및 관리</strong>
@@ -490,55 +510,117 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
   </li>
 </ul>
 
-<h3 id="프로젝트-구조">프로젝트 구조</h3>
+<hr />
 
-<h4 id="1차-설계">1차 설계</h4>
+<h2 id="프로젝트-구조">프로젝트 구조</h2>
+
+<h3 id="1차-설계">1차 설계</h3>
 <div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/nimble_architecture_phase1.png" alt="1차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>엔드유저의 시스템에서 로직이 직접 실행되는 구조로 설계되었습니다. 사용자는 관리자에게 라이센스를 구입하거나 요청하며, 관리자는 라이센스를 부여하고 클라이언트 프로그램을 제공합니다. 매일 실행되는 코어 로직은 실행할 때마다 라이센스 서버에 자신의 키값을 통해 유효성을 검증합니다.</p>
+
+<p><strong>설계 포인트</strong></p>
+<ul>
+  <li>유저가 프로그램을 직접 실행하는 구조</li>
+  <li>사용자는 관리자에게 라이센스를 구입하거나 요청</li>
+  <li>관리자는 라이센스를 부여하고 클라이언트 프로그램을 제공</li>
+  <li>매일 실행되는 코어 로직(Client)은 실행할 때마다 라이센스 서버에 자신의 키값을 통해 유효성을 검증</li>
+</ul>
+
+<p><strong>사용 기술</strong></p>
+<ul>
+  <li>PYQT5, GCP, RDB, FastAPI, Selenium</li>
+</ul>
 
 <p><strong>피드백</strong></p>
 <ul>
-  <li>사용자가 직접 프로그램을 구동하는 것이 부담스럽습니다.</li>
-  <li>업데이트가 있을 때마다 기존 클라이언트에게 새로운 프로그램을 배포하는 것이 어렵습니다.</li>
-  <li>관리자 또한 라이센스를 직접 관리하는 것이 불편합니다.</li>
+  <li>사용자가 직접 프로그램을 구동하는 것의 어려움</li>
+  <li>기존 클라이언트 프로그램 업데이트 및 배포의 어려움</li>
+  <li>관리자가 라이센스를 직접 관리하는 것의 불편</li>
 </ul>
 
-<h4 id="2차-설계">2차 설계</h4>
+<h3 id="2차-설계">2차 설계</h3>
 <div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/nimble_architecture_phase2.png" alt="2차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>1차 피드백을 기반으로 발전된 설계입니다. 사용자는 결제 시 필요한 정보를 입력하면, 결제 플랫폼에서 API를 자동으로 호출하게 됩니다. 이후 필요한 작업들은 모두 서버 상에서 자동으로 실행됩니다.</p>
+
+<p><strong>설계 포인트</strong></p>
+<ul>
+  <li>사용자가 결제 시 필요한 정보들을 입력하면, 결제 플랫폼에서 자동으로 API를 호출하는 구조</li>
+  <li>이후 모든 작업은 서버 상에서 자동으로 실행됨</li>
+</ul>
+
+<p><strong>사용 기술</strong></p>
+<ul>
+  <li>GCP, RDB, FastAPI, Selenium, Terraform, Docker, Airflow, Linux</li>
+</ul>
 
 <p><strong>피드백</strong></p>
 <ul>
-  <li>인프라 유지 비용이 증가합니다.</li>
-  <li>복잡도가 증가하여 개발자에게 부담이 됩니다.</li>
+  <li>인프라 유지 비용이 증가</li>
+  <li>CI/CD 파이프라인이 없어 소스코드를 수정하고 적용하는데 모든 인프라 구조를 알아야함</li>
 </ul>
 
-<h4 id="3차-설계-구현-진행중">3차 설계 (구현 진행중)</h4>
+<h3 id="3차-설계">3차 설계</h3>
 <div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/nimble_architecture_phase3.png" alt="3차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>2차 피드백을 기반으로 발전된 설계입니다. 아직 구현중에 있습니다.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><category term="selenium" /><category term="docker" /><category term="gcp" /><category term="cicd" /><category term="infra" /><summary type="html"><![CDATA[프로젝트 님블 소개]]></summary></entry><entry xml:lang="en"><title type="html">Project Nimble</title><link href="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="Project Nimble" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html"><![CDATA[<h3 id="introduction-to-project-nimble">Introduction to Project Nimble</h3>
 
-<p>Project Nimble aims to automate digital marketing. The digital marketing environment is rapidly changing with the adoption of AI, and automation is essential for creating efficient and effective marketing strategies. Nimble is a solution developed to meet this need.</p>
+<p><strong>설계 포인트</strong></p>
+<ul>
+  <li>Bucket을 통해 Database를 File로 관리함으로 비용 감소</li>
+  <li>유지보수성을 위해 Core Logic을 별도의 깃허브 저장소로 분리 후 Cloud Build로 CI/CD</li>
+  <li>기존 Airflow로 관리되던 작업을 Cloud Function으로 구현하여 관리소요 및 비용 감소</li>
+</ul>
+
+<p><strong>사용 기술</strong></p>
+<ul>
+  <li>GCP, RDB, FastAPI, Selenium, Docker, Terraform, Linux</li>
+</ul>
+
+<p><strong>개선사항</strong></p>
+<ul>
+  <li>모니터링: 지금은 단순 TXT로 출력하고 있음 -&gt; 오픈소스 모니터링 툴을 연결해서 적용</li>
+  <li>CloudBuild w/ Terraform: 테라폼에서 cloud build trigger를 관리하는데 문제가 있음 (테라폼 버그로 추측) Fix예정</li>
+  <li>Unit Test: Selenium 각 기능을 주기적으로(weekly) 테스트하는 환경 구축 필요</li>
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><category term="selenium" /><category term="docker" /><category term="gcp" /><category term="cicd" /><category term="infra" /><summary type="html"><![CDATA[목차 프로젝트 님블 소개 주요 기능 기대 효과 나의 역할 및 사용기술 프로젝트 구조 1차 설계 2차 설계 3차 설계]]></summary></entry><entry xml:lang="en"><title type="html">Project Nimble</title><link href="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="Project Nimble" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+  <li><a href="#introduction-to-project-nimble">Introduction to Project Nimble</a>
+    <ol>
+      <li><a href="#key-features">Key Features</a></li>
+      <li><a href="#expected-benefits">Expected Benefits</a></li>
+      <li><a href="#my-role-and-technologies-used">My Role and Technologies Used</a></li>
+    </ol>
+  </li>
+  <li><a href="#project-architecture">Project Architecture</a>
+    <ol>
+      <li><a href="#phase-1-design">Phase 1 Design</a></li>
+      <li><a href="#phase-2-design">Phase 2 Design</a></li>
+      <li><a href="#phase-3-design">Phase 3 Design</a></li>
+    </ol>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="introduction-to-project-nimble">Introduction to Project Nimble</h2>
+
+<p>Project Nimble aims to automate digital marketing. The modern digital marketing environment is rapidly evolving with the introduction of AI. To keep up and develop efficient and effective marketing strategies, automation is essential. Nimble is a solution developed to meet this need.</p>
 
 <h3 id="key-features">Key Features</h3>
 
 <ol>
   <li><strong>Automated Marketing Management</strong>
     <ul>
-      <li>Project Nimble automates various digital marketing tasks end-to-end.</li>
+      <li>Project Nimble automates various digital marketing processes end-to-end.</li>
     </ul>
   </li>
-  <li><strong>Generative AI-based Marketing</strong>
+  <li><strong>Generative AI-Based Marketing</strong>
     <ul>
-      <li>Utilizes AI technology to analyze and apply real-time SEO and trends.</li>
+      <li>Utilizes AI technology to analyze and apply real-time changes in SEO and trends.</li>
     </ul>
   </li>
 </ol>
@@ -553,12 +635,12 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
   </li>
   <li><strong>Accurate Marketing</strong>
     <ul>
-      <li>Conducts efficient marketing through real-time data analysis and AI-based insights.</li>
+      <li>Efficient marketing through real-time data analysis and AI-based insights.</li>
     </ul>
   </li>
-  <li><strong>Cost Reduction</strong>
+  <li><strong>Cost Savings</strong>
     <ul>
-      <li>Reduces labor and operational costs through automation and advanced infrastructure.</li>
+      <li>Reduced labor and operational costs through automation and infrastructure enhancement.</li>
     </ul>
   </li>
 </ul>
@@ -568,197 +650,100 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 <ul>
   <li><strong>Algorithm Implementation</strong>
     <ul>
+      <li>Python</li>
       <li>Selenium</li>
-      <li>GPT API</li>
     </ul>
   </li>
   <li><strong>Infrastructure Setup and Management</strong>
     <ul>
-      <li>Github Action</li>
+      <li>GitHub Actions</li>
       <li>GCP</li>
       <li>Docker</li>
       <li>Airflow</li>
-      <li>Database (sqlite, postgresql)</li>
+      <li>Database (SQLite, PostgreSQL)</li>
       <li>Linux</li>
       <li>Terraform</li>
     </ul>
   </li>
 </ul>
 
-<h3 id="project-structure">Project Structure</h3>
+<hr />
 
-<h4 id="phase-1-design">Phase 1 Design</h4>
+<h2 id="project-architecture">Project Architecture</h2>
+
+<h3 id="phase-1-design">Phase 1 Design</h3>
 <div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/nimble_architecture_phase1.png" alt="Phase 1 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>The system was designed to execute logic directly on the end-user’s system. Users purchase or request a license from the administrator, who then grants the license and provides the client program. The core logic, executed daily, verifies its validity with the license server using its key each time it runs.</p>
+
+<p><strong>Design Highlights</strong></p>
+<ul>
+  <li>Users directly run the program.</li>
+  <li>Users purchase or request a license from the administrator.</li>
+  <li>Administrators grant licenses and provide the client program.</li>
+  <li>The core logic (Client), which runs daily, verifies its validity with the license server using its key.</li>
+</ul>
+
+<p><strong>Technologies Used</strong></p>
+<ul>
+  <li>PYQT5, GCP, RDB, FastAPI, Selenium</li>
+</ul>
 
 <p><strong>Feedback</strong></p>
 <ul>
-  <li>Users find it burdensome to run the program themselves.</li>
-  <li>Distributing new programs to existing clients with each update is challenging.</li>
-  <li>Administrators find manual license management inconvenient.</li>
+  <li>Users find it challenging to run the program themselves.</li>
+  <li>Difficulty in updating and distributing new client programs to existing clients.</li>
+  <li>Inconvenience for administrators to manage licenses directly.</li>
 </ul>
 
-<h4 id="phase-2-design">Phase 2 Design</h4>
+<h3 id="phase-2-design">Phase 2 Design</h3>
 <div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/nimble_architecture_phase2.png" alt="Phase 2 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>This design evolved from the feedback received in Phase 1. Users enter the required information during payment, and the payment platform automatically calls the API. Subsequent tasks are executed automatically on the server.</p>
+
+<p><strong>Design Highlights</strong></p>
+<ul>
+  <li>Users enter necessary information upon payment, and the payment platform automatically calls the API.</li>
+  <li>All subsequent tasks are executed automatically on the server.</li>
+</ul>
+
+<p><strong>Technologies Used</strong></p>
+<ul>
+  <li>GCP, RDB, FastAPI, Selenium, Terraform, Docker, Airflow, Linux</li>
+</ul>
 
 <p><strong>Feedback</strong></p>
 <ul>
   <li>Increased infrastructure maintenance costs.</li>
-  <li>Increased complexity burdens developers.</li>
+  <li>No CI/CD pipeline, requiring developers to understand the entire infrastructure structure to modify and apply source code.</li>
 </ul>
 
-<h4 id="phase-3-design-in-progress">Phase 3 Design (In Progress)</h4>
+<h3 id="phase-3-design">Phase 3 Design</h3>
 <div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/nimble_architecture_phase3.png" alt="Phase 3 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>This design further evolves from the feedback received in Phase 2. It is currently being implemented.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><summary type="html"><![CDATA[Introduction to Project Nimble]]></summary></entry><entry xml:lang="ko"><title type="html">Utterances를 이용해 깃허브 블로그 댓글 기능 추가</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Utterances를 이용해 깃허브 블로그 댓글 기능 추가" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다.
-이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.</p>
 
-<h3 id="utterances란-무엇인가요">Utterances란 무엇인가요?</h3>
-
-<p>Utterances는 GitHub Issues를 기반으로 한 가벼운 댓글 위젯입니다. 깃허브의 이슈를 이용해 댓글을 작성할 수 있도록 합니다.</p>
-
-<h3 id="utterances의-장점">Utterances의 장점</h3>
-
-<ol>
-  <li><strong>간단한 설정</strong>: 어떤 정적 사이트 생성기와도 쉽게 통합됩니다.</li>
-  <li><strong>GitHub 통합</strong>: GitHub의 기존 이슈 추적 및 알림 시스템을 활용합니다.</li>
-  <li><strong>무료 및 오픈 소스</strong>: 비용이 들지 않으며 필요에 따라 커스터마이징이 가능합니다.</li>
-  <li><strong>마크다운 지원</strong>: 댓글이 GitHub-flavored Markdown을 지원합니다.</li>
-  <li><strong>스팸 방지</strong>: 사용자가 GitHub에 로그인해야 하므로 스팸이 줄어듭니다.</li>
-</ol>
-
-<h3 id="utterances의-단점">Utterances의 단점</h3>
-
-<ol>
-  <li><strong>GitHub 계정 필요</strong>: 댓글 작성자는 GitHub 계정이 있어야 합니다.</li>
-  <li><strong>공개 리포지토리</strong>: Utterances는 공개 리포지토리에서만 작동합니다.</li>
-  <li><strong>혼합된 이슈</strong>: 댓글과 프로젝트 이슈가 제대로 관리되지 않으면 혼합될 수 있습니다.</li>
-</ol>
-
-<h3 id="utterances-추가하는-단계별-가이드">Utterances 추가하는 단계별 가이드</h3>
-
-<h4 id="1단계-github-리포지토리-생성">1단계: GitHub 리포지토리 생성</h4>
-
-<p>먼저 댓글을 저장할 GitHub 리포지토리가 필요합니다. 기존 리포지토리를 사용할 수도 있고, 댓글 전용 새 리포지토리를 만들 수도 있습니다.</p>
-
-<ol>
-  <li><a href="https://github.com" target="_blank">GitHub</a>에 접속하여 로그인합니다.</li>
-  <li>“New” 버튼을 클릭하여 새 리포지토리를 만듭니다.</li>
-  <li>리포지토리 이름을 <code class="language-plaintext highlighter-rouge">blog-comments</code> 등으로 설정합니다.</li>
-  <li>리포지토리를 공개로 설정합니다.</li>
-  <li>“Create repository”를 클릭합니다.</li>
-</ol>
-
-<h4 id="2단계-utterances-설정">2단계: Utterances 설정</h4>
-
-<ol>
-  <li><a href="https://utteranc.es/">Utterances 웹사이트</a>를 방문합니다.</li>
-  <li>아래로 스크롤하여 설정 섹션으로 이동합니다.</li>
-</ol>
-
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/utterances_configuration.png" alt="alt text" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
-  
-</div>
-
-<ol>
-  <li>댓글용으로 생성한 리포지토리를 입력합니다.</li>
-  <li>생성되는 이슈의 형식을 지정합니다.</li>
-</ol>
-
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/post_comment_example.png" alt="alt text" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
-  
-</div>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/comment_issue_example.png" alt="alt text" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-  <p style="font-style: italic; font-size: 0.9em; margin-top: 5px; text-align: center;">댓글을 달았을 경우 생성되는 이슈의 예시</p>
-  
-</div>
-
-<ol>
-  <li>블로그에 맞는 테마를 선택합니다.</li>
-  <li>제공된 스크립트를 복사합니다.</li>
-</ol>
-
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/utterances_setting.png" alt="alt text" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
-  
-</div>
-
-<h4 id="3단계-jekyll-블로그에-utterances-추가">3단계: Jekyll 블로그에 Utterances 추가</h4>
-
-<ol>
-  <li>Jekyll 블로그 프로젝트를 엽니다.</li>
-  <li><code class="language-plaintext highlighter-rouge">_layouts</code> 디렉토리로 이동하여 <code class="language-plaintext highlighter-rouge">post.html</code> (또는 게시물 레이아웃 파일)을 엽니다.</li>
-  <li>댓글이 나타나길 원하는 위치에 Utterances 스크립트를 붙여넣습니다.</li>
-</ol>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/layout_file_example.png" alt="alt text" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
-  
-  <p style="font-style: italic; font-size: 0.9em; margin-top: 5px; text-align: center;">레이아웃 파일 예시</p>
-  
-</div>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><summary type="html"><![CDATA[깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다. 이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.]]></summary></entry><entry xml:lang="en"><title type="html">Starting a Tech Blog</title><link href="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="Starting a Tech Blog" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>Hello, and welcome to the blog!</p>
-
-<h3 id="about-this-blog">About This Blog</h3>
-
-<p>I’m excited to start this blog. Here, I will be sharing posts on various tech topics. The main focus of this blog will be on software development, cloud computing, and more. Whether you are an experienced developer or just starting out, I hope you’ll find valuable information here.</p>
-
-<h3 id="about-me">About Me</h3>
-
-<p>My name is Jaeyoung Heo. I have a passion for technology and software development. Although I am just beginning my journey in the tech industry, I am eager to learn and grow. Through this blog, I hope to share what I learn, document my progress, and connect with others.</p>
-
-<h3 id="what-to-expect">What to Expect</h3>
-
+<p><strong>Design Highlights</strong></p>
 <ul>
-  <li><strong>Learning Log</strong>: I will share my experiences as I learn new technologies, programming languages, and frameworks.</li>
-  <li><strong>Tutorials and Guides</strong>: Step-by-step guides to help you understand and implement various technologies.</li>
-  <li><strong>Projects</strong>: I will showcase the projects I am working on and share the lessons learned from them.</li>
+  <li>Reducing costs by managing the database as a file through Buckets.</li>
+  <li>For maintainability, core logic is separated into a separate GitHub repository and CI/CD is implemented with Cloud Build.</li>
+  <li>Tasks previously managed by Airflow are implemented with Cloud Function, reducing management effort and costs.</li>
 </ul>
 
-<h3 id="lets-connect">Let’s Connect</h3>
-
-<p>I highly value feedback and would love to hear your thoughts on my posts. Feel free to leave comments or connect with me via the email, GitHub, or LinkedIn buttons at the top right corner of this page.</p>
-
-<p>Thank you for visiting my blog. I look forward to sharing my first post with you soon.</p>
-
-<p>Best regards,<br />
-Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="general" /><summary type="html"><![CDATA[Hello, and welcome to the blog!]]></summary></entry><entry xml:lang="ko"><title type="html">기술 블로그를 시작합니다.</title><link href="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="기술 블로그를 시작합니다." /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>안녕하세요, 블로그에 오신 것을 환영합니다!</p>
-
-<h3 id="블로그-소개">블로그 소개</h3>
-
-<p>블로그를 시작하니까 설레네요. 여기서는 여러 기술 주제에 대한 글을 공유할 예정입니다. 이 블로그의 주요 주제는 소프트웨어 개발, 클라우드 컴퓨팅 등에 맞춰질 것입니다. 여러분이 경험 많은 개발자이든 이제 막 시작한 초보자이든, 이곳에서 유용한 정보를 찾길 바랍니다.</p>
-
-<h3 id="저에-대해">저에 대해</h3>
-
-<p>제 이름은 허재영입니다. 저는 컴퓨터에 대한 열정을 가지고 있습니다. 개발자로서의 여정을 이제 막 시작했지만, 열심히 배우고 성장하고 있습니다. 이 블로그를 통해 배운 것을 공유하고, 진행 상황을 기록하며, 사람들과 소통하기를 희망합니다.</p>
-
-<h3 id="이런-글들을-올릴-예정입니다">이런 글들을 올릴 예정입니다.</h3>
-
+<p><strong>Technologies Used</strong></p>
 <ul>
-  <li><strong>학습로그</strong>: 새로운 기술, 프로그래밍 언어, 프레임워크를 배우면서 경험을 공유할 것입니다.</li>
-  <li><strong>튜토리얼과 가이드</strong>: 다양한 기술을 이해하고 구현하는 데 도움이 되는 단계별 가이드를 제공할 것입니다.</li>
-  <li><strong>프로젝트</strong>: 제가 작업 중인 프로젝트를 소개하고, 그로부터 얻은 교훈을 공유할 것입니다.</li>
+  <li>GCP, RDB, FastAPI, Selenium, Docker, Terraform, Linux</li>
 </ul>
 
-<h3 id="마치며">마치며</h3>
-
-<p>많은 피드백 부탁드립니다. 게시글에 대한 여러분의 의견을 듣고 싶습니다. 댓글을 남겨주시고, 페이지 우측 상단의 이메일, GitHub, LinkedIn 버튼을 통해 같이 소통했으면 좋겠습니다.</p>
-
-<p>제 블로그를 방문해 주셔서 감사합니다. 곧 첫 번째 글로 찾아뵙겠습니다.</p>
-
-<p>감사합니다.
-허재영 드림.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="general" /><summary type="html"><![CDATA[안녕하세요, 블로그에 오신 것을 환영합니다!]]></summary></entry><entry xml:lang="en"><title type="html">Adding Comment Functionality to Your GitHub Blog Using Utterances</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Adding Comment Functionality to Your GitHub Blog Using Utterances" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons.
+<p><strong>Improvements</strong></p>
+<ul>
+  <li>Monitoring: Currently outputting simple TXT -&gt; Apply by connecting open-source monitoring tools.</li>
+  <li>CloudBuild w/ Terraform: Managing cloud build triggers with Terraform is problematic (suspected Terraform bug) - Fix planned.</li>
+  <li>Unit Test: Need to establish an environment for periodically (weekly) testing each function of Selenium.</li>
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><category term="selenium" /><category term="docker" /><category term="gcp" /><category term="cicd" /><category term="infra" /><summary type="html"><![CDATA[Table of Contents Introduction to Project Nimble Key Features Expected Benefits My Role and Technologies Used Project Architecture Phase 1 Design Phase 2 Design Phase 3 Design]]></summary></entry><entry xml:lang="en"><title type="html">Adding Comment Functionality to Your GitHub Blog Using Utterances</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Adding Comment Functionality to Your GitHub Blog Using Utterances" /><published>2024-06-10T19:00:00+09:00</published><updated>2024-06-10T19:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons.
 This article introduces Utterances, an elegant solution for managing comments using GitHub Issues. In this tutorial, we will explain how to add Utterances to a GitHub blog using Jekyll.</p>
 
 <h3 id="what-is-utterances">What is Utterances?</h3>
@@ -848,4 +833,143 @@ This article introduces Utterances, an elegant solution for managing comments us
   
   <p style="font-style: italic; font-size: 0.9em; margin-top: 5px; text-align: center;">Example of a layout file</p>
   
-</div>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><summary type="html"><![CDATA[In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons. This article introduces Utterances, an elegant solution for managing comments using GitHub Issues. In this tutorial, we will explain how to add Utterances to a GitHub blog using Jekyll.]]></summary></entry></feed>
+</div>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><category term="github" /><category term="blog" /><summary type="html"><![CDATA[In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons. This article introduces Utterances, an elegant solution for managing comments using GitHub Issues. In this tutorial, we will explain how to add Utterances to a GitHub blog using Jekyll.]]></summary></entry><entry xml:lang="ko"><title type="html">Utterances를 이용해 깃허브 블로그 댓글 기능 추가</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Utterances를 이용해 깃허브 블로그 댓글 기능 추가" /><published>2024-06-10T19:00:00+09:00</published><updated>2024-06-10T19:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다.
+이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.</p>
+
+<h3 id="utterances란-무엇인가요">Utterances란 무엇인가요?</h3>
+
+<p>Utterances는 GitHub Issues를 기반으로 한 가벼운 댓글 위젯입니다. 깃허브의 이슈를 이용해 댓글을 작성할 수 있도록 합니다.</p>
+
+<h3 id="utterances의-장점">Utterances의 장점</h3>
+
+<ol>
+  <li><strong>간단한 설정</strong>: 어떤 정적 사이트 생성기와도 쉽게 통합됩니다.</li>
+  <li><strong>GitHub 통합</strong>: GitHub의 기존 이슈 추적 및 알림 시스템을 활용합니다.</li>
+  <li><strong>무료 및 오픈 소스</strong>: 비용이 들지 않으며 필요에 따라 커스터마이징이 가능합니다.</li>
+  <li><strong>마크다운 지원</strong>: 댓글이 GitHub-flavored Markdown을 지원합니다.</li>
+  <li><strong>스팸 방지</strong>: 사용자가 GitHub에 로그인해야 하므로 스팸이 줄어듭니다.</li>
+</ol>
+
+<h3 id="utterances의-단점">Utterances의 단점</h3>
+
+<ol>
+  <li><strong>GitHub 계정 필요</strong>: 댓글 작성자는 GitHub 계정이 있어야 합니다.</li>
+  <li><strong>공개 리포지토리</strong>: Utterances는 공개 리포지토리에서만 작동합니다.</li>
+  <li><strong>혼합된 이슈</strong>: 댓글과 프로젝트 이슈가 제대로 관리되지 않으면 혼합될 수 있습니다.</li>
+</ol>
+
+<h3 id="utterances-추가하는-단계별-가이드">Utterances 추가하는 단계별 가이드</h3>
+
+<h4 id="1단계-github-리포지토리-생성">1단계: GitHub 리포지토리 생성</h4>
+
+<p>먼저 댓글을 저장할 GitHub 리포지토리가 필요합니다. 기존 리포지토리를 사용할 수도 있고, 댓글 전용 새 리포지토리를 만들 수도 있습니다.</p>
+
+<ol>
+  <li><a href="https://github.com" target="_blank">GitHub</a>에 접속하여 로그인합니다.</li>
+  <li>“New” 버튼을 클릭하여 새 리포지토리를 만듭니다.</li>
+  <li>리포지토리 이름을 <code class="language-plaintext highlighter-rouge">blog-comments</code> 등으로 설정합니다.</li>
+  <li>리포지토리를 공개로 설정합니다.</li>
+  <li>“Create repository”를 클릭합니다.</li>
+</ol>
+
+<h4 id="2단계-utterances-설정">2단계: Utterances 설정</h4>
+
+<ol>
+  <li><a href="https://utteranc.es/">Utterances 웹사이트</a>를 방문합니다.</li>
+  <li>아래로 스크롤하여 설정 섹션으로 이동합니다.</li>
+</ol>
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/utterances_configuration.png" alt="alt text" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<ol>
+  <li>댓글용으로 생성한 리포지토리를 입력합니다.</li>
+  <li>생성되는 이슈의 형식을 지정합니다.</li>
+</ol>
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/post_comment_example.png" alt="alt text" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
+  
+</div>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/comment_issue_example.png" alt="alt text" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+  <p style="font-style: italic; font-size: 0.9em; margin-top: 5px; text-align: center;">댓글을 달았을 경우 생성되는 이슈의 예시</p>
+  
+</div>
+
+<ol>
+  <li>블로그에 맞는 테마를 선택합니다.</li>
+  <li>제공된 스크립트를 복사합니다.</li>
+</ol>
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/utterances_setting.png" alt="alt text" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<h4 id="3단계-jekyll-블로그에-utterances-추가">3단계: Jekyll 블로그에 Utterances 추가</h4>
+
+<ol>
+  <li>Jekyll 블로그 프로젝트를 엽니다.</li>
+  <li><code class="language-plaintext highlighter-rouge">_layouts</code> 디렉토리로 이동하여 <code class="language-plaintext highlighter-rouge">post.html</code> (또는 게시물 레이아웃 파일)을 엽니다.</li>
+  <li>댓글이 나타나길 원하는 위치에 Utterances 스크립트를 붙여넣습니다.</li>
+</ol>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/layout_file_example.png" alt="alt text" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
+  
+  <p style="font-style: italic; font-size: 0.9em; margin-top: 5px; text-align: center;">레이아웃 파일 예시</p>
+  
+</div>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="github" /><category term="blog" /><summary type="html"><![CDATA[깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다. 이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.]]></summary></entry><entry xml:lang="ko"><title type="html">기술 블로그를 시작합니다.</title><link href="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="기술 블로그를 시작합니다." /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>안녕하세요, 블로그에 오신 것을 환영합니다!</p>
+
+<h3 id="블로그-소개">블로그 소개</h3>
+
+<p>블로그를 시작하니까 설레네요. 여기서는 여러 기술 주제에 대한 글을 공유할 예정입니다. 이 블로그의 주요 주제는 소프트웨어 개발, 클라우드 컴퓨팅 등에 맞춰질 것입니다. 여러분이 경험 많은 개발자이든 이제 막 시작한 초보자이든, 이곳에서 유용한 정보를 찾길 바랍니다.</p>
+
+<h3 id="저에-대해">저에 대해</h3>
+
+<p>제 이름은 허재영입니다. 저는 컴퓨터에 대한 열정을 가지고 있습니다. 개발자로서의 여정을 이제 막 시작했지만, 열심히 배우고 성장하고 있습니다. 이 블로그를 통해 배운 것을 공유하고, 진행 상황을 기록하며, 사람들과 소통하기를 희망합니다.</p>
+
+<h3 id="이런-글들을-올릴-예정입니다">이런 글들을 올릴 예정입니다.</h3>
+
+<ul>
+  <li><strong>학습로그</strong>: 새로운 기술, 프로그래밍 언어, 프레임워크를 배우면서 경험을 공유할 것입니다.</li>
+  <li><strong>튜토리얼과 가이드</strong>: 다양한 기술을 이해하고 구현하는 데 도움이 되는 단계별 가이드를 제공할 것입니다.</li>
+  <li><strong>프로젝트</strong>: 제가 작업 중인 프로젝트를 소개하고, 그로부터 얻은 교훈을 공유할 것입니다.</li>
+</ul>
+
+<h3 id="마치며">마치며</h3>
+
+<p>많은 피드백 부탁드립니다. 게시글에 대한 여러분의 의견을 듣고 싶습니다. 댓글을 남겨주시고, 페이지 우측 상단의 이메일, GitHub, LinkedIn 버튼을 통해 같이 소통했으면 좋겠습니다.</p>
+
+<p>제 블로그를 방문해 주셔서 감사합니다. 곧 첫 번째 글로 찾아뵙겠습니다.</p>
+
+<p>감사합니다.
+허재영 드림.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="general" /><summary type="html"><![CDATA[안녕하세요, 블로그에 오신 것을 환영합니다!]]></summary></entry><entry xml:lang="en"><title type="html">Starting a Tech Blog</title><link href="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="Starting a Tech Blog" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>Hello, and welcome to the blog!</p>
+
+<h3 id="about-this-blog">About This Blog</h3>
+
+<p>I’m excited to start this blog. Here, I will be sharing posts on various tech topics. The main focus of this blog will be on software development, cloud computing, and more. Whether you are an experienced developer or just starting out, I hope you’ll find valuable information here.</p>
+
+<h3 id="about-me">About Me</h3>
+
+<p>My name is Jaeyoung Heo. I have a passion for technology and software development. Although I am just beginning my journey in the tech industry, I am eager to learn and grow. Through this blog, I hope to share what I learn, document my progress, and connect with others.</p>
+
+<h3 id="what-to-expect">What to Expect</h3>
+
+<ul>
+  <li><strong>Learning Log</strong>: I will share my experiences as I learn new technologies, programming languages, and frameworks.</li>
+  <li><strong>Tutorials and Guides</strong>: Step-by-step guides to help you understand and implement various technologies.</li>
+  <li><strong>Projects</strong>: I will showcase the projects I am working on and share the lessons learned from them.</li>
+</ul>
+
+<h3 id="lets-connect">Let’s Connect</h3>
+
+<p>I highly value feedback and would love to hear your thoughts on my posts. Feel free to leave comments or connect with me via the email, GitHub, or LinkedIn buttons at the top right corner of this page.</p>
+
+<p>Thank you for visiting my blog. I look forward to sharing my first post with you soon.</p>
+
+<p>Best regards,<br />
+Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="general" /><summary type="html"><![CDATA[Hello, and welcome to the blog!]]></summary></entry></feed>

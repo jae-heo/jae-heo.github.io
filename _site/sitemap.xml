@@ -93,9 +93,9 @@
   
     
     <url>
-      <loc>https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog</loc>
+      <loc>https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</loc>
       
-        <lastmod>2024-06-10T18:00:00+09:00</lastmod>
+        <lastmod>2024-06-10T19:00:00+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -108,7 +108,22 @@
   
     
     <url>
-      <loc>https://jae-heo.github.io/ko/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</loc>
+      <loc>https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</loc>
+      
+        <lastmod>2024-06-10T19:00:00+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.7</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog</loc>
       
         <lastmod>2024-06-10T18:00:00+09:00</lastmod>
       
@@ -136,27 +151,12 @@
     </url>
     
   
-    
-    <url>
-      <loc>https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</loc>
-      
-        <lastmod>2024-06-10T18:00:00+09:00</lastmod>
-      
-      
-        <changefreq>monthly</changefreq>
-      
-      
-        <priority>0.7</priority>
-      
-    </url>
-    
-  
   
     
   
     
     <url>
-      <loc>https://jae-heo.github.io/en/blog</loc>
+      <loc>https://jae-heo.github.io/ko/blog</loc>
       
         <lastmod>2024-06-24T18:00:00+09:00</lastmod>
       
@@ -171,7 +171,7 @@
   
     
     <url>
-      <loc>https://jae-heo.github.io/ko/blog</loc>
+      <loc>https://jae-heo.github.io/en/blog</loc>
       
         <lastmod>2024-06-24T18:00:00+09:00</lastmod>
       
@@ -201,6 +201,21 @@
   
     
     <url>
+      <loc>https://jae-heo.github.io/</loc>
+      
+        <lastmod>2024-06-27T22:17:44+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>https://jae-heo.github.io/ko/</loc>
       
         <lastmod>2024-06-10T18:00:00+09:00</lastmod>
@@ -216,9 +231,39 @@
   
     
     <url>
-      <loc>https://jae-heo.github.io/</loc>
+      <loc>https://jae-heo.github.io/ko/project</loc>
       
-        <lastmod>2024-06-25T02:50:27+09:00</lastmod>
+        <lastmod>2024-06-24T18:00:00+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>https://jae-heo.github.io/en/project</loc>
+      
+        <lastmod>2024-06-24T18:00:00+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>https://jae-heo.github.io/en/resume</loc>
+      
+        <lastmod>2024-06-10T18:00:00+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -248,22 +293,7 @@
     <url>
       <loc>https://jae-heo.github.io/resume</loc>
       
-        <lastmod>2024-06-25T02:50:27+09:00</lastmod>
-      
-      
-        <changefreq>monthly</changefreq>
-      
-      
-        <priority>0.5</priority>
-      
-    </url>
-    
-  
-    
-    <url>
-      <loc>https://jae-heo.github.io/en/resume</loc>
-      
-        <lastmod>2024-06-10T18:00:00+09:00</lastmod>
+        <lastmod>2024-06-27T22:17:44+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -282,7 +312,7 @@
     <url>
       <loc>https://jae-heo.github.io/feed.xml</loc>
       
-        <lastmod>2024-06-25T02:50:27+09:00</lastmod>
+        <lastmod>2024-06-27T22:17:44+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>

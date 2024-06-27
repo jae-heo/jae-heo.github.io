@@ -7,7 +7,7 @@
 <title> Project Nimble — Dreaming of Automation in Digital Marketing  | Jaeyoung Heo</title>
 <meta name="description" content="Jaeyoung Heo's tech blog
 ">
-<meta name="keywords" content="">
+<meta name="keywords" content="selenium, docker, gcp, cicd, infra">
 <link rel="canonical" href="/en/project/2024/06/11/nimble-project.html">
 <link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
 <link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
@@ -35,6 +35,9 @@
     <ul class="menu">
       <li class="menu__entry">
         <a href="/en/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/project">Project</a>
       </li>
       <li class="menu__entry">
         <a href="/en/blog">Blog</a>
@@ -74,21 +77,41 @@
 <div class="page-title__subtitle">Dreaming of Automation in Digital Marketing</div>
 </h1>
 
-<h3 id="introduction-to-project-nimble">Introduction to Project Nimble</h3>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+  <li><a href="#introduction-to-project-nimble">Introduction to Project Nimble</a>
+    <ol>
+      <li><a href="#key-features">Key Features</a></li>
+      <li><a href="#expected-benefits">Expected Benefits</a></li>
+      <li><a href="#my-role-and-technologies-used">My Role and Technologies Used</a></li>
+    </ol>
+  </li>
+  <li><a href="#project-architecture">Project Architecture</a>
+    <ol>
+      <li><a href="#phase-1-design">Phase 1 Design</a></li>
+      <li><a href="#phase-2-design">Phase 2 Design</a></li>
+      <li><a href="#phase-3-design">Phase 3 Design</a></li>
+    </ol>
+  </li>
+</ol>
 
-<p>Project Nimble aims to automate digital marketing. The digital marketing environment is rapidly changing with the adoption of AI, and automation is essential for creating efficient and effective marketing strategies. Nimble is a solution developed to meet this need.</p>
+<hr />
+
+<h2 id="introduction-to-project-nimble">Introduction to Project Nimble</h2>
+
+<p>Project Nimble aims to automate digital marketing. The modern digital marketing environment is rapidly evolving with the introduction of AI. To keep up and develop efficient and effective marketing strategies, automation is essential. Nimble is a solution developed to meet this need.</p>
 
 <h3 id="key-features">Key Features</h3>
 
 <ol>
   <li><strong>Automated Marketing Management</strong>
     <ul>
-      <li>Project Nimble automates various digital marketing tasks end-to-end.</li>
+      <li>Project Nimble automates various digital marketing processes end-to-end.</li>
     </ul>
   </li>
-  <li><strong>Generative AI-based Marketing</strong>
+  <li><strong>Generative AI-Based Marketing</strong>
     <ul>
-      <li>Utilizes AI technology to analyze and apply real-time SEO and trends.</li>
+      <li>Utilizes AI technology to analyze and apply real-time changes in SEO and trends.</li>
     </ul>
   </li>
 </ol>
@@ -103,12 +126,12 @@
   </li>
   <li><strong>Accurate Marketing</strong>
     <ul>
-      <li>Conducts efficient marketing through real-time data analysis and AI-based insights.</li>
+      <li>Efficient marketing through real-time data analysis and AI-based insights.</li>
     </ul>
   </li>
-  <li><strong>Cost Reduction</strong>
+  <li><strong>Cost Savings</strong>
     <ul>
-      <li>Reduces labor and operational costs through automation and advanced infrastructure.</li>
+      <li>Reduced labor and operational costs through automation and infrastructure enhancement.</li>
     </ul>
   </li>
 </ul>
@@ -118,58 +141,100 @@
 <ul>
   <li><strong>Algorithm Implementation</strong>
     <ul>
+      <li>Python</li>
       <li>Selenium</li>
-      <li>GPT API</li>
     </ul>
   </li>
   <li><strong>Infrastructure Setup and Management</strong>
     <ul>
-      <li>Github Action</li>
+      <li>GitHub Actions</li>
       <li>GCP</li>
       <li>Docker</li>
       <li>Airflow</li>
-      <li>Database (sqlite, postgresql)</li>
+      <li>Database (SQLite, PostgreSQL)</li>
       <li>Linux</li>
       <li>Terraform</li>
     </ul>
   </li>
 </ul>
 
-<h3 id="project-structure">Project Structure</h3>
+<hr />
 
-<h4 id="phase-1-design">Phase 1 Design</h4>
+<h2 id="project-architecture">Project Architecture</h2>
+
+<h3 id="phase-1-design">Phase 1 Design</h3>
 <div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/nimble_architecture_phase1.png" alt="Phase 1 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>The system was designed to execute logic directly on the end-user’s system. Users purchase or request a license from the administrator, who then grants the license and provides the client program. The core logic, executed daily, verifies its validity with the license server using its key each time it runs.</p>
+
+<p><strong>Design Highlights</strong></p>
+<ul>
+  <li>Users directly run the program.</li>
+  <li>Users purchase or request a license from the administrator.</li>
+  <li>Administrators grant licenses and provide the client program.</li>
+  <li>The core logic (Client), which runs daily, verifies its validity with the license server using its key.</li>
+</ul>
+
+<p><strong>Technologies Used</strong></p>
+<ul>
+  <li>PYQT5, GCP, RDB, FastAPI, Selenium</li>
+</ul>
 
 <p><strong>Feedback</strong></p>
 <ul>
-  <li>Users find it burdensome to run the program themselves.</li>
-  <li>Distributing new programs to existing clients with each update is challenging.</li>
-  <li>Administrators find manual license management inconvenient.</li>
+  <li>Users find it challenging to run the program themselves.</li>
+  <li>Difficulty in updating and distributing new client programs to existing clients.</li>
+  <li>Inconvenience for administrators to manage licenses directly.</li>
 </ul>
 
-<h4 id="phase-2-design">Phase 2 Design</h4>
+<h3 id="phase-2-design">Phase 2 Design</h3>
 <div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/nimble_architecture_phase2.png" alt="Phase 2 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>This design evolved from the feedback received in Phase 1. Users enter the required information during payment, and the payment platform automatically calls the API. Subsequent tasks are executed automatically on the server.</p>
+
+<p><strong>Design Highlights</strong></p>
+<ul>
+  <li>Users enter necessary information upon payment, and the payment platform automatically calls the API.</li>
+  <li>All subsequent tasks are executed automatically on the server.</li>
+</ul>
+
+<p><strong>Technologies Used</strong></p>
+<ul>
+  <li>GCP, RDB, FastAPI, Selenium, Terraform, Docker, Airflow, Linux</li>
+</ul>
 
 <p><strong>Feedback</strong></p>
 <ul>
   <li>Increased infrastructure maintenance costs.</li>
-  <li>Increased complexity burdens developers.</li>
+  <li>No CI/CD pipeline, requiring developers to understand the entire infrastructure structure to modify and apply source code.</li>
 </ul>
 
-<h4 id="phase-3-design-in-progress">Phase 3 Design (In Progress)</h4>
+<h3 id="phase-3-design">Phase 3 Design</h3>
 <div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/nimble_architecture_phase3.png" alt="Phase 3 Design" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
-<p>This design further evolves from the feedback received in Phase 2. It is currently being implemented.</p>
+
+<p><strong>Design Highlights</strong></p>
+<ul>
+  <li>Reducing costs by managing the database as a file through Buckets.</li>
+  <li>For maintainability, core logic is separated into a separate GitHub repository and CI/CD is implemented with Cloud Build.</li>
+  <li>Tasks previously managed by Airflow are implemented with Cloud Function, reducing management effort and costs.</li>
+</ul>
+
+<p><strong>Technologies Used</strong></p>
+<ul>
+  <li>GCP, RDB, FastAPI, Selenium, Docker, Terraform, Linux</li>
+</ul>
+
+<p><strong>Improvements</strong></p>
+<ul>
+  <li>Monitoring: Currently outputting simple TXT -&gt; Apply by connecting open-source monitoring tools.</li>
+  <li>CloudBuild w/ Terraform: Managing cloud build triggers with Terraform is problematic (suspected Terraform bug) - Fix planned.</li>
+  <li>Unit Test: Need to establish an environment for periodically (weekly) testing each function of Selenium.</li>
+</ul>
 
 
 <section id="comments">
