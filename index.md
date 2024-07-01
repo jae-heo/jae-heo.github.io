@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Redirecting...
+date: 2024-06-24 18:00:00 +0900
 ---
 
 <script>

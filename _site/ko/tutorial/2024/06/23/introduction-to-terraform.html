@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> 테라폼 소개 — IaC - 코드로 인프라를 다루다  | Jaeyoung Heo</title>
+<meta name="description" content="Jaeyoung Heo's tech blog
+">
+<meta name="keywords" content="terraform, infra">
+<link rel="canonical" href="/ko/tutorial/2024/06/23/introduction-to-terraform.html">
+<link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/agate.css">
+
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XDPCR56GW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XDPCR56GW');
+</script>
+</head>
+<body>
+<div class="wrapper">
+<header class="header">
+  <div class="navigation">
+    <a href="/ko" class="logo">Jaeyoung Heo</a>
+    <ul class="menu">
+      <li class="menu__entry">
+        <a href="/ko/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/ko/project">Project</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/ko/blog">Blog</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="social-links">
+    
+    <li class="social-links__entry">
+      <a href="mailto:gjwodud119@gmail.com" target="_blank">
+        <i class="fa fa-envelope-square"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://github.com/jae-heo" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://in.linkedin.com/in/jaeyoung-heo-664033282" target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    
+    <li class="language-selector">
+      <a href="/en/tutorial/2024/06/23/introduction-to-terraform.html"><strong>EN</strong></a> |
+      <a href="/ko/tutorial/2024/06/23/introduction-to-terraform.html"><strong>KO</strong></a>
+    </li>
+  </ul>
+</header>
+<h1 class="page-title">
+<div class="page-title__text">테라폼 소개</div>
+<div class="page-title__subtitle">IaC - 코드로 인프라를 다루다</div>
+</h1>
+
+<p>물론입니다. 아래는 새로운 목차입니다:</p>
+
+<hr />
+
+<h2 id="목차">목차</h2>
+<ol>
+  <li><a href="#terraform-소개">Terraform 소개</a>
+    <ul>
+      <li><a href="#테라폼이란">테라폼이란?</a></li>
+      <li><a href="#사용하는-이유">사용하는 이유</a></li>
+      <li><a href="#주요-키워드">주요 키워드</a></li>
+    </ul>
+  </li>
+  <li><a href="#시작하기">시작하기</a>
+    <ul>
+      <li><a href="#테라폼-설치하기">테라폼 설치하기</a></li>
+      <li><a href="#테라폼-세팅">테라폼 세팅</a></li>
+    </ul>
+  </li>
+  <li><a href="#테라폼-기본-개념">테라폼 기본 개념</a>
+    <ul>
+      <li><a href="#테라폼-구성-파일-이해하기">테라폼 구성 파일 이해하기</a></li>
+      <li><a href="#주요-요소">주요 요소</a></li>
+      <li><a href="#코드-예시">코드 예시</a></li>
+    </ul>
+  </li>
+  <li><a href="#의존성-관리">의존성 관리</a>
+    <ul>
+      <li><a href="#암묵적-의존성">암묵적 의존성</a></li>
+      <li><a href="#명시적-의존성">명시적 의존성</a></li>
+    </ul>
+  </li>
+  <li><a href="#상태-관리">상태 관리</a>
+    <ul>
+      <li><a href="#테라폼의-상태란">테라폼의 상태란?</a></li>
+    </ul>
+  </li>
+  <li><a href="#인프라-프로비저닝">인프라 프로비저닝</a>
+    <ul>
+      <li><a href="#구성-적용-및-삭제">구성 적용 및 삭제</a></li>
+      <li><a href="#주요-명령어">주요 명령어</a></li>
+      <li><a href="#오류-처리-및-디버깅">오류 처리 및 디버깅</a></li>
+    </ul>
+  </li>
+  <li><a href="#고급-개념">고급 개념</a>
+    <ul>
+      <li><a href="#모듈-재사용-가능한-구성">모듈: 재사용 가능한 구성</a></li>
+      <li><a href="#작업-공간-여러-환경-관리">작업 공간: 여러 환경 관리</a></li>
+    </ul>
+  </li>
+  <li><a href="#베스트-프랙티스">베스트 프랙티스</a>
+    <ul>
+      <li><a href="#깨끗하고-유지-보수-가능한-코드-작성하기">깨끗하고 유지 보수 가능한 코드 작성하기</a></li>
+      <li><a href="#테라폼-코드의-버전-관리">테라폼 코드의 버전 관리</a></li>
+      <li><a href="#팀-협업">팀 협업</a></li>
+    </ul>
+  </li>
+  <li><a href="#통합">통합</a>
+    <ul>
+      <li><a href="#테라폼과-cicd-파이프라인-통합">테라폼과 CI/CD 파이프라인 통합</a></li>
+    </ul>
+  </li>
+  <li><a href="#결론">결론</a></li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="terraform-소개">Terraform 소개</h2>
+
+<h3 id="테라폼이란">테라폼이란?</h3>
+
+<p>테라폼은 인프라를 코드로 관리(Infrastructure as Code)할 수 있도록 도와주는 오픈 소스입니다. HashiCorp에서 개발한 테라폼은 클라우드 서비스 제공업체(AWS, Azure, GCP 등)의 인프라를 프로그래밍 방식으로(programatically) 설정하고 관리할 수 있게 해줍니다. 단순 클라우드 환경뿐만 아니라 온프레미스(on-premise) 환경에서도 구성이 가능합니다.</p>
+
+<h3 id="사용하는-이유">사용하는 이유</h3>
+
+<p><strong>자동화</strong>: 테라폼을 사용하면 인프라 설정을 코드로 작성하여 자동으로 배포할 수 있어, 수작업으로 인한 실수를 줄이고 일관성을 유지할 수 있습니다.</p>
+
+<p><strong>효율성</strong>: 복잡한 인프라를 쉽게 관리하고 배포 시간을 단축할 수 있습니다. 한 번 작성한 코드를 여러 환경에 재사용할 수 있어 효율성이 높아집니다.</p>
+
+<p><strong>버전 관리</strong>: 테라폼 구성 파일은 코드로 관리되므로 Git과 같은 버전 관리 시스템을 사용할 수 있습니다.</p>
+
+<p><strong>코드 리뷰</strong>: 리뷰를 통해 팀원간 소통, 검토 및 승인이 이루어질 수 있습니다.</p>
+
+<h3 id="주요-키워드">주요 키워드</h3>
+
+<p><strong>프로바이더(Providers)</strong>: AWS, Azure, GCP 등 다양한 클라우드와 통합을 지원합니다. 프로바이더는 특정 클라우드 서비스와 상호작용할 수 있는 API를 제공합니다.</p>
+
+<p><strong>모듈(Modules)</strong>: 파이썬의 모듈과 거의 같은 역할을 합니다. 테라폼 모듈을 사용하면 코드 재사용이 가능하며, 복잡한 인프라를 여러 작은 단위로 나누어 관리할 수 있습니다. 모듈은 쉽게 공유하고 버전 관리를 할 수 있습니다.</p>
+
+<p><strong>상태 파일(State Files)</strong>: 테라폼은 인프라의 현재 상태를 저장하는 상태 파일을 사용하여 변경 사항을 추적하고 관리합니다. 이를 통해 인프라의 드리프트(설정 불일치)를 감지하고 수정할 수 있습니다.</p>
+
+<p><strong>계획 및 적용(Plan and Apply)</strong>: terraform plan 명령어를 사용하여 변경 사항을 미리 검토하고, terraform apply 명령어를 통해 실제로 적용할 수 있습니다. 이를 통해 배포 전에 어떤 변경이 일어날지 확인할 수 있습니다.</p>
+
+<p><strong>워크스페이스(Workspaces)</strong>: 테라폼 워크스페이스를 사용하면 동일한 구성을 여러 환경(개발, 스테이징, 프로덕션)에서 쉽게 사용할 수 있습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="시작하기">시작하기</h2>
+
+<h3 id="테라폼-설치하기">테라폼 설치하기</h3>
+
+<p>아래 다운로드 페이지를 참고하여 자신의 OS에 맞게 테라폼을 설치합니다.<br /><a href="https://developer.hashicorp.com/terraform/install?product_intent=terraform" target="_blank">테라폼 공식 다운로드 페이지</a></p>
+
+<h3 id="테라폼-세팅">테라폼 세팅</h3>
+
+<p>사용하고자 하는 프로바이더 (GCP/AWS/AZURE 등)을 위해 초기 세팅을 진행합니다.<br />GCP를 예시로 세팅하는 방법을 설명드리겠습니다.</p>
+
+<ol>
+  <li>Google Cloud Console에서 Project 생성 및 Service Key 발급</li>
+  <li>gcloud cli설치 <a href="https://cloud.google.com/sdk/docs/install?hl=ko" target="_blank">gcloud cli 공식문서</a></li>
+  <li>인증 정보 설정
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 해당 명령어를 입력하면 GCP로 로그인하게되고, 이후 프로젝트 등을 설정하게됩니다.</span>
+<span class="nv">$ </span>gcloud auth application-default login
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="테라폼-기본-개념">테라폼 기본 개념</h2>
+
+<h3 id="테라폼-구성-파일-이해하기">테라폼 구성 파일 이해하기</h3>
+
+<p>앞서 테라폼은 인프라를 코드로 정의하도록 도와주는 도구라고 정의했습니다. 이때 사용하는 파일은 .tf 확장자를 가지며, HCL(HashiCorp Configuration Language)로 작성됩니다.</p>
+
+<h3 id="주요-요소">주요 요소</h3>
+<p><strong>프로바이더(Provider)</strong>: 테라폼이 상호작용할 클라우드 서비스 제공업체(AWS, Azure, GCP 등)나 다른 API의 설정을 정의합니다.</p>
+
+<p><strong>리소스(Resource)</strong>: 인프라의 개별 구성 요소를 정의합니다. 예를 들어, 가상 머신, 데이터베이스, 네트워크 설정 등이 포함됩니다.</p>
+
+<p><strong>변수(Variable)</strong>: 구성 파일 내에서 재사용할 수 있는 값을 정의합니다.</p>
+
+<p><strong>출력(Output)</strong>: 테라폼이 적용된 후 생성된 값들을 출력합니다.</p>
+
+<p><strong>데이터 소스(Data Source)</strong>: 외부에서 데이터를 가져와서 리소스를 생성하는데 사용할 수 있습니다.</p>
+
+<h3 id="코드-예시">코드 예시</h3>
+
+<p>다음은 간단한 테라폼 구성 파일의 예시입니다. 이 예제에서는 GCP에서 Compute Engine 인스턴스를 생성하는 방법을 보여줍니다.</p>
+
+<h4 id="provider-및-resource">Provider 및 Resource</h4>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># GCP Provider를 설정합니다.</span>
+<span class="c1"># 프로바이더는 테라폼이 상호작용할 수 있는 외부 시스템(API)을 정의합니다. </span>
+<span class="c1"># 각 프로바이더는 특정 클라우드 서비스(GCP 등) 또는 기타 API와의 통합을 제공합니다.</span>
+<span class="c1"># 테라폼은 프로바이더를 통해 해당 서비스의 리소스를 관리할 수 있습니다.</span>
+<span class="nx">provider</span> <span class="s2">"google"</span> <span class="p">{</span>
+  <span class="nx">credentials</span> <span class="p">=</span> <span class="nx">file</span><span class="p">(</span><span class="s2">"&lt;path-to-your-service-account-key&gt;.json"</span><span class="p">)</span>
+  <span class="nx">project</span>     <span class="p">=</span> <span class="s2">"&lt;your-gcp-project-id&gt;"</span>
+  <span class="nx">location</span>      <span class="p">=</span> <span class="s2">"us-central1"</span>
+<span class="p">}</span>
+
+<span class="c1"># GCP Provider에서 제공하는 google_compute_instance 리소스를 정의합니다.</span>
+<span class="c1"># 리소스는 테라폼 구성의 기본 단위입니다. </span>
+<span class="c1"># 리소스는 클라우드 인프라의 특정 요소를 나타내며, 예를 들어 가상 머신, 데이터베이스, 네트워크 설정 등을 포함합니다. </span>
+<span class="c1"># 각 리소스는 특정 프로바이더와 연결되며, 리소스 블록 내에서 필요한 속성을 정의합니다.</span>
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="s2">"vm-instance"</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"us-central1-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="s2">"default"</span>
+    <span class="nx">access_config</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="variables">Variables</h4>
+<p>variables.tf 파일에 변수를 정의합니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">variable</span> <span class="s2">"project_id"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The GCP project ID"</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+<span class="p">}</span>
+
+<span class="nx">variable</span> <span class="s2">"region"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The GCP region"</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+  <span class="nx">default</span>     <span class="p">=</span> <span class="s2">"us-central1"</span>
+<span class="p">}</span>
+
+<span class="nx">variable</span> <span class="s2">"instance_name"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The name of the compute instance"</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>정의된 변수를 main.tf파일에서 사용할 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">provider</span> <span class="s2">"google"</span> <span class="p">{</span>
+  <span class="nx">credentials</span> <span class="p">=</span> <span class="nx">file</span><span class="p">(</span><span class="s2">"&lt;path-to-your-service-account-key&gt;.json"</span><span class="p">)</span>
+  <span class="nx">project</span>     <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">project_id</span>
+  <span class="nx">region</span>      <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">region</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">instance_name</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"${var.region}-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="s2">"default"</span>
+    <span class="nx">access_config</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>변수값 설정은 terraform.tfvars파일 또는 명령어에서 전달할 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">project_id</span>     <span class="err">=</span> <span class="s2">"your-gcp-project-id"</span>
+<span class="nx">instance_name</span>  <span class="err">=</span> <span class="s2">"vm-instance"</span>
+</code></pre></div></div>
+
+<h4 id="output">Output</h4>
+<p>출력은 테라폼이 적용된 후 생성된 값을 출력하는데 사용됩니다. 이를 통해 중요한 정보를 쉽게 확인할 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">output</span> <span class="s2">"instance_ip"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The IP address of the compute instance"</span>
+  <span class="nx">value</span>       <span class="p">=</span> <span class="nx">google_compute_instance</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">network_interface</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">access_config</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">nat_ip</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>명령어 terraform apply 명령어를 실행한 후 출력된 값을 확인할 수 있습니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Outputs:
+instance_ip <span class="o">=</span> <span class="s2">"34.68.194.64"</span>
+</code></pre></div></div>
+
+<h4 id="datasource">Datasource</h4>
+<p>데이터 소스는 외부에서 데이터를 가져와서 리소스를 생성하는 데 사용할 수 있습니다. 예를 들어, 이미 존재하는 리소스를 조회하거나 다른 API에서 데이터를 가져올 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 예를 들어, GCP 프로젝트의 현재 사용 가능한 네트워크를 </span>
+<span class="c1"># 가져오고 이를 사용하여 인스턴스를 생성할 수 있습니다.</span>
+<span class="nx">data</span> <span class="s2">"google_compute_network"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"default"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">instance_name</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"${var.region}-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+    <span class="nx">access_config</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1"># 이 예시에서 data "google_compute_network" "default"는 GCP의 기본 네트워크 정보를 가져와서</span>
+<span class="c1"># google_compute_instance 리소스에서 사용합니다.</span>
+
+<span class="c1"># 위의 예시들을 통해 테라폼의 변수, 출력, 데이터 소스를 사용하는 방법을 이해할 수 있습니다.</span>
+<span class="c1"># 이를 활용하여 테라폼 구성 파일을 더욱 유연하고 재사용 가능하게 만들 수 있습니다.</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="의존성-관리">의존성 관리</h2>
+<p>테라폼에서 의존성이란, 테라폼 구성 요소 간의 순서를 정의하여 리소스가 올바른 순서로 생성, 수정 또는 삭제되도록 하는 것을 의미합니다. 테라폼은 기본적으로 리소스 간의 종속성을 자동으로 감지하지만, 특정 상황에서는 명시적으로 의존성을 정의해야 할 때도 있습니다.</p>
+
+<h3 id="암묵적-의존성">암묵적 의존성</h3>
+<p>테라폼은 리소스 간의 암묵적 의존성을 자동으로 관리합니다. 예를 들어, 한 리소스의 속성이 다른 리소스의 출력 값을 참조할 때, 테라폼은 자동으로 종속성을 인식합니다.</p>
+
+<p>예시</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">resource</span> <span class="s2">"google_compute_network"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"my-network"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_subnetwork"</span> <span class="s2">"subnet"</span> <span class="p">{</span>
+  <span class="nx">name</span>          <span class="p">=</span> <span class="s2">"my-subnet"</span>
+  <span class="nx">ip_cidr_range</span> <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>
+  <span class="nx">region</span>        <span class="p">=</span> <span class="s2">"us-central1"</span>
+  <span class="nx">network</span>       <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+
+<span class="c1"># 예시에서 google_compute_subnetwork 리소스는 </span>
+<span class="c1"># google_compute_network 리소스를 참조하고 있으므로, </span>
+<span class="c1"># 테라폼은 네트워크가 먼저 생성된 후 서브네트워크가 생성되도록 합니다.</span>
+</code></pre></div></div>
+
+<h3 id="명시적-의존성">명시적 의존성</h3>
+<p>경우에 따라서는 테라폼이 의존성을 자동으로 감지하지 못할 때도 있습니다. 이럴 때는 depends_on 인수를 사용하여 명시적으로 의존성을 정의할 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">resource</span> <span class="s2">"google_compute_network"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"my-network"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_subnetwork"</span> <span class="s2">"subnet"</span> <span class="p">{</span>
+  <span class="nx">name</span>          <span class="p">=</span> <span class="s2">"my-subnet"</span>
+  <span class="nx">ip_cidr_range</span> <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>
+  <span class="nx">region</span>        <span class="p">=</span> <span class="s2">"us-central1"</span>
+  <span class="nx">network</span>       <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="s2">"vm-instance"</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"us-central1-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+  <span class="p">}</span>
+
+  <span class="nx">depends_on</span> <span class="p">=</span> <span class="p">[</span><span class="nx">google_compute_subnetwork</span><span class="p">.</span><span class="nx">subnet</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="c1"># 예시에서 google_compute_instance 리소스는 </span>
+<span class="c1"># google_compute_subnetwork 리소스에 명시적으로 의존함을 나타냅니다. </span>
+<span class="c1"># 따라서 서브네트워크가 생성된 후에 인스턴스가 생성됩니다.</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="상태-관리">상태 관리</h2>
+<p>상태 파일은 관리되는 인프라의 현재 상태를 추적하고 저장하는 데 사용됩니다. 이를 통해 테라폼은 인프라의 변경 사항을 감지하고, 필요한 작업을 효율적으로 수행할 수 있습니다.</p>
+
+<h3 id="테라폼의-상태란">테라폼의 상태란?</h3>
+<p>테라폼 상태는 테라폼이 인프라의 현재 상태를 저장하는 방법입니다. 상태 파일(terraform.tfstate)은 테라폼이 관리하는 모든 리소스의 정보를 포함하고 있으며, 테라폼이 인프라의 현재 상태와 구성 파일을 비교하여 필요한 변경 사항을 결정할 수 있도록 합니다. 상태 파일은 테라폼이 리소스의 속성을 추적하고, 인프라 변경 사항을 관리하는 데 사용됩니다.</p>
+
+<p>상태 파일은 다음과 같은 정보를 포함합니다:</p>
+<ul>
+  <li>테라폼이 생성한 모든 리소스의 현재 상태</li>
+  <li>리소스의 속성과 관련된 메타데이터</li>
+  <li>리소스 간의 종속성 정보</li>
+</ul>
+
+<p>테라폼 상태 파일을 적절하게 관리하는 것은 매우 중요합니다. 기본적으로 테라폼은 상태 파일을 로컬 디렉토리에 저장하지만, 여러 팀원과 협업하거나 인프라를 보다 효율적으로 관리하기 위해 원격 상태 저장소를 사용하는 것이 좋습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="인프라-프로비저닝">인프라 프로비저닝</h2>
+<p>테라폼을 사용하여 인프라를 프로비저닝할 때, 구성 파일을 적용하여 리소스를 생성하거나 업데이트하고, 필요하지 않은 리소스를 삭제할 수 있습니다.</p>
+
+<ul>
+  <li><strong>구성 적용</strong>: <code class="language-plaintext highlighter-rouge">terraform apply</code> 명령어를 사용하여 테라폼 구성 파일에 정의된 리소스를 생성하거나 업데이트합니다. 이 명령어는 구성 파일을 읽고, 현재 상태와 비교하여 필요한 변경 사항을 적용합니다.</li>
+  <li><strong>구성 삭제</strong>: <code class="language-plaintext highlighter-rouge">terraform destroy</code> 명령어를 사용하여 테라폼 구성 파일에 정의된 모든 리소스를 삭제합니다. 이는 테스트 환경이나 임시 환경을 정리할 때 유용합니다.</li>
+</ul>
+
+<h3 id="주요-명령어">주요 명령어</h3>
+
+<p>테라폼에서 자주 사용하는 주요 명령어는 다음과 같습니다:</p>
+
+<ul>
+  <li><strong>terraform init</strong>: 테라폼 초기화를 수행합니다. 이 명령어는 필요한 플러그인과 모듈을 다운로드하고, 백엔드를 구성하여 상태 파일을 초기화합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform init
+</code></pre></div>    </div>
+  </li>
+  <li><strong>terraform plan</strong>: 테라폼 계획을 생성합니다. 이 명령어는 구성 파일을 분석하여 현재 상태와 비교한 후, 적용할 변경 사항을 미리 보여줍니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform plan
+</code></pre></div>    </div>
+  </li>
+  <li><strong>terraform apply</strong>: 테라폼 계획을 적용하여 리소스를 생성하거나 업데이트합니다. 이 명령어는 <code class="language-plaintext highlighter-rouge">terraform plan</code>에서 생성한 실행 계획을 실제로 실행합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform apply
+</code></pre></div>    </div>
+  </li>
+  <li><strong>terraform destroy</strong>: 테라폼 리소스를 삭제합니다. 이 명령어는 구성 파일에 정의된 모든 리소스를 제거합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform destroy
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="오류-처리-및-디버깅">오류 처리 및 디버깅</h3>
+
+<p>테라폼을 사용하면서 발생할 수 있는 오류를 처리하고 디버깅하는 방법은 다음과 같습니다:</p>
+
+<ul>
+  <li><strong>오류 메시지 분석</strong>: 테라폼이 제공하는 오류 메시지를 주의 깊게 읽고, 문제의 원인을 파악합니다.</li>
+  <li><strong>로그 확인</strong>: <code class="language-plaintext highlighter-rouge">TF_LOG</code> 환경 변수를 설정하여 디버그 로그를 활성화합니다. 예를 들어, <code class="language-plaintext highlighter-rouge">export TF_LOG=DEBUG</code> 명령어를 사용하여 디버그 로그를 확인할 수 있습니다.</li>
+  <li><strong>테라폼 커뮤니티</strong>: 테라폼 포럼, GitHub 이슈 트래커, Stack Overflow 등에서 비슷한 문제를 겪는 사람들의 해결 방법을 찾아보거나 직접 질문을 올려 도움을 받을 수 있습니다.</li>
+  <li><strong>코드 검토</strong>: 구성 파일을 다시 검토하여 문법 오류나 잘못된 참조가 없는지 확인합니다.</li>
+  <li><strong>테라폼 문서 확인</strong>: 테라폼 공식 문서나 프로바이더 문서를 참조하여 올바른 사용법을 확인합니다.</li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="고급-개념">고급 개념</h2>
+
+<h3 id="모듈-재사용-가능한-구성">모듈: 재사용 가능한 구성</h3>
+
+<p>모듈은 테라폼 구성 요소를 재사용 가능하게 만드는 방법입니다. 모듈을 사용하면 복잡한 인프라 구성을 여러 개의 작은 단위로 나누어 관리할 수 있습니다. 이를 통해 코드의 재사용성과 유지보수성을 높일 수 있습니다.</p>
+
+<p><strong>모듈 예시</strong></p>
+
+<p>모듈을 정의하려면, 별도의 디렉토리에 테라폼 구성 파일을 작성합니다.</p>
+
+<p><strong>디렉토리 구조</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>modules/
+  vpc/
+    main.tf
+    variables.tf
+    outputs.tf
+</code></pre></div></div>
+
+<p><strong>modules/vpc/main.tf</strong></p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">resource</span> <span class="s2">"google_compute_network"</span> <span class="s2">"vpc_network"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">network_name</span>
+<span class="p">}</span>
+
+<span class="nx">output</span> <span class="s2">"network_name"</span> <span class="p">{</span>
+  <span class="nx">value</span> <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">vpc_network</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>main.tf</strong></p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span> <span class="s2">"vpc"</span> <span class="p">{</span>
+  <span class="nx">source</span>       <span class="p">=</span> <span class="s2">"./modules/vpc"</span>
+  <span class="nx">network_name</span> <span class="p">=</span> <span class="s2">"my-vpc-network"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="작업-공간-여러-환경-관리">작업 공간: 여러 환경 관리</h3>
+
+<p>테라폼 작업 공간(Workspaces)을 사용하면 동일한 구성을 여러 환경에서 쉽게 사용할 수 있습니다. 작업 공간을 통해 개발, 테스트, 프로덕션 환경을 분리하여 관리할 수 있습니다.</p>
+
+<p><strong>작업 공간 명령어</strong></p>
+<ul>
+  <li><strong>작업 공간 생성</strong>: 새로운 작업 공간을 생성합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform workspace new dev
+</code></pre></div>    </div>
+  </li>
+  <li><strong>작업 공간 전환</strong>: 특정 작업 공간으로 전환합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform workspace <span class="k">select </span>dev
+</code></pre></div>    </div>
+  </li>
+  <li><strong>작업 공간 목록 조회</strong>: 현재 사용 가능한 작업 공간 목록을 조회합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform workspace list
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="bp">BP</h2>
+
+<h3 id="깨끗하고-유지-보수-가능한-코드-작성하기">깨끗하고 유지 보수 가능한 코드 작성하기</h3>
+
+<p>테라폼 코드 작성 시, 코드의 가독성과 유지보수성을 높이기 위해 다음과 같은 원칙을 따르는 것이 좋습니다:</p>
+
+<ol>
+  <li><strong>모듈화</strong>: 인프라 구성 요소를 모듈로 나누어 재사용 가능하고 관리하기 쉽게 만듭니다. 각 모듈은 독립적으로 작동하며, 특정 기능을 수행하는 데 집중합니다.</li>
+  <li><strong>주석 달기</strong>: 코드에 주석을 추가하여 다른 개발자나 미래의 자신이 코드를 쉽게 이해할 수 있도록 합니다. 주석은 코드의 의도와 동작을 설명하는 데 사용됩니다.</li>
+  <li><strong>일관된 코드 스타일</strong>: 팀 내에서 일관된 코드 스타일을 유지합니다. 테라폼의 HCL(HashiCorp Configuration Language)은 간단한 구조를 가지므로, 변수 이름, 들여쓰기, 줄 바꿈 등의 스타일 가이드라인을 정하고 따릅니다.</li>
+  <li><strong>변수와 출력 사용</strong>: 변수를 사용하여 반복되는 값을 중앙에서 관리하고, 출력값을 통해 중요한 정보를 쉽게 확인할 수 있도록 합니다.</li>
+</ol>
+
+<h3 id="테라폼-코드의-버전-관리">테라폼 코드의 버전 관리</h3>
+
+<p>테라폼 코드를 버전 관리 시스템(Git 등)을 사용하여 관리하면 변경 사항을 추적하고, 협업을 쉽게 할 수 있습니다.</p>
+
+<ol>
+  <li><strong>Git 사용</strong>: 테라폼 코드를 Git 저장소에 저장하고, 변경 사항을 커밋합니다. 이를 통해 코드의 히스토리를 추적할 수 있습니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git init
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Initial commit"</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>브랜치 전략</strong>: 기능별로 브랜치를 나누어 작업합니다. 예를 들어, 새로운 기능 추가나 버그 수정을 위한 브랜치를 만들고, 작업이 완료되면 메인 브랜치에 병합합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> feature/new-feature
+</code></pre></div>    </div>
+  </li>
+  <li><strong>코드 리뷰</strong>: Pull Request를 통해 코드 리뷰를 진행하여 품질을 유지하고, 팀 내에서 코드에 대한 이해를 공유합니다.</li>
+</ol>
+
+<h3 id="팀-협업">팀 협업</h3>
+
+<p>테라폼을 사용하는 팀은 다음과 같은 방법으로 협업할 수 있습니다:</p>
+
+<ol>
+  <li><strong>표준화된 구성</strong>: 팀 내에서 표준화된 테라폼 모듈과 구성 파일을 사용하여 일관성을 유지합니다.</li>
+  <li><strong>문서화</strong>: 테라폼 코드와 인프라 구성을 문서화하여 팀원들이 쉽게 이해하고 사용할 수 있도록 합니다.</li>
+  <li><strong>상호 검토</strong>: 정기적인 코드 리뷰를 통해 팀원 간의 코드 품질을 유지하고, 모범 사례를 공유합니다.</li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="통합">통합</h2>
+
+<h3 id="테라폼과-cicd-파이프라인-통합">테라폼과 CI/CD 파이프라인 통합</h3>
+
+<p>테라폼을 CI/CD 파이프라인에 통합하면 인프라 배포를 자동화하고, 변경 사항을 효율적으로 관리할 수 있습니다.</p>
+
+<ol>
+  <li><strong>CI/CD 도구 선택</strong>: Jenkins, GitLab CI, GitHub Actions 등과 같은 CI/CD 도구를 선택합니다.</li>
+  <li><strong>파이프라인 설정</strong>: 테라폼 명령어(<code class="language-plaintext highlighter-rouge">terraform init</code>, <code class="language-plaintext highlighter-rouge">terraform plan</code>, <code class="language-plaintext highlighter-rouge">terraform apply</code>)를 포함한 파이프라인을 설정하여 코드 변경 시 자동으로 인프라를 배포합니다.</li>
+</ol>
+
+<p><strong>예시: GitHub Actions</strong></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Terraform</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">main</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">terraform</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+
+    <span class="na">steps</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout code</span>
+      <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set up Terraform</span>
+      <span class="na">uses</span><span class="pi">:</span> <span class="s">hashicorp/setup-terraform@v1</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Terraform Init</span>
+      <span class="na">run</span><span class="pi">:</span> <span class="s">terraform init</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Terraform Plan</span>
+      <span class="na">run</span><span class="pi">:</span> <span class="s">terraform plan</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Terraform Apply</span>
+      <span class="na">if</span><span class="pi">:</span> <span class="s">github.ref == 'refs/heads/main'</span>
+      <span class="na">run</span><span class="pi">:</span> <span class="s">terraform apply -auto-approve</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="결론">결론</h2>
+<p>테라폼은 인프라를 코드로 관리(Infrastructure as Code)할 수 있도록 도와주는 강력한 도구입니다. 이를 통해 다양한 클라우드 환경에서 인프라를 효율적으로 생성, 관리, 삭제할 수 있습니다.</p>
+
+
+<section id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="jae-heo/jae-heo.github.io"
+            issue-term="pathname"
+            label="Comment"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</section>
+
+<div class="about">
+<div class="about__divider">*****</div>
+<div class="about__text">
+<strong> &copy; 2024 Jaeyoung Heo. </strong>
+</div>
+</div>
+
+
+</div>
+<script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

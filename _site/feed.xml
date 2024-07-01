@@ -1,171 +1,1085 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-06-27T22:17:44+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
-</subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="en"><title type="html">Handling GCP Compute Engine with Code (Python)</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="Handling GCP Compute Engine with Code (Python)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-07-01T16:36:13+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
+</subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="en"><title type="html">Introduction to Terraform</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/23/introduction-to-terraform.html" rel="alternate" type="text/html" title="Introduction to Terraform" /><published>2024-06-23T14:00:00+09:00</published><updated>2024-06-23T14:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/23/introduction-to-terraform</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/23/introduction-to-terraform.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
 <ol>
-  <li><a href="#introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</a></li>
-  <li><a href="#introduction-to-google-api-client-library">Introduction to Google API Client Library</a>
-    <ol>
-      <li><a href="#instance-crud">Instance CRUD</a></li>
-      <li><a href="#fetching-instance-list">Fetching Instance List</a></li>
-      <li><a href="#adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</a></li>
-    </ol>
+  <li><a href="#introduction-to-terraform">Introduction to Terraform</a>
+    <ul>
+      <li><a href="#what-is-terraform">What is Terraform?</a></li>
+      <li><a href="#why-use-it">Why Use It?</a></li>
+      <li><a href="#key-concepts">Key Concepts</a></li>
+    </ul>
   </li>
-  <li><a href="#use-cases">Use Cases</a></li>
+  <li><a href="#getting-started">Getting Started</a>
+    <ul>
+      <li><a href="#installing-terraform">Installing Terraform</a></li>
+      <li><a href="#setting-up-terraform">Setting Up Terraform</a></li>
+    </ul>
+  </li>
+  <li><a href="#terraform-basics">Terraform Basics</a>
+    <ul>
+      <li><a href="#understanding-terraform-configuration-files">Understanding Terraform Configuration Files</a></li>
+      <li><a href="#key-elements">Key Elements</a></li>
+      <li><a href="#code-examples">Code Examples</a></li>
+    </ul>
+  </li>
+  <li><a href="#dependency-management">Dependency Management</a>
+    <ul>
+      <li><a href="#implicit-dependencies">Implicit Dependencies</a></li>
+      <li><a href="#explicit-dependencies">Explicit Dependencies</a></li>
+    </ul>
+  </li>
+  <li><a href="#state-management">State Management</a>
+    <ul>
+      <li><a href="#what-is-terraform-state">What is Terraform State?</a></li>
+    </ul>
+  </li>
+  <li><a href="#infrastructure-provisioning">Infrastructure Provisioning</a>
+    <ul>
+      <li><a href="#applying-and-destroying-configurations">Applying and Destroying Configurations</a></li>
+      <li><a href="#key-commands">Key Commands</a></li>
+      <li><a href="#error-handling-and-debugging">Error Handling and Debugging</a></li>
+    </ul>
+  </li>
+  <li><a href="#advanced-concepts">Advanced Concepts</a>
+    <ul>
+      <li><a href="#modules-reusable-configurations">Modules: Reusable Configurations</a></li>
+      <li><a href="#workspaces-managing-multiple-environments">Workspaces: Managing Multiple Environments</a></li>
+    </ul>
+  </li>
+  <li><a href="#best-practices">Best Practices</a>
+    <ul>
+      <li><a href="#writing-clean-and-maintainable-code">Writing Clean and Maintainable Code</a></li>
+      <li><a href="#version-control-for-terraform-code">Version Control for Terraform Code</a></li>
+      <li><a href="#team-collaboration">Team Collaboration</a></li>
+    </ul>
+  </li>
+  <li><a href="#integration">Integration</a>
+    <ul>
+      <li><a href="#integrating-terraform-with-cicd-pipelines">Integrating Terraform with CI/CD Pipelines</a></li>
+    </ul>
+  </li>
+  <li><a href="#conclusion">Conclusion</a></li>
 </ol>
 
-<h2 id="introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</h2>
+<p><br />
+<br /></p>
 
-<p>GCP Compute Engine is a virtual machine service provided by Google Cloud Platform (GCP). It offers similar functionalities to Amazon AWS’s EC2 service. Users can easily manage virtual machines, and it supports various tools for scaling, security, monitoring, and more.</p>
+<h2 id="introduction-to-terraform">Introduction to Terraform</h2>
 
-<h2 id="introduction-to-google-api-client-library">Introduction to Google API Client Library</h2>
+<h3 id="what-is-terraform">What is Terraform?</h3>
 
-<p>Using the Google API Client Library, you can easily manage Compute Engine instances with Python. This library allows you to perform CRUD operations on instances, and since the operations are executed through code, they can be automated.</p>
+<p>Terraform is an open-source tool that allows you to manage infrastructure as code (IaC). Developed by HashiCorp, Terraform enables you to programmatically configure and manage infrastructure provided by cloud service providers (AWS, Azure, GCP, etc.) and even on-premise environments.</p>
 
-<h3 id="instance-crud">Instance CRUD</h3>
+<h3 id="why-use-it">Why Use It?</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
-<span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
+<p><strong>Automation</strong>: Using Terraform, you can write infrastructure configurations as code and automatically deploy them, reducing manual errors and maintaining consistency.</p>
 
-<span class="c1"># Obtain Google Cloud authentication credentials.
-</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
+<p><strong>Efficiency</strong>: Easily manage complex infrastructure and reduce deployment time. Code can be reused across multiple environments, increasing efficiency.</p>
 
-<span class="c1"># Create a Compute Engine API client.
-</span><span class="n">service</span> <span class="o">=</span> <span class="n">discovery</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">compute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+<p><strong>Version Control</strong>: Terraform configuration files can be managed as code, allowing you to use version control systems like Git.</p>
 
-<span class="n">project</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>  <span class="c1"># Enter your project ID.
-</span><span class="n">zone</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3-a</span><span class="sh">'</span>   <span class="c1"># Enter the zone you are using.
-</span>
-<span class="c1"># Instance creation code example
-</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span><span class="p">,</span>
-    <span class="sh">'</span><span class="s">machineType</span><span class="sh">'</span><span class="p">:</span> <span class="sa">f</span><span class="sh">'</span><span class="s">zones/</span><span class="si">{</span><span class="n">zone</span><span class="si">}</span><span class="s">/machineTypes/n1-standard-1</span><span class="sh">'</span><span class="p">,</span> <span class="c1"># Machine type can be set
-</span>    <span class="sh">'</span><span class="s">disks</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-            <span class="sh">'</span><span class="s">boot</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-            <span class="sh">'</span><span class="s">autoDelete</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-            <span class="sh">'</span><span class="s">initializeParams</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
-                <span class="sh">'</span><span class="s">sourceImage</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">projects/debian-cloud/global/images/family/debian-9</span><span class="sh">'</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">],</span>
-    <span class="sh">'</span><span class="s">networkInterfaces</span><span class="sh">'</span><span class="p">:</span> <span class="p">[{</span>
-        <span class="sh">'</span><span class="s">network</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">global/networks/default</span><span class="sh">'</span>
-    <span class="p">}]</span>
+<p><strong>Code Review</strong>: Facilitates communication, review, and approval among team members.</p>
+
+<h3 id="key-concepts">Key Concepts</h3>
+
+<p><strong>Providers</strong>: Supports integration with various clouds like AWS, Azure, GCP, etc. Providers offer APIs for interacting with specific cloud services.</p>
+
+<p><strong>Modules</strong>: Similar to Python modules. Terraform modules allow code reuse and managing complex infrastructure in smaller, manageable units. Modules can be easily shared and version-controlled.</p>
+
+<p><strong>State Files</strong>: Terraform uses state files to store the current state of the infrastructure, tracking changes and managing configurations. This helps in detecting and correcting drifts (configuration mismatches).</p>
+
+<p><strong>Plan and Apply</strong>: Use <code class="language-plaintext highlighter-rouge">terraform plan</code> to preview changes and <code class="language-plaintext highlighter-rouge">terraform apply</code> to apply them. This helps in verifying changes before deployment.</p>
+
+<p><strong>Workspaces</strong>: Workspaces allow you to use the same configuration across multiple environments (development, staging, production) easily.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<h3 id="installing-terraform">Installing Terraform</h3>
+
+<p>Refer to the download page to install Terraform according to your OS.<br /><a href="https://developer.hashicorp.com/terraform/install?product_intent=terraform" target="_blank">Official Terraform Download Page</a></p>
+
+<h3 id="setting-up-terraform">Setting Up Terraform</h3>
+
+<p>Set up the initial configuration for the provider you intend to use (GCP/AWS/AZURE, etc.). Here, we explain the setup using GCP as an example.</p>
+
+<ol>
+  <li>Create a Project in Google Cloud Console and issue a Service Key.</li>
+  <li>Install gcloud CLI <a href="https://cloud.google.com/sdk/docs/install?hl=en" target="_blank">gcloud CLI Documentation</a></li>
+  <li>Set up authentication
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Run this command to log in to GCP, then configure your project settings.</span>
+<span class="nv">$ </span>gcloud auth application-default login
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="terraform-basics">Terraform Basics</h2>
+
+<h3 id="understanding-terraform-configuration-files">Understanding Terraform Configuration Files</h3>
+
+<p>Terraform helps define infrastructure as code. The files used have a .tf extension and are written in HCL (HashiCorp Configuration Language).</p>
+
+<h3 id="key-elements">Key Elements</h3>
+<p><strong>Provider</strong>: Defines settings for cloud service providers (AWS, Azure, GCP, etc.) or other APIs that Terraform interacts with.</p>
+
+<p><strong>Resource</strong>: Defines individual components of the infrastructure, such as virtual machines, databases, network settings, etc.</p>
+
+<p><strong>Variable</strong>: Defines reusable values within configuration files.</p>
+
+<p><strong>Output</strong>: Displays values created after Terraform is applied.</p>
+
+<p><strong>Data Source</strong>: Allows importing external data to use in resource creation.</p>
+
+<h3 id="code-examples">Code Examples</h3>
+
+<p>Here’s a simple example of a Terraform configuration file that creates a Compute Engine instance in GCP.</p>
+
+<h4 id="provider-and-resource">Provider and Resource</h4>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Set up the GCP Provider.</span>
+<span class="nx">provider</span> <span class="s2">"google"</span> <span class="p">{</span>
+  <span class="nx">credentials</span> <span class="p">=</span> <span class="nx">file</span><span class="p">(</span><span class="s2">"&lt;path-to-your-service-account-key&gt;.json"</span><span class="p">)</span>
+  <span class="nx">project</span>     <span class="p">=</span> <span class="s2">"&lt;your-gcp-project-id&gt;"</span>
+  <span class="nx">location</span>    <span class="p">=</span> <span class="s2">"us-central1"</span>
 <span class="p">}</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">insert</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
+<span class="c1"># Define a google_compute_instance resource provided by the GCP Provider.</span>
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="s2">"vm-instance"</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"us-central1-a"</span>
 
-<span class="c1"># Instance reading code example
-</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="s2">"default"</span>
+    <span class="nx">access_config</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
-<span class="c1"># Instance updating code example
-</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="sh">'</span><span class="s">description</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Updated instance</span><span class="sh">'</span>
+<h4 id="variables">Variables</h4>
+<p>Define variables in a variables.tf file.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">variable</span> <span class="s2">"project_id"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The GCP project ID"</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
 <span class="p">}</span>
 
-<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">setMetadata</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="nx">variable</span> <span class="s2">"region"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The GCP region"</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+  <span class="nx">default</span>     <span class="p">=</span> <span class="s2">"us-central1"</span>
+<span class="p">}</span>
 
+<span class="nx">variable</span> <span class="s2">"instance_name"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The name of the compute instance"</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Use the defined variables in the main.tf file.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">provider</span> <span class="s2">"google"</span> <span class="p">{</span>
+  <span class="nx">credentials</span> <span class="p">=</span> <span class="nx">file</span><span class="p">(</span><span class="s2">"&lt;path-to-your-service-account-key&gt;.json"</span><span class="p">)</span>
+  <span class="nx">project</span>     <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">project_id</span>
+  <span class="nx">region</span>      <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">region</span>
+<span class="p">}</span>
 
-<span class="c1"># Instance deletion code example
-</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">delete</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">instance_name</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"${var.region}-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="s2">"default"</span>
+    <span class="nx">access_config</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Set variable values in a terraform.tfvars file or pass them via command line.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">project_id</span>     <span class="err">=</span> <span class="s2">"your-gcp-project-id"</span>
+<span class="nx">instance_name</span>  <span class="err">=</span> <span class="s2">"vm-instance"</span>
 </code></pre></div></div>
 
-<h3 id="fetching-instance-list">Fetching Instance List</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
-from oauth2client.client import GoogleCredentials
-
-# Obtain Google Cloud authentication credentials.
-credentials = GoogleCredentials.get_application_default()
-
-# Create a Compute Engine API client.
-service = discovery.build('compute', 'v1', credentials=credentials)
-
-project = 'your-project-id'  # Enter your project ID.
-zone = 'asia-northeast3-a'   # Enter the zone you are using.
-
-# Create a request to fetch the list of instances.
-request = service.instances().list(project=project, zone=zone)
-
-# Execute the request and get the response.
-response = request.execute()
-
-# Print the list of instances.
-if 'items' in response:
-    for instance in response['items']:
-        print('Instance name:', instance['name'])
-        print('Instance status:', instance['status'])
-        print('Instance zone:', instance['zone'])
-        print()
-else:
-    print('No instances found.')
+<h4 id="output">Output</h4>
+<p>Outputs display values created after applying Terraform configurations.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">output</span> <span class="s2">"instance_ip"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The IP address of the compute instance"</span>
+  <span class="nx">value</span>       <span class="p">=</span> <span class="nx">google_compute_instance</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">network_interface</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">access_config</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">nat_ip</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>After running <code class="language-plaintext highlighter-rouge">terraform apply</code>, check the output values.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Outputs:
+instance_ip <span class="o">=</span> <span class="s2">"34.68.194.64"</span>
 </code></pre></div></div>
 
-<h3 id="adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
-from google.oauth2 import service_account
+<h4 id="data-source">Data Source</h4>
+<p>Data sources import external data for resource creation.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Example: Importing the current available network in a GCP project </span>
+<span class="c1"># and using it to create an instance.</span>
+<span class="nx">data</span> <span class="s2">"google_compute_network"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"default"</span>
+<span class="p">}</span>
 
-# Obtain Google Cloud authentication credentials.
-credentials = GoogleCredentials.get_application_default()
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">instance_name</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"${var.region}-a"</span>
 
-# Create a Compute Engine API client.
-service = discovery.build('compute', 'v1', credentials=credentials)
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
-project = 'your-project-id'  # Enter your project ID.
-zone = 'asia-northeast3-a'   # Enter the zone you are using.
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+    <span class="nx">access_config</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1"># In this example, data "google_compute_network" "default" fetches the default network information from GCP</span>
+<span class="c1"># and uses it in the google_compute_instance resource.</span>
 
-# Read the public key
-with open('public-key-path', 'r') as f:
-    public_key = f.read().strip()
-
-# Get the current metadata of the instance
-instance = compute.instances().get(project=PROJECT_ID, zone=ZONE, instance=INSTANCE_NAME).execute()
-metadata = instance.get('metadata', {})
-items = metadata.get('items', [])
-
-# Add SSH key metadata
-ssh_keys = None
-for item in items:
-    if item['key'] == 'ssh-keys':
-        ssh_keys = item
-        break
-
-if ssh_keys:
-    ssh_keys['value'] += f"\n{user_name}:{public_key}"
-else:
-    items.append({
-        'key': 'ssh-keys',
-        'value': f"{user_name}:{public_key}"
-    })
-
-metadata['items'] = items
-
-# Send a request to update the metadata
-operation = compute.instances().setMetadata(
-    project=PROJECT_ID,
-    zone=ZONE,
-    instance=INSTANCE_NAME,
-    body=metadata
-).execute()
-
-print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
+<span class="c1"># These examples demonstrate how to use variables, outputs, and data sources in Terraform.</span>
+<span class="c1"># Utilizing these can make Terraform configuration files more flexible and reusable.</span>
 </code></pre></div></div>
 
-<h2 id="use-cases">Use Cases</h2>
+<p><br />
+<br /></p>
+
+<h2 id="dependency-management">Dependency Management</h2>
+<p>In Terraform, dependencies refer to defining the order of Terraform components so that resources are created, modified, or deleted in the correct order. Terraform automatically detects dependencies between resources but in some cases, you may need to explicitly define dependencies.</p>
+
+<h3 id="implicit-dependencies">Implicit Dependencies</h3>
+<p>Terraform manages implicit dependencies automatically. For instance, if a resource’s attribute references the output value of another resource, Terraform will automatically detect the dependency.</p>
+
+<p>Example</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">resource</span> <span class="s2">"google_compute_network"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"my-network"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_subnetwork"</span> <span class="s2">"subnet"</span> <span class="p">{</span>
+  <span class="nx">name</span>          <span class="p">=</span> <span class="s2">"my-subnet"</span>
+  <span class="nx">ip_cidr_range</span> <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>
+  <span class="nx">region</span>        <span class="p">=</span> <span class="s2">"us-central1"</span>
+  <span class="nx">network</span>       <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+
+<span class="c1"># In this example, the google_compute_subnetwork resource references the </span>
+<span class="c1"># google_compute_network resource, so Terraform will ensure the network is </span>
+<span class="c1"># created before the subnetwork.</span>
+</code></pre></div></div>
+
+<h3 id="explicit-dependencies">Explicit Dependencies</h3>
+<p>In some cases, Terraform might not automatically detect dependencies. Use the <code class="language-plaintext highlighter-rouge">depends_on</code> argument to explicitly define dependencies.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">resource</span> <span class="s2">"google_compute_network"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"my-network"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_subnetwork"</span> <span class="s2">"subnet"</span> <span class="p">{</span>
+  <span class="nx">name</span>          <span class="p">=</span> <span class="s2">"my-subnet"</span>
+  <span class="nx">ip_cidr_range</span> <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>
+  <span class="nx">region</span>        <span class="p">=</span> <span class="s2">"us-central1"</span>
+  <span class="nx">network</span>       <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="s2">"vm-instance"</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"us-central1-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+  <span class="p">}</span>
+
+  <span class="nx">depends_on</span> <span class="p">=</span> <span class="p">[</span><span class="nx">google_compute_subnetwork</span><span class="p">.</span><span class="nx">subnet</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="c1"># In this example, the google_compute_instance resource explicitly </span>
+<span class="c1"># depends on the google_compute_subnetwork resource. </span>
+<span class="c1"># Therefore, the instance is created after the subnetwork.</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="state-management">State Management</h2>
+<p>State files are used to track and store the current state of managed infrastructure. This enables Terraform to detect changes and efficiently manage configurations.</p>
+
+<h3 id="what-is-terraform-state">What is Terraform State?</h3>
+<p>Terraform state is how Terraform keeps track of the state of your infrastructure. The state file (terraform.tfstate) contains information about all resources managed by Terraform, allowing it to compare the current state with the configuration files to determine necessary changes. The state file is crucial for Terraform to manage resource attributes and handle infrastructure changes effectively.</p>
+
+<p>State files include:</p>
+<ul>
+  <li>The current state of all resources created by Terraform</li>
+  <li>Metadata related to resource attributes</li>
+  <li>Dependency information between resources</li>
+</ul>
+
+<p>Properly managing Terraform state files is essential. By default, Terraform stores state files locally, but for better collaboration and efficient management, using remote state storage is recommended.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="infrastructure-provisioning">Infrastructure Provisioning</h2>
+<p>When using Terraform to provision infrastructure, you can apply configurations to create or update resources and destroy unneeded resources.</p>
 
 <ul>
-  <li><strong>Automated Instance Management</strong>: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.</li>
-  <li><strong>Resource Optimization</strong>: You can create instances only when needed and delete them afterward, creating a cost-effective solution.</li>
-</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[Table of Contents Introduction to GCP Compute Engine Introduction to Google API Client Library Instance CRUD Fetching Instance List Adding SSH Keys to an Instance Use Cases]]></summary></entry><entry xml:lang="ko"><title type="html">코드로 다루는 GCP Compute Engine (파이썬)</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="코드로 다루는 GCP Compute Engine (파이썬)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="목차">목차</h2>
+  <li><strong>Applying Configurations</strong>: Use the <code class="language-plaintext highlighter-rouge">terraform apply</code> command to create or update resources as defined in the Terraform configuration files. This command reads the configuration files, compares them with the current state, and applies necessary changes.</li>
+  <li><strong>Destroying Configurations</strong>: Use the <code class="language-plaintext highlighter-rouge">terraform destroy</code> command to remove all resources defined in the Terraform configuration files. This is useful for cleaning up test or temporary environments.</li>
+</ul>
+
+<h3 id="key-commands">Key Commands</h3>
+
+<p>Here are some key commands frequently used in Terraform:</p>
+
+<ul>
+  <li><strong>terraform init</strong>: Initializes Terraform. This command downloads necessary plugins and modules, and configures the backend to initialize the state file.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform init
+</code></pre></div>    </div>
+  </li>
+  <li><strong>terraform plan</strong>: Creates a Terraform plan. This command analyzes the configuration files and compares them with the current state, showing the changes that will be applied.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform plan
+</code></pre></div>    </div>
+  </li>
+  <li><strong>terraform apply</strong>: Applies the Terraform plan to create or update resources. This command executes the plan generated by <code class="language-plaintext highlighter-rouge">terraform plan</code>.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform apply
+</code></pre></div>    </div>
+  </li>
+  <li><strong>terraform destroy</strong>: Removes all resources defined in the Terraform configuration files.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform destroy
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="error-handling-and-debugging">Error Handling and Debugging</h3>
+
+<p>Here are some methods for handling and debugging errors while using Terraform:</p>
+
+<ul>
+  <li><strong>Analyze Error Messages</strong>: Carefully read the error messages provided by Terraform to identify the root cause of the problem.</li>
+  <li><strong>Check Logs</strong>: Set the <code class="language-plaintext highlighter-rouge">TF_LOG</code> environment variable to enable debug logs. For example, use <code class="language-plaintext highlighter-rouge">export TF_LOG=DEBUG</code> to view debug logs.</li>
+  <li><strong>Terraform Community</strong>: Look for solutions from others facing similar issues on forums, GitHub issue trackers, Stack Overflow, or ask questions for help.</li>
+  <li><strong>Code Review</strong>: Review the configuration files to ensure there are no syntax errors or incorrect references.</li>
+  <li><strong>Check Documentation</strong>: Refer to Terraform official documentation or provider documentation for correct usage.</li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="advanced-concepts">Advanced Concepts</h2>
+
+<h3 id="modules-reusable-configurations">Modules: Reusable Configurations</h3>
+
+<p>Modules make Terraform configurations reusable. Using modules, you can manage complex infrastructure configurations in smaller, manageable units. This enhances code reusability and maintainability.</p>
+
+<p><strong>Module Example</strong></p>
+
+<p>To define a module, create Terraform configuration files in a separate directory.</p>
+
+<p><strong>Directory Structure</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>modules/
+  vpc/
+    main.tf
+    variables.tf
+    outputs.tf
+</code></pre></div></div>
+
+<p><strong>modules/vpc/main.tf</strong></p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">resource</span> <span class="s2">"google_compute_network"</span> <span class="s2">"vpc_network"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">network_name</span>
+<span class="p">}</span>
+
+<span class="nx">output</span> <span class="s2">"network_name"</span> <span class="p">{</span>
+  <span class="nx">value</span> <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">vpc_network</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>main.tf</strong></p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span> <span class="s2">"vpc"</span> <span class="p">{</span>
+  <span class="nx">source</span>       <span class="p">=</span> <span class="s2">"./modules/vpc"</span>
+  <span class="nx">network_name</span> <span class="p">=</span> <span class="s2">"my-vpc-network"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="workspaces-managing-multiple-environments">Workspaces: Managing Multiple Environments</h3>
+
+<p>Using Terraform workspaces, you can easily manage the same configuration across multiple environments. Workspaces help in separating development, testing, and production environments.</p>
+
+<p><strong>Workspace Commands</strong></p>
+<ul>
+  <li><strong>Create a Workspace</strong>: Create a new workspace.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform workspace new dev
+</code></pre></div>    </div>
+  </li>
+  <li><strong>Switch Workspace</strong>: Switch to a specific workspace.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform workspace <span class="k">select </span>dev
+</code></pre></div>    </div>
+  </li>
+  <li><strong>List Workspaces</strong>: List all available workspaces.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform workspace list
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="best-practices">Best Practices</h2>
+
+<h3 id="writing-clean-and-maintainable-code">Writing Clean and Maintainable Code</h3>
+
+<p>Follow these principles to improve the readability and maintainability of your Terraform code:</p>
+
+<ol>
+  <li><strong>Modularization</strong>: Divide infrastructure components into modules for reusability and easier management. Each module should operate independently and focus on a specific function.</li>
+  <li><strong>Commenting</strong>: Add comments to the code to make it easy for others or your future self to understand. Comments should explain the intent and behavior of the code.</li>
+  <li><strong>Consistent Code Style</strong>: Maintain a consistent code style within the team. Terraform’s HCL has a simple structure, so establish guidelines for variable names, indentation, line breaks, etc., and follow them.</li>
+  <li><strong>Use Variables and Outputs</strong>: Use variables to manage repeated values centrally and outputs to easily check important information.</li>
+</ol>
+
+<h3 id="version-control-for-terraform-code">Version Control for Terraform Code</h3>
+
+<p>Managing Terraform code with a version control system (like Git) helps track changes and facilitates collaboration.</p>
+
+<ol>
+  <li><strong>Use Git</strong>: Store Terraform code in a Git repository and commit changes. This helps in tracking the history of the code.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git init
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Initial commit"</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>Branching Strategy</strong>: Create branches for each feature. For example, create a branch for adding a new feature or fixing a bug, and merge it into the main branch after completing the work.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> feature/new-feature
+</code></pre></div>    </div>
+  </li>
+  <li><strong>Code Review</strong>: Conduct code reviews through Pull Requests to maintain code quality and share understanding within the team.</li>
+</ol>
+
+<h3 id="team-collaboration">Team Collaboration</h3>
+
+<p>Teams using Terraform can collaborate effectively using these methods:</p>
+
+<ol>
+  <li><strong>Standardized Configuration</strong>: Use standardized Terraform modules and configuration files within the team to maintain consistency.</li>
+  <li><strong>Documentation</strong>: Document Terraform code and infrastructure configurations to make it easy for team members to understand and use.</li>
+  <li><strong>Mutual Review</strong>: Conduct regular code reviews to maintain code quality and share best practices within the team.</li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="integration">Integration</h2>
+
+<h3 id="integrating-terraform-with-cicd-pipelines">Integrating Terraform with CI/CD Pipelines</h3>
+
+<p>Integrating Terraform into CI/CD pipelines automates infrastructure deployment and efficiently manages changes.</p>
+
+<ol>
+  <li><strong>Choose CI/CD Tools</strong>: Select CI/CD tools like Jenkins, GitLab CI, GitHub Actions, etc.</li>
+  <li><strong>Set Up Pipelines</strong>: Set up pipelines that include Terraform commands (<code class="language-plaintext highlighter-rouge">terraform init</code>, <code class="language-plaintext highlighter-rouge">terraform plan</code>, <code class="language-plaintext highlighter-rouge">terraform apply</code>) to automatically deploy infrastructure on code changes.</li>
+</ol>
+
+<p><strong>Example: GitHub Actions</strong></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Terraform</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">main</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">terraform</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+
+    <span class="na">steps</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout code</span>
+      <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set up Terraform</span>
+      <span class="na">uses</span><span class="pi">:</span> <span class="s">hashicorp/setup-terraform@v1</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Terraform Init</span>
+      <span class="na">run</span><span class="pi">:</span> <span class="s">terraform init</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Terraform Plan</span>
+      <span class="na">run</span><span class="pi">:</span> <span class="s">terraform plan</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Terraform Apply</span>
+      <span class="na">if</span><span class="pi">:</span> <span class="s">github.ref == 'refs/heads/main'</span>
+      <span class="na">run</span><span class="pi">:</span> <span class="s">terraform apply -auto-approve</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Terraform is a powerful tool that helps manage infrastructure as code (IaC). With Terraform, you can efficiently create, manage, and destroy infrastructure across various cloud environments.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><category term="terraform" /><category term="infra" /><summary type="html"><![CDATA[Table of Contents Introduction to Terraform What is Terraform? Why Use It? Key Concepts Getting Started Installing Terraform Setting Up Terraform Terraform Basics Understanding Terraform Configuration Files Key Elements Code Examples Dependency Management Implicit Dependencies Explicit Dependencies State Management What is Terraform State? Infrastructure Provisioning Applying and Destroying Configurations Key Commands Error Handling and Debugging Advanced Concepts Modules: Reusable Configurations Workspaces: Managing Multiple Environments Best Practices Writing Clean and Maintainable Code Version Control for Terraform Code Team Collaboration Integration Integrating Terraform with CI/CD Pipelines Conclusion]]></summary></entry><entry xml:lang="ko"><title type="html">테라폼 소개</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/23/introduction-to-terraform.html" rel="alternate" type="text/html" title="테라폼 소개" /><published>2024-06-23T14:00:00+09:00</published><updated>2024-06-23T14:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/23/introduction-to-terraform</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/23/introduction-to-terraform.html"><![CDATA[<p>물론입니다. 아래는 새로운 목차입니다:</p>
+
+<hr />
+
+<h2 id="목차">목차</h2>
+<ol>
+  <li><a href="#terraform-소개">Terraform 소개</a>
+    <ul>
+      <li><a href="#테라폼이란">테라폼이란?</a></li>
+      <li><a href="#사용하는-이유">사용하는 이유</a></li>
+      <li><a href="#주요-키워드">주요 키워드</a></li>
+    </ul>
+  </li>
+  <li><a href="#시작하기">시작하기</a>
+    <ul>
+      <li><a href="#테라폼-설치하기">테라폼 설치하기</a></li>
+      <li><a href="#테라폼-세팅">테라폼 세팅</a></li>
+    </ul>
+  </li>
+  <li><a href="#테라폼-기본-개념">테라폼 기본 개념</a>
+    <ul>
+      <li><a href="#테라폼-구성-파일-이해하기">테라폼 구성 파일 이해하기</a></li>
+      <li><a href="#주요-요소">주요 요소</a></li>
+      <li><a href="#코드-예시">코드 예시</a></li>
+    </ul>
+  </li>
+  <li><a href="#의존성-관리">의존성 관리</a>
+    <ul>
+      <li><a href="#암묵적-의존성">암묵적 의존성</a></li>
+      <li><a href="#명시적-의존성">명시적 의존성</a></li>
+    </ul>
+  </li>
+  <li><a href="#상태-관리">상태 관리</a>
+    <ul>
+      <li><a href="#테라폼의-상태란">테라폼의 상태란?</a></li>
+    </ul>
+  </li>
+  <li><a href="#인프라-프로비저닝">인프라 프로비저닝</a>
+    <ul>
+      <li><a href="#구성-적용-및-삭제">구성 적용 및 삭제</a></li>
+      <li><a href="#주요-명령어">주요 명령어</a></li>
+      <li><a href="#오류-처리-및-디버깅">오류 처리 및 디버깅</a></li>
+    </ul>
+  </li>
+  <li><a href="#고급-개념">고급 개념</a>
+    <ul>
+      <li><a href="#모듈-재사용-가능한-구성">모듈: 재사용 가능한 구성</a></li>
+      <li><a href="#작업-공간-여러-환경-관리">작업 공간: 여러 환경 관리</a></li>
+    </ul>
+  </li>
+  <li><a href="#베스트-프랙티스">베스트 프랙티스</a>
+    <ul>
+      <li><a href="#깨끗하고-유지-보수-가능한-코드-작성하기">깨끗하고 유지 보수 가능한 코드 작성하기</a></li>
+      <li><a href="#테라폼-코드의-버전-관리">테라폼 코드의 버전 관리</a></li>
+      <li><a href="#팀-협업">팀 협업</a></li>
+    </ul>
+  </li>
+  <li><a href="#통합">통합</a>
+    <ul>
+      <li><a href="#테라폼과-cicd-파이프라인-통합">테라폼과 CI/CD 파이프라인 통합</a></li>
+    </ul>
+  </li>
+  <li><a href="#결론">결론</a></li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="terraform-소개">Terraform 소개</h2>
+
+<h3 id="테라폼이란">테라폼이란?</h3>
+
+<p>테라폼은 인프라를 코드로 관리(Infrastructure as Code)할 수 있도록 도와주는 오픈 소스입니다. HashiCorp에서 개발한 테라폼은 클라우드 서비스 제공업체(AWS, Azure, GCP 등)의 인프라를 프로그래밍 방식으로(programatically) 설정하고 관리할 수 있게 해줍니다. 단순 클라우드 환경뿐만 아니라 온프레미스(on-premise) 환경에서도 구성이 가능합니다.</p>
+
+<h3 id="사용하는-이유">사용하는 이유</h3>
+
+<p><strong>자동화</strong>: 테라폼을 사용하면 인프라 설정을 코드로 작성하여 자동으로 배포할 수 있어, 수작업으로 인한 실수를 줄이고 일관성을 유지할 수 있습니다.</p>
+
+<p><strong>효율성</strong>: 복잡한 인프라를 쉽게 관리하고 배포 시간을 단축할 수 있습니다. 한 번 작성한 코드를 여러 환경에 재사용할 수 있어 효율성이 높아집니다.</p>
+
+<p><strong>버전 관리</strong>: 테라폼 구성 파일은 코드로 관리되므로 Git과 같은 버전 관리 시스템을 사용할 수 있습니다.</p>
+
+<p><strong>코드 리뷰</strong>: 리뷰를 통해 팀원간 소통, 검토 및 승인이 이루어질 수 있습니다.</p>
+
+<h3 id="주요-키워드">주요 키워드</h3>
+
+<p><strong>프로바이더(Providers)</strong>: AWS, Azure, GCP 등 다양한 클라우드와 통합을 지원합니다. 프로바이더는 특정 클라우드 서비스와 상호작용할 수 있는 API를 제공합니다.</p>
+
+<p><strong>모듈(Modules)</strong>: 파이썬의 모듈과 거의 같은 역할을 합니다. 테라폼 모듈을 사용하면 코드 재사용이 가능하며, 복잡한 인프라를 여러 작은 단위로 나누어 관리할 수 있습니다. 모듈은 쉽게 공유하고 버전 관리를 할 수 있습니다.</p>
+
+<p><strong>상태 파일(State Files)</strong>: 테라폼은 인프라의 현재 상태를 저장하는 상태 파일을 사용하여 변경 사항을 추적하고 관리합니다. 이를 통해 인프라의 드리프트(설정 불일치)를 감지하고 수정할 수 있습니다.</p>
+
+<p><strong>계획 및 적용(Plan and Apply)</strong>: terraform plan 명령어를 사용하여 변경 사항을 미리 검토하고, terraform apply 명령어를 통해 실제로 적용할 수 있습니다. 이를 통해 배포 전에 어떤 변경이 일어날지 확인할 수 있습니다.</p>
+
+<p><strong>워크스페이스(Workspaces)</strong>: 테라폼 워크스페이스를 사용하면 동일한 구성을 여러 환경(개발, 스테이징, 프로덕션)에서 쉽게 사용할 수 있습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="시작하기">시작하기</h2>
+
+<h3 id="테라폼-설치하기">테라폼 설치하기</h3>
+
+<p>아래 다운로드 페이지를 참고하여 자신의 OS에 맞게 테라폼을 설치합니다.<br /><a href="https://developer.hashicorp.com/terraform/install?product_intent=terraform" target="_blank">테라폼 공식 다운로드 페이지</a></p>
+
+<h3 id="테라폼-세팅">테라폼 세팅</h3>
+
+<p>사용하고자 하는 프로바이더 (GCP/AWS/AZURE 등)을 위해 초기 세팅을 진행합니다.<br />GCP를 예시로 세팅하는 방법을 설명드리겠습니다.</p>
+
+<ol>
+  <li>Google Cloud Console에서 Project 생성 및 Service Key 발급</li>
+  <li>gcloud cli설치 <a href="https://cloud.google.com/sdk/docs/install?hl=ko" target="_blank">gcloud cli 공식문서</a></li>
+  <li>인증 정보 설정
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 해당 명령어를 입력하면 GCP로 로그인하게되고, 이후 프로젝트 등을 설정하게됩니다.</span>
+<span class="nv">$ </span>gcloud auth application-default login
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="테라폼-기본-개념">테라폼 기본 개념</h2>
+
+<h3 id="테라폼-구성-파일-이해하기">테라폼 구성 파일 이해하기</h3>
+
+<p>앞서 테라폼은 인프라를 코드로 정의하도록 도와주는 도구라고 정의했습니다. 이때 사용하는 파일은 .tf 확장자를 가지며, HCL(HashiCorp Configuration Language)로 작성됩니다.</p>
+
+<h3 id="주요-요소">주요 요소</h3>
+<p><strong>프로바이더(Provider)</strong>: 테라폼이 상호작용할 클라우드 서비스 제공업체(AWS, Azure, GCP 등)나 다른 API의 설정을 정의합니다.</p>
+
+<p><strong>리소스(Resource)</strong>: 인프라의 개별 구성 요소를 정의합니다. 예를 들어, 가상 머신, 데이터베이스, 네트워크 설정 등이 포함됩니다.</p>
+
+<p><strong>변수(Variable)</strong>: 구성 파일 내에서 재사용할 수 있는 값을 정의합니다.</p>
+
+<p><strong>출력(Output)</strong>: 테라폼이 적용된 후 생성된 값들을 출력합니다.</p>
+
+<p><strong>데이터 소스(Data Source)</strong>: 외부에서 데이터를 가져와서 리소스를 생성하는데 사용할 수 있습니다.</p>
+
+<h3 id="코드-예시">코드 예시</h3>
+
+<p>다음은 간단한 테라폼 구성 파일의 예시입니다. 이 예제에서는 GCP에서 Compute Engine 인스턴스를 생성하는 방법을 보여줍니다.</p>
+
+<h4 id="provider-및-resource">Provider 및 Resource</h4>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># GCP Provider를 설정합니다.</span>
+<span class="c1"># 프로바이더는 테라폼이 상호작용할 수 있는 외부 시스템(API)을 정의합니다. </span>
+<span class="c1"># 각 프로바이더는 특정 클라우드 서비스(GCP 등) 또는 기타 API와의 통합을 제공합니다.</span>
+<span class="c1"># 테라폼은 프로바이더를 통해 해당 서비스의 리소스를 관리할 수 있습니다.</span>
+<span class="nx">provider</span> <span class="s2">"google"</span> <span class="p">{</span>
+  <span class="nx">credentials</span> <span class="p">=</span> <span class="nx">file</span><span class="p">(</span><span class="s2">"&lt;path-to-your-service-account-key&gt;.json"</span><span class="p">)</span>
+  <span class="nx">project</span>     <span class="p">=</span> <span class="s2">"&lt;your-gcp-project-id&gt;"</span>
+  <span class="nx">location</span>      <span class="p">=</span> <span class="s2">"us-central1"</span>
+<span class="p">}</span>
+
+<span class="c1"># GCP Provider에서 제공하는 google_compute_instance 리소스를 정의합니다.</span>
+<span class="c1"># 리소스는 테라폼 구성의 기본 단위입니다. </span>
+<span class="c1"># 리소스는 클라우드 인프라의 특정 요소를 나타내며, 예를 들어 가상 머신, 데이터베이스, 네트워크 설정 등을 포함합니다. </span>
+<span class="c1"># 각 리소스는 특정 프로바이더와 연결되며, 리소스 블록 내에서 필요한 속성을 정의합니다.</span>
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="s2">"vm-instance"</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"us-central1-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="s2">"default"</span>
+    <span class="nx">access_config</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="variables">Variables</h4>
+<p>variables.tf 파일에 변수를 정의합니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">variable</span> <span class="s2">"project_id"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The GCP project ID"</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+<span class="p">}</span>
+
+<span class="nx">variable</span> <span class="s2">"region"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The GCP region"</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+  <span class="nx">default</span>     <span class="p">=</span> <span class="s2">"us-central1"</span>
+<span class="p">}</span>
+
+<span class="nx">variable</span> <span class="s2">"instance_name"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The name of the compute instance"</span>
+  <span class="nx">type</span>        <span class="p">=</span> <span class="nx">string</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>정의된 변수를 main.tf파일에서 사용할 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">provider</span> <span class="s2">"google"</span> <span class="p">{</span>
+  <span class="nx">credentials</span> <span class="p">=</span> <span class="nx">file</span><span class="p">(</span><span class="s2">"&lt;path-to-your-service-account-key&gt;.json"</span><span class="p">)</span>
+  <span class="nx">project</span>     <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">project_id</span>
+  <span class="nx">region</span>      <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">region</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">instance_name</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"${var.region}-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="s2">"default"</span>
+    <span class="nx">access_config</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>변수값 설정은 terraform.tfvars파일 또는 명령어에서 전달할 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">project_id</span>     <span class="err">=</span> <span class="s2">"your-gcp-project-id"</span>
+<span class="nx">instance_name</span>  <span class="err">=</span> <span class="s2">"vm-instance"</span>
+</code></pre></div></div>
+
+<h4 id="output">Output</h4>
+<p>출력은 테라폼이 적용된 후 생성된 값을 출력하는데 사용됩니다. 이를 통해 중요한 정보를 쉽게 확인할 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">output</span> <span class="s2">"instance_ip"</span> <span class="p">{</span>
+  <span class="nx">description</span> <span class="p">=</span> <span class="s2">"The IP address of the compute instance"</span>
+  <span class="nx">value</span>       <span class="p">=</span> <span class="nx">google_compute_instance</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">network_interface</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">access_config</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">nat_ip</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>명령어 terraform apply 명령어를 실행한 후 출력된 값을 확인할 수 있습니다.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Outputs:
+instance_ip <span class="o">=</span> <span class="s2">"34.68.194.64"</span>
+</code></pre></div></div>
+
+<h4 id="datasource">Datasource</h4>
+<p>데이터 소스는 외부에서 데이터를 가져와서 리소스를 생성하는 데 사용할 수 있습니다. 예를 들어, 이미 존재하는 리소스를 조회하거나 다른 API에서 데이터를 가져올 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 예를 들어, GCP 프로젝트의 현재 사용 가능한 네트워크를 </span>
+<span class="c1"># 가져오고 이를 사용하여 인스턴스를 생성할 수 있습니다.</span>
+<span class="nx">data</span> <span class="s2">"google_compute_network"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"default"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">instance_name</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"${var.region}-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+    <span class="nx">access_config</span> <span class="p">{</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1"># 이 예시에서 data "google_compute_network" "default"는 GCP의 기본 네트워크 정보를 가져와서</span>
+<span class="c1"># google_compute_instance 리소스에서 사용합니다.</span>
+
+<span class="c1"># 위의 예시들을 통해 테라폼의 변수, 출력, 데이터 소스를 사용하는 방법을 이해할 수 있습니다.</span>
+<span class="c1"># 이를 활용하여 테라폼 구성 파일을 더욱 유연하고 재사용 가능하게 만들 수 있습니다.</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="의존성-관리">의존성 관리</h2>
+<p>테라폼에서 의존성이란, 테라폼 구성 요소 간의 순서를 정의하여 리소스가 올바른 순서로 생성, 수정 또는 삭제되도록 하는 것을 의미합니다. 테라폼은 기본적으로 리소스 간의 종속성을 자동으로 감지하지만, 특정 상황에서는 명시적으로 의존성을 정의해야 할 때도 있습니다.</p>
+
+<h3 id="암묵적-의존성">암묵적 의존성</h3>
+<p>테라폼은 리소스 간의 암묵적 의존성을 자동으로 관리합니다. 예를 들어, 한 리소스의 속성이 다른 리소스의 출력 값을 참조할 때, 테라폼은 자동으로 종속성을 인식합니다.</p>
+
+<p>예시</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">resource</span> <span class="s2">"google_compute_network"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"my-network"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_subnetwork"</span> <span class="s2">"subnet"</span> <span class="p">{</span>
+  <span class="nx">name</span>          <span class="p">=</span> <span class="s2">"my-subnet"</span>
+  <span class="nx">ip_cidr_range</span> <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>
+  <span class="nx">region</span>        <span class="p">=</span> <span class="s2">"us-central1"</span>
+  <span class="nx">network</span>       <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+
+<span class="c1"># 예시에서 google_compute_subnetwork 리소스는 </span>
+<span class="c1"># google_compute_network 리소스를 참조하고 있으므로, </span>
+<span class="c1"># 테라폼은 네트워크가 먼저 생성된 후 서브네트워크가 생성되도록 합니다.</span>
+</code></pre></div></div>
+
+<h3 id="명시적-의존성">명시적 의존성</h3>
+<p>경우에 따라서는 테라폼이 의존성을 자동으로 감지하지 못할 때도 있습니다. 이럴 때는 depends_on 인수를 사용하여 명시적으로 의존성을 정의할 수 있습니다.</p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">resource</span> <span class="s2">"google_compute_network"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="s2">"my-network"</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_subnetwork"</span> <span class="s2">"subnet"</span> <span class="p">{</span>
+  <span class="nx">name</span>          <span class="p">=</span> <span class="s2">"my-subnet"</span>
+  <span class="nx">ip_cidr_range</span> <span class="p">=</span> <span class="s2">"10.0.0.0/16"</span>
+  <span class="nx">region</span>        <span class="p">=</span> <span class="s2">"us-central1"</span>
+  <span class="nx">network</span>       <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+
+<span class="nx">resource</span> <span class="s2">"google_compute_instance"</span> <span class="s2">"default"</span> <span class="p">{</span>
+  <span class="nx">name</span>         <span class="p">=</span> <span class="s2">"vm-instance"</span>
+  <span class="nx">machine_type</span> <span class="p">=</span> <span class="s2">"n1-standard-1"</span>
+  <span class="nx">zone</span>         <span class="p">=</span> <span class="s2">"us-central1-a"</span>
+
+  <span class="nx">boot_disk</span> <span class="p">{</span>
+    <span class="nx">initialize_params</span> <span class="p">{</span>
+      <span class="nx">image</span> <span class="p">=</span> <span class="s2">"debian-cloud/debian-9"</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">network_interface</span> <span class="p">{</span>
+    <span class="nx">network</span> <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">default</span><span class="p">.</span><span class="nx">name</span>
+  <span class="p">}</span>
+
+  <span class="nx">depends_on</span> <span class="p">=</span> <span class="p">[</span><span class="nx">google_compute_subnetwork</span><span class="p">.</span><span class="nx">subnet</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="c1"># 예시에서 google_compute_instance 리소스는 </span>
+<span class="c1"># google_compute_subnetwork 리소스에 명시적으로 의존함을 나타냅니다. </span>
+<span class="c1"># 따라서 서브네트워크가 생성된 후에 인스턴스가 생성됩니다.</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="상태-관리">상태 관리</h2>
+<p>상태 파일은 관리되는 인프라의 현재 상태를 추적하고 저장하는 데 사용됩니다. 이를 통해 테라폼은 인프라의 변경 사항을 감지하고, 필요한 작업을 효율적으로 수행할 수 있습니다.</p>
+
+<h3 id="테라폼의-상태란">테라폼의 상태란?</h3>
+<p>테라폼 상태는 테라폼이 인프라의 현재 상태를 저장하는 방법입니다. 상태 파일(terraform.tfstate)은 테라폼이 관리하는 모든 리소스의 정보를 포함하고 있으며, 테라폼이 인프라의 현재 상태와 구성 파일을 비교하여 필요한 변경 사항을 결정할 수 있도록 합니다. 상태 파일은 테라폼이 리소스의 속성을 추적하고, 인프라 변경 사항을 관리하는 데 사용됩니다.</p>
+
+<p>상태 파일은 다음과 같은 정보를 포함합니다:</p>
+<ul>
+  <li>테라폼이 생성한 모든 리소스의 현재 상태</li>
+  <li>리소스의 속성과 관련된 메타데이터</li>
+  <li>리소스 간의 종속성 정보</li>
+</ul>
+
+<p>테라폼 상태 파일을 적절하게 관리하는 것은 매우 중요합니다. 기본적으로 테라폼은 상태 파일을 로컬 디렉토리에 저장하지만, 여러 팀원과 협업하거나 인프라를 보다 효율적으로 관리하기 위해 원격 상태 저장소를 사용하는 것이 좋습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="인프라-프로비저닝">인프라 프로비저닝</h2>
+<p>테라폼을 사용하여 인프라를 프로비저닝할 때, 구성 파일을 적용하여 리소스를 생성하거나 업데이트하고, 필요하지 않은 리소스를 삭제할 수 있습니다.</p>
+
+<ul>
+  <li><strong>구성 적용</strong>: <code class="language-plaintext highlighter-rouge">terraform apply</code> 명령어를 사용하여 테라폼 구성 파일에 정의된 리소스를 생성하거나 업데이트합니다. 이 명령어는 구성 파일을 읽고, 현재 상태와 비교하여 필요한 변경 사항을 적용합니다.</li>
+  <li><strong>구성 삭제</strong>: <code class="language-plaintext highlighter-rouge">terraform destroy</code> 명령어를 사용하여 테라폼 구성 파일에 정의된 모든 리소스를 삭제합니다. 이는 테스트 환경이나 임시 환경을 정리할 때 유용합니다.</li>
+</ul>
+
+<h3 id="주요-명령어">주요 명령어</h3>
+
+<p>테라폼에서 자주 사용하는 주요 명령어는 다음과 같습니다:</p>
+
+<ul>
+  <li><strong>terraform init</strong>: 테라폼 초기화를 수행합니다. 이 명령어는 필요한 플러그인과 모듈을 다운로드하고, 백엔드를 구성하여 상태 파일을 초기화합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform init
+</code></pre></div>    </div>
+  </li>
+  <li><strong>terraform plan</strong>: 테라폼 계획을 생성합니다. 이 명령어는 구성 파일을 분석하여 현재 상태와 비교한 후, 적용할 변경 사항을 미리 보여줍니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform plan
+</code></pre></div>    </div>
+  </li>
+  <li><strong>terraform apply</strong>: 테라폼 계획을 적용하여 리소스를 생성하거나 업데이트합니다. 이 명령어는 <code class="language-plaintext highlighter-rouge">terraform plan</code>에서 생성한 실행 계획을 실제로 실행합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform apply
+</code></pre></div>    </div>
+  </li>
+  <li><strong>terraform destroy</strong>: 테라폼 리소스를 삭제합니다. 이 명령어는 구성 파일에 정의된 모든 리소스를 제거합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform destroy
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="오류-처리-및-디버깅">오류 처리 및 디버깅</h3>
+
+<p>테라폼을 사용하면서 발생할 수 있는 오류를 처리하고 디버깅하는 방법은 다음과 같습니다:</p>
+
+<ul>
+  <li><strong>오류 메시지 분석</strong>: 테라폼이 제공하는 오류 메시지를 주의 깊게 읽고, 문제의 원인을 파악합니다.</li>
+  <li><strong>로그 확인</strong>: <code class="language-plaintext highlighter-rouge">TF_LOG</code> 환경 변수를 설정하여 디버그 로그를 활성화합니다. 예를 들어, <code class="language-plaintext highlighter-rouge">export TF_LOG=DEBUG</code> 명령어를 사용하여 디버그 로그를 확인할 수 있습니다.</li>
+  <li><strong>테라폼 커뮤니티</strong>: 테라폼 포럼, GitHub 이슈 트래커, Stack Overflow 등에서 비슷한 문제를 겪는 사람들의 해결 방법을 찾아보거나 직접 질문을 올려 도움을 받을 수 있습니다.</li>
+  <li><strong>코드 검토</strong>: 구성 파일을 다시 검토하여 문법 오류나 잘못된 참조가 없는지 확인합니다.</li>
+  <li><strong>테라폼 문서 확인</strong>: 테라폼 공식 문서나 프로바이더 문서를 참조하여 올바른 사용법을 확인합니다.</li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="고급-개념">고급 개념</h2>
+
+<h3 id="모듈-재사용-가능한-구성">모듈: 재사용 가능한 구성</h3>
+
+<p>모듈은 테라폼 구성 요소를 재사용 가능하게 만드는 방법입니다. 모듈을 사용하면 복잡한 인프라 구성을 여러 개의 작은 단위로 나누어 관리할 수 있습니다. 이를 통해 코드의 재사용성과 유지보수성을 높일 수 있습니다.</p>
+
+<p><strong>모듈 예시</strong></p>
+
+<p>모듈을 정의하려면, 별도의 디렉토리에 테라폼 구성 파일을 작성합니다.</p>
+
+<p><strong>디렉토리 구조</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>modules/
+  vpc/
+    main.tf
+    variables.tf
+    outputs.tf
+</code></pre></div></div>
+
+<p><strong>modules/vpc/main.tf</strong></p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">resource</span> <span class="s2">"google_compute_network"</span> <span class="s2">"vpc_network"</span> <span class="p">{</span>
+  <span class="nx">name</span> <span class="p">=</span> <span class="nx">var</span><span class="p">.</span><span class="nx">network_name</span>
+<span class="p">}</span>
+
+<span class="nx">output</span> <span class="s2">"network_name"</span> <span class="p">{</span>
+  <span class="nx">value</span> <span class="p">=</span> <span class="nx">google_compute_network</span><span class="p">.</span><span class="nx">vpc_network</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>main.tf</strong></p>
+<div class="language-hcl highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">module</span> <span class="s2">"vpc"</span> <span class="p">{</span>
+  <span class="nx">source</span>       <span class="p">=</span> <span class="s2">"./modules/vpc"</span>
+  <span class="nx">network_name</span> <span class="p">=</span> <span class="s2">"my-vpc-network"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="작업-공간-여러-환경-관리">작업 공간: 여러 환경 관리</h3>
+
+<p>테라폼 작업 공간(Workspaces)을 사용하면 동일한 구성을 여러 환경에서 쉽게 사용할 수 있습니다. 작업 공간을 통해 개발, 테스트, 프로덕션 환경을 분리하여 관리할 수 있습니다.</p>
+
+<p><strong>작업 공간 명령어</strong></p>
+<ul>
+  <li><strong>작업 공간 생성</strong>: 새로운 작업 공간을 생성합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform workspace new dev
+</code></pre></div>    </div>
+  </li>
+  <li><strong>작업 공간 전환</strong>: 특정 작업 공간으로 전환합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform workspace <span class="k">select </span>dev
+</code></pre></div>    </div>
+  </li>
+  <li><strong>작업 공간 목록 조회</strong>: 현재 사용 가능한 작업 공간 목록을 조회합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform workspace list
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="bp">BP</h2>
+
+<h3 id="깨끗하고-유지-보수-가능한-코드-작성하기">깨끗하고 유지 보수 가능한 코드 작성하기</h3>
+
+<p>테라폼 코드 작성 시, 코드의 가독성과 유지보수성을 높이기 위해 다음과 같은 원칙을 따르는 것이 좋습니다:</p>
+
+<ol>
+  <li><strong>모듈화</strong>: 인프라 구성 요소를 모듈로 나누어 재사용 가능하고 관리하기 쉽게 만듭니다. 각 모듈은 독립적으로 작동하며, 특정 기능을 수행하는 데 집중합니다.</li>
+  <li><strong>주석 달기</strong>: 코드에 주석을 추가하여 다른 개발자나 미래의 자신이 코드를 쉽게 이해할 수 있도록 합니다. 주석은 코드의 의도와 동작을 설명하는 데 사용됩니다.</li>
+  <li><strong>일관된 코드 스타일</strong>: 팀 내에서 일관된 코드 스타일을 유지합니다. 테라폼의 HCL(HashiCorp Configuration Language)은 간단한 구조를 가지므로, 변수 이름, 들여쓰기, 줄 바꿈 등의 스타일 가이드라인을 정하고 따릅니다.</li>
+  <li><strong>변수와 출력 사용</strong>: 변수를 사용하여 반복되는 값을 중앙에서 관리하고, 출력값을 통해 중요한 정보를 쉽게 확인할 수 있도록 합니다.</li>
+</ol>
+
+<h3 id="테라폼-코드의-버전-관리">테라폼 코드의 버전 관리</h3>
+
+<p>테라폼 코드를 버전 관리 시스템(Git 등)을 사용하여 관리하면 변경 사항을 추적하고, 협업을 쉽게 할 수 있습니다.</p>
+
+<ol>
+  <li><strong>Git 사용</strong>: 테라폼 코드를 Git 저장소에 저장하고, 변경 사항을 커밋합니다. 이를 통해 코드의 히스토리를 추적할 수 있습니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git init
+git add <span class="nb">.</span>
+git commit <span class="nt">-m</span> <span class="s2">"Initial commit"</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>브랜치 전략</strong>: 기능별로 브랜치를 나누어 작업합니다. 예를 들어, 새로운 기능 추가나 버그 수정을 위한 브랜치를 만들고, 작업이 완료되면 메인 브랜치에 병합합니다.
+    <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout <span class="nt">-b</span> feature/new-feature
+</code></pre></div>    </div>
+  </li>
+  <li><strong>코드 리뷰</strong>: Pull Request를 통해 코드 리뷰를 진행하여 품질을 유지하고, 팀 내에서 코드에 대한 이해를 공유합니다.</li>
+</ol>
+
+<h3 id="팀-협업">팀 협업</h3>
+
+<p>테라폼을 사용하는 팀은 다음과 같은 방법으로 협업할 수 있습니다:</p>
+
+<ol>
+  <li><strong>표준화된 구성</strong>: 팀 내에서 표준화된 테라폼 모듈과 구성 파일을 사용하여 일관성을 유지합니다.</li>
+  <li><strong>문서화</strong>: 테라폼 코드와 인프라 구성을 문서화하여 팀원들이 쉽게 이해하고 사용할 수 있도록 합니다.</li>
+  <li><strong>상호 검토</strong>: 정기적인 코드 리뷰를 통해 팀원 간의 코드 품질을 유지하고, 모범 사례를 공유합니다.</li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="통합">통합</h2>
+
+<h3 id="테라폼과-cicd-파이프라인-통합">테라폼과 CI/CD 파이프라인 통합</h3>
+
+<p>테라폼을 CI/CD 파이프라인에 통합하면 인프라 배포를 자동화하고, 변경 사항을 효율적으로 관리할 수 있습니다.</p>
+
+<ol>
+  <li><strong>CI/CD 도구 선택</strong>: Jenkins, GitLab CI, GitHub Actions 등과 같은 CI/CD 도구를 선택합니다.</li>
+  <li><strong>파이프라인 설정</strong>: 테라폼 명령어(<code class="language-plaintext highlighter-rouge">terraform init</code>, <code class="language-plaintext highlighter-rouge">terraform plan</code>, <code class="language-plaintext highlighter-rouge">terraform apply</code>)를 포함한 파이프라인을 설정하여 코드 변경 시 자동으로 인프라를 배포합니다.</li>
+</ol>
+
+<p><strong>예시: GitHub Actions</strong></p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Terraform</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">main</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">terraform</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+
+    <span class="na">steps</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout code</span>
+      <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set up Terraform</span>
+      <span class="na">uses</span><span class="pi">:</span> <span class="s">hashicorp/setup-terraform@v1</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Terraform Init</span>
+      <span class="na">run</span><span class="pi">:</span> <span class="s">terraform init</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Terraform Plan</span>
+      <span class="na">run</span><span class="pi">:</span> <span class="s">terraform plan</span>
+
+    <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Terraform Apply</span>
+      <span class="na">if</span><span class="pi">:</span> <span class="s">github.ref == 'refs/heads/main'</span>
+      <span class="na">run</span><span class="pi">:</span> <span class="s">terraform apply -auto-approve</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="결론">결론</h2>
+<p>테라폼은 인프라를 코드로 관리(Infrastructure as Code)할 수 있도록 도와주는 강력한 도구입니다. 이를 통해 다양한 클라우드 환경에서 인프라를 효율적으로 생성, 관리, 삭제할 수 있습니다.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="terraform" /><category term="infra" /><summary type="html"><![CDATA[물론입니다. 아래는 새로운 목차입니다:]]></summary></entry><entry xml:lang="ko"><title type="html">코드로 다루는 GCP Compute Engine (파이썬)</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="코드로 다루는 GCP Compute Engine (파이썬)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="목차">목차</h2>
 <ol>
   <li><a href="#gcp-compute-engine-소개">GCP Compute Engine 소개</a></li>
   <li><a href="#google-api-client-library-소개">Google API Client Library 소개</a>
@@ -331,56 +1245,173 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 <ul>
   <li><strong>자동화된 인스턴스 관리</strong>: 콘솔에서 수동으로 인스턴스를 관리하는 대신, 코드를 사용해 관리를 자동화하여 효율성을 증가시킬 수 있습니다.</li>
   <li><strong>리소스 최적화</strong>: 필요할때만 인스턴스를 생성하고 이후 삭제하는 등 비용 효율적인 기능을 만들 수 있습니다.</li>
-</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[목차 GCP Compute Engine 소개 Google API Client Library 소개 인스턴스 CRUD 인스턴스 리스트 가져오기 인스턴스에 SSH키 추가하기 활용방안]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
-  
-</div>
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[목차 GCP Compute Engine 소개 Google API Client Library 소개 인스턴스 CRUD 인스턴스 리스트 가져오기 인스턴스에 SSH키 추가하기 활용방안]]></summary></entry><entry xml:lang="en"><title type="html">Handling GCP Compute Engine with Code (Python)</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="Handling GCP Compute Engine with Code (Python)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+  <li><a href="#introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</a></li>
+  <li><a href="#introduction-to-google-api-client-library">Introduction to Google API Client Library</a>
+    <ol>
+      <li><a href="#instance-crud">Instance CRUD</a></li>
+      <li><a href="#fetching-instance-list">Fetching Instance List</a></li>
+      <li><a href="#adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</a></li>
+    </ol>
+  </li>
+  <li><a href="#use-cases">Use Cases</a></li>
+</ol>
 
-<h3 id="배경">배경</h3>
+<h2 id="introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</h2>
+
+<p>GCP Compute Engine is a virtual machine service provided by Google Cloud Platform (GCP). It offers similar functionalities to Amazon AWS’s EC2 service. Users can easily manage virtual machines, and it supports various tools for scaling, security, monitoring, and more.</p>
+
+<h2 id="introduction-to-google-api-client-library">Introduction to Google API Client Library</h2>
+
+<p>Using the Google API Client Library, you can easily manage Compute Engine instances with Python. This library allows you to perform CRUD operations on instances, and since the operations are executed through code, they can be automated.</p>
+
+<h3 id="instance-crud">Instance CRUD</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
+<span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
+
+<span class="c1"># Obtain Google Cloud authentication credentials.
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
+
+<span class="c1"># Create a Compute Engine API client.
+</span><span class="n">service</span> <span class="o">=</span> <span class="n">discovery</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">compute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>  <span class="c1"># Enter your project ID.
+</span><span class="n">zone</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3-a</span><span class="sh">'</span>   <span class="c1"># Enter the zone you are using.
+</span>
+<span class="c1"># Instance creation code example
+</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span><span class="p">,</span>
+    <span class="sh">'</span><span class="s">machineType</span><span class="sh">'</span><span class="p">:</span> <span class="sa">f</span><span class="sh">'</span><span class="s">zones/</span><span class="si">{</span><span class="n">zone</span><span class="si">}</span><span class="s">/machineTypes/n1-standard-1</span><span class="sh">'</span><span class="p">,</span> <span class="c1"># Machine type can be set
+</span>    <span class="sh">'</span><span class="s">disks</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="sh">'</span><span class="s">boot</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">autoDelete</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">initializeParams</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">'</span><span class="s">sourceImage</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">projects/debian-cloud/global/images/family/debian-9</span><span class="sh">'</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="sh">'</span><span class="s">networkInterfaces</span><span class="sh">'</span><span class="p">:</span> <span class="p">[{</span>
+        <span class="sh">'</span><span class="s">network</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">global/networks/default</span><span class="sh">'</span>
+    <span class="p">}]</span>
+<span class="p">}</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">insert</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># Instance reading code example
+</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># Instance updating code example
+</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">description</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Updated instance</span><span class="sh">'</span>
+<span class="p">}</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">setMetadata</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># Instance deletion code example
+</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">delete</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="fetching-instance-list">Fetching Instance List</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
+from oauth2client.client import GoogleCredentials
+
+# Obtain Google Cloud authentication credentials.
+credentials = GoogleCredentials.get_application_default()
+
+# Create a Compute Engine API client.
+service = discovery.build('compute', 'v1', credentials=credentials)
+
+project = 'your-project-id'  # Enter your project ID.
+zone = 'asia-northeast3-a'   # Enter the zone you are using.
+
+# Create a request to fetch the list of instances.
+request = service.instances().list(project=project, zone=zone)
+
+# Execute the request and get the response.
+response = request.execute()
+
+# Print the list of instances.
+if 'items' in response:
+    for instance in response['items']:
+        print('Instance name:', instance['name'])
+        print('Instance status:', instance['status'])
+        print('Instance zone:', instance['zone'])
+        print()
+else:
+    print('No instances found.')
+</code></pre></div></div>
+
+<h3 id="adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
+from google.oauth2 import service_account
+
+# Obtain Google Cloud authentication credentials.
+credentials = GoogleCredentials.get_application_default()
+
+# Create a Compute Engine API client.
+service = discovery.build('compute', 'v1', credentials=credentials)
+
+project = 'your-project-id'  # Enter your project ID.
+zone = 'asia-northeast3-a'   # Enter the zone you are using.
+
+# Read the public key
+with open('public-key-path', 'r') as f:
+    public_key = f.read().strip()
+
+# Get the current metadata of the instance
+instance = compute.instances().get(project=PROJECT_ID, zone=ZONE, instance=INSTANCE_NAME).execute()
+metadata = instance.get('metadata', {})
+items = metadata.get('items', [])
+
+# Add SSH key metadata
+ssh_keys = None
+for item in items:
+    if item['key'] == 'ssh-keys':
+        ssh_keys = item
+        break
+
+if ssh_keys:
+    ssh_keys['value'] += f"\n{user_name}:{public_key}"
+else:
+    items.append({
+        'key': 'ssh-keys',
+        'value': f"{user_name}:{public_key}"
+    })
+
+metadata['items'] = items
+
+# Send a request to update the metadata
+operation = compute.instances().setMetadata(
+    project=PROJECT_ID,
+    zone=ZONE,
+    instance=INSTANCE_NAME,
+    body=metadata
+).execute()
+
+print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
+</code></pre></div></div>
+
+<h2 id="use-cases">Use Cases</h2>
+
 <ul>
-  <li>자율 주행 기술이 적용된 배달 로봇 등의 상용화로 깊이 추정 기술에 대한 수요가 급증하고 있음</li>
-  <li>기존 거리 추정은 Lidar 센서를 이용하여 가능하나 비용이 비쌈</li>
-  <li>길거리에서 촬영된 영상은 사람들의 얼굴이 나오기 때문에 데이터로써 활용되기 어려움</li>
-</ul>
-
-<h3 id="기대-효과">기대 효과</h3>
-<ul>
-  <li>단안 카메라 거리 측정 기술을 통한 안전 사고 방지</li>
-  <li>단안 카메라의 단점인 기상 악화 상황에서의 한계를 딥러닝을 이용해서 극복</li>
-  <li>비싼 Lidar 센서 대신 단안 카메라를 사용하여 비용 절감</li>
-</ul>
-
-<h3 id="나의-역할">나의 역할</h3>
-<ul>
-  <li>Python GUI 앱 구현</li>
-  <li>실시간 모델 서빙 서버 구현</li>
-</ul>
-
-<h3 id="사용-모델">사용 모델</h3>
-<ul>
-  <li>YoloWorld</li>
-  <li>Depth Anything</li>
-</ul>
-
-<h3 id="프로젝트-구조">프로젝트 구조</h3>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/cps_architecture.png" alt="cps 구조" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-</div>
-
-<h3 id="사용-기술">사용 기술</h3>
-<ul>
-  <li>PYQT5</li>
-  <li>OpenCV</li>
-  <li>WebSockets</li>
-  <li>FastAPI</li>
-  <li>Lock</li>
-  <li>ONNX</li>
-  <li>Pytorch</li>
-</ul>
-
-<h3 id="프로젝트-자료">프로젝트 자료</h3>
-<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><category term="opencv" /><category term="python" /><category term="deeplearning" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="en"><title type="html">Collision Prediction System</title><link href="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="Collision Prediction System" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
+  <li><strong>Automated Instance Management</strong>: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.</li>
+  <li><strong>Resource Optimization</strong>: You can create instances only when needed and delete them afterward, creating a cost-effective solution.</li>
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[Table of Contents Introduction to GCP Compute Engine Introduction to Google API Client Library Instance CRUD Fetching Instance List Adding SSH Keys to an Instance Use Cases]]></summary></entry><entry xml:lang="en"><title type="html">Collision Prediction System</title><link href="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="Collision Prediction System" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
   
 </div>
@@ -429,164 +1460,56 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 </ul>
 
 <h3 id="project-link">Project Link</h3>
-<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><category term="opencv" /><category term="python" /><category term="deeplearning" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="ko"><title type="html">프로젝트 님블 (Nimble)</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="프로젝트 님블 (Nimble)" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html"><![CDATA[<h2 id="목차">목차</h2>
-<ol>
-  <li><a href="#프로젝트-님블-소개">프로젝트 님블 소개</a>
-    <ol>
-      <li><a href="#주요-기능">주요 기능</a></li>
-      <li><a href="#기대-효과">기대 효과</a></li>
-      <li><a href="#나의-역할-및-사용기술">나의 역할 및 사용기술</a></li>
-    </ol>
-  </li>
-  <li><a href="#프로젝트-구조">프로젝트 구조</a>
-    <ol>
-      <li><a href="#1차-설계">1차 설계</a></li>
-      <li><a href="#2차-설계">2차 설계</a></li>
-      <li><a href="#3차-설계">3차 설계</a></li>
-    </ol>
-  </li>
-</ol>
+<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><category term="opencv" /><category term="python" /><category term="deeplearning" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
+  
+</div>
 
-<hr />
-
-<h2 id="프로젝트-님블-소개">프로젝트 님블 소개</h2>
-
-<p>프로젝트 님블(Nimble)은 디지털 마케팅 자동화를 목표로 하는 프로젝트입니다. 현대의 디지털 마케팅 환경은 AI의 도입으로 빠르게 변화하고 있으며, 이에 발맞추어 효율적이고 효과적인 마케팅 전략을 세우기 위해서는 자동화가 필수적입니다. 님블은 이러한 필요성에 부응하여 개발된 솔루션입니다.</p>
-
-<h3 id="주요-기능">주요 기능</h3>
-
-<ol>
-  <li><strong>자동화된 마케팅 관리</strong>
-    <ul>
-      <li>프로젝트 님블은 다양한 디지털 마케팅을 End-to-end로 자동화합니다.</li>
-    </ul>
-  </li>
-  <li><strong>생성형 AI 기반 마케팅</strong>
-    <ul>
-      <li>인공지능 기술을 활용하여 실시간으로 변화하는 SEO, Trends를 분석하고 적용합니다.</li>
-    </ul>
-  </li>
-</ol>
+<h3 id="배경">배경</h3>
+<ul>
+  <li>자율 주행 기술이 적용된 배달 로봇 등의 상용화로 깊이 추정 기술에 대한 수요가 급증하고 있음</li>
+  <li>기존 거리 추정은 Lidar 센서를 이용하여 가능하나 비용이 비쌈</li>
+  <li>길거리에서 촬영된 영상은 사람들의 얼굴이 나오기 때문에 데이터로써 활용되기 어려움</li>
+</ul>
 
 <h3 id="기대-효과">기대 효과</h3>
-
 <ul>
-  <li><strong>효율성 향상</strong>
-    <ul>
-      <li>자동화를 통해 클라이언트는 자신의 일에 집중할 수 있게됩니다.</li>
-    </ul>
-  </li>
-  <li><strong>정확한 마케팅</strong>
-    <ul>
-      <li>실시간 데이터 분석과 AI 기반 분석을 통해 효울적인 마케팅을 합니다.</li>
-    </ul>
-  </li>
-  <li><strong>비용 절감</strong>
-    <ul>
-      <li>자동화 및 인프라 고도화를 통해 인건비와 운영 비용이 절감됩니다.</li>
-    </ul>
-  </li>
+  <li>단안 카메라 거리 측정 기술을 통한 안전 사고 방지</li>
+  <li>단안 카메라의 단점인 기상 악화 상황에서의 한계를 딥러닝을 이용해서 극복</li>
+  <li>비싼 Lidar 센서 대신 단안 카메라를 사용하여 비용 절감</li>
 </ul>
 
-<h3 id="나의-역할-및-사용기술">나의 역할 및 사용기술</h3>
-
+<h3 id="나의-역할">나의 역할</h3>
 <ul>
-  <li><strong>알고리즘 구현</strong>
-    <ul>
-      <li>Python</li>
-      <li>Selenium</li>
-    </ul>
-  </li>
-  <li><strong>인프라 구축 및 관리</strong>
-    <ul>
-      <li>Github Action</li>
-      <li>GCP</li>
-      <li>Docker</li>
-      <li>Airflow</li>
-      <li>Database (sqlite, postgresql)</li>
-      <li>Linux</li>
-      <li>Terraform</li>
-    </ul>
-  </li>
+  <li>Python GUI 앱 구현</li>
+  <li>실시간 모델 서빙 서버 구현</li>
 </ul>
 
-<hr />
+<h3 id="사용-모델">사용 모델</h3>
+<ul>
+  <li>YoloWorld</li>
+  <li>Depth Anything</li>
+</ul>
 
-<h2 id="프로젝트-구조">프로젝트 구조</h2>
-
-<h3 id="1차-설계">1차 설계</h3>
+<h3 id="프로젝트-구조">프로젝트 구조</h3>
 <div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/nimble_architecture_phase1.png" alt="1차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  <img src="/assets/img/cps_architecture.png" alt="cps 구조" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
   
 </div>
 
-<p><strong>설계 포인트</strong></p>
+<h3 id="사용-기술">사용 기술</h3>
 <ul>
-  <li>유저가 프로그램을 직접 실행하는 구조</li>
-  <li>사용자는 관리자에게 라이센스를 구입하거나 요청</li>
-  <li>관리자는 라이센스를 부여하고 클라이언트 프로그램을 제공</li>
-  <li>매일 실행되는 코어 로직(Client)은 실행할 때마다 라이센스 서버에 자신의 키값을 통해 유효성을 검증</li>
+  <li>PYQT5</li>
+  <li>OpenCV</li>
+  <li>WebSockets</li>
+  <li>FastAPI</li>
+  <li>Lock</li>
+  <li>ONNX</li>
+  <li>Pytorch</li>
 </ul>
 
-<p><strong>사용 기술</strong></p>
-<ul>
-  <li>PYQT5, GCP, RDB, FastAPI, Selenium</li>
-</ul>
-
-<p><strong>피드백</strong></p>
-<ul>
-  <li>사용자가 직접 프로그램을 구동하는 것의 어려움</li>
-  <li>기존 클라이언트 프로그램 업데이트 및 배포의 어려움</li>
-  <li>관리자가 라이센스를 직접 관리하는 것의 불편</li>
-</ul>
-
-<h3 id="2차-설계">2차 설계</h3>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/nimble_architecture_phase2.png" alt="2차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-</div>
-
-<p><strong>설계 포인트</strong></p>
-<ul>
-  <li>사용자가 결제 시 필요한 정보들을 입력하면, 결제 플랫폼에서 자동으로 API를 호출하는 구조</li>
-  <li>이후 모든 작업은 서버 상에서 자동으로 실행됨</li>
-</ul>
-
-<p><strong>사용 기술</strong></p>
-<ul>
-  <li>GCP, RDB, FastAPI, Selenium, Terraform, Docker, Airflow, Linux</li>
-</ul>
-
-<p><strong>피드백</strong></p>
-<ul>
-  <li>인프라 유지 비용이 증가</li>
-  <li>CI/CD 파이프라인이 없어 소스코드를 수정하고 적용하는데 모든 인프라 구조를 알아야함</li>
-</ul>
-
-<h3 id="3차-설계">3차 설계</h3>
-<div style="text-align: center; margin-bottom: 20px;">
-  <img src="/assets/img/nimble_architecture_phase3.png" alt="3차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
-  
-</div>
-
-<p><strong>설계 포인트</strong></p>
-<ul>
-  <li>Bucket을 통해 Database를 File로 관리함으로 비용 감소</li>
-  <li>유지보수성을 위해 Core Logic을 별도의 깃허브 저장소로 분리 후 Cloud Build로 CI/CD</li>
-  <li>기존 Airflow로 관리되던 작업을 Cloud Function으로 구현하여 관리소요 및 비용 감소</li>
-</ul>
-
-<p><strong>사용 기술</strong></p>
-<ul>
-  <li>GCP, RDB, FastAPI, Selenium, Docker, Terraform, Linux</li>
-</ul>
-
-<p><strong>개선사항</strong></p>
-<ul>
-  <li>모니터링: 지금은 단순 TXT로 출력하고 있음 -&gt; 오픈소스 모니터링 툴을 연결해서 적용</li>
-  <li>CloudBuild w/ Terraform: 테라폼에서 cloud build trigger를 관리하는데 문제가 있음 (테라폼 버그로 추측) Fix예정</li>
-  <li>Unit Test: Selenium 각 기능을 주기적으로(weekly) 테스트하는 환경 구축 필요</li>
-</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><category term="selenium" /><category term="docker" /><category term="gcp" /><category term="cicd" /><category term="infra" /><summary type="html"><![CDATA[목차 프로젝트 님블 소개 주요 기능 기대 효과 나의 역할 및 사용기술 프로젝트 구조 1차 설계 2차 설계 3차 설계]]></summary></entry><entry xml:lang="en"><title type="html">Project Nimble</title><link href="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="Project Nimble" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
+<h3 id="프로젝트-자료">프로젝트 자료</h3>
+<p><a href="https://github.com/boostcampaitech6/level2-3-cv-finalproject-cv-12" target="_blank">GitHub Repository</a></p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><category term="opencv" /><category term="python" /><category term="deeplearning" /><summary type="html"><![CDATA[]]></summary></entry><entry xml:lang="en"><title type="html">Project Nimble</title><link href="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="Project Nimble" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/en/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/en/project/2024/06/11/nimble-project.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
 <ol>
   <li><a href="#introduction-to-project-nimble">Introduction to Project Nimble</a>
     <ol>
@@ -743,7 +1666,164 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
   <li>Monitoring: Currently outputting simple TXT -&gt; Apply by connecting open-source monitoring tools.</li>
   <li>CloudBuild w/ Terraform: Managing cloud build triggers with Terraform is problematic (suspected Terraform bug) - Fix planned.</li>
   <li>Unit Test: Need to establish an environment for periodically (weekly) testing each function of Selenium.</li>
-</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><category term="selenium" /><category term="docker" /><category term="gcp" /><category term="cicd" /><category term="infra" /><summary type="html"><![CDATA[Table of Contents Introduction to Project Nimble Key Features Expected Benefits My Role and Technologies Used Project Architecture Phase 1 Design Phase 2 Design Phase 3 Design]]></summary></entry><entry xml:lang="en"><title type="html">Adding Comment Functionality to Your GitHub Blog Using Utterances</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Adding Comment Functionality to Your GitHub Blog Using Utterances" /><published>2024-06-10T19:00:00+09:00</published><updated>2024-06-10T19:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons.
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="project" /><category term="selenium" /><category term="docker" /><category term="gcp" /><category term="cicd" /><category term="infra" /><summary type="html"><![CDATA[Table of Contents Introduction to Project Nimble Key Features Expected Benefits My Role and Technologies Used Project Architecture Phase 1 Design Phase 2 Design Phase 3 Design]]></summary></entry><entry xml:lang="ko"><title type="html">프로젝트 님블 (Nimble)</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html" rel="alternate" type="text/html" title="프로젝트 님블 (Nimble)" /><published>2024-06-11T02:00:00+09:00</published><updated>2024-06-11T02:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/nimble-project</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/nimble-project.html"><![CDATA[<h2 id="목차">목차</h2>
+<ol>
+  <li><a href="#프로젝트-님블-소개">프로젝트 님블 소개</a>
+    <ol>
+      <li><a href="#주요-기능">주요 기능</a></li>
+      <li><a href="#기대-효과">기대 효과</a></li>
+      <li><a href="#나의-역할-및-사용기술">나의 역할 및 사용기술</a></li>
+    </ol>
+  </li>
+  <li><a href="#프로젝트-구조">프로젝트 구조</a>
+    <ol>
+      <li><a href="#1차-설계">1차 설계</a></li>
+      <li><a href="#2차-설계">2차 설계</a></li>
+      <li><a href="#3차-설계">3차 설계</a></li>
+    </ol>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="프로젝트-님블-소개">프로젝트 님블 소개</h2>
+
+<p>프로젝트 님블(Nimble)은 디지털 마케팅 자동화를 목표로 하는 프로젝트입니다. 현대의 디지털 마케팅 환경은 AI의 도입으로 빠르게 변화하고 있으며, 이에 발맞추어 효율적이고 효과적인 마케팅 전략을 세우기 위해서는 자동화가 필수적입니다. 님블은 이러한 필요성에 부응하여 개발된 솔루션입니다.</p>
+
+<h3 id="주요-기능">주요 기능</h3>
+
+<ol>
+  <li><strong>자동화된 마케팅 관리</strong>
+    <ul>
+      <li>프로젝트 님블은 다양한 디지털 마케팅을 End-to-end로 자동화합니다.</li>
+    </ul>
+  </li>
+  <li><strong>생성형 AI 기반 마케팅</strong>
+    <ul>
+      <li>인공지능 기술을 활용하여 실시간으로 변화하는 SEO, Trends를 분석하고 적용합니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="기대-효과">기대 효과</h3>
+
+<ul>
+  <li><strong>효율성 향상</strong>
+    <ul>
+      <li>자동화를 통해 클라이언트는 자신의 일에 집중할 수 있게됩니다.</li>
+    </ul>
+  </li>
+  <li><strong>정확한 마케팅</strong>
+    <ul>
+      <li>실시간 데이터 분석과 AI 기반 분석을 통해 효울적인 마케팅을 합니다.</li>
+    </ul>
+  </li>
+  <li><strong>비용 절감</strong>
+    <ul>
+      <li>자동화 및 인프라 고도화를 통해 인건비와 운영 비용이 절감됩니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="나의-역할-및-사용기술">나의 역할 및 사용기술</h3>
+
+<ul>
+  <li><strong>알고리즘 구현</strong>
+    <ul>
+      <li>Python</li>
+      <li>Selenium</li>
+    </ul>
+  </li>
+  <li><strong>인프라 구축 및 관리</strong>
+    <ul>
+      <li>Github Action</li>
+      <li>GCP</li>
+      <li>Docker</li>
+      <li>Airflow</li>
+      <li>Database (sqlite, postgresql)</li>
+      <li>Linux</li>
+      <li>Terraform</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="프로젝트-구조">프로젝트 구조</h2>
+
+<h3 id="1차-설계">1차 설계</h3>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/nimble_architecture_phase1.png" alt="1차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<p><strong>설계 포인트</strong></p>
+<ul>
+  <li>유저가 프로그램을 직접 실행하는 구조</li>
+  <li>사용자는 관리자에게 라이센스를 구입하거나 요청</li>
+  <li>관리자는 라이센스를 부여하고 클라이언트 프로그램을 제공</li>
+  <li>매일 실행되는 코어 로직(Client)은 실행할 때마다 라이센스 서버에 자신의 키값을 통해 유효성을 검증</li>
+</ul>
+
+<p><strong>사용 기술</strong></p>
+<ul>
+  <li>PYQT5, GCP, RDB, FastAPI, Selenium</li>
+</ul>
+
+<p><strong>피드백</strong></p>
+<ul>
+  <li>사용자가 직접 프로그램을 구동하는 것의 어려움</li>
+  <li>기존 클라이언트 프로그램 업데이트 및 배포의 어려움</li>
+  <li>관리자가 라이센스를 직접 관리하는 것의 불편</li>
+</ul>
+
+<h3 id="2차-설계">2차 설계</h3>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/nimble_architecture_phase2.png" alt="2차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<p><strong>설계 포인트</strong></p>
+<ul>
+  <li>사용자가 결제 시 필요한 정보들을 입력하면, 결제 플랫폼에서 자동으로 API를 호출하는 구조</li>
+  <li>이후 모든 작업은 서버 상에서 자동으로 실행됨</li>
+</ul>
+
+<p><strong>사용 기술</strong></p>
+<ul>
+  <li>GCP, RDB, FastAPI, Selenium, Terraform, Docker, Airflow, Linux</li>
+</ul>
+
+<p><strong>피드백</strong></p>
+<ul>
+  <li>인프라 유지 비용이 증가</li>
+  <li>CI/CD 파이프라인이 없어 소스코드를 수정하고 적용하는데 모든 인프라 구조를 알아야함</li>
+</ul>
+
+<h3 id="3차-설계">3차 설계</h3>
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/nimble_architecture_phase3.png" alt="3차 설계" style="display: block; margin: 0 auto; width: 700px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<p><strong>설계 포인트</strong></p>
+<ul>
+  <li>Bucket을 통해 Database를 File로 관리함으로 비용 감소</li>
+  <li>유지보수성을 위해 Core Logic을 별도의 깃허브 저장소로 분리 후 Cloud Build로 CI/CD</li>
+  <li>기존 Airflow로 관리되던 작업을 Cloud Function으로 구현하여 관리소요 및 비용 감소</li>
+</ul>
+
+<p><strong>사용 기술</strong></p>
+<ul>
+  <li>GCP, RDB, FastAPI, Selenium, Docker, Terraform, Linux</li>
+</ul>
+
+<p><strong>개선사항</strong></p>
+<ul>
+  <li>모니터링: 지금은 단순 TXT로 출력하고 있음 -&gt; 오픈소스 모니터링 툴을 연결해서 적용</li>
+  <li>CloudBuild w/ Terraform: 테라폼에서 cloud build trigger를 관리하는데 문제가 있음 (테라폼 버그로 추측) Fix예정</li>
+  <li>Unit Test: Selenium 각 기능을 주기적으로(weekly) 테스트하는 환경 구축 필요</li>
+</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="project" /><category term="selenium" /><category term="docker" /><category term="gcp" /><category term="cicd" /><category term="infra" /><summary type="html"><![CDATA[목차 프로젝트 님블 소개 주요 기능 기대 효과 나의 역할 및 사용기술 프로젝트 구조 1차 설계 2차 설계 3차 설계]]></summary></entry><entry xml:lang="en"><title type="html">Adding Comment Functionality to Your GitHub Blog Using Utterances</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html" rel="alternate" type="text/html" title="Adding Comment Functionality to Your GitHub Blog Using Utterances" /><published>2024-06-10T19:00:00+09:00</published><updated>2024-06-10T19:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/10/adding-comment-functionality-to-your-github-blog-using-utterances.html"><![CDATA[<p>In a GitHub blog, managing comments can be challenging without a backend server. While there are various solutions to provide comment functionality, each has its pros and cons.
 This article introduces Utterances, an elegant solution for managing comments using GitHub Issues. In this tutorial, we will explain how to add Utterances to a GitHub blog using Jekyll.</p>
 
 <h3 id="what-is-utterances">What is Utterances?</h3>
@@ -922,54 +2002,4 @@ This article introduces Utterances, an elegant solution for managing comments us
   
   <p style="font-style: italic; font-size: 0.9em; margin-top: 5px; text-align: center;">레이아웃 파일 예시</p>
   
-</div>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="github" /><category term="blog" /><summary type="html"><![CDATA[깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다. 이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.]]></summary></entry><entry xml:lang="ko"><title type="html">기술 블로그를 시작합니다.</title><link href="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="기술 블로그를 시작합니다." /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/ko/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>안녕하세요, 블로그에 오신 것을 환영합니다!</p>
-
-<h3 id="블로그-소개">블로그 소개</h3>
-
-<p>블로그를 시작하니까 설레네요. 여기서는 여러 기술 주제에 대한 글을 공유할 예정입니다. 이 블로그의 주요 주제는 소프트웨어 개발, 클라우드 컴퓨팅 등에 맞춰질 것입니다. 여러분이 경험 많은 개발자이든 이제 막 시작한 초보자이든, 이곳에서 유용한 정보를 찾길 바랍니다.</p>
-
-<h3 id="저에-대해">저에 대해</h3>
-
-<p>제 이름은 허재영입니다. 저는 컴퓨터에 대한 열정을 가지고 있습니다. 개발자로서의 여정을 이제 막 시작했지만, 열심히 배우고 성장하고 있습니다. 이 블로그를 통해 배운 것을 공유하고, 진행 상황을 기록하며, 사람들과 소통하기를 희망합니다.</p>
-
-<h3 id="이런-글들을-올릴-예정입니다">이런 글들을 올릴 예정입니다.</h3>
-
-<ul>
-  <li><strong>학습로그</strong>: 새로운 기술, 프로그래밍 언어, 프레임워크를 배우면서 경험을 공유할 것입니다.</li>
-  <li><strong>튜토리얼과 가이드</strong>: 다양한 기술을 이해하고 구현하는 데 도움이 되는 단계별 가이드를 제공할 것입니다.</li>
-  <li><strong>프로젝트</strong>: 제가 작업 중인 프로젝트를 소개하고, 그로부터 얻은 교훈을 공유할 것입니다.</li>
-</ul>
-
-<h3 id="마치며">마치며</h3>
-
-<p>많은 피드백 부탁드립니다. 게시글에 대한 여러분의 의견을 듣고 싶습니다. 댓글을 남겨주시고, 페이지 우측 상단의 이메일, GitHub, LinkedIn 버튼을 통해 같이 소통했으면 좋겠습니다.</p>
-
-<p>제 블로그를 방문해 주셔서 감사합니다. 곧 첫 번째 글로 찾아뵙겠습니다.</p>
-
-<p>감사합니다.
-허재영 드림.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="general" /><summary type="html"><![CDATA[안녕하세요, 블로그에 오신 것을 환영합니다!]]></summary></entry><entry xml:lang="en"><title type="html">Starting a Tech Blog</title><link href="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html" rel="alternate" type="text/html" title="Starting a Tech Blog" /><published>2024-06-10T18:00:00+09:00</published><updated>2024-06-10T18:00:00+09:00</updated><id>https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog</id><content type="html" xml:base="https://jae-heo.github.io/en/general/2024/06/10/welcome-to-my-tech-blog.html"><![CDATA[<p>Hello, and welcome to the blog!</p>
-
-<h3 id="about-this-blog">About This Blog</h3>
-
-<p>I’m excited to start this blog. Here, I will be sharing posts on various tech topics. The main focus of this blog will be on software development, cloud computing, and more. Whether you are an experienced developer or just starting out, I hope you’ll find valuable information here.</p>
-
-<h3 id="about-me">About Me</h3>
-
-<p>My name is Jaeyoung Heo. I have a passion for technology and software development. Although I am just beginning my journey in the tech industry, I am eager to learn and grow. Through this blog, I hope to share what I learn, document my progress, and connect with others.</p>
-
-<h3 id="what-to-expect">What to Expect</h3>
-
-<ul>
-  <li><strong>Learning Log</strong>: I will share my experiences as I learn new technologies, programming languages, and frameworks.</li>
-  <li><strong>Tutorials and Guides</strong>: Step-by-step guides to help you understand and implement various technologies.</li>
-  <li><strong>Projects</strong>: I will showcase the projects I am working on and share the lessons learned from them.</li>
-</ul>
-
-<h3 id="lets-connect">Let’s Connect</h3>
-
-<p>I highly value feedback and would love to hear your thoughts on my posts. Feel free to leave comments or connect with me via the email, GitHub, or LinkedIn buttons at the top right corner of this page.</p>
-
-<p>Thank you for visiting my blog. I look forward to sharing my first post with you soon.</p>
-
-<p>Best regards,<br />
-Jaeyoung Heo</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="general" /><summary type="html"><![CDATA[Hello, and welcome to the blog!]]></summary></entry></feed>
+</div>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="github" /><category term="blog" /><summary type="html"><![CDATA[깃허브 블로그에서는 백엔드 서버가 따로 없어 댓글을 관리하려면 다른 대안이 필요합니다. 댓글 기능을 제공하는 여러 솔루션이 있지만, 각자 장단이 있습니다. 이 글에서는 Utterances라는 GitHub Issues를 사용하여 댓글을 관리할 수 있는 우아한 솔루션을 제공합니다. 이 튜토리얼에서는 Jekyll을 이용한 깃허브 블로그에 Utterances를 추가하는 방법을 설명합니다.]]></summary></entry></feed>
