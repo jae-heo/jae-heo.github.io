@@ -9,10 +9,6 @@ tags: ["terraform", "infra"]
 lang: ko
 ---
 
-물론입니다. 아래는 새로운 목차입니다:
-
----
-
 ## 목차
 1. [Terraform 소개](#terraform-소개)
    - [테라폼이란?](#테라폼이란)
