@@ -73,7 +73,7 @@
 }
 
 /* 태그별 색상 지정 */
-.tag-toggle[data-tag="tutorial"], .post-tag[data-tag="tutorial"] {
+.tag-toggle[data-tag="algorithm"], .post-tag[data-tag="algorithm"] {
   background-color: rgba(214, 158, 158, 0.5); /* 파스텔톤 칙칙한 핑크 */
 }
 
@@ -85,7 +85,7 @@
   background-color: rgba(214, 214, 158, 0.5); /* 파스텔톤 칙칙한 노란색 */
 }
 
-.tag-toggle[data-tag="project"], .post-tag[data-tag="project"] {
+.tag-toggle[data-tag="terraform"], .post-tag[data-tag="terraform"] {
   background-color: rgba(158, 201, 214, 0.5); /* 파스텔톤 칙칙한 하늘색 */
 }
 
@@ -97,7 +97,7 @@
   background-color: rgba(183, 158, 214, 0.5); /* 파스텔톤 칙칙한 연보라색 */
 }
 
-.tag-toggle[data-tag="general"], .post-tag[data-tag="general"] {
+.tag-toggle[data-tag="github"], .post-tag[data-tag="github"] {
   background-color: rgba(214, 198, 158, 0.5); /* 파스텔톤 칙칙한 살구색 */
 }
 
@@ -118,7 +118,7 @@
 }
 
 /* 선택된 상태의 태그별 색상 지정 */
-.tag-toggle.active[data-tag="tutorial"], .post-tag.active[data-tag="tutorial"] {
+.tag-toggle.active[data-tag="algorithm"], .post-tag.active[data-tag="algorithm"] {
   background-color: rgba(194, 133, 133, 0.5); /* 더 칙칙한 핑크 */
 }
 
@@ -130,7 +130,7 @@
   background-color: rgba(194, 194, 133, 0.5); /* 더 칙칙한 노란색 */
 }
 
-.tag-toggle.active[data-tag=“project”], .post-tag.active[data-tag=“project”] {
+.tag-toggle.active[data-tag=“terraform”], .post-tag.active[data-tag=“terraform”] {
 background-color: rgba(133, 159, 194, 0.5); /* 더 칙칙한 하늘색 */
 }
 
@@ -142,7 +142,7 @@ background-color: rgba(194, 133, 159, 0.5); /* 더 칙칙한 연분홍색 */
 background-color: rgba(158, 133, 194, 0.5); /* 더 칙칙한 연보라색 */
 }
 
-.tag-toggle.active[data-tag=“general”], .post-tag.active[data-tag=“general”] {
+.tag-toggle.active[data-tag=“github”], .post-tag.active[data-tag=“github”] {
 background-color: rgba(194, 158, 133, 0.5); /* 더 칙칙한 살구색 */
 }
 
@@ -160,30 +160,4 @@ background-color: rgba(194, 153, 133, 0.5); /* 더 칙칙한 갈색 */
 
 .tag-toggle.active[data-tag=“cicd”], .post-tag.active[data-tag=“cicd”] {
 background-color: rgba(100, 133, 194, 0.5); /* 더 칙칙한 연보라색 */
-}
-
-/* 카테고리별 색상 지정 */
-.category-toggle[data-category="tutorial"], .post-category[data-category="tutorial"] {
-  background-color: rgba(214, 158, 158, 0.5); /* 파스텔톤 칙칙한 핑크 */
-}
-
-.category-toggle[data-category="project"], .post-category[data-category="project"] {
-  background-color: rgba(158, 201, 214, 0.5); /* 파스텔톤 칙칙한 하늘색 */
-}
-
-.category-toggle[data-category="general"], .post-category[data-category="general"] {
-  background-color: rgba(214, 198, 158, 0.5); /* 파스텔톤 칙칙한 살구색 */
-}
-
-/* 선택된 상태의 카테고리별 색상 지정 */
-.category-toggle.active[data-category="tutorial"], .post-category.active[data-category="tutorial"] {
-  background-color: rgba(194, 133, 133, 0.5); /* 더 칙칙한 핑크 */
-}
-
-.category-toggle.active[data-category="project"], .post-category.active[data-category="project"] {
-  background-color: rgba(133, 159, 194, 0.5); /* 더 칙칙한 하늘색 */
-}
-
-.category-toggle.active[data-category="general"], .post-category.active[data-category="general"] {
-  background-color: rgba(194, 158, 133, 0.5); /* 더 칙칙한 살구색 */
 }

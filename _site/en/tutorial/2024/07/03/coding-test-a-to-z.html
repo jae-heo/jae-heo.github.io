@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> All-in-One Guide to Coding Tests — Sharing the process of preparing for coding tests.  | Jaeyoung Heo</title>
+<meta name="description" content="Jaeyoung Heo's tech blog
+">
+<meta name="keywords" content="algorithm">
+<link rel="canonical" href="/en/tutorial/2024/07/03/coding-test-a-to-z.html">
+<link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/agate.css">
+
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XDPCR56GW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XDPCR56GW');
+</script>
+</head>
+<body>
+<div class="wrapper">
+<header class="header">
+  <div class="navigation">
+    <a href="/en" class="logo">Jaeyoung Heo</a>
+    <ul class="menu">
+      <li class="menu__entry">
+        <a href="/en/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/project">Project</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/blog">Blog</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="social-links">
+    
+    <li class="social-links__entry">
+      <a href="mailto:gjwodud119@gmail.com" target="_blank">
+        <i class="fa fa-envelope-square"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://github.com/jae-heo" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://in.linkedin.com/in/jaeyoung-heo-664033282" target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    
+    <li class="language-selector">
+      <a href="/en/tutorial/2024/07/03/coding-test-a-to-z.html"><strong>EN</strong></a> |
+      <a href="/ko/tutorial/2024/07/03/coding-test-a-to-z.html"><strong>KO</strong></a>
+    </li>
+  </ul>
+</header>
+<h1 class="page-title">
+<div class="page-title__text">All-in-One Guide to Coding Tests</div>
+<div class="page-title__subtitle">Sharing the process of preparing for coding tests.</div>
+</h1>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+  <li><a href="#introduction-to-coding-tests">Introduction to Coding Tests</a>
+    <ul>
+      <li><a href="#what-is-a-coding-test">What is a Coding Test?</a></li>
+      <li><a href="#benefits-of-coding-tests">Benefits of Coding Tests</a></li>
+      <li><a href="#types-of-coding-tests">Types of Coding Tests</a></li>
+    </ul>
+  </li>
+  <li><a href="#preparing-for-coding-tests">Preparing for Coding Tests</a>
+    <ul>
+      <li><a href="#learning-basic-concepts">Learning Basic Concepts</a></li>
+      <li><a href="#data-structures-and-algorithms">Data Structures and Algorithms</a></li>
+      <li><a href="#practicing-problem-solving">Practicing Problem-Solving</a></li>
+      <li><a href="#recommended-learning-resources-and-websites">Recommended Learning Resources and Websites</a></li>
+    </ul>
+  </li>
+  <li><a href="#essential-algorithms-and-data-structures">Essential Algorithms and Data Structures</a>
+    <ul>
+      <li><a href="#arrays-and-strings">Arrays and Strings</a></li>
+      <li><a href="#linked-lists">Linked Lists</a></li>
+      <li><a href="#stacks-and-queues">Stacks and Queues</a></li>
+      <li><a href="#trees-and-graphs">Trees and Graphs</a></li>
+      <li><a href="#hash-tables">Hash Tables</a></li>
+      <li><a href="#sorting-and-searching-algorithms">Sorting and Searching Algorithms</a></li>
+      <li><a href="#dynamic-programming">Dynamic Programming</a></li>
+    </ul>
+  </li>
+  <li><a href="#coding-test-checklist">Coding Test Checklist</a>
+    <ul>
+      <li><a href="#arrays">Arrays</a></li>
+      <li><a href="#strings">Strings</a></li>
+      <li><a href="#two-pointers">Two Pointers</a></li>
+      <li><a href="#sliding-window">Sliding Window</a></li>
+      <li><a href="#matrix">Matrix</a></li>
+      <li><a href="#hashmap">HashMap</a></li>
+      <li><a href="#intervals">Intervals</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#linked-list">Linked List</a></li>
+      <li><a href="#binary-tree">Binary Tree</a></li>
+      <li><a href="#binary-tree-search">Binary Tree Search</a></li>
+      <li><a href="#graph">Graph</a></li>
+      <li><a href="#bfsdfs">BFS/DFS</a></li>
+      <li><a href="#graph-bfs">Graph BFS</a></li>
+      <li><a href="#trie">Trie</a></li>
+      <li><a href="#backtracking">Backtracking</a></li>
+      <li><a href="#divide--conquer">Divide &amp; Conquer</a></li>
+      <li><a href="#kadanes-algorithm">Kadane’s Algorithm</a></li>
+      <li><a href="#binary-search">Binary Search</a></li>
+      <li><a href="#heap">Heap</a></li>
+      <li><a href="#bit-manipulation">Bit Manipulation</a></li>
+      <li><a href="#math">Math</a></li>
+      <li><a href="#1d-dp">1D DP</a></li>
+      <li><a href="#multidimensional-dp">Multidimensional DP</a></li>
+    </ul>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="before-you-start">Before You Start</h2>
+
+<p>If you are already somewhat familiar with coding tests, it’s best to skip ahead to the <a href="#coding-test-checklist">Coding Test Checklist</a>.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="introduction-to-coding-tests">Introduction to Coding Tests</h2>
+
+<h3 id="what-is-a-coding-test">What is a Coding Test?</h3>
+
+<p>A coding test is an exam designed to evaluate an applicant’s programming skills. It is mainly required for technical positions, including software development. In a coding test, candidates solve given problems by determining and implementing algorithms in code, assessing their problem-solving skills, coding ability, and understanding of algorithms. Coding tests can be conducted online via platforms or on-site. They are a crucial part of technical interviews in the hiring process, used to verify the candidate’s basic coding skills.</p>
+
+<h3 id="benefits-of-coding-tests">Benefits of Coding Tests</h3>
+
+<ul>
+  <li><strong>Skill Assessment</strong>: An effective way to evaluate a candidate’s basic programming skills, ensuring they can perform coding tasks required in actual work.</li>
+  <li><strong>Problem-Solving Ability</strong>: Assesses the candidate’s ability to solve problems efficiently and think algorithmically.</li>
+  <li><strong>Fair Evaluation</strong>: Provides an objective and fair method to evaluate candidates, minimizing subjective bias.</li>
+  <li><strong>Preparation Evaluation</strong>: Shows how well-prepared a candidate is, reflecting their study efforts and readiness.</li>
+  <li><strong>Cultural Fit</strong>: Helps evaluate how well a candidate fits with the company’s tech stack and culture, ensuring they can adapt and contribute effectively.</li>
+</ul>
+
+<h3 id="types-of-coding-tests">Types of Coding Tests</h3>
+
+<ul>
+  <li><strong>Online Coding Tests</strong>: Candidates solve and submit problems on an online platform, often with time limits and automatic grading systems.</li>
+  <li><strong>Whiteboard Coding Tests</strong>: Conducted during on-site interviews, where candidates solve problems and write code on a whiteboard, allowing interviewers to observe their thought process.</li>
+  <li><strong>Programming Assignments</strong>: Candidates are given a few days to complete a programming task, allowing in-depth problem-solving.</li>
+  <li><strong>Pair Programming Tests</strong>: Candidates work with an interviewer to solve problems, evaluating their collaboration and communication skills.</li>
+  <li><strong>Algorithm and Data Structure Tests</strong>: Tests that evaluate the candidate’s understanding of specific algorithms and data structures, focusing on problem-solving and optimization skills.</li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="preparing-for-coding-tests">Preparing for Coding Tests</h2>
+
+<h3 id="learning-basic-concepts">Learning Basic Concepts</h3>
+
+<p>Building a solid foundation is crucial when preparing for coding tests. Understanding basic syntax, functions, variables, and data types is essential. Common programming languages include Python, Java, C++, and JavaScript. It’s recommended to choose one and study it in-depth.</p>
+
+<h4 id="basic-concepts-to-learn">Basic Concepts to Learn:</h4>
+<ul>
+  <li>Variables and Data Types</li>
+  <li>Conditional Statements and Loops</li>
+  <li>Functions and Scope</li>
+  <li>List, Array, and String Manipulation</li>
+  <li>Input/Output Handling</li>
+</ul>
+
+<h3 id="data-structures-and-algorithms">Data Structures and Algorithms</h3>
+
+<p>The core of coding tests lies in data structures and algorithms. Solving problems requires selecting appropriate data structures and implementing efficient algorithms. It’s important to fully understand commonly used data structures and algorithms and practice using them.</p>
+
+<h4 id="key-data-structures">Key Data Structures:</h4>
+<ul>
+  <li>Arrays</li>
+  <li>Linked Lists</li>
+  <li>Stacks and Queues</li>
+  <li>Hash Tables</li>
+  <li>Trees and Graphs</li>
+  <li>Heaps</li>
+</ul>
+
+<h4 id="key-algorithms">Key Algorithms:</h4>
+<ul>
+  <li>Sorting (Bubble, Selection, Insertion, Quick, Merge Sort)</li>
+  <li>Searching (Binary Search, BFS, DFS)</li>
+  <li>Recursion and Backtracking</li>
+  <li>Dynamic Programming</li>
+  <li>Greedy Algorithms</li>
+  <li>Divide and Conquer</li>
+</ul>
+
+<h3 id="practicing-problem-solving">Practicing Problem-Solving</h3>
+
+<p>Understanding theory alone is not enough. Practicing by solving various problems is crucial. Using online coding platforms to practice is highly effective.</p>
+
+<h4 id="practice-methods">Practice Methods:</h4>
+<ul>
+  <li>Solve problems daily for a consistent period.</li>
+  <li>After solving, review other people’s solutions to learn new approaches.</li>
+  <li>Practice problems of varying difficulty levels.</li>
+  <li>Review and re-solve problems you found difficult or made mistakes on.</li>
+</ul>
+
+<h3 id="recommended-learning-resources-and-websites">Recommended Learning Resources and Websites</h3>
+
+<p>Utilizing good learning resources and websites is important for effective preparation. Here are some recommended resources and sites for coding test preparation.</p>
+
+<h4 id="online-coding-platforms">Online Coding Platforms:</h4>
+<ul>
+  <li><strong><a href="https://leetcode.com/">LeetCode</a></strong>: Provides problems of various difficulty levels, optimized for interview preparation.</li>
+  <li><strong><a href="https://www.hackerrank.com/">HackerRank</a></strong>: Offers problems in algorithms, databases, AI, and more.</li>
+  <li><strong><a href="https://codesignal.com/">CodeSignal</a></strong>: Allows practice in environments similar to real coding tests.</li>
+  <li><strong><a href="https://www.codewars.com/">Codewars</a></strong>: Offers various coding challenges to improve programming skills.</li>
+  <li><strong><a href="https://atcoder.jp/">AtCoder</a></strong>: A well-known Japanese online judge site with a variety of algorithm problems.</li>
+</ul>
+
+<h4 id="other-learning-resources">Other Learning Resources:</h4>
+<ul>
+  <li><strong><a href="https://www.geeksforgeeks.org/">GeeksforGeeks</a></strong>: Provides tutorials and problems on various data structures and algorithms.</li>
+  <li><strong><a href="https://www.coursera.org/">Coursera</a></strong>, <strong><a href="https://www.edx.org/">edX</a></strong>: Platforms offering online courses on data structures and algorithms.</li>
+  <li><strong><a href="https://www.youtube.com/">YouTube</a></strong>: A source for various programming lectures and algorithm explanation videos.</li>
+</ul>
+
+<p><br />
+<br /></p>
+
+<h2 id="essential-algorithms-and-data-structures">Essential Algorithms and Data Structures</h2>
+
+<p>Understanding and utilizing algorithms and data structures frequently tested in coding tests is essential. Below are the key algorithms and data structures to master.</p>
+
+<h3 id="arrays-and-strings">Arrays and Strings</h3>
+
+<h4 id="arrays">Arrays</h4>
+<p>Arrays are data structures that store elements of the same type in contiguous memory locations. Key features of arrays include fast element access via indexing and fixed size, requiring resizing for element insertion or deletion.</p>
+
+<h4 id="strings">Strings</h4>
+<p>Strings are sequences of characters stored as arrays. Key operations on strings include length measurement, character access, substring extraction, and comparison. Common algorithms for handling strings include string searching (KMP, Rabin-Karp) and string sorting.</p>
+
+<h3 id="linked-lists">Linked Lists</h3>
+
+<p>Linked lists are data structures where each node contains data and a reference to the next node. The key advantage of linked lists is dynamic resizing and fast insertion/deletion.</p>
+
+<ul>
+  <li><strong>Singly Linked List</strong>: Each node has a reference to the next node.</li>
+  <li><strong>Doubly Linked List</strong>: Each node has references to both the previous and next nodes.</li>
+  <li><strong>Circular Linked List</strong>: The last node references the first node, forming a circle.</li>
+</ul>
+
+<h3 id="stacks-and-queues">Stacks and Queues</h3>
+
+<h4 id="stacks">Stacks</h4>
+<p>Stacks follow Last-In-First-Out (LIFO) order. They are used for function call storage, reverse string creation, and parentheses validation. Key operations include push, pop, and peek.</p>
+
+<h4 id="queues">Queues</h4>
+<p>Queues follow First-In-First-Out (FIFO) order. They are used for breadth-first search (BFS) and task scheduling. Key operations include enqueue, dequeue, and front.</p>
+
+<h3 id="trees-and-graphs">Trees and Graphs</h3>
+
+<h4 id="trees">Trees</h4>
+<p>Trees are hierarchical data structures with root and child nodes. Binary trees have nodes with at most two children. Key operations include insertion, deletion, and traversal (DFS, BFS).</p>
+
+<ul>
+  <li><strong>Binary Search Tree (BST)</strong>: Left subtree contains values less than the root, and the right subtree contains values greater than the root.</li>
+  <li><strong>Heaps</strong>: Complete binary trees that allow fast retrieval of maximum or minimum values.</li>
+</ul>
+
+<h4 id="graphs">Graphs</h4>
+<p>Graphs consist of nodes and edges connecting them. Types include directed/undirected and weighted/unweighted graphs. Key operations include traversal (DFS, BFS), shortest path finding (Dijkstra, Bellman-Ford), and minimum spanning tree (Prim, Kruskal).</p>
+
+<h3 id="hash-tables">Hash Tables</h3>
+
+<p>Hash tables map keys to values, supporting fast lookup, insertion, and deletion. Hash functions convert keys to hash values, determining storage locations. Collision resolution methods include chaining and open addressing.</p>
+
+<h3 id="sorting-and-searching-algorithms">Sorting and Searching Algorithms</h3>
+
+<h4 id="sorting-algorithms">Sorting Algorithms</h4>
+<p>Sorting algorithms arrange data in a specific order. Key sorting algorithms include:</p>
+<ul>
+  <li><strong>Bubble Sort</strong>: Compares and swaps adjacent elements.</li>
+  <li><strong>Selection Sort</strong>: Finds the minimum value and swaps it with the first element.</li>
+  <li><strong>Insertion Sort</strong>: Inserts elements into the correct position in a sorted part.</li>
+  <li><strong>Quick Sort</strong>: Divides based on a pivot and sorts recursively.</li>
+  <li><strong>Merge Sort</strong>: Divides and merges sorted parts.</li>
+  <li><strong>Heap Sort</strong>: Uses heap data structure for sorting.</li>
+</ul>
+
+<h4 id="searching-algorithms">Searching Algorithms</h4>
+<p>Searching algorithms find desired values within data. Key searching algorithms include:</p>
+<ul>
+  <li><strong>Linear Search</strong>: Sequentially checks each element.</li>
+  <li><strong>Binary Search</strong>: Searches by repeatedly dividing a sorted array in half.</li>
+</ul>
+
+<h3 id="dynamic-programming">Dynamic Programming</h3>
+
+<p>Dynamic programming solves complex problems by breaking them into smaller subproblems. It uses memoization to store results of subproblems and reduce calculations. Dynamic programming is useful for optimization problems, such as Fibonacci sequence, knapsack problem, and longest common subsequence (LCS).</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="coding-test-checklist">Coding Test Checklist</h2>
+
+<p>Wondering if you’re well-prepared for coding tests? Review the content below and fill in any gaps or areas of weakness.</p>
+
+<h3 id="arrays-1">Arrays</h3>
+<ul>
+  <li>Array declaration
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Adding elements
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">arr</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># [1, 2, 3, 4]
+</span></code></pre></div>    </div>
+  </li>
+  <li>Removing elements
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">arr</span><span class="p">.</span><span class="nf">remove</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># [1, 3, 4]
+</span><span class="k">del</span> <span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>     <span class="c1"># [1, 4]
+</span></code></pre></div>    </div>
+  </li>
+  <li>Finding length
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">length</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>  <span class="c1"># 2
+</span></code></pre></div>    </div>
+  </li>
+  <li>Slicing
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">sub_arr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># [1, 2]
+</span></code></pre></div>    </div>
+  </li>
+  <li>Iterating
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+<span class="c1"># Output:
+# 1
+# 2
+# 3
+</span></code></pre></div>    </div>
+  </li>
+  <li>Reversing
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">arr</span><span class="p">.</span><span class="nf">reverse</span><span class="p">()</span>   <span class="c1"># [3, 2, 1]
+</span><span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># [1, 2, 3]
+</span></code></pre></div>    </div>
+  </li>
+  <li>Sorting
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">arr</span><span class="p">.</span><span class="nf">sort</span><span class="p">()</span>  <span class="c1"># [1, 2, 3]
+</span><span class="n">sorted_arr</span> <span class="o">=</span> <span class="nf">sorted</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>  <span class="c1"># [1, 2, 3]
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="strings-1">Strings</h3>
+<ul>
+  <li>String declaration
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Substring extraction
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span>
+<span class="n">sub_str</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>  <span class="c1"># "ell"
+</span></code></pre></div>    </div>
+  </li>
+  <li>Finding length
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span>
+<span class="n">length</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>  <span class="c1"># 5
+</span></code></pre></div>    </div>
+  </li>
+  <li>String concatenation
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="sh">"</span><span class="s">world</span><span class="sh">"</span>
+<span class="n">s3</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="sh">"</span><span class="s"> </span><span class="sh">"</span> <span class="o">+</span> <span class="n">s2</span>  <span class="c1"># "hello world"
+</span></code></pre></div>    </div>
+  </li>
+  <li>Splitting strings
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">hello world</span><span class="sh">"</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="nf">split</span><span class="p">()</span>  <span class="c1"># ['hello', 'world']
+</span></code></pre></div>    </div>
+  </li>
+  <li>Joining strings
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">strs</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">hi</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">bye</span><span class="sh">"</span><span class="p">]</span>
+<span class="sh">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">strs</span><span class="p">)</span> <span class="c1"># hihellobye
+</span><span class="sh">"</span><span class="s"> </span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">strs</span><span class="p">)</span> <span class="c1"># hi hello bye
+</span><span class="sh">"</span><span class="s">-</span><span class="sh">"</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">strs</span><span class="p">)</span> <span class="c1"># hi-hello-bye
+</span></code></pre></div>    </div>
+  </li>
+  <li>Searching strings
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="sh">"</span><span class="s">e</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># 1
+</span></code></pre></div>    </div>
+  </li>
+  <li>Replacing in strings
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="nf">replace</span><span class="p">(</span><span class="sh">"</span><span class="s">l</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">r</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># "herro"
+</span></code></pre></div>    </div>
+  </li>
+  <li>Reversing strings
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span>
+<span class="n">s_rev</span> <span class="o">=</span> <span class="n">s</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># "olleh"
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="two-pointers">Two Pointers</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/valid-palindrome/">Palindrome</a></li>
+  <li><a href="https://leetcode.com/problems/is-subsequence/">Subsequence</a></li>
+  <li><a href="https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/">Two Sum (with sorted array)</a></li>
+  <li><a href="https://leetcode.com/problems/container-with-most-water/">Water Container</a></li>
+</ul>
+
+<h3 id="sliding-window">Sliding Window</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/maximum-subarray/">Maximum Sum Subarray</a></li>
+  <li><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/">Longest Substring Without Repeating Characters</a></li>
+  <li><a href="https://leetcode.com/problems/minimum-window-substring/">Minimum Window Substring</a></li>
+  <li><a href="https://leetcode.com/problems/subarrays-with-k-different-integers/">Subarrays with K Different Integers</a></li>
+</ul>
+
+<h3 id="matrix">Matrix</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/rotate-image/">Rotate Matrix</a></li>
+  <li><a href="https://leetcode.com/problems/spiral-matrix/">Spiral Matrix</a></li>
+  <li><a href="https://leetcode.com/problems/search-a-2d-matrix/">Search a 2D Matrix</a></li>
+  <li><a href="https://leetcode.com/problems/number-of-islands/">Number of Islands</a></li>
+</ul>
+
+<h3 id="hashmap">HashMap</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/two-sum/">Two Sum</a></li>
+  <li><a href="https://leetcode.com/problems/group-anagrams/">Group Anagrams</a></li>
+  <li><a href="https://leetcode.com/problems/subarray-sum-equals-k/">Subarray Sum Equals K</a></li>
+  <li><a href="https://leetcode.com/problems/longest-consecutive-sequence/">Longest Consecutive Sequence</a></li>
+</ul>
+
+<h3 id="intervals">Intervals</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/merge-intervals/">Merge Intervals</a></li>
+  <li><a href="https://leetcode.com/problems/insert-interval/">Insert Interval</a></li>
+  <li><a href="https://leetcode.com/problems/meeting-rooms/">Meeting Rooms</a></li>
+  <li><a href="https://leetcode.com/problems/non-overlapping-intervals/">Non-overlapping Intervals</a></li>
+</ul>
+
+<h3 id="stack">Stack</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/valid-parentheses/">Valid Parentheses</a></li>
+  <li><a href="https://leetcode.com/problems/min-stack/">Min Stack</a></li>
+  <li><a href="https://leetcode.com/problems/evaluate-reverse-polish-notation/">Evaluate Reverse Polish Notation</a></li>
+  <li><a href="https://leetcode.com/problems/daily-temperatures/">Daily Temperatures</a></li>
+</ul>
+
+<h3 id="linked-list">Linked List</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/reverse-linked-list/">Reverse Linked List</a></li>
+  <li><a href="https://leetcode.com/problems/merge-two-sorted-lists/">Merge Two Sorted Lists</a></li>
+  <li><a href="https://leetcode.com/problems/linked-list-cycle/">Linked List Cycle</a></li>
+  <li><a href="https://leetcode.com/problems/remove-nth-node-from-end-of-list/">Remove Nth Node From End of List</a></li>
+</ul>
+
+<h3 id="binary-tree">Binary Tree</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/binary-tree-inorder-traversal/">Binary Tree Inorder Traversal</a></li>
+  <li><a href="https://leetcode.com/problems/maximum-depth-of-binary-tree/">Maximum Depth of Binary Tree</a></li>
+  <li><a href="https://leetcode.com/problems/path-sum/">Path Sum</a></li>
+  <li><a href="https://leetcode.com/problems/serialize-and-deserialize-binary-tree/">Serialize and Deserialize Binary Tree</a></li>
+</ul>
+
+<h3 id="binary-tree-search">Binary Tree Search</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/validate-binary-search-tree/">Validate Binary Search Tree</a></li>
+  <li><a href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/">Lowest Common Ancestor of a BST</a></li>
+  <li><a href="https://leetcode.com/problems/insert-into-a-binary-search-tree/">Insert into a Binary Search Tree</a></li>
+  <li><a href="https://leetcode.com/problems/delete-node-in-a-bst/">Delete Node in a BST</a></li>
+</ul>
+
+<h3 id="graph">Graph</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/clone-graph/">Clone Graph</a></li>
+  <li><a href="https://leetcode.com/problems/course-schedule/">Course Schedule</a></li>
+  <li><a href="https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/">Number of Connected Components in an Undirected Graph</a></li>
+  <li><a href="https://leetcode.com/problems/redundant-connection/">Redundant Connection</a></li>
+</ul>
+
+<h3 id="bfsdfs">BFS/DFS</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/word-ladder/">Word Ladder</a></li>
+  <li><a href="https://leetcode.com/problems/number-of-islands/">Number of Islands</a></li>
+  <li><a href="https://leetcode.com/problems/clone-graph/">Clone Graph</a></li>
+  <li><a href="https://leetcode.com/problems/pacific-atlantic-water-flow/">Pacific Atlantic Water Flow</a></li>
+</ul>
+
+<h3 id="graph-bfs">Graph BFS</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/shortest-path-in-binary-matrix/">Shortest Path in Binary Matrix</a></li>
+  <li><a href="https://leetcode.com/problems/word-ladder-ii/">Word Ladder II</a></li>
+  <li><a href="https://leetcode.com/problems/open-the-lock/">Open the Lock</a></li>
+  <li><a href="https://leetcode.com/problems/minimum-knight-moves/">Minimum Knight Moves</a></li>
+</ul>
+
+<h3 id="trie">Trie</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/implement-trie-prefix-tree/">Implement Trie (Prefix Tree)</a></li>
+  <li><a href="https://leetcode.com/problems/add-and-search-word-data-structure-design/">Add and Search Word</a></li>
+  <li><a href="https://leetcode.com/problems/word-search-ii/">Word Search II</a></li>
+  <li><a href="https://leetcode.com/problems/replace-words/">Replace Words</a></li>
+</ul>
+
+<h3 id="backtracking">Backtracking</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/permutations/">Permutations</a></li>
+  <li><a href="https://leetcode.com/problems/combination-sum/">Combination Sum</a></li>
+  <li><a href="https://leetcode.com/problems/sudoku-solver/">Sudoku Solver</a></li>
+  <li><a href="https://leetcode.com/problems/word-search/">Word Search</a></li>
+</ul>
+
+<h3 id="divide--conquer">Divide &amp; Conquer</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/sort-an-array/">Merge Sort</a></li>
+  <li><a href="https://leetcode.com/problems/sort-an-array/">Quick Sort</a></li>
+  <li><a href="https://leetcode.com/problems/maximum-subarray/">Maximum Subarray</a></li>
+  <li><a href="https://leetcode.com/problems/kth-largest-element-in-an-array/">Kth Largest Element in an Array</a></li>
+</ul>
+
+<h3 id="kadanes-algorithm">Kadane’s Algorithm</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/maximum-subarray/">Maximum Subarray</a></li>
+  <li><a href="https://leetcode.com/problems/maximum-sum-circular-subarray/">Maximum Sum Circular Subarray</a></li>
+  <li><a href="https://leetcode.com/problems/maximum-product-subarray/">Maximum Product Subarray</a></li>
+  <li><a href="https://leetcode.com/problems/min-cost-climbing-stairs/">Minimum Cost Climbing Stairs</a></li>
+</ul>
+
+<h3 id="binary-search">Binary Search</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/binary-search/">Binary Search</a></li>
+  <li><a href="https://leetcode.com/problems/search-in-rotated-sorted-array/">Search in Rotated Sorted Array</a></li>
+  <li><a href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/">Find Minimum in Rotated Sorted Array</a></li>
+  <li><a href="https://leetcode.com/problems/median-of-two-sorted-arrays/">Median of Two Sorted Arrays</a></li>
+</ul>
+
+<h3 id="heap">Heap</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/kth-largest-element-in-an-array/">Kth Largest Element in an Array</a></li>
+  <li><a href="https://leetcode.com/problems/merge-k-sorted-lists/">Merge k Sorted Lists</a></li>
+  <li><a href="https://leetcode.com/problems/top-k-frequent-elements/">Top K Frequent Elements</a></li>
+  <li><a href="https://leetcode.com/problems/find-median-from-data-stream/">Find Median from Data Stream</a></li>
+</ul>
+
+<h3 id="bit-manipulation">Bit Manipulation</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/single-number/">Single Number</a></li>
+  <li><a href="https://leetcode.com/problems/number-of-1-bits/">Number of 1 Bits</a></li>
+  <li><a href="https://leetcode.com/problems/missing-number/">Missing Number</a></li>
+  <li><a href="https://leetcode.com/problems/reverse-bits/">Reverse Bits</a></li>
+</ul>
+
+<h3 id="math">Math</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/count-primes/">Sieve of Eratosthenes</a></li>
+  <li><a href="https://leetcode.com/problems/greatest-common-divisor-of-strings/">GCD and LCM</a></li>
+  <li><a href="https://leetcode.com/problems/fibonacci-number/">Fibonacci Number</a></li>
+  <li><a href="https://leetcode.com/problems/power-of-three/">Power of Three</a></li>
+</ul>
+
+<h3 id="1d-dp">1D DP</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/climbing-stairs/">Climbing Stairs</a></li>
+  <li><a href="https://leetcode.com/problems/house-robber/">House Robber</a></li>
+  <li><a href="https://leetcode.com/problems/longest-increasing-subsequence/">Longest Increasing Subsequence</a></li>
+  <li><a href="https://leetcode.com/problems/coin-change/">Coin Change</a></li>
+</ul>
+
+<h3 id="multidimensional-dp">Multidimensional DP</h3>
+<ul>
+  <li><a href="https://leetcode.com/problems/unique-paths/">Unique Paths</a></li>
+  <li><a href="https://leetcode.com/problems/longest-common-subsequence/">Longest Common Subsequence</a></li>
+  <li><a href="https://leetcode.com/problems/edit-distance/">Edit Distance</a></li>
+  <li><a href="https://leetcode.com/problems/maximal-square/">Maximal Square</a></li>
+</ul>
+
+
+<section id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="jae-heo/jae-heo.github.io"
+            issue-term="pathname"
+            label="Comment"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</section>
+
+<div class="about">
+<div class="about__divider">*****</div>
+<div class="about__text">
+<strong> &copy; 2024 Jaeyoung Heo. </strong>
+</div>
+</div>
+
+
+</div>
+<script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
