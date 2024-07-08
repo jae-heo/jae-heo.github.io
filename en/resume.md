@@ -64,6 +64,7 @@ date: 2024-06-10 18:00:00 +0900
     <strong>Backend</strong>
     <ul>
       <li>FastAPI</li>
+      <li>ORM (SQLAlchemy, Alembic)</li>
       <li>Databases (PostgreSQL, MSSQL)</li>
     </ul>
   </div>
@@ -128,8 +129,8 @@ Major: Department of Computer Science
 
 ### Experience
 
-**Consultant - DXT** <span style="float: right;">2022.09 ~ 2023.10</span>  
-As a Junior Consultant, I developed a bio-production process management solution at DXT. This project improved the existing workflow, previously managed via files, reducing BOM management workload by 50%. Additionally, I designed and implemented an ASPICE-compliant solution for autonomous vehicle component management, achieving a 70% cost reduction through B2B cloud deployment.
+**Developer - DXT** <span style="float: right;">2022.09 ~ 2023.10</span>  
+As a Junior Developer, I developed a bio-production process management solution at DXT. This project improved the existing workflow, previously managed via files, reducing BOM management workload by 50%. Additionally, I designed and implemented an ASPICE-compliant solution for autonomous vehicle component management, achieving a 70% cost reduction through B2B cloud deployment.
 
 **Intern - WESTMOON** <span style="float: right;">2022.06 ~ 2022.08</span>  
 At WESTMOON, I was responsible for backend maintenance in the development team. This included maintaining a video streaming server using Node.js and improving the admin page. Additionally, I developed an annotation tool for rehabilitation datasets using PyQT5, collaborating with the rehabilitation team to design annotation rules.

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-07-04T14:08:52+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-07-08T15:49:32+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
 </subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="en"><title type="html">All-in-One Guide to Coding Tests</title><link href="https://jae-heo.github.io/en/tutorial/2024/07/03/coding-test-a-to-z.html" rel="alternate" type="text/html" title="All-in-One Guide to Coding Tests" /><published>2024-07-03T22:00:00+09:00</published><updated>2024-07-03T22:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/07/03/coding-test-a-to-z</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/07/03/coding-test-a-to-z.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
 <ol>
   <li><a href="#introduction-to-coding-tests">Introduction to Coding Tests</a>
@@ -2131,199 +2131,642 @@ git commit <span class="nt">-m</span> <span class="s2">"Initial commit"</span>
 <br /></p>
 
 <h2 id="conclusion">Conclusion</h2>
-<p>Terraform is a powerful tool that helps manage infrastructure as code (IaC). With Terraform, you can efficiently create, manage, and destroy infrastructure across various cloud environments.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><category term="terraform" /><category term="infra" /><summary type="html"><![CDATA[Table of Contents Introduction to Terraform What is Terraform? Why Use It? Key Concepts Getting Started Installing Terraform Setting Up Terraform Terraform Basics Understanding Terraform Configuration Files Key Elements Code Examples Dependency Management Implicit Dependencies Explicit Dependencies State Management What is Terraform State? Infrastructure Provisioning Applying and Destroying Configurations Key Commands Error Handling and Debugging Advanced Concepts Modules: Reusable Configurations Workspaces: Managing Multiple Environments Best Practices Writing Clean and Maintainable Code Version Control for Terraform Code Team Collaboration Integration Integrating Terraform with CI/CD Pipelines Conclusion]]></summary></entry><entry xml:lang="ko"><title type="html">코드로 다루는 GCP Compute Engine (파이썬)</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="코드로 다루는 GCP Compute Engine (파이썬)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="목차">목차</h2>
+<p>Terraform is a powerful tool that helps manage infrastructure as code (IaC). With Terraform, you can efficiently create, manage, and destroy infrastructure across various cloud environments.</p>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><category term="terraform" /><category term="infra" /><summary type="html"><![CDATA[Table of Contents Introduction to Terraform What is Terraform? Why Use It? Key Concepts Getting Started Installing Terraform Setting Up Terraform Terraform Basics Understanding Terraform Configuration Files Key Elements Code Examples Dependency Management Implicit Dependencies Explicit Dependencies State Management What is Terraform State? Infrastructure Provisioning Applying and Destroying Configurations Key Commands Error Handling and Debugging Advanced Concepts Modules: Reusable Configurations Workspaces: Managing Multiple Environments Best Practices Writing Clean and Maintainable Code Version Control for Terraform Code Team Collaboration Integration Integrating Terraform with CI/CD Pipelines Conclusion]]></summary></entry><entry xml:lang="ko"><title type="html">코드로 다루는 GCP</title><link href="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="코드로 다루는 GCP" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-07-07T14:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="목차">목차</h2>
+
 <ol>
-  <li><a href="#gcp-compute-engine-소개">GCP Compute Engine 소개</a></li>
-  <li><a href="#google-api-client-library-소개">Google API Client Library 소개</a>
-    <ol>
-      <li><a href="#인스턴스-crud">인스턴스 CRUD</a></li>
+  <li><a href="#소개">소개</a>
+    <ul>
+      <li><a href="#사전-준비">사전 준비</a>
+        <ol>
+          <li><a href="#google-cloud-sdk-설치">Google Cloud SDK 설치</a></li>
+          <li><a href="#서비스-계정-생성-및-키-파일-다운로드">서비스 계정 생성 및 키 파일 다운로드</a></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#compute-engine">Compute Engine</a>
+    <ul>
+      <li><a href="#인스턴스-crud">인스턴스 CRUD</a>
+        <ul>
+          <li><a href="#인스턴스-생성-코드-예제">인스턴스 생성 코드 예제</a></li>
+          <li><a href="#인스턴스-읽기-코드-예제">인스턴스 읽기 코드 예제</a></li>
+          <li><a href="#인스턴스-업데이트-코드-예제">인스턴스 업데이트 코드 예제</a></li>
+          <li><a href="#인스턴스-삭제-코드-예제">인스턴스 삭제 코드 예제</a></li>
+        </ul>
+      </li>
       <li><a href="#인스턴스-리스트-가져오기">인스턴스 리스트 가져오기</a></li>
       <li><a href="#인스턴스에-ssh키-추가하기">인스턴스에 SSH키 추가하기</a></li>
-    </ol>
+    </ul>
   </li>
-  <li><a href="#활용방안">활용방안</a></li>
+  <li><a href="#cloud-storage-gcs">Cloud Storage (GCS)</a>
+    <ul>
+      <li><a href="#버킷-생성-및-삭제">버킷 생성 및 삭제</a>
+        <ul>
+          <li><a href="#버킷-생성-코드-예제">버킷 생성 코드 예제</a></li>
+          <li><a href="#버킷-삭제-코드-예제">버킷 삭제 코드 예제</a></li>
+        </ul>
+      </li>
+      <li><a href="#객체-업로드-및-다운로드">객체 업로드 및 다운로드</a>
+        <ul>
+          <li><a href="#객체-업로드-코드-예제">객체 업로드 코드 예제</a></li>
+          <li><a href="#객체-다운로드-코드-예제">객체 다운로드 코드 예제</a></li>
+        </ul>
+      </li>
+      <li><a href="#객체-리스트-가져오기">객체 리스트 가져오기</a></li>
+    </ul>
+  </li>
+  <li><a href="#cloud-run">Cloud Run</a>
+    <ul>
+      <li><a href="#라이브러리-설치">라이브러리 설치</a></li>
+      <li><a href="#서비스-배포">서비스 배포</a>
+        <ul>
+          <li><a href="#서비스-배포-코드-예제">서비스 배포 코드 예제</a></li>
+        </ul>
+      </li>
+      <li><a href="#서비스-업데이트">서비스 업데이트</a>
+        <ul>
+          <li><a href="#서비스-업데이트-코드-예제">서비스 업데이트 코드 예제</a></li>
+        </ul>
+      </li>
+      <li><a href="#서비스-삭제">서비스 삭제</a>
+        <ul>
+          <li><a href="#서비스-삭제-코드-예제">서비스 삭제 코드 예제</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ol>
 
-<h2 id="gcp-compute-engine-소개">GCP Compute Engine 소개</h2>
+<p><br />
+<br /></p>
+
+<h2 id="소개">소개</h2>
+
+<p>파이썬 코드를 이용해 GCP를 다루는 방법을 소개합니다. 대부분의 설정이 실제 콘솔에서 하는 작업과 유사하며, 코드로만 이해가 가지 않는다면 콘솔에서 직접 실행해보는것을 추천드립니다.</p>
+
+<h3 id="사전-준비">사전 준비</h3>
+<ol>
+  <li><strong>Google Cloud SDK 설치</strong>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://sdk.cloud.google.com | bash
+<span class="nb">exec</span> <span class="nt">-l</span> <span class="nv">$SHELL</span>
+gcloud init
+</code></pre></div>    </div>
+  </li>
+  <li><strong>서비스 계정 생성 및 키 파일 다운로드</strong>
+    <ul>
+      <li>Google Cloud Console에서 서비스 계정을 생성하고 JSON 키 파일을 다운로드합니다.</li>
+      <li>환경 변수 설정:
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">GOOGLE_APPLICATION_CREDENTIALS</span><span class="o">=</span><span class="s2">"/path/to/your-service-account-file.json"</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="compute-engine">Compute Engine</h2>
 
 <p>GCP Compute Engine은 Google Cloud Platform(GCP)에서 제공하는 가상 머신 서비스입니다. 아마존 AWS의 EC2 서비스와 비슷한 기능을 제공합니다. 사용자는 가상머신을 손쉽게 관리할 수 있고, 스케일링, 보안, 모니터링 등 다양한 도구를 지원합니다.</p>
 
-<h2 id="google-api-client-library-소개">Google API Client Library 소개</h2>
-
-<p>Google API Client Library를 사용하면 파이썬으로 Compute Engine을 쉽게 다룰 수 있습니다. 이 라이브러리를 통해 인스턴스의 CRUD 작업을 실행할 수 있고, 코드로 실행하기 때문에 자동화가 가능합니다.</p>
-
 <h3 id="인스턴스-crud">인스턴스 CRUD</h3>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
-from oauth2client.client import GoogleCredentials
-
-# Google Cloud 인증 정보를 얻습니다.
-credentials = GoogleCredentials.get_application_default()
-
-# Compute Engine API 클라이언트를 생성합니다.
-service = discovery.build('compute', 'v1', credentials=credentials)
-
-project = 'your-project-id'  # 프로젝트 ID를 입력합니다.
-zone = 'asia-northeast3-a'   # 사용 중인 존을 입력합니다.
-
-# 인스턴스 생성 코드 예제
-instance_body = {
-    'name': 'instance-name',
-    'machineType': f'zones/{zone}/machineTypes/n1-standard-1', # 머신 타입 설정 가능
-    'disks': [
-        {
-            'boot': True,
-            'autoDelete': True,
-            'initializeParams': {
-                'sourceImage': 'projects/debian-cloud/global/images/family/debian-9'
-            }
-        }
-    ],
-    'networkInterfaces': [{
-        'network': 'global/networks/default'
-    }]
-}
-request = service.instances().insert(project=project, zone=zone, body=instance_body)
-response = request.execute()
-print(response)
-
-
-# 인스턴스 읽기 코드 예제
-instance_name = 'instance-name'
-request = service.instances().get(project=project, zone=zone, instance=instance_name)
-response = request.execute()
-print(response)
-
-
-# 인스턴스 업데이트 코드 예제
-instance_body = {
-    'description': 'Updated instance'
-}
-
-request = service.instances().setMetadata(project=project, zone=zone, instance=instance, body=instance_body)
-response = request.execute()
-print(response)
-
-
-# 인스턴스 삭제 코드 예제
-instance_name = 'instance-name'
-request = service.instances().delete(project=project, zone=zone, instance=instance_name)
-response = request.execute()
-print(response)
-</code></pre></div></div>
-
-<h3 id="인스턴스-리스트-가져오기">인스턴스 리스트 가져오기</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
-from oauth2client.client import GoogleCredentials
-
-# Google Cloud 인증 정보를 얻습니다.
-credentials = GoogleCredentials.get_application_default()
-
-# Compute Engine API 클라이언트를 생성합니다.
-service = discovery.build('compute', 'v1', credentials=credentials)
-
-project = 'your-project-id'  # 프로젝트 ID를 입력합니다.
-zone = 'asia-northeast3-a'   # 사용 중인 존을 입력합니다.
-
-# 인스턴스 목록을 가져오는 요청을 만듭니다.
-request = service.instances().list(project=project, zone=zone)
-
-# 요청을 실행하여 응답을 얻습니다.
-response = request.execute()
-
-# 인스턴스 목록을 출력합니다.
-if 'items' in response:
-    for instance in response['items']:
-        print('Instance name:', instance['name'])
-        print('Instance status:', instance['status'])
-        print('Instance zone:', instance['zone'])
-        print()
-else:
-    print('No instances found.')
-</code></pre></div></div>
-
-<h3 id="인스턴스에-ssh키-추가하기">인스턴스에 SSH키 추가하기</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
-from google.oauth2 import service_account
-
-# Google Cloud 인증 정보를 얻습니다.
-credentials = GoogleCredentials.get_application_default()
-
-# Compute Engine API 클라이언트를 생성합니다.
-service = discovery.build('compute', 'v1', credentials=credentials)
-
-project = 'your-project-id'  # 프로젝트 ID를 입력합니다.
-zone = 'asia-northeast3-a'   # 사용 중인 존을 입력합니다.
-
-# 공개 키 읽기
-with open('public-key-path', 'r') as f:
-    public_key = f.read().strip()
-
-# 인스턴스의 현재 메타데이터 가져오기
-instance = compute.instances().get(project=PROJECT_ID, zone=ZONE, instance=INSTANCE_NAME).execute()
-metadata = instance.get('metadata', {})
-items = metadata.get('items', [])
-
-# SSH 키 메타데이터 추가
-ssh_keys = None
-for item in items:
-    if item['key'] == 'ssh-keys':
-        ssh_keys = item
-        break
-
-if ssh_keys:
-    ssh_keys['value'] += f"\n{user_name}:{public_key}"
-else:
-    items.append({
-        'key': 'ssh-keys',
-        'value': f"{user_name}:{public_key}"
-    })
-
-metadata['items'] = items
-
-# 메타데이터 업데이트 요청
-operation = compute.instances().setMetadata(
-    project=PROJECT_ID,
-    zone=ZONE,
-    instance=INSTANCE_NAME,
-    body=metadata
-).execute()
-
-print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
-</code></pre></div></div>
-
-<h2 id="활용방안">활용방안</h2>
-
-<ul>
-  <li><strong>자동화된 인스턴스 관리</strong>: 콘솔에서 수동으로 인스턴스를 관리하는 대신, 코드를 사용해 관리를 자동화하여 효율성을 증가시킬 수 있습니다.</li>
-  <li><strong>리소스 최적화</strong>: 필요할때만 인스턴스를 생성하고 이후 삭제하는 등 비용 효율적인 기능을 만들 수 있습니다.</li>
-</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[목차 GCP Compute Engine 소개 Google API Client Library 소개 인스턴스 CRUD 인스턴스 리스트 가져오기 인스턴스에 SSH키 추가하기 활용방안]]></summary></entry><entry xml:lang="en"><title type="html">Handling GCP Compute Engine with Code (Python)</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="Handling GCP Compute Engine with Code (Python)" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-06-16T14:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
-<ol>
-  <li><a href="#introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</a></li>
-  <li><a href="#introduction-to-google-api-client-library">Introduction to Google API Client Library</a>
-    <ol>
-      <li><a href="#instance-crud">Instance CRUD</a></li>
-      <li><a href="#fetching-instance-list">Fetching Instance List</a></li>
-      <li><a href="#adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</a></li>
-    </ol>
-  </li>
-  <li><a href="#use-cases">Use Cases</a></li>
-</ol>
-
-<h2 id="introduction-to-gcp-compute-engine">Introduction to GCP Compute Engine</h2>
-
-<p>GCP Compute Engine is a virtual machine service provided by Google Cloud Platform (GCP). It offers similar functionalities to Amazon AWS’s EC2 service. Users can easily manage virtual machines, and it supports various tools for scaling, security, monitoring, and more.</p>
-
-<h2 id="introduction-to-google-api-client-library">Introduction to Google API Client Library</h2>
-
-<p>Using the Google API Client Library, you can easily manage Compute Engine instances with Python. This library allows you to perform CRUD operations on instances, and since the operations are executed through code, they can be automated.</p>
-
-<h3 id="instance-crud">Instance CRUD</h3>
+<p>Google API Client Library를 사용하면 파이썬으로 Compute Engine을 쉽게 다룰 수 있습니다. 이 라이브러리를 통해 인스턴스의 CRUD 작업을 실행할 수 있고, 코드로 실행하기 때문에 자동화가 가능합니다.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
 <span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
 
-<span class="c1"># Obtain Google Cloud authentication credentials.
+<span class="c1"># Google Cloud 인증 정보를 얻습니다.
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
+
+<span class="c1"># Compute Engine API 클라이언트를 생성합니다.
+</span><span class="n">service</span> <span class="o">=</span> <span class="n">discovery</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">compute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>  <span class="c1"># 프로젝트 ID를 입력합니다.
+</span><span class="n">zone</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3-a</span><span class="sh">'</span>   <span class="c1"># 사용 중인 존을 입력합니다.
+</span>
+<span class="c1"># 인스턴스 생성 코드 예제
+</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span><span class="p">,</span>
+    <span class="sh">'</span><span class="s">machineType</span><span class="sh">'</span><span class="p">:</span> <span class="sa">f</span><span class="sh">'</span><span class="s">zones/</span><span class="si">{</span><span class="n">zone</span><span class="si">}</span><span class="s">/machineTypes/n1-standard-1</span><span class="sh">'</span><span class="p">,</span> <span class="c1"># 머신 타입 설정 가능
+</span>    <span class="sh">'</span><span class="s">disks</span><span class="sh">'</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="sh">'</span><span class="s">boot</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">autoDelete</span><span class="sh">'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+            <span class="sh">'</span><span class="s">initializeParams</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">'</span><span class="s">sourceImage</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">projects/debian-cloud/global/images/family/debian-9</span><span class="sh">'</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="sh">'</span><span class="s">networkInterfaces</span><span class="sh">'</span><span class="p">:</span> <span class="p">[{</span>
+        <span class="sh">'</span><span class="s">network</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">global/networks/default</span><span class="sh">'</span>
+    <span class="p">}]</span>
+<span class="p">}</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">insert</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># 인스턴스 읽기 코드 예제
+</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># 인스턴스 업데이트 코드 예제
+</span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="sh">'</span><span class="s">description</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Updated instance</span><span class="sh">'</span>
+<span class="p">}</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">setMetadata</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">instance_body</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="c1"># 인스턴스 삭제 코드 예제
+</span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">delete</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="인스턴스-리스트-가져오기">인스턴스 리스트 가져오기</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
+<span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
+
+<span class="c1"># Google Cloud 인증 정보를 얻습니다.
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
+
+<span class="c1"># Compute Engine API 클라이언트를 생성합니다.
+</span><span class="n">service</span> <span class="o">=</span> <span class="n">discovery</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">compute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>  <span class="c1"># 프로젝트 ID를 입력합니다.
+</span><span class="n">zone</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3-a</span><span class="sh">'</span>   <span class="c1"># 사용 중인 존을 입력합니다.
+</span>
+<span class="c1"># 인스턴스 목록을 가져오는 요청을 만듭니다.
+</span><span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">list</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">)</span>
+
+<span class="c1"># 요청을 실행하여 응답을 얻습니다.
+</span><span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+
+<span class="c1"># 인스턴스 목록을 출력합니다.
+</span><span class="k">if</span> <span class="sh">'</span><span class="s">items</span><span class="sh">'</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="sh">'</span><span class="s">items</span><span class="sh">'</span><span class="p">]:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Instance name:</span><span class="sh">'</span><span class="p">,</span> <span class="n">instance</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Instance status:</span><span class="sh">'</span><span class="p">,</span> <span class="n">instance</span><span class="p">[</span><span class="sh">'</span><span class="s">status</span><span class="sh">'</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Instance zone:</span><span class="sh">'</span><span class="p">,</span> <span class="n">instance</span><span class="p">[</span><span class="sh">'</span><span class="s">zone</span><span class="sh">'</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">No instances found.</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="인스턴스에-ssh키-추가하기">인스턴스에 SSH키 추가하기</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
+<span class="kn">from</span> <span class="n">google.oauth2</span> <span class="kn">import</span> <span class="n">service_account</span>
+
+<span class="c1"># Google Cloud 인증 정보를 얻습니다.
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
+
+<span class="c1"># Compute Engine API 클라이언트를 생성합니다.
+</span><span class="n">service</span> <span class="o">=</span> <span class="n">discovery</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">compute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>  <span class="c1"># 프로젝트 ID를 입력합니다.
+</span><span class="n">zone</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3-a</span><span class="sh">'</span>   <span class="c1"># 사용 중인 존을 입력합니다.
+</span>
+<span class="c1"># 공개 키 읽기
+</span><span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">public-key-path</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">public_key</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
+
+<span class="c1"># 인스턴스의 현재 메타데이터 가져오기
+</span><span class="n">instance</span> <span class="o">=</span> <span class="n">compute</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">ZONE</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">INSTANCE_NAME</span><span class="p">).</span><span class="nf">execute</span><span class="p">()</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">metadata</span><span class="sh">'</span><span class="p">,</span> <span class="p">{})</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">items</span><span class="sh">'</span><span class="p">,</span> <span class="p">[])</span>
+
+<span class="c1"># SSH 키 메타데이터 추가
+</span><span class="n">ssh_keys</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="sh">'</span><span class="s">key</span><span class="sh">'</span><span class="p">]</span> <span class="o">==</span> <span class="sh">'</span><span class="s">ssh-keys</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">ssh_keys</span> <span class="o">=</span> <span class="n">item</span>
+        <span class="k">break</span>
+
+<span class="k">if</span> <span class="n">ssh_keys</span><span class="p">:</span>
+    <span class="n">ssh_keys</span><span class="p">[</span><span class="sh">'</span><span class="s">value</span><span class="sh">'</span><span class="p">]</span> <span class="o">+=</span> <span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s">:</span><span class="si">{</span><span class="n">public_key</span><span class="si">}</span><span class="sh">"</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">items</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+        <span class="sh">'</span><span class="s">key</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">ssh-keys</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">value</span><span class="sh">'</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s">:</span><span class="si">{</span><span class="n">public_key</span><span class="si">}</span><span class="sh">"</span>
+    <span class="p">})</span>
+
+<span class="n">metadata</span><span class="p">[</span><span class="sh">'</span><span class="s">items</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">items</span>
+
+<span class="c1"># 메타데이터 업데이트 요청
+</span><span class="n">operation</span> <span class="o">=</span> <span class="n">compute</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">setMetadata</span><span class="p">(</span>
+    <span class="n">project</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span>
+    <span class="n">zone</span><span class="o">=</span><span class="n">ZONE</span><span class="p">,</span>
+    <span class="n">instance</span><span class="o">=</span><span class="n">INSTANCE_NAME</span><span class="p">,</span>
+    <span class="n">body</span><span class="o">=</span><span class="n">metadata</span>
+<span class="p">).</span><span class="nf">execute</span><span class="p">()</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Updating metadata for </span><span class="si">{</span><span class="n">INSTANCE_NAME</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">operation</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="cloud-storage-gcs">Cloud Storage (GCS)</h2>
+
+<p>Google Cloud Storage (GCS)는 GCP에서 제공하는 객체 스토리지 서비스입니다. 대규모 데이터를 저장하고 관리할 수 있습니다.</p>
+
+<h3 id="버킷-생성-및-삭제">버킷 생성 및 삭제</h3>
+
+<h4 id="버킷-생성-코드-예제">버킷 생성 코드 예제</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># 클라이언트를 생성합니다.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># 버킷 이름과 지역을 지정합니다.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+<span class="n">location</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3</span><span class="sh">'</span>
+
+<span class="c1"># 버킷을 생성합니다.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+<span class="n">bucket</span><span class="p">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">location</span>
+<span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">create_bucket</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Bucket </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s"> created in </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="버킷-삭제-코드-예제">버킷 삭제 코드 예제</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># 클라이언트를 생성합니다.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># 삭제할 버킷 이름을 지정합니다.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+
+<span class="c1"># 버킷을 가져옵니다.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+<span class="c1"># 버킷을 삭제합니다.
+</span><span class="n">bucket</span><span class="p">.</span><span class="nf">delete</span><span class="p">()</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Bucket </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s"> deleted.</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="객체-업로드-및-다운로드">객체 업로드 및 다운로드</h3>
+
+<p>Google Cloud Storage에 객체를 업로드하고 다운로드하는 방법에 대해 설명합니다.</p>
+
+<h4 id="객체-업로드-코드-예제">객체 업로드 코드 예제</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># 클라이언트를 생성합니다.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># 버킷 이름과 업로드할 파일 경로를 지정합니다.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+<span class="n">source_file_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">local-file-path</span><span class="sh">'</span>
+<span class="n">destination_blob_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">storage-object-name</span><span class="sh">'</span>
+
+<span class="c1"># 버킷을 가져옵니다.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+<span class="c1"># Blob 객체를 생성하고 파일을 업로드합니다.
+</span><span class="n">blob</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">.</span><span class="nf">blob</span><span class="p">(</span><span class="n">destination_blob_name</span><span class="p">)</span>
+<span class="n">blob</span><span class="p">.</span><span class="nf">upload_from_filename</span><span class="p">(</span><span class="n">source_file_name</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">File </span><span class="si">{</span><span class="n">source_file_name</span><span class="si">}</span><span class="s"> uploaded to </span><span class="si">{</span><span class="n">destination_blob_name</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="객체-다운로드-코드-예제">객체 다운로드 코드 예제</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># 클라이언트를 생성합니다.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># 버킷 이름과 다운로드할 객체 이름을 지정합니다.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+<span class="n">source_blob_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">storage-object-name</span><span class="sh">'</span>
+<span class="n">destination_file_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">local-file-path</span><span class="sh">'</span>
+
+<span class="c1"># 버킷을 가져옵니다.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+<span class="c1"># Blob 객체를 가져오고 파일을 다운로드합니다.
+</span><span class="n">blob</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">.</span><span class="nf">blob</span><span class="p">(</span><span class="n">source_blob_name</span><span class="p">)</span>
+<span class="n">blob</span><span class="p">.</span><span class="nf">download_to_filename</span><span class="p">(</span><span class="n">destination_file_name</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Blob </span><span class="si">{</span><span class="n">source_blob_name</span><span class="si">}</span><span class="s"> downloaded to </span><span class="si">{</span><span class="n">destination_file_name</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="객체-리스트-가져오기">객체 리스트 가져오기</h3>
+
+<p>Google Cloud Storage에서 특정 버킷의 객체 리스트를 가져오는 방법에 대해 설명합니다.</p>
+
+<h4 id="객체-리스트-가져오기-코드-예제">객체 리스트 가져오기 코드 예제</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># 클라이언트를 생성합니다.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># 버킷 이름을 지정합니다.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+
+<span class="c1"># 버킷을 가져옵니다.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+<span class="c1"># 객체 리스트를 가져옵니다.
+</span><span class="n">blobs</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">.</span><span class="nf">list_blobs</span><span class="p">()</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Objects in the bucket:</span><span class="sh">'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">blob</span> <span class="ow">in</span> <span class="n">blobs</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">blob</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="cloud-run">Cloud Run</h2>
+
+<p>Google Cloud Run은 컨테이너화된 애플리케이션을 빠르고 간편하게 배포할 수 있는 완전 관리형 서버리스 플랫폼입니다. Cloud Run을 사용하면 인프라 관리 없이 코드 실행에 집중할 수 있으며, 자동으로 확장되며 트래픽에 맞게 조정됩니다. Cloud Run을 Python 코드로 자동화하려면 Google Cloud SDK의 Python 클라이언트 라이브러리를 사용합니다.</p>
+
+<h3 id="라이브러리-설치">라이브러리 설치</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>google-api-python-client google-auth-httplib2 google-auth-oauthlib
+</code></pre></div></div>
+
+<h3 id="서비스-배포">서비스 배포</h3>
+
+<p>Cloud Run API와 Google Cloud SDK를 사용하여 Python 코드로 Cloud Run 서비스를 배포, 업데이트 및 삭제하는 방법을 보여줍니다. Docker 이미지를 빌드하고 Google Container Registry(GCR)에 푸시한 다음, 해당 이미지를 사용하여 Cloud Run 서비스를 관리할 수 있습니다.</p>
+
+<h4 id="서비스-배포-코드-예제">서비스 배포 코드 예제</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient.discovery</span> <span class="kn">import</span> <span class="n">build</span>
+<span class="kn">from</span> <span class="n">google.oauth2</span> <span class="kn">import</span> <span class="n">service_account</span>
+<span class="kn">import</span> <span class="n">subprocess</span>
+
+<span class="c1"># 서비스 계정 인증 정보 설정
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">service_account</span><span class="p">.</span><span class="n">Credentials</span><span class="p">.</span><span class="nf">from_service_account_file</span><span class="p">(</span>
+    <span class="sh">'</span><span class="s">path/to/your-service-account-file.json</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># Cloud Run API 클라이언트 생성
+</span><span class="n">service</span> <span class="o">=</span> <span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">run</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+
+<span class="c1"># Docker 이미지 빌드 및 푸시
+</span><span class="k">def</span> <span class="nf">build_and_push_docker_image</span><span class="p">(</span><span class="n">image_name</span><span class="p">):</span>
+    <span class="n">subprocess</span><span class="p">.</span><span class="nf">run</span><span class="p">([</span><span class="sh">'</span><span class="s">docker</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">build</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">-t</span><span class="sh">'</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="sh">'</span><span class="s">.</span><span class="sh">'</span><span class="p">])</span>
+    <span class="n">subprocess</span><span class="p">.</span><span class="nf">run</span><span class="p">([</span><span class="sh">'</span><span class="s">docker</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">push</span><span class="sh">'</span><span class="p">,</span> <span class="n">image_name</span><span class="p">])</span>
+
+<span class="c1"># 서비스 배포 함수
+</span><span class="k">def</span> <span class="nf">deploy_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
+    <span class="nf">build_and_push_docker_image</span><span class="p">(</span><span class="n">image_name</span><span class="p">)</span>
+    
+    <span class="c1"># Cloud Run 서비스 배포
+</span>    <span class="n">project_id</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">'</span><span class="s">projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s">/locations/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="sh">'</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="sh">'</span><span class="s">metadata</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">:</span> <span class="n">service_name</span><span class="p">},</span>
+        <span class="sh">'</span><span class="s">spec</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">template</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">'</span><span class="s">spec</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="sh">'</span><span class="s">containers</span><span class="sh">'</span><span class="p">:</span> <span class="p">[{</span><span class="sh">'</span><span class="s">image</span><span class="sh">'</span><span class="p">:</span> <span class="n">image_name</span><span class="p">}]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">namespaces</span><span class="p">().</span><span class="nf">services</span><span class="p">().</span><span class="nf">create</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Service </span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="s"> deployed with image </span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s"> in region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># 변수 설정
+</span><span class="n">service_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-service-name</span><span class="sh">'</span>
+<span class="n">image_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">gcr.io/your-project-id/your-image-name</span><span class="sh">'</span>
+<span class="n">region</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-region</span><span class="sh">'</span>
+
+<span class="c1"># 서비스 배포 실행
+</span><span class="nf">deploy_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="서비스-업데이트">서비스 업데이트</h3>
+
+<h4 id="서비스-업데이트-코드-예제">서비스 업데이트 코드 예제</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 서비스 업데이트 함수
+</span><span class="k">def</span> <span class="nf">update_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
+    <span class="nf">build_and_push_docker_image</span><span class="p">(</span><span class="n">image_name</span><span class="p">)</span>
+    
+    <span class="c1"># Cloud Run 서비스 업데이트
+</span>    <span class="n">project_id</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">'</span><span class="s">projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s">/locations/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">/services/</span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="sh">'</span>
+    
+    <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="sh">'</span><span class="s">spec</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">template</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">'</span><span class="s">spec</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="sh">'</span><span class="s">containers</span><span class="sh">'</span><span class="p">:</span> <span class="p">[{</span><span class="sh">'</span><span class="s">image</span><span class="sh">'</span><span class="p">:</span> <span class="n">image_name</span><span class="p">}]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">projects</span><span class="p">().</span><span class="nf">locations</span><span class="p">().</span><span class="nf">services</span><span class="p">().</span><span class="nf">replaceService</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Service </span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="s"> updated with image </span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s"> in region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># 서비스 업데이트 실행
+</span><span class="nf">update_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="서비스-삭제">서비스 삭제</h3>
+
+<h4 id="서비스-삭제-코드-예제">서비스 삭제 코드 예제</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 서비스 삭제 함수
+</span><span class="k">def</span> <span class="nf">delete_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
+    <span class="n">project_id</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">'</span><span class="s">projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s">/locations/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">/services/</span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="sh">'</span>
+    
+    <span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">projects</span><span class="p">().</span><span class="nf">locations</span><span class="p">().</span><span class="nf">services</span><span class="p">().</span><span class="nf">delete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Service </span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="s"> deleted from region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># 서비스 삭제 실행
+</span><span class="nf">delete_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="이후-추가될-내용">이후 추가될 내용</h2>
+<ol>
+  <li><a href="#cloud-functions">Cloud Functions</a>
+    <ul>
+      <li><a href="#함수-배포">함수 배포</a></li>
+      <li><a href="#함수-호출">함수 호출</a></li>
+      <li><a href="#함수-삭제">함수 삭제</a></li>
+    </ul>
+  </li>
+  <li><a href="#bigquery">BigQuery</a>
+    <ul>
+      <li><a href="#데이터셋-생성-및-삭제">데이터셋 생성 및 삭제</a></li>
+      <li><a href="#쿼리-실행">쿼리 실행</a></li>
+      <li><a href="#테이블-데이터-가져오기">테이블 데이터 가져오기</a></li>
+    </ul>
+  </li>
+  <li><a href="#pubsub">Pub/Sub</a>
+    <ul>
+      <li><a href="#주제-생성-및-삭제">주제 생성 및 삭제</a></li>
+      <li><a href="#메시지-발행">메시지 발행</a></li>
+      <li><a href="#구독-설정-및-메시지-수신">구독 설정 및 메시지 수신</a></li>
+    </ul>
+  </li>
+  <li><a href="#ai-platform">AI Platform</a>
+    <ul>
+      <li><a href="#모델-배포">모델 배포</a></li>
+      <li><a href="#예측-요청">예측 요청</a></li>
+      <li><a href="#모델-삭제">모델 삭제</a></li>
+    </ul>
+  </li>
+  <li><a href="#firestore">Firestore</a>
+    <ul>
+      <li><a href="#문서-생성-및-삭제">문서 생성 및 삭제</a></li>
+      <li><a href="#문서-쿼리-및-업데이트">문서 쿼리 및 업데이트</a></li>
+    </ul>
+  </li>
+  <li><a href="#app-engine">App Engine</a>
+    <ul>
+      <li><a href="#애플리케이션-배포">애플리케이션 배포</a></li>
+      <li><a href="#버전-관리-및-트래픽-분배">버전 관리 및 트래픽 분배</a></li>
+    </ul>
+  </li>
+  <li><a href="#cloud-dataflow">Cloud Dataflow</a>
+    <ul>
+      <li><a href="#파이프라인-생성-및-실행">파이프라인 생성 및 실행</a></li>
+      <li><a href="#작업-모니터링-및-관리">작업 모니터링 및 관리</a></li>
+    </ul>
+  </li>
+  <li><a href="#cloud-translation">Cloud Translation</a>
+    <ul>
+      <li><a href="#텍스트-번역">텍스트 번역</a></li>
+      <li><a href="#다양한-언어-지원">다양한 언어 지원</a></li>
+    </ul>
+  </li>
+  <li><a href="#vision-ai">Vision AI</a>
+    <ul>
+      <li><a href="#이미지-분석-및-라벨링">이미지 분석 및 라벨링</a></li>
+      <li><a href="#텍스트-인식-ocr">텍스트 인식 (OCR)</a></li>
+    </ul>
+  </li>
+  <li><a href="#활용-방안">활용 방안</a></li>
+</ol>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="ko" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[목차]]></summary></entry><entry xml:lang="en"><title type="html">Managing GCP with Code</title><link href="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html" rel="alternate" type="text/html" title="Managing GCP with Code" /><published>2024-06-16T14:00:00+09:00</published><updated>2024-07-07T14:00:00+09:00</updated><id>https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python</id><content type="html" xml:base="https://jae-heo.github.io/en/tutorial/2024/06/16/gcp-on-code-python.html"><![CDATA[<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#introduction">Introduction</a>
+    <ul>
+      <li><a href="#preparation">Preparation</a>
+        <ol>
+          <li><a href="#installing-google-cloud-sdk">Installing Google Cloud SDK</a></li>
+          <li><a href="#creating-a-service-account-and-downloading-key-file">Creating a Service Account and Downloading Key File</a></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#compute-engine">Compute Engine</a>
+    <ul>
+      <li><a href="#instance-crud">Instance CRUD</a>
+        <ul>
+          <li><a href="#instance-creation-code-example">Instance Creation Code Example</a></li>
+          <li><a href="#instance-read-code-example">Instance Read Code Example</a></li>
+          <li><a href="#instance-update-code-example">Instance Update Code Example</a></li>
+          <li><a href="#instance-deletion-code-example">Instance Deletion Code Example</a></li>
+        </ul>
+      </li>
+      <li><a href="#listing-instances">Listing Instances</a></li>
+      <li><a href="#adding-ssh-keys-to-instances">Adding SSH Keys to Instances</a></li>
+    </ul>
+  </li>
+  <li><a href="#cloud-storage-gcs">Cloud Storage (GCS)</a>
+    <ul>
+      <li><a href="#bucket-creation-and-deletion">Bucket Creation and Deletion</a>
+        <ul>
+          <li><a href="#bucket-creation-code-example">Bucket Creation Code Example</a></li>
+          <li><a href="#bucket-deletion-code-example">Bucket Deletion Code Example</a></li>
+        </ul>
+      </li>
+      <li><a href="#uploading-and-downloading-objects">Uploading and Downloading Objects</a>
+        <ul>
+          <li><a href="#object-upload-code-example">Object Upload Code Example</a></li>
+          <li><a href="#object-download-code-example">Object Download Code Example</a></li>
+        </ul>
+      </li>
+      <li><a href="#listing-objects">Listing Objects</a></li>
+    </ul>
+  </li>
+  <li><a href="#cloud-run">Cloud Run</a>
+    <ul>
+      <li><a href="#library-installation">Library Installation</a></li>
+      <li><a href="#deploying-services">Deploying Services</a>
+        <ul>
+          <li><a href="#service-deployment-code-example">Service Deployment Code Example</a></li>
+        </ul>
+      </li>
+      <li><a href="#updating-services">Updating Services</a>
+        <ul>
+          <li><a href="#service-update-code-example">Service Update Code Example</a></li>
+        </ul>
+      </li>
+      <li><a href="#deleting-services">Deleting Services</a>
+        <ul>
+          <li><a href="#service-deletion-code-example">Service Deletion Code Example</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>This guide introduces how to manage GCP using Python code. Most settings are similar to what you would do on the console, and if you find it hard to understand through code alone, it is recommended to try executing the tasks directly on the console.</p>
+
+<h3 id="preparation">Preparation</h3>
+<ol>
+  <li><strong>Installing Google Cloud SDK</strong>
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://sdk.cloud.google.com | bash
+<span class="nb">exec</span> <span class="nt">-l</span> <span class="nv">$SHELL</span>
+gcloud init
+</code></pre></div>    </div>
+  </li>
+  <li><strong>Creating a Service Account and Downloading Key File</strong>
+    <ul>
+      <li>Create a service account on the Google Cloud Console and download the JSON key file.</li>
+      <li>Set the environment variable:
+        <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">GOOGLE_APPLICATION_CREDENTIALS</span><span class="o">=</span><span class="s2">"/path/to/your-service-account-file.json"</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="compute-engine">Compute Engine</h2>
+
+<p>GCP Compute Engine is a virtual machine service provided by Google Cloud Platform (GCP). It offers similar functionality to Amazon AWS’s EC2 service. Users can easily manage virtual machines and are supported with various tools for scaling, security, monitoring, etc.</p>
+
+<h3 id="instance-crud">Instance CRUD</h3>
+
+<p>Using the Google API Client Library, you can easily manage Compute Engine instances with Python. This library allows for executing CRUD operations on instances, enabling automation through code.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
+<span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
+
+<span class="c1"># Obtain Google Cloud authentication information.
 </span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
 
 <span class="c1"># Create a Compute Engine API client.
@@ -2354,14 +2797,14 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
 
-<span class="c1"># Instance reading code example
+<span class="c1"># Instance read code example
 </span><span class="n">instance_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">instance-name</span><span class="sh">'</span>
 <span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">instance_name</span><span class="p">)</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
 <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
 
-<span class="c1"># Instance updating code example
+<span class="c1"># Instance update code example
 </span><span class="n">instance_body</span> <span class="o">=</span> <span class="p">{</span>
     <span class="sh">'</span><span class="s">description</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Updated instance</span><span class="sh">'</span>
 <span class="p">}</span>
@@ -2378,92 +2821,375 @@ print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
 <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h3 id="fetching-instance-list">Fetching Instance List</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
-from oauth2client.client import GoogleCredentials
+<h3 id="listing-instances">Listing Instances</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
+<span class="kn">from</span> <span class="n">oauth2client.client</span> <span class="kn">import</span> <span class="n">GoogleCredentials</span>
 
-# Obtain Google Cloud authentication credentials.
-credentials = GoogleCredentials.get_application_default()
+<span class="c1"># Obtain Google Cloud authentication information.
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
 
-# Create a Compute Engine API client.
-service = discovery.build('compute', 'v1', credentials=credentials)
+<span class="c1"># Create a Compute Engine API client.
+</span><span class="n">service</span> <span class="o">=</span> <span class="n">discovery</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">compute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
 
-project = 'your-project-id'  # Enter your project ID.
-zone = 'asia-northeast3-a'   # Enter the zone you are using.
+<span class="n">project</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>  <span class="c1"># Enter your project ID.
+</span><span class="n">zone</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3-a</span><span class="sh">'</span>   <span class="c1"># Enter the zone you are using.
+</span>
+<span class="c1"># Create a request to get the list of instances.
+</span><span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">list</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">)</span>
 
-# Create a request to fetch the list of instances.
-request = service.instances().list(project=project, zone=zone)
+<span class="c1"># Execute the request to get the response.
+</span><span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
 
-# Execute the request and get the response.
-response = request.execute()
-
-# Print the list of instances.
-if 'items' in response:
-    for instance in response['items']:
-        print('Instance name:', instance['name'])
-        print('Instance status:', instance['status'])
-        print('Instance zone:', instance['zone'])
-        print()
-else:
-    print('No instances found.')
+<span class="c1"># Print the list of instances.
+</span><span class="k">if</span> <span class="sh">'</span><span class="s">items</span><span class="sh">'</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="sh">'</span><span class="s">items</span><span class="sh">'</span><span class="p">]:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Instance name:</span><span class="sh">'</span><span class="p">,</span> <span class="n">instance</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Instance status:</span><span class="sh">'</span><span class="p">,</span> <span class="n">instance</span><span class="p">[</span><span class="sh">'</span><span class="s">status</span><span class="sh">'</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Instance zone:</span><span class="sh">'</span><span class="p">,</span> <span class="n">instance</span><span class="p">[</span><span class="sh">'</span><span class="s">zone</span><span class="sh">'</span><span class="p">])</span>
+        <span class="nf">print</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">No instances found.</span><span class="sh">'</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h3 id="adding-ssh-keys-to-an-instance">Adding SSH Keys to an Instance</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from googleapiclient import discovery
-from google.oauth2 import service_account
+<h3 id="adding-ssh-keys-to-instances">Adding SSH Keys to Instances</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient</span> <span class="kn">import</span> <span class="n">discovery</span>
+<span class="kn">from</span> <span class="n">google.oauth2</span> <span class="kn">import</span> <span class="n">service_account</span>
 
-# Obtain Google Cloud authentication credentials.
-credentials = GoogleCredentials.get_application_default()
+<span class="c1"># Obtain Google Cloud authentication information.
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">GoogleCredentials</span><span class="p">.</span><span class="nf">get_application_default</span><span class="p">()</span>
 
-# Create a Compute Engine API client.
-service = discovery.build('compute', 'v1', credentials=credentials)
+<span class="c1"># Create a Compute Engine API client.
+</span><span class="n">service</span> <span class="o">=</span> <span class="n">discovery</span><span class="p">.</span><span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">compute</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
 
-project = 'your-project-id'  # Enter your project ID.
-zone = 'asia-northeast3-a'   # Enter the zone you are using.
+<span class="n">project</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>  <span class="c1"># Enter your project ID.
+</span><span class="n">zone</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3-a</span><span class="sh">'</span>   <span class="c1"># Enter the zone you are using.
+</span>
+<span class="c1"># Read the public key
+</span><span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sh">'</span><span class="s">public-key-path</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">public_key</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">read</span><span class="p">().</span><span class="nf">strip</span><span class="p">()</span>
 
-# Read the public key
-with open('public-key-path', 'r') as f:
-    public_key = f.read().strip()
+<span class="c1"># Get the current metadata of the instance
+</span><span class="n">instance</span> <span class="o">=</span> <span class="n">compute</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">get</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">ZONE</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">INSTANCE_NAME</span><span class="p">).</span><span class="nf">execute</span><span class="p">()</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">instance</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">metadata</span><span class="sh">'</span><span class="p">,</span> <span class="p">{})</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">items</span><span class="sh">'</span><span class="p">,</span> <span class="p">[])</span>
 
-# Get the current metadata of the instance
-instance = compute.instances().get(project=PROJECT_ID, zone=ZONE, instance=INSTANCE_NAME).execute()
-metadata = instance.get('metadata', {})
-items = metadata.get('items', [])
+<span class="c1"># Add SSH key metadata
+</span><span class="n">ssh_keys</span> <span class="o">=</span> <span class="bp">None</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="sh">'</span><span class="s">key</span><span class="sh">'</span><span class="p">]</span> <span class="o">==</span> <span class="sh">'</span><span class="s">ssh-keys</span><span class="sh">'</span><span class="p">:</span>
+        <span class="n">ssh_keys</span> <span class="o">=</span> <span class="n">item</span>
+        <span class="k">break</span>
 
-# Add SSH key metadata
-ssh_keys = None
-for item in items:
-    if item['key'] == 'ssh-keys':
-        ssh_keys = item
-        break
+<span class="k">if</span> <span class="n">ssh_keys</span><span class="p">:</span>
+    <span class="n">ssh_keys</span><span class="p">[</span><span class="sh">'</span><span class="s">value</span><span class="sh">'</span><span class="p">]</span> <span class="o">+=</span> <span class="sa">f</span><span class="sh">"</span><span class="se">\n</span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s">:</span><span class="si">{</span><span class="n">public_key</span><span class="si">}</span><span class="sh">"</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">items</span><span class="p">.</span><span class="nf">append</span><span class="p">({</span>
+        <span class="sh">'</span><span class="s">key</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">ssh-keys</span><span class="sh">'</span><span class="p">,</span>
+        <span class="sh">'</span><span class="s">value</span><span class="sh">'</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">user_name</span><span class="si">}</span><span class="s">:</span><span class="si">{</span><span class="n">public_key</span><span class="si">}</span><span class="sh">"</span>
+    <span class="p">})</span>
 
-if ssh_keys:
-    ssh_keys['value'] += f"\n{user_name}:{public_key}"
-else:
-    items.append({
-        'key': 'ssh-keys',
-        'value': f"{user_name}:{public_key}"
-    })
+<span class="n">metadata</span><span class="p">[</span><span class="sh">'</span><span class="s">items</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">items</span>
 
-metadata['items'] = items
+<span class="c1"># Metadata update request
+</span><span class="n">operation</span> <span class="o">=</span> <span class="n">compute</span><span class="p">.</span><span class="nf">instances</span><span class="p">().</span><span class="nf">setMetadata</span><span class="p">(</span>
+    <span class="n">project</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span>
+    <span class="n">zone</span><span class="o">=</span><span class="n">ZONE</span><span class="p">,</span>
+    <span class="n">instance</span><span class="o">=</span><span class="n">INSTANCE_NAME</span><span class="p">,</span>
+    <span class="n">body</span><span class="o">=</span><span class="n">metadata</span>
+<span class="p">).</span><span class="nf">execute</span><span class="p">()</span>
 
-# Send a request to update the metadata
-operation = compute.instances().setMetadata(
-    project=PROJECT_ID,
-    zone=ZONE,
-    instance=INSTANCE_NAME,
-    body=metadata
-).execute()
-
-print(f"Updating metadata for {INSTANCE_NAME}: {operation['name']}")
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Updating metadata for </span><span class="si">{</span><span class="n">INSTANCE_NAME</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">operation</span><span class="p">[</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h2 id="use-cases">Use Cases</h2>
+<p><br />
+<br /></p>
 
-<ul>
-  <li><strong>Automated Instance Management</strong>: Instead of manually managing instances through the console, you can use code to automate management tasks, increasing efficiency.</li>
-  <li><strong>Resource Optimization</strong>: You can create instances only when needed and delete them afterward, creating a cost-effective solution.</li>
-</ul>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[Table of Contents Introduction to GCP Compute Engine Introduction to Google API Client Library Instance CRUD Fetching Instance List Adding SSH Keys to an Instance Use Cases]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
+<h2 id="cloud-storage-gcs">Cloud Storage (GCS)</h2>
+
+<p>Google Cloud Storage (GCS) is an object storage service provided by GCP. It allows you to store and manage large-scale data.</p>
+
+<h3 id="bucket-creation-and-deletion">Bucket Creation and Deletion</h3>
+
+<h4 id="bucket-creation-code-example">Bucket Creation Code Example</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># Create a client.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># Specify the bucket name and location.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+<span class="n">location</span> <span class="o">=</span> <span class="sh">'</span><span class="s">asia-northeast3</span><span class="sh">'</span>
+
+<span class="c1"># Create the bucket.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+<span class="n">bucket</span><span class="p">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">location</span>
+<span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">create_bucket</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Bucket </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s"> created in </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="bucket-deletion-code-example">Bucket Deletion Code Example</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># Create a client.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># Specify the name of the bucket to delete.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+
+<span class="c1"># Get the bucket.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+<span class="c1"># Delete the bucket.
+</span><span class="n">bucket</span><span class="p">.</span><span class="nf">delete</span><span class="p">()</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Bucket </span><span class="si">{</span><span class="n">bucket_name</span><span class="si">}</span><span class="s"> deleted.</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="uploading-and-downloading-objects">Uploading and Downloading Objects</h3>
+
+<p>This section explains how to upload and download objects in Google Cloud Storage.</p>
+
+<h4 id="object-upload-code-example">Object Upload Code Example</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># Create a client.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># Specify the bucket name and the file path to upload.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+<span class="n">source_file_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">local-file-path</span><span class="sh">'</span>
+<span class="n">destination_blob_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">storage-object-name</span><span class="sh">'</span>
+
+<span class="c1"># Get the bucket.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+<span class="c1"># Create a blob object and upload the file.
+</span><span class="n">blob</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">.</span><span class="nf">blob</span><span class="p">(</span><span class="n">destination_blob_name</span><span class="p">)</span>
+<span class="n">blob</span><span class="p">.</span><span class="nf">upload_from_filename</span><span class="p">(</span><span class="n">source_file_name</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">File </span><span class="si">{</span><span class="n">source_file_name</span><span class="si">}</span><span class="s"> uploaded to </span><span class="si">{</span><span class="n">destination_blob_name</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="object-download-code-example">Object Download Code Example</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># Create a client.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># Specify the bucket name and the object name to download.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+<span class="n">source_blob_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">storage-object-name</span><span class="sh">'</span>
+<span class="n">destination_file_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">local-file-path</span><span class="sh">'</span>
+
+<span class="c1"># Get the bucket.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+<span class="c1"># Get the blob object and download the file.
+</span><span class="n">blob</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">.</span><span class="nf">blob</span><span class="p">(</span><span class="n">source_blob_name</span><span class="p">)</span>
+<span class="n">blob</span><span class="p">.</span><span class="nf">download_to_filename</span><span class="p">(</span><span class="n">destination_file_name</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Blob </span><span class="si">{</span><span class="n">source_blob_name</span><span class="si">}</span><span class="s"> downloaded to </span><span class="si">{</span><span class="n">destination_file_name</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="listing-objects">Listing Objects</h3>
+
+<p>This section explains how to list objects in a specific bucket in Google Cloud Storage.</p>
+
+<h4 id="listing-objects-code-example">Listing Objects Code Example</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># Create a client.
+</span><span class="n">client</span> <span class="o">=</span> <span class="n">storage</span><span class="p">.</span><span class="nc">Client</span><span class="p">()</span>
+
+<span class="c1"># Specify the bucket name.
+</span><span class="n">bucket_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-bucket-name</span><span class="sh">'</span>
+
+<span class="c1"># Get the bucket.
+</span><span class="n">bucket</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+
+<span class="c1"># Get the list of objects.
+</span><span class="n">blobs</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">.</span><span class="nf">list_blobs</span><span class="p">()</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Objects in the bucket:</span><span class="sh">'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">blob</span> <span class="ow">in</span> <span class="n">blobs</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">blob</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="cloud-run">Cloud Run</h2>
+
+<p>Google Cloud Run is a fully managed serverless platform that allows you to quickly and easily deploy containerized applications. With Cloud Run, you can focus on running your code without managing infrastructure, and it automatically scales based on traffic. To automate Cloud Run with Python, use the Google Cloud SDK’s Python client library.</p>
+
+<h3 id="library-installation">Library Installation</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>google-api-python-client google-auth-httplib2 google-auth-oauthlib
+</code></pre></div></div>
+
+<h3 id="deploying-services">Deploying Services</h3>
+
+<p>This section demonstrates how to deploy, update, and delete Cloud Run services using Python code with the Cloud Run API and Google Cloud SDK. Build the Docker image, push it to Google Container Registry (GCR), and use it to manage Cloud Run services.</p>
+
+<h4 id="service-deployment-code-example">Service Deployment Code Example</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">googleapiclient.discovery</span> <span class="kn">import</span> <span class="n">build</span>
+<span class="kn">from</span> <span class="n">google.oauth2</span> <span class="kn">import</span> <span class="n">service_account</span>
+<span class="kn">import</span> <span class="n">subprocess</span>
+
+<span class="c1"># Set the service account credentials
+</span><span class="n">credentials</span> <span class="o">=</span> <span class="n">service_account</span><span class="p">.</span><span class="n">Credentials</span><span class="p">.</span><span class="nf">from_service_account_file</span><span class="p">(</span>
+    <span class="sh">'</span><span class="s">path/to/your-service-account-file.json</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># Create a Cloud Run API client
+</span><span class="n">service</span> <span class="o">=</span> <span class="nf">build</span><span class="p">(</span><span class="sh">'</span><span class="s">run</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">v1</span><span class="sh">'</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">)</span>
+
+<span class="c1"># Build and push the Docker image
+</span><span class="k">def</span> <span class="nf">build_and_push_docker_image</span><span class="p">(</span><span class="n">image_name</span><span class="p">):</span>
+    <span class="n">subprocess</span><span class="p">.</span><span class="nf">run</span><span class="p">([</span><span class="sh">'</span><span class="s">docker</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">build</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">-t</span><span class="sh">'</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="sh">'</span><span class="s">.</span><span class="sh">'</span><span class="p">])</span>
+    <span class="n">subprocess</span><span class="p">.</span><span class="nf">run</span><span class="p">([</span><span class="sh">'</span><span class="s">docker</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">push</span><span class="sh">'</span><span class="p">,</span> <span class="n">image_name</span><span class="p">])</span>
+
+<span class="c1"># Service deployment function
+</span><span class="k">def</span> <span class="nf">deploy_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
+    <span class="nf">build_and_push_docker_image</span><span class="p">(</span><span class="n">image_name</span><span class="p">)</span>
+    
+    <span class="c1"># Deploy the Cloud Run service
+</span>    <span class="n">project_id</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">'</span><span class="s">projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s">/locations/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="sh">'</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="sh">'</span><span class="s">metadata</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">:</span> <span class="n">service_name</span><span class="p">},</span>
+        <span class="sh">'</span><span class="s">spec</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">template</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">'</span><span class="s">spec</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="sh">'</span><span class="s">containers</span><span class="sh">'</span><span class="p">:</span> <span class="p">[{</span><span class="sh">'</span><span class="s">image</span><span class="sh">'</span><span class="p">:</span> <span class="n">image_name</span><span class="p">}]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">namespaces</span><span class="p">().</span><span class="nf">services</span><span class="p">().</span><span class="nf">create</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Service </span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="s"> deployed with image </span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s"> in region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># Set variables
+</span><span class="n">service_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-service-name</span><span class="sh">'</span>
+<span class="n">image_name</span> <span class="o">=</span> <span class="sh">'</span><span class="s">gcr.io/your-project-id/your-image-name</span><span class="sh">'</span>
+<span class="n">region</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-region</span><span class="sh">'</span>
+
+<span class="c1"># Execute service deployment
+</span><span class="nf">deploy_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="updating-services">Updating Services</h3>
+
+<h4 id="service-update-code-example">Service Update Code Example</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Service update function
+</span><span class="k">def</span> <span class="nf">update_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
+    <span class="nf">build_and_push_docker_image</span><span class="p">(</span><span class="n">image_name</span><span class="p">)</span>
+    
+    <span class="c1"># Update the Cloud Run service
+</span>    <span class="n">project_id</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">'</span><span class="s">projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s">/locations/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">/services/</span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="sh">'</span>
+    
+    <span class="n">body</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="sh">'</span><span class="s">spec</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+            <span class="sh">'</span><span class="s">template</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                <span class="sh">'</span><span class="s">spec</span><span class="sh">'</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="sh">'</span><span class="s">containers</span><span class="sh">'</span><span class="p">:</span> <span class="p">[{</span><span class="sh">'</span><span class="s">image</span><span class="sh">'</span><span class="p">:</span> <span class="n">image_name</span><span class="p">}]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">projects</span><span class="p">().</span><span class="nf">locations</span><span class="p">().</span><span class="nf">services</span><span class="p">().</span><span class="nf">replaceService</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Service </span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="s"> updated with image </span><span class="si">{</span><span class="n">image_name</span><span class="si">}</span><span class="s"> in region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># Execute service update
+</span><span class="nf">update_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">image_name</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="deleting-services">Deleting Services</h3>
+
+<h4 id="service-deletion-code-example">Service Deletion Code Example</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Service deletion function
+</span><span class="k">def</span> <span class="nf">delete_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
+    <span class="n">project_id</span> <span class="o">=</span> <span class="sh">'</span><span class="s">your-project-id</span><span class="sh">'</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="sh">'</span><span class="s">projects/</span><span class="si">{</span><span class="n">project_id</span><span class="si">}</span><span class="s">/locations/</span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">/services/</span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="sh">'</span>
+    
+    <span class="n">request</span> <span class="o">=</span> <span class="n">service</span><span class="p">.</span><span class="nf">projects</span><span class="p">().</span><span class="nf">locations</span><span class="p">().</span><span class="nf">services</span><span class="p">().</span><span class="nf">delete</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="nf">execute</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">'</span><span class="s">Service </span><span class="si">{</span><span class="n">service_name</span><span class="si">}</span><span class="s"> deleted from region </span><span class="si">{</span><span class="n">region</span><span class="si">}</span><span class="s">.</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="c1"># Execute service deletion
+</span><span class="nf">delete_service</span><span class="p">(</span><span class="n">service_name</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="future-content">Future Content</h2>
+<ol>
+  <li><a href="#cloud-functions">Cloud Functions</a>
+    <ul>
+      <li><a href="#deploying-functions">Deploying Functions</a></li>
+      <li><a href="#invoking-functions">Invoking Functions</a></li>
+      <li><a href="#deleting-functions">Deleting Functions</a></li>
+    </ul>
+  </li>
+  <li><a href="#bigquery">BigQuery</a>
+    <ul>
+      <li><a href="#creating-and-deleting-datasets">Creating and Deleting Datasets</a></li>
+      <li><a href="#executing-queries">Executing Queries</a></li>
+      <li><a href="#retrieving-table-data">Retrieving Table Data</a></li>
+    </ul>
+  </li>
+  <li><a href="#pubsub">Pub/Sub</a>
+    <ul>
+      <li><a href="#creating-and-deleting-topics">Creating and Deleting Topics</a></li>
+      <li><a href="#publishing-messages">Publishing Messages</a></li>
+      <li><a href="#setting-up-subscriptions-and-receiving-messages">Setting Up Subscriptions and Receiving Messages</a></li>
+    </ul>
+  </li>
+  <li><a href="#ai-platform">AI Platform</a>
+    <ul>
+      <li><a href="#deploying-models">Deploying Models</a></li>
+      <li><a href="#making-prediction-requests">Making Prediction Requests</a></li>
+      <li><a href="#deleting-models">Deleting Models</a></li>
+    </ul>
+  </li>
+  <li><a href="#firestore">Firestore</a>
+    <ul>
+      <li><a href="#creating-and-deleting-documents">Creating and Deleting Documents</a></li>
+      <li><a href="#querying-and-updating-documents">Querying and Updating Documents</a></li>
+    </ul>
+  </li>
+  <li><a href="#app-engine">App Engine</a>
+    <ul>
+      <li><a href="#deploying-applications">Deploying Applications</a></li>
+      <li><a href="#version-management-and-traffic-splitting">Version Management and Traffic Splitting</a></li>
+    </ul>
+  </li>
+  <li><a href="#cloud-dataflow">Cloud Dataflow</a>
+    <ul>
+      <li><a href="#creating-and-running-pipelines">Creating and Running Pipelines</a></li>
+      <li><a href="#monitoring-and-managing-jobs">Monitoring and Managing Jobs</a></li>
+    </ul>
+  </li>
+  <li><a href="#cloud-translation">Cloud Translation</a>
+    <ul>
+      <li><a href="#translating-text">Translating Text</a></li>
+      <li><a href="#supporting-multiple-languages">Supporting Multiple Languages</a></li>
+    </ul>
+  </li>
+  <li><a href="#vision-ai">Vision AI</a>
+    <ul>
+      <li><a href="#image-analysis-and-labeling">Image Analysis and Labeling</a></li>
+      <li><a href="#text-recognition-ocr">Text Recognition (OCR)</a></li>
+    </ul>
+  </li>
+  <li><a href="#use-cases">Use Cases</a></li>
+</ol>]]></content><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><category term="en" /><category term="tutorial" /><category term="gcp" /><category term="infra" /><category term="python" /><summary type="html"><![CDATA[Table of Contents]]></summary></entry><entry xml:lang="ko"><title type="html">충돌 예측 시스템</title><link href="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html" rel="alternate" type="text/html" title="충돌 예측 시스템" /><published>2024-06-11T13:00:00+09:00</published><updated>2024-06-11T13:00:00+09:00</updated><id>https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system</id><content type="html" xml:base="https://jae-heo.github.io/ko/project/2024/06/11/collision-prediction-system.html"><![CDATA[<div style="text-align: center; margin-bottom: 20px;">
   <img src="/assets/img/cps_demo.gif" alt="cps_demo_gif" style="display: block; margin: 0 auto; width: 500px; height: auto; border: 2px solid #000;" />
   
 </div>
