@@ -3,6 +3,36 @@
   
     
     <url>
+      <loc>https://jae-heo.github.io/ko/tutorial/2024/07/09/learning-rust</loc>
+      
+        <lastmod>2024-07-09T12:00:00+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.7</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>https://jae-heo.github.io/en/tutorial/2024/07/09/learning-rust</loc>
+      
+        <lastmod>2024-07-09T12:00:00+09:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.7</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>https://jae-heo.github.io/ko/tutorial/2024/07/03/coding-test-a-to-z</loc>
       
         <lastmod>2024-07-03T22:00:00+09:00</lastmod>
@@ -357,7 +387,7 @@
     <url>
       <loc>https://jae-heo.github.io/feed.xml</loc>
       
-        <lastmod>2024-07-08T15:49:32+09:00</lastmod>
+        <lastmod>2024-07-10T21:23:28+09:00</lastmod>
       
       
         <changefreq>monthly</changefreq>

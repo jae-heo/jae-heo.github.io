@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Learning the Rust Language — Explaining Rust concepts in a simple way.  | Jaeyoung Heo</title>
+<meta name="description" content="Jaeyoung Heo's tech blog
+">
+<meta name="keywords" content="rust">
+<link rel="canonical" href="/en/tutorial/2024/07/09/learning-rust.html">
+<link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/agate.css">
+
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XDPCR56GW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XDPCR56GW');
+</script>
+</head>
+<body>
+<div class="wrapper">
+<header class="header">
+  <div class="navigation">
+    <a href="/en" class="logo">Jaeyoung Heo</a>
+    <ul class="menu">
+      <li class="menu__entry">
+        <a href="/en/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/project">Project</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/blog">Blog</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="social-links">
+    
+    <li class="social-links__entry">
+      <a href="mailto:gjwodud119@gmail.com" target="_blank">
+        <i class="fa fa-envelope-square"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://github.com/jae-heo" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://in.linkedin.com/in/jaeyoung-heo-664033282" target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    
+    <li class="language-selector">
+      <a href="/en/tutorial/2024/07/09/learning-rust.html"><strong>EN</strong></a> |
+      <a href="/ko/tutorial/2024/07/09/learning-rust.html"><strong>KO</strong></a>
+    </li>
+  </ul>
+</header>
+<h1 class="page-title">
+<div class="page-title__text">Learning the Rust Language</div>
+<div class="page-title__subtitle">Explaining Rust concepts in a simple way.</div>
+</h1>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#introduction">Introduction</a></li>
+  <li><a href="#advantages-of-the-rust-language">Advantages of the Rust Language</a></li>
+  <li><a href="#syntax">Syntax</a>
+    <ol>
+      <li><a href="#variables">Variables</a></li>
+      <li><a href="#constants">Constants</a></li>
+      <li><a href="#variable-types">Variable Types</a></li>
+      <li><a href="#data-types">Data Types</a>
+        <ol>
+          <li><a href="#scalar-types">Scalar Types</a></li>
+          <li><a href="#compound-types">Compound Types</a></li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>In this post, I will share what I have learned about the Rust language. The primary resource for my learning will be the <a href="https://doc.rust-lang.org/book/" target="_blank">Rust Book</a>.</p>
+
+<h3 id="advantages-of-the-rust-language">Advantages of the Rust Language</h3>
+
+<p>In the <a href="https://doc.rust-lang.org/book/foreword.html" target="_blank">Rust Book-Foreword</a>, the advantages of the Rust language are described as follows:</p>
+<ol>
+  <li>Helps simplify complex tasks such as low-level memory management, data representation, and concurrency.</li>
+  <li>Provides tools to clearly handle parts that were difficult to manage in existing languages.</li>
+  <li>Allows managing low-level areas without crashes or security issues.</li>
+  <li>Enables writing efficient code in terms of speed and memory usage.</li>
+  <li>Reduces the risk of implementing parallel processing.</li>
+  <li>Allows for more confident optimization attempts.</li>
+  <li>Supports programming from low-level to high-level.</li>
+</ol>
+
+<p>My personal thoughts on the Rust language:</p>
+<ol>
+  <li>Improves speed by using an AoT compiler similar to the C language.</li>
+  <li>If the C language is like a city starting from old times and being redeveloped, Rust feels like a planned city built with many considerations from the start.</li>
+  <li>Adopts a unique system to manage the heap area without using a GC. This system also has overhead for memory management, but it offers a better memory management method than traditional GC by requiring coders to follow rules like Ownership.</li>
+  <li>Requires users to consider more while writing code because the tasks previously abstracted by GC are now their responsibility. However, I believe the merits of the language make it worthwhile.</li>
+  <li>Besides the language itself, provides high-quality package managers, libraries, and documentation, which make it highly accessible.</li>
+</ol>
+
+<p>Now, let’s dive deeper into the Rust language.</p>
+
+<h2 id="syntax">Syntax</h2>
+
+<h3 id="variables">Variables</h3>
+
+<ul>
+  <li>Variables are defined with the <code class="language-plaintext highlighter-rouge">let</code> keyword.</li>
+  <li>Variables must always be inside curly braces (function declaration).</li>
+  <li>By default, all variables are immutable.</li>
+  <li>To make a variable mutable, use the <code class="language-plaintext highlighter-rouge">mut</code> keyword when declaring it.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This will cause an error.</span>
+<span class="k">let</span> <span class="n">testVar</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">testVar</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+
+<span class="c1">// This will not cause an error.</span>
+<span class="k">let</span> <span class="k">mut</span> <span class="n">testVar</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">testVar</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="constants">Constants</h3>
+
+<ul>
+  <li>Constants are defined with the <code class="language-plaintext highlighter-rouge">const</code> keyword.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="n">THREE_HOURS_IN_SECONDS</span><span class="p">:</span> <span class="nb">u32</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Constants cannot be mutable, so you cannot use the <code class="language-plaintext highlighter-rouge">mut</code> keyword with them.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Using the `mut` keyword with constants will cause an error.</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="k">mut</span> <span class="n">THREE_HOURS_IN_SECONDS</span><span class="p">:</span> <span class="nb">u32</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Constants can also be defined outside of a block.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="n">THREE_HOURS_IN_SECONDS</span><span class="p">:</span> <span class="nb">u32</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">let</span> <span class="n">testVar</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="variable-types">Variable Types</h3>
+
+<ul>
+  <li>Rust allows you to declare variables without specifying their types.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// The type of the variable is inferred automatically.</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// This could be of type i8 to i128, or u8 to u128,</span>
+    <span class="c1">// but by default, if the type is not specified, an integer is of type i32.</span>
+    <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+    <span class="c1">// For floating-point numbers, the default type is f32.</span>
+    <span class="k">let</span> <span class="n">y</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">;</span> <span class="c1">// f32</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Rust performs static type checking.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This will cause a type error.</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">let</span> <span class="k">mut</span> <span class="n">testVar</span> <span class="o">=</span> <span class="s">"   "</span><span class="p">;</span>
+	<span class="n">testVar</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>You can redeclare a variable with the same name.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Redeclaring a variable with the same name is not an error (Shadowing).</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">let</span> <span class="n">testVar</span> <span class="o">=</span> <span class="s">"   "</span><span class="p">;</span>
+	<span class="k">let</span> <span class="n">testVar</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="err">```</span><span class="n">rust</span>
+<span class="c1">// To delve deeper, if a shadowed variable occupies heap space...</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">{</span>
+        <span class="k">let</span> <span class="n">s</span> <span class="o">=</span> <span class="nn">String</span><span class="p">::</span><span class="nf">from</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span> <span class="c1">// s uses heap memory</span>
+        <span class="k">let</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">// The previous s goes out of scope, and drop is called.</span>
+    <span class="p">}</span> <span class="c1">// The new s goes out of scope here.</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="data-types">Data Types</h3>
+
+<p><strong>Scalar Types</strong></p>
+
+<p>Rust has four scalar types: Integer, floating-point number, Boolean, and character. These types are managed on the stack.</p>
+
+<p><strong>Compound Types</strong></p>
+
+<p>Rust supports two compound types: Tuple and Array. The difference is that a Tuple allows each element to have a different data type, while an Array requires all elements to have the same data type.</p>
+
+<ul>
+  <li>Example of declaring a Tuple:</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Each element can have a different type.</span>
+    <span class="k">let</span> <span class="n">tup</span><span class="p">:</span> <span class="p">(</span><span class="nb">i32</span><span class="p">,</span> <span class="nb">f64</span><span class="p">,</span> <span class="nb">u8</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">6.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Even without specifying types, type inference will determine each element's type.</span>
+    <span class="k">let</span> <span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">6.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="c1">// You can also decompose a Tuple.</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">=</span> <span class="n">tup</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Accessing elements of a Tuple:</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="nb">i32</span><span class="p">,</span> <span class="nb">f64</span><span class="p">,</span> <span class="nb">u8</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">6.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="k">let</span> <span class="n">five_hundred</span> <span class="o">=</span> <span class="n">x</span><span class="na">.0</span><span class="p">;</span>
+
+    <span class="k">let</span> <span class="n">six_point_four</span> <span class="o">=</span> <span class="n">x</span><span class="na">.1</span><span class="p">;</span>
+
+    <span class="k">let</span> <span class="n">one</span> <span class="o">=</span> <span class="n">x</span><span class="na">.2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Example of declaring an Array:</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// All elements must have the same type.</span>
+    <span class="k">let</span> <span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="s">"January"</span><span class="p">,</span> <span class="s">"February"</span><span class="p">,</span> <span class="s">"March"</span><span class="p">,</span> <span class="s">"April"</span><span class="p">,</span> <span class="s">"May"</span><span class="p">,</span> <span class="s">"June"</span><span class="p">,</span> <span class="s">"July"</span><span class="p">,</span>
+              <span class="s">"August"</span><span class="p">,</span> <span class="s">"September"</span><span class="p">,</span> <span class="s">"October"</span><span class="p">,</span> <span class="s">"November"</span><span class="p">,</span> <span class="s">"December"</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// You can explicitly specify the type and length.</span>
+    <span class="k">let</span> <span class="n">a</span><span class="p">:</span> <span class="p">[</span><span class="nb">i32</span><span class="p">;</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Accessing elements of an Array:</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">];</span>
+
+    <span class="k">let</span> <span class="n">first</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">let</span> <span class="n">second</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+<section id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="jae-heo/jae-heo.github.io"
+            issue-term="pathname"
+            label="Comment"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</section>
+
+<div class="about">
+<div class="about__divider">*****</div>
+<div class="about__text">
+<strong> &copy; 2024 Jaeyoung Heo. </strong>
+</div>
+</div>
+
+
+</div>
+<script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

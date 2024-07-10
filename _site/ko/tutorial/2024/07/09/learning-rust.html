@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Rust 언어를 배우며 — Rust에 대한 내용을 쉽게 설명합니다.  | Jaeyoung Heo</title>
+<meta name="description" content="Jaeyoung Heo's tech blog
+">
+<meta name="keywords" content="rust">
+<link rel="canonical" href="/ko/tutorial/2024/07/09/learning-rust.html">
+<link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/agate.css">
+
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XDPCR56GW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XDPCR56GW');
+</script>
+</head>
+<body>
+<div class="wrapper">
+<header class="header">
+  <div class="navigation">
+    <a href="/ko" class="logo">Jaeyoung Heo</a>
+    <ul class="menu">
+      <li class="menu__entry">
+        <a href="/ko/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/ko/project">Project</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/ko/blog">Blog</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="social-links">
+    
+    <li class="social-links__entry">
+      <a href="mailto:gjwodud119@gmail.com" target="_blank">
+        <i class="fa fa-envelope-square"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://github.com/jae-heo" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://in.linkedin.com/in/jaeyoung-heo-664033282" target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    
+    <li class="language-selector">
+      <a href="/en/tutorial/2024/07/09/learning-rust.html"><strong>EN</strong></a> |
+      <a href="/ko/tutorial/2024/07/09/learning-rust.html"><strong>KO</strong></a>
+    </li>
+  </ul>
+</header>
+<h1 class="page-title">
+<div class="page-title__text">Rust 언어를 배우며</div>
+<div class="page-title__subtitle">Rust에 대한 내용을 쉽게 설명합니다.</div>
+</h1>
+
+<h2 id="목차">목차</h2>
+
+<ol>
+  <li><a href="#소개">소개</a></li>
+  <li><a href="#rust-언어의-장점">Rust 언어의 장점</a></li>
+  <li><a href="#문법">문법</a>
+    <ol>
+      <li><a href="#변수">변수</a></li>
+      <li><a href="#상수">상수</a></li>
+      <li><a href="#변수-타입">변수 타입</a></li>
+      <li><a href="#data-type">Data Type</a>
+        <ol>
+          <li><a href="#scalar-type">Scalar Type</a></li>
+          <li><a href="#compound-type">Compound Type</a></li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="소개">소개</h2>
+
+<p>이 글에서는 Rust 언어를 배우며 얻은 것들을 공유하려고 합니다. 주로 <a href="https://doc.rust-lang.org/book/" target="_blank">Rust Book</a>을 통해 학습을 진행할 예정입니다.</p>
+
+<h3 id="rust-언어의-장점">Rust 언어의 장점</h3>
+<p><a href="https://doc.rust-lang.org/book/foreword.html" target="_blank">Rust Book-Foreword</a>에서는 러스트 언어의 장점을 아래와 같이 설명합니다.</p>
+<ol>
+  <li>저수준의 메모리 관리, 데이터 표현, 병행 처리와 같은 복잡한 작업을 쉽게 하도록 도와줍니다.</li>
+  <li>기존 언어들에서 관리하기 어려웠던 부분들을 명확하게 다루는 도구를 제공합니다.</li>
+  <li>Low-Level 영역의 관리를 충돌이나 보안문제 없이 다루도록 해줍니다.</li>
+  <li>속도와 메모리 사용 측면에서 효율적인 코드를 작성할 수 있습니다.</li>
+  <li>병렬 처리 구현의 위험도가 줄어듭니다.</li>
+  <li>최적화를 이전보다 자신 있게 시도할 수 있습니다.</li>
+  <li>Low-Level 부터 High-Level Programming 까지 지원합니다.</li>
+</ol>
+
+<p>개인적으로 느낀 Rust 언어는</p>
+<ol>
+  <li>C언어와 비슷한 느낌으로 AoT 컴파일러를 사용하므로 속도에 향상이 있습니다.</li>
+  <li>C언어가 구시가지로 시작해 곳곳을 허물며 재개발하는 도시의 형태라면, Rust는 처음부터 많은것을 고려하고 지어진 계획도시 같은 느낌입니다.</li>
+  <li>GC를 사용하지 않고 Heap 영역을 관리할 수 있도록 독특한 시스템을 채용합니다. 이 시스템 또한 메모리 관리에 오버헤드를 가지고있지만, Ownership 같은 규칙을 Coder에게 준수하도록 하여 기존 GC 보다 좋은 성능의 메모리 관리 방법을 제공합니다.</li>
+  <li>기존 추상화되어있던 GC의 작업을 사용자에게 요구하는 만큼 사용자는 더 많은것을 고려하며 코드를 작성해야합니다. 하지만 그것을 고려해도 좋을 만큼 메리트가 있는 언어라고 생각됩니다.</li>
+  <li>언어적인 부분 외에도 패키지매니저, 라이브러리, 문서 등이 상당한 퀄리티로 제공되기 때문에 높은 접근성을 가지고 있습니다.</li>
+</ol>
+
+<p>그렇다면 Rust언어에 대해 조금 더 깊이 내려가보겠습니다.</p>
+
+<h2 id="문법">문법</h2>
+
+<h3 id="변수">변수</h3>
+
+<ul>
+  <li>변수는 let 키워드로 정의합니다.</li>
+  <li>변수는 항상 중괄호(function declaration) 안에 있어야 합니다.</li>
+  <li>기본적으로 모든 변수는 immutable(변할 수 없는)입니다.</li>
+  <li>변수를 선언할 때 mut(mutable) 키워드를 사용하면 변수를 변할 수 있도록 만들 수 있습니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 오류가 발생합니다.</span>
+<span class="k">let</span> <span class="n">testVar</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">testVar</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+
+<span class="c1">// 오류가 발생하지 않습니다.</span>
+<span class="k">let</span> <span class="k">mut</span> <span class="n">testVar</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="n">testVar</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="상수">상수</h3>
+
+<ul>
+  <li>상수는 Const 키워드로 정의합니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="n">THREE_HOURS_IN_SECONDS</span><span class="p">:</span> <span class="nb">u32</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>기본적으로 상수는 변하지 않으므로 mut 키워드를 사용할 수 없습니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 상수의 경우 mut 키워드를 사용할 경우 오류가 발생합니다.</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">const</span> <span class="k">mut</span> <span class="n">THREE_HOURS_IN_SECONDS</span><span class="p">:</span> <span class="nb">u32</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>상수는 Block 밖에도 정의가 가능합니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">const</span> <span class="n">THREE_HOURS_IN_SECONDS</span><span class="p">:</span> <span class="nb">u32</span> <span class="o">=</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">let</span> <span class="n">testVar</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="변수-타입">변수 타입</h3>
+
+<ul>
+  <li>Rust는 변수의 타입을 지정하지 않고 선언할 수 있습니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 변수의 타입을 자동으로 추론합니다.</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 이때 i8~i128, u8~u128 타입이 가능성이 있는데, </span>
+	<span class="c1">// 기본적으로 정수의 경우 타입 명시를 하지 않는다면 i32 타입을 갖습니다.</span>
+    <span class="k">let</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+
+	<span class="c1">// 부동소수점의 경우 f32가 Default Type 입니다.</span>
+    <span class="k">let</span> <span class="n">y</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">;</span> <span class="c1">// f32</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>정적으로 데이터타입을 확인합니다.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//이 경우에는 Type Error가 발생합니다.
+fn main() {
+	let mut testVar = "   ";
+	testVar = 5;
+}
+</code></pre></div></div>
+
+<ul>
+  <li>같은 이름으로 변수를 새로 선언할 수 있습니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 같은 이름의 변수를 새로 선언해도 오류가 아닙니다. (Shadowing)</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">let</span> <span class="n">testVar</span> <span class="o">=</span> <span class="s">"   "</span><span class="p">;</span>
+	<span class="k">let</span> <span class="n">testVar</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="err">```</span><span class="n">rust</span>
+<span class="c1">// 조금 더 자세히 알아보자면, 만약 shadowing으로 교체된 변수가 Heap영역을 차지하고 있다면...</span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">{</span>
+        <span class="k">let</span> <span class="n">s</span> <span class="o">=</span> <span class="nn">String</span><span class="p">::</span><span class="nf">from</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span> <span class="c1">// s는 힙 메모리를 사용하므로</span>
+        <span class="k">let</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">// 이전 s는 Scope를 벗어나게 되므로 drop이 호출됩니다.</span>
+    <span class="p">}</span> <span class="c1">// 여기서 새로운 s는 Scope를 벗어나게 됩니다.</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="data-type">Data Type</h3>
+
+<p><strong>Scalar Type</strong></p>
+
+<p>Rust에는 네 가지의 스칼라 타입의 자료형이 있습니다. Integer, floating-point number, Boolean, character 입니다. 이 자료형은 메모리상의 Stack에서 관리됩니다.</p>
+
+<p><strong>Compound Type</strong></p>
+
+<p>두 가지의 Compound Type을 지원합니다. Tuple, Array 입니다. 두 자료구조의 차이는, Tuple의 경우 각 엘리먼트가 다른 데이터타입을 갖도록 허용하고, Array의 경우 모든 Element가 같은 테이터타입을 갖도록 합니다.</p>
+
+<ul>
+  <li>Tuple 선언방법의 예시입니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 각 element별 타입을 다르게 지정할 수 있습니다.</span>
+    <span class="k">let</span> <span class="n">tup</span><span class="p">:</span> <span class="p">(</span><span class="nb">i32</span><span class="p">,</span> <span class="nb">f64</span><span class="p">,</span> <span class="nb">u8</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">6.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 타입을 명시하지 않았지만 타입추론을 통해 각 엘리먼트별 Type이 추론됩니다.</span>
+    <span class="k">let</span> <span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">6.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+	<span class="c1">// Tuple의 Decomposing도 가능합니다.</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span> <span class="o">=</span> <span class="n">tup</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Tuple의 Element에 접근하는 예시입니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="nb">i32</span><span class="p">,</span> <span class="nb">f64</span><span class="p">,</span> <span class="nb">u8</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">6.4</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="k">let</span> <span class="n">five_hundred</span> <span class="o">=</span> <span class="n">x</span><span class="na">.0</span><span class="p">;</span>
+
+    <span class="k">let</span> <span class="n">six_point_four</span> <span class="o">=</span> <span class="n">x</span><span class="na">.1</span><span class="p">;</span>
+
+    <span class="k">let</span> <span class="n">one</span> <span class="o">=</span> <span class="n">x</span><span class="na">.2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Array 선언방법의 예시입니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 각 element별 타입이 모두 같아야합니다.</span>
+    <span class="k">let</span> <span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="s">"January"</span><span class="p">,</span> <span class="s">"February"</span><span class="p">,</span> <span class="s">"March"</span><span class="p">,</span> <span class="s">"April"</span><span class="p">,</span> <span class="s">"May"</span><span class="p">,</span> <span class="s">"June"</span><span class="p">,</span> <span class="s">"July"</span><span class="p">,</span>
+              <span class="s">"August"</span><span class="p">,</span> <span class="s">"September"</span><span class="p">,</span> <span class="s">"October"</span><span class="p">,</span> <span class="s">"November"</span><span class="p">,</span> <span class="s">"December"</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="c1">// 타입과 길이를 직접 명시할 수 있습니다.</span>
+    <span class="k">let</span> <span class="n">a</span><span class="p">:</span> <span class="p">[</span><span class="nb">i32</span><span class="p">;</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Array의 element에 접근하는 예시입니다.</li>
+</ul>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">];</span>
+
+    <span class="k">let</span> <span class="n">first</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">let</span> <span class="n">second</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+<section id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="jae-heo/jae-heo.github.io"
+            issue-term="pathname"
+            label="Comment"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</section>
+
+<div class="about">
+<div class="about__divider">*****</div>
+<div class="about__text">
+<strong> &copy; 2024 Jaeyoung Heo. </strong>
+</div>
+</div>
+
+
+</div>
+<script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

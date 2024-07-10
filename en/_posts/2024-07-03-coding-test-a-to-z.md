@@ -136,16 +136,16 @@ Understanding theory alone is not enough. Practicing by solving various problems
 Utilizing good learning resources and websites is important for effective preparation. Here are some recommended resources and sites for coding test preparation.
 
 #### Online Coding Platforms:
-- **[LeetCode](https://leetcode.com/)**: Provides problems of various difficulty levels, optimized for interview preparation.
-- **[HackerRank](https://www.hackerrank.com/)**: Offers problems in algorithms, databases, AI, and more.
-- **[CodeSignal](https://codesignal.com/)**: Allows practice in environments similar to real coding tests.
-- **[Codewars](https://www.codewars.com/)**: Offers various coding challenges to improve programming skills.
-- **[AtCoder](https://atcoder.jp/)**: A well-known Japanese online judge site with a variety of algorithm problems.
+- **[LeetCode](https://leetcode.com/){:target="_blank"}**: Provides problems of various difficulty levels, optimized for interview preparation.
+- **[HackerRank](https://www.hackerrank.com/){:target="_blank"}**: Offers problems in algorithms, databases, AI, and more.
+- **[CodeSignal](https://codesignal.com/){:target="_blank"}**: Allows practice in environments similar to real coding tests.
+- **[Codewars](https://www.codewars.com/){:target="_blank"}**: Offers various coding challenges to improve programming skills.
+- **[AtCoder](https://atcoder.jp/){:target="_blank"}**: A well-known Japanese online judge site with a variety of algorithm problems.
 
 #### Other Learning Resources:
-- **[GeeksforGeeks](https://www.geeksforgeeks.org/)**: Provides tutorials and problems on various data structures and algorithms.
-- **[Coursera](https://www.coursera.org/)**, **[edX](https://www.edx.org/)**: Platforms offering online courses on data structures and algorithms.
-- **[YouTube](https://www.youtube.com/)**: A source for various programming lectures and algorithm explanation videos.
+- **[GeeksforGeeks](https://www.geeksforgeeks.org/){:target="_blank"}**: Provides tutorials and problems on various data structures and algorithms.
+- **[Coursera](https://www.coursera.org/){:target="_blank"}**, **[edX](https://www.edx.org/){:target="_blank"}**: Platforms offering online courses on data structures and algorithms.
+- **[YouTube](https://www.youtube.com/){:target="_blank"}**: A source for various programming lectures and algorithm explanation videos.
 
 <br>
 <br>
@@ -335,133 +335,133 @@ Wondering if you're well-prepared for coding tests? Review the content below and
   ```
 
 ### Two Pointers
-- [Palindrome](https://leetcode.com/problems/valid-palindrome/)
-- [Subsequence](https://leetcode.com/problems/is-subsequence/)
-- [Two Sum (with sorted array)](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
-- [Water Container](https://leetcode.com/problems/container-with-most-water/)
+- [Palindrome](https://leetcode.com/problems/valid-palindrome/){:target="_blank"}
+- [Subsequence](https://leetcode.com/problems/is-subsequence/){:target="_blank"}
+- [Two Sum (with sorted array)](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/){:target="_blank"}
+- [Water Container](https://leetcode.com/problems/container-with-most-water/){:target="_blank"}
 
 ### Sliding Window
-- [Maximum Sum Subarray](https://leetcode.com/problems/maximum-subarray/)
-- [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
-- [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/)
-- [Subarrays with K Different Integers](https://leetcode.com/problems/subarrays-with-k-different-integers/)
+- [Maximum Sum Subarray](https://leetcode.com/problems/maximum-subarray/){:target="_blank"}
+- [Longest Substring Without Repeating Characters](https://leetcode.com/problems/longest-substring-without-repeating-characters/){:target="_blank"}
+- [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/){:target="_blank"}
+- [Subarrays with K Different Integers](https://leetcode.com/problems/subarrays-with-k-different-integers/){:target="_blank"}
 
 ### Matrix
-- [Rotate Matrix](https://leetcode.com/problems/rotate-image/)
-- [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/)
-- [Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix/)
-- [Number of Islands](https://leetcode.com/problems/number-of-islands/)
+- [Rotate Matrix](https://leetcode.com/problems/rotate-image/){:target="_blank"}
+- [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/){:target="_blank"}
+- [Search a 2D Matrix](https://leetcode.com/problems/search-a-2d-matrix/){:target="_blank"}
+- [Number of Islands](https://leetcode.com/problems/number-of-islands/){:target="_blank"}
 
 ### HashMap
-- [Two Sum](https://leetcode.com/problems/two-sum/)
-- [Group Anagrams](https://leetcode.com/problems/group-anagrams/)
-- [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/)
-- [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/)
+- [Two Sum](https://leetcode.com/problems/two-sum/){:target="_blank"}
+- [Group Anagrams](https://leetcode.com/problems/group-anagrams/){:target="_blank"}
+- [Subarray Sum Equals K](https://leetcode.com/problems/subarray-sum-equals-k/){:target="_blank"}
+- [Longest Consecutive Sequence](https://leetcode.com/problems/longest-consecutive-sequence/){:target="_blank"}
 
 ### Intervals
-- [Merge Intervals](https://leetcode.com/problems/merge-intervals/)
-- [Insert Interval](https://leetcode.com/problems/insert-interval/)
-- [Meeting Rooms](https://leetcode.com/problems/meeting-rooms/)
-- [Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/)
+- [Merge Intervals](https://leetcode.com/problems/merge-intervals/){:target="_blank"}
+- [Insert Interval](https://leetcode.com/problems/insert-interval/){:target="_blank"}
+- [Meeting Rooms](https://leetcode.com/problems/meeting-rooms/){:target="_blank"}
+- [Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/){:target="_blank"}
 
 ### Stack
-- [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/)
-- [Min Stack](https://leetcode.com/problems/min-stack/)
-- [Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/)
-- [Daily Temperatures](https://leetcode.com/problems/daily-temperatures/)
+- [Valid Parentheses](https://leetcode.com/problems/valid-parentheses/){:target="_blank"}
+- [Min Stack](https://leetcode.com/problems/min-stack/){:target="_blank"}
+- [Evaluate Reverse Polish Notation](https://leetcode.com/problems/evaluate-reverse-polish-notation/){:target="_blank"}
+- [Daily Temperatures](https://leetcode.com/problems/daily-temperatures/){:target="_blank"}
 
 ### Linked List
-- [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
-- [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/)
-- [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
-- [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+- [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/){:target="_blank"}
+- [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/){:target="_blank"}
+- [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/){:target="_blank"}
+- [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/){:target="_blank"}
 
 ### Binary Tree
-- [Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/)
-- [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
-- [Path Sum](https://leetcode.com/problems/path-sum/)
-- [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
+- [Binary Tree Inorder Traversal](https://leetcode.com/problems/binary-tree-inorder-traversal/){:target="_blank"}
+- [Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/){:target="_blank"}
+- [Path Sum](https://leetcode.com/problems/path-sum/){:target="_blank"}
+- [Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/){:target="_blank"}
 
 ### Binary Tree Search
-- [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/)
-- [Lowest Common Ancestor of a BST](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
-- [Insert into a Binary Search Tree](https://leetcode.com/problems/insert-into-a-binary-search-tree/)
-- [Delete Node in a BST](https://leetcode.com/problems/delete-node-in-a-bst/)
+- [Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/){:target="_blank"}
+- [Lowest Common Ancestor of a BST](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/){:target="_blank"}
+- [Insert into a Binary Search Tree](https://leetcode.com/problems/insert-into-a-binary-search-tree/){:target="_blank"}
+- [Delete Node in a BST](https://leetcode.com/problems/delete-node-in-a-bst/){:target="_blank"}
 
 ### Graph
-- [Clone Graph](https://leetcode.com/problems/clone-graph/)
-- [Course Schedule](https://leetcode.com/problems/course-schedule/)
-- [Number of Connected Components in an Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
-- [Redundant Connection](https://leetcode.com/problems/redundant-connection/)
+- [Clone Graph](https://leetcode.com/problems/clone-graph/){:target="_blank"}
+- [Course Schedule](https://leetcode.com/problems/course-schedule/){:target="_blank"}
+- [Number of Connected Components in an Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/){:target="_blank"}
+- [Redundant Connection](https://leetcode.com/problems/redundant-connection/){:target="_blank"}
 
 ### BFS/DFS
-- [Word Ladder](https://leetcode.com/problems/word-ladder/)
-- [Number of Islands](https://leetcode.com/problems/number-of-islands/)
-- [Clone Graph](https://leetcode.com/problems/clone-graph/)
-- [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/)
+- [Word Ladder](https://leetcode.com/problems/word-ladder/){:target="_blank"}
+- [Number of Islands](https://leetcode.com/problems/number-of-islands/){:target="_blank"}
+- [Clone Graph](https://leetcode.com/problems/clone-graph/){:target="_blank"}
+- [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/){:target="_blank"}
 
 ### Graph BFS
-- [Shortest Path in Binary Matrix](https://leetcode.com/problems/shortest-path-in-binary-matrix/)
-- [Word Ladder II](https://leetcode.com/problems/word-ladder-ii/)
-- [Open the Lock](https://leetcode.com/problems/open-the-lock/)
-- [Minimum Knight Moves](https://leetcode.com/problems/minimum-knight-moves/)
+- [Shortest Path in Binary Matrix](https://leetcode.com/problems/shortest-path-in-binary-matrix/){:target="_blank"}
+- [Word Ladder II](https://leetcode.com/problems/word-ladder-ii/){:target="_blank"}
+- [Open the Lock](https://leetcode.com/problems/open-the-lock/){:target="_blank"}
+- [Minimum Knight Moves](https://leetcode.com/problems/minimum-knight-moves/){:target="_blank"}
 
 ### Trie
-- [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/)
-- [Add and Search Word](https://leetcode.com/problems/add-and-search-word-data-structure-design/)
-- [Word Search II](https://leetcode.com/problems/word-search-ii/)
-- [Replace Words](https://leetcode.com/problems/replace-words/)
+- [Implement Trie (Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/){:target="_blank"}
+- [Add and Search Word](https://leetcode.com/problems/add-and-search-word-data-structure-design/){:target="_blank"}
+- [Word Search II](https://leetcode.com/problems/word-search-ii/){:target="_blank"}
+- [Replace Words](https://leetcode.com/problems/replace-words/){:target="_blank"}
 
 ### Backtracking
-- [Permutations](https://leetcode.com/problems/permutations/)
-- [Combination Sum](https://leetcode.com/problems/combination-sum/)
-- [Sudoku Solver](https://leetcode.com/problems/sudoku-solver/)
-- [Word Search](https://leetcode.com/problems/word-search/)
+- [Permutations](https://leetcode.com/problems/permutations/){:target="_blank"}
+- [Combination Sum](https://leetcode.com/problems/combination-sum/){:target="_blank"}
+- [Sudoku Solver](https://leetcode.com/problems/sudoku-solver/){:target="_blank"}
+- [Word Search](https://leetcode.com/problems/word-search/){:target="_blank"}
 
 ### Divide & Conquer
-- [Merge Sort](https://leetcode.com/problems/sort-an-array/)
-- [Quick Sort](https://leetcode.com/problems/sort-an-array/)
-- [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
-- [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
+- [Merge Sort](https://leetcode.com/problems/sort-an-array/){:target="_blank"}
+- [Quick Sort](https://leetcode.com/problems/sort-an-array/){:target="_blank"}
+- [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/){:target="_blank"}
+- [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/){:target="_blank"}
 
 ### Kadane's Algorithm
-- [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/)
-- [Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray/)
-- [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/)
-- [Minimum Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/)
+- [Maximum Subarray](https://leetcode.com/problems/maximum-subarray/){:target="_blank"}
+- [Maximum Sum Circular Subarray](https://leetcode.com/problems/maximum-sum-circular-subarray/){:target="_blank"}
+- [Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/){:target="_blank"}
+- [Minimum Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/){:target="_blank"}
 
 ### Binary Search
-- [Binary Search](https://leetcode.com/problems/binary-search/)
-- [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
-- [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
-- [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/)
+- [Binary Search](https://leetcode.com/problems/binary-search/){:target="_blank"}
+- [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/){:target="_blank"}
+- [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/){:target="_blank"}
+- [Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/){:target="_blank"}
 
 ### Heap
-- [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/)
-- [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)
-- [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
-- [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/)
+- [Kth Largest Element in an Array](https://leetcode.com/problems/kth-largest-element-in-an-array/){:target="_blank"}
+- [Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/){:target="_blank"}
+- [Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/){:target="_blank"}
+- [Find Median from Data Stream](https://leetcode.com/problems/find-median-from-data-stream/){:target="_blank"}
 
 ### Bit Manipulation
-- [Single Number](https://leetcode.com/problems/single-number/)
-- [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/)
-- [Missing Number](https://leetcode.com/problems/missing-number/)
-- [Reverse Bits](https://leetcode.com/problems/reverse-bits/)
+- [Single Number](https://leetcode.com/problems/single-number/){:target="_blank"}
+- [Number of 1 Bits](https://leetcode.com/problems/number-of-1-bits/){:target="_blank"}
+- [Missing Number](https://leetcode.com/problems/missing-number/){:target="_blank"}
+- [Reverse Bits](https://leetcode.com/problems/reverse-bits/){:target="_blank"}
 
 ### Math
-- [Sieve of Eratosthenes](https://leetcode.com/problems/count-primes/)
-- [GCD and LCM](https://leetcode.com/problems/greatest-common-divisor-of-strings/)
-- [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/)
-- [Power of Three](https://leetcode.com/problems/power-of-three/)
+- [Sieve of Eratosthenes](https://leetcode.com/problems/count-primes/){:target="_blank"}
+- [GCD and LCM](https://leetcode.com/problems/greatest-common-divisor-of-strings/){:target="_blank"}
+- [Fibonacci Number](https://leetcode.com/problems/fibonacci-number/){:target="_blank"}
+- [Power of Three](https://leetcode.com/problems/power-of-three/){:target="_blank"}
 
 ### 1D DP
-- [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/)
-- [House Robber](https://leetcode.com/problems/house-robber/)
-- [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
-- [Coin Change](https://leetcode.com/problems/coin-change/)
+- [Climbing Stairs](https://leetcode.com/problems/climbing-stairs/){:target="_blank"}
+- [House Robber](https://leetcode.com/problems/house-robber/){:target="_blank"}
+- [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/){:target="_blank"}
+- [Coin Change](https://leetcode.com/problems/coin-change/){:target="_blank"}
 
 ### Multidimensional DP
-- [Unique Paths](https://leetcode.com/problems/unique-paths/)
-- [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
-- [Edit Distance](https://leetcode.com/problems/edit-distance/)
-- [Maximal Square](https://leetcode.com/problems/maximal-square/)
+- [Unique Paths](https://leetcode.com/problems/unique-paths/){:target="_blank"}
+- [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/){:target="_blank"}
+- [Edit Distance](https://leetcode.com/problems/edit-distance/){:target="_blank"}
+- [Maximal Square](https://leetcode.com/problems/maximal-square/){:target="_blank"}

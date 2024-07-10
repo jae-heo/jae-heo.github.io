@@ -136,17 +136,17 @@ lang: ko
 효과적으로 코딩 테스트를 준비하기 위해서는 좋은 학습 자료와 사이트를 활용하는 것이 중요합니다. 다음은 코딩 테스트 준비에 유용한 추천 학습 자료 및 사이트입니다.
 
 #### 온라인 코딩 플랫폼:
-- **[Baekjoon](https://www.acmicpc.net/)**: 한국의 대표적인 사이트로, 다양한 난이도의 알고리즘 문제를 제공합니다.
-- **[LeetCode](https://leetcode.com/)**: 다양한 난이도의 코딩 문제를 제공하며, 인터뷰 준비에 최적화된 플랫폼입니다.
-- **[HackerRank](https://www.hackerrank.com/)**: 알고리즘, 데이터베이스, AI 등 다양한 분야의 문제를 풀 수 있는 플랫폼입니다.
-- **[CodeSignal](https://codesignal.com/)**: 실전 코딩 테스트와 유사한 환경에서 연습할 수 있는 플랫폼입니다.
-- **[Codewars](https://www.codewars.com/)**: 다양한 코딩 챌린지를 통해 프로그래밍 실력을 향상시킬 수 있는 플랫폼입니다.
-- **[AtCoder](https://atcoder.jp/)**: 일본의 유명한 온라인 저지 사이트로, 다양한 알고리즘 문제를 제공합니다.
+- **[Baekjoon](https://www.acmicpc.net/){:target="_blank"}**: 한국의 대표적인 사이트로, 다양한 난이도의 알고리즘 문제를 제공합니다.
+- **[LeetCode](https://leetcode.com/){:target="_blank"}**: 다양한 난이도의 코딩 문제를 제공하며, 인터뷰 준비에 최적화된 플랫폼입니다.
+- **[HackerRank](https://www.hackerrank.com/){:target="_blank"}**: 알고리즘, 데이터베이스, AI 등 다양한 분야의 문제를 풀 수 있는 플랫폼입니다.
+- **[CodeSignal](https://codesignal.com/){:target="_blank"}**: 실전 코딩 테스트와 유사한 환경에서 연습할 수 있는 플랫폼입니다.
+- **[Codewars](https://www.codewars.com/){:target="_blank"}**: 다양한 코딩 챌린지를 통해 프로그래밍 실력을 향상시킬 수 있는 플랫폼입니다.
+- **[AtCoder](https://atcoder.jp/){:target="_blank"}**: 일본의 유명한 온라인 저지 사이트로, 다양한 알고리즘 문제를 제공합니다.
 
 #### 기타 학습 자료:
-- **[GeeksforGeeks](https://www.geeksforgeeks.org/)**: 다양한 자료 구조와 알고리즘에 대한 튜토리얼과 문제를 제공합니다.
-- **[Coursera](https://www.coursera.org/)**, **[edX](https://www.edx.org/)**: 데이터 구조와 알고리즘에 대한 온라인 강의를 수강할 수 있는 플랫폼입니다.
-- **[YouTube](https://www.youtube.com/)**: 다양한 프로그래밍 강의와 알고리즘 설명 동영상을 찾을 수 있습니다.
+- **[GeeksforGeeks](https://www.geeksforgeeks.org/){:target="_blank"}**: 다양한 자료 구조와 알고리즘에 대한 튜토리얼과 문제를 제공합니다.
+- **[Coursera](https://www.coursera.org/){:target="_blank"}**, **[edX](https://www.edx.org/){:target="_blank"}**: 데이터 구조와 알고리즘에 대한 온라인 강의를 수강할 수 있는 플랫폼입니다.
+- **[YouTube](https://www.youtube.com/){:target="_blank"}**: 다양한 프로그래밍 강의와 알고리즘 설명 동영상을 찾을 수 있습니다.
 
 ## 필수 알고리즘 및 자료 구조
 
@@ -339,133 +339,133 @@ lang: ko
   ```
 
 ### 투 포인터(Two Pointers)
-- [회문 검사 (Palindrome)](https://leetcode.com/problems/valid-palindrome/)
-- [부분 수열 (Subsequence)](https://leetcode.com/problems/is-subsequence/)
-- [두 수의 합 (정렬된 배열) (Two Sum with sorted array)](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
-- [물통 문제 (Water Container)](https://leetcode.com/problems/container-with-most-water/)
+- [회문 검사 (Palindrome)](https://leetcode.com/problems/valid-palindrome/){:target="_blank"}
+- [부분 수열 (Subsequence)](https://leetcode.com/problems/is-subsequence/){:target="_blank"}
+- [두 수의 합 (정렬된 배열) (Two Sum with sorted array)](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/){:target="_blank"}
+- [물통 문제 (Water Container)](https://leetcode.com/problems/container-with-most-water/){:target="_blank"}
 
 ### 슬라이딩 윈도우(Sliding Window)
-- [최대 부분합 (Maximum Sum Subarray)](https://leetcode.com/problems/maximum-subarray/)
-- [반복되지 않는 가장 긴 부분 문자열 (Longest Substring Without Repeating Characters)](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
-- [최소 윈도우 부분 문자열 (Minimum Window Substring)](https://leetcode.com/problems/minimum-window-substring/)
-- [K개의 다른 정수를 가진 부분 배열 (Subarrays with K Different Integers)](https://leetcode.com/problems/subarrays-with-k-different-integers/)
+- [최대 부분합 (Maximum Sum Subarray)](https://leetcode.com/problems/maximum-subarray/){:target="_blank"}
+- [반복되지 않는 가장 긴 부분 문자열 (Longest Substring Without Repeating Characters)](https://leetcode.com/problems/longest-substring-without-repeating-characters/){:target="_blank"}
+- [최소 윈도우 부분 문자열 (Minimum Window Substring)](https://leetcode.com/problems/minimum-window-substring/){:target="_blank"}
+- [K개의 다른 정수를 가진 부분 배열 (Subarrays with K Different Integers)](https://leetcode.com/problems/subarrays-with-k-different-integers/){:target="_blank"}
 
 ### 행렬(Matrix)
-- [행렬 회전 (Rotate Matrix)](https://leetcode.com/problems/rotate-image/)
-- [나선형 행렬 (Spiral Matrix)](https://leetcode.com/problems/spiral-matrix/)
-- [2D 행렬 검색 (Search a 2D Matrix)](https://leetcode.com/problems/search-a-2d-matrix/)
-- [섬의 개수 (Number of Islands)](https://leetcode.com/problems/number-of-islands/)
+- [행렬 회전 (Rotate Matrix)](https://leetcode.com/problems/rotate-image/){:target="_blank"}
+- [나선형 행렬 (Spiral Matrix)](https://leetcode.com/problems/spiral-matrix/){:target="_blank"}
+- [2D 행렬 검색 (Search a 2D Matrix)](https://leetcode.com/problems/search-a-2d-matrix/){:target="_blank"}
+- [섬의 개수 (Number of Islands)](https://leetcode.com/problems/number-of-islands/){:target="_blank"}
 
 ### 해시맵(HashMap)
-- [두 수의 합 (Two Sum)](https://leetcode.com/problems/two-sum/)
-- [애너그램 그룹 (Group Anagrams)](https://leetcode.com/problems/group-anagrams/)
-- [부분 배열의 합이 K인 경우의 수 (Subarray Sum Equals K)](https://leetcode.com/problems/subarray-sum-equals-k/)
-- [가장 긴 연속 수열 (Longest Consecutive Sequence)](https://leetcode.com/problems/longest-consecutive-sequence/)
+- [두 수의 합 (Two Sum)](https://leetcode.com/problems/two-sum/){:target="_blank"}
+- [애너그램 그룹 (Group Anagrams)](https://leetcode.com/problems/group-anagrams/){:target="_blank"}
+- [부분 배열의 합이 K인 경우의 수 (Subarray Sum Equals K)](https://leetcode.com/problems/subarray-sum-equals-k/){:target="_blank"}
+- [가장 긴 연속 수열 (Longest Consecutive Sequence)](https://leetcode.com/problems/longest-consecutive-sequence/){:target="_blank"}
 
 ### 구간(Intervals)
-- [구간 병합 (Merge Intervals)](https://leetcode.com/problems/merge-intervals/)
-- [구간 삽입 (Insert Interval)](https://leetcode.com/problems/insert-interval/)
-- [회의실 배정 (Meeting Rooms)](https://leetcode.com/problems/meeting-rooms/)
-- [겹치지 않는 구간 (Non-overlapping Intervals)](https://leetcode.com/problems/non-overlapping-intervals/)
+- [구간 병합 (Merge Intervals)](https://leetcode.com/problems/merge-intervals/){:target="_blank"}
+- [구간 삽입 (Insert Interval)](https://leetcode.com/problems/insert-interval/){:target="_blank"}
+- [회의실 배정 (Meeting Rooms)](https://leetcode.com/problems/meeting-rooms/){:target="_blank"}
+- [겹치지 않는 구간 (Non-overlapping Intervals)](https://leetcode.com/problems/non-overlapping-intervals/){:target="_blank"}
 
 ### 스택(Stack)
-- [유효한 괄호 (Valid Parentheses)](https://leetcode.com/problems/valid-parentheses/)
-- [최소 스택 (Min Stack)](https://leetcode.com/problems/min-stack/)
-- [후위 표기법 계산 (Evaluate Reverse Polish Notation)](https://leetcode.com/problems/evaluate-reverse-polish-notation/)
-- [일일 온도 (Daily Temperatures)](https://leetcode.com/problems/daily-temperatures/)
+- [유효한 괄호 (Valid Parentheses)](https://leetcode.com/problems/valid-parentheses/){:target="_blank"}
+- [최소 스택 (Min Stack)](https://leetcode.com/problems/min-stack/){:target="_blank"}
+- [후위 표기법 계산 (Evaluate Reverse Polish Notation)](https://leetcode.com/problems/evaluate-reverse-polish-notation/){:target="_blank"}
+- [일일 온도 (Daily Temperatures)](https://leetcode.com/problems/daily-temperatures/){:target="_blank"}
 
 ### 연결 리스트(Linked List)
-- [연결 리스트 뒤집기 (Reverse Linked List)](https://leetcode.com/problems/reverse-linked-list/)
-- [두 정렬된 리스트 병합 (Merge Two Sorted Lists)](https://leetcode.com/problems/merge-two-sorted-lists/)
-- [연결 리스트 사이클 (Linked List Cycle)](https://leetcode.com/problems/linked-list-cycle/)
-- [뒤에서 N번째 노드 제거 (Remove Nth Node From End of List)](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)
+- [연결 리스트 뒤집기 (Reverse Linked List)](https://leetcode.com/problems/reverse-linked-list/){:target="_blank"}
+- [두 정렬된 리스트 병합 (Merge Two Sorted Lists)](https://leetcode.com/problems/merge-two-sorted-lists/){:target="_blank"}
+- [연결 리스트 사이클 (Linked List Cycle)](https://leetcode.com/problems/linked-list-cycle/){:target="_blank"}
+- [뒤에서 N번째 노드 제거 (Remove Nth Node From End of List)](https://leetcode.com/problems/remove-nth-node-from-end-of-list/){:target="_blank"}
 
 ### 이진 트리(Binary Tree)
-- [이진 트리 중위 순회 (Binary Tree Inorder Traversal)](https://leetcode.com/problems/binary-tree-inorder-traversal/)
-- [이진 트리의 최대 깊이 (Maximum Depth of Binary Tree)](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
-- [경로 합 (Path Sum)](https://leetcode.com/problems/path-sum/)
-- [이진 트리 직렬화 및 역직렬화 (Serialize and Deserialize Binary Tree)](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)
+- [이진 트리 중위 순회 (Binary Tree Inorder Traversal)](https://leetcode.com/problems/binary-tree-inorder-traversal/){:target="_blank"}
+- [이진 트리의 최대 깊이 (Maximum Depth of Binary Tree)](https://leetcode.com/problems/maximum-depth-of-binary-tree/){:target="_blank"}
+- [경로 합 (Path Sum)](https://leetcode.com/problems/path-sum/){:target="_blank"}
+- [이진 트리 직렬화 및 역직렬화 (Serialize and Deserialize Binary Tree)](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/){:target="_blank"}
 
 ### 이진 탐색 트리(Binary Tree Search)
-- [이진 탐색 트리 유효성 검사 (Validate Binary Search Tree)](https://leetcode.com/problems/validate-binary-search-tree/)
-- [이진 탐색 트리의 최소 공통 조상 (Lowest Common Ancestor of a BST)](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
-- [이진 탐색 트리에 노드 삽입 (Insert into a Binary Search Tree)](https://leetcode.com/problems/insert-into-a-binary-search-tree/)
-- [이진 탐색 트리에서 노드 삭제 (Delete Node in a BST)](https://leetcode.com/problems/delete-node-in-a-bst/)
+- [이진 탐색 트리 유효성 검사 (Validate Binary Search Tree)](https://leetcode.com/problems/validate-binary-search-tree/){:target="_blank"}
+- [이진 탐색 트리의 최소 공통 조상 (Lowest Common Ancestor of a BST)](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/){:target="_blank"}
+- [이진 탐색 트리에 노드 삽입 (Insert into a Binary Search Tree)](https://leetcode.com/problems/insert-into-a-binary-search-tree/){:target="_blank"}
+- [이진 탐색 트리에서 노드 삭제 (Delete Node in a BST)](https://leetcode.com/problems/delete-node-in-a-bst/){:target="_blank"}
 
 ### 그래프(Graph)
-- [그래프 복제 (Clone Graph)](https://leetcode.com/problems/clone-graph/)
-- [강의 계획표 (Course Schedule)](https://leetcode.com/problems/course-schedule/)
-- [무방향 그래프의 연결 요소 개수 (Number of Connected Components in an Undirected Graph)](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
-- [중복 간선 (Redundant Connection)](https://leetcode.com/problems/redundant-connection/)
+- [그래프 복제 (Clone Graph)](https://leetcode.com/problems/clone-graph/){:target="_blank"}
+- [강의 계획표 (Course Schedule)](https://leetcode.com/problems/course-schedule/){:target="_blank"}
+- [무방향 그래프의 연결 요소 개수 (Number of Connected Components in an Undirected Graph)](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/){:target="_blank"}
+- [중복 간선 (Redundant Connection)](https://leetcode.com/problems/redundant-connection/){:target="_blank"}
 
 ### BFS/DFS
-- [단어 사다리 (Word Ladder)](https://leetcode.com/problems/word-ladder/)
-- [섬의 개수 (Number of Islands)](https://leetcode.com/problems/number-of-islands/)
-- [그래프 복제 (Clone Graph)](https://leetcode.com/problems/clone-graph/)
-- [태평양 대서양 수류 (Pacific Atlantic Water Flow)](https://leetcode.com/problems/pacific-atlantic-water-flow/)
+- [단어 사다리 (Word Ladder)](https://leetcode.com/problems/word-ladder/){:target="_blank"}
+- [섬의 개수 (Number of Islands)](https://leetcode.com/problems/number-of-islands/){:target="_blank"}
+- [그래프 복제 (Clone Graph)](https://leetcode.com/problems/clone-graph/){:target="_blank"}
+- [태평양 대서양 수류 (Pacific Atlantic Water Flow)](https://leetcode.com/problems/pacific-atlantic-water-flow/){:target="_blank"}
 
 ### 그래프 BFS(Graph BFS)
-- [이진 행렬에서의 최단 경로 (Shortest Path in Binary Matrix)](https://leetcode.com/problems/shortest-path-in-binary-matrix/)
-- [단어 사다리 II (Word Ladder II)](https://leetcode.com/problems/word-ladder-ii/)
-- [자물쇠 열기 (Open the Lock)](https://leetcode.com/problems/open-the-lock/)
-- [최소 나이트 이동 (Minimum Knight Moves)](https://leetcode.com/problems/minimum-knight-moves/)
+- [이진 행렬에서의 최단 경로 (Shortest Path in Binary Matrix)](https://leetcode.com/problems/shortest-path-in-binary-matrix/){:target="_blank"}
+- [단어 사다리 II (Word Ladder II)](https://leetcode.com/problems/word-ladder-ii/){:target="_blank"}
+- [자물쇠 열기 (Open the Lock)](https://leetcode.com/problems/open-the-lock/){:target="_blank"}
+- [최소 나이트 이동 (Minimum Knight Moves)](https://leetcode.com/problems/minimum-knight-moves/){:target="_blank"}
 
 ### 트라이(Trie)
-- [트라이 구현 (Implement Trie, Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/)
-- [단어 추가 및 검색 (Add and Search Word)](https://leetcode.com/problems/add-and-search-word-data-structure-design/)
-- [단어 검색 II (Word Search II)](https://leetcode.com/problems/word-search-ii/)
-- [단어 치환 (Replace Words)](https://leetcode.com/problems/replace-words/)
+- [트라이 구현 (Implement Trie, Prefix Tree)](https://leetcode.com/problems/implement-trie-prefix-tree/){:target="_blank"}
+- [단어 추가 및 검색 (Add and Search Word)](https://leetcode.com/problems/add-and-search-word-data-structure-design/){:target="_blank"}
+- [단어 검색 II (Word Search II)](https://leetcode.com/problems/word-search-ii/){:target="_blank"}
+- [단어 치환 (Replace Words)](https://leetcode.com/problems/replace-words/){:target="_blank"}
 
 ### 백트래킹(Backtracking)
-- [순열 (Permutations)](https://leetcode.com/problems/permutations/)
-- [조합 합 (Combination Sum)](https://leetcode.com/problems/combination-sum/)
-- [스도쿠 해결 (Sudoku Solver)](https://leetcode.com/problems/sudoku-solver/)
-- [단어 검색 (Word Search)](https://leetcode.com/problems/word-search/)
+- [순열 (Permutations)](https://leetcode.com/problems/permutations/){:target="_blank"}
+- [조합 합 (Combination Sum)](https://leetcode.com/problems/combination-sum/){:target="_blank"}
+- [스도쿠 해결 (Sudoku Solver)](https://leetcode.com/problems/sudoku-solver/){:target="_blank"}
+- [단어 검색 (Word Search)](https://leetcode.com/problems/word-search/){:target="_blank"}
 
 ### 분할 정복(Divide & Conquer)
-- [병합 정렬 (Merge Sort)](https://leetcode.com/problems/sort-an-array/)
-- [퀵 정렬 (Quick Sort)](https://leetcode.com/problems/sort-an-array/)
-- [최대 부분합 (Maximum Subarray)](https://leetcode.com/problems/maximum-subarray/)
-- [배열에서 K번째 큰 요소 (Kth Largest Element in an Array)](https://leetcode.com/problems/kth-largest-element-in-an-array/)
+- [병합 정렬 (Merge Sort)](https://leetcode.com/problems/sort-an-array/){:target="_blank"}
+- [퀵 정렬 (Quick Sort)](https://leetcode.com/problems/sort-an-array/){:target="_blank"}
+- [최대 부분합 (Maximum Subarray)](https://leetcode.com/problems/maximum-subarray/){:target="_blank"}
+- [배열에서 K번째 큰 요소 (Kth Largest Element in an Array)](https://leetcode.com/problems/kth-largest-element-in-an-array/){:target="_blank"}
 
 ### 카데인 알고리즘(Kadane's Algorithm)
-- [최대 부분합 (Maximum Subarray)](https://leetcode.com/problems/maximum-subarray/)
-- [최대 합 원형 부분 배열 (Maximum Sum Circular Subarray)](https://leetcode.com/problems/maximum-sum-circular-subarray/)
-- [최대 곱 부분 배열 (Maximum Product Subarray)](https://leetcode.com/problems/maximum-product-subarray/)
-- [최소 비용 계단 오르기 (Minimum Cost Climbing Stairs)](https://leetcode.com/problems/min-cost-climbing-stairs/)
+- [최대 부분합 (Maximum Subarray)](https://leetcode.com/problems/maximum-subarray/){:target="_blank"}
+- [최대 합 원형 부분 배열 (Maximum Sum Circular Subarray)](https://leetcode.com/problems/maximum-sum-circular-subarray/){:target="_blank"}
+- [최대 곱 부분 배열 (Maximum Product Subarray)](https://leetcode.com/problems/maximum-product-subarray/){:target="_blank"}
+- [최소 비용 계단 오르기 (Minimum Cost Climbing Stairs)](https://leetcode.com/problems/min-cost-climbing-stairs/){:target="_blank"}
 
 ### 이진 탐색(Binary Search)
-- [이진 탐색 (Binary Search)](https://leetcode.com/problems/binary-search/)
-- [회전된 정렬 배열에서 검색 (Search in Rotated Sorted Array)](https://leetcode.com/problems/search-in-rotated-sorted-array/)
-- [회전된 정렬 배열에서 최소값 찾기 (Find Minimum in Rotated Sorted Array)](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
-- [두 정렬된 배열의 중앙값 찾기 (Median of Two Sorted Arrays)](https://leetcode.com/problems/median-of-two-sorted-arrays/)
+- [이진 탐색 (Binary Search)](https://leetcode.com/problems/binary-search/){:target="_blank"}
+- [회전된 정렬 배열에서 검색 (Search in Rotated Sorted Array)](https://leetcode.com/problems/search-in-rotated-sorted-array/){:target="_blank"}
+- [회전된 정렬 배열에서 최소값 찾기 (Find Minimum in Rotated Sorted Array)](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/){:target="_blank"}
+- [두 정렬된 배열의 중앙값 찾기 (Median of Two Sorted Arrays)](https://leetcode.com/problems/median-of-two-sorted-arrays/){:target="_blank"}
 
 ### 힙(Heap)
-- [배열에서 K번째 큰 요소 (Kth Largest Element in an Array)](https://leetcode.com/problems/kth-largest-element-in-an-array/)
-- [K개의 정렬된 리스트 병합 (Merge k Sorted Lists)](https://leetcode.com/problems/merge-k-sorted-lists/)
-- [가장 빈번한 요소들 (Top K Frequent Elements)](https://leetcode.com/problems/top-k-frequent-elements/)
-- [데이터 스트림에서 중앙값 찾기 (Find Median from Data Stream)](https://leetcode.com/problems/find-median-from-data-stream/)
+- [배열에서 K번째 큰 요소 (Kth Largest Element in an Array)](https://leetcode.com/problems/kth-largest-element-in-an-array/){:target="_blank"}
+- [K개의 정렬된 리스트 병합 (Merge k Sorted Lists)](https://leetcode.com/problems/merge-k-sorted-lists/){:target="_blank"}
+- [가장 빈번한 요소들 (Top K Frequent Elements)](https://leetcode.com/problems/top-k-frequent-elements/){:target="_blank"}
+- [데이터 스트림에서 중앙값 찾기 (Find Median from Data Stream)](https://leetcode.com/problems/find-median-from-data-stream/){:target="_blank"}
 
 ### 비트 조작(Bit Manipulation)
-- [유일한 수 (Single Number)](https://leetcode.com/problems/single-number/)
-- [1의 개수 (Number of 1 Bits)](https://leetcode.com/problems/number-of-1-bits/)
-- [누락된 숫자 (Missing Number)](https://leetcode.com/problems/missing-number/)
-- [비트 뒤집기 (Reverse Bits)](https://leetcode.com/problems/reverse-bits/)
+- [유일한 수 (Single Number)](https://leetcode.com/problems/single-number/){:target="_blank"}
+- [1의 개수 (Number of 1 Bits)](https://leetcode.com/problems/number-of-1-bits/){:target="_blank"}
+- [누락된 숫자 (Missing Number)](https://leetcode.com/problems/missing-number/){:target="_blank"}
+- [비트 뒤집기 (Reverse Bits)](https://leetcode.com/problems/reverse-bits/){:target="_blank"}
 
 ### 수학(Math)
-- [에라토스테네스의 체 (Sieve of Eratosthenes)](https://leetcode.com/problems/count-primes/)
-- [최대공약수(GCD)와 최소공배수(LCM)](https://leetcode.com/problems/greatest-common-divisor-of-strings/)
-- [피보나치 수 (Fibonacci Number)](https://leetcode.com/problems/fibonacci-number/)
-- [3의 제곱 여부 판별 (Power of Three)](https://leetcode.com/problems/power-of-three/)
+- [에라토스테네스의 체 (Sieve of Eratosthenes)](https://leetcode.com/problems/count-primes/){:target="_blank"}
+- [최대공약수(GCD)와 최소공배수(LCM)](https://leetcode.com/problems/greatest-common-divisor-of-strings/){:target="_blank"}
+- [피보나치 수 (Fibonacci Number)](https://leetcode.com/problems/fibonacci-number/){:target="_blank"}
+- [3의 제곱 여부 판별 (Power of Three)](https://leetcode.com/problems/power-of-three/){:target="_blank"}
 
 ### 1차원 동적 프로그래밍(1D DP)
-- [계단 오르기 (Climbing Stairs)](https://leetcode.com/problems/climbing-stairs/)
-- [집 도둑 (House Robber)](https://leetcode.com/problems/house-robber/)
-- [가장 긴 증가하는 부분 수열 (Longest Increasing Subsequence)](https://leetcode.com/problems/longest-increasing-subsequence/)
-- [동전 교환 (Coin Change)](https://leetcode.com/problems/coin-change/)
+- [계단 오르기 (Climbing Stairs)](https://leetcode.com/problems/climbing-stairs/){:target="_blank"}
+- [집 도둑 (House Robber)](https://leetcode.com/problems/house-robber/){:target="_blank"}
+- [가장 긴 증가하는 부분 수열 (Longest Increasing Subsequence)](https://leetcode.com/problems/longest-increasing-subsequence/){:target="_blank"}
+- [동전 교환 (Coin Change)](https://leetcode.com/problems/coin-change/){:target="_blank"}
 
 ### 다차원 동적 프로그래밍(Multidimensional DP)
-- [유일한 경로 (Unique Paths)](https://leetcode.com/problems/unique-paths/)
-- [가장 긴 공통 부분 수열 (Longest Common Subsequence)](https://leetcode.com/problems/longest-common-subsequence/)
-- [편집 거리 (Edit Distance)](https://leetcode.com/problems/edit-distance/)
-- [최대 정사각형 (Maximal Square)](https://leetcode.com/problems/maximal-square/)
+- [유일한 경로 (Unique Paths)](https://leetcode.com/problems/unique-paths/){:target="_blank"}
+- [가장 긴 공통 부분 수열 (Longest Common Subsequence)](https://leetcode.com/problems/longest-common-subsequence/){:target="_blank"}
+- [편집 거리 (Edit Distance)](https://leetcode.com/problems/edit-distance/){:target="_blank"}
+- [최대 정사각형 (Maximal Square)](https://leetcode.com/problems/maximal-square/){:target="_blank"}

@@ -1,11 +1,10 @@
 ---
 layout: blog
-title: Blog
-subtitle: Welcome to Jae's tech blog
+title: Jae's Tech Blog
+subtitle: 의미있는 글을 올리려고 노력합니다.
 lang: ko
 date: 2024-06-24 18:00:00 +0900
 ---
-
 <div id="filter-buttons" class="filter-buttons">
   <button class="filter-toggle" data-filter="all">ALL</button>
 </div>
