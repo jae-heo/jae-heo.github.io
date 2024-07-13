@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-07-13T23:10:47+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="https://jae-heo.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jae-heo.github.io/" rel="alternate" type="text/html" /><updated>2024-07-13T23:36:42+09:00</updated><id>https://jae-heo.github.io/feed.xml</id><title type="html">Jaeyoung Heo</title><subtitle>Jaeyoung Heo&apos;s tech blog
 </subtitle><author><name>{&quot;fullname&quot;=&gt;&quot;Jaeyoung Heo&quot;, &quot;github&quot;=&gt;&quot;jae-heo&quot;, &quot;linkedin&quot;=&gt;&quot;jaeyoung-heo-664033282&quot;, &quot;email&quot;=&gt;&quot;gjwodud119@gmail.com&quot;}</name><email>gjwodud119@gmail.com</email></author><entry xml:lang="ko"><title type="html">Python 고수의 길</title><link href="https://jae-heo.github.io/ko/tutorial/2024/07/13/advanced-in_python.html" rel="alternate" type="text/html" title="Python 고수의 길" /><published>2024-07-13T12:00:00+09:00</published><updated>2024-07-09T12:00:00+09:00</updated><id>https://jae-heo.github.io/ko/tutorial/2024/07/13/advanced-in_python</id><content type="html" xml:base="https://jae-heo.github.io/ko/tutorial/2024/07/13/advanced-in_python.html"><![CDATA[<h2 id="목차">목차</h2>
 
 <ol>
@@ -194,7 +194,11 @@
 
 <h3 id="추가적으로-알아두면-좋은-정보">추가적으로 알아두면 좋은 정보</h3>
 
-<h4 id="wraps">wraps</h4>
+<ul>
+  <li>
+    <h4 id="wraps">wraps</h4>
+  </li>
+</ul>
 
 <p>wraps는 Python의 functools 모듈에서 제공하는 데코레이터로, 몇 가지 작업을 수행합니다.</p>
 <ol>
@@ -339,7 +343,11 @@
 
 <h3 id="추가적으로-알아두면-좋은-정보-1">추가적으로 알아두면 좋은 정보</h3>
 
-<h4 id="제너레이터-표현식">제너레이터 표현식</h4>
+<ul>
+  <li>
+    <h4 id="제너레이터-표현식">제너레이터 표현식</h4>
+  </li>
+</ul>
 
 <p>리스트 컴프리헨션과 유사하지만 소괄호 <code class="language-plaintext highlighter-rouge">()</code> 를 사용하여 제너레이터를 생성할 수 있습니다. 이때 장점은 공간복잡도를 절약할 수 있습니다.</p>
 
@@ -356,7 +364,11 @@
     <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h4 id="send-메서드">send 메서드</h4>
+<ul>
+  <li>
+    <h4 id="send-메서드">send 메서드</h4>
+  </li>
+</ul>
 
 <p>제너레이터의 <code class="language-plaintext highlighter-rouge">send</code> 메서드를 사용하면 제너레이터 내부로 값을 전달할 수 있습니다.</p>
 
@@ -371,7 +383,11 @@
 <span class="n">gen</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="sh">"</span><span class="s">World</span><span class="sh">"</span><span class="p">)</span>
 </code></pre></div></div>
 
-<h4 id="양방향-통신">양방향 통신</h4>
+<ul>
+  <li>
+    <h4 id="양방향-통신">양방향 통신</h4>
+  </li>
+</ul>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 이 메커니즘을 이해하면 제너레이터를 사용한 복잡한 코루틴 패턴을 구현할 수 있습니다.
 </span>

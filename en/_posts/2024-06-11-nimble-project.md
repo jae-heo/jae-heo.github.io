@@ -19,7 +19,7 @@ lang: en
     2. [Phase 2 Design](#phase-2-design)
     3. [Phase 3 Design](#phase-3-design)
 
--------------
+<br><br>
 
 ## Introduction to Project Nimble
 
@@ -59,7 +59,7 @@ Project Nimble aims to automate digital marketing. The modern digital marketing 
     - Linux
     - Terraform
 
-------------
+<br><br>
 
 ## Project Architecture
 
