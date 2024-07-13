@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Python 고수의 길 — Python 고수가 되려면 어떻게 해야할까요?  | Jaeyoung Heo</title>
+<meta name="description" content="Jaeyoung Heo's tech blog
+">
+<meta name="keywords" content="python">
+<link rel="canonical" href="/ko/tutorial/2024/07/13/advanced-in_python.html">
+<link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/agate.css">
+
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XDPCR56GW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XDPCR56GW');
+</script>
+</head>
+<body>
+<div class="wrapper">
+<header class="header">
+  <div class="navigation">
+    <a href="/ko" class="logo">Jaeyoung Heo</a>
+    <ul class="menu">
+      <li class="menu__entry">
+        <a href="/ko/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/ko/project">Project</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/ko/blog">Blog</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="social-links">
+    
+    <li class="social-links__entry">
+      <a href="mailto:gjwodud119@gmail.com" target="_blank">
+        <i class="fa fa-envelope-square"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://github.com/jae-heo" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://in.linkedin.com/in/jaeyoung-heo-664033282" target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    
+    <li class="language-selector">
+      <a href="/en/tutorial/2024/07/13/advanced-in_python.html"><strong>EN</strong></a> |
+      <a href="/ko/tutorial/2024/07/13/advanced-in_python.html"><strong>KO</strong></a>
+    </li>
+  </ul>
+</header>
+<h1 class="page-title">
+<div class="page-title__text">Python 고수의 길</div>
+<div class="page-title__subtitle">Python 고수가 되려면 어떻게 해야할까요?</div>
+</h1>
+
+<h2 id="목차">목차</h2>
+
+<ol>
+  <li><a href="#배경">배경</a></li>
+  <li><a href="#데코레이터-decorator">데코레이터 (Decorator)</a>
+    <ul>
+      <li><a href="#예시">예시</a></li>
+      <li><a href="#응용사례">응용사례</a></li>
+      <li><a href="#추가적으로-알아두면-좋은-정보">추가 정보: wraps</a></li>
+    </ul>
+  </li>
+  <li><a href="#제너레이터-generator">제너레이터 (Generator)</a>
+    <ul>
+      <li><a href="#예시-1">예시</a></li>
+      <li><a href="#제너레이터의-특징">제너레이터의 특징</a></li>
+      <li><a href="#응용사례-1">응용사례</a></li>
+      <li><a href="#추가적으로-알아두면-좋은-정보-1">추가 정보</a></li>
+    </ul>
+  </li>
+  <li><a href="#컨텍스트-매니저-context-manager">컨텍스트 매니저 (Context Manager)</a>
+    <ul>
+      <li><a href="#기본-구조">기본 구조</a></li>
+      <li><a href="#예시-파일-관리">예시: 파일 관리</a></li>
+      <li><a href="#contextlib-사용">contextlib 사용</a></li>
+      <li><a href="#응용-사례">응용 사례</a></li>
+      <li><a href="#주요-이점">주요 이점</a></li>
+    </ul>
+  </li>
+  <li><a href="#메타클래스-metaclasses">메타클래스 (Metaclasses)</a>
+    <ul>
+      <li><a href="#기본-개념">기본 개념</a></li>
+      <li><a href="#메타클래스-정의">메타클래스 정의</a></li>
+      <li><a href="#메타클래스-사용">메타클래스 사용</a></li>
+      <li><a href="#예시-속성-검증">예시: 속성 검증</a></li>
+      <li><a href="#응용-사례-1">응용 사례</a></li>
+      <li><a href="#주의사항">주의사항</a></li>
+    </ul>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="배경">배경</h2>
+
+<p>Python에서는 여러 심화된 기능들을 제공합니다. 아쉽게도 필자는 이러한 기능들을 배우기는 했어도 실제로 사용해 볼 경험은 크게 없었습니다. 물론 원리를 아는 것 만으로도 여러 라이브러리/프레임워크에 대한 이해도가 많이 올라가지만, 실제 응용 사례까지 알게된다면 Python을 더욱 알차게 사용할 수 있을 것이라 기대합니다.</p>
+
+<p>이 글에서는 심화 기능들에 대하여 다시한번 정리하고 응용방법까지 알아보겠습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="데코레이터-decorator">데코레이터 (Decorator)</h2>
+
+<p>데코레이터는 다른 함수의 기능에 부가적인 기능, 작업을 추가하는 함수입니다. 이 기능을 사용하면 실제 함수의 코드를 변경하지 않고도 해당 함수에 기능을 추가할 수 있습니다.</p>
+
+<h3 id="예시">예시</h3>
+
+<p>아래의 예시에서는 log_function_call 이라는 함수가 greet 함수의 decorator로 사용됩니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c1"># Decorator 함수에서는 내부적으로 wrapper라는 함수를 정의하고 해당 함수를 return하게 됩니다.
+</span><span class="k">def</span> <span class="nf">log_function_call</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">함수 호출: </span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="c1"># greet의 함수가 호출될 때 log_function_call 함수를 
+# 데코레이터로 사용한다는 것을 @log_function_call 로 표현합니다.
+</span><span class="nd">@log_function_call</span>
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">안녕하세요, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">님!</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="nf">greet</span><span class="p">(</span><span class="sh">"</span><span class="s">재영</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="결과">결과</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>함수 호출: greet
+안녕하세요, 재영님!
+</code></pre></div></div>
+
+<h3 id="응용사례">응용사례</h3>
+
+<ul>
+  <li><strong>로깅</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">logging</span>
+
+<span class="n">logging</span><span class="p">.</span><span class="nf">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="p">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">log_function_call</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">logging</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">함수 호출: </span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">logging</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">함수 </span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="s"> 정상 종료</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">함수 </span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="s">에서 에러 발생: </span><span class="si">{</span><span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">raise</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@log_function_call</span>
+<span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+
+<span class="c1"># 정상 케이스
+</span><span class="nf">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># 에러 케이스
+</span><span class="k">try</span><span class="p">:</span>
+    <span class="nf">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">ZeroDivisionError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>인증</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">req_auth</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">is_authenticated</span><span class="p">():</span>  <span class="c1"># 인증 확인 함수 (별도 구현 필요)
+</span>            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">인증이 필요합니다.</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@req_auth</span>
+<span class="k">def</span> <span class="nf">sensitive_operation</span><span class="p">():</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">중요한 작업 수행</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="nf">sensitive_operation</span><span class="p">()</span>  <span class="c1"># 인증되지 않은 경우 PermissionError 발생
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>캐싱</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">memoize</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cache</span><span class="p">[</span><span class="n">args</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">cache</span><span class="p">[</span><span class="n">args</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">fibonacci</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>  <span class="c1"># 첫 실행은 느리지만, 이후 동일한 입력에 대하여 빠르게 응답
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>재시도</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">time</span>
+
+<span class="c1"># 데코레이터에서 인자를 받고싶으면 함수를 3중으로 작성해야합니다.
+# 이를 데코레이터 팩토리라고 칭합니다.
+</span><span class="k">def</span> <span class="nf">retry</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">attempts</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">attempts</span> <span class="o">&lt;</span> <span class="n">max_attempts</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">attempts</span> <span class="o">==</span> <span class="n">max_attempts</span><span class="p">:</span>
+                        <span class="k">raise</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">오류 발생: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s">. </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s">초 후 재시도...</span><span class="sh">"</span><span class="p">)</span>
+                    <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">decorator</span>
+
+<span class="nd">@retry</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unstable_network_call</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="n">random</span>
+    <span class="k">if</span> <span class="n">random</span><span class="p">.</span><span class="nf">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.7</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nc">ConnectionError</span><span class="p">(</span><span class="sh">"</span><span class="s">네트워크 오류</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">성공</span><span class="sh">"</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">unstable_network_call</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="추가적으로-알아두면-좋은-정보">추가적으로 알아두면 좋은 정보</h3>
+
+<h4 id="wraps">wraps</h4>
+
+<p>wraps는 Python의 functools 모듈에서 제공하는 데코레이터로, 몇 가지 작업을 수행합니다.</p>
+<ol>
+  <li>메타데이터 보존 - wraps는 원본 함수의 메타데이터(이름, 문서열, 인자 목록 등)를 데코레이터에 의해 래핑된 함수로 복사합니다.</li>
+  <li>디버깅 및 내부 검사 지원 - 이를 통해 디버깅 도구와 내부 검사 기능이 원본 함수의 정보를 올바르게 표시할 수 있게 됩니다.</li>
+  <li>문서화 유지 - 원본 함수의 독스트링(docstring)을 보존하여, 문서 생성 도구가 정확한 정보를 제공할 수 있게 합니다.</li>
+</ol>
+
+<p><strong>문제 예시</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">wrapper 함수가 호출되었습니다.</span><span class="sh">"""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@my_decorator</span>
+<span class="k">def</span> <span class="nf">say_hello</span><span class="p">():</span>
+    <span class="sh">"""</span><span class="s">say_hello 함수가 호출되었습니다.</span><span class="sh">"""</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">안녕하세요.</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">.</span><span class="n">__name__</span><span class="p">)</span>  <span class="c1"># 출력: wrapper
+</span><span class="nf">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">.</span><span class="n">__doc__</span><span class="p">)</span>   <span class="c1"># 출력: wrapper 함수가 호출되었습니다.
+</span></code></pre></div></div>
+
+<p><strong>해결 예시</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">wrapper 함수가 호출되었습니다.</span><span class="sh">"""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@my_decorator</span>
+<span class="k">def</span> <span class="nf">say_hello</span><span class="p">():</span>
+    <span class="sh">"""</span><span class="s">say_hello 함수가 호출되었습니다.</span><span class="sh">"""</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Hello!</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">.</span><span class="n">__name__</span><span class="p">)</span>  <span class="c1"># 출력: say_hello
+</span><span class="nf">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">.</span><span class="n">__doc__</span><span class="p">)</span>   <span class="c1"># 출력: say_hello 함수가 호출되었습니다.
+</span></code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="제너레이터-generator">제너레이터 (Generator)</h2>
+
+<p>제너레이터는 이터레이터를 생성하는 함수입니다. 일반 함수와 달리 <code class="language-plaintext highlighter-rouge">yield</code> 키워드를 사용하여 값을 하나씩 반환합니다. 이를 통해 메모리를 효율적으로 사용하고, 큰 데이터셋을 다룰 때 유용합니다.</p>
+
+<h3 id="예시-1">예시</h3>
+
+<p>아래의 예시에서는 <code class="language-plaintext highlighter-rouge">fibonacci</code> 함수가 제너레이터로 구현되어 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">a</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="c1"># 제너레이터 사용
+</span><span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="결과-1">결과</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+</code></pre></div></div>
+
+<h3 id="제너레이터의-특징">제너레이터의 특징</h3>
+
+<ol>
+  <li><strong>지연 평가 (Lazy Evaluation)</strong>: 값을 미리 계산하지 않고, 필요할 때마다 계산합니다.</li>
+  <li><strong>메모리 효율성</strong>: 모든 값을 한 번에 메모리에 저장하지 않아 메모리 사용량이 적습니다.</li>
+  <li><strong>무한 시퀀스</strong>: 이론적으로 무한한 시퀀스를 표현할 수 있습니다.</li>
+</ol>
+
+<h3 id="응용사례-1">응용사례</h3>
+
+<ul>
+  <li><strong>대용량 파일 읽기</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_large_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">file</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">line</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nf">read_large_file</span><span class="p">(</span><span class="sh">'</span><span class="s">large_file.txt</span><span class="sh">'</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>무한 시퀀스 생성</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">infinite_sequence</span><span class="p">():</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">num</span>
+        <span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">infinite_sequence</span><span class="p">():</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">break</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>데이터 변환 파이프라인</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">numbers</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">i</span>
+
+<span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">num</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">num</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">pipeline</span> <span class="o">=</span> <span class="nf">add_one</span><span class="p">(</span><span class="nf">square</span><span class="p">(</span><span class="nf">numbers</span><span class="p">()))</span>
+<span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">pipeline</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="추가적으로-알아두면-좋은-정보-1">추가적으로 알아두면 좋은 정보</h3>
+
+<h4 id="제너레이터-표현식">제너레이터 표현식</h4>
+
+<p>리스트 컴프리헨션과 유사하지만 소괄호 <code class="language-plaintext highlighter-rouge">()</code> 를 사용하여 제너레이터를 생성할 수 있습니다. 이때 장점은 공간복잡도를 절약할 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 리스트 컴프리헨션
+</span><span class="n">squares_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+
+<span class="c1"># 제너레이터 표현식
+</span><span class="n">squares_gen</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">squares_list</span><span class="p">)</span>  <span class="c1"># [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+</span><span class="nf">print</span><span class="p">(</span><span class="n">squares_gen</span><span class="p">)</span>   <span class="c1"># &lt;generator object &lt;genexpr&gt; at 0x...&gt;
+</span>
+<span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">squares_gen</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="send-메서드">send 메서드</h4>
+
+<p>제너레이터의 <code class="language-plaintext highlighter-rouge">send</code> 메서드를 사용하면 제너레이터 내부로 값을 전달할 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">echo_generator</span><span class="p">():</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">received</span> <span class="o">=</span> <span class="k">yield</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Received: </span><span class="si">{</span><span class="n">received</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="n">gen</span> <span class="o">=</span> <span class="nf">echo_generator</span><span class="p">()</span>
+<span class="nf">next</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>  <span class="c1"># 제너레이터 초기화
+</span><span class="n">gen</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="sh">"</span><span class="s">Hello</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">gen</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="sh">"</span><span class="s">World</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="양방향-통신">양방향 통신</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 이 메커니즘을 이해하면 제너레이터를 사용한 복잡한 코루틴 패턴을 구현할 수 있습니다.
+</span>
+<span class="k">def</span> <span class="nf">two_way_generator</span><span class="p">():</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">received</span> <span class="o">=</span> <span class="k">yield</span> <span class="sh">"</span><span class="s">입력을 받을 준비가 되었습니다.</span><span class="sh">"</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">받은 입력: </span><span class="si">{</span><span class="n">received</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="n">gen</span> <span class="o">=</span> <span class="nf">two_way_generator</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">next</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>  <span class="c1"># 출력: 입력을 받을 준비가 되었습니다.
+</span><span class="nf">print</span><span class="p">(</span><span class="n">gen</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="sh">"</span><span class="s">안녕하세요</span><span class="sh">"</span><span class="p">))</span>  <span class="c1"># 출력: 받은 입력: 안녕하세요
+</span>                            <span class="c1"># 입력을 받을 준비가 되었습니다.
+</span></code></pre></div></div>
+
+<p>제너레이터는 파이썬에서 메모리 효율적인 프로그래밍을 가능하게 하는 강력한 도구입니다. 대용량 데이터 처리, 스트리밍 작업, 혹은 무한 시퀀스 생성 등 다양한 상황에서 유용하게 사용될 수 있습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="컨텍스트-매니저-context-manager">컨텍스트 매니저 (Context Manager)</h2>
+
+<p>컨텍스트 매니저는 리소스의 획득과 반환을 관리하는 객체입니다. 주로 <code class="language-plaintext highlighter-rouge">with</code> 문과 함께 사용되며, 코드 블록 실행 전후에 특정 동작을 수행할 수 있게 해줍니다. 이를 통해 리소스 관리를 더 안전하고 편리하게 할 수 있습니다.</p>
+
+<h3 id="기본-구조">기본 구조</h3>
+
+<p>컨텍스트 매니저는 <code class="language-plaintext highlighter-rouge">__enter__</code>와 <code class="language-plaintext highlighter-rouge">__exit__</code> 메서드를 구현해야 합니다:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyContextManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="c1"># 리소스 획득 또는 초기화
+</span>        <span class="k">return</span> <span class="n">self</span>  <span class="c1"># 또는 다른 관련 객체
+</span>
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="c1"># 리소스 정리 또는 해제
+</span>        <span class="c1"># 예외 처리 (선택적)
+</span>        <span class="k">return</span> <span class="bp">False</span>  <span class="c1"># True를 반환하면 예외를 억제함
+</span></code></pre></div></div>
+
+<h3 id="예시-파일-관리">예시: 파일 관리</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FileManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">file</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">file</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">mode</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nb">file</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nb">file</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nb">file</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+
+<span class="c1"># 사용 예
+</span><span class="k">with</span> <span class="nc">FileManager</span><span class="p">(</span><span class="sh">'</span><span class="s">example.txt</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">'</span><span class="s">Hello, Context Manager!</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="contextlib-사용">contextlib 사용</h3>
+
+<p><code class="language-plaintext highlighter-rouge">contextlib</code> 모듈의 <code class="language-plaintext highlighter-rouge">@contextmanager</code> 데코레이터를 사용하면 더 간단하게 컨텍스트 매니저를 만들 수 있습니다:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">file_manager</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">f</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+
+<span class="c1"># 사용 예
+</span><span class="k">with</span> <span class="nf">file_manager</span><span class="p">(</span><span class="sh">'</span><span class="s">example.txt</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">'</span><span class="s">Hello, contextlib!</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="응용-사례">응용 사례</h3>
+
+<ul>
+  <li><strong>데이터베이스 연결 관리</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">conn</span> <span class="o">=</span> <span class="nf">create_connection</span><span class="p">()</span>  <span class="c1"># 연결 생성 함수
+</span>        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">conn</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="nc">DatabaseConnection</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="nf">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span><span class="sh">"</span><span class="s">SELECT * FROM users</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>시간 측정</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">timer</span><span class="p">():</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+    <span class="k">yield</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">실행 시간: </span><span class="si">{</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="si">}</span><span class="s"> 초</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nf">timer</span><span class="p">():</span>
+    <span class="c1"># 시간을 측정할 코드
+</span>    <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>임시 디렉토리 관리</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">shutil</span>
+<span class="kn">from</span> <span class="n">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">temporary_directory</span><span class="p">():</span>
+    <span class="n">temp_dir</span> <span class="o">=</span> <span class="sh">'</span><span class="s">temp_dir</span><span class="sh">'</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">temp_dir</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">shutil</span><span class="p">.</span><span class="nf">rmtree</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nf">temporary_directory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
+    <span class="c1"># 임시 디렉토리 사용
+</span>    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s">/temp_file.txt</span><span class="sh">"</span><span class="p">,</span> <span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s">임시 파일 내용</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="주요-이점">주요 이점</h3>
+
+<ol>
+  <li><strong>자원 관리 자동화</strong>: 리소스의 획득과 해제를 자동으로 처리합니다.</li>
+  <li><strong>예외 처리</strong>: <code class="language-plaintext highlighter-rouge">__exit__</code> 메서드에서 예외를 처리할 수 있습니다.</li>
+  <li><strong>코드 간결성</strong>: <code class="language-plaintext highlighter-rouge">try</code>-<code class="language-plaintext highlighter-rouge">finally</code> 블록을 사용하는 것보다 더 깔끔한 코드를 작성할 수 있습니다.</li>
+  <li><strong>재사용성</strong>: 동일한 리소스 관리 로직을 여러 곳에서 재사용할 수 있습니다.</li>
+</ol>
+
+<p>컨텍스트 매니저를 사용하면 리소스 관리와 관련된 많은 반복적인 작업을 줄일 수 있으며, 코드의 안정성과 가독성을 높일 수 있습니다. 파일 처리, 데이터베이스 연결, 네트워크 소켓, 락(lock) 관리 등 다양한 상황에서 유용하게 활용될 수 있습니다.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="메타클래스-metaclasses">메타클래스 (Metaclasses)</h2>
+
+<p>메타클래스는 “클래스의 클래스”로, 클래스의 생성과 동작을 제어하는 고급 Python 기능입니다. 메타클래스를 사용하면 클래스 정의 자체를 수정하거나 확장할 수 있습니다.</p>
+
+<h3 id="기본-개념">기본 개념</h3>
+
+<p>Python에서 클래스도 객체입니다. 클래스는 <code class="language-plaintext highlighter-rouge">type</code>이라는 메타클래스의 인스턴스입니다. 메타클래스는 클래스의 생성 프로세스를 제어합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">type</span><span class="p">(</span><span class="n">MyClass</span><span class="p">))</span>  <span class="c1"># 출력: &lt;class 'type'&gt;
+</span></code></pre></div></div>
+
+<h3 id="메타클래스-정의">메타클래스 정의</h3>
+
+<p>메타클래스는 보통 <code class="language-plaintext highlighter-rouge">type</code>을 상속받아 정의합니다:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyMetaclass</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="c1"># 클래스 생성 과정 수정
+</span>        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="메타클래스-사용">메타클래스 사용</h3>
+
+<p>클래스를 정의할 때 <code class="language-plaintext highlighter-rouge">metaclass</code> 키워드 인자를 사용하여 메타클래스를 지정합니다:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">MyMetaclass</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<h3 id="예시-속성-검증">예시: 속성 검증</h3>
+
+<p>메타클래스를 사용하여 클래스 속성을 자동으로 검증하는 예:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ValidateFields</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">'</span><span class="s">_</span><span class="sh">'</span><span class="p">):</span>  <span class="c1"># 비공개 속성은 검증하지 않음
+</span>                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="nc">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s"> must be int, float, str, or bool</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ValidateFields</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">John</span><span class="sh">"</span>
+    <span class="n">age</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mf">1.75</span>
+    <span class="n">is_student</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="c1"># grades = []  # 이 줄의 주석을 해제하면 TypeError 발생
+</span></code></pre></div></div>
+
+<h3 id="응용-사례-1">응용 사례</h3>
+
+<ul>
+  <li><strong>싱글톤 패턴 구현</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="n">_instances</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cls</span><span class="p">.</span><span class="n">_instances</span><span class="p">:</span>
+            <span class="n">cls</span><span class="p">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span> <span class="o">=</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Singleton</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="nc">MyClass</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="nc">MyClass</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">)</span>  <span class="c1"># 출력: True
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>자동 프로퍼티 생성</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AutoProperty</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">'</span><span class="s">_</span><span class="sh">'</span><span class="p">):</span>
+                <span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nf">property</span><span class="p">(</span><span class="k">lambda</span> <span class="n">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">value</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Config</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">AutoProperty</span><span class="p">):</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="sh">"</span><span class="s">localhost</span><span class="sh">"</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="mi">8080</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="nc">Config</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">host</span><span class="p">)</span>  <span class="c1"># 출력: localhost
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>추상 베이스 클래스 확장</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="k">class</span> <span class="nc">ExtendedABCMeta</span><span class="p">(</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nf">callable</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">key</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">'</span><span class="s">_</span><span class="sh">'</span><span class="p">):</span>
+                <span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nf">abstractmethod</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyAbstractClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ExtendedABCMeta</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">method1</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">method2</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="c1"># MyAbstractClass()  # 이 줄의 주석을 해제하면 TypeError 발생
+</span></code></pre></div></div>
+
+<h3 id="주의사항">주의사항</h3>
+
+<ol>
+  <li>
+    <p><strong>복잡성</strong>: 메타클래스는 복잡합니다. 간단한 문제는 데코레이터나 상속으로 해결하는 것이 좋습니다.</p>
+  </li>
+  <li>
+    <p><strong>성능</strong>: 클래스 생성 시 추가적인 처리를 수행하므로 성능에 영향을 줄 수 있습니다.</p>
+  </li>
+  <li>
+    <p><strong>디버깅</strong>: 메타클래스로 인한 문제는 디버깅이 어려울 수 있습니다.</p>
+  </li>
+  <li>
+    <p><strong>호환성</strong>: 다른 라이브러리나 프레임워크와의 호환성 문제가 발생할 수 있습니다.</p>
+  </li>
+</ol>
+
+<p>메타클래스는 강력한 도구이지만, 일반적인 프로그래밍 작업에서는 자주 사용되지 않습니다. 주로 프레임워크나 라이브러리 개발, 또는 매우 특수한 요구사항이 있는 경우에 사용됩니다. 메타클래스를 사용할 때는 그 필요성과 영향을 신중히 고려해야 합니다.</p>
+
+
+<section id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="jae-heo/jae-heo.github.io"
+            issue-term="pathname"
+            label="Comment"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</section>
+
+<div class="about">
+<div class="about__divider">*****</div>
+<div class="about__text">
+<strong> &copy; 2024 Jaeyoung Heo. </strong>
+</div>
+</div>
+
+
+</div>
+<script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

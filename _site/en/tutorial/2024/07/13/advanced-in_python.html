@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> The Path to Python Mastery — How to Become a Python Expert?  | Jaeyoung Heo</title>
+<meta name="description" content="Jaeyoung Heo's tech blog
+">
+<meta name="keywords" content="python">
+<link rel="canonical" href="/en/tutorial/2024/07/13/advanced-in_python.html">
+<link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/agate.css">
+
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XDPCR56GW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XDPCR56GW');
+</script>
+</head>
+<body>
+<div class="wrapper">
+<header class="header">
+  <div class="navigation">
+    <a href="/en" class="logo">Jaeyoung Heo</a>
+    <ul class="menu">
+      <li class="menu__entry">
+        <a href="/en/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/project">Project</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/blog">Blog</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="social-links">
+    
+    <li class="social-links__entry">
+      <a href="mailto:gjwodud119@gmail.com" target="_blank">
+        <i class="fa fa-envelope-square"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://github.com/jae-heo" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://in.linkedin.com/in/jaeyoung-heo-664033282" target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    
+    <li class="language-selector">
+      <a href="/en/tutorial/2024/07/13/advanced-in_python.html"><strong>EN</strong></a> |
+      <a href="/ko/tutorial/2024/07/13/advanced-in_python.html"><strong>KO</strong></a>
+    </li>
+  </ul>
+</header>
+<h1 class="page-title">
+<div class="page-title__text">The Path to Python Mastery</div>
+<div class="page-title__subtitle">How to Become a Python Expert?</div>
+</h1>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#background">Background</a></li>
+  <li><a href="#decorators">Decorators</a>
+    <ul>
+      <li><a href="#example">Example</a></li>
+      <li><a href="#use-cases">Use Cases</a></li>
+      <li><a href="#additional-information-to-know">Additional Information: wraps</a></li>
+    </ul>
+  </li>
+  <li><a href="#generators">Generators</a>
+    <ul>
+      <li><a href="#example-1">Example</a></li>
+      <li><a href="#characteristics-of-generators">Characteristics of Generators</a></li>
+      <li><a href="#use-cases-1">Use Cases</a></li>
+      <li><a href="#additional-information-to-know-1">Additional Information</a></li>
+    </ul>
+  </li>
+  <li><a href="#context-managers">Context Managers</a>
+    <ul>
+      <li><a href="#basic-structure">Basic Structure</a></li>
+      <li><a href="#example-file-management">Example: File Management</a></li>
+      <li><a href="#using-contextlib">Using contextlib</a></li>
+      <li><a href="#use-cases-2">Use Cases</a></li>
+      <li><a href="#key-benefits">Key Benefits</a></li>
+    </ul>
+  </li>
+  <li><a href="#metaclasses">Metaclasses</a>
+    <ul>
+      <li><a href="#basic-concept">Basic Concept</a></li>
+      <li><a href="#defining-metaclasses">Defining Metaclasses</a></li>
+      <li><a href="#using-metaclasses">Using Metaclasses</a></li>
+      <li><a href="#example-attribute-validation">Example: Attribute Validation</a></li>
+      <li><a href="#use-cases-3">Use Cases</a></li>
+      <li><a href="#precautions">Precautions</a></li>
+    </ul>
+  </li>
+</ol>
+
+<p><br />
+<br /></p>
+
+<h2 id="background">Background</h2>
+
+<p>Python offers various advanced features. Unfortunately, while I’ve learned about these features, I haven’t had much experience using them in practice. Of course, understanding the principles alone greatly improves comprehension of various libraries and frameworks, but if we also learn about real-world applications, we can use Python even more effectively.</p>
+
+<p>In this post, we’ll review these advanced features once again and explore their practical applications.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="decorators">Decorators</h2>
+
+<p>Decorators are functions that add supplementary functionality or operations to other functions. This feature allows you to add functionality to a function without changing its actual code.</p>
+
+<h3 id="example">Example</h3>
+
+<p>In the example below, a function called log_function_call is used as a decorator for the greet function.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># The Decorator function internally defines a wrapper function and returns it.
+</span><span class="k">def</span> <span class="nf">log_function_call</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Function called: </span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="c1"># @log_function_call indicates that the log_function_call function 
+# is used as a decorator when the greet function is called.
+</span><span class="nd">@log_function_call</span>
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">!</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="nf">greet</span><span class="p">(</span><span class="sh">"</span><span class="s">Jaeyoung</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="result">Result</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Function called: greet
+Hello, Jaeyoung!
+</code></pre></div></div>
+
+<h3 id="use-cases">Use Cases</h3>
+
+<ul>
+  <li><strong>Logging</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">logging</span>
+
+<span class="n">logging</span><span class="p">.</span><span class="nf">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="p">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">log_function_call</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">logging</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Function called: </span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">logging</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Function </span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="s"> completed successfully</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Error occurred in function </span><span class="si">{</span><span class="n">func</span><span class="p">.</span><span class="n">__name__</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="nf">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+            <span class="k">raise</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@log_function_call</span>
+<span class="k">def</span> <span class="nf">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+
+<span class="c1"># Normal case
+</span><span class="nf">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Error case
+</span><span class="k">try</span><span class="p">:</span>
+    <span class="nf">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">ZeroDivisionError</span><span class="p">:</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Authentication</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">req_auth</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nf">is_authenticated</span><span class="p">():</span>  <span class="c1"># Authentication check function (needs separate implementation)
+</span>            <span class="k">raise</span> <span class="nc">PermissionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Authentication required.</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@req_auth</span>
+<span class="k">def</span> <span class="nf">sensitive_operation</span><span class="p">():</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Performing important operation</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="nf">sensitive_operation</span><span class="p">()</span>  <span class="c1"># Raises PermissionError if not authenticated
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>Caching</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">memoize</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">cache</span><span class="p">[</span><span class="n">args</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">cache</span><span class="p">[</span><span class="n">args</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@memoize</span>
+<span class="k">def</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">fibonacci</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>  <span class="c1"># First execution is slow, but subsequent calls with the same input are fast
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>Retry</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">time</span>
+
+<span class="c1"># To accept arguments in a decorator, you need to write a triple-nested function.
+# This is called a decorator factory.
+</span><span class="k">def</span> <span class="nf">retry</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">attempts</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">attempts</span> <span class="o">&lt;</span> <span class="n">max_attempts</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">attempts</span> <span class="o">==</span> <span class="n">max_attempts</span><span class="p">:</span>
+                        <span class="k">raise</span>
+                    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Error occurred: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s">. Retrying in </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s"> seconds...</span><span class="sh">"</span><span class="p">)</span>
+                    <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">decorator</span>
+
+<span class="nd">@retry</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">unstable_network_call</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="n">random</span>
+    <span class="k">if</span> <span class="n">random</span><span class="p">.</span><span class="nf">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.7</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nc">ConnectionError</span><span class="p">(</span><span class="sh">"</span><span class="s">Network error</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">Success</span><span class="sh">"</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">unstable_network_call</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="additional-information-to-know">Additional Information to Know</h3>
+
+<h4 id="wraps">wraps</h4>
+
+<p>wraps is a decorator provided by Python’s functools module that performs several tasks:</p>
+<ol>
+  <li>Metadata preservation - wraps copies the metadata (name, docstring, argument list, etc.) of the original function to the function wrapped by the decorator.</li>
+  <li>Debugging and introspection support - This allows debugging tools and introspection features to correctly display information about the original function.</li>
+  <li>Documentation maintenance - It preserves the docstring of the original function, allowing documentation generation tools to provide accurate information.</li>
+</ol>
+
+<p><strong>Problem Example</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">The wrapper function has been called.</span><span class="sh">"""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@my_decorator</span>
+<span class="k">def</span> <span class="nf">say_hello</span><span class="p">():</span>
+    <span class="sh">"""</span><span class="s">The say_hello function has been called.</span><span class="sh">"""</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Hello.</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">.</span><span class="n">__name__</span><span class="p">)</span>  <span class="c1"># Output: wrapper
+</span><span class="nf">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">.</span><span class="n">__doc__</span><span class="p">)</span>   <span class="c1"># Output: The wrapper function has been called.
+</span></code></pre></div></div>
+
+<p><strong>Solution Example</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+<span class="k">def</span> <span class="nf">my_decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">The wrapper function has been called.</span><span class="sh">"""</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@my_decorator</span>
+<span class="k">def</span> <span class="nf">say_hello</span><span class="p">():</span>
+    <span class="sh">"""</span><span class="s">The say_hello function has been called.</span><span class="sh">"""</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Hello!</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">.</span><span class="n">__name__</span><span class="p">)</span>  <span class="c1"># Output: say_hello
+</span><span class="nf">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">.</span><span class="n">__doc__</span><span class="p">)</span>   <span class="c1"># Output: The say_hello function has been called.
+</span></code></pre></div></div>
+
+<p><br />
+<br /></p>
+
+<h2 id="generators">Generators</h2>
+
+<p>Generators are functions that create iterators. Unlike regular functions, they use the <code class="language-plaintext highlighter-rouge">yield</code> keyword to return values one at a time. This allows for efficient memory usage and is useful when dealing with large datasets.</p>
+
+<h3 id="example-1">Example</h3>
+
+<p>In the example below, the <code class="language-plaintext highlighter-rouge">fibonacci</code> function is implemented as a generator.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">a</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="c1"># Using the generator
+</span><span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="result-1">Result</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+</code></pre></div></div>
+
+<h3 id="characteristics-of-generators">Characteristics of Generators</h3>
+
+<ol>
+  <li><strong>Lazy Evaluation</strong>: Values are not calculated in advance but are computed as needed.</li>
+  <li><strong>Memory Efficiency</strong>: All values are not stored in memory at once, resulting in lower memory usage.</li>
+  <li><strong>Infinite Sequences</strong>: Theoretically, infinite sequences can be represented.</li>
+</ol>
+
+<h3 id="use-cases-1">Use Cases</h3>
+
+<ul>
+  <li><strong>Reading Large Files</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_large_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">file</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">line</span><span class="p">.</span><span class="nf">strip</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nf">read_large_file</span><span class="p">(</span><span class="sh">'</span><span class="s">large_file.txt</span><span class="sh">'</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Generating Infinite Sequences</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">infinite_sequence</span><span class="p">():</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">num</span>
+        <span class="n">num</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">infinite_sequence</span><span class="p">():</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">break</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Data Transformation Pipeline</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">numbers</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">i</span>
+
+<span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">num</span> <span class="o">**</span> <span class="mi">2</span>
+
+<span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">num</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">pipeline</span> <span class="o">=</span> <span class="nf">add_one</span><span class="p">(</span><span class="nf">square</span><span class="p">(</span><span class="nf">numbers</span><span class="p">()))</span>
+<span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">pipeline</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="additional-information-to-know-1">Additional Information to Know</h3>
+
+<h4 id="generator-expressions">Generator Expressions</h4>
+
+<p>Similar to list comprehensions, but using parentheses <code class="language-plaintext highlighter-rouge">()</code> to create generators. The advantage here is that it saves space complexity.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># List comprehension
+</span><span class="n">squares_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+
+<span class="c1"># Generator expression
+</span><span class="n">squares_gen</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">squares_list</span><span class="p">)</span>  <span class="c1"># [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+</span><span class="nf">print</span><span class="p">(</span><span class="n">squares_gen</span><span class="p">)</span>   <span class="c1"># &lt;generator object &lt;genexpr&gt; at 0x...&gt;
+</span>
+<span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">squares_gen</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="send-method">send Method</h4>
+
+<p>The <code class="language-plaintext highlighter-rouge">send</code> method of generators allows you to pass values into the generator.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">echo_generator</span><span class="p">():</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">received</span> <span class="o">=</span> <span class="k">yield</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Received: </span><span class="si">{</span><span class="n">received</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="n">gen</span> <span class="o">=</span> <span class="nf">echo_generator</span><span class="p">()</span>
+<span class="nf">next</span><span class="p">(</span><span class="n">gen</span><span class="p">)</span>  <span class="c1"># Initialize generator
+</span><span class="n">gen</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="sh">"</span><span class="s">Hello</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">gen</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="sh">"</span><span class="s">World</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="two-way-communication">Two-way Communication</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Understanding this mechanism allows you to implement complex coroutine patterns using generators.
+</span>
+<span class="k">def</span> <span class="nf">two_way_generator</span><span class="p">():</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">received</span> <span class="o">=</span> <span class="k">yield</span> <span class="sh">"</span><span class="s">Ready to receive input.</span><span class="sh">"</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Received input: </span><span class="si">{</span><span class="n">received</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="n">gen</span> <span class="o">=</span> <span class="nf">two_way_generator</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">next</span><span class="p">(</span><span class="n">gen</span><span class="p">))</span>  <span class="c1"># Output: Ready to receive input.
+</span><span class="nf">print</span><span class="p">(</span><span class="n">gen</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="sh">"</span><span class="s">Hello</span><span class="sh">"</span><span class="p">))</span>  <span class="c1"># Output: Received input: Hello
+</span>                          <span class="c1"># Ready to receive input.
+</span></code></pre></div></div>
+
+<p>Generators are powerful tools in Python that enable memory-efficient programming. They can be useful in various situations such as processing large amounts of data, streaming operations, or generating infinite sequences.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="context-managers">Context Managers</h2>
+
+<p>Context managers are objects that manage the acquisition and release of resources. They are typically used with the <code class="language-plaintext highlighter-rouge">with</code> statement and allow specific actions to be performed before and after a code block is executed. This enables safer and more convenient resource management.</p>
+
+<h3 id="basic-structure">Basic Structure</h3>
+
+<p>Context managers must implement the <code class="language-plaintext highlighter-rouge">__enter__</code> and <code class="language-plaintext highlighter-rouge">__exit__</code> methods:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyContextManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="c1"># Resource acquisition or initialization
+</span>        <span class="k">return</span> <span class="n">self</span>  <span class="c1"># Or another related object
+</span>
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="c1"># Resource cleanup or release
+</span>        <span class="c1"># Exception handling (optional)
+</span>        <span class="k">return</span> <span class="bp">False</span>  <span class="c1"># Returning True suppresses exceptions
+</span></code></pre></div></div>
+
+<h3 id="example-file-management">Example: File Management</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">FileManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">file</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="nb">file</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">filename</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">mode</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="nb">file</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="nb">file</span><span class="p">:</span>
+            <span class="n">self</span><span class="p">.</span><span class="nb">file</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+
+<span class="c1"># Usage example
+</span><span class="k">with</span> <span class="nc">FileManager</span><span class="p">(</span><span class="sh">'</span><span class="s">example.txt</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">'</span><span class="s">Hello, Context Manager!</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="using-contextlib">Using contextlib</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">@contextmanager</code> decorator from the <code class="language-plaintext highlighter-rouge">contextlib</code> module allows for simpler creation of context managers:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">file_manager</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+        <span class="k">yield</span> <span class="n">f</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+
+<span class="c1"># Usage example
+</span><span class="k">with</span> <span class="nf">file_manager</span><span class="p">(</span><span class="sh">'</span><span class="s">example.txt</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">'</span><span class="s">Hello, contextlib!</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="use-cases-2">Use Cases</h3>
+
+<ul>
+  <li><strong>Database Connection Management</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">conn</span> <span class="o">=</span> <span class="nf">create_connection</span><span class="p">()</span>  <span class="c1"># Connection creation function
+</span>        <span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">conn</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">conn</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="nc">DatabaseConnection</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="nf">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="p">.</span><span class="nf">execute</span><span class="p">(</span><span class="sh">"</span><span class="s">SELECT * FROM users</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Time Measurement</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="n">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">timer</span><span class="p">():</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+    <span class="k">yield</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="nf">time</span><span class="p">()</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Execution time: </span><span class="si">{</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="si">}</span><span class="s"> seconds</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nf">timer</span><span class="p">():</span>
+    <span class="c1"># Code to measure time
+</span>    <span class="n">time</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Temporary Directory Management</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">import</span> <span class="n">shutil</span>
+<span class="kn">from</span> <span class="n">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">temporary_directory</span><span class="p">():</span>
+    <span class="n">temp_dir</span> <span class="o">=</span> <span class="sh">'</span><span class="s">temp_dir</span><span class="sh">'</span>
+    <span class="n">os</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">temp_dir</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">shutil</span><span class="p">.</span><span class="nf">rmtree</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nf">temporary_directory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
+    <span class="c1"># Using temporary directory
+</span>    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">temp_dir</span><span class="si">}</span><span class="s">/temp_file.txt</span><span class="sh">"</span><span class="p">,</span> <span class="sh">'</span><span class="s">w</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="p">.</span><span class="nf">write</span><span class="p">(</span><span class="sh">"</span><span class="s">Temporary file content</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="key-benefits">Key Benefits</h3>
+
+<ol>
+  <li><strong>Automated Resource Management</strong>: Automatically handles resource acquisition and release.</li>
+  <li><strong>Exception Handling</strong>: Exceptions can be handled in the <code class="language-plaintext highlighter-rouge">__exit__</code> method.</li>
+  <li><strong>Code Conciseness</strong>: Allows for cleaner code compared to using <code class="language-plaintext highlighter-rouge">try</code>-<code class="language-plaintext highlighter-rouge">finally</code> blocks.</li>
+  <li><strong>Reusability</strong>: The same resource management logic can be reused in multiple places.</li>
+</ol>
+
+<p>Using context managers can reduce many repetitive tasks related to resource management and improve code stability and readability. They can be useful in various situations such as file handling, database connections, network sockets, and lock management.</p>
+
+<p><br />
+<br /></p>
+
+<h2 id="metaclasses">Metaclasses</h2>
+
+<p>Metaclasses are “classes of classes” that control the creation and behavior of classes. They are an advanced Python feature that allows you to modify or extend class definitions themselves.</p>
+
+<h3 id="basic-concept">Basic Concept</h3>
+
+<p>In Python, classes are also objects. Classes are instances of a metaclass called <code class="language-plaintext highlighter-rouge">type</code>. Metaclasses control the class creation process.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">type</span><span class="p">(</span><span class="n">MyClass</span><span class="p">))</span>  <span class="c1"># Output: &lt;class 'type'&gt;
+</span></code></pre></div></div>
+
+<h3 id="defining-metaclasses">Defining Metaclasses</h3>
+
+<p>Metaclasses are typically defined by inheriting from <code class="language-plaintext highlighter-rouge">type</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyMetaclass</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="c1"># Modify class creation process
+</span>        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="using-metaclasses">Using Metaclasses</h3>
+
+<p>When defining a class, use the <code class="language-plaintext highlighter-rouge">metaclass</code> keyword argument to specify the metaclass:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">MyMetaclass</span><span class="p">):</span>
+    <span class="k">pass</span>
+</code></pre></div></div>
+
+<h3 id="example-attribute-validation">Example: Attribute Validation</h3>
+
+<p>An example of using a metaclass to automatically validate class attributes:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">ValidateFields</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">'</span><span class="s">_</span><span class="sh">'</span><span class="p">):</span>  <span class="c1"># Don't validate private attributes
+</span>                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="nc">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s"> must be int, float, str, or bool</span><span class="sh">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ValidateFields</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">John</span><span class="sh">"</span>
+    <span class="n">age</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="mf">1.75</span>
+    <span class="n">is_student</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="c1"># grades = []  # Uncommenting this line will raise a TypeError
+</span></code></pre></div></div>
+
+<h3 id="use-cases-3">Use Cases</h3>
+
+<ul>
+  <li><strong>Implementing Singleton Pattern</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="n">_instances</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cls</span><span class="p">.</span><span class="n">_instances</span><span class="p">:</span>
+            <span class="n">cls</span><span class="p">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span> <span class="o">=</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="p">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">cls</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">MyClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Singleton</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="nc">MyClass</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="nc">MyClass</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">)</span>  <span class="c1"># Output: True
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>Automatic Property Creation</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AutoProperty</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">'</span><span class="s">_</span><span class="sh">'</span><span class="p">):</span>
+                <span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nf">property</span><span class="p">(</span><span class="k">lambda</span> <span class="n">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">value</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Config</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">AutoProperty</span><span class="p">):</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="sh">"</span><span class="s">localhost</span><span class="sh">"</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="mi">8080</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="nc">Config</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">host</span><span class="p">)</span>  <span class="c1"># Output: localhost
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>Extending Abstract Base Classes</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="k">class</span> <span class="nc">ExtendedABCMeta</span><span class="p">(</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nf">callable</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">key</span><span class="p">.</span><span class="nf">startswith</span><span class="p">(</span><span class="sh">'</span><span class="s">_</span><span class="sh">'</span><span class="p">):</span>
+                <span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nf">abstractmethod</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nf">super</span><span class="p">().</span><span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">attrs</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyAbstractClass</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ExtendedABCMeta</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">method1</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">method2</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="c1"># MyAbstractClass()  # Uncommenting this line will raise a TypeError
+</span></code></pre></div></div>
+
+<h3 id="precautions">Precautions</h3>
+
+<ol>
+  <li>
+    <p><strong>Complexity</strong>: Metaclasses are complex. It’s better to solve simple problems with decorators or inheritance.</p>
+  </li>
+  <li>
+    <p><strong>Performance</strong>: They can affect performance as they perform additional processing during class creation.</p>
+  </li>
+  <li>
+    <p><strong>Debugging</strong>: Problems caused by metaclasses can be difficult to debug.</p>
+  </li>
+  <li>
+    <p><strong>Compatibility</strong>: Compatibility issues may arise with other libraries or frameworks.</p>
+  </li>
+</ol>
+
+<p>Metaclasses are powerful tools, but they are not frequently used in general programming tasks. They are mainly used in framework or library development, or in cases with very specific requirements. When using metaclasses, their necessity and impact should be carefully considered.</p>
+
+
+<section id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="jae-heo/jae-heo.github.io"
+            issue-term="pathname"
+            label="Comment"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</section>
+
+<div class="about">
+<div class="about__divider">*****</div>
+<div class="about__text">
+<strong> &copy; 2024 Jaeyoung Heo. </strong>
+</div>
+</div>
+
+
+</div>
+<script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
