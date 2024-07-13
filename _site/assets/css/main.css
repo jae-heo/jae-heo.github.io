@@ -1,10 +1,10 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Gothic+A1&family=Nanum+Gothic+Coding&family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@550&display=swap');
 /* =Base *//*************************************************************/
   body {
-    font-family: "Noto Sans KR", sans-serif;
+    font-family: "Quicksand", "Noto Sans KR", sans-serif;
     font-size: 100%;
-    font-weight: 350;
     color: #012;
     background-color: #FFF; }
 
@@ -55,6 +55,15 @@
   h4 {
     /* font-size: 1.2em;  글씨 크기 조절 */
     color: #898dc3;    /* 글씨 색상 조절 */
+  }
+
+  h2 {
+    font-weight: 450;
+  }
+
+
+  h3 {
+    font-weight: 400;
   }
 
 /* =Header *//*************************************************************/
@@ -139,7 +148,7 @@
     text-align: center; }
 
   .page-title__text {
-    font-weight: 450;
+    font-weight: 350;
     font-size: 110%; }
 
   .page-title__subtitle {
