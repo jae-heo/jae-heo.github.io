@@ -645,3 +645,469 @@ class MyAbstractClass(metaclass=ExtendedABCMeta):
 4. **호환성**: 다른 라이브러리나 프레임워크와의 호환성 문제가 발생할 수 있습니다.
 
 메타클래스는 강력한 도구이지만, 일반적인 프로그래밍 작업에서는 자주 사용되지 않습니다. 주로 프레임워크나 라이브러리 개발, 또는 매우 특수한 요구사항이 있는 경우에 사용됩니다. 메타클래스를 사용할 때는 그 필요성과 영향을 신중히 고려해야 합니다.
+
+<br><br>
+
+## 데이터 클래스 (Data Classes)
+
+데이터 클래스는 데이터를 저장하는 용도의 클래스를 만드는데 사용됩니다. `@dataclass` 데코레이터를 사용하여 정의하며, `__init__()`, `__repr__()`, `__eq__()` 등의 특수 메서드를 자동으로 생성합니다. 
+
+<h4>주의</h4> 이 기능은 Python 3.7부터 사용 가능합니다.
+
+### 예시
+
+아래의 예시에서는 `Person`이라는 데이터 클래스를 정의합니다.
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Person:
+    name: str
+    age: int
+    height: float
+
+# 데이터 클래스 인스턴스 생성
+person = Person("홍길동", 30, 175.5)
+print(person)
+```
+
+### 결과
+```text
+Person(name='홍길동', age=30, height=175.5)
+```
+
+### 데이터 클래스의 특징
+
+1. **자동 생성되는 메서드**
+   - `__init__()`: 초기화 메서드
+   - `__repr__()`: 문자열 표현 메서드
+   - `__eq__()`: 동등성 비교 메서드
+
+2. **불변 인스턴스 생성**
+   ```python
+   from dataclasses import dataclass, field
+
+   @dataclass(frozen=True)
+   class ImmutablePerson:
+       name: str
+       age: int = field(compare=False)
+   ```
+
+3. **기본값 설정**
+   ```python
+   @dataclass
+   class Configuration:
+       host: str = "localhost"
+       port: int = 8000
+   ```
+
+### 응용사례
+
+- **간단한 데이터 모델링**
+
+```python
+from dataclasses import dataclass
+from typing import List
+
+@dataclass
+class Student:
+    name: str
+    student_id: str
+    grades: List[float] = field(default_factory=list)
+
+    def average_grade(self):
+        return sum(self.grades) / len(self.grades) if self.grades else 0
+
+students = [
+    Student("Alice", "A001", [85, 90, 88]),
+    Student("Bob", "B002", [78, 85, 92])
+]
+
+for student in students:
+    print(f"{student.name}'s average grade: {student.average_grade():.2f}")
+```
+
+- **불변 구성 객체**
+
+```python
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class DatabaseConfig:
+    host: str
+    port: int
+    username: str
+    password: str
+
+config = DatabaseConfig("localhost", 5432, "user", "password")
+# config.port = 3306  # 이 줄은 FrozenInstanceError를 발생시킵니다
+```
+
+- **JSON 직렬화**
+
+```python
+from dataclasses import dataclass, asdict
+import json
+
+@dataclass
+class Point:
+    x: float
+    y: float
+
+point = Point(10.5, 20.7)
+json_string = json.dumps(asdict(point))
+print(json_string)
+```
+
+### 추가적으로 알아두면 좋은 정보
+
+- #### 포스트 초기화
+
+`__post_init__` 메서드를 사용하여 초기화 이후 추가 로직을 실행할 수 있습니다.
+
+```python
+from dataclasses import dataclass, field
+
+@dataclass
+class Rectangle:
+    width: float
+    height: float
+    area: float = field(init=False)
+
+    def __post_init__(self):
+        self.area = self.width * self.height
+
+rect = Rectangle(5, 3)
+print(f"Rectangle area: {rect.area}")  # 출력: Rectangle area: 15.0
+```
+
+데이터 클래스를 이용하여 반복적인 코드를 줄이고, 데이터 중심의 클래스를 쉽게 정의할 수 있습니다. 간단한 데이터 구조나 설정 객체 등을 만들 때 유용하며, 코드의 가독성과 유지보수성을 크게 향상시킬 수 있습니다.
+
+<br><br>
+
+## 타입 힌팅 (Type Hinting)
+
+타입 힌팅은 Python 3.5부터 도입된 기능으로, 변수, 함수 매개변수, 반환값의 타입을 명시적으로 지정할 수 있게 해줍니다. 이를 통해 코드의 가독성을 높이고, 개발 도구의 지원을 받아 잠재적인 버그를 사전에 발견할 수 있습니다.
+
+### 기본 타입 힌팅
+
+기본적인 타입 힌팅의 예시입니다.
+
+```python
+def greeting(name: str) -> str:
+    return f"Hello, {name}!"
+
+age: int = 30
+pi: float = 3.14
+is_python_fun: bool = True
+
+# 함수 호출
+message: str = greeting("Alice")
+print(message)
+```
+
+### 결과
+```text
+Hello, Alice!
+```
+
+### 타입 힌팅의 특징
+
+1. **제네릭 (Generics)**
+   
+   제네릭을 사용하면 다양한 타입에 대해 재사용 가능한 코드를 작성할 수 있습니다.
+
+   ```python
+   from typing import List, Dict, TypeVar
+
+   T = TypeVar('T')
+
+   def first_element(lst: List[T]) -> T:
+       return lst[0]
+
+   numbers: List[int] = [1, 2, 3]
+   names: List[str] = ["Alice", "Bob", "Charlie"]
+
+   print(first_element(numbers))  # 출력: 1
+   print(first_element(names))    # 출력: Alice
+   ```
+
+2. **타입 별칭 (Type Aliases)**
+   
+   복잡한 타입을 간단하게 참조할 수 있게 해줍니다.
+
+   ```python
+   from typing import Dict, List, Tuple
+
+   Vector = List[float]
+   Matrix = List[Vector]
+
+   def dot_product(v1: Vector, v2: Vector) -> float:
+       return sum(x * y for x, y in zip(v1, v2))
+
+   vector1: Vector = [1.0, 2.0, 3.0]
+   vector2: Vector = [4.0, 5.0, 6.0]
+   result: float = dot_product(vector1, vector2)
+   print(f"Dot product: {result}")
+   ```
+
+3. **프로토콜 (Protocols)**
+   
+   구조적 서브타이핑을 지원합니다. 특정 메서드나 속성을 가진 객체를 정의할 수 있습니다.
+
+   ```python
+   from typing import Protocol
+
+   class Drawable(Protocol):
+       def draw(self) -> None: ...
+
+   class Circle:
+       def draw(self) -> None:
+           print("Drawing a circle")
+
+   class Square:
+       def draw(self) -> None:
+           print("Drawing a square")
+
+   def draw_shape(shape: Drawable) -> None:
+       shape.draw()
+
+   circle: Circle = Circle()
+   square: Square = Square()
+
+   draw_shape(circle)  # 출력: Drawing a circle
+   draw_shape(square)  # 출력: Drawing a square
+   ```
+
+### 응용사례
+
+- **함수 오버로딩**
+
+```python
+from typing import overload, Union
+
+@overload
+def process_data(data: str) -> str: ...
+
+@overload
+def process_data(data: int) -> int: ...
+
+def process_data(data: Union[str, int]) -> Union[str, int]:
+    if isinstance(data, str):
+        return data.upper()
+    elif isinstance(data, int):
+        return data * 2
+
+result1: str = process_data("hello")
+result2: int = process_data(5)
+print(result1, result2)  # 출력: HELLO 10
+```
+
+- **옵셔널 타입**
+
+```python
+from typing import Optional
+
+def find_user(user_id: int) -> Optional[str]:
+    users = {1: "Alice", 2: "Bob"}
+    return users.get(user_id)
+
+user: Optional[str] = find_user(1)
+if user is not None:
+    print(f"Found user: {user}")
+else:
+    print("User not found")
+```
+
+- **콜러블 타입**
+
+```python
+from typing import Callable
+
+def apply_operation(x: int, y: int, operation: Callable[[int, int], int]) -> int:
+    return operation(x, y)
+
+def add(a: int, b: int) -> int:
+    return a + b
+
+result: int = apply_operation(5, 3, add)
+print(f"Result: {result}")  # 출력: Result: 8
+```
+
+### 추가적으로 알아두면 좋은 정보
+
+- #### 타입 검사 도구
+
+mypy와 같은 정적 타입 검사 도구를 사용하여 타입 힌팅의 일관성을 검사할 수 있습니다.
+
+```python
+# example.py
+def greet(name: str) -> str:
+    return "Hello, " + name
+
+greet(42)  # 타입 오류
+```
+
+```bash
+$ mypy example.py
+example.py:4: error: Argument 1 to "greet" has incompatible type "int"; expected "str"
+```
+
+타입 힌팅은 Python의 동적 타이핑 특성을 해치지 않으면서도, 코드의 의도를 명확히 하고 잠재적인 오류를 줄이는 데 도움을 줍니다.
+
+<br><br>
+
+## 함수형 프로그래밍 기법
+
+함수형 프로그래밍은 계산을 수학적 함수의 평가로 취급하고 상태 변경과 가변 데이터를 피하는 프로그래밍 패러다임입니다. Python은 함수형 프로그래밍을 완전히 지원하지는 않지만, 많은 함수형 프로그래밍 기법을 사용할 수 있습니다.
+
+### 람다 함수 (Lambda Functions)
+
+람다 함수는 이름 없는 익명 함수로, 간단한 연산을 수행할 때 유용합니다.
+
+```python
+# 일반적인 함수 정의
+def add(x, y):
+    return x + y
+
+# 같은 기능의 람다 함수
+add_lambda = lambda x, y: x + y
+
+print(add(3, 5))        # 출력: 8
+print(add_lambda(3, 5)) # 출력: 8
+```
+
+### map, filter, reduce 함수
+
+이 함수들은 함수형 프로그래밍의 핵심 개념을 구현합니다.
+
+1. **map 함수**
+
+   `map`은 함수를 반복 가능한 객체의 모든 요소에 적용합니다.
+
+   ```python
+   numbers = [1, 2, 3, 4, 5]
+   squared = list(map(lambda x: x**2, numbers))
+   print(squared)  # 출력: [1, 4, 9, 16, 25]
+   ```
+
+2. **filter 함수**
+
+   `filter`는 함수를 사용하여 반복 가능한 객체에서 특정 조건을 만족하는 요소만 선택합니다.
+
+   ```python
+   numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+   even_numbers = list(filter(lambda x: x % 2 == 0, numbers))
+   print(even_numbers)  # 출력: [2, 4, 6, 8, 10]
+   ```
+
+3. **reduce 함수**
+
+   `reduce`는 반복 가능한 객체의 요소들을 누적하여 하나의 결과로 줄입니다.
+
+   ```python
+   from functools import reduce
+
+   numbers = [1, 2, 3, 4, 5]
+   sum_all = reduce(lambda x, y: x + y, numbers)
+   print(sum_all)  # 출력: 15
+   ```
+
+### 함수형 프로그래밍 라이브러리 (functools)
+
+`functools` 모듈은 고차 함수와 함수를 다루는 연산을 위한 도구를 제공합니다.
+
+1. **partial 함수**
+
+   `partial`은 함수의 일부 인자를 미리 채워 새로운 함수를 만듭니다.
+
+   ```python
+   from functools import partial
+
+   def multiply(x, y):
+       return x * y
+
+   double = partial(multiply, 2)
+   print(double(4))  # 출력: 8
+   ```
+
+2. **lru_cache 데코레이터**
+
+   `lru_cache`는 함수의 결과를 메모이제이션하여 반복적인 호출의 성능을 향상시킵니다.
+
+   ```python
+   from functools import lru_cache
+
+   @lru_cache(maxsize=None)
+   def fibonacci(n):
+       if n < 2:
+           return n
+       return fibonacci(n-1) + fibonacci(n-2)
+
+   print(fibonacci(100))  # 빠르게 계산됩니다
+   ```
+
+### 응용사례
+
+- **데이터 처리 파이프라인**
+
+  함수형 프로그래밍 기법을 사용하여 데이터 처리 파이프라인을 구축할 수 있습니다.
+
+  ```python
+  def read_data(filename):
+      with open(filename, 'r') as f:
+          return f.readlines()
+
+  def parse_data(lines):
+      return [line.strip().split(',') for line in lines]
+
+  def filter_data(data):
+      return filter(lambda x: int(x[1]) > 25, data)
+
+  def format_output(data):
+      return map(lambda x: f"{x[0]} is {x[1]} years old", data)
+
+  # 파이프라인 실행
+  pipeline = compose(format_output, filter_data, parse_data, read_data)
+  result = list(pipeline('data.txt'))
+  print(result)
+  ```
+
+- **함수 합성**
+
+  여러 함수를 조합하여 새로운 함수를 만듭니다.
+
+  ```python
+  def compose(*functions):
+      def inner(arg):
+          for f in reversed(functions):
+              arg = f(arg)
+          return arg
+      return inner
+
+  def add_one(x):
+      return x + 1
+
+  def double(x):
+      return x * 2
+
+  f = compose(double, add_one)
+  print(f(3))  # 출력: 8 ((3 + 1) * 2)
+  ```
+
+### 추가적으로 알아두면 좋은 정보
+
+- **불변성 (Immutability)**
+
+  함수형 프로그래밍에서는 데이터의 불변성을 중요하게 여깁니다. Python에서는 튜플과 frozenset 등의 불변 자료구조를 활용할 수 있습니다.
+
+  ```python
+  # 불변 리스트 대신 튜플 사용
+  immutable_list = (1, 2, 3, 4, 5)
+  
+  # 불변 집합
+  immutable_set = frozenset([1, 2, 3])
+  ```
+
+함수형 프로그래밍 기법을 활용하면 코드의 가독성과 재사용성을 높이고, 부작용을 줄일 수 있습니다. 특히 데이터 처리와 병렬 프로그래밍 분야에서 유용하게 사용됩니다. Python에서는 이러한 기법들을 명령형 프로그래밍과 함께 사용하여 더 유연하고 효율적인 코드를 작성할 수 있습니다.
