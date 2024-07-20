@@ -115,6 +115,31 @@
       <li><a href="#precautions">Precautions</a></li>
     </ul>
   </li>
+  <li><a href="#data-classes">Data Classes</a>
+    <ul>
+      <li><a href="#example">Example</a></li>
+      <li><a href="#characteristics-of-data-classes">Characteristics of Data Classes</a></li>
+      <li><a href="#use-cases">Use Cases</a></li>
+      <li><a href="#additional-information-to-know">Additional Information: Post-Initialization</a></li>
+    </ul>
+  </li>
+  <li><a href="#type-hinting">Type Hinting</a>
+    <ul>
+      <li><a href="#basic-type-hinting">Basic Type Hinting</a></li>
+      <li><a href="#features-of-type-hinting">Features of Type Hinting</a></li>
+      <li><a href="#use-cases-1">Use Cases</a></li>
+      <li><a href="#additional-information-to-know-1">Additional Information: Type Checking Tools</a></li>
+    </ul>
+  </li>
+  <li><a href="#functional-programming-techniques">Functional Programming Techniques</a>
+    <ul>
+      <li><a href="#lambda-functions">Lambda Functions</a></li>
+      <li><a href="#map-filter-reduce-functions">map, filter, reduce Functions</a></li>
+      <li><a href="#functional-programming-library-functools">Functional Programming Library (functools)</a></li>
+      <li><a href="#use-cases-2">Use Cases</a></li>
+      <li><a href="#additional-information-to-know-2">Additional Information: Immutability</a></li>
+    </ul>
+  </li>
 </ol>
 
 <p><br />
@@ -735,6 +760,495 @@ Hello, Jaeyoung!
 </ol>
 
 <p>Metaclasses are powerful tools, but they are not frequently used in general programming tasks. They are mainly used in framework or library development, or in cases with very specific requirements. When using metaclasses, their necessity and impact should be carefully considered.</p>
+
+<h2 id="data-classes">Data Classes</h2>
+
+<p>Data classes are used to create classes for storing data. They are defined using the <code class="language-plaintext highlighter-rouge">@dataclass</code> decorator and automatically generate special methods like <code class="language-plaintext highlighter-rouge">__init__()</code>, <code class="language-plaintext highlighter-rouge">__repr__()</code>, <code class="language-plaintext highlighter-rouge">__eq__()</code>, etc.</p>
+
+<h4>Note</h4>
+<p>This feature is available from Python 3.7 onwards.</p>
+
+<h3 id="example-2">Example</h3>
+
+<p>In the example below, we define a data class called <code class="language-plaintext highlighter-rouge">Person</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">height</span><span class="p">:</span> <span class="nb">float</span>
+
+<span class="c1"># Creating an instance of the data class
+</span><span class="n">person</span> <span class="o">=</span> <span class="nc">Person</span><span class="p">(</span><span class="sh">"</span><span class="s">John Doe</span><span class="sh">"</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">175.5</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="result-2">Result</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Person(name='John Doe', age=30, height=175.5)
+</code></pre></div></div>
+
+<h3 id="characteristics-of-data-classes">Characteristics of Data Classes</h3>
+
+<ol>
+  <li><strong>Automatically Generated Methods</strong>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">__init__()</code>: Initialization method</li>
+      <li><code class="language-plaintext highlighter-rouge">__repr__()</code>: String representation method</li>
+      <li><code class="language-plaintext highlighter-rouge">__eq__()</code>: Equality comparison method</li>
+    </ul>
+  </li>
+  <li><strong>Creating Immutable Instances</strong>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ImmutablePerson</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nf">field</span><span class="p">(</span><span class="n">compare</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>Setting Default Values</strong>
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Configuration</span><span class="p">:</span>
+    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">"</span><span class="s">localhost</span><span class="sh">"</span>
+    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8000</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="use-cases-4">Use Cases</h3>
+
+<ul>
+  <li>
+    <p><strong>Simple Data Modeling</strong></p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+  <span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+  <span class="nd">@dataclass</span>
+  <span class="k">class</span> <span class="nc">Student</span><span class="p">:</span>
+      <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+      <span class="n">student_id</span><span class="p">:</span> <span class="nb">str</span>
+      <span class="n">grades</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="nf">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+      <span class="k">def</span> <span class="nf">average_grade</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+          <span class="k">return</span> <span class="nf">sum</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">grades</span><span class="p">)</span> <span class="o">/</span> <span class="nf">len</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">grades</span><span class="p">)</span> <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">grades</span> <span class="k">else</span> <span class="mi">0</span>
+
+  <span class="n">students</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="nc">Student</span><span class="p">(</span><span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">A001</span><span class="sh">"</span><span class="p">,</span> <span class="p">[</span><span class="mi">85</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">88</span><span class="p">]),</span>
+      <span class="nc">Student</span><span class="p">(</span><span class="sh">"</span><span class="s">Bob</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">B002</span><span class="sh">"</span><span class="p">,</span> <span class="p">[</span><span class="mi">78</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">92</span><span class="p">])</span>
+  <span class="p">]</span>
+
+  <span class="k">for</span> <span class="n">student</span> <span class="ow">in</span> <span class="n">students</span><span class="p">:</span>
+      <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">student</span><span class="p">.</span><span class="n">name</span><span class="si">}</span><span class="sh">'</span><span class="s">s average grade: </span><span class="si">{</span><span class="n">student</span><span class="p">.</span><span class="nf">average_grade</span><span class="p">()</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Immutable Configuration Objects</strong></p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+  <span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+  <span class="k">class</span> <span class="nc">DatabaseConfig</span><span class="p">:</span>
+      <span class="n">host</span><span class="p">:</span> <span class="nb">str</span>
+      <span class="n">port</span><span class="p">:</span> <span class="nb">int</span>
+      <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+      <span class="n">password</span><span class="p">:</span> <span class="nb">str</span>
+
+  <span class="n">config</span> <span class="o">=</span> <span class="nc">DatabaseConfig</span><span class="p">(</span><span class="sh">"</span><span class="s">localhost</span><span class="sh">"</span><span class="p">,</span> <span class="mi">5432</span><span class="p">,</span> <span class="sh">"</span><span class="s">user</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">password</span><span class="sh">"</span><span class="p">)</span>
+  <span class="c1"># config.port = 3306  # This line would raise a FrozenInstanceError
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>JSON Serialization</strong></p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">asdict</span>
+  <span class="kn">import</span> <span class="n">json</span>
+
+  <span class="nd">@dataclass</span>
+  <span class="k">class</span> <span class="nc">Point</span><span class="p">:</span>
+      <span class="n">x</span><span class="p">:</span> <span class="nb">float</span>
+      <span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+
+  <span class="n">point</span> <span class="o">=</span> <span class="nc">Point</span><span class="p">(</span><span class="mf">10.5</span><span class="p">,</span> <span class="mf">20.7</span><span class="p">)</span>
+  <span class="n">json_string</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="nf">asdict</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+  <span class="nf">print</span><span class="p">(</span><span class="n">json_string</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="additional-information-to-know-2">Additional Information to Know</h3>
+
+<ul>
+  <li>
+    <h4 id="post-initialization">Post-Initialization</h4>
+
+    <p>You can use the <code class="language-plaintext highlighter-rouge">__post_init__</code> method to run additional logic after initialization.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">from</span> <span class="n">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+  <span class="nd">@dataclass</span>
+  <span class="k">class</span> <span class="nc">Rectangle</span><span class="p">:</span>
+      <span class="n">width</span><span class="p">:</span> <span class="nb">float</span>
+      <span class="n">height</span><span class="p">:</span> <span class="nb">float</span>
+      <span class="n">area</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nf">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+      <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="n">self</span><span class="p">):</span>
+          <span class="n">self</span><span class="p">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">height</span>
+
+  <span class="n">rect</span> <span class="o">=</span> <span class="nc">Rectangle</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+  <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Rectangle area: </span><span class="si">{</span><span class="n">rect</span><span class="p">.</span><span class="n">area</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># Output: Rectangle area: 15.0
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>Data classes help reduce repetitive code and make it easier to define data-centric classes. They are useful for creating simple data structures or configuration objects, and can greatly improve code readability and maintainability.</p>
+
+<p><br /><br /></p>
+
+<h2 id="type-hinting">Type Hinting</h2>
+
+<p>Type hinting, introduced in Python 3.5, allows you to explicitly specify types for variables, function parameters, and return values. This improves code readability and allows development tools to catch potential bugs in advance.</p>
+
+<h3 id="basic-type-hinting">Basic Type Hinting</h3>
+
+<p>Here’s an example of basic type hinting:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">greeting</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="sh">"</span><span class="s">Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s">!</span><span class="sh">"</span>
+
+<span class="n">age</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">pi</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.14</span>
+<span class="n">is_python_fun</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c1"># Function call
+</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nf">greeting</span><span class="p">(</span><span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="result-3">Result</h3>
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hello, Alice!
+</code></pre></div></div>
+
+<h3 id="features-of-type-hinting">Features of Type Hinting</h3>
+
+<ol>
+  <li>
+    <p><strong>Generics</strong></p>
+
+    <p>Generics allow you to write reusable code for different types.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="nc">TypeVar</span><span class="p">(</span><span class="sh">'</span><span class="s">T</span><span class="sh">'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">first_element</span><span class="p">(</span><span class="n">lst</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">lst</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">numbers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">names</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Bob</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">Charlie</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">first_element</span><span class="p">(</span><span class="n">numbers</span><span class="p">))</span>  <span class="c1"># Output: 1
+</span><span class="nf">print</span><span class="p">(</span><span class="nf">first_element</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>    <span class="c1"># Output: Alice
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Type Aliases</strong></p>
+
+    <p>Type aliases allow you to refer to complex types more simply.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="n">Vector</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+<span class="n">Matrix</span> <span class="o">=</span> <span class="n">List</span><span class="p">[</span><span class="n">Vector</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">dot_product</span><span class="p">(</span><span class="n">v1</span><span class="p">:</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">v2</span><span class="p">:</span> <span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nf">sum</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nf">zip</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">))</span>
+
+<span class="n">vector1</span><span class="p">:</span> <span class="n">Vector</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]</span>
+<span class="n">vector2</span><span class="p">:</span> <span class="n">Vector</span> <span class="o">=</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]</span>
+<span class="n">result</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nf">dot_product</span><span class="p">(</span><span class="n">vector1</span><span class="p">,</span> <span class="n">vector2</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Dot product: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Protocols</strong></p>
+
+    <p>Protocols support structural subtyping. You can define objects with specific methods or attributes.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
+
+<span class="k">class</span> <span class="nc">Drawable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span> <span class="bp">...</span>
+
+<span class="k">class</span> <span class="nc">Circle</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Drawing a circle</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Square</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">Drawing a square</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">draw_shape</span><span class="p">(</span><span class="n">shape</span><span class="p">:</span> <span class="n">Drawable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="n">shape</span><span class="p">.</span><span class="nf">draw</span><span class="p">()</span>
+
+<span class="n">circle</span><span class="p">:</span> <span class="n">Circle</span> <span class="o">=</span> <span class="nc">Circle</span><span class="p">()</span>
+<span class="n">square</span><span class="p">:</span> <span class="n">Square</span> <span class="o">=</span> <span class="nc">Square</span><span class="p">()</span>
+
+<span class="nf">draw_shape</span><span class="p">(</span><span class="n">circle</span><span class="p">)</span>  <span class="c1"># Output: Drawing a circle
+</span><span class="nf">draw_shape</span><span class="p">(</span><span class="n">square</span><span class="p">)</span>  <span class="c1"># Output: Drawing a square
+</span></code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="use-cases-5">Use Cases</h3>
+
+<ul>
+  <li>
+    <p><strong>Function Overloading</strong></p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">overload</span><span class="p">,</span> <span class="n">Union</span>
+
+  <span class="nd">@overload</span>
+  <span class="k">def</span> <span class="nf">process_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="bp">...</span>
+
+  <span class="nd">@overload</span>
+  <span class="k">def</span> <span class="nf">process_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span> <span class="bp">...</span>
+
+  <span class="k">def</span> <span class="nf">process_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+      <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+          <span class="k">return</span> <span class="n">data</span><span class="p">.</span><span class="nf">upper</span><span class="p">()</span>
+      <span class="k">elif</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+          <span class="k">return</span> <span class="n">data</span> <span class="o">*</span> <span class="mi">2</span>
+
+  <span class="n">result1</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nf">process_data</span><span class="p">(</span><span class="sh">"</span><span class="s">hello</span><span class="sh">"</span><span class="p">)</span>
+  <span class="n">result2</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nf">process_data</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+  <span class="nf">print</span><span class="p">(</span><span class="n">result1</span><span class="p">,</span> <span class="n">result2</span><span class="p">)</span>  <span class="c1"># Output: HELLO 10
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Optional Types</strong></p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+  <span class="k">def</span> <span class="nf">find_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+      <span class="n">users</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="sh">"</span><span class="s">Alice</span><span class="sh">"</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="sh">"</span><span class="s">Bob</span><span class="sh">"</span><span class="p">}</span>
+      <span class="k">return</span> <span class="n">users</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+
+  <span class="n">user</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nf">find_user</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+      <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Found user: </span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+      <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">User not found</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Callable Types</strong></p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kn">from</span> <span class="n">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+  <span class="k">def</span> <span class="nf">apply_operation</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">operation</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+      <span class="k">return</span> <span class="nf">operation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+  <span class="n">result</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nf">apply_operation</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">add</span><span class="p">)</span>
+  <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Result: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>  <span class="c1"># Output: Result: 8
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="additional-information-to-know-3">Additional Information to Know</h3>
+
+<ul>
+  <li>
+    <h4 id="type-checking-tools">Type Checking Tools</h4>
+
+    <p>You can use static type checking tools like mypy to check the consistency of type hints.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1"># example.py
+</span>  <span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+      <span class="k">return</span> <span class="sh">"</span><span class="s">Hello, </span><span class="sh">"</span> <span class="o">+</span> <span class="n">name</span>
+
+  <span class="nf">greet</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># Type error
+</span></code></pre></div>    </div>
+
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nv">$ </span>mypy example.py
+  example.py:4: error: Argument 1 to <span class="s2">"greet"</span> has incompatible <span class="nb">type</span> <span class="s2">"int"</span><span class="p">;</span> expected <span class="s2">"str"</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>Type hinting helps clarify code intent and reduce potential errors without compromising Python’s dynamic typing nature.</p>
+
+<p><br /><br /></p>
+
+<h2 id="functional-programming-techniques">Functional Programming Techniques</h2>
+
+<p>Functional programming is a programming paradigm that treats computation as the evaluation of mathematical functions and avoids changing state and mutable data. While Python doesn’t fully support functional programming, it offers many functional programming techniques.</p>
+
+<h3 id="lambda-functions">Lambda Functions</h3>
+
+<p>Lambda functions are anonymous functions useful for simple operations.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Regular function definition
+</span><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="c1"># Equivalent lambda function
+</span><span class="n">add_lambda</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">add</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>        <span class="c1"># Output: 8
+</span><span class="nf">print</span><span class="p">(</span><span class="nf">add_lambda</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span> <span class="c1"># Output: 8
+</span></code></pre></div></div>
+
+<h3 id="map-filter-reduce-functions">map, filter, reduce Functions</h3>
+
+<p>These functions implement core concepts of functional programming.</p>
+
+<ol>
+  <li>
+    <p><strong>map Function</strong></p>
+
+    <p><code class="language-plaintext highlighter-rouge">map</code> applies a function to all elements of an iterable.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">squared</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">numbers</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">squared</span><span class="p">)</span>  <span class="c1"># Output: [1, 4, 9, 16, 25]
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>filter Function</strong></p>
+
+    <p><code class="language-plaintext highlighter-rouge">filter</code> selects elements from an iterable that satisfy a specific condition.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="n">even_numbers</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">numbers</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">even_numbers</span><span class="p">)</span>  <span class="c1"># Output: [2, 4, 6, 8, 10]
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>reduce Function</strong></p>
+
+    <p><code class="language-plaintext highlighter-rouge">reduce</code> accumulates the elements of an iterable into a single result.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">sum_all</span> <span class="o">=</span> <span class="nf">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">numbers</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">sum_all</span><span class="p">)</span>  <span class="c1"># Output: 15
+</span></code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="functional-programming-library-functools">Functional Programming Library (functools)</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">functools</code> module provides tools for working with higher-order functions and operations on callable objects.</p>
+
+<ol>
+  <li>
+    <p><strong>partial Function</strong></p>
+
+    <p><code class="language-plaintext highlighter-rouge">partial</code> creates a new function with some arguments pre-filled.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+
+<span class="n">double</span> <span class="o">=</span> <span class="nf">partial</span><span class="p">(</span><span class="n">multiply</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">double</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>  <span class="c1"># Output: 8
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>lru_cache Decorator</strong></p>
+
+    <p><code class="language-plaintext highlighter-rouge">lru_cache</code> memoizes function results to improve performance for repeated calls.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">fibonacci</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>  <span class="c1"># Calculates quickly
+</span></code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="use-cases-6">Use Cases</h3>
+
+<ul>
+  <li>
+    <p><strong>Data Processing Pipeline</strong></p>
+
+    <p>You can build data processing pipelines using functional programming techniques.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nf">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="sh">'</span><span class="s">r</span><span class="sh">'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">.</span><span class="nf">readlines</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">parse_data</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">line</span><span class="p">.</span><span class="nf">strip</span><span class="p">().</span><span class="nf">split</span><span class="p">(</span><span class="sh">'</span><span class="s">,</span><span class="sh">'</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">filter_data</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nf">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nf">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">25</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">format_output</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nf">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s"> is </span><span class="si">{</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s"> years old</span><span class="sh">"</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Execute pipeline
+</span><span class="n">pipeline</span> <span class="o">=</span> <span class="nf">compose</span><span class="p">(</span><span class="n">format_output</span><span class="p">,</span> <span class="n">filter_data</span><span class="p">,</span> <span class="n">parse_data</span><span class="p">,</span> <span class="n">read_data</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="nf">pipeline</span><span class="p">(</span><span class="sh">'</span><span class="s">data.txt</span><span class="sh">'</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Function Composition</strong></p>
+
+    <p>Combine multiple functions to create a new function.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">compose</span><span class="p">(</span><span class="o">*</span><span class="n">functions</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="n">arg</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nf">reversed</span><span class="p">(</span><span class="n">functions</span><span class="p">):</span>
+            <span class="n">arg</span> <span class="o">=</span> <span class="nf">f</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">arg</span>
+    <span class="k">return</span> <span class="n">inner</span>
+
+<span class="k">def</span> <span class="nf">add_one</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="nf">compose</span><span class="p">(</span><span class="n">double</span><span class="p">,</span> <span class="n">add_one</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="nf">f</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>  <span class="c1"># Output: 8 ((3 + 1) * 2)
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="additional-information-to-know-4">Additional Information to Know</h3>
+
+<ul>
+  <li>
+    <p><strong>Immutability</strong></p>
+
+    <p>Functional programming emphasizes data immutability. In Python, you can use immutable data structures like tuples and frozensets.</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Use tuple instead of mutable list
+</span><span class="n">immutable_list</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+  
+<span class="c1"># Immutable set
+</span><span class="n">immutable_set</span> <span class="o">=</span> <span class="nf">frozenset</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>Functional programming techniques can improve code readability, reusability, and reduce side effects. They are particularly useful in data processing and parallel programming. In Python, you can combine these techniques with imperative programming to write more flexible and efficient code.</p>
 
 
 <section id="comments">

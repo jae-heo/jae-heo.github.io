@@ -34,6 +34,22 @@ lang: en
    - [Example: Attribute Validation](#example-attribute-validation)
    - [Use Cases](#use-cases-3)
    - [Precautions](#precautions)
+6. [Data Classes](#data-classes)
+   - [Example](#example)
+   - [Characteristics of Data Classes](#characteristics-of-data-classes)
+   - [Use Cases](#use-cases)
+   - [Additional Information: Post-Initialization](#additional-information-to-know)
+7. [Type Hinting](#type-hinting)
+   - [Basic Type Hinting](#basic-type-hinting)
+   - [Features of Type Hinting](#features-of-type-hinting)
+   - [Use Cases](#use-cases-1)
+   - [Additional Information: Type Checking Tools](#additional-information-to-know-1)
+8. [Functional Programming Techniques](#functional-programming-techniques)
+   - [Lambda Functions](#lambda-functions)
+   - [map, filter, reduce Functions](#map-filter-reduce-functions)
+   - [Functional Programming Library (functools)](#functional-programming-library-functools)
+   - [Use Cases](#use-cases-2)
+   - [Additional Information: Immutability](#additional-information-to-know-2)
 
 <br>
 <br>
@@ -643,3 +659,467 @@ class MyAbstractClass(metaclass=ExtendedABCMeta):
 4. **Compatibility**: Compatibility issues may arise with other libraries or frameworks.
 
 Metaclasses are powerful tools, but they are not frequently used in general programming tasks. They are mainly used in framework or library development, or in cases with very specific requirements. When using metaclasses, their necessity and impact should be carefully considered.
+
+## Data Classes
+
+Data classes are used to create classes for storing data. They are defined using the `@dataclass` decorator and automatically generate special methods like `__init__()`, `__repr__()`, `__eq__()`, etc.
+
+<h4>Note</h4> This feature is available from Python 3.7 onwards.
+
+### Example
+
+In the example below, we define a data class called `Person`:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Person:
+    name: str
+    age: int
+    height: float
+
+# Creating an instance of the data class
+person = Person("John Doe", 30, 175.5)
+print(person)
+```
+
+### Result
+```text
+Person(name='John Doe', age=30, height=175.5)
+```
+
+### Characteristics of Data Classes
+
+1. **Automatically Generated Methods**
+   - `__init__()`: Initialization method
+   - `__repr__()`: String representation method
+   - `__eq__()`: Equality comparison method
+
+2. **Creating Immutable Instances**
+   ```python
+   from dataclasses import dataclass, field
+
+   @dataclass(frozen=True)
+   class ImmutablePerson:
+       name: str
+       age: int = field(compare=False)
+   ```
+
+3. **Setting Default Values**
+   ```python
+   @dataclass
+   class Configuration:
+       host: str = "localhost"
+       port: int = 8000
+   ```
+
+### Use Cases
+
+- **Simple Data Modeling**
+
+    ```python
+    from dataclasses import dataclass
+    from typing import List
+
+    @dataclass
+    class Student:
+        name: str
+        student_id: str
+        grades: List[float] = field(default_factory=list)
+
+        def average_grade(self):
+            return sum(self.grades) / len(self.grades) if self.grades else 0
+
+    students = [
+        Student("Alice", "A001", [85, 90, 88]),
+        Student("Bob", "B002", [78, 85, 92])
+    ]
+
+    for student in students:
+        print(f"{student.name}'s average grade: {student.average_grade():.2f}")
+    ```
+
+- **Immutable Configuration Objects**
+
+    ```python
+    from dataclasses import dataclass
+
+    @dataclass(frozen=True)
+    class DatabaseConfig:
+        host: str
+        port: int
+        username: str
+        password: str
+
+    config = DatabaseConfig("localhost", 5432, "user", "password")
+    # config.port = 3306  # This line would raise a FrozenInstanceError
+    ```
+
+- **JSON Serialization**
+
+    ```python
+    from dataclasses import dataclass, asdict
+    import json
+
+    @dataclass
+    class Point:
+        x: float
+        y: float
+
+    point = Point(10.5, 20.7)
+    json_string = json.dumps(asdict(point))
+    print(json_string)
+    ```
+
+### Additional Information to Know
+
+- #### Post-Initialization
+
+    You can use the `__post_init__` method to run additional logic after initialization.
+
+    ```python
+    from dataclasses import dataclass, field
+
+    @dataclass
+    class Rectangle:
+        width: float
+        height: float
+        area: float = field(init=False)
+
+        def __post_init__(self):
+            self.area = self.width * self.height
+
+    rect = Rectangle(5, 3)
+    print(f"Rectangle area: {rect.area}")  # Output: Rectangle area: 15.0
+    ```
+
+Data classes help reduce repetitive code and make it easier to define data-centric classes. They are useful for creating simple data structures or configuration objects, and can greatly improve code readability and maintainability.
+
+<br><br>
+
+## Type Hinting
+
+Type hinting, introduced in Python 3.5, allows you to explicitly specify types for variables, function parameters, and return values. This improves code readability and allows development tools to catch potential bugs in advance.
+
+### Basic Type Hinting
+
+Here's an example of basic type hinting:
+
+```python
+def greeting(name: str) -> str:
+    return f"Hello, {name}!"
+
+age: int = 30
+pi: float = 3.14
+is_python_fun: bool = True
+
+# Function call
+message: str = greeting("Alice")
+print(message)
+```
+
+### Result
+```text
+Hello, Alice!
+```
+
+### Features of Type Hinting
+
+1. **Generics**
+   
+   Generics allow you to write reusable code for different types.
+
+   ```python
+   from typing import List, Dict, TypeVar
+
+   T = TypeVar('T')
+
+   def first_element(lst: List[T]) -> T:
+       return lst[0]
+
+   numbers: List[int] = [1, 2, 3]
+   names: List[str] = ["Alice", "Bob", "Charlie"]
+
+   print(first_element(numbers))  # Output: 1
+   print(first_element(names))    # Output: Alice
+   ```
+
+2. **Type Aliases**
+   
+   Type aliases allow you to refer to complex types more simply.
+
+   ```python
+   from typing import Dict, List, Tuple
+
+   Vector = List[float]
+   Matrix = List[Vector]
+
+   def dot_product(v1: Vector, v2: Vector) -> float:
+       return sum(x * y for x, y in zip(v1, v2))
+
+   vector1: Vector = [1.0, 2.0, 3.0]
+   vector2: Vector = [4.0, 5.0, 6.0]
+   result: float = dot_product(vector1, vector2)
+   print(f"Dot product: {result}")
+   ```
+
+3. **Protocols**
+   
+   Protocols support structural subtyping. You can define objects with specific methods or attributes.
+
+   ```python
+   from typing import Protocol
+
+   class Drawable(Protocol):
+       def draw(self) -> None: ...
+
+   class Circle:
+       def draw(self) -> None:
+           print("Drawing a circle")
+
+   class Square:
+       def draw(self) -> None:
+           print("Drawing a square")
+
+   def draw_shape(shape: Drawable) -> None:
+       shape.draw()
+
+   circle: Circle = Circle()
+   square: Square = Square()
+
+   draw_shape(circle)  # Output: Drawing a circle
+   draw_shape(square)  # Output: Drawing a square
+   ```
+
+### Use Cases
+
+- **Function Overloading**
+
+    ```python
+    from typing import overload, Union
+
+    @overload
+    def process_data(data: str) -> str: ...
+
+    @overload
+    def process_data(data: int) -> int: ...
+
+    def process_data(data: Union[str, int]) -> Union[str, int]:
+        if isinstance(data, str):
+            return data.upper()
+        elif isinstance(data, int):
+            return data * 2
+
+    result1: str = process_data("hello")
+    result2: int = process_data(5)
+    print(result1, result2)  # Output: HELLO 10
+    ```
+
+- **Optional Types**
+
+    ```python
+    from typing import Optional
+
+    def find_user(user_id: int) -> Optional[str]:
+        users = {1: "Alice", 2: "Bob"}
+        return users.get(user_id)
+
+    user: Optional[str] = find_user(1)
+    if user is not None:
+        print(f"Found user: {user}")
+    else:
+        print("User not found")
+    ``` 
+
+- **Callable Types**
+
+    ```python
+    from typing import Callable
+
+    def apply_operation(x: int, y: int, operation: Callable[[int, int], int]) -> int:
+        return operation(x, y)
+
+    def add(a: int, b: int) -> int:
+        return a + b
+
+    result: int = apply_operation(5, 3, add)
+    print(f"Result: {result}")  # Output: Result: 8
+    ```
+
+### Additional Information to Know
+
+- #### Type Checking Tools
+
+    You can use static type checking tools like mypy to check the consistency of type hints.
+
+    ```python
+    # example.py
+    def greet(name: str) -> str:
+        return "Hello, " + name
+
+    greet(42)  # Type error
+    ```
+
+    ```bash
+    $ mypy example.py
+    example.py:4: error: Argument 1 to "greet" has incompatible type "int"; expected "str"
+    ```
+
+Type hinting helps clarify code intent and reduce potential errors without compromising Python's dynamic typing nature.
+
+<br><br>
+
+## Functional Programming Techniques
+
+Functional programming is a programming paradigm that treats computation as the evaluation of mathematical functions and avoids changing state and mutable data. While Python doesn't fully support functional programming, it offers many functional programming techniques.
+
+### Lambda Functions
+
+Lambda functions are anonymous functions useful for simple operations.
+
+```python
+# Regular function definition
+def add(x, y):
+    return x + y
+
+# Equivalent lambda function
+add_lambda = lambda x, y: x + y
+
+print(add(3, 5))        # Output: 8
+print(add_lambda(3, 5)) # Output: 8
+```
+
+### map, filter, reduce Functions
+
+These functions implement core concepts of functional programming.
+
+1. **map Function**
+
+   `map` applies a function to all elements of an iterable.
+
+   ```python
+   numbers = [1, 2, 3, 4, 5]
+   squared = list(map(lambda x: x**2, numbers))
+   print(squared)  # Output: [1, 4, 9, 16, 25]
+   ```
+
+2. **filter Function**
+
+   `filter` selects elements from an iterable that satisfy a specific condition.
+
+   ```python
+   numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+   even_numbers = list(filter(lambda x: x % 2 == 0, numbers))
+   print(even_numbers)  # Output: [2, 4, 6, 8, 10]
+   ```
+
+3. **reduce Function**
+
+   `reduce` accumulates the elements of an iterable into a single result.
+
+   ```python
+   from functools import reduce
+
+   numbers = [1, 2, 3, 4, 5]
+   sum_all = reduce(lambda x, y: x + y, numbers)
+   print(sum_all)  # Output: 15
+   ```
+
+### Functional Programming Library (functools)
+
+The `functools` module provides tools for working with higher-order functions and operations on callable objects.
+
+1. **partial Function**
+
+   `partial` creates a new function with some arguments pre-filled.
+
+   ```python
+   from functools import partial
+
+   def multiply(x, y):
+       return x * y
+
+   double = partial(multiply, 2)
+   print(double(4))  # Output: 8
+   ```
+
+2. **lru_cache Decorator**
+
+   `lru_cache` memoizes function results to improve performance for repeated calls.
+
+   ```python
+   from functools import lru_cache
+
+   @lru_cache(maxsize=None)
+   def fibonacci(n):
+       if n < 2:
+           return n
+       return fibonacci(n-1) + fibonacci(n-2)
+
+   print(fibonacci(100))  # Calculates quickly
+   ```
+
+### Use Cases
+
+- **Data Processing Pipeline**
+
+  You can build data processing pipelines using functional programming techniques.
+
+  ```python
+  def read_data(filename):
+      with open(filename, 'r') as f:
+          return f.readlines()
+
+  def parse_data(lines):
+      return [line.strip().split(',') for line in lines]
+
+  def filter_data(data):
+      return filter(lambda x: int(x[1]) > 25, data)
+
+  def format_output(data):
+      return map(lambda x: f"{x[0]} is {x[1]} years old", data)
+
+  # Execute pipeline
+  pipeline = compose(format_output, filter_data, parse_data, read_data)
+  result = list(pipeline('data.txt'))
+  print(result)
+  ```
+
+- **Function Composition**
+
+  Combine multiple functions to create a new function.
+
+  ```python
+  def compose(*functions):
+      def inner(arg):
+          for f in reversed(functions):
+              arg = f(arg)
+          return arg
+      return inner
+
+  def add_one(x):
+      return x + 1
+
+  def double(x):
+      return x * 2
+
+  f = compose(double, add_one)
+  print(f(3))  # Output: 8 ((3 + 1) * 2)
+  ```
+
+### Additional Information to Know
+
+- **Immutability**
+
+  Functional programming emphasizes data immutability. In Python, you can use immutable data structures like tuples and frozensets.
+
+  ```python
+  # Use tuple instead of mutable list
+  immutable_list = (1, 2, 3, 4, 5)
+  
+  # Immutable set
+  immutable_set = frozenset([1, 2, 3])
+  ```
+
+Functional programming techniques can improve code readability, reusability, and reduce side effects. They are particularly useful in data processing and parallel programming. In Python, you can combine these techniques with imperative programming to write more flexible and efficient code.

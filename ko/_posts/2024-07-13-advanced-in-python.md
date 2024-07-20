@@ -34,7 +34,22 @@ lang: ko
    - [예시: 속성 검증](#예시-속성-검증)
    - [응용 사례](#응용-사례-1)
    - [주의사항](#주의사항)
-
+6. [데이터 클래스 (Data Classes)](#데이터-클래스-data-classes)
+   - [예시](#예시)
+   - [데이터 클래스의 특징](#데이터-클래스의-특징)
+   - [응용사례](#응용사례)
+   - [추가 정보: 포스트 초기화](#추가적으로-알아두면-좋은-정보)
+7. [타입 힌팅 (Type Hinting)](#타입-힌팅-type-hinting)
+   - [기본 타입 힌팅](#기본-타입-힌팅)
+   - [타입 힌팅의 특징](#타입-힌팅의-특징)
+   - [응용사례](#응용사례-1)
+   - [추가 정보: 타입 검사 도구](#추가적으로-알아두면-좋은-정보-1)
+8. [함수형 프로그래밍 기법](#함수형-프로그래밍-기법)
+   - [람다 함수 (Lambda Functions)](#람다-함수-lambda-functions)
+   - [map, filter, reduce 함수](#map-filter-reduce-함수)
+   - [함수형 프로그래밍 라이브러리 (functools)](#함수형-프로그래밍-라이브러리-functools)
+   - [응용사례](#응용사례-2)
+   - [추가 정보: 불변성](#추가적으로-알아두면-좋은-정보-2)
 
 <br>
 <br>
@@ -84,158 +99,158 @@ greet("재영")
 
 - **로깅**
 
-```python
-import logging
+    ```python
+    import logging
 
-logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO)
 
-def log_function_call(func):
-    def wrapper(*args, **kwargs):
-        logging.info(f"함수 호출: {func.__name__}")
-        try:
-            result = func(*args, **kwargs)
-            logging.info(f"함수 {func.__name__} 정상 종료")
-            return result
-        except Exception as e:
-            logging.error(f"함수 {func.__name__}에서 에러 발생: {str(e)}")
-            raise
-    return wrapper
+    def log_function_call(func):
+        def wrapper(*args, **kwargs):
+            logging.info(f"함수 호출: {func.__name__}")
+            try:
+                result = func(*args, **kwargs)
+                logging.info(f"함수 {func.__name__} 정상 종료")
+                return result
+            except Exception as e:
+                logging.error(f"함수 {func.__name__}에서 에러 발생: {str(e)}")
+                raise
+        return wrapper
 
-@log_function_call
-def divide(a, b):
-    return a / b
+    @log_function_call
+    def divide(a, b):
+        return a / b
 
-# 정상 케이스
-divide(10, 2)
+    # 정상 케이스
+    divide(10, 2)
 
-# 에러 케이스
-try:
-    divide(10, 0)
-except ZeroDivisionError:
-    pass
-```
+    # 에러 케이스
+    try:
+        divide(10, 0)
+    except ZeroDivisionError:
+        pass
+    ```
 
 - **인증**
 
-```python
-def req_auth(func):
-    def wrapper(*args, **kwargs):
-        if not is_authenticated():  # 인증 확인 함수 (별도 구현 필요)
-            raise PermissionError("인증이 필요합니다.")
-        return func(*args, **kwargs)
-    return wrapper
+    ```python
+    def req_auth(func):
+        def wrapper(*args, **kwargs):
+            if not is_authenticated():  # 인증 확인 함수 (별도 구현 필요)
+                raise PermissionError("인증이 필요합니다.")
+            return func(*args, **kwargs)
+        return wrapper
 
-@req_auth
-def sensitive_operation():
-    print("중요한 작업 수행")
+    @req_auth
+    def sensitive_operation():
+        print("중요한 작업 수행")
 
-sensitive_operation()  # 인증되지 않은 경우 PermissionError 발생
-```
+    sensitive_operation()  # 인증되지 않은 경우 PermissionError 발생
+    ```
 
 - **캐싱**
 
-```python
-def memoize(func):
-    cache = {}
-    def wrapper(*args):
-        if args in cache:
-            return cache[args]
-        result = func(*args)
-        cache[args] = result
-        return result
-    return wrapper
+    ```python
+    def memoize(func):
+        cache = {}
+        def wrapper(*args):
+            if args in cache:
+                return cache[args]
+            result = func(*args)
+            cache[args] = result
+            return result
+        return wrapper
 
-@memoize
-def fibonacci(n):
-    if n < 2:
-        return n
-    return fibonacci(n-1) + fibonacci(n-2)
+    @memoize
+    def fibonacci(n):
+        if n < 2:
+            return n
+        return fibonacci(n-1) + fibonacci(n-2)
 
-print(fibonacci(100))  # 첫 실행은 느리지만, 이후 동일한 입력에 대하여 빠르게 응답
-```
+    print(fibonacci(100))  # 첫 실행은 느리지만, 이후 동일한 입력에 대하여 빠르게 응답
+    ```
 
 - **재시도**
 
-```python
-import time
+    ```python
+    import time
 
-# 데코레이터에서 인자를 받고싶으면 함수를 3중으로 작성해야합니다.
-# 이를 데코레이터 팩토리라고 칭합니다.
-def retry(max_attempts=3, delay=1):
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            attempts = 0
-            while attempts < max_attempts:
-                try:
-                    return func(*args, **kwargs)
-                except Exception as e:
-                    attempts += 1
-                    if attempts == max_attempts:
-                        raise
-                    print(f"오류 발생: {e}. {delay}초 후 재시도...")
-                    time.sleep(delay)
-        return wrapper
-    return decorator
+    # 데코레이터에서 인자를 받고싶으면 함수를 3중으로 작성해야합니다.
+    # 이를 데코레이터 팩토리라고 칭합니다.
+    def retry(max_attempts=3, delay=1):
+        def decorator(func):
+            def wrapper(*args, **kwargs):
+                attempts = 0
+                while attempts < max_attempts:
+                    try:
+                        return func(*args, **kwargs)
+                    except Exception as e:
+                        attempts += 1
+                        if attempts == max_attempts:
+                            raise
+                        print(f"오류 발생: {e}. {delay}초 후 재시도...")
+                        time.sleep(delay)
+            return wrapper
+        return decorator
 
-@retry(max_attempts=3, delay=2)
-def unstable_network_call():
-    import random
-    if random.random() < 0.7:
-        raise ConnectionError("네트워크 오류")
-    return "성공"
+    @retry(max_attempts=3, delay=2)
+    def unstable_network_call():
+        import random
+        if random.random() < 0.7:
+            raise ConnectionError("네트워크 오류")
+        return "성공"
 
-print(unstable_network_call())
-```
+    print(unstable_network_call())
+    ```
 
 ### 추가적으로 알아두면 좋은 정보
 
 - #### wraps
 
-wraps는 Python의 functools 모듈에서 제공하는 데코레이터로, 몇 가지 작업을 수행합니다.
-1. 메타데이터 보존 - wraps는 원본 함수의 메타데이터(이름, 문서열, 인자 목록 등)를 데코레이터에 의해 래핑된 함수로 복사합니다.
-2. 디버깅 및 내부 검사 지원 - 이를 통해 디버깅 도구와 내부 검사 기능이 원본 함수의 정보를 올바르게 표시할 수 있게 됩니다.
-3. 문서화 유지 - 원본 함수의 독스트링(docstring)을 보존하여, 문서 생성 도구가 정확한 정보를 제공할 수 있게 합니다.
+    wraps는 Python의 functools 모듈에서 제공하는 데코레이터로, 몇 가지 작업을 수행합니다.
+    1. 메타데이터 보존 - wraps는 원본 함수의 메타데이터(이름, 문서열, 인자 목록 등)를 데코레이터에 의해 래핑된 함수로 복사합니다.
+    2. 디버깅 및 내부 검사 지원 - 이를 통해 디버깅 도구와 내부 검사 기능이 원본 함수의 정보를 올바르게 표시할 수 있게 됩니다.
+    3. 문서화 유지 - 원본 함수의 독스트링(docstring)을 보존하여, 문서 생성 도구가 정확한 정보를 제공할 수 있게 합니다.
 
-**문제 예시**
+    **문제 예시**
 
-```python
-def my_decorator(func):
-    def wrapper(*args, **kwargs):
-        """wrapper 함수가 호출되었습니다."""
-        result = func(*args, **kwargs)
-        return result
-    return wrapper
+    ```python
+    def my_decorator(func):
+        def wrapper(*args, **kwargs):
+            """wrapper 함수가 호출되었습니다."""
+            result = func(*args, **kwargs)
+            return result
+        return wrapper
 
-@my_decorator
-def say_hello():
-    """say_hello 함수가 호출되었습니다."""
-    print("안녕하세요.")
+    @my_decorator
+    def say_hello():
+        """say_hello 함수가 호출되었습니다."""
+        print("안녕하세요.")
 
-print(say_hello.__name__)  # 출력: wrapper
-print(say_hello.__doc__)   # 출력: wrapper 함수가 호출되었습니다.
-```
+    print(say_hello.__name__)  # 출력: wrapper
+    print(say_hello.__doc__)   # 출력: wrapper 함수가 호출되었습니다.
+    ```
 
-**해결 예시**
+    **해결 예시**
 
-```python
-from functools import wraps
+    ```python
+    from functools import wraps
 
-def my_decorator(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        """wrapper 함수가 호출되었습니다."""
-        result = func(*args, **kwargs)
-        return result
-    return wrapper
+    def my_decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            """wrapper 함수가 호출되었습니다."""
+            result = func(*args, **kwargs)
+            return result
+        return wrapper
 
-@my_decorator
-def say_hello():
-    """say_hello 함수가 호출되었습니다."""
-    print("Hello!")
+    @my_decorator
+    def say_hello():
+        """say_hello 함수가 호출되었습니다."""
+        print("Hello!")
 
-print(say_hello.__name__)  # 출력: say_hello
-print(say_hello.__doc__)   # 출력: say_hello 함수가 호출되었습니다.
-```
+    print(say_hello.__name__)  # 출력: say_hello
+    print(say_hello.__doc__)   # 출력: say_hello 함수가 호출되었습니다.
+    ```
 
 <br>
 <br>
@@ -284,104 +299,104 @@ for num in fibonacci(10):
 
 - **대용량 파일 읽기**
 
-```python
-def read_large_file(file_path):
-    with open(file_path, 'r') as file:
-        for line in file:
-            yield line.strip()
+    ```python
+    def read_large_file(file_path):
+        with open(file_path, 'r') as file:
+            for line in file:
+                yield line.strip()
 
-for line in read_large_file('large_file.txt'):
-    print(line)
-```
+    for line in read_large_file('large_file.txt'):
+        print(line)
+    ```
 
 - **무한 시퀀스 생성**
 
-```python
-def infinite_sequence():
-    num = 0
-    while True:
-        yield num
-        num += 1
+    ```python
+    def infinite_sequence():
+        num = 0
+        while True:
+            yield num
+            num += 1
 
-for i in infinite_sequence():
-    print(i)
-    if i > 100:
-        break
-```
+    for i in infinite_sequence():
+        print(i)
+        if i > 100:
+            break
+    ```
 
 - **데이터 변환 파이프라인**
 
-```python
-def numbers():
-    for i in range(1, 11):
-        yield i
+    ```python
+    def numbers():
+        for i in range(1, 11):
+            yield i
 
-def square(nums):
-    for num in nums:
-        yield num ** 2
+    def square(nums):
+        for num in nums:
+            yield num ** 2
 
-def add_one(nums):
-    for num in nums:
-        yield num + 1
+    def add_one(nums):
+        for num in nums:
+            yield num + 1
 
-pipeline = add_one(square(numbers()))
-for num in pipeline:
-    print(num)
-```
+    pipeline = add_one(square(numbers()))
+    for num in pipeline:
+        print(num)
+    ```
 
 ### 추가적으로 알아두면 좋은 정보
 
 - #### 제너레이터 표현식
 
-리스트 컴프리헨션과 유사하지만 소괄호 `()` 를 사용하여 제너레이터를 생성할 수 있습니다. 이때 장점은 공간복잡도를 절약할 수 있습니다.
+    리스트 컴프리헨션과 유사하지만 소괄호 `()` 를 사용하여 제너레이터를 생성할 수 있습니다. 이때 장점은 공간복잡도를 절약할 수 있습니다.
 
-```python
-# 리스트 컴프리헨션
-squares_list = [x**2 for x in range(10)]
+    ```python
+    # 리스트 컴프리헨션
+    squares_list = [x**2 for x in range(10)]
 
-# 제너레이터 표현식
-squares_gen = (x**2 for x in range(10))
+    # 제너레이터 표현식
+    squares_gen = (x**2 for x in range(10))
 
-print(squares_list)  # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
-print(squares_gen)   # <generator object <genexpr> at 0x...>
+    print(squares_list)  # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+    print(squares_gen)   # <generator object <genexpr> at 0x...>
 
-for num in squares_gen:
-    print(num)
-```
+    for num in squares_gen:
+        print(num)
+    ```
 
 - #### send 메서드
 
-제너레이터의 `send` 메서드를 사용하면 제너레이터 내부로 값을 전달할 수 있습니다.
+    제너레이터의 `send` 메서드를 사용하면 제너레이터 내부로 값을 전달할 수 있습니다.
 
-```python
-def echo_generator():
-    while True:
-        received = yield
-        print(f"Received: {received}")
+    ```python
+    def echo_generator():
+        while True:
+            received = yield
+            print(f"Received: {received}")
 
-gen = echo_generator()
-next(gen)  # 제너레이터 초기화
-gen.send("Hello")
-gen.send("World")
-```
+    gen = echo_generator()
+    next(gen)  # 제너레이터 초기화
+    gen.send("Hello")
+    gen.send("World")
+    ```
 
 - #### 양방향 통신
 
-```python
-# 이 메커니즘을 이해하면 제너레이터를 사용한 복잡한 코루틴 패턴을 구현할 수 있습니다.
+    ```python
+    # 이 메커니즘을 이해하면 제너레이터를 사용한 복잡한 코루틴 패턴을 구현할 수 있습니다.
 
-def two_way_generator():
-    while True:
-        received = yield "입력을 받을 준비가 되었습니다."
-        print(f"받은 입력: {received}")
+    def two_way_generator():
+        while True:
+            received = yield "입력을 받을 준비가 되었습니다."
+            print(f"받은 입력: {received}")
 
-gen = two_way_generator()
-print(next(gen))  # 출력: 입력을 받을 준비가 되었습니다.
-print(gen.send("안녕하세요"))  # 출력: 받은 입력: 안녕하세요
-                            # 입력을 받을 준비가 되었습니다.
-```
+    gen = two_way_generator()
+    print(next(gen))  # 출력: 입력을 받을 준비가 되었습니다.
+    print(gen.send("안녕하세요"))  # 출력: 받은 입력: 안녕하세요
+                                # 입력을 받을 준비가 되었습니다.
+    ```
 
-제너레이터는 파이썬에서 메모리 효율적인 프로그래밍을 가능하게 하는 강력한 도구입니다. 대용량 데이터 처리, 스트리밍 작업, 혹은 무한 시퀀스 생성 등 다양한 상황에서 유용하게 사용될 수 있습니다.
+    제너레이터는 파이썬에서 메모리 효율적인 프로그래밍을 가능하게 하는 강력한 도구입니다. 대용량 데이터 처리, 스트리밍 작업, 혹은 무한 시퀀스 생성 등 다양한 상황에서 유용하게 사용될 수 있습니다.
 
 <br>
 <br>
@@ -452,59 +467,59 @@ with file_manager('example.txt', 'w') as f:
 
 - **데이터베이스 연결 관리**
 
-```python
-class DatabaseConnection:
-    def __enter__(self):
-        self.conn = create_connection()  # 연결 생성 함수
-        return self.conn
+    ```python
+    class DatabaseConnection:
+        def __enter__(self):
+            self.conn = create_connection()  # 연결 생성 함수
+            return self.conn
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.conn.close()
+        def __exit__(self, exc_type, exc_value, traceback):
+            self.conn.close()
 
-with DatabaseConnection() as conn:
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users")
-```
+    with DatabaseConnection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users")
+    ```
 
 - **시간 측정**
 
-```python
-import time
-from contextlib import contextmanager
+    ```python
+    import time
+    from contextlib import contextmanager
 
-@contextmanager
-def timer():
-    start = time.time()
-    yield
-    end = time.time()
-    print(f"실행 시간: {end - start} 초")
+    @contextmanager
+    def timer():
+        start = time.time()
+        yield
+        end = time.time()
+        print(f"실행 시간: {end - start} 초")
 
-with timer():
-    # 시간을 측정할 코드
-    time.sleep(2)
-```
+    with timer():
+        # 시간을 측정할 코드
+        time.sleep(2)
+    ```
 
 - **임시 디렉토리 관리**
 
-```python
-import os
-import shutil
-from contextlib import contextmanager
+    ```python
+    import os
+    import shutil
+    from contextlib import contextmanager
 
-@contextmanager
-def temporary_directory():
-    temp_dir = 'temp_dir'
-    os.mkdir(temp_dir)
-    try:
-        yield temp_dir
-    finally:
-        shutil.rmtree(temp_dir)
+    @contextmanager
+    def temporary_directory():
+        temp_dir = 'temp_dir'
+        os.mkdir(temp_dir)
+        try:
+            yield temp_dir
+        finally:
+            shutil.rmtree(temp_dir)
 
-with temporary_directory() as temp_dir:
-    # 임시 디렉토리 사용
-    with open(f"{temp_dir}/temp_file.txt", 'w') as f:
-        f.write("임시 파일 내용")
-```
+    with temporary_directory() as temp_dir:
+        # 임시 디렉토리 사용
+        with open(f"{temp_dir}/temp_file.txt", 'w') as f:
+            f.write("임시 파일 내용")
+    ```
 
 ### 주요 이점
 
@@ -579,60 +594,60 @@ class MyModel(metaclass=ValidateFields):
 
 - **싱글톤 패턴 구현**
 
-```python
-class Singleton(type):
-    _instances = {}
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super().__call__(*args, **kwargs)
-        return cls._instances[cls]
+    ```python
+    class Singleton(type):
+        _instances = {}
+        def __call__(cls, *args, **kwargs):
+            if cls not in cls._instances:
+                cls._instances[cls] = super().__call__(*args, **kwargs)
+            return cls._instances[cls]
 
-class MyClass(metaclass=Singleton):
-    pass
+    class MyClass(metaclass=Singleton):
+        pass
 
-a = MyClass()
-b = MyClass()
-print(a is b)  # 출력: True
-```
+    a = MyClass()
+    b = MyClass()
+    print(a is b)  # 출력: True
+    ```
 
 - **자동 프로퍼티 생성**
 
-```python
-class AutoProperty(type):
-    def __new__(cls, name, bases, attrs):
-        for key, value in attrs.items():
-            if not key.startswith('_'):
-                attrs[key] = property(lambda self, x=value: x)
-        return super().__new__(cls, name, bases, attrs)
+    ```python
+    class AutoProperty(type):
+        def __new__(cls, name, bases, attrs):
+            for key, value in attrs.items():
+                if not key.startswith('_'):
+                    attrs[key] = property(lambda self, x=value: x)
+            return super().__new__(cls, name, bases, attrs)
 
-class Config(metaclass=AutoProperty):
-    host = "localhost"
-    port = 8080
+    class Config(metaclass=AutoProperty):
+        host = "localhost"
+        port = 8080
 
-config = Config()
-print(config.host)  # 출력: localhost
-```
+    config = Config()
+    print(config.host)  # 출력: localhost
+    ```
 
 - **추상 베이스 클래스 확장**
 
-```python
-from abc import ABCMeta, abstractmethod
+    ```python
+    from abc import ABCMeta, abstractmethod
 
-class ExtendedABCMeta(ABCMeta):
-    def __new__(cls, name, bases, attrs):
-        for key, value in attrs.items():
-            if callable(value) and not key.startswith('_'):
-                attrs[key] = abstractmethod(value)
-        return super().__new__(cls, name, bases, attrs)
+    class ExtendedABCMeta(ABCMeta):
+        def __new__(cls, name, bases, attrs):
+            for key, value in attrs.items():
+                if callable(value) and not key.startswith('_'):
+                    attrs[key] = abstractmethod(value)
+            return super().__new__(cls, name, bases, attrs)
 
-class MyAbstractClass(metaclass=ExtendedABCMeta):
-    def method1(self):
-        pass
-    def method2(self):
-        pass
+    class MyAbstractClass(metaclass=ExtendedABCMeta):
+        def method1(self):
+            pass
+        def method2(self):
+            pass
 
-# MyAbstractClass()  # 이 줄의 주석을 해제하면 TypeError 발생
-```
+    # MyAbstractClass()  # 이 줄의 주석을 해제하면 TypeError 발생
+    ```
 
 ### 주의사항
 
@@ -706,81 +721,81 @@ Person(name='홍길동', age=30, height=175.5)
 
 - **간단한 데이터 모델링**
 
-```python
-from dataclasses import dataclass
-from typing import List
+    ```python
+    from dataclasses import dataclass
+    from typing import List
 
-@dataclass
-class Student:
-    name: str
-    student_id: str
-    grades: List[float] = field(default_factory=list)
+    @dataclass
+    class Student:
+        name: str
+        student_id: str
+        grades: List[float] = field(default_factory=list)
 
-    def average_grade(self):
-        return sum(self.grades) / len(self.grades) if self.grades else 0
+        def average_grade(self):
+            return sum(self.grades) / len(self.grades) if self.grades else 0
 
-students = [
-    Student("Alice", "A001", [85, 90, 88]),
-    Student("Bob", "B002", [78, 85, 92])
-]
+    students = [
+        Student("Alice", "A001", [85, 90, 88]),
+        Student("Bob", "B002", [78, 85, 92])
+    ]
 
-for student in students:
-    print(f"{student.name}'s average grade: {student.average_grade():.2f}")
-```
+    for student in students:
+        print(f"{student.name}'s average grade: {student.average_grade():.2f}")
+    ```
 
 - **불변 구성 객체**
 
-```python
-from dataclasses import dataclass
+    ```python
+    from dataclasses import dataclass
 
-@dataclass(frozen=True)
-class DatabaseConfig:
-    host: str
-    port: int
-    username: str
-    password: str
+    @dataclass(frozen=True)
+    class DatabaseConfig:
+        host: str
+        port: int
+        username: str
+        password: str
 
-config = DatabaseConfig("localhost", 5432, "user", "password")
-# config.port = 3306  # 이 줄은 FrozenInstanceError를 발생시킵니다
-```
+    config = DatabaseConfig("localhost", 5432, "user", "password")
+    # config.port = 3306  # 이 줄은 FrozenInstanceError를 발생시킵니다
+    ```
 
 - **JSON 직렬화**
 
-```python
-from dataclasses import dataclass, asdict
-import json
+    ```python
+    from dataclasses import dataclass, asdict
+    import json
 
-@dataclass
-class Point:
-    x: float
-    y: float
+    @dataclass
+    class Point:
+        x: float
+        y: float
 
-point = Point(10.5, 20.7)
-json_string = json.dumps(asdict(point))
-print(json_string)
-```
+    point = Point(10.5, 20.7)
+    json_string = json.dumps(asdict(point))
+    print(json_string)
+    ```
 
 ### 추가적으로 알아두면 좋은 정보
 
 - #### 포스트 초기화
 
-`__post_init__` 메서드를 사용하여 초기화 이후 추가 로직을 실행할 수 있습니다.
+    `__post_init__` 메서드를 사용하여 초기화 이후 추가 로직을 실행할 수 있습니다.
 
-```python
-from dataclasses import dataclass, field
+    ```python
+    from dataclasses import dataclass, field
 
-@dataclass
-class Rectangle:
-    width: float
-    height: float
-    area: float = field(init=False)
+    @dataclass
+    class Rectangle:
+        width: float
+        height: float
+        area: float = field(init=False)
 
-    def __post_init__(self):
-        self.area = self.width * self.height
+        def __post_init__(self):
+            self.area = self.width * self.height
 
-rect = Rectangle(5, 3)
-print(f"Rectangle area: {rect.area}")  # 출력: Rectangle area: 15.0
-```
+    rect = Rectangle(5, 3)
+    print(f"Rectangle area: {rect.area}")  # 출력: Rectangle area: 15.0
+    ```
 
 데이터 클래스를 이용하여 반복적인 코드를 줄이고, 데이터 중심의 클래스를 쉽게 정의할 수 있습니다. 간단한 데이터 구조나 설정 객체 등을 만들 때 유용하며, 코드의 가독성과 유지보수성을 크게 향상시킬 수 있습니다.
 
@@ -884,75 +899,75 @@ Hello, Alice!
 
 - **함수 오버로딩**
 
-```python
-from typing import overload, Union
+    ```python
+    from typing import overload, Union
 
-@overload
-def process_data(data: str) -> str: ...
+    @overload
+    def process_data(data: str) -> str: ...
 
-@overload
-def process_data(data: int) -> int: ...
+    @overload
+    def process_data(data: int) -> int: ...
 
-def process_data(data: Union[str, int]) -> Union[str, int]:
-    if isinstance(data, str):
-        return data.upper()
-    elif isinstance(data, int):
-        return data * 2
+    def process_data(data: Union[str, int]) -> Union[str, int]:
+        if isinstance(data, str):
+            return data.upper()
+        elif isinstance(data, int):
+            return data * 2
 
-result1: str = process_data("hello")
-result2: int = process_data(5)
-print(result1, result2)  # 출력: HELLO 10
-```
+    result1: str = process_data("hello")
+    result2: int = process_data(5)
+    print(result1, result2)  # 출력: HELLO 10
+    ```
 
 - **옵셔널 타입**
 
-```python
-from typing import Optional
+    ```python
+    from typing import Optional
 
-def find_user(user_id: int) -> Optional[str]:
-    users = {1: "Alice", 2: "Bob"}
-    return users.get(user_id)
+    def find_user(user_id: int) -> Optional[str]:
+        users = {1: "Alice", 2: "Bob"}
+        return users.get(user_id)
 
-user: Optional[str] = find_user(1)
-if user is not None:
-    print(f"Found user: {user}")
-else:
-    print("User not found")
-```
+    user: Optional[str] = find_user(1)
+    if user is not None:
+        print(f"Found user: {user}")
+    else:
+        print("User not found")
+    ``` 
 
 - **콜러블 타입**
 
-```python
-from typing import Callable
+    ```python
+    from typing import Callable
 
-def apply_operation(x: int, y: int, operation: Callable[[int, int], int]) -> int:
-    return operation(x, y)
+    def apply_operation(x: int, y: int, operation: Callable[[int, int], int]) -> int:
+        return operation(x, y)
 
-def add(a: int, b: int) -> int:
-    return a + b
+    def add(a: int, b: int) -> int:
+        return a + b
 
-result: int = apply_operation(5, 3, add)
-print(f"Result: {result}")  # 출력: Result: 8
-```
+    result: int = apply_operation(5, 3, add)
+    print(f"Result: {result}")  # 출력: Result: 8
+    ```
 
 ### 추가적으로 알아두면 좋은 정보
 
 - #### 타입 검사 도구
 
-mypy와 같은 정적 타입 검사 도구를 사용하여 타입 힌팅의 일관성을 검사할 수 있습니다.
+    mypy와 같은 정적 타입 검사 도구를 사용하여 타입 힌팅의 일관성을 검사할 수 있습니다.
 
-```python
-# example.py
-def greet(name: str) -> str:
-    return "Hello, " + name
+    ```python
+    # example.py
+    def greet(name: str) -> str:
+        return "Hello, " + name
 
-greet(42)  # 타입 오류
-```
+    greet(42)  # 타입 오류
+    ```
 
-```bash
-$ mypy example.py
-example.py:4: error: Argument 1 to "greet" has incompatible type "int"; expected "str"
-```
+    ```bash
+    $ mypy example.py
+    example.py:4: error: Argument 1 to "greet" has incompatible type "int"; expected "str"
+    ```
 
 타입 힌팅은 Python의 동적 타이핑 특성을 해치지 않으면서도, 코드의 의도를 명확히 하고 잠재적인 오류를 줄이는 데 도움을 줍니다.
 
