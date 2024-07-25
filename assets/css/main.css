@@ -46,7 +46,7 @@
   strong {
     color: #16a085;
     font-weight: 400;
-    font-size: 17px  }
+    font-size: 16px  }
 
   .wrapper {
     max-width: 800px;
@@ -64,6 +64,7 @@
 
   h3 {
     font-weight: 400;
+    color: #6ec361;
   }
 
 /* =Header *//*************************************************************/

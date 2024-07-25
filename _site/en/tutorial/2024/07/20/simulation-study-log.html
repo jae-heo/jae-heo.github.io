@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Simulation Learning Log — What is Simulation?  | Jaeyoung Heo</title>
+<meta name="description" content="Jaeyoung Heo's tech blog
+">
+<meta name="keywords" content="simulation">
+<link rel="canonical" href="/en/tutorial/2024/07/20/simulation-study-log.html">
+<link rel="icon" type="image/jpeg" href="/assets/img/me.jpeg"/>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/agate.css">
+
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1XDPCR56GW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1XDPCR56GW');
+</script>
+</head>
+<body>
+<div class="wrapper">
+<header class="header">
+  <div class="navigation">
+    <a href="/en" class="logo">Jaeyoung Heo</a>
+    <ul class="menu">
+      <li class="menu__entry">
+        <a href="/en/resume">Resume</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/project">Project</a>
+      </li>
+      <li class="menu__entry">
+        <a href="/en/blog">Blog</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="social-links">
+    
+    <li class="social-links__entry">
+      <a href="mailto:gjwodud119@gmail.com" target="_blank">
+        <i class="fa fa-envelope-square"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://github.com/jae-heo" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+    </li>
+    
+    
+    <li class="social-links__entry">
+      <a href="https://in.linkedin.com/in/jaeyoung-heo-664033282" target="_blank">
+        <i class="fa fa-linkedin"></i>
+      </a>
+    </li>
+    
+    <li class="language-selector">
+      <a href="/en/tutorial/2024/07/20/simulation-study-log.html"><strong>EN</strong></a> |
+      <a href="/ko/tutorial/2024/07/20/simulation-study-log.html"><strong>KO</strong></a>
+    </li>
+  </ul>
+</header>
+<h1 class="page-title">
+<div class="page-title__text">Simulation Learning Log</div>
+<div class="page-title__subtitle">What is Simulation?</div>
+</h1>
+
+<h2 id="table-of-contents">Table of Contents</h2>
+
+<ol>
+  <li><a href="#background">Background</a></li>
+  <li><a href="#tragedy-of-the-commons">Tragedy of the Commons</a>
+    <ul>
+      <li><a href="#modeling">Modeling</a></li>
+    </ul>
+  </li>
+  <li><a href="#causal-loop-diagram">Causal Loop Diagram</a>
+    <ul>
+      <li><a href="#components">Components</a></li>
+      <li><a href="#types-of-loops">Types of Loops</a></li>
+      <li><a href="#delays">Delays</a></li>
+    </ul>
+  </li>
+  <li><a href="#system-archetype">System Archetype</a>
+    <ul>
+      <li><a href="#archetype-escalation">Escalation</a></li>
+      <li><a href="#archetype-success-to-successful">Success to Successful</a></li>
+    </ul>
+  </li>
+  <li><a href="#from-causal-loop-diagram-to-system-dynamics-model">From Causal Loop Diagram to System Dynamics Model</a>
+    <ul>
+      <li><a href="#key-steps">Key Steps</a></li>
+      <li><a href="#example-population-growth-model">Example: Population Growth Model</a></li>
+    </ul>
+  </li>
+  <li><a href="#simulation-time-flow-and-finite-state-machine">Simulation Time Flow and Finite State Machine</a>
+    <ul>
+      <li><a href="#simulation-time-flow">Simulation Time Flow</a></li>
+      <li><a href="#finite-state-machine">Finite State Machine</a>
+        <ul>
+          <li><a href="#key-components">Key Components</a></li>
+          <li><a href="#characteristics">Characteristics</a></li>
+          <li><a href="#example-vending-machine">Example: Vending Machine</a></li>
+        </ul>
+      </li>
+      <li><a href="#applications-in-simulation">Applications in Simulation</a></li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /><br /></p>
+
+<h2 id="background">Background</h2>
+
+<p>In this article, we will explore the basics of simulation and modeling. What is simulation? According to Claude, my favorite AI assistant, <strong>simulation is the imitation of real-world systems, states, or processes through computer or physical models</strong>. Wouldn’t it be incredibly useful if we could predict the real world through simulation?</p>
+
+<p>This article is primarily based on the online open course <a href="https://youtu.be/cGJPIj1YuWo?si=I89z4Q2XpuhVg_ta/" target="_blank">Introduction to Modeling and Simulation</a> from KAIST.</p>
+
+<p><br /><br /></p>
+
+<h2 id="tragedy-of-the-commons">Tragedy of the Commons</h2>
+
+<p>There are various public resources in the world. Notable examples include water, land, and oil. The tragedy of the commons refers to the economic and scientific situation where these shared resources, if not managed separately and consumed by individuals according to their own interests, will be depleted. This example is often used to explain simulation and modeling.</p>
+
+<p>Let’s consider a scenario. There are two shepherds, each with their own flock of sheep. They are in a competitive relationship. Given that the pasture where the sheep can graze is limited, what choices should the shepherds make to maximize their own benefits?</p>
+<ol>
+  <li>Let the sheep graze all day.</li>
+  <li>Increase the size of the flock.</li>
+</ol>
+
+<p>While there are various choices, ultimately, the faster and more one consumes the shared resource (pasture) compared to the competitor, the more their benefits are maximized. If limited public goods are consumed through such choices, the result will inevitably be depletion.</p>
+
+<h3 id="modeling">Modeling</h3>
+
+<p>How can we model this example? Let’s first define the important objects:</p>
+<ol>
+  <li>Pasture</li>
+  <li>Flock of sheep</li>
+  <li>Shepherd</li>
+  <li>Barren land</li>
+</ol>
+
+<p>But unfortunately, this is not the end. We also need to define the attributes and relationships of each object:</p>
+<ol>
+  <li>Rate of change from pasture to barren land based on flock size</li>
+  <li>Rate of change from barren land to pasture over time</li>
+  <li>Reproduction rate of the flock</li>
+  <li>Total size of the pasture</li>
+</ol>
+
+<p>The attributes/relationships defined here are just a part of what needs to be considered. There are many more factors to take into account.</p>
+
+<p><br /><br /></p>
+
+<h2 id="causal-loop-diagram">Causal Loop Diagram</h2>
+
+<p>A causal loop diagram is a tool for visually representing the causal relationships between variables in a system. It uses arrows to show relationships between variables, distinguishing between positive (+) and negative (-) relationships. When modeling for simulation, using a Causal Loop Diagram allows you to observe an abstracted view of the model.</p>
+
+<p>There are three main components in a Causal Loop Diagram:</p>
+
+<ol>
+  <li>Factors
+    <ul>
+      <li>Factors are numerical variables that represent quantity or intensity.</li>
+    </ul>
+  </li>
+  <li>Relationships between the factors
+    <ul>
+      <li>Relationships include feedback and positive/negative links.</li>
+    </ul>
+  </li>
+  <li>Delays
+    <ul>
+      <li>We’ll explain delays in more detail later.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Positive/negative links can create loops, and there are two types of loops:</p>
+<ul>
+  <li>Reinforcing loop
+    <ul>
+      <li>A reinforcing loop occurs when the number of negative links in the cycle is even.</li>
+    </ul>
+  </li>
+</ul>
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/reinforcing_loop.png" alt="reinforcing_loop" style="display: block; margin: 0 auto; width: 250px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<ul>
+  <li>Balancing loop
+    <ul>
+      <li>A balancing loop occurs when the number of negative links is odd.</li>
+    </ul>
+  </li>
+</ul>
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/balancing_loop.png" alt="balancing_loop" style="display: block; margin: 0 auto; width: 250px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<h3 id="delays">Delays</h3>
+
+<p>Without delays, modeling can be simplified and made to work ideally. However, most real-world problems include delays.</p>
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/balancing_process_with_delay.png" alt="reinforcing_loop" style="display: block; margin: 0 auto; width: 250px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<p>For example, if you keep placing orders because products haven’t arrived, you might end up with more products than expected. To resolve this, you might return some, but returns also have delays, which can cause similar problems as with the orders. This is called oscillations.<br />
+If the oscillations converge to the target value, the goal can be achieved, but if the error keeps growing, this is called the bullwhip effect. This is a common problem that can occur in supply chain management (SCM).</p>
+
+<p><br /><br /></p>
+
+<h2 id="system-archetype">System Archetype</h2>
+
+<p>A system archetype is a conceptual model that describes recurring behavior patterns in organizations or systems. Understanding archetypes can help more easily identify and solve problems in complex systems.</p>
+
+<p>You can find images and more detailed explanations of the examples below at <a href="https://en.wikipedia.org/wiki/System_archetype" target="_blank">System Archetype</a>.</p>
+
+<h3 id="archetype-escalation">Archetype: Escalation</h3>
+
+<p>This type includes scenarios like the chicken game and arms races. There is a common factor between two loops, and this factor controls both loops. For example, if country A increases its military power, country B also needs to increase its military power, resulting in a continuous escalation effect on both sides.</p>
+
+<h3 id="archetype-success-to-successful">Archetype: Success to Successful</h3>
+
+<p>This type explains the phenomenon where, in a situation with limited resources, when there are A and B, as more resources are invested in A, B’s power weakens. Both loops are reinforcing loops, but they go in different directions.</p>
+
+<p><br /><br /></p>
+
+<h2 id="from-causal-loop-diagram-to-system-dynamics-model">From Causal Loop Diagram to System Dynamics Model</h2>
+
+<p>While Causal Diagrams were good for conceptually modeling scenarios, they pose challenges in terms of complexity and visibility when modeling actual complex problems. In other words, to develop from a qualitative model to a quantitative model, we need to evolve into a System Dynamics Model. This process includes mathematical definition of variables, setting initial values, and equation formulation.</p>
+
+<h3 id="key-steps">Key Steps:</h3>
+
+<ol>
+  <li>Variable Identification and Definition:
+    <ul>
+      <li>Define each element of the causal loop diagram as a clear variable.</li>
+      <li>Determine the type of each variable (stock, flow, auxiliary).</li>
+    </ul>
+  </li>
+  <li>Establishing Mathematical Relationships:
+    <ul>
+      <li>Express the relationships between variables as mathematical equations.</li>
+      <li>Example: Population growth rate = Birth rate - Death rate</li>
+    </ul>
+  </li>
+  <li>Setting Initial Values:
+    <ul>
+      <li>Define the initial values for each stock variable.</li>
+      <li>Represents the system state at the start of the simulation.</li>
+    </ul>
+  </li>
+  <li>Setting Time Units and Simulation Period:
+    <ul>
+      <li>Decide on the time unit of the model (e.g., day, month, year).</li>
+      <li>Set the overall simulation period.</li>
+    </ul>
+  </li>
+  <li>Defining Functions and Tables:
+    <ul>
+      <li>Create graph functions or lookup tables to express non-linear relationships.</li>
+    </ul>
+  </li>
+  <li>Implementing Feedback Loops:
+    <ul>
+      <li>Convert the feedback structure of the causal loop diagram into mathematical relationships.</li>
+    </ul>
+  </li>
+  <li>Modeling Delay Effects:
+    <ul>
+      <li>Use appropriate delay functions to express the system’s delay effects.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="example-population-growth-model">Example: Population Growth Model</h3>
+
+<p>You can find additional images and examples at <a href="https://en.wikipedia.org/wiki/System_dynamics" target="_blank">System Dynamics</a>.</p>
+
+<p>Causal loop diagram:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Birth rate (+) --&gt; Population --&gt; (+) Birth rate
+Population --&gt; (+) Death rate --&gt; (-) Population
+</code></pre></div></div>
+
+<p>System dynamics model:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Population(t) = Population(t-dt) + (Birth rate - Death rate) * dt
+Initial Population = 1000
+Birth rate = Population * Birth_rate_coefficient
+Death rate = Population * Death_rate_coefficient
+Birth_rate_coefficient = 0.03
+Death_rate_coefficient = 0.02
+</code></pre></div></div>
+
+<p><br /><br /></p>
+
+<h2 id="simulation-time-flow-and-finite-state-machine">Simulation Time Flow and Finite State Machine</h2>
+
+<p>In simulation, time can be modeled as <strong>continuous</strong> or <strong>discrete</strong>. A finite state machine is a model where the system has a <strong>finite number of states</strong> and <strong>transitions between states</strong> occur according to specific conditions.</p>
+
+<p>These two concepts play important roles in modeling the dynamic behavior of various systems.</p>
+
+<h3 id="simulation-time-flow">Simulation Time Flow</h3>
+
+<p>There are two main ways to model the flow of time in simulations:</p>
+
+<ol>
+  <li>Continuous Time Flow:
+    <ul>
+      <li>Models time as flowing continuously without interruption.</li>
+      <li>Uses differential equations to express changes in the system.</li>
+      <li>Examples: Physical systems, chemical reactions, population dynamics, etc.</li>
+    </ul>
+  </li>
+  <li>Discrete Time Flow:
+    <ul>
+      <li>Models time in discrete intervals.</li>
+      <li>Uses difference equations or discrete events to express changes in the system.</li>
+      <li>Examples: Digital systems, production lines, computer networks, etc.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>The choice of time flow depends on the characteristics of the system being modeled and the purpose of the simulation.</p>
+
+<h3 id="finite-state-machine">Finite State Machine</h3>
+
+<p>A finite state machine is a mathematical model that represents the behavior of a system as a finite number of states and transitions between them.</p>
+
+<h4 id="key-components">Key Components</h4>
+<ol>
+  <li>States: All possible conditions or situations the system can be in</li>
+  <li>Transitions: Changes from one state to another</li>
+  <li>Events: Conditions or inputs that trigger transitions</li>
+  <li>Actions: Operations performed during state changes</li>
+</ol>
+
+<h4 id="characteristics">Characteristics</h4>
+<ul>
+  <li>Clarity: Can clearly define the behavior of the system.</li>
+  <li>Predictability: Can easily predict the system’s response to given inputs.</li>
+  <li>Ease of Testing: Can individually test each state and transition.</li>
+</ul>
+
+<p>You can find additional images and examples at <a href="https://en.wikipedia.org/wiki/Finite-state_machine" target="_blank">Finite State Machine</a>.</p>
+
+<h4 id="example-vending-machine">Example: Vending Machine</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>States: Waiting, Selection, Payment, Dispensing
+Transitions:
+  Waiting -&gt; Selection (Product button pressed)
+  Selection -&gt; Payment (Money inserted)
+  Payment -&gt; Dispensing (Payment completed)
+  Dispensing -&gt; Waiting (Product dispensed)
+</code></pre></div></div>
+
+<h3 id="applications-in-simulation">Applications in Simulation</h3>
+
+<ol>
+  <li>Modeling Complex Systems:
+    <ul>
+      <li>Hybrid modeling is possible by combining continuous and discrete concepts.</li>
+      <li>Can use finite state machines to define the main behaviors of the system.</li>
+    </ul>
+  </li>
+  <li>Event-Based Simulation:
+    <ul>
+      <li>Can implement event-centered simulations by combining discrete time flow and finite state machines.</li>
+    </ul>
+  </li>
+  <li>System Verification:
+    <ul>
+      <li>Can systematically verify all possible states and transitions of the system through finite state machines.</li>
+    </ul>
+  </li>
+  <li>Real-Time System Design:
+    <ul>
+      <li>Can model physical processes using continuous time flow and implement control logic with finite state machines.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /><br /></p>
+
+
+<section id="comments">
+    <script src="https://utteranc.es/client.js"
+            repo="jae-heo/jae-heo.github.io"
+            issue-term="pathname"
+            label="Comment"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+    </script>
+</section>
+
+<div class="about">
+<div class="about__divider">*****</div>
+<div class="about__text">
+<strong> &copy; 2024 Jaeyoung Heo. </strong>
+</div>
+</div>
+
+
+</div>
+<script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>

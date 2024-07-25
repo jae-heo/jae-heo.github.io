@@ -81,28 +81,56 @@
 
 <ol>
   <li><a href="#배경">배경</a></li>
-  <li><a href="#데코레이터-decorator">데코레이터 (Decorator)</a>
+  <li><a href="#공유지의-비극-tragedy-of-the-commons">공유지의 비극 (Tragedy of the commons)</a>
     <ul>
-      <li><a href="#예시">예시</a></li>
-      <li><a href="#응용사례">응용사례</a></li>
-      <li><a href="#추가적으로-알아두면-좋은-정보">추가 정보: wraps</a></li>
+      <li><a href="#모델링">모델링</a></li>
+    </ul>
+  </li>
+  <li><a href="#causal-loop-diagram">Causal Loop Diagram</a>
+    <ul>
+      <li><a href="#구성-요소">구성 요소</a></li>
+      <li><a href="#루프의-종류">루프의 종류</a></li>
+      <li><a href="#delays">Delays</a></li>
+    </ul>
+  </li>
+  <li><a href="#system-archetype">System archetype</a>
+    <ul>
+      <li><a href="#archetype-에스컬레이션-escalation">에스컬레이션 (Escalation)</a></li>
+      <li><a href="#archetype-성공은-성공을-낳는다-success-to-successful">성공은 성공을 낳는다 (Success to Successful)</a></li>
+    </ul>
+  </li>
+  <li><a href="#causal-loop-diagram-to-system-dynamics-model">Causal loop diagram to system dynamics model</a>
+    <ul>
+      <li><a href="#주요-단계">주요 단계</a></li>
+      <li><a href="#예시-인구-성장-모델">예시: 인구 성장 모델</a></li>
+    </ul>
+  </li>
+  <li><a href="#simulation-time-flow-and-finite-state-machine">Simulation time flow and finite state machine</a>
+    <ul>
+      <li><a href="#시뮬레이션-시간-흐름-simulation-time-flow">시뮬레이션 시간 흐름 (Simulation time flow)</a></li>
+      <li><a href="#유한-상태-기계-finite-state-machine">유한 상태 기계 (Finite state machine)</a>
+        <ul>
+          <li><a href="#주요-구성-요소">주요 구성 요소</a></li>
+          <li><a href="#특징">특징</a></li>
+          <li><a href="#예시-자동-판매기">예시: 자동 판매기</a></li>
+        </ul>
+      </li>
+      <li><a href="#시뮬레이션에서의-활용">시뮬레이션에서의 활용</a></li>
     </ul>
   </li>
 </ol>
 
-<p><br />
-<br /></p>
+<p><br /><br /></p>
 
 <h2 id="배경">배경</h2>
 
-<p>시뮬레이션을 통해 실제 세상을 예측할 수 있다면 정말 유용하지 않을까요? 발전하는 하드웨어와 딥러닝 기술을 기반으로 더 발전된 시뮬레이션을 할 수 있을까요? 사실 시뮬레이션의 기초를 정리하는 글에서 하기엔 너무 앞서나간 생각 같기는 합니다.</p>
+<p>이 글에서는 시뮬레이션 및 모델링의 기초를 살펴볼 예정입니다. 시뮬레이션이란 무엇일까요? 제가 애용하는 Claude에게 물어본 결과 <strong>시뮬레이션은 실제 세계의 시스템, 상태 또는 프로세스를 컴퓨터나 물리적 모델을 통해 모방하는 것</strong> 이라고 합니다. 시뮬레이션을 통해 실제 세상을 예측할 수 있다면 정말 유용하지 않을까요?</p>
 
 <p>해당 글은 KAIST의 온라인 공개강좌인 <a href="https://youtu.be/cGJPIj1YuWo?si=I89z4Q2XpuhVg_ta/" target="_blank">모델링 및 시뮬레이션 개론</a>을 주로 수강하며 작성한 글입니다.</p>
 
-<p><br />
-<br /></p>
+<p><br /><br /></p>
 
-<h2 id="공유지의-비극">공유지의 비극</h2>
+<h2 id="tragedy-of-the-commons-공유지의-비극">Tragedy of the commons (공유지의 비극)</h2>
 
 <p>세상에는 여러 공공자원이 있습니다. 대표적으로는 물, 땅, 석유 등이 있는데요, 이러한 공유자원들이 따로 관리되지 않고, 개인이 이익에 따라 소비한다면 해당 자원은 고갈되어버린다는 경제 과학적 상황을 공유지의 비극이라고 표현합니다. 이 예시는 시뮬레이션과 모델링을 설명할 때 많이 사용하는 예시입니다.</p>
 
@@ -132,13 +160,246 @@
   <li>전체 목초지의 크기</li>
 </ol>
 
-<p>여기서 정의된 속성/관계는 아주 일부에 불과합니다. 이외에도 고려해야 할 것들이 정말 많습니다.</p>
+<p>여기서 정의된 속성/관계는 일부에 불과합니다. 이외에도 고려해야 할 것들이 많습니다.</p>
 
 <p><br /><br /></p>
 
-<h2 id="causal-loop-diagram">Causal Loop Diagram</h2>
+<h2 id="causal-loop-diagram">Causal loop diagram</h2>
 
-<p>시뮬레이션을 위해 모델링할 때 Causal Loop Diagram을 이용하면 모델의 대략적인 모양(abstracted view)을 관찰할 수 있습니다.</p>
+<p>Causal loop diagram은 시스템 내의 변수들의 인과 관계를 시각적으로 표현하는 도구입니다. 화살표로 변수 간 관계를 나타내며, 양의 관계(+)와 음의 관계(-)를 구분합니다. 시뮬레이션을 위해 모델링할 때 Causal Loop Diagram을 이용하면 모델의 대략적인 모양(abstracted view)을 관찰할 수 있습니다.</p>
+
+<p>Causal Loop Diagram에는 세 가지 주요 구성 요소가 있습니다:</p>
+
+<ol>
+  <li>Factors
+    <ul>
+      <li>Factors은 수치 변수로, 양이나 강도를 나타냅니다.</li>
+    </ul>
+  </li>
+  <li>Relationships between the factors
+    <ul>
+      <li>Relationships는 Feedback, Positive/Negative 링크가 있습니다.</li>
+    </ul>
+  </li>
+  <li>Delays
+    <ul>
+      <li>지연에 대해서는 나중에 자세히 설명하겠습니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>긍정적/부정적 링크는 루프를 생성할 수 있으며, 두 가지 종류의 루프가 있습니다:</p>
+<ul>
+  <li>강화 루프(Reinforcing loop) 및
+    <ul>
+      <li>강화 루프는 사이클 내 Negative 링크의 개수가 짝수일 때 나타납니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/reinforcing_loop.png" alt="reinforcing_loop" style="display: block; margin: 0 auto; width: 250px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<ul>
+  <li>균형 루프(Balancing loop)
+    <ul>
+      <li>균형 루프는 Negative 링크의 개수가 홀수일 때 나타납니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/balancing_loop.png" alt="balancing_loop" style="display: block; margin: 0 auto; width: 250px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<h3 id="delays">Delays</h3>
+
+<p>지연이 없다면 모델링을 간단하게 표현하고 이상적으로 작동하도록 만들 수 있습니다. 하지만 현실세계의 대부분의 문제에는 지연이 포함됩니다.</p>
+
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="/assets/img/balancing_process_with_delay.png" alt="reinforcing_loop" style="display: block; margin: 0 auto; width: 250px; height: auto; border: 2px solid #000;" />
+  
+</div>
+
+<p>예를 들어, 발주를 넣었는데 상품이 도착하지 않아 계속 발주를 넣는 경우 기대치보다 더 많은 상품이 도착할 수 있습니다. 이 때 이것을 해결하기 위해 반납을 할 수 있는데요, 반납 또한 지연되는 시간이 있기 때문에 발주때와 비슷한 문제가 발생할 수 있습니다. 이것을 진동(oscillations) 이라고 표현합니다.<br />
+진동이 목표치에 Converge한다면 목표값에 도달할 수 있지만, 오차가 계속 커지는 상황이 발생한다면 이를 채찍 효과(bullwhip effect)라고 합니다. 이는 주로 공급망 관리(SCM)에서 발생할 수 있는 일반적인 문제입니다.</p>
+
+<p><br /><br /></p>
+
+<h2 id="system-archetype">System archetype</h2>
+
+<p>System archetype은 조직이나 시스템에서 반복적으로 나타나는 행동 패턴을 설명하는 개념적 모델입니다. archetype을 이해하면 복잡한 시스템의 문제를 더 쉽게 파악하고 해결할 수 있습니다.</p>
+
+<p>아래의 예시들은 <a href="https://en.wikipedia.org/wiki/System_archetype" target="_blank">System Archetype</a>에서 이미지와 더 자세한 설명을 확인할 수 있습니다.</p>
+
+<h3 id="archetype-에스컬레이션-escalation">Archetype: 에스컬레이션 (Escalation)</h3>
+
+<p>이 타입에는 치킨 게임, 군사력 경쟁 등이 포함됩니다. 두 개의 루프 사이에 공통 Factor가 있고, 이 요인이 두 루프를 모두 제어합니다. 예를 들어, A 국가에서 군사력을 증강하면 B 국가도 군사력을 증강해야 하고, 이로 인해 양측에서 지속적인 상승 효과가 발생하게 됩니다.</p>
+
+<h3 id="archetype-성공은-성공을-낳는다-success-to-successful">Archetype: 성공은 성공을 낳는다 (Success to Successful)</h3>
+
+<p>이 타입은 한정된 자원 상황에서 A와 B가 있을 때, A에 자원이 투자될수록 B의 힘이 약해지는 현상을 설명합니다. 두 루프 모두 강화 루프이지만, 방향이 다릅니다.</p>
+
+<p><br /><br /></p>
+
+<h2 id="causal-loop-diagram-to-system-dynamics-model">Causal loop diagram to system dynamics model</h2>
+
+<p>Causal Diagram에서는 시나리오를 Conceptual하게 모델링하기에는 좋았지만, 실제 복잡한 문제에서 해당 방식으로 모델링하기에는 복잡도나, 가시성의 문제가 발생합니다. 즉, 정성적 모델에서 정량적 모델로 발전시키기 위해서는 System Dynamics Model로 발전해야합니다. 이 과정에는 변수의 수학적 정의, 초기값 설정, 방정식 구성 등이 포함됩니다.</p>
+
+<h3 id="주요-단계">주요 단계:</h3>
+
+<ol>
+  <li>변수 식별 및 정의:
+    <ul>
+      <li>Causal loop diagram의 각 요소를 명확한 변수로 정의합니다.</li>
+      <li>각 변수의 유형(stock, flow, auxiliary)을 결정합니다.</li>
+    </ul>
+  </li>
+  <li>수학적 관계 설정:
+    <ul>
+      <li>변수 간의 관계를 수학적 방정식으로 표현합니다.</li>
+      <li>예: 인구 증가율 = 출생률 - 사망률</li>
+    </ul>
+  </li>
+  <li>초기값 설정:
+    <ul>
+      <li>각 stock 변수의 초기값을 정의합니다.</li>
+      <li>시뮬레이션 시작 시점의 시스템 상태를 나타냅니다.</li>
+    </ul>
+  </li>
+  <li>시간 단위 및 시뮬레이션 기간 설정:
+    <ul>
+      <li>모델의 시간 단위(예: 일, 월, 년)를 결정합니다.</li>
+      <li>전체 시뮬레이션 기간을 설정합니다.</li>
+    </ul>
+  </li>
+  <li>함수 및 테이블 정의:
+    <ul>
+      <li>비선형 관계를 표현하기 위한 그래프 함수나 룩업 테이블을 생성합니다.</li>
+    </ul>
+  </li>
+  <li>피드백 루프 구현:
+    <ul>
+      <li>Causal loop diagram의 피드백 구조를 수학적 관계로 변환합니다.</li>
+    </ul>
+  </li>
+  <li>지연 효과 모델링:
+    <ul>
+      <li>시스템의 지연 효과를 표현하기 위해 적절한 지연 함수를 사용합니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="예시-인구-성장-모델">예시: 인구 성장 모델</h3>
+
+<p>추가적인 이미지와 예시들은 <a href="https://en.wikipedia.org/wiki/System_dynamics" target="_blank">System Dynamics</a>에서 확인할 수 있습니다.</p>
+
+<p>Causal loop diagram:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>출생률 (+) --&gt; 인구 --&gt; (+) 출생률
+인구 --&gt; (+) 사망률 --&gt; (-) 인구
+</code></pre></div></div>
+
+<p>System dynamics model:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>인구(t) = 인구(t-dt) + (출생률 - 사망률) * dt
+초기 인구 = 1000
+출생률 = 인구 * 출생률_계수
+사망률 = 인구 * 사망률_계수
+출생률_계수 = 0.03
+사망률_계수 = 0.02
+</code></pre></div></div>
+
+<p><br /><br /></p>
+
+<h2 id="simulation-time-flow-and-finite-state-machine">Simulation time flow and finite state machine</h2>
+
+<p>시뮬레이션에서 시간은 <strong>연속적</strong> 또는 <strong>이산적</strong>으로 모델링될 수 있습니다. 유한 상태 기계는 시스템이 가질 수 있는 <strong>상태의 수가 유한</strong>하며, 특정 조건에 따라 <strong>상태 간 전이</strong>가 일어나는 모델입니다.</p>
+
+<p>이 두 개념은 다양한 시스템의 동적 행동을 모델링하는 데 중요한 역할을 합니다.</p>
+
+<h3 id="시뮬레이션-시간-흐름-simulation-time-flow">시뮬레이션 시간 흐름 (Simulation time flow)</h3>
+
+<p>시뮬레이션에서 시간의 흐름을 모델링하는 방식은 크게 두 가지로 나눌 수 있습니다:</p>
+
+<ol>
+  <li>연속적 시간 흐름 (Continuous time flow):
+    <ul>
+      <li>시간이 끊임없이 연속적으로 흐르는 것으로 모델링합니다.</li>
+      <li>미분 방정식을 사용하여 시스템의 변화를 표현합니다.</li>
+      <li>예: 물리 시스템, 화학 반응, 인구 동태 등</li>
+    </ul>
+  </li>
+  <li>이산적 시간 흐름 (Discrete time flow):
+    <ul>
+      <li>시간을 일정한 간격으로 나누어 모델링합니다.</li>
+      <li>차분 방정식이나 이산 사건을 사용하여 시스템의 변화를 표현합니다.</li>
+      <li>예: 디지털 시스템, 생산 라인, 컴퓨터 네트워크 등</li>
+    </ul>
+  </li>
+</ol>
+
+<p>시간 흐름의 선택은 모델링하려는 시스템의 특성과 시뮬레이션의 목적에 따라 결정됩니다.</p>
+
+<h3 id="유한-상태-기계-finite-state-machine">유한 상태 기계 (Finite state machine)</h3>
+
+<p>유한 상태 기계는 시스템의 동작을 유한한 수의 상태와 그 사이의 전이로 표현하는 수학적 모델입니다.</p>
+
+<h4 id="주요-구성-요소">주요 구성 요소</h4>
+<ol>
+  <li>상태 (States): 시스템이 가질 수 있는 모든 가능한 조건이나 상황</li>
+  <li>전이 (Transitions): 한 상태에서 다른 상태로의 변화</li>
+  <li>이벤트 (Events): 전이를 트리거하는 조건이나 입력</li>
+  <li>액션 (Actions): 상태 변화 시 수행되는 동작</li>
+</ol>
+
+<h4 id="특징">특징</h4>
+<ul>
+  <li>명확성: 시스템의 동작을 명확하게 정의할 수 있습니다.</li>
+  <li>예측 가능성: 주어진 입력에 대한 시스템의 반응을 쉽게 예측할 수 있습니다.</li>
+  <li>테스트 용이성: 각 상태와 전이를 개별적으로 테스트할 수 있습니다.</li>
+</ul>
+
+<p>추가적인 이미지와 예시들은 <a href="https://en.wikipedia.org/wiki/Finite-state_machine" target="_blank">Finite State Machine</a>에서 확인할 수 있습니다.</p>
+
+<h4 id="예시-자동-판매기">예시: 자동 판매기</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>States: 대기, 선택, 지불, 배출
+Transitions:
+  대기 -&gt; 선택 (상품 버튼 누름)
+  선택 -&gt; 지불 (금액 투입)
+  지불 -&gt; 배출 (결제 완료)
+  배출 -&gt; 대기 (상품 배출 완료)
+</code></pre></div></div>
+
+<h3 id="시뮬레이션에서의-활용">시뮬레이션에서의 활용</h3>
+
+<ol>
+  <li>복잡한 시스템 모델링:
+    <ul>
+      <li>연속적/이산적 개념을 조합하여 hybrid 모델링이 가능합니다.</li>
+      <li>유한 상태 기계를 사용하여 시스템의 주요 동작을 정의할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li>이벤트 기반 시뮬레이션:
+    <ul>
+      <li>이산적 시간 흐름과 유한 상태 기계를 결합하여 이벤트 중심의 시뮬레이션을 구현할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li>시스템 검증:
+    <ul>
+      <li>유한 상태 기계를 통해 시스템의 모든 가능한 상태와 전이를 체계적으로 검증할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li>실시간 시스템 설계:
+    <ul>
+      <li>연속적 시간 흐름을 사용하여 물리적 프로세스를 모델링하고, 유한 상태 기계로 제어 로직을 구현할 수 있습니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p><br /><br /></p>
+
 
 
 <section id="comments">
