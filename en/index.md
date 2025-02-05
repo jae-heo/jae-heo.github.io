@@ -1,17 +1,15 @@
 ---
 layout: page
-title: Hello
-subtitle: My name is Jaeyoung Heo
-date: 2024-06-10 18:00:00 +0900
+title: Hello, I'm Jaeyoung Heo
+subtitle: Software Developer
 sitemap:
   priority: 0.9
 lang: en
+date: 2024-06-10 18:00:00 +0900
 ---
 
 <img src="{{ '/assets/img/me.jpeg' | prepend: site.baseurl }}" id="about-img">
 
 <div id="describe-text">
-	<p>A passionate and aspiring software developer<br>with a strong interest in infrastructure management and abstraction.</p>
-	<p>Though I am at the start of my professional journey, my academic background and personal projects have given me a solid foundation in both software development and system administration.</p>
-	<br>
+  <p>Currently, I'm working on Discrete Event Simulation (DES) systems. <br>My passion lies in infrastructure management and creating elegant abstractions for complex systems. <br>Through continuous learning and hands-on experience, I strive to deepen my expertise in both software development and system architecture.</p>
 </div>

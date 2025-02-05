@@ -45,43 +45,25 @@ date: 2024-06-10 18:00:00 +0900
 
 <div class="skills-container">
   <div class="skills-item">
-    <strong>프로그래밍 언어</strong>
+    <strong>프로그래밍</strong>
     <ul>
-      <li>주 언어: Python</li>
-      <li>부 언어: Java/C</li>
-      <li>학습 중: Rust</li>
+      <li>언어: Python, C, Rust</li>
+      <li>도메인: Web, Simulation </li>
+      <li>운영체제: Linux, Windows </li>
     </ul>
   </div>
   <div class="skills-item">
-    <strong>DevOps 도구</strong>
+    <strong>도구</strong>
     <ul>
-      <li>도커</li>
-      <li>클라우드 플랫폼 (GCP, AWS)</li>
-      <li>깃허브 액션</li>
-      <li>테라폼</li>
+      <li>인프라: GCP, AWS, Docker, Terraform</li>
+      <li>버전관리: Git, SVN</li>
+      <li>인공지능: Pytorch</li>
     </ul>
   </div>
-  <div class="skills-item">
-    <strong>백엔드</strong>
-    <ul>
-      <li>FastAPI</li>
-      <li>ORM (SQLAlchemy, Alembic)</li>
-      <li>데이터베이스 (PostgreSQL, MSSQL)</li>
-    </ul>
-  </div>
-  <div class="skills-item">
-    <strong>학습 예정</strong>
-    <ul>
-      <li>쿠버네티스</li>
-      <li>앤서블</li>
-      <li>프로메테우스</li>
-      <li>그라파나</li>
-    </ul>
-  </div>
-  <div class="skills-item-full">
+  <!-- <div class="skills-item-full">
     <div>
       <ul>
-      <strong>기타</strong>
+      <strong>Miscellaneous</strong>
       </ul>
     </div>
     <div>
@@ -112,29 +94,27 @@ date: 2024-06-10 18:00:00 +0900
         <li></li>
       </ul>
     </div>
-  </div>
+  </div> -->
 </div>
 
+<br>
 
-### 프로젝트
-**님블 - 디지털 마케팅 자동화**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/nimble-project.html" style="float: right; text-decoration: underline; margin-left: 30px">링크</a><span style="float: right; ">2024.01 ~ 진행 중</span>  
-
-프로젝트 님블(Nimble)은 디지털 마케팅 자동화를 목표로 하는 프로젝트입니다. 현대의 디지털 마케팅 환경은 AI의 도입으로 빠르게 변화하고 있으며, 이에 발맞추어 효율적이고 효과적인 마케팅 전략을 세우기 위해서는 자동화가 필수적입니다. 님블은 이러한 필요성에 부응하여 개발된 솔루션입니다.
-
-**충돌 방지 시스템**<a href="{{ site.baseurl }}/{{ page.lang }}/project/2024/06/11/collision-prediction-system.html" style="float: right; text-decoration: underline; margin-left: 30px">링크</a><span style="float: right; ">2024.02 ~ 2024.04</span>  
-자율 주행 로봇의 상용화로 인해 비용 효율적인 거리 추정 기술이 필요해지고 있습니다. 이 프로젝트에서는 단안카메라를 이용해 문제를 해결하려고 했습니다. 딥러닝 AI를 통해 기상 악화 상황에서의 한계를 극복하고, 안전 사고를 예방할 수 있는 기대 효과를 제공합니다.
-
-### 학력
-
-**숭실대학교** <span style="float: right; ">2016.03 ~ 2023.02</span>  
-전공: 컴퓨터학부
 ### 경력
+**선임연구원 - 뉴로코어** <span style="float: right; ">2024.08 ~</span>  
+소프트웨어 엔지니어링과 시뮬레이션 도메인에서 전문성을 쌓아가고 있습니다. 주력 분야는 이산 사건 시뮬레이션(DES) 엔진 개발로, 핵심 로직 구현부터 성능 최적화, 아키텍처 개선까지 전반적인 엔진 개발 사이클을 담당하고 있습니다. 또한 제조 산업 도메인의 이해를 바탕으로 현장에 적용 가능한 시뮬레이션 시스템 설계를 배워가며, 실무 경험을 통해 전문성을 키워나가고 있습니다.
 
 **개발자 - 디엑스티** <span style="float: right; ">2022.09 ~ 2023.10</span>  
 주니어 개발자로 근무하며 바이오 생산공정 관리 솔루션을 구축했습니다. 기존 파일로 관리되던 업무 체계를 개선하여 BOM 관리 업무량을 50% 감소시키는 성과를 거두었습니다.<br>자율주행 전장부품 관리체계(ASPICE) 컴플라이언스 솔루션을 구축하였습니다. 이를 B2B간 클라우드 배포를 통해 비용을 70% 절감하였습니다.
 
 **인턴 - 웨스트문** <span style="float: right; ">2022.06 ~ 2022.08</span>  
 웨스트문의 개발팀에서 백엔드 유지보수를 담당했습니다. Node.js를 사용하여 영상 스트리밍 서버를 보수하고, 관리자 페이지를 개선했습니다. 또한, PyQT5를 이용해 재활치료 데이터셋을 위한 Annotation Tool을 개발하고, 재활치료팀과 협업하여 Annotation Rule을 설계하였습니다.
+
+<br>
+
+### 학력
+
+**숭실대학교** <span style="float: right; ">2016.03 ~ 2023.02</span>  
+전공: 컴퓨터학부
 
 ### 군대
 
