@@ -1,7 +1,7 @@
 // src/components/common/LanguageSwitcher.tsx
 import { useState, useRef, useEffect } from 'react';
 import { useI18n } from '../../hooks/useI18n';
-import './LanguageSwitcher.css';
+import '../../styles/components/common/language-switcher.css';
 
 interface LanguageSwitcherProps {
   showText?: boolean;

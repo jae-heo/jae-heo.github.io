@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import { BlogPost } from '../../types';
 import { formatDate } from '../../utils/dateFormatter';
-import './BlogPostCard.css';
+import '../../styles/components/blog/blog-post-card.css';
 
 interface BlogPostCardProps {
   post: BlogPost;

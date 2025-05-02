@@ -2,7 +2,7 @@
 import { useTranslation } from 'react-i18next';
 import { BlogPost } from '../../types';
 import BlogPostCard from './BlogPostCard';
-import './BlogPostList.css';
+import '../../styles/components/blog/blog-post-list.css';
 
 interface BlogPostListProps {
   posts: BlogPost[];

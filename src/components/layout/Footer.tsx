@@ -1,6 +1,6 @@
 // src/components/layout/Footer.tsx
 import { useTranslation } from 'react-i18next';
-import './Footer.css';
+import '../../styles/components/layout/footer.css';
 
 /**
  * Footer component

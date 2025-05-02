@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import config from '../../config/blog';
-import './AuthorProfile.css';
+import '../../styles/components/common/author-profile.css';
 
 interface AuthorProfileProps {
   compact?: boolean;
