@@ -1,9 +1,16 @@
+// src/App.tsx
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './App.css';
 
-// 추가: 컴포넌트 import 추가 예정
+// Pages
+import HomePage from './pages/HomePage';
+import BlogListPage from './pages/BlogListPage';
+import BlogPostPage from './pages/BlogPostPage';
+import AboutPage from './pages/AboutPage';
+import TagPage from './pages/TagPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   const { t } = useTranslation();
@@ -14,18 +21,15 @@ function App() {
 
   return (
     <Router>
-      <Suspense fallback={<div>Loading...</div>}>
-        <div className="app-container">
-          {/* 사이드바와 컨텐츠 영역 추가 예정 */}
-          <main className="content">
-            <Routes>
-              <Route path="/" element={<div>Home Page</div>} />
-              <Route path="/blog/:postId" element={<div>Blog Post</div>} />
-              <Route path="/about" element={<div>About Page</div>} />
-              <Route path="*" element={<div>Not Found</div>} />
-            </Routes>
-          </main>
-        </div>
+      <Suspense fallback={<div className="loading">Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/blog" element={<BlogListPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/tag/:tag" element={<TagPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </Suspense>
     </Router>
   );
