@@ -1,0 +1,21 @@
+{
+  "blog": {
+    "title": "My Tech Blog",
+    "description": "Stories about programming, web development, and technology",
+    "copyright": "© {{year}} My Tech Blog. All rights reserved."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "portfolio": "Portfolio",
+    "contact": "Contact"
+  },
+  "sidebar": {
+    "menu": "Menu",
+    "categories": "Categories",
+    "recentPosts": "Recent Posts",
+    "tagCloud": "Tag Cloud",
+    "socialMedia": "Social Media",
+    "archives": "Archives"
+  }
+}

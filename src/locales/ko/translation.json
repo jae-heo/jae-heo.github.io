@@ -1,0 +1,21 @@
+{
+  "blog": {
+    "title": "My Tech Blog",
+    "description": "프로그래밍, 웹 개발, 그리고 기술에 관한 이야기",
+    "copyright": "© {{year}} My Tech Blog. All rights reserved."
+  },
+  "nav": {
+    "home": "홈",
+    "about": "소개",
+    "portfolio": "포트폴리오",
+    "contact": "연락처"
+  },
+  "sidebar": {
+    "menu": "메뉴",
+    "categories": "카테고리",
+    "recentPosts": "최근 포스트",
+    "tagCloud": "태그 클라우드",
+    "socialMedia": "소셜 미디어",
+    "archives": "아카이브"
+  }
+}
