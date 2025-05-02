@@ -58,6 +58,7 @@ body {
   width: 100%;
 }
 
+/* 메인 컨테이너 수정 - 양쪽 사이드바 포함 */
 .main-container {
   display: flex;
   flex: 1;
@@ -66,9 +67,11 @@ body {
   gap: var(--spacing-md);
 }
 
+/* 콘텐츠 영역 수정 */
 .content {
   flex: 1;
-  width: calc(100% - var(--sidebar-width) - var(--spacing-md));
+  width: calc(100% - (var(--sidebar-width) * 2) - (var(--spacing-md) * 2));
+  min-width: 0; /* 필요한 경우 콘텐츠 축소 허용 */
 }
 
 /* Header full width */
@@ -149,12 +152,21 @@ body {
   background-color: var(--primary-color);
 }
 
-/* Sidebar */
+/* 왼쪽 사이드바 스타일 */
+.left-sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  margin-right: var(--spacing-md);
+}
+
+/* 오른쪽 사이드바 스타일 (기존 .sidebar) */
 .sidebar {
   width: var(--sidebar-width);
   flex-shrink: 0;
+  margin-left: var(--spacing-md);
 }
 
+/* 사이드바 공통 스타일 */
 .sidebar-section {
   background-color: var(--card-bg-color);
   border-radius: 8px;
@@ -207,6 +219,59 @@ body {
 
 .social-links a:hover {
   color: var(--primary-color);
+}
+
+/* 사이드바 소개 섹션 스타일 */
+.author-profile {
+  text-align: center;
+}
+
+.author-info-compact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.author-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto var(--spacing-md);
+  border: 3px solid var(--primary-color);
+}
+
+.author-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.author-name {
+  margin: var(--spacing-sm) 0;
+  font-size: 1.2rem;
+}
+
+.author-bio-short {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
+}
+
+.about-link {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--primary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.about-link:hover {
+  background-color: var(--primary-hover-color);
 }
 
 /* Footer full width */
@@ -456,19 +521,35 @@ body {
   font-size: 1.5rem;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
+/* 반응형 디자인 수정 - 모바일에서 세로로 배치 */
+@media (max-width: 1200px) {
   .main-container {
     flex-direction: column;
     padding: var(--spacing-sm);
   }
   
-  .content {
+  .content, .sidebar, .left-sidebar {
     width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  /* 모바일에서 순서 변경: 콘텐츠 -> 왼쪽 사이드바 -> 오른쪽 사이드바 */
+  .main-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .content {
+    order: 1;
+  }
+  
+  .left-sidebar {
+    order: 2;
   }
   
   .sidebar {
-    width: 100%;
+    order: 3;
   }
   
   .posts-grid {

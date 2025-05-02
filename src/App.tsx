@@ -2,7 +2,6 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import './App.css';
 
 // Pages
 import HomePage from './pages/HomePage';

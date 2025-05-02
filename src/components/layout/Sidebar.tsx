@@ -1,10 +1,10 @@
-
 // src/components/layout/Sidebar.tsx
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getRecentBlogPosts } from '../../utils/blogLoader'; // Updated import
+import { getCategories, getRecentBlogPosts } from '../../utils/blogLoader';
 import { Category, BlogPost } from '../../types/blog';
+import blogConfig from '../../config/blog';
 
 function Sidebar() {
   const { t } = useTranslation();
@@ -38,6 +38,28 @@ function Sidebar() {
   
   return (
     <aside className="sidebar">
+      {/* 소개 섹션 추가 */}
+      <div className="sidebar-section author-profile">
+        <h3>{t('sidebar.about')}</h3>
+        <div className="author-info-compact">
+          {blogConfig.blog.authorImageUrl && (
+            <div className="author-avatar">
+              <img 
+                src={blogConfig.blog.authorImageUrl} 
+                alt={blogConfig.blog.author} 
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/placeholder-profile.jpg';
+                }}
+              />
+            </div>
+          )}
+          <h4 className="author-name">{blogConfig.blog.author}</h4>
+          <p className="author-bio-short">{blogConfig.blog.authorBio}</p>
+          <Link to="/about" className="about-link">{t('nav.about')}</Link>
+        </div>
+      </div>
+      
       <div className="sidebar-section">
         <h3>{t('sidebar.categories')}</h3>
         <ul className="category-list">

@@ -1,0 +1,111 @@
+/* base.css - 기본 스타일, 변수, 리셋 */
+
+/* CSS 변수 정의 */
+:root {
+  --primary-color: #646cff;
+  --primary-hover-color: #535bf2;
+  --text-color: rgba(255, 255, 255, 0.87);
+  --bg-color: #242424;
+  --card-bg-color: #1a1a1a;
+  --border-color: #444;
+  --light-text-color: #888;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  --sidebar-width: 300px;
+}
+
+/* 라이트 모드 */
+@media (prefers-color-scheme: light) {
+  :root {
+    --text-color: #213547;
+    --bg-color: #ffffff;
+    --card-bg-color: #f9f9f9;
+    --border-color: #ddd;
+    --light-text-color: #666;
+  }
+}
+
+/* 기본 리셋 및 박스 모델 설정 */
+* {
+  box-sizing: border-box;
+}
+
+/* 기본 스타일 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  min-width: 100%;
+  min-height: 100vh;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 링크 기본 스타일 */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--primary-hover-color);
+}
+
+/* 버튼 기본 스타일 */
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--card-bg-color);
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: var(--primary-color);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* 기본 컨테이너 설정 */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root > div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* 로딩 상태 스타일 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.5rem;
+}
