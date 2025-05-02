@@ -4,12 +4,12 @@ import type { BlogConfig } from '../types/config';
 const blogConfig: BlogConfig = {
   // 블로그 기본 정보
   blog: {
-    title: "My Tech Blog",
-    description: "프로그래밍, 웹 개발, 그리고 기술에 관한 이야기",
-    author: "홍길동",
-    authorBio: "프론트엔드 개발자이자 블로거. React와 JavaScript에 관심이 많으며 개발 경험을 공유하고 있습니다.",
-    authorImageUrl: "/placeholder-profile.jpg",
-    copyright: `© ${new Date().getFullYear()} My Tech Blog. All rights reserved.`
+    title: "Jae's Blog",
+    description: "개발과 일상",
+    author: "허재영",
+    authorBio: "DES 기반 시뮬레이션 개발을 하고 있습니다.",
+    authorImageUrl: "/images/profile/profile.jpeg",
+    copyright: `© ${new Date().getFullYear()} Jae's Tech Blog. All rights reserved.`
   },
   
   // 다국어 설정

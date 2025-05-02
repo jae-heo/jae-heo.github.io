@@ -1,8 +1,8 @@
 {
   "blog": {
-    "title": "My Tech Blog",
-    "description": "Stories about programming, web development, and technology",
-    "copyright": "© {{year}} My Tech Blog. All rights reserved."
+    "title": "Jae's Blog",
+    "description": "Stories about programming",
+    "copyright": "© {{year}} Jae's Blog. All rights reserved."
   },
   "nav": {
     "home": "Home",

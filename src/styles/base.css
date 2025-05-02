@@ -1,6 +1,6 @@
-/* base.css - 기본 스타일, 변수, 리셋 */
+/* base.css - updated CSS variables for layout control */
 
-/* CSS 변수 정의 */
+/* CSS variables definition */
 :root {
   --primary-color: #646cff;
   --primary-hover-color: #535bf2;
@@ -12,10 +12,15 @@
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 2rem;
-  --sidebar-width: 300px;
+  
+  /* Updated sidebar width variables */
+  --left-sidebar-width: 250px;      /* Left sidebar - slightly narrower */
+  --right-sidebar-width: 300px;     /* Right sidebar */
+  --content-max-width: 800px;       /* Optional: maximum width for content */
+  --layout-gap: var(--spacing-md);  /* Gap between layout sections */
 }
 
-/* 라이트 모드 */
+/* Light mode */
 @media (prefers-color-scheme: light) {
   :root {
     --text-color: #213547;
@@ -26,12 +31,12 @@
   }
 }
 
-/* 기본 리셋 및 박스 모델 설정 */
+/* Basic reset and box model setup */
 * {
   box-sizing: border-box;
 }
 
-/* 기본 스타일 */
+/* Basic styles */
 html, body {
   margin: 0;
   padding: 0;
@@ -53,7 +58,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 링크 기본 스타일 */
+/* Link default styles */
 a {
   color: var(--primary-color);
   text-decoration: none;
@@ -64,7 +69,7 @@ a:hover {
   color: var(--primary-hover-color);
 }
 
-/* 버튼 기본 스타일 */
+/* Button default styles */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -86,7 +91,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* 기본 컨테이너 설정 */
+/* Default container setup */
 #root {
   width: 100%;
   min-height: 100vh;
@@ -101,7 +106,7 @@ button:focus-visible {
   flex: 1;
 }
 
-/* 로딩 상태 스타일 */
+/* Loading state styles */
 .loading {
   display: flex;
   justify-content: center;

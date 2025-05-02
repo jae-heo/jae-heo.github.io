@@ -3,10 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
-import { getRecentBlogPosts } from '../utils/blogLoader'; // Updated import
+import { getRecentBlogPosts } from '../utils/blogLoader';
 import { BlogPost } from '../types/blog';
 
-function HomePage() {
+interface HomePageProps {
+  showLayoutControls?: boolean;
+}
+
+function HomePage({ showLayoutControls = false }: HomePageProps) {
   const { t } = useTranslation();
   const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +31,7 @@ function HomePage() {
   }, []);
   
   return (
-    <Layout>
+    <Layout showLayoutControls={showLayoutControls}>
       <section className="hero-section">
         <div className="hero-content">
           <h1>{t('blog.title')}</h1>
