@@ -1,8 +1,8 @@
 {
   "blog": {
-    "title": "Jae's Tech Blog",
+    "title": "Jae's Blog",
     "description": "Stories about programming and web development",
-    "copyright": "© {{year}} Jae's Tech Blog. All rights reserved.",
+    "copyright": "© {{year}} Jae's Blog. All rights reserved.",
     "recentPosts": "Recent Posts",
     "readMore": "Read More →",
     "noPostsFound": "No posts found",

@@ -38,6 +38,7 @@
 /* Dropdown-style language switcher */
 .lang-switcher-dropdown {
   position: relative;
+  display: inline-block; /* Important */
 }
 
 .lang-dropdown-toggle {
@@ -65,11 +66,23 @@
   transition: transform 0.3s;
 }
 
+/* Dropdown overlay with fixed positioning */
+.dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background: transparent;
+  pointer-events: none; /* Allow clicking through except for menu items */
+}
+
+/* Dropdown menu positioned absolutely */
 .lang-dropdown-menu {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 5px); /* Position below the button */
   right: 0;
-  margin-top: 0.5rem;
   background-color: var(--card-bg-color);
   border: 1px solid var(--border-color);
   border-radius: 4px;
@@ -77,7 +90,8 @@
   padding: 0;
   list-style: none;
   min-width: 120px;
-  z-index: 100;
+  z-index: 1000;
+  pointer-events: auto; /* Enable clicks on the menu */
 }
 
 .lang-dropdown-menu li {
@@ -111,6 +125,12 @@
 [dir="rtl"] .lang-dropdown-menu {
   right: auto;
   left: 0;
+}
+
+/* Header container with explicit z-index */
+.header {
+  position: relative;
+  z-index: 100; /* Lower than dropdown menu */
 }
 
 /* Responsive styles */

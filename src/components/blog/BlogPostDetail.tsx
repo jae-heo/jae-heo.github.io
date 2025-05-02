@@ -3,33 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { BlogPost } from '../../types/blog';
 import { formatDate } from '../../utils/dateFormatter';
-import blogConfig from '../../config/blog';
+import ReactMarkdown from 'react-markdown';
 
 interface BlogPostDetailProps {
   post: BlogPost;
 }
 
 function BlogPostDetail({ post }: BlogPostDetailProps) {
-  const { t, i18n } = useTranslation();
-  
-  // Get author name based on current language
-  const getLocalizedAuthorName = (authorName: string) => {
-    const currentLang = i18n.language;
-    
-    // If the author is the blog owner, use the localized name
-    if (authorName === blogConfig.blog.author) {
-      return blogConfig.languages.info[currentLang]?.authorName || authorName;
-    }
-    
-    return authorName;
-  };
+  const { t } = useTranslation();
   
   if (!post) {
     return <div className="post-not-found">{t('blog.postNotFound')}</div>;
   }
-  
-  const localizedAuthor = getLocalizedAuthorName(post.author);
-  const formattedDate = formatDate(post.date);
   
   return (
     <article className="blog-post-detail">
@@ -38,10 +23,10 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
         
         <div className="post-meta">
           <span className="post-date">
-            {t('post.publishedOn', { date: formattedDate })}
+            {formatDate(post.date)}
           </span>
           <span className="post-author">
-            {t('post.writtenBy', { author: localizedAuthor })}
+            {post.author}
           </span>
         </div>
         
@@ -68,10 +53,9 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
         </div>
       </header>
       
-      <div 
-        className="post-content"
-        dangerouslySetInnerHTML={{ __html: post.content }}
-      />
+      <div className="post-content">
+        <ReactMarkdown>{post.content}</ReactMarkdown>
+      </div>
       
       <footer className="post-footer">
         <div className="post-navigation">

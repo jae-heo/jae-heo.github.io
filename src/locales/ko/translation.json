@@ -1,8 +1,8 @@
 {
   "blog": {
-    "title": "재영의 기술 블로그",
+    "title": "Jae's Blog",
     "description": "프로그래밍과 웹 개발에 관한 이야기",
-    "copyright": "© {{year}} 재영의 기술 블로그. 모든 권리 보유.",
+    "copyright": "© {{year}} Jae's Blog. All rights reserved.",
     "recentPosts": "최근 게시물",
     "readMore": "더 읽기 →",
     "noPostsFound": "게시물을 찾을 수 없습니다",
