@@ -1,4 +1,4 @@
-/* src/components/layout/Layout.css */
+/* Layout component styles */
 
 .layout {
   display: flex;
@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-.main-container {
+.container {
   display: flex;
   flex: 1;
   width: 100%;
@@ -26,7 +26,7 @@
 
 /* Responsive adjustments */
 @media (max-width: 1200px) {
-  .main-container {
+  .container {
     flex-direction: column;
     padding: var(--spacing-sm);
   }
@@ -43,18 +43,18 @@
     order: 1;
   }
   
-  .sidebar-left {
+  .sidebarLeft {
     order: 2;
   }
   
-  .sidebar-right {
+  .sidebarRight {
     order: 3;
   }
 }
 
 /* Medium-sized screens - tablet layout */
 @media (min-width: 768px) and (max-width: 1200px) {
-  .main-container {
+  .container {
     flex-wrap: wrap;
     flex-direction: row;
   }
@@ -64,12 +64,12 @@
     order: 1;
   }
   
-  .sidebar-right {
+  .sidebarRight {
     width: var(--sidebar-width);
     order: 2;
   }
   
-  .sidebar-left {
+  .sidebarLeft {
     width: 100%;
     order: 3;
   }

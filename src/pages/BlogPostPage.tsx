@@ -6,7 +6,7 @@ import BlogPostDetail from '../components/blog/BlogPostDetail';
 import { getBlogPostBySlug } from '../utils/blogLoader';
 import { BlogPost } from '../types';
 import { useI18n } from '../hooks/useI18n';
-import './BlogPostPage.css';
+import styles from './BlogPostPage.module.css';
 
 /**
  * Blog post page component
@@ -51,11 +51,13 @@ function BlogPostPage() {
   
   return (
     <Layout>
-      {loading ? (
-        <div className="loading">{t('post.loading')}</div>
-      ) : (
-        post && <BlogPostDetail post={post} />
-      )}
+      <div className={styles.container}>
+        {loading ? (
+          <div className="loading">{t('post.loading')}</div>
+        ) : (
+          post && <BlogPostDetail post={post} />
+        )}
+      </div>
     </Layout>
   );
 }

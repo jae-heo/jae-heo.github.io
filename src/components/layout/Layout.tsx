@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
-import './Layout.css';
+import styles from './Layout.module.css';
 
 interface LayoutProps {
   children: ReactNode;
@@ -15,19 +15,19 @@ interface LayoutProps {
  */
 function Layout({ children }: LayoutProps) {
   return (
-    <div className="layout">
+    <div className={styles.layout}>
       <Header />
-      <div className="main-container">
+      <div className={styles.container}>
         {/* Left sidebar with author info */}
-        <Sidebar position="left" />
+        <Sidebar position="left" className={styles.sidebarLeft} />
         
         {/* Main content */}
-        <main className="content">
+        <main className={styles.content}>
           {children}
         </main>
         
         {/* Right sidebar with categories and recent posts */}
-        <Sidebar position="right" />
+        <Sidebar position="right" className={styles.sidebarRight} />
       </div>
       <Footer />
     </div>

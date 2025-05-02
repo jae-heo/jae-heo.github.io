@@ -1,6 +1,6 @@
 // src/components/layout/Footer.tsx
 import { useTranslation } from 'react-i18next';
-import '../../styles/components/layout/footer.css';
+import styles from './Footer.module.css';
 
 /**
  * Footer component
@@ -11,15 +11,15 @@ function Footer() {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <p>{t('blog.copyright', { year: currentYear })}</p>
+    <footer className={styles.footer}>
+      <div className={styles.content}>
+        <p className={styles.copyright}>{t('blog.copyright', { year: currentYear })}</p>
         
         {/* Optional footer links */}
-        <div className="footer-links">
-          <a href="/privacy-policy">Privacy Policy</a>
-          <span className="separator">|</span>
-          <a href="/terms">Terms of Use</a>
+        <div className={styles.links}>
+          <a href="/privacy-policy" className={styles.link}>Privacy Policy</a>
+          <span className={styles.separator}>|</span>
+          <a href="/terms" className={styles.link}>Terms of Use</a>
         </div>
       </div>
     </footer>

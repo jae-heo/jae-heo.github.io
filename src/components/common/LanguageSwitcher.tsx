@@ -1,7 +1,7 @@
 // src/components/common/LanguageSwitcher.tsx
 import { useState, useRef, useEffect } from 'react';
 import { useI18n } from '../../hooks/useI18n';
-import '../../styles/components/common/language-switcher.css';
+import styles from './LanguageSwitcher.module.css';
 
 interface LanguageSwitcherProps {
   showText?: boolean;
@@ -32,23 +32,23 @@ function LanguageSwitcher({ showText = false }: LanguageSwitcherProps) {
   }, []);
   
   return (
-    <div ref={dropdownRef} className="language-switcher">
+    <div ref={dropdownRef} className={styles.container}>
       {/* Current language button */}
       <button 
-        className="language-toggle"
+        className={styles.toggle}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
-        <span className="language-flag">{currentLanguage?.flag}</span>
+        <span className={styles.flag}>{currentLanguage?.flag}</span>
         {showText && (
-          <span className="language-name">{currentLanguage?.name}</span>
+          <span className={styles.name}>{currentLanguage?.name}</span>
         )}
-        <span className={`dropdown-arrow ${isOpen ? 'open' : ''}`}>▼</span>
+        <span className={`${styles.arrow} ${isOpen ? styles.arrowOpen : ''}`}>▼</span>
       </button>
       
       {/* Language dropdown */}
       {isOpen && (
-        <div className="language-dropdown">
+        <div className={styles.dropdown}>
           {languages.available.map(code => {
             const lang = languages.info[code];
             if (!lang) return null;
@@ -56,14 +56,14 @@ function LanguageSwitcher({ showText = false }: LanguageSwitcherProps) {
             return (
               <button
                 key={code}
-                className={code === currentLang ? 'active' : ''}
+                className={`${styles.option} ${code === currentLang ? styles.optionActive : ''}`}
                 onClick={() => {
                   switchLanguage(code);
                   setIsOpen(false);
                 }}
               >
-                <span className="language-flag">{lang.flag}</span>
-                <span className="language-name">{lang.name}</span>
+                <span className={styles.flag}>{lang.flag}</span>
+                <span className={styles.name}>{lang.name}</span>
               </button>
             );
           })}

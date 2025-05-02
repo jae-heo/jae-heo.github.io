@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import { useI18n } from '../hooks/useI18n';
-import './NotFoundPage.css';
+import styles from './NotFoundPage.module.css';
 
 /**
  * 404 Not Found page component
@@ -18,11 +18,11 @@ function NotFoundPage() {
   
   return (
     <Layout>
-      <div className="not-found-page">
-        <h1>404</h1>
-        <h2>{t('pages.notFound.title')}</h2>
-        <p>{t('pages.notFound.message')}</p>
-        <Link to="/" className="back-home-link">
+      <div className={styles.container}>
+        <h1 className={styles.title404}>404</h1>
+        <h2 className={styles.title}>{t('pages.notFound.title')}</h2>
+        <p className={styles.message}>{t('pages.notFound.message')}</p>
+        <Link to="/" className={styles.backLink}>
           {t('pages.notFound.backToHome')}
         </Link>
       </div>

@@ -1,7 +1,6 @@
-/* src/components/blog/BlogPostDetail.css */
+/* Blog post detail styles */
 
-/* Blog post detail container */
-.blog-post-detail {
+.container {
   background-color: var(--card-bg-color);
   border-radius: 8px;
   padding: var(--spacing-lg);
@@ -9,23 +8,20 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Post header */
-.post-header {
+.header {
   margin-bottom: var(--spacing-lg);
   border-bottom: 1px solid var(--border-color);
   padding-bottom: var(--spacing-lg);
 }
 
-/* Post title */
-.post-title {
+.title {
   margin-top: 0;
   font-size: 2.2rem;
   margin-bottom: var(--spacing-md);
   line-height: 1.3;
 }
 
-/* Post metadata */
-.post-meta {
+.meta {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -34,12 +30,11 @@
   margin-bottom: var(--spacing-md);
 }
 
-.post-date, .post-author {
+.date, .author {
   font-size: 0.95rem;
 }
 
-/* Featured image */
-.post-featured-image {
+.featuredImage {
   margin: var(--spacing-lg) 0;
   border-radius: 8px;
   overflow: hidden;
@@ -47,14 +42,13 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-.post-featured-image img {
+.featuredImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* Tags */
-.post-tags {
+.tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
@@ -62,12 +56,12 @@
   align-items: center;
 }
 
-.tags-label {
+.tagsLabel {
   font-weight: 500;
   margin-right: var(--spacing-sm);
 }
 
-.post-tag {
+.tag {
   color: var(--primary-color);
   text-decoration: none;
   font-size: 0.9rem;
@@ -77,49 +71,48 @@
   transition: background-color 0.3s;
 }
 
-.post-tag:hover {
+.tag:hover {
   background-color: rgba(var(--primary-color-rgb), 0.2);
 }
 
-/* Post content */
-.post-content {
+.content {
   line-height: 1.7;
   width: 100%;
   font-size: 1.05rem;
 }
 
 /* Markdown styling */
-.post-content h1,
-.post-content h2,
-.post-content h3 {
+.content h1,
+.content h2,
+.content h3 {
   margin-top: 2em;
   margin-bottom: 1em;
   color: var(--text-color);
 }
 
-.post-content h1 {
+.content h1 {
   font-size: 1.8rem;
 }
 
-.post-content h2 {
+.content h2 {
   font-size: 1.5rem;
 }
 
-.post-content h3 {
+.content h3 {
   font-size: 1.3rem;
 }
 
-.post-content p {
+.content p {
   margin-bottom: 1.5em;
 }
 
-.post-content ul,
-.post-content ol {
+.content ul,
+.content ol {
   margin-bottom: 1.5em;
   padding-left: 1.5em;
 }
 
-.post-content blockquote {
+.content blockquote {
   border-left: 4px solid var(--primary-color);
   padding-left: var(--spacing-md);
   margin-left: 0;
@@ -127,38 +120,41 @@
   font-style: italic;
 }
 
-.post-content code {
+.content code {
   background-color: rgba(0, 0, 0, 0.1);
   padding: 2px 4px;
   border-radius: 4px;
   font-family: monospace;
 }
 
-.post-content pre {
+.content pre {
   background-color: rgba(0, 0, 0, 0.1);
   padding: var(--spacing-md);
   border-radius: 8px;
   overflow-x: auto;
 }
 
-.post-content pre code {
+.content pre code {
   background-color: transparent;
   padding: 0;
 }
 
-.post-content a {
+.content a {
   color: var(--primary-color);
   text-decoration: underline;
 }
 
-.post-content img {
+.content img {
   max-width: 100%;
   border-radius: 4px;
   margin: var(--spacing-md) 0;
 }
 
-/* Post navigation */
-.post-navigation {
+.footer {
+  margin-top: var(--spacing-lg);
+}
+
+.navigation {
   margin-top: var(--spacing-lg);
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--border-color);
@@ -166,7 +162,7 @@
   justify-content: space-between;
 }
 
-.back-to-posts {
+.backLink {
   color: var(--primary-color);
   text-decoration: none;
   display: inline-flex;
@@ -174,12 +170,11 @@
   transition: color 0.3s;
 }
 
-.back-to-posts:hover {
+.backLink:hover {
   color: var(--primary-hover-color);
 }
 
-/* Post not found */
-.post-not-found {
+.notFound {
   text-align: center;
   padding: var(--spacing-lg);
   font-size: 1.2rem;
@@ -187,7 +182,7 @@
 }
 
 /* RTL support */
-[dir="rtl"] .post-content blockquote {
+[dir="rtl"] .content blockquote {
   border-left: none;
   border-right: 4px solid var(--primary-color);
   padding-left: 0;
@@ -196,15 +191,15 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .post-title {
+  .title {
     font-size: 1.8rem;
   }
   
-  .post-featured-image {
+  .featuredImage {
     max-height: 300px;
   }
   
-  .post-content {
+  .content {
     font-size: 1rem;
   }
 }

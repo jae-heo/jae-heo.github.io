@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { BlogPost } from '../../types';
 import { formatDate } from '../../utils/dateFormatter';
-import './BlogPostDetail.css';
+import styles from './BlogPostDetail.module.css';
 
 interface BlogPostDetailProps {
   post: BlogPost;
@@ -18,27 +18,27 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
   const { t } = useTranslation();
   
   if (!post) {
-    return <div className="post-not-found">{t('blog.postNotFound')}</div>;
+    return <div className={styles.notFound}>{t('blog.postNotFound')}</div>;
   }
   
   return (
-    <article className="blog-post-detail">
+    <article className={styles.container}>
       {/* Post header with title and metadata */}
-      <header className="post-header">
-        <h1 className="post-title">{post.title}</h1>
+      <header className={styles.header}>
+        <h1 className={styles.title}>{post.title}</h1>
         
-        <div className="post-meta">
-          <span className="post-date">
+        <div className={styles.meta}>
+          <span className={styles.date}>
             {formatDate(post.date)}
           </span>
-          <span className="post-author">
+          <span className={styles.author}>
             {post.author}
           </span>
         </div>
         
         {/* Featured image */}
         {post.imageUrl && (
-          <div className="post-featured-image">
+          <div className={styles.featuredImage}>
             <img 
               src={post.imageUrl} 
               alt={post.title} 
@@ -51,10 +51,10 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
         )}
         
         {/* Tags */}
-        <div className="post-tags">
-          <span className="tags-label">{t('post.tags')}</span>
+        <div className={styles.tags}>
+          <span className={styles.tagsLabel}>{t('post.tags')}</span>
           {post.tags.map(tag => (
-            <Link key={tag} to={`/tag/${tag.toLowerCase()}`} className="post-tag">
+            <Link key={tag} to={`/tag/${tag.toLowerCase()}`} className={styles.tag}>
               #{tag}
             </Link>
           ))}
@@ -62,14 +62,14 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
       </header>
       
       {/* Post content rendered with markdown */}
-      <div className="post-content">
+      <div className={styles.content}>
         <ReactMarkdown>{post.content}</ReactMarkdown>
       </div>
       
       {/* Post footer with navigation */}
-      <footer className="post-footer">
-        <div className="post-navigation">
-          <Link to="/blog" className="back-to-posts">
+      <footer className={styles.footer}>
+        <div className={styles.navigation}>
+          <Link to="/blog" className={styles.backLink}>
             {t('blog.backToPosts')}
           </Link>
         </div>

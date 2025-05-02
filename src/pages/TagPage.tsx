@@ -6,7 +6,7 @@ import BlogPostList from '../components/blog/BlogPostList';
 import { getBlogPostsByTag } from '../utils/blogLoader';
 import { BlogPost } from '../types';
 import { useI18n } from '../hooks/useI18n';
-import './TagPage.css';
+import styles from './TagPage.module.css';
 
 /**
  * Tag page component
@@ -43,9 +43,9 @@ function TagPage() {
   
   return (
     <Layout>
-      <section className="tag-posts-section">
-        <h1 className="page-title">
-          #{tag}
+      <section className={styles.section}>
+        <h1 className={styles.pageTitle}>
+          {tag}
         </h1>
         {loading ? (
           <div className="loading">{t('common.loading')}</div>

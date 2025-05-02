@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import config from '../../config/blog';
-import './Header.css';
+import styles from './Header.module.css';
 
 /**
  * Header component with navigation and language switcher
@@ -17,17 +17,17 @@ function Header() {
     .sort((a, b) => a.order - b.order);
   
   return (
-    <header className="header">
-      <div className="header-content">
+    <header className={styles.header}>
+      <div className={styles.content}>
         {/* Logo/Site Title */}
-        <div className="logo">
+        <div className={styles.logo}>
           <Link to="/">
             <h1>{t('blog.title')}</h1>
           </Link>
         </div>
         
         {/* Main Navigation */}
-        <nav className="main-nav">
+        <nav className={styles.nav}>
           <ul>
             {menuItems.map(item => (
               <li key={item.id}>

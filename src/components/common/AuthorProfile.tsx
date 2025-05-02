@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import config from '../../config/blog';
-import '../../styles/components/common/author-profile.css';
+import styles from './AuthorProfile.module.css';
 
 interface AuthorProfileProps {
   compact?: boolean;
@@ -23,9 +23,9 @@ function AuthorProfile({ compact = false }: AuthorProfileProps) {
   // Use compact layout for sidebar
   if (compact) {
     return (
-      <div className="author-profile-compact">
+      <div className={styles.profileCompact}>
         {authorImageUrl && (
-          <div className="author-avatar">
+          <div className={styles.avatar}>
             <img 
               src={authorImageUrl} 
               alt={authorName} 
@@ -36,19 +36,19 @@ function AuthorProfile({ compact = false }: AuthorProfileProps) {
             />
           </div>
         )}
-        <h4 className="author-name">{authorName}</h4>
-        <p className="author-bio-short">{authorBio}</p>
-        <Link to="/about" className="about-link">{t('nav.about')}</Link>
+        <h4 className={styles.name}>{authorName}</h4>
+        <p className={styles.bioShort}>{authorBio}</p>
+        <Link to="/about" className={styles.aboutLink}>{t('nav.about')}</Link>
       </div>
     );
   }
   
   // Full layout for about page
   return (
-    <div className="author-profile-full">
-      <div className="author-info">
+    <div className={styles.profileFull}>
+      <div className={styles.authorInfo}>
         {authorImageUrl && (
-          <div className="author-image">
+          <div className={styles.authorImage}>
             <img 
               src={authorImageUrl} 
               alt={authorName} 
@@ -60,7 +60,7 @@ function AuthorProfile({ compact = false }: AuthorProfileProps) {
           </div>
         )}
         
-        <div className="author-bio">
+        <div className={styles.bio}>
           <h2>{authorName}</h2>
           <p>{authorBio}</p>
         </div>

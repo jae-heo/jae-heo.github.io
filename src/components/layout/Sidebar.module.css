@@ -1,21 +1,19 @@
-/* src/components/layout/Sidebar.css */
+/* Sidebar component styles */
 
-/* Sidebar container */
 .sidebar {
   width: var(--sidebar-width, 300px);
   flex-shrink: 0;
 }
 
-.sidebar-left {
+.left {
   margin-right: var(--spacing-md);
 }
 
-.sidebar-right {
+.right {
   margin-left: var(--spacing-md);
 }
 
-/* Sidebar sections */
-.sidebar-section {
+.section {
   background-color: var(--card-bg-color);
   border-radius: 8px;
   padding: var(--spacing-lg);
@@ -23,35 +21,34 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.sidebar-section h3 {
+.section h3 {
   margin-top: 0;
   border-bottom: 1px solid var(--border-color);
   padding-bottom: var(--spacing-sm);
   font-size: 1.2rem;
 }
 
-/* Category & recent posts lists */
-.category-list, 
-.recent-posts-list {
+.categoryList, 
+.recentPostsList {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.category-list li, 
-.recent-posts-list li {
+.categoryList li, 
+.recentPostsList li {
   margin-bottom: var(--spacing-sm);
   border-bottom: 1px dashed var(--border-color);
   padding-bottom: var(--spacing-sm);
 }
 
-.category-list li:last-child, 
-.recent-posts-list li:last-child {
+.categoryList li:last-child, 
+.recentPostsList li:last-child {
   border-bottom: none;
 }
 
-.category-list a, 
-.recent-posts-list a {
+.categoryList a, 
+.recentPostsList a {
   text-decoration: none;
   color: var(--text-color);
   display: block;
@@ -59,26 +56,25 @@
   transition: color 0.3s;
 }
 
-.category-list a:hover, 
-.recent-posts-list a:hover {
+.categoryList a:hover, 
+.recentPostsList a:hover {
   color: var(--primary-color);
 }
 
-.post-date {
+.postDate {
   display: block;
   font-size: 0.8rem;
   color: var(--light-text-color);
 }
 
-/* Social media links */
-.social-links {
+.socialLinks {
   display: flex;
   gap: var(--spacing-md);
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.social-links a {
+.socialLinks a {
   color: var(--text-color);
   text-decoration: none;
   padding: var(--spacing-sm);
@@ -86,19 +82,18 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.social-links a:hover {
+.socialLinks a:hover {
   color: var(--primary-color);
   background-color: rgba(var(--primary-color-rgb), 0.1);
 }
 
-/* Tag cloud */
-.tag-cloud {
+.tagCloud {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
 }
 
-.tag-cloud .tag {
+.tag {
   display: inline-block;
   padding: 3px 8px;
   background-color: rgba(var(--primary-color-rgb), 0.1);
@@ -107,13 +102,13 @@
   transition: background-color 0.3s;
 }
 
-.tag-cloud .tag:hover {
+.tag:hover {
   background-color: rgba(var(--primary-color-rgb), 0.2);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .social-links {
+  .socialLinks {
     justify-content: flex-start;
   }
 }

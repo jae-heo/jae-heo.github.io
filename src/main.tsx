@@ -1,9 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-// Use the consolidated CSS imports
-import './index.css'
-import './App.css'
+
+import './styles/global.css'
 
 // i18n setup
 import './i18n.ts'

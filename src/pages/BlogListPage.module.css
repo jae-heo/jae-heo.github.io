@@ -1,0 +1,43 @@
+/* BlogListPage styles */
+
+.section {
+  width: 100%;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pageTitle::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+/* RTL support */
+[dir="rtl"] .pageTitle::after {
+  left: auto;
+  right: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pageTitle {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  
+  .pageTitle::after {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+  }
+}

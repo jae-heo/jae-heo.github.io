@@ -1,7 +1,6 @@
-/* not-found.css - 404 페이지 스타일 */
+/* NotFoundPage styles */
 
-/* 404 페이지 컨테이너 */
-.not-found-page {
+.container {
   text-align: center;
   padding: var(--spacing-lg);
   background-color: var(--card-bg-color);
@@ -11,8 +10,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* 404 숫자 */
-.not-found-page h1 {
+.title404 {
   font-size: 8rem;
   margin: 0;
   color: var(--primary-color);
@@ -20,22 +18,19 @@
   text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* 페이지 제목 */
-.not-found-page h2 {
+.title {
   font-size: 2rem;
   margin: var(--spacing-sm) 0 var(--spacing-lg);
   color: var(--text-color);
 }
 
-/* 설명 텍스트 */
-.not-found-page p {
+.message {
   font-size: 1.1rem;
   margin-bottom: var(--spacing-lg);
   color: var(--light-text-color);
 }
 
-/* 홈으로 돌아가기 버튼 */
-.back-home-link {
+.backLink {
   display: inline-block;
   margin-top: var(--spacing-lg);
   padding: var(--spacing-md) var(--spacing-lg);
@@ -47,14 +42,14 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.back-home-link:hover {
+.backLink:hover {
   background-color: var(--primary-hover-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* 배경 효과 (선택 사항) */
-.not-found-page::before {
+/* Background effect (optional) */
+.container::before {
   content: '';
   position: absolute;
   top: 0;

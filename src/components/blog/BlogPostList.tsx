@@ -2,7 +2,7 @@
 import { useTranslation } from 'react-i18next';
 import { BlogPost } from '../../types';
 import BlogPostCard from './BlogPostCard';
-import '../../styles/components/blog/blog-post-list.css';
+import styles from './BlogPostList.module.css';
 
 interface BlogPostListProps {
   posts: BlogPost[];
@@ -17,16 +17,16 @@ function BlogPostList({ posts, title }: BlogPostListProps) {
   
   // If no posts, show a message
   if (posts.length === 0) {
-    return <div className="no-posts">{t('blog.noPostsFound')}</div>;
+    return <div className={styles.noPosts}>{t('blog.noPostsFound')}</div>;
   }
   
   return (
-    <div className="blog-post-list">
+    <div className={styles.container}>
       {/* Optional section title */}
-      {title && <h2 className="section-title">{title}</h2>}
+      {title && <h2 className={styles.sectionTitle}>{title}</h2>}
       
       {/* Grid of blog posts */}
-      <div className="posts-grid">
+      <div className={styles.grid}>
         {posts.map(post => (
           <BlogPostCard key={post.id} post={post} />
         ))}

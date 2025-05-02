@@ -5,7 +5,7 @@ import BlogPostList from '../components/blog/BlogPostList';
 import { getBlogPosts } from '../utils/blogLoader'; 
 import { BlogPost } from '../types';
 import { useI18n } from '../hooks/useI18n';
-import './BlogListPage.css';
+import styles from './BlogListPage.module.css';
 
 /**
  * Blog list page component
@@ -37,8 +37,8 @@ function BlogListPage() {
   
   return (
     <Layout>
-      <section className="blog-list-section">
-        <h1 className="page-title">{t('nav.blog')}</h1>
+      <section className={styles.section}>
+        <h1 className={styles.pageTitle}>{t('nav.blog')}</h1>
         {loading ? (
           <div className="loading">{t('common.loading')}</div>
         ) : (

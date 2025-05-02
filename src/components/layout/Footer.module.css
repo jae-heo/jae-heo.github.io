@@ -1,6 +1,5 @@
-/* src/components/layout/Footer.css */
+/* Footer component styles */
 
-/* Footer container */
 .footer {
   background-color: var(--card-bg-color);
   border-top: 1px solid var(--border-color);
@@ -10,37 +9,33 @@
   margin-top: auto; /* Push to bottom */
 }
 
-/* Footer content container */
-.footer-content {
+.content {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Copyright text */
-.footer p {
+.copyright {
   margin: 0;
   font-size: 0.9rem;
   color: var(--light-text-color);
 }
 
-/* Footer links */
-.footer-links {
+.links {
   margin-top: var(--spacing-sm);
 }
 
-.footer a {
+.link {
   color: var(--primary-color);
   text-decoration: none;
   transition: color 0.3s;
   font-size: 0.9rem;
 }
 
-.footer a:hover {
+.link:hover {
   color: var(--primary-hover-color);
   text-decoration: underline;
 }
 
-/* Separator between links */
 .separator {
   margin: 0 var(--spacing-sm);
   color: var(--light-text-color);

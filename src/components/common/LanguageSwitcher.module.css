@@ -1,12 +1,10 @@
-/* src/components/common/LanguageSwitcher.css */
+/* Language switcher styles */
 
-/* Language switcher container */
-.language-switcher {
+.container {
   position: relative;
 }
 
-/* Language toggle button */
-.language-toggle {
+.toggle {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -18,16 +16,15 @@
   transition: background-color 0.3s;
 }
 
-.language-toggle:hover {
+.toggle:hover {
   background-color: rgba(var(--primary-color-rgb), 0.1);
 }
 
-/* Language flag and name */
-.language-flag {
+.flag {
   font-size: 1.2rem;
 }
 
-.language-name {
+.name {
   font-size: 0.9rem;
   max-width: 80px;
   white-space: nowrap;
@@ -35,18 +32,16 @@
   text-overflow: ellipsis;
 }
 
-/* Dropdown arrow */
-.dropdown-arrow {
+.arrow {
   font-size: 0.7rem;
   transition: transform 0.3s;
 }
 
-.dropdown-arrow.open {
+.arrowOpen {
   transform: rotate(180deg);
 }
 
-/* Language dropdown menu */
-.language-dropdown {
+.dropdown {
   position: absolute;
   top: calc(100% + 4px);
   right: 0;
@@ -59,8 +54,7 @@
   overflow: hidden;
 }
 
-/* Language options */
-.language-dropdown button {
+.option {
   width: 100%;
   display: flex;
   align-items: center;
@@ -74,38 +68,38 @@
   transition: background-color 0.3s;
 }
 
-.language-dropdown button:hover {
+.option:hover {
   background-color: rgba(var(--primary-color-rgb), 0.1);
 }
 
-.language-dropdown button.active {
+.optionActive {
   background-color: rgba(var(--primary-color-rgb), 0.2);
   font-weight: bold;
 }
 
 /* RTL support */
-[dir="rtl"] .language-dropdown {
+[dir="rtl"] .dropdown {
   right: auto;
   left: 0;
 }
 
-[dir="rtl"] .language-dropdown button {
+[dir="rtl"] .option {
   text-align: right;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .language-name {
+  .name {
     max-width: 60px;
   }
 }
 
 @media (max-width: 480px) {
-  .language-toggle {
+  .toggle {
     padding: 4px 8px;
   }
   
-  .language-flag {
+  .flag {
     font-size: 1rem;
   }
 }

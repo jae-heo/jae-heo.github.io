@@ -5,10 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { getCategories, getRecentBlogPosts } from '../../utils/blogLoader';
 import { BlogPost, Category } from '../../types/blog';
 import AuthorProfile from '../common/AuthorProfile';
-import './Sidebar.css';
+import styles from './Sidebar.module.css';
 
 interface SidebarProps {
   position: 'left' | 'right';
+  className?: string;
 }
 
 /**
@@ -16,7 +17,7 @@ interface SidebarProps {
  * Left sidebar: Author profile and categories
  * Right sidebar: Recent posts, archives, tags
  */
-function Sidebar({ position }: SidebarProps) {
+function Sidebar({ position, className }: SidebarProps) {
   const { t } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
@@ -46,23 +47,30 @@ function Sidebar({ position }: SidebarProps) {
     loadData();
   }, [position]);
   
+  // Determine sidebar classes
+  const sidebarClasses = [
+    styles.sidebar,
+    position === 'left' ? styles.left : styles.right,
+    className
+  ].filter(Boolean).join(' ');
+  
   // Left sidebar content
   if (position === 'left') {
     return (
-      <aside className="sidebar sidebar-left">
+      <aside className={sidebarClasses}>
         {/* Author Profile Section */}
-        <div className="sidebar-section">
+        <div className={styles.section}>
           <h3>{t('sidebar.about')}</h3>
           <AuthorProfile compact={true} />
         </div>
         
         {/* Categories Section */}
-        <div className="sidebar-section">
+        <div className={styles.section}>
           <h3>{t('sidebar.categories')}</h3>
           {loading ? (
             <div>Loading...</div>
           ) : (
-            <ul className="category-list">
+            <ul className={styles.categoryList}>
               {categories.map(category => (
                 <li key={category.id}>
                   <Link to={`/tag/${category.slug}`}>
@@ -79,20 +87,20 @@ function Sidebar({ position }: SidebarProps) {
   
   // Right sidebar content
   return (
-    <aside className="sidebar sidebar-right">
+    <aside className={sidebarClasses}>
       {/* Recent Posts Section */}
-      <div className="sidebar-section">
+      <div className={styles.section}>
         <h3>{t('sidebar.recentPosts')}</h3>
         {loading ? (
           <div>Loading...</div>
         ) : (
-          <ul className="recent-posts-list">
+          <ul className={styles.recentPostsList}>
             {recentPosts.map(post => (
               <li key={post.id}>
                 <Link to={`/blog/${post.slug}`}>
                   {post.title}
                 </Link>
-                <span className="post-date">
+                <span className={styles.postDate}>
                   {new Date(post.date).toLocaleDateString()}
                 </span>
               </li>
@@ -102,9 +110,9 @@ function Sidebar({ position }: SidebarProps) {
       </div>
       
       {/* Social Media Section */}
-      <div className="sidebar-section">
+      <div className={styles.section}>
         <h3>{t('sidebar.socialMedia')}</h3>
-        <div className="social-links">
+        <div className={styles.socialLinks}>
           <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
           <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -112,12 +120,12 @@ function Sidebar({ position }: SidebarProps) {
       </div>
       
       {/* Tag Cloud Section */}
-      <div className="sidebar-section">
+      <div className={styles.section}>
         <h3>{t('sidebar.tagCloud')}</h3>
-        <div className="tag-cloud">
-          <Link to="/tag/react" className="tag">React</Link>
-          <Link to="/tag/typescript" className="tag">TypeScript</Link>
-          <Link to="/tag/web-development" className="tag">Web Development</Link>
+        <div className={styles.tagCloud}>
+          <Link to="/tag/react" className={styles.tag}>React</Link>
+          <Link to="/tag/typescript" className={styles.tag}>TypeScript</Link>
+          <Link to="/tag/web-development" className={styles.tag}>Web Development</Link>
         </div>
       </div>
     </aside>

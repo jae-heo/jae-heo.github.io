@@ -5,7 +5,7 @@ import BlogPostList from '../components/blog/BlogPostList';
 import { getRecentBlogPosts } from '../utils/blogLoader';
 import { BlogPost } from '../types';
 import { useI18n } from '../hooks/useI18n';
-import './HomePage.css';
+import styles from './HomePage.module.css';
 
 /**
  * Home page component
@@ -35,15 +35,15 @@ function HomePage() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-content">
+      <section className={styles.heroSection}>
+        <div className={styles.heroContent}>
           <h1>{t('pages.home.heroTitle')}</h1>
           <p>{t('pages.home.heroSubtitle')}</p>
         </div>
       </section>
       
       {/* Recent Posts Section */}
-      <section className="recent-posts-section">
+      <section className={styles.recentPostsSection}>
         {loading ? (
           <div className="loading">{t('common.loading')}</div>
         ) : (

@@ -1,12 +1,10 @@
-/* src/components/blog/BlogPostList.css */
+/* Blog post list styles */
 
-/* Blog post list container */
-.blog-post-list {
+.container {
   width: 100%;
 }
 
-/* Section title */
-.section-title {
+.sectionTitle {
   font-size: 1.8rem;
   margin-bottom: var(--spacing-lg);
   position: relative;
@@ -14,7 +12,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.section-title::after {
+.sectionTitle::after {
   content: '';
   position: absolute;
   bottom: -1px;
@@ -24,16 +22,14 @@
   background-color: var(--primary-color);
 }
 
-/* Posts grid */
-.posts-grid {
+.grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--spacing-lg);
   width: 100%;
 }
 
-/* No posts message */
-.no-posts {
+.noPosts {
   text-align: center;
   padding: var(--spacing-lg);
   background-color: var(--card-bg-color);
@@ -43,24 +39,24 @@
 }
 
 /* RTL support */
-[dir="rtl"] .section-title::after {
+[dir="rtl"] .sectionTitle::after {
   left: auto;
   right: 0;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .posts-grid {
+  .grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: var(--spacing-md);
   }
   
-  .section-title {
+  .sectionTitle {
     font-size: 1.5rem;
     text-align: center;
   }
   
-  .section-title::after {
+  .sectionTitle::after {
     left: 50%;
     transform: translateX(-50%);
     width: 80px;
@@ -69,7 +65,7 @@
 
 /* Small screens */
 @media (max-width: 480px) {
-  .posts-grid {
+  .grid {
     grid-template-columns: 1fr;
   }
 }

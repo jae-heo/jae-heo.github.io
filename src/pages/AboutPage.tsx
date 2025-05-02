@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import AuthorProfile from '../components/common/AuthorProfile';
 import { useI18n } from '../hooks/useI18n';
-import './AboutPage.css';
+import styles from './AboutPage.module.css';
 
 /**
  * About page component
@@ -19,32 +19,32 @@ function AboutPage() {
   
   return (
     <Layout>
-      <section className="about-section">
-        <h1 className="page-title">{t('pages.about.title')}</h1>
+      <section className={styles.section}>
+        <h1 className={styles.pageTitle}>{t('pages.about.title')}</h1>
         
-        <div className="about-content">
+        <div className={styles.content}>
           {/* Author information */}
-          <div className="author-container">
+          <div className={styles.authorContainer}>
             <h2>{t('pages.about.aboutMe')}</h2>
             <AuthorProfile />
           </div>
           
           {/* About the blog */}
-          <div className="about-blog">
+          <div className={styles.aboutBlog}>
             <h2>{t('pages.about.aboutBlog')}</h2>
             <p>{t('blog.description')}</p>
           </div>
           
           {/* Skills section */}
-          <div className="skills-section">
+          <div className={styles.skillsSection}>
             <h3>{t('pages.about.skills')}</h3>
-            <div className="skills-grid">
-              <div className="skill-item">React</div>
-              <div className="skill-item">TypeScript</div>
-              <div className="skill-item">JavaScript</div>
-              <div className="skill-item">HTML/CSS</div>
-              <div className="skill-item">Node.js</div>
-              <div className="skill-item">Git</div>
+            <div className={styles.skillsGrid}>
+              <div className={styles.skillItem}>React</div>
+              <div className={styles.skillItem}>TypeScript</div>
+              <div className={styles.skillItem}>JavaScript</div>
+              <div className={styles.skillItem}>HTML/CSS</div>
+              <div className={styles.skillItem}>Node.js</div>
+              <div className={styles.skillItem}>Git</div>
             </div>
           </div>
         </div>

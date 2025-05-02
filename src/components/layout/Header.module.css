@@ -1,6 +1,5 @@
-/* src/components/layout/Header.css */
+/* Header component styles */
 
-/* Header container */
 .header {
   background-color: var(--card-bg-color);
   border-bottom: 1px solid var(--border-color);
@@ -10,8 +9,7 @@
   z-index: 100; /* Keep above other content */
 }
 
-/* Header content layout */
-.header-content {
+.content {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -20,7 +18,6 @@
   margin: 0 auto;
 }
 
-/* Logo/site title */
 .logo a {
   text-decoration: none;
   color: var(--text-color);
@@ -31,8 +28,7 @@
   font-size: 1.8rem;
 }
 
-/* Main navigation */
-.main-nav ul {
+.nav ul {
   display: flex;
   list-style: none;
   gap: var(--spacing-lg);
@@ -40,11 +36,11 @@
   padding: 0;
 }
 
-.main-nav li {
+.nav li {
   position: relative;
 }
 
-.main-nav a {
+.nav a {
   font-weight: 500;
   text-decoration: none;
   padding: var(--spacing-sm) 0;
@@ -54,7 +50,7 @@
 }
 
 /* Animated underline effect */
-.main-nav a::after {
+.nav a::after {
   content: '';
   position: absolute;
   left: 0;
@@ -65,28 +61,28 @@
   transition: width 0.3s ease;
 }
 
-.main-nav a:hover {
+.nav a:hover {
   color: var(--primary-color);
 }
 
-.main-nav a:hover::after {
+.nav a:hover::after {
   width: 100%;
 }
 
 /* RTL support */
-[dir="rtl"] .main-nav a::after {
+[dir="rtl"] .nav a::after {
   left: auto;
   right: 0;
 }
 
 /* Responsive header */
 @media (max-width: 900px) {
-  .header-content {
+  .content {
     flex-direction: column;
     gap: var(--spacing-md);
   }
   
-  .main-nav ul {
+  .nav ul {
     justify-content: center;
     flex-wrap: wrap;
   }
@@ -98,7 +94,7 @@
     font-size: 1.5rem;
   }
   
-  .main-nav a {
+  .nav a {
     font-size: 0.9rem;
   }
 }

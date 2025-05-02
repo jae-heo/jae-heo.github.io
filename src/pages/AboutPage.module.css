@@ -1,12 +1,10 @@
-/* about.css - 소개 페이지 특정 스타일 */
+/* AboutPage styles */
 
-/* 소개 페이지 섹션 */
-.about-section {
+.section {
   width: 100%;
 }
 
-/* 페이지 제목 */
-.page-title {
+.pageTitle {
   font-size: 2rem;
   margin-bottom: var(--spacing-lg);
   position: relative;
@@ -14,7 +12,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.page-title::after {
+.pageTitle::after {
   content: '';
   position: absolute;
   bottom: -1px;
@@ -24,8 +22,7 @@
   background-color: var(--primary-color);
 }
 
-/* 소개 콘텐츠 */
-.about-content {
+.content {
   background-color: var(--card-bg-color);
   border-radius: 8px;
   padding: var(--spacing-lg);
@@ -33,59 +30,45 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* 작가 정보 */
-.author-info {
-  display: flex;
-  gap: var(--spacing-lg);
+.authorContainer {
   margin-bottom: var(--spacing-lg);
 }
 
-.author-bio h2 {
-  margin-top: 0;
+.authorContainer h2 {
   font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
   color: var(--text-color);
 }
 
-.author-bio p {
-  line-height: 1.8;
-  color: var(--text-color);
-}
-
-/* 블로그에 대한 정보 */
-.about-blog {
+.aboutBlog {
   margin-top: var(--spacing-lg);
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--border-color);
 }
 
-.about-blog h2 {
+.aboutBlog h2 {
   font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
   color: var(--text-color);
 }
 
-.about-blog p {
-  line-height: 1.8;
-  color: var(--text-color);
-}
-
-/* 스킬 섹션 (선택 사항) */
-.skills-section {
+.skillsSection {
   margin-top: var(--spacing-lg);
 }
 
-.skills-section h3 {
+.skillsSection h3 {
   font-size: 1.3rem;
   margin-bottom: var(--spacing-md);
   color: var(--text-color);
 }
 
-.skills-grid {
+.skillsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: var(--spacing-md);
 }
 
-.skill-item {
+.skillItem {
   background-color: rgba(100, 108, 255, 0.1);
   padding: var(--spacing-sm);
   border-radius: 4px;
@@ -93,25 +76,29 @@
   transition: transform 0.3s, background-color 0.3s;
 }
 
-.skill-item:hover {
+.skillItem:hover {
   transform: translateY(-2px);
   background-color: rgba(100, 108, 255, 0.2);
 }
 
-/* 반응형 조정 */
+/* RTL support */
+[dir="rtl"] .pageTitle::after {
+  left: auto;
+  right: 0;
+}
+
+/* Responsive adjustments */
 @media (max-width: 900px) {
-  .author-info {
-    flex-direction: column;
-    align-items: center;
+  .pageTitle {
     text-align: center;
   }
   
-  .author-bio {
-    text-align: center;
-  }
-  
-  .page-title::after {
+  .pageTitle::after {
     left: 50%;
     transform: translateX(-50%);
+  }
+  
+  .skillsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 }
