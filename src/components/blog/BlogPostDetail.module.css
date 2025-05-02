@@ -40,12 +40,32 @@
   overflow: hidden;
   max-height: 400px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
 .featuredImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Letter avatar styles */
+.letterAvatarContainer {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.letterAvatar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8rem;
+  font-weight: bold;
 }
 
 .tags {
@@ -197,6 +217,14 @@
   
   .featuredImage {
     max-height: 300px;
+  }
+  
+  .letterAvatarContainer {
+    height: 300px;
+  }
+  
+  .letterAvatar {
+    font-size: 6rem;
   }
   
   .content {

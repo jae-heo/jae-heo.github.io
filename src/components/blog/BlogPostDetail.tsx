@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { BlogPost } from '../../types';
 import { formatDate } from '../../utils/dateFormatter';
+import LetterAvatar from '../common/LetterAvatar';
 import styles from './BlogPostDetail.module.css';
 
 interface BlogPostDetailProps {
@@ -36,19 +37,43 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
           </span>
         </div>
         
-        {/* Featured image */}
-        {post.imageUrl && (
-          <div className={styles.featuredImage}>
+        {/* Featured image or Letter Avatar */}
+        <div className={styles.featuredImage}>
+          {post.imageUrl ? (
             <img 
               src={post.imageUrl} 
               alt={post.title} 
               onError={(e) => {
+                // If image fails to load, replace with letter avatar
                 const target = e.target as HTMLImageElement;
-                target.src = '/placeholder-image.jpg';
+                target.style.display = 'none';
+                
+                // Create letter avatar
+                const parent = target.parentElement;
+                if (parent) {
+                  const letterAvatarContainer = document.createElement('div');
+                  letterAvatarContainer.className = styles.letterAvatarContainer;
+                  parent.appendChild(letterAvatarContainer);
+                  
+                  // We'd normally use React to render this component,
+                  // but for simplicity in error handling, we're creating a styled div
+                  const letterAvatar = document.createElement('div');
+                  letterAvatar.className = styles.letterAvatar;
+                  letterAvatar.textContent = post.title.charAt(0).toUpperCase();
+                  letterAvatarContainer.appendChild(letterAvatar);
+                }
               }}
             />
-          </div>
-        )}
+          ) : (
+            <div className={styles.letterAvatarContainer}>
+              <LetterAvatar 
+                title={post.title} 
+                size={400}
+                className={styles.letterAvatar}
+              />
+            </div>
+          )}
+        </div>
         
         {/* Tags */}
         <div className={styles.tags}>

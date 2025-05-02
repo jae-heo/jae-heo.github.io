@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useI18n } from '../../hooks/useI18n';
 import { BlogPost } from '../../types';
 import { formatDate } from '../../utils/dateFormatter';
+import LetterAvatar from '../common/LetterAvatar';
 import styles from './BlogPostCard.module.css';
 
 interface BlogPostCardProps {
@@ -21,20 +22,32 @@ function BlogPostCard({ post }: BlogPostCardProps) {
   
   return (
     <article className={styles.card}>
-      {/* Post image */}
-      {post.imageUrl && (
-        <Link to={`/blog/${post.slug}`} className={styles.imageContainer}>
+      {/* Post image or letter avatar */}
+      <Link to={`/blog/${post.slug}`} className={styles.imageContainer}>
+        {post.imageUrl ? (
           <img 
             src={post.imageUrl} 
             alt={post.title} 
             className={styles.image} 
             onError={(e) => {
+              // If image fails to load, replace with letter avatar
               const target = e.target as HTMLImageElement;
-              target.src = '/placeholder-image.jpg';
+              target.style.display = 'none';
+              const container = target.parentElement;
+              if (container) {
+                const avatar = document.createElement('div');
+                avatar.className = styles.letterAvatar;
+                container.appendChild(avatar);
+              }
             }}
           />
-        </Link>
-      )}
+        ) : (
+          <LetterAvatar 
+            title={post.title} 
+            className={styles.letterAvatar}
+          />
+        )}
+      </Link>
       
       <div className={styles.content}>
         {/* Post header with title and metadata */}
