@@ -25,9 +25,9 @@
   --content-max-width: 800px;
   
   /* Fonts */
-  --font-primary: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  --font-korean: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-  --font-english: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-primary: 'Noto Sans KR', sans-serif;
+  --font-korean: 'Noto Sans KR', sans-serif;
+  --font-english: 'Noto Sans KR', sans-serif;
   
   /* Font sizes */
   --font-size-sm: 0.875rem;
