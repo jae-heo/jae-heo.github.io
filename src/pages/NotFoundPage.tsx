@@ -1,11 +1,8 @@
 // src/pages/NotFoundPage.tsx
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import Layout from '../components/layout/Layout';
 
 function NotFoundPage() {
-  const { t } = useTranslation();
-  
   return (
     <Layout>
       <div className="not-found-page">

@@ -1,14 +1,11 @@
 // src/pages/TagPage.tsx
 import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
 import { getBlogPostsByTag } from '../data/blogPosts';
 
 function TagPage() {
   const { tag } = useParams<{ tag: string }>();
-  const { t } = useTranslation();
-  
   const taggedPosts = tag ? getBlogPostsByTag(tag) : [];
   
   return (

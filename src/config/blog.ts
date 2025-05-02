@@ -1,4 +1,7 @@
-const blogConfig = {
+// src/config/blog.ts
+import type { BlogConfig } from '../types/config';
+
+const blogConfig: BlogConfig = {
   // 블로그 기본 정보
   blog: {
     title: "My Tech Blog",

@@ -1,6 +1,5 @@
 // src/components/layout/Footer.tsx
 import { useTranslation } from 'react-i18next';
-import blogConfig from '../../config/blog';
 
 function Footer() {
   const { t } = useTranslation();
