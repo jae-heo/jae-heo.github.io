@@ -1,14 +1,19 @@
 // src/components/blog/BlogPostDetail.tsx
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { BlogPost } from '../../types/blog';
-import { formatDate } from '../../utils/dateFormatter';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
+import { BlogPost } from '../../types';
+import { formatDate } from '../../utils/dateFormatter';
+import './BlogPostDetail.css';
 
 interface BlogPostDetailProps {
   post: BlogPost;
 }
 
+/**
+ * Blog post detail component for the single post page
+ * Renders the full blog post content with metadata
+ */
 function BlogPostDetail({ post }: BlogPostDetailProps) {
   const { t } = useTranslation();
   
@@ -18,6 +23,7 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
   
   return (
     <article className="blog-post-detail">
+      {/* Post header with title and metadata */}
       <header className="post-header">
         <h1 className="post-title">{post.title}</h1>
         
@@ -30,6 +36,7 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
           </span>
         </div>
         
+        {/* Featured image */}
         {post.imageUrl && (
           <div className="post-featured-image">
             <img 
@@ -43,6 +50,7 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
           </div>
         )}
         
+        {/* Tags */}
         <div className="post-tags">
           <span className="tags-label">{t('post.tags')}</span>
           {post.tags.map(tag => (
@@ -53,10 +61,12 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
         </div>
       </header>
       
+      {/* Post content rendered with markdown */}
       <div className="post-content">
         <ReactMarkdown>{post.content}</ReactMarkdown>
       </div>
       
+      {/* Post footer with navigation */}
       <footer className="post-footer">
         <div className="post-navigation">
           <Link to="/blog" className="back-to-posts">

@@ -1,34 +1,47 @@
-/* footer.css - 푸터 관련 스타일 */
+/* src/components/layout/Footer.css */
 
-/* 푸터 컨테이너 */
+/* Footer container */
 .footer {
   background-color: var(--card-bg-color);
   border-top: 1px solid var(--border-color);
   padding: var(--spacing-lg);
   text-align: center;
   width: 100%;
-  margin-top: auto; /* 항상 콘텐츠 아래에 배치 */
+  margin-top: auto; /* Push to bottom */
 }
 
-/* 푸터 콘텐츠 */
+/* Footer content container */
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* 저작권 텍스트 */
+/* Copyright text */
 .footer p {
   margin: 0;
   font-size: 0.9rem;
   color: var(--light-text-color);
 }
 
-/* 푸터 내부 링크 */
+/* Footer links */
+.footer-links {
+  margin-top: var(--spacing-sm);
+}
+
 .footer a {
   color: var(--primary-color);
+  text-decoration: none;
   transition: color 0.3s;
+  font-size: 0.9rem;
 }
 
 .footer a:hover {
   color: var(--primary-hover-color);
+  text-decoration: underline;
+}
+
+/* Separator between links */
+.separator {
+  margin: 0 var(--spacing-sm);
+  color: var(--light-text-color);
 }

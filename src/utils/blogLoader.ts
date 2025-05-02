@@ -1,16 +1,14 @@
 // src/utils/blogLoader.ts
-
-import { BlogPost, Category } from '../types/blog';
-
-// Import sample blog posts from our data directory
-// This is a fallback in case the file-based approach doesn't work
+import { BlogPost, Category } from '../types';
 import { blogPosts as sampleBlogPosts } from '../data/blogPosts';
 
-// In-memory cache to avoid reading files multiple times
+// Cache for blog posts and categories
 let postsCache: BlogPost[] | null = null;
 let categoriesCache: Category[] | null = null;
 
-// Function to load blog posts from markdown files
+/**
+ * Load blog posts from markdown files or sample data
+ */
 export async function loadBlogPosts(): Promise<BlogPost[]> {
   // Return cached posts if available
   if (postsCache) {
@@ -18,53 +16,53 @@ export async function loadBlogPosts(): Promise<BlogPost[]> {
   }
 
   try {
-    // Try to use the file-based approach with import.meta.glob
+    // Try to use file-based approach with import.meta.glob
     try {
-      // Use the updated syntax for Vite's import.meta.glob
       const postFiles = import.meta.glob('../content/posts/*.md', { query: '?raw', import: 'default' });
       
-      // If there are no files, throw an error to fall back to the sample data
+      // If no files, fall back to sample data
       if (Object.keys(postFiles).length === 0) {
         throw new Error('No markdown files found');
       }
       
-      // Process will continue here if files are found
-      console.log('Found markdown files:', Object.keys(postFiles).length);
-      
-      // Actual file processing would happen here...
-      // But for now, we'll just use the sample data
-      throw new Error('Processing not implemented yet');
+      // File processing would happen here in a real implementation
+      // For now, fall back to sample data
+      throw new Error('File processing not implemented');
       
     } catch (error) {
-      // Log but don't re-throw - we'll fall back to sample data
-      console.warn('Error using file-based approach:', error);
-      console.log('Falling back to sample data');
+      console.log('Using sample blog data');
       
-      // Use the sample data from blogPosts.ts instead
-      postsCache = [...sampleBlogPosts]; // Clone to avoid modifying the original
+      // Use sample data from blogPosts.ts
+      postsCache = [...sampleBlogPosts]; 
       return postsCache;
     }
   } catch (error) {
     console.error('Error loading blog posts:', error);
     
-    // Fallback to sample data in case of any error
+    // Fallback to sample data
     postsCache = [...sampleBlogPosts];
     return postsCache;
   }
 }
 
-// Get all blog posts
+/**
+ * Get all blog posts
+ */
 export async function getBlogPosts(): Promise<BlogPost[]> {
   return loadBlogPosts();
 }
 
-// Get a specific blog post by slug
+/**
+ * Get a specific blog post by slug
+ */
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
   const posts = await loadBlogPosts();
   return posts.find(post => post.slug === slug);
 }
 
-// Get blog posts by tag
+/**
+ * Get blog posts by tag
+ */
 export async function getBlogPostsByTag(tag: string): Promise<BlogPost[]> {
   const posts = await loadBlogPosts();
   return posts.filter(post => 
@@ -72,13 +70,19 @@ export async function getBlogPostsByTag(tag: string): Promise<BlogPost[]> {
   );
 }
 
-// Get recent blog posts
+/**
+ * Get recent blog posts
+ */
 export async function getRecentBlogPosts(count: number = 3): Promise<BlogPost[]> {
   const posts = await loadBlogPosts();
-  return posts.slice(0, count);
+  return [...posts]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, count);
 }
 
-// Calculate and get categories with post counts
+/**
+ * Get all categories with post counts
+ */
 export async function getCategories(): Promise<Category[]> {
   // Return cached categories if available
   if (categoriesCache) {
@@ -86,9 +90,9 @@ export async function getCategories(): Promise<Category[]> {
   }
 
   const posts = await loadBlogPosts();
-  const categoryMap = new Map<string, { id: string, name: string, slug: string, count: number }>();
+  const categoryMap = new Map<string, Category>();
   
-  // Process all tags from all posts
+  // Process tags from all posts to build categories
   posts.forEach(post => {
     post.tags.forEach(tag => {
       const tagLower = tag.toLowerCase();
@@ -96,9 +100,10 @@ export async function getCategories(): Promise<Category[]> {
       
       if (categoryMap.has(slug)) {
         // Increment count if category exists
-        categoryMap.get(slug)!.count += 1;
+        const category = categoryMap.get(slug)!;
+        category.count += 1;
       } else {
-        // Create new category if it doesn't exist
+        // Create new category
         categoryMap.set(slug, {
           id: slug,
           name: tag,
@@ -119,7 +124,9 @@ export async function getCategories(): Promise<Category[]> {
   return categories;
 }
 
-// Clear cache (useful if you want to reload posts, e.g., in development)
+/**
+ * Clear cache (for development)
+ */
 export function clearCache(): void {
   postsCache = null;
   categoriesCache = null;

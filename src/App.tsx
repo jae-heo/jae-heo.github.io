@@ -11,33 +11,26 @@ import AboutPage from './pages/AboutPage';
 import TagPage from './pages/TagPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-// In development mode, you might want to clear cache on refresh
+// Utils
 import { clearCache } from './utils/blogLoader';
-import blogConfig from './config/blog';
 
 function App() {
   const { t, i18n, currentLang, isRTL } = useI18n();
   const isDevelopment = import.meta.env.DEV;
   
   useEffect(() => {
-    // Set document title
+    // Set document title and language attributes
     document.title = t('blog.title');
-
-    // Set HTML lang attribute to current language
     document.documentElement.lang = currentLang;
-    
-    // Set RTL attribute if needed
     document.documentElement.dir = isRTL() ? 'rtl' : 'ltr';
-
-    // Clear cache in development mode to see changes immediately
+    document.body.className = `lang-${currentLang}`;
+    
+    // Clear cache in development mode
     if (isDevelopment) {
       clearCache();
     }
     
-    // Add language-specific class to body for additional styling
-    document.body.className = `lang-${currentLang}`;
-    
-    // Add any font imports needed for specific languages
+    // Add Korean font if needed
     if (currentLang === 'ko' && !document.getElementById('korean-font')) {
       const link = document.createElement('link');
       link.id = 'korean-font';
@@ -51,13 +44,12 @@ function App() {
     <Router>
       <Suspense fallback={<div className="loading">{t('common.loading')}</div>}>
         <Routes>
-          {/* Pass the showLayoutControls prop to enable layout controls in dev mode */}
-          <Route path="/" element={<HomePage showLayoutControls={isDevelopment} />} />
-          <Route path="/blog" element={<BlogListPage showLayoutControls={isDevelopment} />} />
-          <Route path="/blog/:slug" element={<BlogPostPage showLayoutControls={isDevelopment} />} />
-          <Route path="/about" element={<AboutPage showLayoutControls={isDevelopment} />} />
-          <Route path="/tag/:tag" element={<TagPage showLayoutControls={isDevelopment} />} />
-          <Route path="*" element={<NotFoundPage showLayoutControls={isDevelopment} />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/blog" element={<BlogListPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/tag/:tag" element={<TagPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
     </Router>

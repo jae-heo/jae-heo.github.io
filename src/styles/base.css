@@ -1,56 +1,62 @@
-/* src/styles/base.css - updated with multilingual support */
+/* src/styles/base.css - Global variables and base styles */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+/* Import Google Fonts for Korean */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
-/* 모든 요소에 폰트 적용 */
-* {
-  font-family: 'Noto Sans KR', sans-serif;
-}
-
-/* CSS variables definition */
+/* CSS variables */
 :root {
+  /* Colors */
   --primary-color: #646cff;
-  --primary-color-rgb: 100, 108, 255; /* RGB values for rgba() usage */
+  --primary-color-rgb: 100, 108, 255; /* RGB values for rgba() */
   --primary-hover-color: #535bf2;
   --text-color: rgba(255, 255, 255, 0.87);
   --bg-color: #242424;
   --card-bg-color: #1a1a1a;
   --border-color: #444;
   --light-text-color: #888;
+  
+  /* Spacing */
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 2rem;
   
-  /* Layout variables */
-  --left-sidebar-width: 250px;
-  --right-sidebar-width: 300px;
+  /* Layout */
+  --sidebar-width: 300px;
   --content-max-width: 800px;
-  --layout-gap: var(--spacing-md);
   
-  /* Font variables for multilingual support */
+  /* Fonts */
   --font-primary: system-ui, Avenir, Helvetica, Arial, sans-serif;
   --font-korean: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
   --font-english: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   
-  /* Font sizes - can be adjusted per language */
+  /* Font sizes */
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.5rem;
   --font-size-2xl: 2rem;
-  --font-size-3xl: 2.5rem;
   
-  /* Line heights for different languages */
+  /* Line heights */
   --line-height-tight: 1.3;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.8;
   
-  /* Direction-aware spacing */
-  --spacing-inline-start: var(--spacing-md);
-  --spacing-inline-end: var(--spacing-md);
+  /* Border radius */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  
+  /* Transitions */
+  --transition-fast: 0.2s;
+  --transition-normal: 0.3s;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Light mode */
+/* Light theme variables */
 @media (prefers-color-scheme: light) {
   :root {
     --text-color: #213547;
@@ -61,34 +67,33 @@
   }
 }
 
-/* Korean language specific styles */
+/* Language-specific styles */
 html[lang="ko"] {
   --font-primary: var(--font-korean);
-  --line-height-normal: 1.7; /* Slightly increased line height for Korean */
+  --line-height-normal: 1.7; /* Slightly increased for Korean */
+  word-break: keep-all; /* Better line breaks for Korean */
 }
 
-/* English language specific styles */
 html[lang="en"] {
   --font-primary: var(--font-english);
   --line-height-normal: 1.5;
 }
 
-/* RTL language support */
+/* RTL support */
 [dir="rtl"] {
-  --spacing-inline-start: var(--spacing-md);
-  --spacing-inline-end: var(--spacing-md);
+  text-align: right;
 }
 
-/* Basic reset and box model setup */
+/* Reset */
 * {
   box-sizing: border-box;
-}
-
-/* Basic styles */
-html, body {
   margin: 0;
   padding: 0;
+}
+
+html, body {
   width: 100%;
+  height: 100%;
   overflow-x: hidden;
 }
 
@@ -98,66 +103,47 @@ body {
   font-family: var(--font-primary);
   line-height: var(--line-height-normal);
   font-weight: 400;
-  min-width: 100%;
   min-height: 100vh;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: color var(--transition-normal), background-color var(--transition-normal);
 }
 
-/* Update lang attribute when language changes */
-html[lang="ko"] {
-  word-break: keep-all; /* Better line breaks for Korean */
-}
-
-/* Link default styles */
+/* Basic element styles */
 a {
   color: var(--primary-color);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color var(--transition-normal);
 }
 
 a:hover {
   color: var(--primary-hover-color);
 }
 
-/* Button default styles */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: var(--card-bg-color);
   cursor: pointer;
-  transition: border-color 0.25s;
+  border: none;
+  background: none;
 }
 
-button:hover {
-  border-color: var(--primary-color);
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+  line-height: var(--line-height-tight);
 }
 
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+ul, ol {
+  list-style-position: inside;
 }
 
-/* Direction-aware properties */
-[dir="rtl"] {
-  .post-author::before {
-    right: -10px;
-    left: auto;
-  }
-  
-  .post-title::after {
-    right: 0;
-    left: auto;
-  }
+img {
+  max-width: 100%;
+  height: auto;
 }
 
-/* Default container setup */
+/* App container */
 #root {
   width: 100%;
   min-height: 100vh;
@@ -165,19 +151,69 @@ button:focus-visible {
   flex-direction: column;
 }
 
-#root > div {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-/* Loading state styles */
+/* Loading state */
 .loading {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  font-size: 1.5rem;
+  padding: var(--spacing-lg);
+  min-height: 200px;
+  font-size: var(--font-size-lg);
+  color: var(--light-text-color);
 }
 
+/* Common page title */
+.page-title {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.page-title::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background-color: var(--primary-color);
+}
+
+/* Common button style */
+.btn {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: var(--border-radius-sm);
+  transition: background-color var(--transition-normal), transform var(--transition-fast);
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  border: none;
+}
+
+.btn:hover {
+  background-color: var(--primary-hover-color);
+  transform: translateY(-2px);
+}
+
+/* Accessibility */
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}

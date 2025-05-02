@@ -1,6 +1,20 @@
-/* sidebar.css - 사이드바 관련 스타일 */
+/* src/components/layout/Sidebar.css */
 
-/* 사이드바 섹션 공통 스타일 */
+/* Sidebar container */
+.sidebar {
+  width: var(--sidebar-width, 300px);
+  flex-shrink: 0;
+}
+
+.sidebar-left {
+  margin-right: var(--spacing-md);
+}
+
+.sidebar-right {
+  margin-left: var(--spacing-md);
+}
+
+/* Sidebar sections */
 .sidebar-section {
   background-color: var(--card-bg-color);
   border-radius: 8px;
@@ -16,24 +30,28 @@
   font-size: 1.2rem;
 }
 
-/* 카테고리 및 최근 포스트 목록 */
-.category-list, .recent-posts-list {
+/* Category & recent posts lists */
+.category-list, 
+.recent-posts-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.category-list li, .recent-posts-list li {
+.category-list li, 
+.recent-posts-list li {
   margin-bottom: var(--spacing-sm);
   border-bottom: 1px dashed var(--border-color);
   padding-bottom: var(--spacing-sm);
 }
 
-.category-list li:last-child, .recent-posts-list li:last-child {
+.category-list li:last-child, 
+.recent-posts-list li:last-child {
   border-bottom: none;
 }
 
-.category-list a, .recent-posts-list a {
+.category-list a, 
+.recent-posts-list a {
   text-decoration: none;
   color: var(--text-color);
   display: block;
@@ -41,7 +59,8 @@
   transition: color 0.3s;
 }
 
-.category-list a:hover, .recent-posts-list a:hover {
+.category-list a:hover, 
+.recent-posts-list a:hover {
   color: var(--primary-color);
 }
 
@@ -51,7 +70,7 @@
   color: var(--light-text-color);
 }
 
-/* 소셜 미디어 링크 */
+/* Social media links */
 .social-links {
   display: flex;
   gap: var(--spacing-md);
@@ -69,5 +88,32 @@
 
 .social-links a:hover {
   color: var(--primary-color);
-  background-color: rgba(100, 108, 255, 0.1);
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* Tag cloud */
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.tag-cloud .tag {
+  display: inline-block;
+  padding: 3px 8px;
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s;
+}
+
+.tag-cloud .tag:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .social-links {
+    justify-content: flex-start;
+  }
 }

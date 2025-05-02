@@ -1,0 +1,141 @@
+/* src/components/blog/BlogPostCard.css */
+
+/* Post card container */
+.post-card {
+  background-color: var(--card-bg-color);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Post image */
+.post-image-container {
+  height: 200px;
+  overflow: hidden;
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.post-card:hover .post-image {
+  transform: scale(1.05);
+}
+
+/* Post content area */
+.post-content {
+  padding: var(--spacing-lg);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Post title */
+.post-title {
+  margin-top: 0;
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.post-title a {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.post-title a:hover {
+  color: var(--primary-color);
+}
+
+/* Post metadata */
+.post-meta {
+  color: var(--light-text-color);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.post-author {
+  position: relative;
+  margin-left: var(--spacing-md);
+}
+
+.post-author::before {
+  content: '•';
+  position: absolute;
+  left: -10px;
+}
+
+/* Post description */
+.post-description {
+  flex-grow: 1;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Post footer with tags and read more link */
+.post-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+/* Tags */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.post-tag {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  transition: background-color 0.3s;
+}
+
+.post-tag:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Read more link */
+.read-more-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.read-more-link:hover {
+  color: var(--primary-hover-color);
+}
+
+/* RTL support */
+[dir="rtl"] .post-author::before {
+  left: auto;
+  right: -10px;
+}

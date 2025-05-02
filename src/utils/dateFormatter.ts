@@ -1,72 +1,75 @@
 // src/utils/dateFormatter.ts
 import { format, Locale } from 'date-fns';
 import { ko, enUS } from 'date-fns/locale';
-import blogConfig from '../config/blog';
-import i18n from '../i18n';
+import config from '../config/blog';
 
 /**
- * Get the appropriate date-fns locale object based on language code
+ * Map of language codes to date-fns locale objects
  */
-const getLocale = (language: string): Locale => {
-  switch (language) {
-    case 'ko':
-      return ko;
-    case 'en':
-    default:
-      return enUS;
-  }
+const localeMap: Record<string, Locale> = {
+  ko: ko,
+  en: enUS
 };
 
 /**
- * Format a date string based on the current language
+ * Get the appropriate date-fns locale based on language code
  */
-export const formatDate = (dateString: string, customFormat?: string): string => {
+function getLocale(language: string): Locale {
+  return localeMap[language] || enUS;
+}
+
+/**
+ * Format a date string based on the specified language
+ */
+export function formatDate(
+  dateString: string, 
+  customFormat?: string,
+  language?: string
+): string {
   try {
     const date = new Date(dateString);
-    const language = i18n.language;
-    const locale = getLocale(language);
+    const lang = language || document.documentElement.lang || config.languages.default;
+    const locale = getLocale(lang);
     
     // Use custom format or get format from language config
     const dateFormat = customFormat || 
-      blogConfig.languages.info[language]?.dateFormat || 
-      (language === 'ko' ? 'yyyy년 MM월 dd일' : 'MMMM d, yyyy');
+      config.languages.info[lang]?.dateFormat || 
+      'MMM d, yyyy';
     
     return format(date, dateFormat, { locale });
   } catch (error) {
     console.error('Error formatting date:', error);
-    return dateString; // Return original string if parsing fails
+    return dateString; // Return original string if formatting fails
   }
-};
+}
 
 /**
  * Format a date with relative time (e.g., "2 days ago")
- * This could be extended with a library like date-fns/formatDistance
  */
-export const formatRelativeDate = (dateString: string): string => {
-  // Basic implementation - could be enhanced with formatDistance from date-fns
+export function formatRelativeDate(
+  dateString: string,
+  language?: string
+): string {
   try {
     const date = new Date(dateString);
     const now = new Date();
     const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    const lang = language || document.documentElement.lang || config.languages.default;
     
+    // Simple relative date formatting
     if (diffInDays === 0) {
-      return i18n.language === 'ko' ? '오늘' : 'Today';
+      return lang === 'ko' ? '오늘' : 'Today';
     } else if (diffInDays === 1) {
-      return i18n.language === 'ko' ? '어제' : 'Yesterday';
+      return lang === 'ko' ? '어제' : 'Yesterday';
     } else if (diffInDays < 7) {
-      return i18n.language === 'ko' 
+      return lang === 'ko' 
         ? `${diffInDays}일 전` 
         : `${diffInDays} days ago`;
     } else {
-      return formatDate(dateString);
+      return formatDate(dateString, undefined, lang);
     }
   } catch (error) {
     console.error('Error formatting relative date:', error);
     return dateString;
   }
-};
-
-export default {
-  formatDate,
-  formatRelativeDate
-};
+}

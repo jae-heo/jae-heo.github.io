@@ -1,17 +1,22 @@
 // src/config/blog.ts
-import type { BlogConfig } from '../types/config';
+import { BlogConfig } from '../types';
 
-const blogConfig: BlogConfig = {
-  // Basic blog information with language-specific overrides in i18n files
+/**
+ * Blog configuration
+ * Central place for all blog settings
+ */
+const config: BlogConfig = {
+  // Basic blog information
   blog: {
-    title: "Jae's Blog", // Default fallback title
-    description: "Stories about programming", // Default fallback description
-    author: "허재영", // Author name (will be shown in UI based on language)
-    authorBio: "DES 기반 시뮬레이션 개발을 하고 있습니다.", // Default bio (will use i18n)
+    title: "Jae's Blog", 
+    description: "Stories about programming", 
+    author: "허재영", 
+    authorBio: "DES 기반 시뮬레이션 개발을 하고 있습니다.", 
     authorImageUrl: "/images/profile/profile.jpeg",
     copyright: `© ${new Date().getFullYear()} Jae's Tech Blog. All rights reserved.`
   },
   
+  // Language configuration
   languages: {
     available: ['ko', 'en'],
     default: 'ko',
@@ -28,13 +33,14 @@ const blogConfig: BlogConfig = {
         name: 'English',
         flag: '🇬🇧',
         rtl: false,
-        dateFormat: 'MMMM d, yyyy', // English date format
-        authorName: 'Jae-young Heo', // English name spelling
+        dateFormat: 'MMMM d, yyyy',
+        authorName: 'Jae-young Heo',
         authorBio: 'Working on DES-based simulation development.'
       }
     }
   },
   
+  // Main navigation menu
   mainMenu: [
     { id: 1, name: "home", path: "/", icon: "home", visible: true, order: 1 },
     { id: 2, name: "about", path: "/about", icon: "user", visible: true, order: 2 },
@@ -43,20 +49,20 @@ const blogConfig: BlogConfig = {
     { id: 5, name: "contact", path: "/contact", icon: "mail", visible: true, order: 5 }
   ],
   
-  socialMedia: {
+  // Social media links
+  socialLinks: {
     github: "https://github.com/jae-heo",
     twitter: "https://twitter.com/username",
     linkedin: "https://linkedin.com/in/username"
   },
   
-  // Features configuration
+  // Feature flags
   features: {
-    enableComments: true,
-    enableSocialSharing: true,
-    enableDarkMode: true,
-    enableSubscription: true,
-    postsPerPage: 5
+    darkMode: true,
+    comments: true,
+    socialSharing: true,
+    postsPerPage: 6
   }
 };
 
-export default blogConfig;
+export default config;

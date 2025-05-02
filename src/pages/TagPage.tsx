@@ -4,22 +4,31 @@ import { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
 import { getBlogPostsByTag } from '../utils/blogLoader';
-import { BlogPost } from '../types/blog';
+import { BlogPost } from '../types';
+import { useI18n } from '../hooks/useI18n';
+import './TagPage.css';
 
-interface TagPageProps {
-  showLayoutControls?: boolean;
-}
-
-function TagPage({ showLayoutControls = false }: TagPageProps) {
+/**
+ * Tag page component
+ * Displays posts filtered by tag
+ */
+function TagPage() {
   const { tag } = useParams<{ tag: string }>();
+  const { t, getPageTitle } = useI18n();
   const [taggedPosts, setTaggedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
+    // Set page title
+    if (tag) {
+      document.title = getPageTitle('blog.title', { tag });
+    }
+    
     async function loadPosts() {
       if (!tag) return;
       
       try {
+        setLoading(true);
         const posts = await getBlogPostsByTag(tag);
         setTaggedPosts(posts);
       } catch (error) {
@@ -30,20 +39,20 @@ function TagPage({ showLayoutControls = false }: TagPageProps) {
     }
 
     loadPosts();
-  }, [tag]);
+  }, [tag, getPageTitle]);
   
   return (
-    <Layout showLayoutControls={showLayoutControls}>
+    <Layout>
       <section className="tag-posts-section">
         <h1 className="page-title">
           #{tag}
         </h1>
         {loading ? (
-          <div className="loading">Loading posts...</div>
+          <div className="loading">{t('common.loading')}</div>
         ) : (
           <BlogPostList 
             posts={taggedPosts} 
-            title={`${taggedPosts.length} ${taggedPosts.length === 1 ? 'post' : 'posts'}`}
+            title={`${taggedPosts.length} ${taggedPosts.length === 1 ? t('post.post') : t('post.posts')}`}
           />
         )}
       </section>

@@ -1,23 +1,23 @@
 // src/pages/NotFoundPage.tsx
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import Layout from '../components/layout/Layout';
+import { useI18n } from '../hooks/useI18n';
+import './NotFoundPage.css';
 
-interface NotFoundPageProps {
-  showLayoutControls?: boolean;
-}
-
-function NotFoundPage({ showLayoutControls = false }: NotFoundPageProps) {
-  const { t } = useTranslation();
+/**
+ * 404 Not Found page component
+ */
+function NotFoundPage() {
+  const { t } = useI18n();
   
-  // Set document title for the 404 page
   useEffect(() => {
+    // Set document title for the 404 page
     document.title = `404 - ${t('pages.notFound.title')}`;
   }, [t]);
   
   return (
-    <Layout showLayoutControls={showLayoutControls}>
+    <Layout>
       <div className="not-found-page">
         <h1>404</h1>
         <h2>{t('pages.notFound.title')}</h2>

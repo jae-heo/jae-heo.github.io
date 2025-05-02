@@ -1,23 +1,30 @@
-// src/pages/BlogListPage.tsx - Add showLayoutControls prop
+// src/pages/BlogListPage.tsx
 import { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
 import { getBlogPosts } from '../utils/blogLoader'; 
-import { BlogPost } from '../types/blog';
+import { BlogPost } from '../types';
+import { useI18n } from '../hooks/useI18n';
+import './BlogListPage.css';
 
-interface BlogListPageProps {
-  showLayoutControls?: boolean;
-}
-
-function BlogListPage({ showLayoutControls = false }: BlogListPageProps) {
-  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
+/**
+ * Blog list page component
+ * Displays all blog posts
+ */
+function BlogListPage() {
+  const { t, getPageTitle } = useI18n();
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Set page title
+    document.title = getPageTitle('nav.blog');
+    
     async function loadPosts() {
       try {
-        const posts = await getBlogPosts();
-        setAllPosts(posts);
+        setLoading(true);
+        const allPosts = await getBlogPosts();
+        setPosts(allPosts);
       } catch (error) {
         console.error('Failed to load blog posts:', error);
       } finally {
@@ -26,16 +33,16 @@ function BlogListPage({ showLayoutControls = false }: BlogListPageProps) {
     }
 
     loadPosts();
-  }, []);
+  }, [getPageTitle]);
   
   return (
-    <Layout showLayoutControls={showLayoutControls}>
+    <Layout>
       <section className="blog-list-section">
-        <h1 className="page-title">Blog</h1>
+        <h1 className="page-title">{t('nav.blog')}</h1>
         {loading ? (
-          <div className="loading">Loading posts...</div>
+          <div className="loading">{t('common.loading')}</div>
         ) : (
-          <BlogPostList posts={allPosts} />
+          <BlogPostList posts={posts} />
         )}
       </section>
     </Layout>

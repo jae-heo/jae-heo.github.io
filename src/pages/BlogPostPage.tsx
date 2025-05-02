@@ -4,17 +4,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import BlogPostDetail from '../components/blog/BlogPostDetail';
 import { getBlogPostBySlug } from '../utils/blogLoader';
-import { BlogPost } from '../types/blog';
-import { useTranslation } from 'react-i18next';
+import { BlogPost } from '../types';
+import { useI18n } from '../hooks/useI18n';
+import './BlogPostPage.css';
 
-interface BlogPostPageProps {
-  showLayoutControls?: boolean;
-}
-
-function BlogPostPage({ showLayoutControls = false }: BlogPostPageProps) {
+/**
+ * Blog post page component
+ * Displays a single blog post
+ */
+function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useI18n();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -31,6 +32,7 @@ function BlogPostPage({ showLayoutControls = false }: BlogPostPageProps) {
         
         if (fetchedPost) {
           setPost(fetchedPost);
+          // Set page title to post title
           document.title = fetchedPost.title;
         } else {
           // Post not found, redirect to blog list
@@ -48,7 +50,7 @@ function BlogPostPage({ showLayoutControls = false }: BlogPostPageProps) {
   }, [slug, navigate]);
   
   return (
-    <Layout showLayoutControls={showLayoutControls}>
+    <Layout>
       {loading ? (
         <div className="loading">{t('post.loading')}</div>
       ) : (

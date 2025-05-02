@@ -1,6 +1,11 @@
 // src/components/layout/Footer.tsx
 import { useTranslation } from 'react-i18next';
+import './Footer.css';
 
+/**
+ * Footer component
+ * Displays copyright information and optional links
+ */
 function Footer() {
   const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
@@ -10,7 +15,7 @@ function Footer() {
       <div className="footer-content">
         <p>{t('blog.copyright', { year: currentYear })}</p>
         
-        {/* Optional: Add additional footer content like links */}
+        {/* Optional footer links */}
         <div className="footer-links">
           <a href="/privacy-policy">Privacy Policy</a>
           <span className="separator">|</span>
