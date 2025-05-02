@@ -1,12 +1,40 @@
+
 // src/components/layout/Sidebar.tsx
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, getRecentBlogPosts } from '../../data/blogPosts';
+import { getCategories, getRecentBlogPosts } from '../../utils/blogLoader'; // Updated import
+import { Category, BlogPost } from '../../types/blog';
 
 function Sidebar() {
   const { t } = useTranslation();
-  const categories = getCategories();
-  const recentPosts = getRecentBlogPosts(5);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [fetchedCategories, fetchedPosts] = await Promise.all([
+          getCategories(),
+          getRecentBlogPosts(5)
+        ]);
+        
+        setCategories(fetchedCategories);
+        setRecentPosts(fetchedPosts);
+      } catch (error) {
+        console.error('Failed to load sidebar data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+  }, []);
+  
+  if (loading) {
+    return <aside className="sidebar">Loading...</aside>;
+  }
   
   return (
     <aside className="sidebar">
@@ -15,7 +43,7 @@ function Sidebar() {
         <ul className="category-list">
           {categories.map(category => (
             <li key={category.id}>
-              <Link to={`/category/${category.slug}`}>
+              <Link to={`/tag/${category.slug}`}>
                 {category.name} ({category.count})
               </Link>
             </li>

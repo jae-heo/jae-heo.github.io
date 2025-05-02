@@ -1,12 +1,30 @@
 // src/pages/HomePage.tsx
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
-import { getRecentBlogPosts } from '../data/blogPosts';
+import { getRecentBlogPosts } from '../utils/blogLoader'; // Updated import
+import { BlogPost } from '../types/blog';
 
 function HomePage() {
   const { t } = useTranslation();
-  const recentPosts = getRecentBlogPosts();
+  const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadPosts() {
+      try {
+        const posts = await getRecentBlogPosts();
+        setRecentPosts(posts);
+      } catch (error) {
+        console.error('Failed to load recent posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadPosts();
+  }, []);
   
   return (
     <Layout>
@@ -18,10 +36,14 @@ function HomePage() {
       </section>
       
       <section className="recent-posts-section">
-        <BlogPostList 
-          posts={recentPosts} 
-          title={t('sidebar.recentPosts')} 
-        />
+        {loading ? (
+          <div className="loading">Loading recent posts...</div>
+        ) : (
+          <BlogPostList 
+            posts={recentPosts} 
+            title={t('sidebar.recentPosts')} 
+          />
+        )}
       </section>
     </Layout>
   );

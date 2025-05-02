@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { BlogPost } from '../../types/blog';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import ReactMarkdown from 'react-markdown';
 
 interface BlogPostDetailProps {
   post: BlogPost;
@@ -54,13 +53,14 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
         </div>
       </header>
       
-      <div className="post-content">
-        <ReactMarkdown>{post.content}</ReactMarkdown>
-      </div>
+      <div 
+        className="post-content"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
       
       <footer className="post-footer">
         <div className="post-navigation">
-          <Link to="/" className="back-to-posts">
+          <Link to="/blog" className="back-to-posts">
             ← Back to all posts
           </Link>
         </div>

@@ -12,11 +12,19 @@ import AboutPage from './pages/AboutPage';
 import TagPage from './pages/TagPage';
 import NotFoundPage from './pages/NotFoundPage';
 
+// In development mode, you might want to clear cache on refresh
+import { clearCache } from './utils/blogLoader';
+
 function App() {
   const { t } = useTranslation();
   
   useEffect(() => {
     document.title = t('blog.title');
+
+    // Clear cache in development mode to see changes immediately
+    if (import.meta.env.DEV) {
+      clearCache();
+    }
   }, [t]);
 
   return (

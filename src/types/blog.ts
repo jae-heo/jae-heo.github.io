@@ -4,6 +4,7 @@ export interface BlogPost {
   title: string;
   description: string;
   content: string;
+  rawContent?: string; // Optional: the original markdown content
   date: string;
   author: string;
   tags: string[];
