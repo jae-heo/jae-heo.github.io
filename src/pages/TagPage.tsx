@@ -3,10 +3,14 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
-import { getBlogPostsByTag } from '../utils/blogLoader'; // Updated import
+import { getBlogPostsByTag } from '../utils/blogLoader';
 import { BlogPost } from '../types/blog';
 
-function TagPage() {
+interface TagPageProps {
+  showLayoutControls?: boolean;
+}
+
+function TagPage({ showLayoutControls = false }: TagPageProps) {
   const { tag } = useParams<{ tag: string }>();
   const [taggedPosts, setTaggedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +33,7 @@ function TagPage() {
   }, [tag]);
   
   return (
-    <Layout>
+    <Layout showLayoutControls={showLayoutControls}>
       <section className="tag-posts-section">
         <h1 className="page-title">
           #{tag}

@@ -4,10 +4,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Layout from '../components/layout/Layout';
 import BlogPostDetail from '../components/blog/BlogPostDetail';
-import { getBlogPostBySlug } from '../utils/blogLoader'; // Updated import
+import { getBlogPostBySlug } from '../utils/blogLoader';
 import { BlogPost } from '../types/blog';
 
-function BlogPostPage() {
+interface BlogPostPageProps {
+  showLayoutControls?: boolean;
+}
+
+function BlogPostPage({ showLayoutControls = false }: BlogPostPageProps) {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -49,7 +53,7 @@ function BlogPostPage() {
   
   if (loading) {
     return (
-      <Layout>
+      <Layout showLayoutControls={showLayoutControls}>
         <div className="loading">Loading post...</div>
       </Layout>
     );
@@ -60,7 +64,7 @@ function BlogPostPage() {
   }
   
   return (
-    <Layout>
+    <Layout showLayoutControls={showLayoutControls}>
       <BlogPostDetail post={post} />
     </Layout>
   );

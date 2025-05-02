@@ -3,11 +3,15 @@ import { useTranslation } from 'react-i18next';
 import Layout from '../components/layout/Layout';
 import blogConfig from '../config/blog';
 
-function AboutPage() {
+interface AboutPageProps {
+  showLayoutControls?: boolean;
+}
+
+function AboutPage({ showLayoutControls = false }: AboutPageProps) {
   const { t } = useTranslation();
   
   return (
-    <Layout>
+    <Layout showLayoutControls={showLayoutControls}>
       <section className="about-section">
         <h1 className="page-title">{t('nav.about')}</h1>
         

@@ -1,11 +1,15 @@
-// src/pages/BlogListPage.tsx
+// src/pages/BlogListPage.tsx - Add showLayoutControls prop
 import { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
-import { getBlogPosts } from '../utils/blogLoader'; // Updated import
+import { getBlogPosts } from '../utils/blogLoader'; 
 import { BlogPost } from '../types/blog';
 
-function BlogListPage() {
+interface BlogListPageProps {
+  showLayoutControls?: boolean;
+}
+
+function BlogListPage({ showLayoutControls = false }: BlogListPageProps) {
   const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +29,7 @@ function BlogListPage() {
   }, []);
   
   return (
-    <Layout>
+    <Layout showLayoutControls={showLayoutControls}>
       <section className="blog-list-section">
         <h1 className="page-title">Blog</h1>
         {loading ? (

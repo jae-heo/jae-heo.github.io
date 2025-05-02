@@ -71,55 +71,6 @@ function LayoutControl() {
       }}>
         Reset to Defaults
       </button>
-      
-      <style jsx>{`
-        .layout-control {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
-          background-color: var(--card-bg-color);
-          border: 1px solid var(--border-color);
-          border-radius: 8px;
-          padding: 15px;
-          z-index: 1000;
-          box-shadow: 0 0 10px rgba(0,0,0,0.2);
-          max-width: 300px;
-        }
-        
-        h3 {
-          margin-top: 0;
-          border-bottom: 1px solid var(--border-color);
-          padding-bottom: 8px;
-        }
-        
-        .control-group {
-          margin-bottom: 15px;
-        }
-        
-        label {
-          display: block;
-          margin-bottom: 5px;
-          font-size: 14px;
-        }
-        
-        input[type="range"] {
-          width: 100%;
-        }
-        
-        button {
-          width: 100%;
-          background-color: var(--primary-color);
-          color: white;
-          border: none;
-          padding: 8px;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-        
-        button:hover {
-          background-color: var(--primary-hover-color);
-        }
-      `}</style>
     </div>
   );
 }
