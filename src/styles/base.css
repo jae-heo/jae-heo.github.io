@@ -1,5 +1,12 @@
 /* src/styles/base.css - updated with multilingual support */
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+/* 모든 요소에 폰트 적용 */
+* {
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
 /* CSS variables definition */
 :root {
   --primary-color: #646cff;
@@ -173,3 +180,4 @@ button:focus-visible {
   height: 100vh;
   font-size: 1.5rem;
 }
+

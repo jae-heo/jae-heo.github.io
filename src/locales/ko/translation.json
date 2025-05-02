@@ -31,13 +31,13 @@
   },
   "pages": {
     "home": {
-      "heroTitle": "재영의 기술 블로그에 오신 것을 환영합니다",
-      "heroSubtitle": "프로그래밍과 웹 개발에 관한 생각과 경험을 공유합니다"
+      "heroTitle": "Jae's Blog",
+      "heroSubtitle": "프로그래밍에 관한 생각과 경험을 공유합니다"
     },
     "about": {
       "title": "소개",
-      "aboutMe": "저에 대해서",
-      "aboutBlog": "이 블로그에 대해서",
+      "aboutMe": "About Me",
+      "aboutBlog": "이 블로그는...",
       "skills": "기술 스택"
     },
     "notFound": {
