@@ -15,6 +15,7 @@
 @import './components/blog-post.css';
 @import './components/author.css';
 @import './components/layout-control.css';
+@import './components/language-switcher.css'; /* Added language switcher styles */
 
 /* Page-specific styles */
 @import './pages/home.css';

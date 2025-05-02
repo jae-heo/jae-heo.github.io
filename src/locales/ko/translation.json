@@ -1,22 +1,73 @@
 {
   "blog": {
-    "title": "Jae's Blog",
-    "description": "프로그래밍에 관한 이야기",
-    "copyright": "© {{year}} Jae's Blog. All rights reserved."
+    "title": "재영의 기술 블로그",
+    "description": "프로그래밍과 웹 개발에 관한 이야기",
+    "copyright": "© {{year}} 재영의 기술 블로그. 모든 권리 보유.",
+    "recentPosts": "최근 게시물",
+    "readMore": "더 읽기 →",
+    "noPostsFound": "게시물을 찾을 수 없습니다",
+    "backToPosts": "← 모든 게시물로 돌아가기",
+    "postNotFound": "게시물을 찾을 수 없습니다"
   },
   "nav": {
     "home": "홈",
     "about": "소개",
+    "blog": "블로그",
     "portfolio": "포트폴리오",
     "contact": "연락처"
   },
   "sidebar": {
     "menu": "메뉴",
     "categories": "카테고리",
-    "recentPosts": "최근 포스트",
+    "recentPosts": "최근 게시물",
     "tagCloud": "태그 클라우드",
     "socialMedia": "소셜 미디어",
     "archives": "아카이브",
     "about": "소개"
+  },
+  "author": {
+    "name": "허재영",
+    "bio": "DES 기반 시뮬레이션 개발을 하고 있습니다."
+  },
+  "pages": {
+    "home": {
+      "heroTitle": "재영의 기술 블로그에 오신 것을 환영합니다",
+      "heroSubtitle": "프로그래밍과 웹 개발에 관한 생각과 경험을 공유합니다"
+    },
+    "about": {
+      "title": "소개",
+      "aboutMe": "저에 대해서",
+      "aboutBlog": "이 블로그에 대해서",
+      "skills": "기술 스택"
+    },
+    "notFound": {
+      "title": "페이지를 찾을 수 없습니다",
+      "message": "찾으시는 페이지가 존재하지 않거나 이동되었습니다.",
+      "backToHome": "홈으로 돌아가기"
+    }
+  },
+  "post": {
+    "publishedOn": "{{date}}에 발행됨",
+    "writtenBy": "작성자: {{author}}",
+    "tags": "태그:",
+    "posts": "게시물",
+    "post": "게시물",
+    "loading": "로딩 중..."
+  },
+  "common": {
+    "loading": "로딩 중...",
+    "year": "년",
+    "month": "월",
+    "day": "일"
+  },
+  "ui": {
+    "darkMode": "다크 모드",
+    "lightMode": "라이트 모드",
+    "language": "언어",
+    "lastUpdated": "마지막 업데이트: {{date}}"
+  },
+  "meta": {
+    "pageTitle": "{{title}} | 재영의 기술 블로그",
+    "description": "프로그래밍과 웹 개발에 관한 생각과 경험을 공유하는 블로그"
   }
 }

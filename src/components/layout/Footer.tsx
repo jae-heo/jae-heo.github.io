@@ -9,6 +9,13 @@ function Footer() {
     <footer className="footer">
       <div className="footer-content">
         <p>{t('blog.copyright', { year: currentYear })}</p>
+        
+        {/* Optional: Add additional footer content like links */}
+        <div className="footer-links">
+          <a href="/privacy-policy">Privacy Policy</a>
+          <span className="separator">|</span>
+          <a href="/terms">Terms of Use</a>
+        </div>
       </div>
     </footer>
   );

@@ -2,24 +2,34 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { BlogPost } from '../../types/blog';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { formatDate } from '../../utils/dateFormatter';
+import blogConfig from '../../config/blog';
 
 interface BlogPostDetailProps {
   post: BlogPost;
 }
 
 function BlogPostDetail({ post }: BlogPostDetailProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return format(date, 'PPP', { locale: i18n.language === 'ko' ? ko : undefined });
+  // Get author name based on current language
+  const getLocalizedAuthorName = (authorName: string) => {
+    const currentLang = i18n.language;
+    
+    // If the author is the blog owner, use the localized name
+    if (authorName === blogConfig.blog.author) {
+      return blogConfig.languages.info[currentLang]?.authorName || authorName;
+    }
+    
+    return authorName;
   };
   
   if (!post) {
-    return <div className="post-not-found">Post not found</div>;
+    return <div className="post-not-found">{t('blog.postNotFound')}</div>;
   }
+  
+  const localizedAuthor = getLocalizedAuthorName(post.author);
+  const formattedDate = formatDate(post.date);
   
   return (
     <article className="blog-post-detail">
@@ -27,8 +37,12 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
         <h1 className="post-title">{post.title}</h1>
         
         <div className="post-meta">
-          <span className="post-date">{formatDate(post.date)}</span>
-          <span className="post-author">{post.author}</span>
+          <span className="post-date">
+            {t('post.publishedOn', { date: formattedDate })}
+          </span>
+          <span className="post-author">
+            {t('post.writtenBy', { author: localizedAuthor })}
+          </span>
         </div>
         
         {post.imageUrl && (
@@ -45,6 +59,7 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
         )}
         
         <div className="post-tags">
+          <span className="tags-label">{t('post.tags')}</span>
           {post.tags.map(tag => (
             <Link key={tag} to={`/tag/${tag.toLowerCase()}`} className="post-tag">
               #{tag}
@@ -61,7 +76,7 @@ function BlogPostDetail({ post }: BlogPostDetailProps) {
       <footer className="post-footer">
         <div className="post-navigation">
           <Link to="/blog" className="back-to-posts">
-            ← Back to all posts
+            {t('blog.backToPosts')}
           </Link>
         </div>
       </footer>

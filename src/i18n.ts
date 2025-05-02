@@ -1,41 +1,61 @@
+// src/i18n.ts - Enhanced configuration
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-// 언어 리소스 파일들
+// Language resources
 import translationKO from './locales/ko/translation.json';
 import translationEN from './locales/en/translation.json';
+import blogConfig from './config/blog';
 
-// 언어 리소스
-const resources = {
-  ko: {
-    translation: translationKO
-  },
-  en: {
-    translation: translationEN
-  }
-};
-
+// Initialize i18next
 i18n
-  // 브라우저의 언어 감지
+  // Detect browser language
   .use(LanguageDetector)
-  // react-i18next 초기화
+  // Initialize react-i18next
   .use(initReactI18next)
-  // i18n 초기화
+  // Initialize i18n
   .init({
-    resources,
-    fallbackLng: 'ko', // 기본 언어
-    debug: import.meta.env.DEV, // 개발 환경에서만 디버그 모드 활성화
+    resources: {
+      ko: {
+        translation: translationKO
+      },
+      en: {
+        translation: translationEN
+      }
+    },
+    fallbackLng: blogConfig.languages.default,
+    debug: import.meta.env.DEV, // Debug mode in development
     interpolation: {
-      escapeValue: false // XSS 방지를 위한 이스케이프 비활성화 (React에서는 기본적으로 처리함)
+      escapeValue: false // React already handles this
     },
     detection: {
       order: ['querystring', 'cookie', 'localStorage', 'navigator'],
-      lookupQuerystring: 'lang', // URL에서 언어 파라미터 (예: ?lang=en)
-      lookupCookie: 'i18n', // 쿠키에 저장될 이름
+      lookupQuerystring: 'lang', // URL parameter (e.g., ?lang=en)
+      lookupCookie: 'i18n', // Cookie name
       lookupLocalStorage: 'i18nLanguage',
       caches: ['localStorage', 'cookie']
+    },
+    react: {
+      useSuspense: true,
     }
   });
+
+// Function to change language - can be imported and used anywhere
+export const changeLanguage = (lang: string) => {
+  i18n.changeLanguage(lang);
+  
+  // Save language preference to localStorage
+  localStorage.setItem('i18nLanguage', lang);
+  
+  // Update document dir attribute for RTL languages if needed
+  const isRTL = blogConfig.languages.info[lang]?.rtl || false;
+  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+};
+
+// Initialize language direction based on current language
+const currentLang = i18n.language;
+const isRTL = blogConfig.languages.info[currentLang]?.rtl || false;
+document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
 
 export default i18n;

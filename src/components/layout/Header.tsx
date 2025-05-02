@@ -15,6 +15,7 @@ function Header() {
             <h1>{t('blog.title')}</h1>
           </Link>
         </div>
+        
         <nav className="main-nav">
           <ul>
             {blogConfig.mainMenu
@@ -22,12 +23,16 @@ function Header() {
               .sort((a, b) => a.order - b.order)
               .map(item => (
                 <li key={item.id}>
-                  <Link to={item.path}>{t(`nav.${item.name.toLowerCase()}`)}</Link>
+                  <Link to={item.path}>
+                    {t(`nav.${item.name}`)}
+                  </Link>
                 </li>
               ))}
           </ul>
         </nav>
-        <LangSwitcher />
+        
+        {/* Use the dropdown style for language switching */}
+        <LangSwitcher dropdownStyle={true} showText={true} />
       </div>
     </header>
   );

@@ -11,14 +11,16 @@ interface HomePageProps {
 }
 
 function HomePage({ showLayoutControls = false }: HomePageProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Reload posts when language changes
   useEffect(() => {
     async function loadPosts() {
       try {
-        const posts = await getRecentBlogPosts();
+        setLoading(true);
+        const posts = await getRecentBlogPosts(6); // Get more posts for homepage
         setRecentPosts(posts);
       } catch (error) {
         console.error('Failed to load recent posts:', error);
@@ -28,24 +30,27 @@ function HomePage({ showLayoutControls = false }: HomePageProps) {
     }
 
     loadPosts();
-  }, []);
+    
+    // Update page title with translated title
+    document.title = t('blog.title');
+  }, [i18n.language, t]); // Re-run when language changes
   
   return (
     <Layout showLayoutControls={showLayoutControls}>
       <section className="hero-section">
         <div className="hero-content">
-          <h1>{t('blog.title')}</h1>
-          <p>{t('blog.description')}</p>
+          <h1>{t('pages.home.heroTitle')}</h1>
+          <p>{t('pages.home.heroSubtitle')}</p>
         </div>
       </section>
       
       <section className="recent-posts-section">
         {loading ? (
-          <div className="loading">Loading recent posts...</div>
+          <div className="loading">{t('common.loading')}</div>
         ) : (
           <BlogPostList 
             posts={recentPosts} 
-            title={t('sidebar.recentPosts')} 
+            title={t('blog.recentPosts')} 
           />
         )}
       </section>
