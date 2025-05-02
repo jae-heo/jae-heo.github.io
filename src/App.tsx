@@ -15,7 +15,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import { clearCache } from './utils/blogLoader';
 
 function App() {
-  const { t, i18n, currentLang, isRTL } = useI18n();
+  const { t, currentLang, isRTL } = useI18n();
   const isDevelopment = import.meta.env.DEV;
   
   useEffect(() => {

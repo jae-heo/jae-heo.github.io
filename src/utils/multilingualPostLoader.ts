@@ -1,7 +1,6 @@
 // src/utils/multilingualPostLoader.ts
 import { BlogPost } from '../types/blog';
 import { getBlogPosts, getBlogPostBySlug } from './blogLoader';
-import blogConfig from '../config/blog';
 import i18n from '../i18n';
 
 // Interface for multilingual posts (extends BlogPost)
@@ -18,7 +17,6 @@ export interface MultilingualBlogPost extends BlogPost {
  */
 export function getLocalizedPost(post: MultilingualBlogPost): BlogPost {
   const currentLang = i18n.language;
-  const defaultLang = blogConfig.languages.default;
   
   // If post doesn't have translations or current language matches post's original language,
   // return the original post
