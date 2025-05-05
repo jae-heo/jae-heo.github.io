@@ -1,0 +1,78 @@
+.notification {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--primary-color);
+  border-radius: 6px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  max-width: 90vw;
+  transform: translateX(400px);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.hide {
+  transform: translateX(400px);
+  opacity: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.language {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.message {
+  font-size: 0.9rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--light-text-color);
+  padding: 0;
+  margin-left: 10px;
+  transition: color 0.3s;
+}
+
+.closeButton:hover {
+  color: var(--text-color);
+}
+
+/* RTL 지원 */
+[dir="rtl"] .notification {
+  right: auto;
+  left: 30px;
+  border-left: 1px solid var(--border-color);
+  border-right: 4px solid var(--primary-color);
+  transform: translateX(-400px);
+}
+
+[dir="rtl"] .show {
+  transform: translateX(0);
+}
+
+[dir="rtl"] .hide {
+  transform: translateX(-400px);
+}

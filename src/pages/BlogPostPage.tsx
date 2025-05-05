@@ -3,19 +3,15 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import BlogPostDetail from '../components/blog/BlogPostDetail';
-import { getBlogPostBySlug } from '../utils/blogLoader';
+import { getLanguageFilteredPostBySlug } from '../utils/languageFilteredBlogLoader';
 import { BlogPost } from '../types';
 import { useI18n } from '../hooks/useI18n';
 import styles from './BlogPostPage.module.css';
 
-/**
- * Blog post page component
- * Displays a single blog post
- */
 function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, currentLang } = useI18n();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   
@@ -28,14 +24,14 @@ function BlogPostPage() {
       
       try {
         setLoading(true);
-        const fetchedPost = await getBlogPostBySlug(slug);
+        const fetchedPost = await getLanguageFilteredPostBySlug(slug);
         
         if (fetchedPost) {
           setPost(fetchedPost);
           // Set page title to post title
           document.title = fetchedPost.title;
         } else {
-          // Post not found, redirect to blog list
+          // Post not found in current language, redirect to blog list
           navigate('/blog');
         }
       } catch (error) {
@@ -47,7 +43,7 @@ function BlogPostPage() {
     }
 
     loadPost();
-  }, [slug, navigate]);
+  }, [slug, navigate, currentLang]);
   
   return (
     <Layout>

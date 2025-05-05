@@ -1,9 +1,9 @@
-// src/App.tsx
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { Suspense, useEffect } from 'react';
 import { useI18n } from './hooks/useI18n';
+import { LanguageFilteredBlogProvider } from './contexts/LanguageFilteredBlogContext';
+import LanguageSwitchNotification from './components/common/LanguageSwitchNotification';
 
-// Pages
 import HomePage from './pages/HomePage';
 import BlogListPage from './pages/BlogListPage';
 import BlogPostPage from './pages/BlogPostPage';
@@ -11,7 +11,6 @@ import AboutPage from './pages/AboutPage';
 import TagPage from './pages/TagPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-// Utils
 import { clearCache } from './utils/blogLoader';
 
 function App() {
@@ -42,16 +41,19 @@ function App() {
 
   return (
     <Router>
+    <LanguageFilteredBlogProvider>
       <Suspense fallback={<div className="loading">{t('common.loading')}</div>}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/blog" element={<BlogListPage />} />
-          <Route path="/blog/:slug" element={<BlogPostPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/tag/:tag" element={<TagPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/blog" element={<BlogListPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/tag/:tag" element={<TagPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        <LanguageSwitchNotification />
       </Suspense>
+    </LanguageFilteredBlogProvider>
     </Router>
   );
 }

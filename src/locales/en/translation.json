@@ -7,7 +7,8 @@
     "readMore": "Read More →",
     "noPostsFound": "No posts found",
     "backToPosts": "← Back to all posts",
-    "postNotFound": "Post not found"
+    "postNotFound": "Post not found",
+    "noPostsInLanguage": "No posts available in the current language ({{language}})."
   },
   "nav": {
     "home": "Home",
@@ -23,7 +24,10 @@
     "tagCloud": "Tag Cloud",
     "socialMedia": "Social Media",
     "archives": "Archives",
-    "about": "About"
+    "about": "About",
+    "noCategories": "No categories available for the current language",
+    "noPosts": "No posts available for the current language",
+    "noTags": "No tags available for the current language"
   },
   "author": {
     "name": "Jae-young Heo",
@@ -69,5 +73,9 @@
   "meta": {
     "pageTitle": "{{title}} | Jae's Tech Blog",
     "description": "A blog sharing thoughts and experiences on programming and web development"
+  },
+  "notification": {
+    "postsInLanguage": "There are {{count}} posts available in {{language}}.",
+    "noPostsInLanguage": "No posts available in {{language}}."
   }
 }

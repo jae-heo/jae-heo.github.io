@@ -1,36 +1,19 @@
 // src/pages/HomePage.tsx
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
-import { getRecentBlogPosts } from '../utils/blogLoader';
-import { BlogPost } from '../types';
+import { useLanguageFilteredBlog } from '../contexts/LanguageFilteredBlogContext';
 import { useI18n } from '../hooks/useI18n';
 import styles from './HomePage.module.css';
 
-/**
- * Home page component
- * Features a hero section and recent blog posts
- */
 function HomePage() {
   const { t } = useI18n();
-  const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadPosts() {
-      try {
-        setLoading(true);
-        const posts = await getRecentBlogPosts(6);
-        setRecentPosts(posts);
-      } catch (error) {
-        console.error('Failed to load recent posts:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadPosts();
-  }, []);
+  const { posts, loading, error } = useLanguageFilteredBlog();
+  
+  // Get only the recent posts from the filtered list
+  const recentPosts = [...posts]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 6);
   
   return (
     <Layout>
@@ -46,6 +29,8 @@ function HomePage() {
       <section className={styles.recentPostsSection}>
         {loading ? (
           <div className="loading">{t('common.loading')}</div>
+        ) : error ? (
+          <div className="error">{error}</div>
         ) : (
           <BlogPostList 
             posts={recentPosts} 

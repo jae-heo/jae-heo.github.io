@@ -113,3 +113,40 @@
     justify-content: flex-start;
   }
 }
+/* 태그 클라우드 개선 스타일 */
+.tagCloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.tag {
+  display: inline-block;
+  padding: 3px 8px;
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.5;
+}
+
+.tag:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  transform: translateY(-2px);
+}
+
+/* 게시물 또는 카테고리가 없을 때 메시지 */
+.noCategories,
+.noPosts,
+.noTags {
+  color: var(--light-text-color);
+  font-style: italic;
+  text-align: center;
+  padding: var(--spacing-md) 0;
+  font-size: 0.9rem;
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  margin-top: var(--spacing-sm);
+}

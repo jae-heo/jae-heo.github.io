@@ -7,7 +7,8 @@
     "readMore": "더 읽기 →",
     "noPostsFound": "게시물을 찾을 수 없습니다",
     "backToPosts": "← 모든 게시물로 돌아가기",
-    "postNotFound": "게시물을 찾을 수 없습니다"
+    "postNotFound": "게시물을 찾을 수 없습니다",
+    "noPostsInLanguage": "현재 언어({{language}})로 작성된 게시물이 없습니다."
   },
   "nav": {
     "home": "홈",
@@ -23,7 +24,10 @@
     "tagCloud": "태그 클라우드",
     "socialMedia": "소셜 미디어",
     "archives": "아카이브",
-    "about": "소개"
+    "about": "소개",
+    "noCategories": "현재 선택된 언어의 카테고리가 없습니다",
+    "noPosts": "현재 선택된 언어의 게시물이 없습니다",
+    "noTags": "현재 선택된 언어의 태그가 없습니다"
   },
   "author": {
     "name": "허재영",
@@ -69,5 +73,9 @@
   "meta": {
     "pageTitle": "{{title}} | 재영의 기술 블로그",
     "description": "프로그래밍과 웹 개발에 관한 생각과 경험을 공유하는 블로그"
+  },
+  "notification": {
+    "postsInLanguage": "현재 언어({{language}})로 작성된 게시물이 {{count}}개 있습니다.",
+    "noPostsInLanguage": "현재 언어({{language}})로 작성된 게시물이 없습니다."
   }
 }
