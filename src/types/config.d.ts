@@ -1,36 +1,7 @@
-// src/types/config.d.ts
-
-// Define language info structure with extended properties
-interface LanguageInfo {
-  name: string;
-  flag: string;
-  rtl: boolean;
-  dateFormat: string;
-  authorName?: string;
-  authorBio?: string;
-}
-
-// Define languages configuration
-interface LanguagesConfig {
-  available: string[];
-  default: string;
-  info: {
-    [key: string]: LanguageInfo;
-  };
-}
-
-// Define menu item
-interface MenuItem {
-  id: number;
-  name: string; // This is the i18n key for translation
-  path: string;
-  icon: string;
-  visible: boolean;
-  order: number;
-}
-
-// Social media links
-interface SocialMediaLinks {
+/**
+ * Social media links interface
+ */
+export interface SocialLinks {
   github?: string;
   twitter?: string;
   linkedin?: string;
@@ -39,17 +10,20 @@ interface SocialMediaLinks {
   [key: string]: string | undefined;
 }
 
-// Define features
-interface Features {
-  enableComments: boolean;
-  enableSocialSharing: boolean;
-  enableDarkMode: boolean;
-  enableSubscription: boolean;
+/**
+ * Feature toggles interface
+ */
+export interface Features {
+  darkMode: boolean;
+  comments: boolean;
+  socialSharing: boolean;
   postsPerPage: number;
 }
 
-// Define blog config
-interface BlogConfig {
+/**
+ * Blog configuration interface
+ */
+export interface BlogConfig {
   blog: {
     title: string;
     description: string;
@@ -60,16 +34,6 @@ interface BlogConfig {
   };
   languages: LanguagesConfig;
   mainMenu: MenuItem[];
-  socialMedia?: SocialMediaLinks;
+  socialLinks?: SocialLinks;
   features: Features;
 }
-
-// Export the types for use in other files
-export type { 
-  BlogConfig, 
-  LanguagesConfig, 
-  LanguageInfo, 
-  MenuItem, 
-  Features,
-  SocialMediaLinks
-};

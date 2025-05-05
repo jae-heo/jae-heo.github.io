@@ -1,23 +1,23 @@
 // src/components/common/LanguageSwitcher.tsx
 import { useState, useRef, useEffect } from 'react';
 import { useI18n } from '../../hooks/useI18n';
+import { LanguagesConfig, Language } from '../../types'; // Import from centralized types
 import styles from './LanguageSwitcher.module.css';
 
 interface LanguageSwitcherProps {
   showText?: boolean;
 }
 
-/**
- * Language switcher component
- * Supports both button and dropdown styles
- */
 function LanguageSwitcher({ showText = false }: LanguageSwitcherProps) {
   const { currentLang, languages, switchLanguage } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
-  // Get current language info
-  const currentLanguage = languages.info[currentLang];
+  // Use type assertion to tell TypeScript what type the languages object is
+  const typedLanguages = languages as LanguagesConfig;
+  
+  // Get current language info with proper typing
+  const currentLanguage = typedLanguages.info[currentLang];
   
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -49,8 +49,8 @@ function LanguageSwitcher({ showText = false }: LanguageSwitcherProps) {
       {/* Language dropdown */}
       {isOpen && (
         <div className={styles.dropdown}>
-          {languages.available.map(code => {
-            const lang = languages.info[code];
+          {typedLanguages.available.map(code => {
+            const lang = typedLanguages.info[code];
             if (!lang) return null;
             
             return (

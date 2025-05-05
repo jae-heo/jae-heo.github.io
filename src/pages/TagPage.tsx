@@ -1,17 +1,19 @@
-// src/pages/TagPage.tsx
+// src/pages/TagPage.tsx - Fixed version
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
 import { useLanguageFilteredBlog } from '../contexts/LanguageFilteredBlogContext';
 import { useI18n } from '../hooks/useI18n';
+import { BlogPost } from '../types';
 import styles from './TagPage.module.css';
 
 function TagPage() {
   const { tag } = useParams<{ tag: string }>();
   const { t, getPageTitle } = useI18n();
   const { posts, loading } = useLanguageFilteredBlog();
-  const [taggedPosts, setTaggedPosts] = useState([]);
+  // Initialize with the correct type
+  const [taggedPosts, setTaggedPosts] = useState<BlogPost[]>([]);
   
   useEffect(() => {
     // Set page title

@@ -8,11 +8,18 @@ export interface BlogPost {
   tags: string[];
   imageUrl?: string;
   slug: string;
-  language?: string; // Add this line to specify the post language explicitly
+  language?: string; // Explicit language identifier
 }
+
 export interface Category {
   id: string;
   name: string;
   slug: string;
   count: number;
+}
+
+export interface MultilingualBlogPost extends BlogPost {
+  translations?: {
+    [langCode: string]: Partial<BlogPost>;
+  };
 }
