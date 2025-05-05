@@ -11,4 +11,15 @@ export default defineConfig({
       globalThis.Buffer = Buffer;
     `,
   },
+    define: {
+    'process.env': {},
+  },
+  resolve: {
+    alias: {
+      buffer: 'buffer',
+    },
+  },
+  optimizeDeps: {
+    include: ['buffer'],
+  },
 })
