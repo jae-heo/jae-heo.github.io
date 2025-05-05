@@ -7,6 +7,7 @@ author: "홍길동"
 tags: ["React", "TypeScript", "Web Development"]
 imageUrl: "/images/react-typescript.jpg"
 slug: "creating-blog-with-react-and-typescript"
+language: "ko"
 ---
 
 # 리액트와 타입스크립트로 블로그 만들기

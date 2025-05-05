@@ -1,3 +1,4 @@
+// src/utils/markdownLoader.ts
 import { BlogPost, Category } from '../types';
 import matter from 'gray-matter';
 
@@ -6,7 +7,7 @@ let postsCache: BlogPost[] | null = null;
 let categoriesCache: Category[] | null = null;
 
 /**
- * Load blog posts from markdown files
+ * Load blog posts from markdown files in the content/posts directory
  */
 export async function loadBlogPosts(): Promise<BlogPost[]> {
   // Return cached posts if available
@@ -15,66 +16,70 @@ export async function loadBlogPosts(): Promise<BlogPost[]> {
   }
 
   try {
-    // Use import.meta.glob to load markdown files
-    const postFiles = import.meta.glob('/src/content/posts/*.md', { query: '?raw', import: 'default' });
+    // Use Vite's import.meta.glob to get all markdown files
+    const postModules = import.meta.glob('../content/posts/*.md', { eager: true, as: 'raw' });
     
-    // If no files found, return empty array
-    if (Object.keys(postFiles).length === 0) {
-      console.warn('No markdown files found in /src/content/posts/');
-      postsCache = [];
-      return postsCache;
+    // If no modules found, return empty array
+    if (Object.keys(postModules).length === 0) {
+      console.warn('No markdown files found in content/posts directory');
+      return [];
     }
-
-    const posts: BlogPost[] = [];
-
-    // Process each markdown file
-    for (const [path, loader] of Object.entries(postFiles)) {
-      try {
-        const fileContent = await loader() as string;
-        
-        // Parse frontmatter and content using gray-matter
-        const { data: frontmatter, content } = matter(fileContent);
-
-        // Validate required frontmatter fields
-        if (!frontmatter.id || !frontmatter.title || !frontmatter.slug) {
-          console.warn(`Skipping invalid post at ${path}: missing required frontmatter fields (id, title, or slug)`);
-          continue;
-        }
-
-        // Construct BlogPost object
-        const post: BlogPost = {
-          id: frontmatter.id.toString(),
-          title: frontmatter.title,
-          description: frontmatter.description || '',
-          content: content.trim(),
-          date: frontmatter.date || new Date().toISOString().split('T')[0],
-          author: frontmatter.author || 'Anonymous',
-          tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
-          imageUrl: frontmatter.imageUrl || '/images/default.jpg',
-          slug: frontmatter.slug,
-          language: frontmatter.language || 'en' // Default to 'en' if not specified
-        };
-
-        posts.push(post);
-      } catch (error) {
-        console.error(`Error processing file ${path}:`, error);
-      }
-    }
-
-    // Log if no valid posts were loaded
-    if (posts.length === 0) {
-      console.warn('No valid posts loaded from markdown files');
-    }
-
-    // Cache and return the loaded posts
-    postsCache = posts;
-    return postsCache;
-
+    
+    // Process each markdown file using gray-matter
+    const posts: BlogPost[] = Object.entries(postModules).map(([path, content]) => {
+      // Parse frontmatter and content using gray-matter
+      const { data, content: markdownContent } = matter(content as string);
+      
+      // Extract the filename (slug) from the path
+      // e.g., "../content/posts/my-post.md" -> "my-post"
+      const filename = path.split('/').pop()?.replace('.md', '') || '';
+      
+      // Use the frontmatter data to populate the BlogPost object
+      return {
+        id: data.id || filename,
+        title: data.title || 'Untitled',
+        description: data.description || '',
+        content: markdownContent,
+        date: data.date || new Date().toISOString(),
+        author: data.author || 'Anonymous',
+        tags: data.tags || [],
+        imageUrl: data.imageUrl || undefined,
+        slug: data.slug || filename,
+        language: data.language || detectLanguageFromContent(data.title + ' ' + markdownContent),
+      };
+    });
+    
+    // Sort posts by date (newest first)
+    const sortedPosts = posts.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    
+    // Cache the posts
+    postsCache = sortedPosts;
+    
+    return sortedPosts;
   } catch (error) {
-    console.error('Error loading blog posts:', error);
-    postsCache = [];
-    return postsCache;
+    console.error('Error loading blog posts from markdown files:', error);
+    return [];
   }
+}
+
+/**
+ * Simple language detection function
+ * Detects if content is primarily Korean or English
+ */
+function detectLanguageFromContent(text: string): 'ko' | 'en' {
+  // Count Korean characters (Hangul)
+  const koreanPattern = /[가-힣]/g;
+  const koreanMatches = text.match(koreanPattern) || [];
+  
+  // If more than 5 Korean characters, assume it's Korean
+  if (koreanMatches.length > 5) {
+    return 'ko';
+  }
+  
+  // Default to English
+  return 'en';
 }
 
 /**
@@ -100,14 +105,6 @@ export async function getBlogPostsByTag(tag: string): Promise<BlogPost[]> {
   return posts.filter(post => 
     post.tags.map(t => t.toLowerCase()).includes(tag.toLowerCase())
   );
-}
-
-/**
- * Get blog posts by language
- */
-export async function getBlogPostsByLanguage(language: string): Promise<BlogPost[]> {
-  const posts = await loadBlogPosts();
-  return posts.filter(post => post.language?.toLowerCase() === language.toLowerCase());
 }
 
 /**

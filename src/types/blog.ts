@@ -17,9 +17,3 @@ export interface Category {
   slug: string;
   count: number;
 }
-
-export interface MultilingualBlogPost extends BlogPost {
-  translations?: {
-    [langCode: string]: Partial<BlogPost>;
-  };
-}
