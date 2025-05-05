@@ -5,21 +5,4 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/',
-  esbuild: {
-    banner: `
-      import { Buffer } from 'buffer';
-      globalThis.Buffer = Buffer;
-    `,
-  },
-    define: {
-    'process.env': {},
-  },
-  resolve: {
-    alias: {
-      buffer: 'buffer',
-    },
-  },
-  optimizeDeps: {
-    include: ['buffer'],
-  },
 })
