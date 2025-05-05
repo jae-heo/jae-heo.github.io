@@ -16,7 +16,7 @@ export async function loadBlogPosts(): Promise<BlogPost[]> {
 
   try {
     // Use import.meta.glob to load markdown files
-    const postFiles = import.meta.glob('/src/content/posts/*.md', { query: '?raw', import: 'default' });
+    const postFiles = import.meta.glob('../content/posts/*.md', { query: '?raw', import: 'default' });
     
     // If no files found, return empty array
     if (Object.keys(postFiles).length === 0) {
