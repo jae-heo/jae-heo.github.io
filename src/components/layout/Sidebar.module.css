@@ -1,7 +1,7 @@
 /* Sidebar component styles */
 
 .sidebar {
-  width: var(--sidebar-width, 300px);
+  width: var(--sidebar-width);
   flex-shrink: 0;
 }
 

@@ -13,13 +13,13 @@
   width: 100%;
   padding: var(--spacing-md);
   gap: var(--spacing-md);
-  max-width: 1440px;
+  max-width: 1500px;
   margin: 0 auto;
 }
 
 .content {
   flex: 1;
-  min-width: 0;
+  min-width: var(--content-min-width);;
   max-width: var(--content-max-width);
   margin: 0 auto;
 }
@@ -65,7 +65,7 @@
   }
   
   .sidebarRight {
-    width: var(--sidebar-width);
+    width: 100%;
     order: 2;
   }
   
