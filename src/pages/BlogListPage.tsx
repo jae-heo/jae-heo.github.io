@@ -23,9 +23,6 @@ function BlogListPage() {
       <section className={styles.section}>
         <h1 className={styles.pageTitle}>
           {t('nav.blog')}
-          <span className={styles.languageIndicator}>
-            {languageDisplay}
-          </span>
         </h1>
         
         {loading ? (
