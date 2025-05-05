@@ -1,3 +1,7 @@
+
+      import { Buffer } from 'buffer';
+      globalThis.Buffer = Buffer;
+    
 const n=`---
 id: "2"
 title: "웹 개발에서 다국어 지원하기"
@@ -7,6 +11,7 @@ author: "홍길동"
 tags: ["i18n", "Web Development", "Localization"]
 imageUrl: "/images/i18n.jpg"
 slug: "multilingual-support-in-web-development"
+language: "ko"
 ---
 
 # 웹 개발에서 다국어 지원하기

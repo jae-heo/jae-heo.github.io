@@ -1,3 +1,7 @@
+
+      import { Buffer } from 'buffer';
+      globalThis.Buffer = Buffer;
+    
 const n=`---
 id: "3"
 title: "GitHub Actions로 블로그 자동 배포하기"
@@ -7,6 +11,7 @@ author: "김개발"
 tags: ["GitHub", "CI/CD", "DevOps"]
 imageUrl: "/images/github-actions.jpg"
 slug: "auto-deploy-blog-with-github-actions"
+language: "ko"
 ---
 
 # GitHub Actions로 블로그 자동 배포하기
