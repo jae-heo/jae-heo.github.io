@@ -1,7 +1,3 @@
-
-      import { Buffer } from 'buffer';
-      globalThis.Buffer = Buffer;
-    
 const n=`---
 id: "3"
 title: "GitHub Actions로 블로그 자동 배포하기"

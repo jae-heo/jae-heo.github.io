@@ -1,7 +1,3 @@
-
-      import { Buffer } from 'buffer';
-      globalThis.Buffer = Buffer;
-    
 const n=`---
 id: "2"
 title: "웹 개발에서 다국어 지원하기"

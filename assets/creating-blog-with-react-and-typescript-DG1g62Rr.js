@@ -1,7 +1,3 @@
-
-      import { Buffer } from 'buffer';
-      globalThis.Buffer = Buffer;
-    
 const n=`---
 id: "1"
 title: "리액트와 타입스크립트로 블로그 만들기"
