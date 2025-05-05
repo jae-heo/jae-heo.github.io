@@ -1,7 +1,7 @@
 // src/components/common/LanguageSwitcher.tsx
 import { useState, useRef, useEffect } from 'react';
 import { useI18n } from '../../hooks/useI18n';
-import { LanguagesConfig, Language } from '../../types'; // Import from centralized types
+import { LanguagesConfig } from '../../types'; // Import from centralized types
 import styles from './LanguageSwitcher.module.css';
 
 interface LanguageSwitcherProps {

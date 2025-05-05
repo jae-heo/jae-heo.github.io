@@ -21,7 +21,7 @@ interface SidebarProps {
  */
 function Sidebar({ position, className }: SidebarProps) {
   const { t, i18n } = useTranslation();
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [_categories, setCategories] = useState<Category[]>([]);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);

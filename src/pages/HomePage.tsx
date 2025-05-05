@@ -1,5 +1,4 @@
 // src/pages/HomePage.tsx
-import { useEffect } from 'react';
 import Layout from '../components/layout/Layout';
 import BlogPostList from '../components/blog/BlogPostList';
 import { useLanguageFilteredBlog } from '../contexts/LanguageFilteredBlogContext';
