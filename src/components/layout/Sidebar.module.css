@@ -23,6 +23,7 @@
 
 .section h3 {
   margin-top: 0;
+  margin-bottom: 20px;
   border-bottom: 1px solid var(--border-color);
   padding-bottom: var(--spacing-sm);
   font-size: 1.2rem;
