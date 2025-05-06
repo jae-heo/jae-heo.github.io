@@ -33,11 +33,10 @@ jobs:
           NODE_ENV: production
 
       - name: Generate Sitemap
-        run: |
-          node ./scripts/generateSitemap.js
+        run: node ./scripts/generateSitemap.js
         env:
           SITE_BASE_URL: https://jae-heo.github.io
-          SITEMAP_OUTPUT_PATH: ./dist/sitemap.xml
+          SITEMAP_OUTPUT_PATH: ./public/sitemap.xml
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

@@ -1,6 +1,6 @@
 // scripts/submitSitemap.js
-const { google } = require('googleapis');
-const { JWT } = require('google-auth-library');
+import { google } from 'googleapis';
+import { JWT } from 'google-auth-library';
 
 // Create authentication client using environment variable
 const createAuthClient = () => {

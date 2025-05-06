@@ -1,6 +1,11 @@
 // scripts/generateSitemap.js
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get current file directory in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Generate sitemap.xml file for the blog
@@ -19,6 +24,8 @@ async function generateSitemap(baseUrl, outputPath) {
     { url: '/', priority: 1.0 },
     { url: '/blog', priority: 0.8 },
     { url: '/about', priority: 0.7 },
+    { url: '/portfolio', priority: 0.7 },
+    { url: '/contact', priority: 0.6 },
   ];
   
   // Add static pages to entries
@@ -62,6 +69,8 @@ async function generateSitemap(baseUrl, outputPath) {
   // Write sitemap.xml file
   fs.writeFileSync(outputPath, sitemapContent);
   console.log(`Sitemap generated successfully at ${outputPath}!`);
+  
+  return sitemapContent;
 }
 
 // Get the base URL from environment variable or fallback
