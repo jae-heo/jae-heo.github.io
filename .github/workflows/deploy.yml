@@ -1,3 +1,4 @@
+# .github/workflows/deploy.yml
 name: Deploy to GitHub Pages
 
 on:
@@ -30,6 +31,13 @@ jobs:
         env:
           # Add environment variables if needed
           NODE_ENV: production
+
+      - name: Generate Sitemap
+        run: |
+          npx ts-node -O '{"module":"commonjs"}' ./scripts/generateSitemap.ts
+        env:
+          SITE_BASE_URL: https://jae-heo.github.io
+          SITEMAP_OUTPUT_PATH: ./dist/sitemap.xml
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
