@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate Sitemap
         run: |
-          npx ts-node -O '{"module":"commonjs"}' ./scripts/generateSitemap.ts
+          node ./scripts/generateSitemap.js
         env:
           SITE_BASE_URL: https://jae-heo.github.io
           SITEMAP_OUTPUT_PATH: ./dist/sitemap.xml
