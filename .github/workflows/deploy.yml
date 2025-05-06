@@ -35,7 +35,6 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # Add environment variables if needed
           NODE_ENV: production
 
       - name: Deploy 🚀
@@ -46,7 +45,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}  # Using the built-in token
 
       - name: Submit Sitemap to Google Search Console
-        if: success()  # Only run if deployment was successful
+        if: success() && env.GOOGLE_SEARCH_CONSOLE_KEY != ''  # Only run if deployment was successful and key is set
         run: |
           npm install googleapis google-auth-library
           node ./scripts/submitSitemap.js
