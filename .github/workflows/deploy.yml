@@ -53,3 +53,13 @@ jobs:
           GOOGLE_SEARCH_CONSOLE_KEY: ${{ secrets.GOOGLE_SEARCH_CONSOLE_KEY }}
           SITE_URL: https://jae-heo.github.io
           SITEMAP_URL: https://jae-heo.github.io/sitemap.xml
+
+      - name: Debug Secrets
+        run: |
+          if [ -z "$GOOGLE_SEARCH_CONSOLE_KEY_EXISTS" ]; then
+            echo "Secret GOOGLE_SEARCH_CONSOLE_KEY is not set"
+          else
+            echo "Secret GOOGLE_SEARCH_CONSOLE_KEY exists"
+          fi
+        env:
+          GOOGLE_SEARCH_CONSOLE_KEY_EXISTS: ${{ secrets.GOOGLE_SEARCH_CONSOLE_KEY != '' }}
