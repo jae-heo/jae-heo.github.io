@@ -26,17 +26,17 @@ jobs:
       - name: Type check
         run: npx tsc --noEmit
         
-      - name: Build
-        run: npm run build
-        env:
-          # Add environment variables if needed
-          NODE_ENV: production
-
       - name: Generate Sitemap
         run: node ./scripts/generateSitemap.js
         env:
           SITE_BASE_URL: https://jae-heo.github.io
           SITEMAP_OUTPUT_PATH: ./public/sitemap.xml
+
+      - name: Build
+        run: npm run build
+        env:
+          # Add environment variables if needed
+          NODE_ENV: production
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
@@ -44,3 +44,13 @@ jobs:
           folder: dist
           branch: gh-pages
           token: ${{ secrets.GITHUB_TOKEN }}  # Using the built-in token
+
+      - name: Submit Sitemap to Google Search Console
+        if: success()  # Only run if deployment was successful
+        run: |
+          npm install googleapis google-auth-library
+          node ./scripts/submitSitemap.js
+        env:
+          GOOGLE_SEARCH_CONSOLE_KEY: ${{ secrets.GOOGLE_SEARCH_CONSOLE_KEY }}
+          SITE_URL: https://jae-heo.github.io
+          SITEMAP_URL: https://jae-heo.github.io/sitemap.xml
