@@ -6,7 +6,7 @@ let postsCache: BlogPost[] | null = null;
 let categoriesCache: Category[] | null = null;
 
 /**
- * Load blog posts from markdown files
+ * Load blog posts from markdown files recursively from all subdirectories
  */
 export async function loadBlogPosts(): Promise<BlogPost[]> {
   // Return cached posts if available
@@ -15,12 +15,13 @@ export async function loadBlogPosts(): Promise<BlogPost[]> {
   }
 
   try {
-    // Use import.meta.glob to load markdown files
-    const postFiles = import.meta.glob('../content/posts/*.md', { query: '?raw', import: 'default' });
+    // Use import.meta.glob to load markdown files from all directories and subdirectories
+    // The double asterisk ** syntax tells Vite to search recursively
+    const postFiles = import.meta.glob('../content/posts/**/*.md', { query: '?raw', import: 'default' });
     
     // If no files found, return empty array
     if (Object.keys(postFiles).length === 0) {
-      console.warn('No markdown files found in /src/content/posts/');
+      console.warn('No markdown files found in /src/content/posts/ or its subdirectories');
       postsCache = [];
       return postsCache;
     }
@@ -35,9 +36,9 @@ export async function loadBlogPosts(): Promise<BlogPost[]> {
         // Parse frontmatter and content using gray-matter
         const { data: frontmatter, content } = matter(fileContent);
 
-        // Validate required frontmatter fields
+        // Skip files without necessary frontmatter
         if (!frontmatter.id || !frontmatter.title || !frontmatter.slug) {
-          console.warn(`Skipping invalid post at ${path}: missing required frontmatter fields (id, title, or slug)`);
+          console.warn(`Skipping blog post ${path}: Missing required frontmatter fields (id, title, or slug)`);
           continue;
         }
 
@@ -56,22 +57,23 @@ export async function loadBlogPosts(): Promise<BlogPost[]> {
         };
 
         posts.push(post);
-      } catch (error) {
-        console.error(`Error processing file ${path}:`, error);
+      } catch (err) {
+        console.error(`Error processing file ${path}:`, err);
       }
     }
-
-    // Log if no valid posts were loaded
-    if (posts.length === 0) {
-      console.warn('No valid posts loaded from markdown files');
-    }
-
-    // Cache and return the loaded posts
-    postsCache = posts;
-    return postsCache;
-
-  } catch (error) {
-    console.error('Error loading blog posts:', error);
+    
+    // Sort posts by date (newest first)
+    const sortedPosts = posts.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    
+    console.log(`Found ${sortedPosts.length} blog posts across all directories`);
+    
+    // Cache the posts
+    postsCache = sortedPosts;
+    return sortedPosts;
+  } catch (err) {
+    console.error('Error scanning blog posts:', err);
     postsCache = [];
     return postsCache;
   }

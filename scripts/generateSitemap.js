@@ -98,7 +98,7 @@ async function generateSitemap(baseUrl, outputPath) {
 }
 
 /**
- * Scan blog posts from the content directory
+ * Scan blog posts from all content directories recursively
  * @returns {Array} Array of blog post objects with necessary metadata
  */
 async function scanBlogPosts() {
@@ -112,21 +112,41 @@ async function scanBlogPosts() {
       return blogPosts;
     }
     
-    // Get all markdown files
-    const files = fs.readdirSync(postsDir).filter(file => file.endsWith('.md'));
+    // Recursively scan all markdown files
+    scanDirectory(postsDir, blogPosts);
     
-    for (const file of files) {
-      const filePath = path.join(postsDir, file);
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      const stats = fs.statSync(filePath);
-      
-      // Use gray-matter to parse the markdown frontmatter
+    console.log(`Found ${blogPosts.length} blog posts across all directories`);
+    return blogPosts;
+  } catch (err) {
+    console.error('Error scanning blog posts:', err);
+    return [];
+  }
+}
+
+/**
+ * Recursively scan a directory for markdown files
+ * @param {string} dir Directory to scan
+ * @param {Array} blogPosts Array to populate with blog post data
+ */
+function scanDirectory(dir, blogPosts) {
+  const files = fs.readdirSync(dir);
+  
+  for (const file of files) {
+    const filePath = path.join(dir, file);
+    const stats = fs.statSync(filePath);
+    
+    if (stats.isDirectory()) {
+      // Recursively scan subdirectories
+      scanDirectory(filePath, blogPosts);
+    } else if (file.endsWith('.md')) {
       try {
+        // Read and parse markdown file
+        const fileContent = fs.readFileSync(filePath, 'utf8');
         const { data } = matter(fileContent);
         
         // Skip files without necessary frontmatter
         if (!data.slug) {
-          console.warn(`Skipping blog post ${file}: Missing slug in frontmatter`);
+          console.warn(`Skipping blog post ${filePath}: Missing slug in frontmatter`);
           continue;
         }
         
@@ -137,15 +157,9 @@ async function scanBlogPosts() {
           tags: data.tags || []
         });
       } catch (err) {
-        console.error(`Error parsing blog post ${file}:`, err);
+        console.error(`Error parsing blog post ${filePath}:`, err);
       }
     }
-    
-    console.log(`Found ${blogPosts.length} blog posts`);
-    return blogPosts;
-  } catch (err) {
-    console.error('Error scanning blog posts:', err);
-    return [];
   }
 }
 
