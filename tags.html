@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jae's Blog</title>
+    <meta name="description" content="A blog built from scratchA blog built from scratch">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Blog RSS" href="/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="site-title" data-nav-link>Jae's Blog</a>
+            <div class="nav-links">
+                <a href="/" data-nav-link>Home</a>
+                <a href="/categories.html" data-nav-link>Categories</a>
+                <a href="/tags.html" data-nav-link>Tags</a>
+                <a href="/archive.html" data-nav-link>Archive</a>
+                <a href="/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="tags-index">
+    <div class="page-header">
+        <h1>All Tags</h1>
+        <p class="subtitle">Browse all  tags</p>
+    </div>
+
+    <div class="tags-cloud">
+        
+        <a href="/tags/javascript.html" class="tag-item">
+            <span class="tag-name">javascript</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/tags/i18n.html" class="tag-item">
+            <span class="tag-name">i18n</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/tags/multilingual.html" class="tag-item">
+            <span class="tag-name">multilingual</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/tags/korean.html" class="tag-item">
+            <span class="tag-name">korean</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/tags/english.html" class="tag-item">
+            <span class="tag-name">english</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/tags/ai.html" class="tag-item">
+            <span class="tag-name">ai</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/future.html" class="tag-item">
+            <span class="tag-name">future</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/technology.html" class="tag-item">
+            <span class="tag-name">technology</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/machine-learning.html" class="tag-item">
+            <span class="tag-name">machine-learning</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/react.html" class="tag-item">
+            <span class="tag-name">react</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/hooks.html" class="tag-item">
+            <span class="tag-name">hooks</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/frontend.html" class="tag-item">
+            <span class="tag-name">frontend</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/productivity.html" class="tag-item">
+            <span class="tag-name">productivity</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/tips.html" class="tag-item">
+            <span class="tag-name">tips</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/workflow.html" class="tag-item">
+            <span class="tag-name">workflow</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/nodejs.html" class="tag-item">
+            <span class="tag-name">nodejs</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/tutorial.html" class="tag-item">
+            <span class="tag-name">tutorial</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/welcome.html" class="tag-item">
+            <span class="tag-name">welcome</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tags/first-post.html" class="tag-item">
+            <span class="tag-name">first-post</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+    </div>
+</div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update navigation links based on current language
+        function updateNavLinks() {
+            const isKorean = window.location.pathname.startsWith('/ko');
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+
+            navLinks.forEach(link => {
+                let href = link.getAttribute('href');
+                // Remove any existing /ko prefix
+                href = href.replace(/^\/ko/, '');
+
+                // Add /ko prefix if on Korean site
+                if (isKorean) {
+                    // Special case for root
+                    if (href === '/') {
+                        link.setAttribute('href', '/ko/');
+                    } else {
+                        link.setAttribute('href', '/ko' + href);
+                    }
+                } else {
+                    link.setAttribute('href', href);
+                }
+            });
+        }
+
+        // Call immediately to update links
+        updateNavLinks();
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown based on URL
+            const isKorean = window.location.pathname.startsWith('/ko');
+            langSelect.value = isKorean ? 'ko' : 'en';
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Get current path and remove any existing /ko prefix
+                let path = window.location.pathname;
+                const cleanPath = path.replace(/^\/ko/, '') || '/';
+
+                if (selectedLang === 'ko') {
+                    // Add /ko prefix for Korean
+                    if (cleanPath === '/') {
+                        window.location.href = '/ko/';
+                    } else {
+                        window.location.href = '/ko' + cleanPath;
+                    }
+                } else {
+                    // Use clean path without /ko for English
+                    window.location.href = cleanPath;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
