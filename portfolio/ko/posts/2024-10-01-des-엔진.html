@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고성능 이산 이벤트 시뮬레이션 엔진 - 재영의 블로그</title>
+    <meta name="description" content="밀리초 미만 지연시간으로 백만 개체를 처리하는 DES 엔진 구축">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/portfolio/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/portfolio/ko/" class="site-title" data-nav-link>재영의 블로그</a>
+            <div class="nav-links">
+                <a href="/portfolio/ko/" data-nav-link>홈</a>
+                <a href="/portfolio/ko/categories.html" data-nav-link>카테고리</a>
+                <a href="/portfolio/ko/tags.html" data-nav-link>태그</a>
+                <a href="/portfolio/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/portfolio/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>고성능 이산 이벤트 시뮬레이션 엔진</h1>
+        <time datetime=""2024-10-01T00:00:00.000Z"">October 1, 2024</time>
+        
+        <div style="margin-top: 1rem;">
+            <a href="/portfolio/ko/categories/projects.html" class="category-badge">프로젝트</a>
+        </div>
+        
+        
+        <div class="tags" style="margin-top: 1rem;">
+            
+            <a href="/portfolio/ko/tags/python.html" class="tag">python</a>
+            
+            <a href="/portfolio/ko/tags/시뮬레이션.html" class="tag">시뮬레이션</a>
+            
+            <a href="/portfolio/ko/tags/성능.html" class="tag">성능</a>
+            
+            <a href="/portfolio/ko/tags/오픈소스.html" class="tag">오픈소스</a>
+            
+        </div>
+        
+    </header>
+
+    <div class="post-content">
+        <h1 id="-">고성능 이산 이벤트 시뮬레이션 엔진</h1>
+<h2>개요</h2>
+<p>밀리초 미만의 이벤트 처리 지연시간으로 수백만 개체를 처리할 수 있는 Python 기반 이산 이벤트 시뮬레이션 엔진을 개발했습니다. 이 엔진은 네트워크 모델링, 물류 최적화, 에이전트 기반 모델링을 위한 대규모 시뮬레이션을 구동합니다.</p>
+<h2 id="-">기술적 성과</h2>
+<h3 id="-">성능 지표</h3>
+<ul class="ul-list">
+<li>단일 노드에서 <strong>초당 1천만 이벤트</strong> 처리</li><li>Calendar Queue로 <strong>밀리초 미만</strong> 이벤트 스케줄링</li><li>C 확장과 JIT 컴파일을 통한 <strong>100배 속도 향상</strong></li><li>분산 처리로 64코어까지 <strong>선형 확장성</strong></li></ul>
+<h3 id="-">핵심 기술</h3>
+<ul class="ul-list">
+<li><strong>Python 3.11+</strong> 타입 힌트와 async/await 활용</li><li><strong>Cython</strong> 성능 크리티컬 경로 최적화</li><li><strong>NumPy</strong> 벡터화 연산</li><li><strong>Ray</strong> 분산 시뮬레이션</li><li><strong>MPI</strong> HPC 클러스터 배포</li></ul>
+<h3 id="-">주요 기능</h3>
+<h4 id="-">적응형 스케줄러</h4>
+<p>워크로드 특성에 따라 Calendar Queue, Ladder Queue, Splay Tree 간 자동 전환하는 동적 스케줄러 구현으로 평균 O(1) 복잡도 달성.</p>
+<h4 id="zero-copy-">Zero-Copy 아키텍처</h4>
+<p>메모리 맵 파일과 버퍼 프로토콜을 사용한 공유 메모리 시스템 설계로 멀티프로세스 시뮬레이션에서 데이터 복사 오버헤드 제거.</p>
+<h4 id="time-warp-">Time Warp 프로토콜</h4>
+<p>Jefferson의 Virtual Time과 낙관적 동기화 구현으로 자동 롤백과 안티메시지 처리를 통한 효율적인 분산 시뮬레이션 가능.</p>
+<h2>임팩트</h2>
+<ul class="ul-list">
+<li>백만 개체 모델의 시뮬레이션 실행 시간을 며칠에서 시간 단위로 단축</li><li>물류 네트워크를 위한 실시간 의사결정 지원 가능</li><li>핵심 컴포넌트 오픈소스화로 GitHub 500+ 스타 획득</li><li>3개 연구 기관에서 에이전트 기반 모델링에 채택</li></ul>
+<h2 id="-">코드 예시</h2>
+<pre><code class="language-python">from simulation import Engine, CalendarQueue
+
+engine = Engine(scheduler=CalendarQueue())
+engine.schedule(time=0.0, event=InitializeSimulation())
+engine.run(until=86400.0)  # 24시간 시뮬레이션 시간 실행</code></pre>
+<h2>링크</h2>
+<ul class="ul-list">
+<li><a href="https://github.com/example/des-engine" target="_blank" rel="noopener noreferrer">GitHub 저장소</a></li><li><a href="https://des-engine.readthedocs.io" target="_blank" rel="noopener noreferrer">문서</a></li><li><a href="https://example.com/benchmarks" target="_blank" rel="noopener noreferrer">성능 벤치마크</a></li></ul>
+<h2 id="-">사용 기술</h2>
+<p>Python • Cython • NumPy • Ray • MPI • ZeroMQ • Numba • JAX</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/portfolio/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>

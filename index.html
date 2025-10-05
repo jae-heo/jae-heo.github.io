@@ -81,7 +81,7 @@
     <main style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
         <div style="text-align: center; margin-bottom: 4rem;">
             <h1 id="welcome-text" style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Welcome to My Space</h1>
-            <p id="subtitle" style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Explore my thoughts on life, technology, and the projects I've built</p>
+            <p id="subtitle" style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Hello, I'm Jaeyoung Heo. The blog is still under development, so it's filled with dummy text for now.</p>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
@@ -111,7 +111,7 @@
                 <h3 id="portfolio-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Jae's Portfolio</h3>
                 <p id="portfolio-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Showcase of my projects, open source contributions, and professional work</p>
                 <p style="color: var(--accent); font-weight: 600;">
-                    <span id="portfolio-visit">Visit Blog</span>
+                    <span id="portfolio-visit">Visit Portfolio</span>
                     <span class="blog-arrow">→</span>
                 </p>
             </a>
@@ -131,69 +131,35 @@
     </footer>
 
     <script>
-        // Load translations from locale files
-        let translations = {};
-
-        async function loadTranslations() {
-            try {
-                // Load both locale files
-                const [enResponse, koResponse] = await Promise.all([
-                    fetch('/src/i18n/locales/en.json'),
-                    fetch('/src/i18n/locales/ko.json')
-                ]);
-
-                const enData = await enResponse.json();
-                const koData = await koResponse.json();
-
-                translations = {
-                    en: enData.landing,
-                    ko: koData.landing
-                };
-
-                // Initialize language after translations are loaded
-                initializeLanguage();
-            } catch (error) {
-                console.error('Failed to load translations:', error);
-                // Fallback to embedded translations if loading fails
-                translations = {
-                    en: {
-                        welcome: "Welcome to My Space",
-                        subtitle: "Explore my thoughts on life, technology, and the projects I've built",
-                        
-                        lifeTitle: "Jae's Life Blog",
-                        lifeDesc: "Personal stories, travel adventures, and life experiences beyond the code",
-                        lifeVisit: "Visit Blog",
-                        
-                        techTitle: "Jae's Tech Blog",
-                        techDesc: "Deep dives into programming, technology trends, and development insights",
-                        techVisit: "Visit Blog",
-                        
-                        portfolioTitle: "Jae's Portfolio",
-                        portfolioDesc: "Showcase of my projects, open source contributions, and professional work",
-                        portfolioVisit: "Visit Portfolio",
-                        
-                    },
-                    ko: {
-                        welcome: "재영 공간",
-                        subtitle: "안녕하세요, 허재영입니다.",
-                        
-                        lifeTitle: "일상 블로그",
-                        lifeDesc: "나사빠진 이야기",
-                        lifeVisit: "블로그 방문",
-                        
-                        techTitle: "테크 블로그",
-                        techDesc: "나사들어간 이야기",
-                        techVisit: "블로그 방문",
-                        
-                        portfolioTitle: "포트폴리오",
-                        portfolioDesc: "개발자로서의 여정",
-                        portfolioVisit: "포트폴리오 방문",
-                        
-                    }
-                };
-                initializeLanguage();
+        // Translations are embedded during build
+        const translations = {
+            en: {
+                welcome: "Welcome to My Space",
+                subtitle: "Hello, I'm Jaeyoung Heo. The blog is still under development, so it's filled with dummy text for now.",
+                lifeTitle: "Jae's Life Blog",
+                lifeDesc: "Personal stories, travel adventures, and life experiences beyond the code",
+                lifeVisit: "Visit Blog",
+                techTitle: "Jae's Tech Blog",
+                techDesc: "Deep dives into programming, technology trends, and development insights",
+                techVisit: "Visit Blog",
+                portfolioTitle: "Jae's Portfolio",
+                portfolioDesc: "Showcase of my projects, open source contributions, and professional work",
+                portfolioVisit: "Visit Portfolio"
+            },
+            ko: {
+                welcome: "재영 공간",
+                subtitle: "안녕하세요, 허재영입니다. 아직 블로그는 개발중이라 Dummy Text로 채워져 있습니다.",
+                lifeTitle: "일상 블로그",
+                lifeDesc: "나사빠진 이야기",
+                lifeVisit: "블로그 방문",
+                techTitle: "테크 블로그",
+                techDesc: "나사들어간 이야기",
+                techVisit: "블로그 방문",
+                portfolioTitle: "포트폴리오",
+                portfolioDesc: "개발자로서의 여정",
+                portfolioVisit: "포트폴리오 방문"
             }
-        }
+        };
 
         function initializeLanguage() {
             const langSelect = document.getElementById('lang-select');
@@ -216,29 +182,39 @@
             document.getElementById('welcome-text').textContent = translations[lang].welcome;
             document.getElementById('subtitle').textContent = translations[lang].subtitle;
 
-            
-            document.getElementById('life-title').textContent = translations[lang].lifeTitle;
-            document.getElementById('life-desc').textContent = translations[lang].lifeDesc;
-            document.getElementById('life-visit').textContent = translations[lang].lifeVisit;
-            document.getElementById('life-blog-link').href = `/life/${lang}/`;
-            
-            document.getElementById('tech-title').textContent = translations[lang].techTitle;
-            document.getElementById('tech-desc').textContent = translations[lang].techDesc;
-            document.getElementById('tech-visit').textContent = translations[lang].techVisit;
-            document.getElementById('tech-blog-link').href = `/tech/${lang}/`;
-            
-            document.getElementById('portfolio-title').textContent = translations[lang].portfolioTitle;
-            document.getElementById('portfolio-desc').textContent = translations[lang].portfolioDesc;
-            document.getElementById('portfolio-visit').textContent = translations[lang].portfolioVisit;
-            document.getElementById('portfolio-blog-link').href = `/portfolio/${lang}/`;
-            
+            // Update life blog
+            const lifeTitle = document.getElementById('life-title');
+            if (lifeTitle) {
+                lifeTitle.textContent = translations[lang].lifeTitle;
+                document.getElementById('life-desc').textContent = translations[lang].lifeDesc;
+                document.getElementById('life-visit').textContent = translations[lang].lifeVisit;
+                document.getElementById('life-blog-link').href = `/life/${lang}/`;
+            }
+
+            // Update tech blog
+            const techTitle = document.getElementById('tech-title');
+            if (techTitle) {
+                techTitle.textContent = translations[lang].techTitle;
+                document.getElementById('tech-desc').textContent = translations[lang].techDesc;
+                document.getElementById('tech-visit').textContent = translations[lang].techVisit;
+                document.getElementById('tech-blog-link').href = `/tech/${lang}/`;
+            }
+
+            // Update portfolio
+            const portfolioTitle = document.getElementById('portfolio-title');
+            if (portfolioTitle) {
+                portfolioTitle.textContent = translations[lang].portfolioTitle;
+                document.getElementById('portfolio-desc').textContent = translations[lang].portfolioDesc;
+                document.getElementById('portfolio-visit').textContent = translations[lang].portfolioVisit;
+                document.getElementById('portfolio-blog-link').href = `/portfolio/${lang}/`;
+            }
 
             // Update HTML lang attribute
             document.documentElement.lang = lang;
         }
 
-        // Load translations when page loads
-        loadTranslations();
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeLanguage);
     </script>
 </body>
 </html>

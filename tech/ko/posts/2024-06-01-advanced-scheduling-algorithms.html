@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이산 이벤트 시뮬레이션을 위한 고급 스케줄링 알고리즘 - 재영의 블로그</title>
+    <meta name="description" content="Calendar Queue, Ladder Queue, Splay Tree 등 O(1) 스케줄링을 위한 고급 자료구조">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/categories.html" data-nav-link>카테고리</a>
+                <a href="/tech/ko/tags.html" data-nav-link>태그</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>이산 이벤트 시뮬레이션을 위한 고급 스케줄링 알고리즘</h1>
+        <time datetime=""2024-06-01T00:00:00.000Z"">June 1, 2024</time>
+        
+        <div style="margin-top: 1rem;">
+            <a href="/tech/ko/categories/algorithms.html" class="category-badge">알고리즘</a>
+        </div>
+        
+        
+        <div class="tags" style="margin-top: 1rem;">
+            
+            <a href="/tech/ko/tags/des.html" class="tag">des</a>
+            
+            <a href="/tech/ko/tags/scheduling.html" class="tag">scheduling</a>
+            
+            <a href="/tech/ko/tags/algorithms.html" class="tag">algorithms</a>
+            
+            <a href="/tech/ko/tags/python.html" class="tag">python</a>
+            
+            <a href="/tech/ko/tags/performance.html" class="tag">performance</a>
+            
+        </div>
+        
+    </header>
+
+    <div class="post-content">
+        <h1 id="-">이산 이벤트 시뮬레이션을 위한 고급 스케줄링 알고리즘</h1>
+<p>대규모 DES에서 이벤트 스케줄링은 전체 성능의 핵심입니다. O(log n)의 힙을 넘어 O(1) 성능을 달성하는 고급 알고리즘들을 구현합니다.</p>
+<h2 id="dynamic-calendar-queue-">Dynamic Calendar Queue 구현</h2>
+<pre><code class="language-python">import numpy as np
+from dataclasses import dataclass
+from typing import Optional, List
+import math
+
+@dataclass
+class Event:
+    time: float
+    priority: int
+    data: any
+    __slots__ = [&#39;time&#39;, &#39;priority&#39;, &#39;data&#39;]
+
+class DynamicCalendarQueue:
+    &quot;&quot;&quot;자동 리사이징 Calendar Queue&quot;&quot;&quot;
+
+    def __init__(self, initial_width: float = 1.0):
+        self.width = initial_width
+        self.n_buckets = 256  # 2의 제곱수
+        self.buckets = [[] for _ in range(self.n_buckets)]
+
+        # 통계 정보
+        self.n_events = 0
+        self.last_time = 0.0
+        self.bucket_top = 0.0
+
+        # 리사이징 파라미터
+        self.resize_threshold = 2.0
+        self.sample_size = 0
+        self.sample_sum = 0.0
+
+    def enqueue(self, time: float, data: any, priority: int = 0):
+        &quot;&quot;&quot;O(1) 평균 시간 삽입&quot;&quot;&quot;
+        # 리사이징 체크
+        self._check_resize()
+
+        # 버킷 인덱스 계산
+        bucket_idx = self._get_bucket_index(time)
+        event = Event(time, priority, data)
+
+        # 버킷 내 정렬 삽입 (작은 버킷 크기로 실질적 O(1))
+        bucket = self.buckets[bucket_idx]
+        insertion_idx = 0
+
+        # 이진 탐색으로 삽입 위치 찾기
+        if len(bucket) &gt; 8:  # 임계값
+            insertion_idx = self._binary_search_insert(bucket, time, priority)
+        else:
+            # 선형 탐색
+            for i, e in enumerate(bucket):
+                if e.time &gt; time or (e.time == time and e.priority &gt; priority):
+                    insertion_idx = i
+                    break
+                insertion_idx = i + 1
+
+        bucket.insert(insertion_idx, event)
+        self.n_events += 1
+
+        # 샘플링 (리사이징용)
+        self.sample_size += 1
+        if self.sample_size &gt; 1:
+            self.sample_sum += abs(time - self.last_time)
+        self.last_time = time
+
+    def dequeue(self) -&gt; Optional[Event]:
+        &quot;&quot;&quot;O(1) 평균 시간 추출&quot;&quot;&quot;
+        if self.n_events == 0:
+            return None
+
+        # 현재 버킷부터 순회
+        start_bucket = int(self.bucket_top / self.width) % self.n_buckets
+
+        for i in range(self.n_buckets):
+            bucket_idx = (start_bucket + i) % self.n_buckets
+            bucket = self.buckets[bucket_idx]
+
+            if bucket:
+                # 가장 이른 이벤트 추출
+                event = bucket.pop(0)
+                self.n_events -= 1
+                self.bucket_top = event.time
+                return event
+
+        return None
+
+    def _get_bucket_index(self, time: float) -&gt; int:
+        &quot;&quot;&quot;버킷 인덱스 계산&quot;&quot;&quot;
+        return int(time / self.width) &amp; (self.n_buckets - 1)
+
+    def _binary_search_insert(self, bucket: List[Event],
+                             time: float, priority: int) -&gt; int:
+        &quot;&quot;&quot;이진 탐색으로 삽입 위치 찾기&quot;&quot;&quot;
+        left, right = 0, len(bucket)
+
+        while left &lt; right:
+            mid = (left + right) // 2
+            if (bucket[mid].time &lt; time or
+                (bucket[mid].time == time and bucket[mid].priority &lt; priority)):
+                left = mid + 1
+            else:
+                right = mid
+
+        return left
+
+    def _check_resize(self):
+        &quot;&quot;&quot;동적 리사이징&quot;&quot;&quot;
+        if self.sample_size &lt; 100:
+            return
+
+        avg_gap = self.sample_sum / (self.sample_size - 1)
+
+        # 최적 버킷 폭 계산
+        optimal_width = 3.0 * avg_gap
+        ratio = optimal_width / self.width
+
+        if ratio &gt; self.resize_threshold or ratio &lt; 1.0 / self.resize_threshold:
+            self._resize(optimal_width)
+
+    def _resize(self, new_width: float):
+        &quot;&quot;&quot;캘린더 큐 리사이징&quot;&quot;&quot;
+        old_buckets = self.buckets
+        self.width = new_width
+        self.buckets = [[] for _ in range(self.n_buckets)]
+
+        # 모든 이벤트 재삽입
+        for bucket in old_buckets:
+            for event in bucket:
+                bucket_idx = self._get_bucket_index(event.time)
+                self.buckets[bucket_idx].append(event)
+
+        # 각 버킷 정렬
+        for bucket in self.buckets:
+            bucket.sort(key=lambda e: (e.time, e.priority))
+
+        # 샘플 초기화
+        self.sample_size = 0
+        self.sample_sum = 0.0</code></pre>
+<h2 id="lazy-queue-ladder-queue-">Lazy Queue (Ladder Queue) 구현</h2>
+<pre><code class="language-python">class LadderQueue:
+    &quot;&quot;&quot;Lazy Queue for 이산 시간 시뮬레이션&quot;&quot;&quot;
+
+    def __init__(self, max_levels: int = 3):
+        self.max_levels = max_levels
+
+        # 다단계 버킷
+        self.levels = []
+        for level in range(max_levels):
+            bucket_width = 2 ** level
+            n_buckets = 256 // (2 ** level)
+            self.levels.append({
+                &#39;width&#39;: bucket_width,
+                &#39;buckets&#39;: [[] for _ in range(n_buckets)],
+                &#39;n_buckets&#39;: n_buckets,
+                &#39;min_time&#39;: float(&#39;inf&#39;),
+                &#39;max_time&#39;: float(&#39;-inf&#39;)
+            })
+
+        # Top과 Bottom
+        self.top = []  # 즉시 처리할 이벤트
+        self.bottom = []  # Overflow 이벤트
+
+        self.current_time = 0
+
+    def enqueue(self, time: int, data: any):
+        &quot;&quot;&quot;O(1) 삽입&quot;&quot;&quot;
+        if time == self.current_time:
+            # Top에 직접 삽입
+            self.top.append((time, data))
+            return
+
+        # 적절한 레벨 찾기
+        level_idx = self._find_level(time)
+
+        if level_idx &lt; 0:
+            # Bottom에 삽입 (overflow)
+            self._insert_sorted(self.bottom, (time, data))
+        else:
+            # 해당 레벨 버킷에 삽입
+            level = self.levels[level_idx]
+            bucket_idx = (time // level[&#39;width&#39;]) % level[&#39;n_buckets&#39;]
+            level[&#39;buckets&#39;][bucket_idx].append((time, data))
+
+            # 레벨 통계 업데이트
+            level[&#39;min_time&#39;] = min(level[&#39;min_time&#39;], time)
+            level[&#39;max_time&#39;] = max(level[&#39;max_time&#39;], time)
+
+    def dequeue(self) -&gt; Optional[tuple]:
+        &quot;&quot;&quot;O(1) 평균 추출&quot;&quot;&quot;
+        # Top에서 먼저 확인
+        if self.top:
+            return self.top.pop(0)
+
+        # 각 레벨 순회
+        for level in self.levels:
+            if level[&#39;min_time&#39;] &lt;= level[&#39;max_time&#39;]:
+                # 현재 시간의 버킷 확인
+                bucket_idx = (self.current_time // level[&#39;width&#39;]) % level[&#39;n_buckets&#39;]
+
+                for i in range(level[&#39;n_buckets&#39;]):
+                    check_idx = (bucket_idx + i) % level[&#39;n_buckets&#39;]
+                    bucket = level[&#39;buckets&#39;][check_idx]
+
+                    if bucket:
+                        # 가장 이른 이벤트 찾기
+                        min_idx = min(range(len(bucket)),
+                                    key=lambda i: bucket[i][0])
+                        event = bucket.pop(min_idx)
+
+                        self.current_time = event[0]
+                        return event
+
+        # Bottom 확인
+        if self.bottom:
+            event = self.bottom.pop(0)
+            self.current_time = event[0]
+            return event
+
+        return None
+
+    def _find_level(self, time: int) -&gt; int:
+        &quot;&quot;&quot;적절한 레벨 찾기&quot;&quot;&quot;
+        time_diff = time - self.current_time
+
+        for i, level in enumerate(self.levels):
+            if time_diff &lt; level[&#39;n_buckets&#39;] * level[&#39;width&#39;]:
+                return i
+
+        return -1  # Overflow
+
+    def _insert_sorted(self, lst: list, item: tuple):
+        &quot;&quot;&quot;정렬된 삽입 (Bottom용)&quot;&quot;&quot;
+        import bisect
+        bisect.insort(lst, item, key=lambda x: x[0])</code></pre>
+<h2 id="splay-tree-">Splay Tree 기반 우선순위 큐</h2>
+<pre><code class="language-python">class SplayNode:
+    &quot;&quot;&quot;Splay Tree 노드&quot;&quot;&quot;
+    __slots__ = [&#39;time&#39;, &#39;data&#39;, &#39;left&#39;, &#39;right&#39;, &#39;parent&#39;]
+
+    def __init__(self, time: float, data: any):
+        self.time = time
+        self.data = data
+        self.left = None
+        self.right = None
+        self.parent = None
+
+class SplayTreeQueue:
+    &quot;&quot;&quot;자가 균형 Splay Tree 우선순위 큐&quot;&quot;&quot;
+
+    def __init__(self):
+        self.root = None
+        self.size = 0
+
+    def enqueue(self, time: float, data: any):
+        &quot;&quot;&quot;O(log n) amortized 삽입&quot;&quot;&quot;
+        node = SplayNode(time, data)
+
+        if not self.root:
+            self.root = node
+        else:
+            self._insert(node)
+            self._splay(node)
+
+        self.size += 1
+
+    def dequeue(self) -&gt; Optional[tuple]:
+        &quot;&quot;&quot;O(log n) amortized 추출&quot;&quot;&quot;
+        if not self.root:
+            return None
+
+        # 최소값 찾기
+        min_node = self._find_min(self.root)
+        self._splay(min_node)
+
+        # 루트가 최소값
+        result = (self.root.time, self.root.data)
+
+        # 루트 제거
+        if self.root.right:
+            self.root = self.root.right
+            self.root.parent = None
+        else:
+            self.root = None
+
+        self.size -= 1
+        return result
+
+    def _splay(self, node: SplayNode):
+        &quot;&quot;&quot;노드를 루트로 스플레이&quot;&quot;&quot;
+        while node.parent:
+            parent = node.parent
+            grandparent = parent.parent
+
+            if not grandparent:
+                # Zig
+                if node == parent.left:
+                    self._rotate_right(parent)
+                else:
+                    self._rotate_left(parent)
+            elif node == parent.left and parent == grandparent.left:
+                # Zig-Zig
+                self._rotate_right(grandparent)
+                self._rotate_right(parent)
+            elif node == parent.right and parent == grandparent.right:
+                # Zig-Zig
+                self._rotate_left(grandparent)
+                self._rotate_left(parent)
+            elif node == parent.right and parent == grandparent.left:
+                # Zig-Zag
+                self._rotate_left(parent)
+                self._rotate_right(grandparent)
+            else:
+                # Zig-Zag
+                self._rotate_right(parent)
+                self._rotate_left(grandparent)
+
+    def _rotate_left(self, node: SplayNode):
+        &quot;&quot;&quot;좌회전&quot;&quot;&quot;
+        right = node.right
+        node.right = right.left
+
+        if right.left:
+            right.left.parent = node
+
+        right.parent = node.parent
+
+        if not node.parent:
+            self.root = right
+        elif node == node.parent.left:
+            node.parent.left = right
+        else:
+            node.parent.right = right
+
+        right.left = node
+        node.parent = right
+
+    def _rotate_right(self, node: SplayNode):
+        &quot;&quot;&quot;우회전&quot;&quot;&quot;
+        left = node.left
+        node.left = left.right
+
+        if left.right:
+            left.right.parent = node
+
+        left.parent = node.parent
+
+        if not node.parent:
+            self.root = left
+        elif node == node.parent.right:
+            node.parent.right = left
+        else:
+            node.parent.left = left
+
+        left.right = node
+        node.parent = left</code></pre>
+<h2 id="-">하이브리드 적응형 스케줄러</h2>
+<pre><code class="language-python">class AdaptiveScheduler:
+    &quot;&quot;&quot;워크로드에 따라 자동 전환하는 스케줄러&quot;&quot;&quot;
+
+    def __init__(self):
+        self.calendar_queue = DynamicCalendarQueue()
+        self.ladder_queue = LadderQueue()
+        self.splay_tree = SplayTreeQueue()
+
+        # 현재 활성 큐
+        self.active_queue = &#39;calendar&#39;
+        self.queues = {
+            &#39;calendar&#39;: self.calendar_queue,
+            &#39;ladder&#39;: self.ladder_queue,
+            &#39;splay&#39;: self.splay_tree
+        }
+
+        # 성능 메트릭
+        self.operation_times = {
+            &#39;calendar&#39;: [],
+            &#39;ladder&#39;: [],
+            &#39;splay&#39;: []
+        }
+
+        self.switch_threshold = 100
+        self.measurement_window = 1000
+
+    def enqueue(self, time: float, data: any):
+        &quot;&quot;&quot;적응형 삽입&quot;&quot;&quot;
+        import time as timer
+
+        start = timer.perf_counter_ns()
+
+        if self.active_queue == &#39;calendar&#39;:
+            self.calendar_queue.enqueue(time, data)
+        elif self.active_queue == &#39;ladder&#39;:
+            # 정수 시간으로 변환
+            self.ladder_queue.enqueue(int(time * 1000), data)
+        else:
+            self.splay_tree.enqueue(time, data)
+
+        elapsed = timer.perf_counter_ns() - start
+        self._record_performance(self.active_queue, elapsed)
+
+    def dequeue(self) -&gt; Optional[tuple]:
+        &quot;&quot;&quot;적응형 추출&quot;&quot;&quot;
+        import time as timer
+
+        start = timer.perf_counter_ns()
+
+        result = None
+        if self.active_queue == &#39;calendar&#39;:
+            event = self.calendar_queue.dequeue()
+            if event:
+                result = (event.time, event.data)
+        elif self.active_queue == &#39;ladder&#39;:
+            ladder_result = self.ladder_queue.dequeue()
+            if ladder_result:
+                result = (ladder_result[0] / 1000.0, ladder_result[1])
+        else:
+            result = self.splay_tree.dequeue()
+
+        elapsed = timer.perf_counter_ns() - start
+        self._record_performance(self.active_queue, elapsed)
+
+        # 주기적으로 최적 큐 선택
+        if len(self.operation_times[self.active_queue]) &gt;= self.measurement_window:
+            self._select_optimal_queue()
+
+        return result
+
+    def _record_performance(self, queue_type: str, time_ns: int):
+        &quot;&quot;&quot;성능 기록&quot;&quot;&quot;
+        times = self.operation_times[queue_type]
+        times.append(time_ns)
+
+        # 윈도우 크기 유지
+        if len(times) &gt; self.measurement_window:
+            times.pop(0)
+
+    def _select_optimal_queue(self):
+        &quot;&quot;&quot;최적 큐 선택&quot;&quot;&quot;
+        avg_times = {}
+
+        for queue_type, times in self.operation_times.items():
+            if times:
+                avg_times[queue_type] = sum(times) / len(times)
+
+        if avg_times:
+            optimal = min(avg_times, key=avg_times.get)
+
+            if optimal != self.active_queue:
+                print(f&quot;Switching from {self.active_queue} to {optimal}&quot;)
+                self._migrate_events(self.active_queue, optimal)
+                self.active_queue = optimal
+
+    def _migrate_events(self, from_queue: str, to_queue: str):
+        &quot;&quot;&quot;이벤트 마이그레이션&quot;&quot;&quot;
+        events = []
+
+        # 모든 이벤트 추출
+        while True:
+            if from_queue == &#39;calendar&#39;:
+                event = self.calendar_queue.dequeue()
+                if event:
+                    events.append((event.time, event.data))
+                else:
+                    break
+            # ... 다른 큐들도 동일하게
+
+        # 새 큐에 재삽입
+        for time, data in events:
+            if to_queue == &#39;calendar&#39;:
+                self.calendar_queue.enqueue(time, data)
+            # ... 다른 큐들도 동일하게</code></pre>
+<p>이러한 고급 스케줄링 알고리즘을 활용하면 수백만 이벤트를 효율적으로 처리할 수 있으며, 워크로드 특성에 따라 최적의 성능을 달성할 수 있습니다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/2024-07-10-python-simulation-profiling.html" class="prev">← Python 시뮬레이션 병목 지점 프로파일링과 최적화</a>
+        
+        
+        <a href="/tech/ko/posts/2024-05-15-python-jit-simulation.html" class="next">시뮬레이션을 위한 Python JIT 컴파일러 최적화 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>

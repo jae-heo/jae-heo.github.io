@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시뮬레이션 성능을 위한 CPython C 확장 모듈 개발 - 재영의 블로그</title>
+    <meta name="description" content="시뮬레이션 핫패스 최적화를 위한 CPython C API 활용과 Cython 통합">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/categories.html" data-nav-link>카테고리</a>
+                <a href="/tech/ko/tags.html" data-nav-link>태그</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>시뮬레이션 성능을 위한 CPython C 확장 모듈 개발</h1>
+        <time datetime=""2024-03-10T00:00:00.000Z"">March 10, 2024</time>
+        
+        <div style="margin-top: 1rem;">
+            <a href="/tech/ko/categories/performance.html" class="category-badge">성능 최적화</a>
+        </div>
+        
+        
+        <div class="tags" style="margin-top: 1rem;">
+            
+            <a href="/tech/ko/tags/python.html" class="tag">python</a>
+            
+            <a href="/tech/ko/tags/c-extension.html" class="tag">c-extension</a>
+            
+            <a href="/tech/ko/tags/cpython.html" class="tag">cpython</a>
+            
+            <a href="/tech/ko/tags/simulation.html" class="tag">simulation</a>
+            
+            <a href="/tech/ko/tags/performance.html" class="tag">performance</a>
+            
+        </div>
+        
+    </header>
+
+    <div class="post-content">
+        <h1 id="-cpython-c-">시뮬레이션 성능을 위한 CPython C 확장 모듈 개발</h1>
+<p>Python 시뮬레이션의 성능 병목을 해결하기 위해 C 확장을 개발하는 것은 필수적입니다. CPython API를 직접 활용하여 크리티컬 패스를 최적화하는 방법을 살펴봅니다.</p>
+<h2 id="cpython-c-api-">CPython C API 기초</h2>
+<p>시뮬레이션 엔진의 핵심 이벤트 처리를 C로 구현:</p>
+<pre><code class="language-c">// simulation_core.c
+#define PY_SSIZE_T_CLEAN
+#include &lt;Python.h&gt;
+#include &lt;structmember.h&gt;
+#include &lt;stdint.h&gt;
+
+typedef struct {
+    PyObject_HEAD
+    double current_time;
+    uint64_t event_count;
+    PyObject* event_queue;  // Min-heap of events
+    PyObject* entities;     // Dictionary of entities
+} SimulationEngine;
+
+static int
+SimulationEngine_init(SimulationEngine *self, PyObject *args, PyObject *kwds)
+{
+    self-&gt;current_time = 0.0;
+    self-&gt;event_count = 0;
+
+    // 이벤트 큐 초기화 (C 레벨 힙)
+    self-&gt;event_queue = PyList_New(0);
+    if (self-&gt;event_queue == NULL)
+        return -1;
+
+    self-&gt;entities = PyDict_New();
+    if (self-&gt;entities == NULL) {
+        Py_DECREF(self-&gt;event_queue);
+        return -1;
+    }
+
+    return 0;
+}
+
+// 고성능 이벤트 처리
+static PyObject*
+SimulationEngine_process_events(SimulationEngine *self, PyObject *args)
+{
+    double until_time;
+    if (!PyArg_ParseTuple(args, &quot;d&quot;, &amp;until_time))
+        return NULL;
+
+    // GIL 해제하여 병렬 처리 가능
+    Py_BEGIN_ALLOW_THREADS
+
+    // 크리티컬 이벤트 처리 루프
+    while (self-&gt;current_time &lt; until_time) {
+        // C 레벨에서 직접 이벤트 처리
+        // ...
+    }
+
+    Py_END_ALLOW_THREADS
+
+    Py_RETURN_NONE;
+}</code></pre>
+<h2 id="cython-">Cython을 활용한 점진적 최적화</h2>
+<p>순수 Python에서 C 성능으로 점진적 전환:</p>
+<pre><code class="language-python"># simulation_core.pyx
+# cython: language_level=3
+# cython: boundscheck=False
+# cython: wraparound=False
+# cython: cdivision=True
+
+import cython
+from libc.stdlib cimport malloc, free
+from libc.math cimport exp, log, sqrt
+import numpy as np
+cimport numpy as np
+
+# C 구조체 정의
+cdef struct Event:
+    double time
+    int entity_id
+    int event_type
+    void* data
+
+cdef class FastEventQueue:
+    &quot;&quot;&quot;C 레벨 이진 힙 구현&quot;&quot;&quot;
+    cdef:
+        Event* heap
+        size_t capacity
+        size_t size
+
+    def __cinit__(self, size_t initial_capacity=10000):
+        self.capacity = initial_capacity
+        self.size = 0
+        self.heap = &lt;Event*&gt;malloc(initial_capacity * sizeof(Event))
+
+        if not self.heap:
+            raise MemoryError(&quot;Failed to allocate event queue&quot;)
+
+    def __dealloc__(self):
+        if self.heap:
+            free(self.heap)
+
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    cdef void push(self, double time, int entity_id, int event_type) nogil:
+        &quot;&quot;&quot;GIL 없이 이벤트 삽입&quot;&quot;&quot;
+        cdef size_t idx = self.size
+        cdef size_t parent_idx
+
+        # 동적 크기 조정
+        if self.size &gt;= self.capacity:
+            self._resize()
+
+        # 이벤트 추가
+        self.heap[idx].time = time
+        self.heap[idx].entity_id = entity_id
+        self.heap[idx].event_type = event_type
+
+        # 힙 속성 유지 (bubble up)
+        while idx &gt; 0:
+            parent_idx = (idx - 1) // 2
+            if self.heap[parent_idx].time &lt;= self.heap[idx].time:
+                break
+
+            # Swap
+            self.heap[idx], self.heap[parent_idx] = \
+                self.heap[parent_idx], self.heap[idx]
+            idx = parent_idx
+
+        self.size += 1
+
+    cdef Event pop(self) nogil:
+        &quot;&quot;&quot;최소 시간 이벤트 추출&quot;&quot;&quot;
+        cdef Event result = self.heap[0]
+        cdef size_t idx = 0
+        cdef size_t child_idx
+
+        self.size -= 1
+        self.heap[0] = self.heap[self.size]
+
+        # Bubble down
+        while True:
+            child_idx = 2 * idx + 1
+            if child_idx &gt;= self.size:
+                break
+
+            # 작은 자식 선택
+            if child_idx + 1 &lt; self.size and \
+               self.heap[child_idx + 1].time &lt; self.heap[child_idx].time:
+                child_idx += 1
+
+            if self.heap[idx].time &lt;= self.heap[child_idx].time:
+                break
+
+            # Swap
+            self.heap[idx], self.heap[child_idx] = \
+                self.heap[child_idx], self.heap[idx]
+            idx = child_idx
+
+        return result</code></pre>
+<h2 id="numpy-c-api-">NumPy C API 통합</h2>
+<p>벡터화된 시뮬레이션 연산:</p>
+<pre><code class="language-c">// numpy_simulation_ops.c
+#include &lt;Python.h&gt;
+#include &lt;numpy/arrayobject.h&gt;
+#include &lt;immintrin.h&gt;  // AVX instructions
+
+// SIMD 최적화된 상태 업데이트
+static PyObject*
+vectorized_state_update(PyObject *self, PyObject *args)
+{
+    PyArrayObject *states, *deltas;
+    double dt;
+
+    if (!PyArg_ParseTuple(args, &quot;O!O!d&quot;,
+                          &amp;PyArray_Type, &amp;states,
+                          &amp;PyArray_Type, &amp;deltas,
+                          &amp;dt))
+        return NULL;
+
+    npy_intp n = PyArray_DIM(states, 0);
+    npy_intp m = PyArray_DIM(states, 1);
+
+    double *state_data = (double*)PyArray_DATA(states);
+    double *delta_data = (double*)PyArray_DATA(deltas);
+
+    // AVX를 사용한 벡터화
+    #pragma omp parallel for
+    for (npy_intp i = 0; i &lt; n; i++) {
+        __m256d dt_vec = _mm256_set1_pd(dt);
+
+        for (npy_intp j = 0; j &lt; m; j += 4) {
+            __m256d state = _mm256_load_pd(&amp;state_data[i*m + j]);
+            __m256d delta = _mm256_load_pd(&amp;delta_data[i*m + j]);
+
+            // state += delta * dt
+            __m256d result = _mm256_fmadd_pd(delta, dt_vec, state);
+
+            _mm256_store_pd(&amp;state_data[i*m + j], result);
+        }
+    }
+
+    Py_RETURN_NONE;
+}</code></pre>
+<h2 id="-">메모리 뷰와 버퍼 프로토콜</h2>
+<p>Zero-copy 데이터 교환:</p>
+<pre><code class="language-python"># buffer_protocol.pyx
+from cpython cimport Py_buffer
+from libc.string cimport memcpy
+
+cdef class SimulationBuffer:
+    &quot;&quot;&quot;버퍼 프로토콜 구현&quot;&quot;&quot;
+    cdef:
+        double* data
+        size_t size
+        size_t itemsize
+
+    def __cinit__(self, size_t n_elements):
+        self.size = n_elements
+        self.itemsize = sizeof(double)
+        self.data = &lt;double*&gt;malloc(n_elements * sizeof(double))
+
+    def __getbuffer__(self, Py_buffer *buffer, int flags):
+        buffer.buf = &lt;void*&gt;self.data
+        buffer.len = self.size * self.itemsize
+        buffer.itemsize = self.itemsize
+        buffer.format = &quot;d&quot;  # double
+        buffer.ndim = 1
+        buffer.shape = &amp;self.size
+        buffer.strides = &amp;self.itemsize
+        buffer.suboffsets = NULL
+        buffer.readonly = 0
+        buffer.internal = NULL
+
+    def __releasebuffer__(self, Py_buffer *buffer):
+        pass
+
+# 사용 예시
+def process_with_numpy(SimulationBuffer buf):
+    &quot;&quot;&quot;NumPy 배열로 직접 변환 (복사 없음)&quot;&quot;&quot;
+    import numpy as np
+    cdef np.ndarray[double, ndim=1] arr = np.asarray(buf)
+
+    # NumPy 연산 적용
+    arr *= 2.0  # In-place 연산</code></pre>
+<h2 id="-gil-">병렬 처리와 GIL 우회</h2>
+<pre><code class="language-python"># parallel_simulation.pyx
+from cython.parallel import prange, parallel
+from libc.stdlib cimport abort, malloc, free
+
+cdef class ParallelSimulation:
+    cdef:
+        double[:, :] entity_states
+        int n_threads
+
+    def parallel_update(self):
+        &quot;&quot;&quot;OpenMP를 사용한 병렬 업데이트&quot;&quot;&quot;
+        cdef:
+            int i, j
+            int n = self.entity_states.shape[0]
+            int m = self.entity_states.shape[1]
+            double local_sum
+
+        # GIL 해제하고 병렬 처리
+        with nogil, parallel(num_threads=self.n_threads):
+            for i in prange(n, schedule=&#39;dynamic&#39;):
+                local_sum = 0.0
+
+                # 각 엔티티 독립적 처리
+                for j in range(m):
+                    self.entity_states[i, j] = self._update_state(
+                        self.entity_states[i, j]
+                    )
+                    local_sum += self.entity_states[i, j]
+
+                # 정규화
+                if local_sum &gt; 0:
+                    for j in range(m):
+                        self.entity_states[i, j] /= local_sum
+
+    cdef double _update_state(self, double value) nogil:
+        &quot;&quot;&quot;GIL 없이 실행되는 상태 업데이트&quot;&quot;&quot;
+        cdef double result = value
+
+        # 복잡한 계산 로직
+        result = exp(-result * 0.1) + log(result + 1.0)
+
+        return result</code></pre>
+<h2 id="-">프로파일 기반 최적화</h2>
+<pre><code class="language-python"># profile_guided.py
+import cProfile
+import pstats
+from line_profiler import LineProfiler
+
+def profile_c_extension():
+    &quot;&quot;&quot;C 확장 성능 프로파일링&quot;&quot;&quot;
+    import pyinstrument
+
+    profiler = pyinstrument.Profiler()
+    profiler.start()
+
+    # 시뮬레이션 실행
+    engine = SimulationEngine()
+    for _ in range(100000):
+        engine.process_events(1.0)
+
+    profiler.stop()
+
+    # 콜그래프 생성
+    print(profiler.output_text(unicode=True, color=True))
+
+    # C 레벨 프로파일링 (gprof)
+    import subprocess
+    subprocess.run([
+        &quot;gcc&quot;, &quot;-pg&quot;, &quot;-O3&quot;, &quot;simulation_core.c&quot;,
+        &quot;-o&quot;, &quot;simulation_core&quot;
+    ])
+
+# Cython 어노테이션 HTML 생성
+# cython -a simulation_core.pyx</code></pre>
+<h2 id="-">빌드 설정</h2>
+<pre><code class="language-python"># setup.py
+from setuptools import setup, Extension
+from Cython.Build import cythonize
+import numpy
+
+extensions = [
+    Extension(
+        &quot;simulation_core&quot;,
+        [&quot;simulation_core.pyx&quot;],
+        extra_compile_args=[&#39;-O3&#39;, &#39;-march=native&#39;, &#39;-fopenmp&#39;],
+        extra_link_args=[&#39;-fopenmp&#39;],
+        include_dirs=[numpy.get_include()],
+    ),
+]
+
+setup(
+    ext_modules=cythonize(
+        extensions,
+        compiler_directives={
+            &#39;language_level&#39;: 3,
+            &#39;boundscheck&#39;: False,
+            &#39;wraparound&#39;: False,
+            &#39;cdivision&#39;: True,
+        }
+    )
+)</code></pre>
+<p>C 확장을 통해 Python 시뮬레이션의 성능을 100배 이상 향상시킬 수 있으며, 순수 Python의 유연성을 유지하면서도 C의 성능을 얻을 수 있습니다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/2024-04-05-distributed-des-python.html" class="prev">← Python으로 구현하는 분산 이산 이벤트 시뮬레이션</a>
+        
+        
+        <a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html" class="next">대규모 시뮬레이션을 위한 Python 메모리 관리 최적화 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>

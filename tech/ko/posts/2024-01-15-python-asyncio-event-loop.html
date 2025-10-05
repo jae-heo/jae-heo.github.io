@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python asyncio 내부 구조와 커스텀 이벤트 루프 구현 - 재영의 블로그</title>
+    <meta name="description" content="이산 이벤트 시뮬레이션을 위한 Python asyncio 이벤트 루프 내부 구조 분석과 커스텀 구현">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/categories.html" data-nav-link>카테고리</a>
+                <a href="/tech/ko/tags.html" data-nav-link>태그</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</h1>
+        <time datetime=""2024-01-15T00:00:00.000Z"">January 15, 2024</time>
+        
+        <div style="margin-top: 1rem;">
+            <a href="/tech/ko/categories/deep-dive.html" class="category-badge">심층 분석</a>
+        </div>
+        
+        
+        <div class="tags" style="margin-top: 1rem;">
+            
+            <a href="/tech/ko/tags/python.html" class="tag">python</a>
+            
+            <a href="/tech/ko/tags/asyncio.html" class="tag">asyncio</a>
+            
+            <a href="/tech/ko/tags/event-loop.html" class="tag">event-loop</a>
+            
+            <a href="/tech/ko/tags/des.html" class="tag">des</a>
+            
+            <a href="/tech/ko/tags/동시성.html" class="tag">동시성</a>
+            
+        </div>
+        
+    </header>
+
+    <div class="post-content">
+        <h1 id="python-asyncio-">Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</h1>
+<p>이산 이벤트 시뮬레이션(DES) 엔진을 구축할 때, Python의 asyncio는 강력한 기반을 제공하지만 성능이 중요한 애플리케이션에서는 내부 구조를 이해하는 것이 필수적입니다.</p>
+<h2 id="-">이벤트 루프 아키텍처 이해하기</h2>
+<p>asyncio 이벤트 루프는 본질적으로 정교한 스케줄링 메커니즘을 갖춘 콜백의 우선순위 큐입니다:</p>
+<pre><code class="language-python">import heapq
+import collections
+from dataclasses import dataclass, field
+
+@dataclass(order=True)
+class Event:
+    time: float
+    priority: int = field(compare=False)
+    callback: callable = field(compare=False)
+    args: tuple = field(default_factory=tuple, compare=False)
+
+class SimulationEventLoop:
+    def __init__(self):
+        self._ready = collections.deque()
+        self._scheduled = []
+        self._current_time = 0.0
+        self._event_count = 0
+
+    def call_at(self, when: float, callback, *args, priority=0):
+        &quot;&quot;&quot;특정 시뮬레이션 시간에 이벤트 스케줄링&quot;&quot;&quot;
+        event = Event(when, priority, callback, args)
+        heapq.heappush(self._scheduled, event)
+        self._event_count += 1
+        return event
+
+    def run_until(self, stop_time: float):
+        &quot;&quot;&quot;지정된 시뮬레이션 시간까지 실행&quot;&quot;&quot;
+        while self._scheduled and self._scheduled[0].time &lt;= stop_time:
+            event = heapq.heappop(self._scheduled)
+            self._current_time = event.time
+            event.callback(*event.args)</code></pre>
+<h2 id="zero-copy-">Zero-Copy 이벤트 전파 구현</h2>
+<p>시뮬레이션 엔진에서 이벤트 전파 오버헤드는 런타임을 지배할 수 있습니다. 메모리 뷰와 객체 풀을 사용한 zero-copy 구현:</p>
+<pre><code class="language-python">import numpy as np
+from typing import Optional
+
+class EventPool:
+    &quot;&quot;&quot;객체 재사용을 위한 이벤트 풀&quot;&quot;&quot;
+    def __init__(self, size: int = 100_000):
+        self._pool = []
+        self._available = collections.deque()
+
+        # 사전 할당된 numpy 배열로 메모리 레이아웃 최적화
+        self._event_data = np.zeros(
+            size,
+            dtype=[
+                (&#39;time&#39;, &#39;f8&#39;),
+                (&#39;entity_id&#39;, &#39;i8&#39;),
+                (&#39;event_type&#39;, &#39;i4&#39;),
+                (&#39;data&#39;, &#39;f8&#39;, (10,))
+            ]
+        )
+
+        for i in range(size):
+            self._available.append(i)
+
+    def acquire(self) -&gt; int:
+        &quot;&quot;&quot;이벤트 인덱스 획득&quot;&quot;&quot;
+        if not self._available:
+            raise MemoryError(&quot;Event pool exhausted&quot;)
+        return self._available.popleft()
+
+    def release(self, idx: int):
+        &quot;&quot;&quot;이벤트 인덱스 반환&quot;&quot;&quot;
+        self._event_data[idx] = 0  # Clear data
+        self._available.append(idx)</code></pre>
+<h2 id="-">고급 스케줄링 알고리즘</h2>
+<p>Calendar Queue를 사용한 O(1) 이벤트 스케줄링:</p>
+<pre><code class="language-python">class CalendarQueue:
+    &quot;&quot;&quot;O(1) 평균 시간 복잡도를 위한 Calendar Queue&quot;&quot;&quot;
+    def __init__(self, bucket_width: float = 1.0, n_buckets: int = 256):
+        self.bucket_width = bucket_width
+        self.n_buckets = n_buckets
+        self.buckets = [[] for _ in range(n_buckets)]
+        self.n_events = 0
+        self.last_bucket = 0
+        self.bucket_top = 0.0
+
+    def enqueue(self, time: float, event):
+        &quot;&quot;&quot;이벤트 삽입 - 평균 O(1)&quot;&quot;&quot;
+        bucket_idx = int(time / self.bucket_width) % self.n_buckets
+
+        # 버킷 내 정렬 삽입
+        bucket = self.buckets[bucket_idx]
+        insertion_point = 0
+        for i, (t, _) in enumerate(bucket):
+            if t &gt; time:
+                insertion_point = i
+                break
+            insertion_point = i + 1
+
+        bucket.insert(insertion_point, (time, event))
+        self.n_events += 1</code></pre>
+<h2 id="-">성능 최적화 전략</h2>
+<p>백만 개 이상의 이벤트를 처리할 때는 마이크로초 단위 최적화가 중요합니다. Profile-guided optimization과 메모리 레이아웃 최적화가 필수적입니다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html" class="prev">← 대규모 시뮬레이션을 위한 Python 메모리 관리 최적화</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>

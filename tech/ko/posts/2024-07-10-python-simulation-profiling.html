@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 시뮬레이션 병목 지점 프로파일링과 최적화 - 재영의 블로그</title>
+    <meta name="description" content="시뮬레이션 코드의 성능 병목을 찾고 최적화하는 고급 프로파일링 기법">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/categories.html" data-nav-link>카테고리</a>
+                <a href="/tech/ko/tags.html" data-nav-link>태그</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>Python 시뮬레이션 병목 지점 프로파일링과 최적화</h1>
+        <time datetime=""2024-07-10T00:00:00.000Z"">July 10, 2024</time>
+        
+        <div style="margin-top: 1rem;">
+            <a href="/tech/ko/categories/performance.html" class="category-badge">성능 최적화</a>
+        </div>
+        
+        
+        <div class="tags" style="margin-top: 1rem;">
+            
+            <a href="/tech/ko/tags/python.html" class="tag">python</a>
+            
+            <a href="/tech/ko/tags/profiling.html" class="tag">profiling</a>
+            
+            <a href="/tech/ko/tags/optimization.html" class="tag">optimization</a>
+            
+            <a href="/tech/ko/tags/performance.html" class="tag">performance</a>
+            
+            <a href="/tech/ko/tags/simulation.html" class="tag">simulation</a>
+            
+        </div>
+        
+    </header>
+
+    <div class="post-content">
+        <h1 id="python-">Python 시뮬레이션 병목 지점 프로파일링과 최적화</h1>
+<p>대규모 시뮬레이션에서 1%의 성능 개선도 시간과 비용을 크게 절약할 수 있습니다. 정밀한 프로파일링과 타겟 최적화 기법을 살펴봅니다.</p>
+<h2 id="-">계층적 프로파일링 전략</h2>
+<pre><code class="language-python">import cProfile
+import pstats
+from memory_profiler import profile
+from line_profiler import LineProfiler
+import tracemalloc
+import sys
+import gc
+
+class SimulationProfiler:
+    &quot;&quot;&quot;다층적 시뮬레이션 프로파일러&quot;&quot;&quot;
+
+    def __init__(self, simulation):
+        self.simulation = simulation
+        self.cpu_profiler = cProfile.Profile()
+        self.line_profiler = LineProfiler()
+        self.memory_snapshots = []
+
+        # 프로파일링 타겟 설정
+        self._setup_targets()
+
+    def _setup_targets(self):
+        &quot;&quot;&quot;프로파일링 대상 메서드 등록&quot;&quot;&quot;
+        # 핫스팟 예상 함수들
+        critical_methods = [
+            self.simulation.process_event,
+            self.simulation.update_state,
+            self.simulation.calculate_interactions
+        ]
+
+        for method in critical_methods:
+            self.line_profiler.add_function(method)
+
+    def profile_execution(self, duration: float):
+        &quot;&quot;&quot;전체 실행 프로파일링&quot;&quot;&quot;
+        # CPU 프로파일링 시작
+        self.cpu_profiler.enable()
+
+        # 메모리 추적 시작
+        tracemalloc.start()
+        initial_snapshot = tracemalloc.take_snapshot()
+
+        # 시뮬레이션 실행
+        try:
+            self.simulation.run(duration)
+        finally:
+            # CPU 프로파일링 종료
+            self.cpu_profiler.disable()
+
+            # 메모리 스냅샷
+            final_snapshot = tracemalloc.take_snapshot()
+            tracemalloc.stop()
+
+            # 결과 분석
+            self._analyze_results(initial_snapshot, final_snapshot)
+
+    def _analyze_results(self, initial_snapshot, final_snapshot):
+        &quot;&quot;&quot;프로파일링 결과 분석&quot;&quot;&quot;
+        # CPU 프로파일링 결과
+        stats = pstats.Stats(self.cpu_profiler)
+        stats.sort_stats(&#39;cumulative&#39;)
+
+        print(&quot;\n=== Top 10 CPU Hotspots ===&quot;)
+        stats.print_stats(10)
+
+        # 메모리 증가 분석
+        top_stats = final_snapshot.compare_to(initial_snapshot, &#39;lineno&#39;)
+        print(&quot;\n=== Top Memory Growth ===&quot;)
+        for stat in top_stats[:10]:
+            print(f&quot;{stat}&quot;)
+
+        # 콜 그래프 생성
+        self._generate_callgraph()
+
+    def _generate_callgraph(self):
+        &quot;&quot;&quot;시각적 콜그래프 생성&quot;&quot;&quot;
+        import gprof2dot
+        import subprocess
+
+        # pstats를 dot 파일로 변환
+        stats = pstats.Stats(self.cpu_profiler)
+        stats.dump_stats(&#39;profile.stats&#39;)
+
+        # Graphviz로 시각화
+        subprocess.run([
+            &#39;gprof2dot&#39;, &#39;-f&#39;, &#39;pstats&#39;, &#39;profile.stats&#39;,
+            &#39;|&#39;, &#39;dot&#39;, &#39;-Tpng&#39;, &#39;-o&#39;, &#39;profile.png&#39;
+        ], shell=True)</code></pre>
+<h2 id="-">마이크로벤치마킹과 최적화</h2>
+<pre><code class="language-python">import timeit
+import numpy as np
+from functools import wraps
+import dis
+
+def benchmark(number=1000):
+    &quot;&quot;&quot;마이크로벤치마크 데코레이터&quot;&quot;&quot;
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # 워밍업
+            for _ in range(10):
+                func(*args, **kwargs)
+
+            # 실제 측정
+            times = []
+            for _ in range(number):
+                start = timeit.default_timer()
+                result = func(*args, **kwargs)
+                end = timeit.default_timer()
+                times.append(end - start)
+
+            times = np.array(times)
+            print(f&quot;{func.__name__}:&quot;)
+            print(f&quot;  Mean: {np.mean(times)*1e6:.2f} μs&quot;)
+            print(f&quot;  Std: {np.std(times)*1e6:.2f} μs&quot;)
+            print(f&quot;  Min: {np.min(times)*1e6:.2f} μs&quot;)
+            print(f&quot;  Max: {np.max(times)*1e6:.2f} μs&quot;)
+
+            return result
+
+        return wrapper
+    return decorator
+
+class OptimizationComparison:
+    &quot;&quot;&quot;최적화 기법 비교&quot;&quot;&quot;
+
+    @staticmethod
+    def compare_list_operations():
+        &quot;&quot;&quot;리스트 연산 최적화 비교&quot;&quot;&quot;
+        n = 10000
+
+        # 방법 1: 리스트 컴프리헨션
+        @benchmark(1000)
+        def list_comprehension():
+            return [i**2 for i in range(n)]
+
+        # 방법 2: map
+        @benchmark(1000)
+        def map_operation():
+            return list(map(lambda x: x**2, range(n)))
+
+        # 방법 3: NumPy
+        @benchmark(1000)
+        def numpy_operation():
+            return np.arange(n)**2
+
+        # 방법 4: 사전 할당
+        @benchmark(1000)
+        def preallocated():
+            result = [0] * n
+            for i in range(n):
+                result[i] = i**2
+            return result
+
+        # 실행
+        list_comprehension()
+        map_operation()
+        numpy_operation()
+        preallocated()
+
+    @staticmethod
+    def analyze_bytecode(func):
+        &quot;&quot;&quot;바이트코드 분석&quot;&quot;&quot;
+        print(f&quot;\n=== Bytecode for {func.__name__} ===&quot;)
+        dis.dis(func)
+
+        # 바이트코드 명령어 카운트
+        bytecode = dis.Bytecode(func)
+        instruction_counts = {}
+
+        for instr in bytecode:
+            if instr.opname not in instruction_counts:
+                instruction_counts[instr.opname] = 0
+            instruction_counts[instr.opname] += 1
+
+        print(&quot;\nInstruction frequency:&quot;)
+        for opname, count in sorted(instruction_counts.items(),
+                                   key=lambda x: x[1], reverse=True):
+            print(f&quot;  {opname}: {count}&quot;)</code></pre>
+<h2 id="-">캐시 최적화와 메모리 접근 패턴</h2>
+<pre><code class="language-python">import functools
+from pympler import asizeof
+import sys
+
+class CacheOptimization:
+    &quot;&quot;&quot;캐시 친화적 최적화&quot;&quot;&quot;
+
+    def __init__(self):
+        self.cache_stats = {}
+
+    @functools.lru_cache(maxsize=10000)
+    def expensive_calculation(self, x: int, y: int) -&gt; float:
+        &quot;&quot;&quot;캐시된 계산&quot;&quot;&quot;
+        # 복잡한 계산 시뮬레이션
+        import math
+        result = 0.0
+        for i in range(100):
+            result += math.exp(-x * y / (i + 1))
+        return result
+
+    def analyze_cache_performance(self):
+        &quot;&quot;&quot;캐시 성능 분석&quot;&quot;&quot;
+        cache_info = self.expensive_calculation.cache_info()
+
+        hit_rate = cache_info.hits / (cache_info.hits + cache_info.misses)
+        print(f&quot;Cache hit rate: {hit_rate:.2%}&quot;)
+        print(f&quot;Cache size: {cache_info.currsize}&quot;)
+        print(f&quot;Max size: {cache_info.maxsize}&quot;)
+
+        # 메모리 사용량 측정
+        cache_memory = asizeof.asizeof(self.expensive_calculation.__wrapped__)
+        print(f&quot;Cache memory usage: {cache_memory / 1024:.2f} KB&quot;)
+
+    @staticmethod
+    def optimize_memory_access():
+        &quot;&quot;&quot;메모리 접근 패턴 최적화&quot;&quot;&quot;
+        size = 1000
+
+        # 나쁜 패턴: Column-major access in row-major array
+        @benchmark(100)
+        def bad_pattern():
+            matrix = [[0] * size for _ in range(size)]
+            total = 0
+            for j in range(size):
+                for i in range(size):
+                    total += matrix[i][j]
+            return total
+
+        # 좋은 패턴: Row-major access
+        @benchmark(100)
+        def good_pattern():
+            matrix = [[0] * size for _ in range(size)]
+            total = 0
+            for i in range(size):
+                for j in range(size):
+                    total += matrix[i][j]
+            return total
+
+        # NumPy 최적화
+        @benchmark(100)
+        def numpy_pattern():
+            matrix = np.zeros((size, size))
+            return np.sum(matrix)
+
+        bad_pattern()
+        good_pattern()
+        numpy_pattern()</code></pre>
+<h2 id="-">동적 최적화와 적응형 알고리즘</h2>
+<pre><code class="language-python">import ast
+import types
+import inspect
+
+class DynamicOptimizer:
+    &quot;&quot;&quot;런타임 동적 최적화&quot;&quot;&quot;
+
+    def __init__(self):
+        self.optimization_history = []
+        self.performance_metrics = {}
+
+    def optimize_loop(self, func):
+        &quot;&quot;&quot;루프 최적화&quot;&quot;&quot;
+        source = inspect.getsource(func)
+        tree = ast.parse(source)
+
+        # AST 변환을 통한 최적화
+        optimizer = LoopOptimizer()
+        optimized_tree = optimizer.visit(tree)
+
+        # 새 함수 컴파일
+        code = compile(optimized_tree, &#39;&lt;optimized&gt;&#39;, &#39;exec&#39;)
+        namespace = {}
+        exec(code, namespace)
+
+        return namespace[func.__name__]
+
+class LoopOptimizer(ast.NodeTransformer):
+    &quot;&quot;&quot;AST 레벨 루프 최적화&quot;&quot;&quot;
+
+    def visit_For(self, node):
+        &quot;&quot;&quot;for 루프 최적화&quot;&quot;&quot;
+        # range() 호출 최적화
+        if isinstance(node.iter, ast.Call):
+            if hasattr(node.iter.func, &#39;id&#39;) and node.iter.func.id == &#39;range&#39;:
+                # range를 xrange로 변경 (Python 2 스타일)
+                # 또는 다른 최적화 적용
+                pass
+
+        # 루프 언롤링 가능성 체크
+        if self._can_unroll(node):
+            return self._unroll_loop(node)
+
+        return self.generic_visit(node)
+
+    def _can_unroll(self, node):
+        &quot;&quot;&quot;루프 언롤링 가능 여부 판단&quot;&quot;&quot;
+        # 간단한 휴리스틱: 작은 고정 크기 루프
+        if isinstance(node.iter, ast.Call):
+            if hasattr(node.iter.func, &#39;id&#39;) and node.iter.func.id == &#39;range&#39;:
+                if len(node.iter.args) == 1:
+                    if isinstance(node.iter.args[0], ast.Constant):
+                        return node.iter.args[0].value &lt;= 10
+        return False
+
+    def _unroll_loop(self, node):
+        &quot;&quot;&quot;루프 언롤링&quot;&quot;&quot;
+        # 루프 바디를 복제하여 언롤링
+        unrolled = []
+        if isinstance(node.iter.args[0], ast.Constant):
+            n = node.iter.args[0].value
+            for i in range(n):
+                # 루프 변수를 상수로 치환
+                body_copy = ast.fix_missing_locations(
+                    ast.copy_location(node.body[0], node)
+                )
+                unrolled.append(body_copy)
+
+        return unrolled</code></pre>
+<h2 id="-">실시간 성능 모니터링</h2>
+<pre><code class="language-python">import psutil
+import threading
+import queue
+import time
+
+class RealTimeMonitor:
+    &quot;&quot;&quot;실시간 성능 모니터&quot;&quot;&quot;
+
+    def __init__(self, simulation):
+        self.simulation = simulation
+        self.monitoring = False
+        self.metrics_queue = queue.Queue()
+
+        # 메트릭 수집기
+        self.collectors = {
+            &#39;cpu&#39;: self._collect_cpu,
+            &#39;memory&#39;: self._collect_memory,
+            &#39;io&#39;: self._collect_io,
+            &#39;custom&#39;: self._collect_custom
+        }
+
+    def start_monitoring(self, interval=0.1):
+        &quot;&quot;&quot;모니터링 시작&quot;&quot;&quot;
+        self.monitoring = True
+
+        def monitor_loop():
+            while self.monitoring:
+                metrics = {}
+                for name, collector in self.collectors.items():
+                    metrics[name] = collector()
+
+                self.metrics_queue.put({
+                    &#39;timestamp&#39;: time.time(),
+                    &#39;metrics&#39;: metrics
+                })
+
+                time.sleep(interval)
+
+        monitor_thread = threading.Thread(target=monitor_loop, daemon=True)
+        monitor_thread.start()
+
+    def _collect_cpu(self):
+        &quot;&quot;&quot;CPU 메트릭 수집&quot;&quot;&quot;
+        process = psutil.Process()
+        return {
+            &#39;usage_percent&#39;: process.cpu_percent(),
+            &#39;num_threads&#39;: process.num_threads(),
+            &#39;context_switches&#39;: process.num_ctx_switches()
+        }
+
+    def _collect_memory(self):
+        &quot;&quot;&quot;메모리 메트릭 수집&quot;&quot;&quot;
+        process = psutil.Process()
+        mem_info = process.memory_info()
+        return {
+            &#39;rss&#39;: mem_info.rss / 1024 / 1024,  # MB
+            &#39;vms&#39;: mem_info.vms / 1024 / 1024,  # MB
+            &#39;percent&#39;: process.memory_percent()
+        }
+
+    def _collect_io(self):
+        &quot;&quot;&quot;I/O 메트릭 수집&quot;&quot;&quot;
+        process = psutil.Process()
+        io_counters = process.io_counters()
+        return {
+            &#39;read_bytes&#39;: io_counters.read_bytes,
+            &#39;write_bytes&#39;: io_counters.write_bytes,
+            &#39;read_count&#39;: io_counters.read_count,
+            &#39;write_count&#39;: io_counters.write_count
+        }
+
+    def _collect_custom(self):
+        &quot;&quot;&quot;시뮬레이션 특화 메트릭&quot;&quot;&quot;
+        return {
+            &#39;events_processed&#39;: self.simulation.event_count,
+            &#39;simulation_time&#39;: self.simulation.current_time,
+            &#39;entities_active&#39;: len(self.simulation.active_entities)
+        }
+
+    def generate_report(self):
+        &quot;&quot;&quot;성능 리포트 생성&quot;&quot;&quot;
+        all_metrics = []
+
+        while not self.metrics_queue.empty():
+            all_metrics.append(self.metrics_queue.get())
+
+        if not all_metrics:
+            return
+
+        # 시계열 분석
+        import pandas as pd
+
+        df = pd.DataFrame([m[&#39;metrics&#39;][&#39;cpu&#39;] for m in all_metrics])
+        print(&quot;\n=== CPU Usage Statistics ===&quot;)
+        print(df.describe())
+
+        # 병목 지점 식별
+        self._identify_bottlenecks(all_metrics)
+
+    def _identify_bottlenecks(self, metrics):
+        &quot;&quot;&quot;병목 지점 자동 식별&quot;&quot;&quot;
+        cpu_spikes = []
+        memory_leaks = []
+
+        for i, m in enumerate(metrics):
+            # CPU 스파이크 감지
+            if m[&#39;metrics&#39;][&#39;cpu&#39;][&#39;usage_percent&#39;] &gt; 90:
+                cpu_spikes.append((m[&#39;timestamp&#39;], m[&#39;metrics&#39;][&#39;cpu&#39;][&#39;usage_percent&#39;]))
+
+            # 메모리 누수 감지
+            if i &gt; 0:
+                mem_growth = (m[&#39;metrics&#39;][&#39;memory&#39;][&#39;rss&#39;] -
+                            metrics[i-1][&#39;metrics&#39;][&#39;memory&#39;][&#39;rss&#39;])
+                if mem_growth &gt; 10:  # 10MB 이상 증가
+                    memory_leaks.append((m[&#39;timestamp&#39;], mem_growth))
+
+        if cpu_spikes:
+            print(f&quot;\n⚠️ CPU spikes detected: {len(cpu_spikes)} times&quot;)
+
+        if memory_leaks:
+            print(f&quot;\n⚠️ Potential memory leaks: {len(memory_leaks)} incidents&quot;)</code></pre>
+<h2 id="-">프로파일 기반 자동 최적화</h2>
+<pre><code class="language-python">class AutoOptimizer:
+    &quot;&quot;&quot;프로파일 기반 자동 최적화&quot;&quot;&quot;
+
+    def __init__(self):
+        self.optimization_rules = []
+        self._setup_rules()
+
+    def _setup_rules(self):
+        &quot;&quot;&quot;최적화 규칙 설정&quot;&quot;&quot;
+        self.optimization_rules = [
+            {
+                &#39;condition&#39;: lambda stats: stats[&#39;list_append_count&#39;] &gt; 1000,
+                &#39;action&#39;: self._optimize_list_append,
+                &#39;description&#39;: &#39;Convert repeated append to list comprehension&#39;
+            },
+            {
+                &#39;condition&#39;: lambda stats: stats[&#39;nested_loop_depth&#39;] &gt; 2,
+                &#39;action&#39;: self._optimize_nested_loops,
+                &#39;description&#39;: &#39;Flatten nested loops&#39;
+            },
+            {
+                &#39;condition&#39;: lambda stats: stats[&#39;repeated_calculation&#39;] &gt; 100,
+                &#39;action&#39;: self._add_memoization,
+                &#39;description&#39;: &#39;Add memoization for repeated calculations&#39;
+            }
+        ]
+
+    def analyze_and_optimize(self, code_stats):
+        &quot;&quot;&quot;코드 분석 및 최적화&quot;&quot;&quot;
+        applied_optimizations = []
+
+        for rule in self.optimization_rules:
+            if rule[&#39;condition&#39;](code_stats):
+                print(f&quot;Applying: {rule[&#39;description&#39;]}&quot;)
+                rule[&#39;action&#39;]()
+                applied_optimizations.append(rule[&#39;description&#39;])
+
+        return applied_optimizations
+
+    def _optimize_list_append(self):
+        &quot;&quot;&quot;리스트 append 최적화&quot;&quot;&quot;
+        # deque 사용 권장
+        print(&quot;Recommendation: Use collections.deque for frequent appends&quot;)
+
+    def _optimize_nested_loops(self):
+        &quot;&quot;&quot;중첩 루프 최적화&quot;&quot;&quot;
+        # NumPy 벡터화 권장
+        print(&quot;Recommendation: Use NumPy vectorization for nested loops&quot;)
+
+    def _add_memoization(self):
+        &quot;&quot;&quot;메모이제이션 추가&quot;&quot;&quot;
+        # functools.lru_cache 권장
+        print(&quot;Recommendation: Add @functools.lru_cache decorator&quot;)</code></pre>
+<p>프로파일링과 최적화는 반복적인 과정입니다. 측정 없는 최적화는 추측에 불과하므로, 항상 데이터 기반으로 최적화를 진행해야 합니다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        
+        <a href="/tech/ko/posts/2024-06-01-advanced-scheduling-algorithms.html" class="next">이산 이벤트 시뮬레이션을 위한 고급 스케줄링 알고리즘 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>

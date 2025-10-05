@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시뮬레이션을 위한 Python JIT 컴파일러 최적화 - 재영의 블로그</title>
+    <meta name="description" content="Numba, JAX, PyPy를 활용한 시뮬레이션 코드의 JIT 컴파일 최적화 전략">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/categories.html" data-nav-link>카테고리</a>
+                <a href="/tech/ko/tags.html" data-nav-link>태그</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>시뮬레이션을 위한 Python JIT 컴파일러 최적화</h1>
+        <time datetime=""2024-05-15T00:00:00.000Z"">May 15, 2024</time>
+        
+        <div style="margin-top: 1rem;">
+            <a href="/tech/ko/categories/performance.html" class="category-badge">성능 최적화</a>
+        </div>
+        
+        
+        <div class="tags" style="margin-top: 1rem;">
+            
+            <a href="/tech/ko/tags/python.html" class="tag">python</a>
+            
+            <a href="/tech/ko/tags/jit.html" class="tag">jit</a>
+            
+            <a href="/tech/ko/tags/numba.html" class="tag">numba</a>
+            
+            <a href="/tech/ko/tags/jax.html" class="tag">jax</a>
+            
+            <a href="/tech/ko/tags/pypy.html" class="tag">pypy</a>
+            
+            <a href="/tech/ko/tags/optimization.html" class="tag">optimization</a>
+            
+        </div>
+        
+    </header>
+
+    <div class="post-content">
+        <h1 id="-python-jit-">시뮬레이션을 위한 Python JIT 컴파일러 최적화</h1>
+<p>JIT(Just-In-Time) 컴파일러를 활용하면 Python 시뮬레이션 코드를 네이티브 성능에 근접하게 실행할 수 있습니다. 다양한 JIT 솔루션의 심화 활용법을 살펴봅니다.</p>
+<h2 id="numba-">Numba를 활용한 고성능 시뮬레이션</h2>
+<pre><code class="language-python">import numba as nb
+from numba import cuda, prange, vectorize
+import numpy as np
+from numba.typed import Dict, List
+from numba.experimental import jitclass
+
+# JIT 클래스 정의
+spec = [
+    (&#39;n_entities&#39;, nb.int64),
+    (&#39;states&#39;, nb.float64[:, :]),
+    (&#39;events&#39;, nb.float64[:]),
+    (&#39;time&#39;, nb.float64),
+]
+
+@jitclass(spec)
+class NumbaSimulation:
+    &quot;&quot;&quot;Numba JIT 컴파일된 시뮬레이션 엔진&quot;&quot;&quot;
+
+    def __init__(self, n_entities):
+        self.n_entities = n_entities
+        self.states = np.zeros((n_entities, 10), dtype=np.float64)
+        self.events = np.zeros(n_entities, dtype=np.float64)
+        self.time = 0.0
+
+    @nb.njit(fastmath=True, parallel=True)
+    def update_states(self, dt):
+        &quot;&quot;&quot;병렬화된 상태 업데이트&quot;&quot;&quot;
+        for i in prange(self.n_entities):
+            # SIMD 최적화 가능한 벡터 연산
+            for j in range(10):
+                self.states[i, j] += dt * self._compute_derivative(i, j)
+
+    @nb.njit(inline=&#39;always&#39;)
+    def _compute_derivative(self, entity_id, state_idx):
+        &quot;&quot;&quot;인라인 최적화된 미분 계산&quot;&quot;&quot;
+        return np.exp(-self.states[entity_id, state_idx] * 0.1)
+
+# GPU 가속 시뮬레이션
+@cuda.jit
+def cuda_simulation_kernel(states, events, dt, result):
+    &quot;&quot;&quot;CUDA 커널로 구현된 시뮬레이션&quot;&quot;&quot;
+    # 쓰레드 인덱싱
+    tx = cuda.threadIdx.x
+    ty = cuda.threadIdx.y
+    bx = cuda.blockIdx.x
+    by = cuda.blockIdx.y
+    bw = cuda.blockDim.x
+    bh = cuda.blockDim.y
+
+    # 글로벌 인덱스 계산
+    i = tx + bx * bw
+    j = ty + by * bh
+
+    # 공유 메모리 활용
+    shared_cache = cuda.shared.array(shape=(32, 32), dtype=nb.float64)
+
+    if i &lt; states.shape[0] and j &lt; states.shape[1]:
+        # 공유 메모리로 로드
+        shared_cache[tx, ty] = states[i, j]
+        cuda.syncthreads()
+
+        # 계산 수행
+        local_sum = 0.0
+        for k in range(min(32, states.shape[1])):
+            local_sum += shared_cache[tx, k] * dt
+
+        # 결과 저장
+        result[i, j] = local_sum
+
+# 벡터화 함수
+@vectorize([nb.float64(nb.float64, nb.float64)],
+           target=&#39;parallel&#39;, fastmath=True)
+def vectorized_interaction(x, y):
+    &quot;&quot;&quot;SIMD 벡터화된 상호작용 계산&quot;&quot;&quot;
+    return np.exp(-abs(x - y)) / (1.0 + x * y)</code></pre>
+<h2 id="jax-xla-">JAX를 활용한 자동 미분과 XLA 컴파일</h2>
+<pre><code class="language-python">import jax
+import jax.numpy as jnp
+from jax import jit, grad, vmap, pmap
+from functools import partial
+import haiku as hk
+
+class JAXSimulation:
+    &quot;&quot;&quot;JAX 기반 미분 가능한 시뮬레이션&quot;&quot;&quot;
+
+    def __init__(self, n_entities: int):
+        self.n_entities = n_entities
+
+        # PRNGKey 초기화
+        self.key = jax.random.PRNGKey(0)
+
+    @partial(jit, static_argnums=(0,))
+    def simulate_step(self, state, params, dt):
+        &quot;&quot;&quot;JIT 컴파일된 시뮬레이션 스텝&quot;&quot;&quot;
+        # 자동 미분 가능한 연산
+        def entity_dynamics(entity_state, entity_params):
+            # Neural ODE 스타일 다이나믹스
+            hidden = jnp.tanh(entity_state @ entity_params[&#39;W1&#39;])
+            output = hidden @ entity_params[&#39;W2&#39;]
+            return output
+
+        # vmap을 통한 벡터화
+        batched_dynamics = vmap(entity_dynamics, in_axes=(0, None))
+
+        # 상태 업데이트
+        derivatives = batched_dynamics(state, params)
+        new_state = state + dt * derivatives
+
+        return new_state
+
+    @partial(jit, static_argnums=(0,))
+    def compute_loss(self, state, target, params):
+        &quot;&quot;&quot;손실 함수 (자동 미분용)&quot;&quot;&quot;
+        predicted = self.simulate_step(state, params, 0.01)
+        loss = jnp.mean((predicted - target) ** 2)
+        return loss
+
+    def optimize_parameters(self, initial_state, target_state, params):
+        &quot;&quot;&quot;경사하강법으로 파라미터 최적화&quot;&quot;&quot;
+        # 그래디언트 함수 생성
+        grad_fn = jit(grad(self.compute_loss, argnums=2))
+
+        # Adam 옵티마이저
+        import optax
+        optimizer = optax.adam(learning_rate=1e-3)
+        opt_state = optimizer.init(params)
+
+        @jit
+        def update_step(params, opt_state, state, target):
+            grads = grad_fn(state, target, params)
+            updates, opt_state = optimizer.update(grads, opt_state)
+            params = optax.apply_updates(params, updates)
+            return params, opt_state
+
+        # 최적화 루프
+        for _ in range(1000):
+            params, opt_state = update_step(
+                params, opt_state, initial_state, target_state
+            )
+
+        return params
+
+# XLA 백엔드 최적화
+@partial(jit, backend=&#39;gpu&#39;)  # GPU에서 XLA 컴파일
+def xla_optimized_simulation(states, params):
+    &quot;&quot;&quot;XLA 최적화된 시뮬레이션&quot;&quot;&quot;
+    # 퓨전 가능한 연산 체인
+    x = jnp.dot(states, params[&#39;W1&#39;])
+    x = jax.nn.relu(x)
+    x = jnp.dot(x, params[&#39;W2&#39;])
+    x = jax.nn.softmax(x, axis=-1)
+
+    # 스캔을 통한 시퀀셜 처리
+    def scan_fn(carry, x):
+        state = carry
+        state = state * 0.9 + x * 0.1
+        return state, state
+
+    _, outputs = jax.lax.scan(scan_fn, x[0], x)
+    return outputs
+
+# 다중 디바이스 병렬화
+@pmap
+def parallel_simulation_step(state, params):
+    &quot;&quot;&quot;다중 GPU/TPU 병렬 실행&quot;&quot;&quot;
+    # 각 디바이스에서 독립적 실행
+    local_result = xla_optimized_simulation(state, params)
+
+    # 디바이스 간 통신 (all-reduce)
+    global_mean = jax.lax.pmean(local_result, axis_name=&#39;devices&#39;)
+
+    return global_mean</code></pre>
+<h2 id="pypy-jit-">PyPy JIT 최적화 패턴</h2>
+<pre><code class="language-python"># PyPy에서 최적화되는 패턴들
+class PyPyOptimizedSimulation:
+    &quot;&quot;&quot;PyPy JIT 친화적인 시뮬레이션&quot;&quot;&quot;
+
+    def __init__(self, n_entities):
+        self.n_entities = n_entities
+        # PyPy는 리스트를 효율적으로 처리
+        self.entities = [Entity(i) for i in range(n_entities)]
+
+        # 타입 안정적인 딕셔너리
+        self.event_handlers = {}
+        self._register_handlers()
+
+    def _register_handlers(self):
+        &quot;&quot;&quot;JIT 친화적인 핸들러 등록&quot;&quot;&quot;
+        # 가상 함수 호출 피하기
+        self.event_handlers[EVENT_MOVE] = self._handle_move
+        self.event_handlers[EVENT_INTERACT] = self._handle_interact
+
+    def process_events(self, events):
+        &quot;&quot;&quot;타입 안정적인 이벤트 처리&quot;&quot;&quot;
+        # PyPy는 타입이 안정적인 루프를 최적화
+        for event in events:
+            handler = self.event_handlers.get(event.type)
+            if handler is not None:
+                handler(event)
+
+    def _handle_move(self, event):
+        &quot;&quot;&quot;인라인 가능한 핸들러&quot;&quot;&quot;
+        entity = self.entities[event.entity_id]
+        # 간단한 연산은 인라인됨
+        entity.x += event.dx
+        entity.y += event.dy
+
+    # 루프 언롤링을 위한 힌트
+    def update_all_entities(self):
+        &quot;&quot;&quot;PyPy가 최적화하는 루프 패턴&quot;&quot;&quot;
+        # 루프 분할로 최적화 유도
+        n = self.n_entities
+
+        # 4개씩 언롤링
+        i = 0
+        while i &lt; n - 3:
+            self.entities[i].update()
+            self.entities[i+1].update()
+            self.entities[i+2].update()
+            self.entities[i+3].update()
+            i += 4
+
+        # 나머지 처리
+        while i &lt; n:
+            self.entities[i].update()
+            i += 1</code></pre>
+<h2 id="-jit-">하이브리드 JIT 전략</h2>
+<pre><code class="language-python">import numba as nb
+import jax.numpy as jnp
+from jax import jit
+
+class HybridJITSimulation:
+    &quot;&quot;&quot;다중 JIT 컴파일러 활용&quot;&quot;&quot;
+
+    def __init__(self):
+        self.use_gpu = self._detect_gpu()
+
+    @staticmethod
+    @nb.njit(cache=True)
+    def numba_critical_loop(data, n_iterations):
+        &quot;&quot;&quot;Numba로 컴파일된 크리티컬 루프&quot;&quot;&quot;
+        result = np.zeros_like(data)
+
+        for i in range(n_iterations):
+            # CPU 집약적 계산
+            for j in range(len(data)):
+                result[j] += np.exp(-data[j] * i / 1000.0)
+
+        return result
+
+    @staticmethod
+    @jit
+    def jax_matrix_operations(matrices):
+        &quot;&quot;&quot;JAX로 최적화된 행렬 연산&quot;&quot;&quot;
+        # GPU에서 효율적인 대규모 행렬 연산
+        result = matrices[0]
+        for m in matrices[1:]:
+            result = jnp.matmul(result, m)
+            result = jax.nn.relu(result)
+
+        return result
+
+    def run_hybrid_simulation(self, data, matrices):
+        &quot;&quot;&quot;하이브리드 실행&quot;&quot;&quot;
+        # CPU 작업은 Numba로
+        cpu_result = self.numba_critical_loop(data, 100)
+
+        # GPU 작업은 JAX로
+        if self.use_gpu:
+            gpu_result = self.jax_matrix_operations(matrices)
+        else:
+            gpu_result = self._numpy_fallback(matrices)
+
+        return cpu_result, gpu_result</code></pre>
+<h2 id="jit-">JIT 프로파일링과 최적화</h2>
+<pre><code class="language-python"># Numba 프로파일링
+from numba import config
+config.DUMP_ASSEMBLY = True
+config.DUMP_CFG = True
+config.DUMP_IR = True
+
+@nb.njit
+def profile_target(x):
+    &quot;&quot;&quot;프로파일링 대상 함수&quot;&quot;&quot;
+    return np.sum(x ** 2)
+
+# 생성된 어셈블리 확인
+profile_target.inspect_types()
+profile_target.inspect_asm()
+
+# JAX 프로파일링
+from jax.profiler import start_trace, stop_trace
+
+def profile_jax_code():
+    &quot;&quot;&quot;JAX 프로파일링&quot;&quot;&quot;
+    # 트레이스 시작
+    start_trace(&quot;/tmp/jax_trace&quot;)
+
+    # 시뮬레이션 코드
+    result = xla_optimized_simulation(states, params)
+
+    # 트레이스 종료
+    stop_trace()
+
+# 컴파일 시간 측정
+import time
+
+def measure_compilation_overhead():
+    &quot;&quot;&quot;JIT 컴파일 오버헤드 측정&quot;&quot;&quot;
+    # 첫 실행 (컴파일 포함)
+    start = time.perf_counter()
+    result1 = numba_critical_loop(data, 100)
+    compile_time = time.perf_counter() - start
+
+    # 두 번째 실행 (캐시된 버전)
+    start = time.perf_counter()
+    result2 = numba_critical_loop(data, 100)
+    runtime = time.perf_counter() - start
+
+    print(f&quot;Compilation overhead: {compile_time/runtime:.1f}x&quot;)</code></pre>
+<h2 id="-jit-">커스텀 JIT 컴파일러 확장</h2>
+<pre><code class="language-python">from numba import types
+from numba.core import cgutils
+from numba.core.imputils import lower_builtin
+from numba.core.typing import signature
+
+# 커스텀 인트린식 정의
+@nb.intrinsic
+def custom_atomic_add(typingctx, val_t, ptr_t):
+    &quot;&quot;&quot;원자적 덧셈 연산&quot;&quot;&quot;
+    sig = types.void(val_t, ptr_t)
+
+    def codegen(context, builder, sig, args):
+        val, ptr = args
+        # LLVM IR 생성
+        old = builder.atomic_rmw(&#39;add&#39;, ptr, val, &#39;seq_cst&#39;)
+        return context.get_dummy_value()
+
+    return sig, codegen
+
+# 사용 예시
+@nb.njit
+def parallel_accumulate(array, indices, values):
+    &quot;&quot;&quot;원자적 누적&quot;&quot;&quot;
+    for i in range(len(indices)):
+        custom_atomic_add(values[i], array.ctypes.data + indices[i])</code></pre>
+<p>JIT 컴파일러를 효과적으로 활용하면 Python 시뮬레이션을 C++에 근접한 성능으로 실행할 수 있으며, 개발 생산성을 유지하면서도 높은 성능을 달성할 수 있습니다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/2024-06-01-advanced-scheduling-algorithms.html" class="prev">← 이산 이벤트 시뮬레이션을 위한 고급 스케줄링 알고리즘</a>
+        
+        
+        <a href="/tech/ko/posts/2024-04-05-distributed-des-python.html" class="next">Python으로 구현하는 분산 이산 이벤트 시뮬레이션 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>
