@@ -1,37 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Life & Personal Blog</title>
-    <meta name="description" content="Thoughts on life, travel, and everything in betweenA blog built from scratch">
+    <title>재영의 블로그</title>
+    <meta name="description" content="처음부터 만든 블로그">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="Life & Personal Blog RSS" href="/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <script>
         // Apply saved theme immediately to prevent flash
         const theme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
-        const lang = localStorage.getItem('lang') || 'en';
+        const lang = localStorage.getItem('lang') || 'ko';
     </script>
     <script src="/assets/js/theme-switcher.js" defer></script>
 </head>
 <body>
     <header>
         <nav>
-            <a href="/" class="site-title" data-nav-link>Life & Personal Blog</a>
+            <a href="/" class="site-title" data-nav-link>재영의 블로그</a>
             <div class="nav-links">
-                <a href="/" data-nav-link>Home</a>
-                <a href="/categories.html" data-nav-link>Categories</a>
-                <a href="/tags.html" data-nav-link>Tags</a>
-                <a href="/archive.html" data-nav-link>Archive</a>
-                <a href="/about.html" data-nav-link>About</a>
+                <a href="/" data-nav-link>홈</a>
+                <a href="/categories.html" data-nav-link>카테고리</a>
+                <a href="/tags.html" data-nav-link>태그</a>
+                <a href="/archive.html" data-nav-link>아카이브</a>
+                <a href="/about.html" data-nav-link>소개</a>
                 <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
                     <span id="theme-icon">🌙</span>
                 </button>
             </div>
@@ -39,13 +39,13 @@
     </header>
 
     <main>
-        <div class="categories-index">
+        <div class="home">
     <div class="page-header">
-        <h1>All Categories</h1>
-        <p class="subtitle">Browse content by category</p>
+        <h1>최근 포스트</h1>
+        <p class="subtitle">코드, 기술, 그리고 모든 것에 대한 생각</p>
     </div>
 
-    <div class="categories-grid">
+    <div class="post-list">
         
     </div>
 </div>
@@ -53,7 +53,7 @@
 
     <footer>
         <div class="footer-content">
-            <p>&copy; Jae · Built with custom static site generator</p>
+            <p>&copy; Anonymous · Built with custom static site generator</p>
             <div class="footer-links">
                 <a href="/feed.xml">RSS</a>
                 
