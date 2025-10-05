@@ -5,7 +5,7 @@
     <link>http://localhost:3000</link>
     <description>A blog built from scratch</description>
     <atom:link href="http://localhost:3000/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Sun, 05 Oct 2025 10:41:56 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 05 Oct 2025 10:43:23 GMT</lastBuildDate>
     
   </channel>
 </rss>
