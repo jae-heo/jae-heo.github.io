@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jae's Blogs</title>
+    <meta name="description" content="Welcome to Jae's personal space - Life blog, Tech blog, and Portfolio">
+    <link rel="stylesheet" href="/assets/style.css">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+    <style>
+        .blog-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-hover) 100%);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-color: var(--accent);
+        }
+
+        .blog-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .blog-card:hover .blog-arrow {
+            transform: translateX(5px);
+        }
+
+        .blog-arrow {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="site-title">Jae's Blogs</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <h1 id="welcome-text" style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Welcome to My Space</h1>
+            <p id="subtitle" style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Explore my thoughts on life, technology, and the projects I've built</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+            <a href="/life/en/" id="life-blog-link" class="blog-card">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🌟</div>
+                <h3 id="life-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Jae's Life Blog</h3>
+                <p id="life-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Personal stories, travel adventures, and life experiences beyond the code</p>
+                <p style="color: var(--accent); font-weight: 600;">
+                    <span id="life-visit">Visit Blog</span>
+                    <span class="blog-arrow">→</span>
+                </p>
+            </a>
+
+            <a href="/tech/en/" id="tech-blog-link" class="blog-card">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">💻</div>
+                <h3 id="tech-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Jae's Tech Blog</h3>
+                <p id="tech-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Deep dives into programming, technology trends, and development insights</p>
+                <p style="color: var(--accent); font-weight: 600;">
+                    <span id="tech-visit">Visit Blog</span>
+                    <span class="blog-arrow">→</span>
+                </p>
+            </a>
+
+            <a href="/portfolio/en/" id="portfolio-blog-link" class="blog-card">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+                <h3 id="portfolio-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Jae's Portfolio</h3>
+                <p id="portfolio-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Showcase of my projects, open source contributions, and professional work</p>
+                <p style="color: var(--accent); font-weight: 600;">
+                    <span id="portfolio-visit">Visit Portfolio</span>
+                    <span class="blog-arrow">→</span>
+                </p>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with a custom static site generator</p>
+            <div class="footer-links">
+                <a href="https://github.com/jae-heo" target="_blank">GitHub</a>
+                <a href="mailto:jae@example.com">Email</a>
+                <a href="https://linkedin.com/in/jae" target="_blank">LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                welcome: "Welcome to My Space",
+                subtitle: "Explore my thoughts on life, technology, and the projects I've built",
+                lifeTitle: "Jae's Life Blog",
+                lifeDesc: "Personal stories, travel adventures, and life experiences beyond the code",
+                lifeVisit: "Visit Blog",
+                techTitle: "Jae's Tech Blog",
+                techDesc: "Deep dives into programming, technology trends, and development insights",
+                techVisit: "Visit Blog",
+                portfolioTitle: "Jae's Portfolio",
+                portfolioDesc: "Showcase of my projects, open source contributions, and professional work",
+                portfolioVisit: "Visit Portfolio"
+            },
+            ko: {
+                welcome: "재영의 공간에 오신 것을 환영합니다",
+                subtitle: "삶, 기술, 그리고 제가 만든 프로젝트에 대한 생각을 탐색해보세요",
+                lifeTitle: "재영의 라이프 블로그",
+                lifeDesc: "코드 너머의 개인적인 이야기, 여행 모험, 그리고 삶의 경험들",
+                lifeVisit: "블로그 방문",
+                techTitle: "재영의 테크 블로그",
+                techDesc: "프로그래밍, 기술 트렌드, 그리고 개발 인사이트에 대한 심층 탐구",
+                techVisit: "블로그 방문",
+                portfolioTitle: "재영의 포트폴리오",
+                portfolioDesc: "프로젝트, 오픈소스 기여, 그리고 전문적인 작업 쇼케이스",
+                portfolioVisit: "포트폴리오 방문"
+            }
+        };
+
+        // Theme handling
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        themeToggle?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language handling
+        const langSelect = document.getElementById('lang-select');
+        const savedLang = localStorage.getItem('lang') || 'en';
+        langSelect.value = savedLang;
+
+        function updateLanguage(lang) {
+            // Update text content
+            document.getElementById('welcome-text').textContent = translations[lang].welcome;
+            document.getElementById('subtitle').textContent = translations[lang].subtitle;
+            document.getElementById('life-title').textContent = translations[lang].lifeTitle;
+            document.getElementById('life-desc').textContent = translations[lang].lifeDesc;
+            document.getElementById('life-visit').textContent = translations[lang].lifeVisit;
+            document.getElementById('tech-title').textContent = translations[lang].techTitle;
+            document.getElementById('tech-desc').textContent = translations[lang].techDesc;
+            document.getElementById('tech-visit').textContent = translations[lang].techVisit;
+            document.getElementById('portfolio-title').textContent = translations[lang].portfolioTitle;
+            document.getElementById('portfolio-desc').textContent = translations[lang].portfolioDesc;
+            document.getElementById('portfolio-visit').textContent = translations[lang].portfolioVisit;
+
+            // Update blog links
+            document.getElementById('life-blog-link').href = `/life/${lang}/`;
+            document.getElementById('tech-blog-link').href = `/tech/${lang}/`;
+            document.getElementById('portfolio-blog-link').href = `/portfolio/${lang}/`;
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+        }
+
+        updateLanguage(savedLang);
+
+        langSelect.addEventListener('change', (e) => {
+            const selectedLang = e.target.value;
+            localStorage.setItem('lang', selectedLang);
+            updateLanguage(selectedLang);
+        });
+    </script>
+</body>
+</html>
