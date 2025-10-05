@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script>
+        // Get saved language preference or default
+        const savedLang = localStorage.getItem('lang') || 'en';
+        const supportedLangs = ["en","ko"];
+
+        // Redirect to the appropriate language version
+        const targetLang = supportedLangs.includes(savedLang) ? savedLang : 'en';
+        window.location.replace(window.location.pathname + targetLang + '/');
+    </script>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=./en/">
+    </noscript>
+</head>
+<body>
+    <p>Redirecting to your preferred language...</p>
+    <p>If you are not redirected: <a href="./en/">English</a> | <a href="./ko/">한국어</a></p>
+</body>
+</html>

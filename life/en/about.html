@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Jae's Life Blog</title>
+    <meta name="description" content="Thoughts on life, travel, and everything in betweenThoughts on life, travel, and everything in between">
+    <link rel="stylesheet" href="/life/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Life Blog RSS" href="/life/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/life/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/life/en/" class="site-title" data-nav-link>Jae's Life Blog</a>
+            <div class="nav-links">
+                <a href="/life/en/" data-nav-link>Home</a>
+                <a href="/life/en/categories.html" data-nav-link>Categories</a>
+                <a href="/life/en/tags.html" data-nav-link>Tags</a>
+                <a href="/life/en/archive.html" data-nav-link>Archive</a>
+                <a href="/life/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-wrapper">
+    <div class="page-header">
+        <h1>About</h1>
+    </div>
+    <article class="page">
+        <div class="page-content">
+            <h1 id="about-jae39s-life-blog">About Jae&#39;s Life Blog</h1>
+<p>Welcome to my personal space on the web! This is where I share my thoughts, experiences, and adventures beyond the world of code.</p>
+<h2 id="what-i-write-about">What I Write About</h2>
+<h3 id="-travel-amp-adventures">🌍 Travel &amp; Adventures</h3>
+<p>From weekend getaways to international trips, I love exploring new places and cultures. I share travel tips, destination guides, and personal experiences from my journeys around the world.</p>
+<h3 id="-personal-development">🎯 Personal Development</h3>
+<p>Life is a constant learning experience. I write about productivity, habits, goal-setting, and the lessons I&#39;ve learned along the way.</p>
+<h3 id="-books-amp-learning">📚 Books &amp; Learning</h3>
+<p>I&#39;m an avid reader and lifelong learner. I share book reviews, reading lists, and insights from various subjects that fascinate me.</p>
+<h3 id="-health-amp-wellness">🏃 Health &amp; Wellness</h3>
+<p>Maintaining a healthy work-life balance is crucial. I write about fitness routines, mental health, meditation, and finding balance in our busy lives.</p>
+<h3 id="-hobbies-amp-interests">🎨 Hobbies &amp; Interests</h3>
+<p>From photography to cooking, from music to gaming - I explore various hobbies and share my experiences trying new things.</p>
+<h2 id="why-i-blog">Why I Blog</h2>
+<p>This blog is my digital journal where I:</p>
+<ul class="ul-list">
+<li>Document life&#39;s precious moments</li><li>Share experiences and lessons learned</li><li>Connect with like-minded people</li><li>Practice mindful reflection</li></ul>
+<h2 id="about-me">About Me</h2>
+<p>Hi, I&#39;m Jae! I&#39;m a software developer by profession, but this blog is about everything else that makes life interesting. I believe in living a balanced life where work is just one part of a much bigger picture.</p>
+<p>I&#39;m passionate about:</p>
+<ul class="ul-list">
+<li>Exploring new cultures and cuisines</li><li>Continuous learning and self-improvement</li><li>Building meaningful relationships</li><li>Finding joy in simple things</li></ul>
+<h2 id="connect-with-me">Connect With Me</h2>
+<p>I love hearing from readers! Whether you want to share your own experiences, have questions, or just want to say hello:</p>
+<ul class="ul-list">
+<li><strong>GitHub</strong>: <a href="https://github.com/jae-heo" target="_blank" rel="noopener noreferrer">github.com/jae-heo</a></li><li><strong>Email</strong>: jae@example.com</li><li><strong>LinkedIn</strong>: <a href="https://linkedin.com/in/jae" target="_blank" rel="noopener noreferrer">linkedin.com/in/jae</a></li></ul>
+<h2 id="my-life-philosophy">My Life Philosophy</h2>
+<blockquote><p>&quot;Life is not measured by the number of breaths we take, but by the moments that take our breath away.&quot;</p>
+</blockquote>
+<p>I believe in living intentionally, embracing new experiences, and finding beauty in everyday moments.</p>
+<hr />
+<p><em></em></p>
+
+        </div>
+    </article>
+</div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/life/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>

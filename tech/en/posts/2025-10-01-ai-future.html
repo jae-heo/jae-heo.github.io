@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Future of AI in Software Development - Jae's Tech Blog</title>
+    <meta name="description" content="Exploring how AI is transforming the way we write and maintain code.">
+    <link rel="stylesheet" href="/tech/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/tech/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/categories.html" data-nav-link>Categories</a>
+                <a href="/tech/en/tags.html" data-nav-link>Tags</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>The Future of AI in Software Development</h1>
+        <time datetime=""2025-10-01T00:00:00.000Z"">October 1, 2025</time>
+        
+        <div style="margin-top: 1rem;">
+            <a href="/tech/en/categories/technology.html" class="category-badge">technology</a>
+        </div>
+        
+        
+        <div class="tags" style="margin-top: 1rem;">
+            
+            <a href="/tech/en/tags/ai.html" class="tag">ai</a>
+            
+            <a href="/tech/en/tags/future.html" class="tag">future</a>
+            
+            <a href="/tech/en/tags/technology.html" class="tag">technology</a>
+            
+            <a href="/tech/en/tags/machine-learning.html" class="tag">machine-learning</a>
+            
+        </div>
+        
+    </header>
+
+    <div class="post-content">
+        <p>Artificial Intelligence is rapidly changing the landscape of software development. From code completion to automated testing, AI is becoming an integral part of the development workflow.</p>
+<h2 id="ai-powered-development-tools">AI-Powered Development Tools</h2>
+<h3 id="github-copilot">GitHub Copilot</h3>
+<p>AI pair programming that suggests code as you type.</p>
+<h3 id="chatgpt-amp-claude">ChatGPT &amp; Claude</h3>
+<p>Natural language to code conversion and debugging assistance.</p>
+<h3 id="automated-code-review">Automated Code Review</h3>
+<p>AI systems that catch bugs and suggest improvements.</p>
+<h2 id="benefits-of-ai-in-development">Benefits of AI in Development</h2>
+<ol class="ol-list">
+<li><strong>Increased Productivity</strong>: Write code faster with intelligent suggestions</li><li><strong>Reduced Bugs</strong>: AI can spot patterns that lead to errors</li><li><strong>Learning Tool</strong>: Great for learning new languages and frameworks</li><li><strong>Documentation</strong>: Auto-generate documentation from code</li></ol>
+<h2 id="challenges-and-considerations">Challenges and Considerations</h2>
+<ul class="ul-list">
+<li><strong>Code Quality</strong>: AI-generated code needs review</li><li><strong>Security</strong>: Be careful with sensitive data</li><li><strong>Over-reliance</strong>: Don&#39;t lose your problem-solving skills</li><li><strong>Licensing</strong>: Understand the implications of AI-generated code</li></ul>
+<h2 id="the-future">The Future</h2>
+<p>We&#39;re moving towards a future where AI assists rather than replaces developers. The key is to use AI as a tool to enhance creativity and productivity, not as a crutch.</p>
+<p>What exciting times to be a developer!</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/2025-10-02-react-hooks.html" class="prev">← Understanding React Hooks</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>

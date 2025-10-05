@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jae's Life Blog</title>
+    <meta name="description" content="Thoughts on life, travel, and everything in betweenThoughts on life, travel, and everything in between">
+    <link rel="stylesheet" href="/life/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Life Blog RSS" href="/life/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/life/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/life/en/" class="site-title" data-nav-link>Jae's Life Blog</a>
+            <div class="nav-links">
+                <a href="/life/en/" data-nav-link>Home</a>
+                <a href="/life/en/categories.html" data-nav-link>Categories</a>
+                <a href="/life/en/tags.html" data-nav-link>Tags</a>
+                <a href="/life/en/archive.html" data-nav-link>Archive</a>
+                <a href="/life/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="tags-index">
+    <div class="page-header">
+        <h1>All Tags</h1>
+        <p class="subtitle">Browse all  tags</p>
+    </div>
+
+    <div class="tags-cloud">
+        
+        <a href="/life/en/tags/productivity.html" class="tag-item">
+            <span class="tag-name">productivity</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/life/en/tags/travel.html" class="tag-item">
+            <span class="tag-name">travel</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/life/en/tags/tips.html" class="tag-item">
+            <span class="tag-name">tips</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/workflow.html" class="tag-item">
+            <span class="tag-name">workflow</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/welcome.html" class="tag-item">
+            <span class="tag-name">welcome</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/first-post.html" class="tag-item">
+            <span class="tag-name">first-post</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/i18n.html" class="tag-item">
+            <span class="tag-name">i18n</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/multilingual.html" class="tag-item">
+            <span class="tag-name">multilingual</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/korean.html" class="tag-item">
+            <span class="tag-name">korean</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/english.html" class="tag-item">
+            <span class="tag-name">english</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/japan.html" class="tag-item">
+            <span class="tag-name">japan</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/adventure.html" class="tag-item">
+            <span class="tag-name">adventure</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/일상.html" class="tag-item">
+            <span class="tag-name">일상</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/개발자.html" class="tag-item">
+            <span class="tag-name">개발자</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/워라밸.html" class="tag-item">
+            <span class="tag-name">워라밸</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/korea.html" class="tag-item">
+            <span class="tag-name">korea</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/여행.html" class="tag-item">
+            <span class="tag-name">여행</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/한국.html" class="tag-item">
+            <span class="tag-name">한국</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/life/en/tags/서울.html" class="tag-item">
+            <span class="tag-name">서울</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+    </div>
+</div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/life/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>

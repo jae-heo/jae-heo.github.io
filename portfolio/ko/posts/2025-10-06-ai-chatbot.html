@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기업용 AI 챗봇 플랫폼 개발 - 재영의 블로그</title>
+    <meta name="description" content="GPT-4 기반 지능형 고객 상담 챗봇 시스템 구축">
+    <link rel="stylesheet" href="/portfolio/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/portfolio/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/portfolio/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/portfolio/ko/" class="site-title" data-nav-link>재영의 블로그</a>
+            <div class="nav-links">
+                <a href="/portfolio/ko/" data-nav-link>홈</a>
+                <a href="/portfolio/ko/categories.html" data-nav-link>카테고리</a>
+                <a href="/portfolio/ko/tags.html" data-nav-link>태그</a>
+                <a href="/portfolio/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/portfolio/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>기업용 AI 챗봇 플랫폼 개발</h1>
+        <time datetime=""2025-10-06T00:00:00.000Z"">October 6, 2025</time>
+        
+        <div style="margin-top: 1rem;">
+            <a href="/portfolio/ko/categories/projects.html" class="category-badge">projects</a>
+        </div>
+        
+        
+        <div class="tags" style="margin-top: 1rem;">
+            
+            <a href="/portfolio/ko/tags/ai.html" class="tag">ai</a>
+            
+            <a href="/portfolio/ko/tags/chatgpt.html" class="tag">chatgpt</a>
+            
+            <a href="/portfolio/ko/tags/python.html" class="tag">python</a>
+            
+            <a href="/portfolio/ko/tags/fastapi.html" class="tag">fastapi</a>
+            
+            <a href="/portfolio/ko/tags/챗봇.html" class="tag">챗봇</a>
+            
+            <a href="/portfolio/ko/tags/nlp.html" class="tag">nlp</a>
+            
+        </div>
+        
+    </header>
+
+    <div class="post-content">
+        <h1 id="-ai-">기업용 AI 챗봇 플랫폼 개발</h1>
+<h2 id="-">프로젝트 소개</h2>
+<h3>개요</h3>
+<p>고객 서비스 효율성을 높이기 위한 AI 기반 대화형 챗봇 플랫폼을 개발했습니다. GPT-4 API를 활용하여 자연스러운 대화가 가능하며, 기업별 맞춤 설정이 가능한 솔루션입니다.</p>
+<h3 id="-">주요 특징</h3>
+<ul class="ul-list">
+<li>다국어 지원 (한국어, 영어, 일본어, 중국어)</li><li>실시간 상담원 전환</li><li>감정 분석 및 우선순위 처리</li><li>통계 대시보드</li><li>학습 데이터 관리 시스템</li></ul>
+<h3 id="-">개발 기간</h3>
+<p>2024년 6월 - 2024년 12월 (6개월)</p>
+<h2 id="-">기술 스택</h2>
+<h3 id="backend">Backend</h3>
+<pre><code class="language-python"># 주요 기술
+- Python 3.11
+- FastAPI
+- LangChain
+- OpenAI GPT-4 API
+- PostgreSQL
+- Redis
+- Celery</code></pre>
+<h3 id="frontend">Frontend</h3>
+<pre><code class="language-javascript"><span class="comment">// 관리자 대시보드</span>
+- React <span class="number">18</span>
+- TypeScript
+- Material-UI
+- Chart.js
+- Socket.io</code></pre>
+<h3 id="infrastructure">Infrastructure</h3>
+<ul class="ul-list">
+<li>Docker &amp; Kubernetes</li><li>AWS EKS</li><li>MongoDB (대화 로그)</li><li>Elasticsearch (검색)</li></ul>
+<h2 id="-">시스템 아키텍처</h2>
+<pre><code class="language-mermaid">graph TB
+    User[사용자] --&gt; Widget[챗봇 위젯]
+    Widget --&gt; Gateway[API Gateway]
+    Gateway --&gt; ChatService[대화 서비스]
+    ChatService --&gt; GPT[GPT-4 API]
+    ChatService --&gt; Context[컨텍스트 관리]
+    Context --&gt; VectorDB[Vector DB]
+    ChatService --&gt; Analytics[분석 엔진]
+    Analytics --&gt; Dashboard[대시보드]</code></pre>
+<h2 id="-">핵심 기능 구현</h2>
+<h3 id="1-">1. 컨텍스트 관리 시스템</h3>
+<pre><code class="language-python">from langchain.memory import ConversationBufferWindowMemory
+from langchain.vectorstores import Pinecone
+import pinecone
+
+class ContextManager:
+    def __init__(self, session_id: str):
+        self.session_id = session_id
+        self.memory = ConversationBufferWindowMemory(
+            k=10,  # 최근 10개 대화 유지
+            return_messages=True
+        )
+        self.vector_store = self._init_vector_store()
+
+    def _init_vector_store(self):
+        pinecone.init(
+            api_key=PINECONE_API_KEY,
+            environment=&quot;asia-southeast1-gcp&quot;
+        )
+        return Pinecone.from_existing_index(
+            index_name=&quot;chatbot-knowledge&quot;,
+            embedding=OpenAIEmbeddings()
+        )
+
+    async def get_relevant_context(self, query: str):
+        # 벡터 검색으로 관련 문서 찾기
+        docs = await self.vector_store.similarity_search(
+            query, k=5
+        )
+
+        # 대화 기록과 결합
+        chat_history = self.memory.chat_memory.messages
+
+        return {
+            &quot;documents&quot;: docs,
+            &quot;chat_history&quot;: chat_history
+        }</code></pre>
+<h3 id="2-">2. 프롬프트 엔지니어링</h3>
+<pre><code class="language-python">class PromptTemplate:
+    def __init__(self, company_profile):
+        self.company = company_profile
+        self.system_prompt = f&quot;&quot;&quot;
+        당신은 {self.company[&#39;name&#39;]}의 고객 서비스 상담원입니다.
+
+        회사 정보:
+        - 업종: {self.company[&#39;industry&#39;]}
+        - 주요 서비스: {&#39;, &#39;.join(self.company[&#39;services&#39;])}
+
+        대화 원칙:
+        1. 항상 친절하고 전문적으로 응대
+        2. 회사 정책과 일치하는 답변 제공
+        3. 불확실한 경우 상담원 연결 제안
+        4. 개인정보 보호 준수
+        &quot;&quot;&quot;
+
+    def create_chat_prompt(self, user_input, context):
+        return f&quot;&quot;&quot;
+        {self.system_prompt}
+
+        관련 문서:
+        {context[&#39;documents&#39;]}
+
+        대화 기록:
+        {context[&#39;chat_history&#39;]}
+
+        고객 질문: {user_input}
+
+        위 정보를 바탕으로 적절한 답변을 제공하세요.
+        &quot;&quot;&quot;</code></pre>
+<h3 id="3-">3. 실시간 감정 분석</h3>
+<pre><code class="language-python">from transformers import pipeline
+
+class EmotionAnalyzer:
+    def __init__(self):
+        self.classifier = pipeline(
+            &quot;sentiment-analysis&quot;,
+            model=&quot;nlptown/bert-base-multilingual-uncased-sentiment&quot;
+        )
+
+    def analyze(self, text: str):
+        result = self.classifier(text)[0]
+
+        emotion_map = {
+            &quot;1 star&quot;: &quot;very_negative&quot;,
+            &quot;2 stars&quot;: &quot;negative&quot;,
+            &quot;3 stars&quot;: &quot;neutral&quot;,
+            &quot;4 stars&quot;: &quot;positive&quot;,
+            &quot;5 stars&quot;: &quot;very_positive&quot;
+        }
+
+        emotion = emotion_map.get(result[&#39;label&#39;], &#39;neutral&#39;)
+        confidence = result[&#39;score&#39;]
+
+        # 부정적 감정 시 알림
+        if emotion in [&#39;very_negative&#39;, &#39;negative&#39;]:
+            self.escalate_to_human(text, emotion)
+
+        return {
+            &quot;emotion&quot;: emotion,
+            &quot;confidence&quot;: confidence,
+            &quot;priority&quot;: self.calculate_priority(emotion, confidence)
+        }
+
+    def calculate_priority(self, emotion, confidence):
+        if emotion == &#39;very_negative&#39; and confidence &gt; 0.8:
+            return &quot;high&quot;
+        elif emotion == &#39;negative&#39;:
+            return &quot;medium&quot;
+        return &quot;low&quot;</code></pre>
+<h3 id="4-">4. 다국어 처리</h3>
+<pre><code class="language-python">from googletrans import Translator
+import langdetect
+
+class MultilingualHandler:
+    def __init__(self):
+        self.translator = Translator()
+        self.supported_langs = [&#39;ko&#39;, &#39;en&#39;, &#39;ja&#39;, &#39;zh-cn&#39;]
+
+    async def process(self, text: str):
+        # 언어 감지
+        detected_lang = langdetect.detect(text)
+
+        if detected_lang not in self.supported_langs:
+            detected_lang = &#39;en&#39;
+
+        # 영어로 번역 (GPT 처리용)
+        if detected_lang != &#39;en&#39;:
+            translated = self.translator.translate(
+                text,
+                src=detected_lang,
+                dest=&#39;en&#39;
+            )
+            text_for_gpt = translated.text
+        else:
+            text_for_gpt = text
+
+        # GPT 응답 받기
+        response = await self.get_gpt_response(text_for_gpt)
+
+        # 원래 언어로 번역
+        if detected_lang != &#39;en&#39;:
+            final_response = self.translator.translate(
+                response,
+                src=&#39;en&#39;,
+                dest=detected_lang
+            )
+            return final_response.text
+
+        return response</code></pre>
+<h3 id="5-">5. 성능 최적화</h3>
+<pre><code class="language-python">import asyncio
+from functools import lru_cache
+import hashlib
+
+class ResponseCache:
+    def __init__(self):
+        self.redis_client = redis.Redis(
+            host=&#39;localhost&#39;,
+            port=6379,
+            decode_responses=True
+        )
+
+    def get_cache_key(self, query: str, context: dict):
+        # 쿼리와 컨텍스트를 해시화
+        content = f&quot;{query}{str(context)}&quot;
+        return hashlib.md5(content.encode()).hexdigest()
+
+    async def get_response(self, query: str, context: dict):
+        cache_key = self.get_cache_key(query, context)
+
+        # 캐시 확인
+        cached = self.redis_client.get(cache_key)
+        if cached:
+            return json.loads(cached)
+
+        # GPT 호출
+        response = await self.call_gpt(query, context)
+
+        # 캐시 저장 (1시간 TTL)
+        self.redis_client.setex(
+            cache_key,
+            3600,
+            json.dumps(response)
+        )
+
+        return response</code></pre>
+<h2 id="-">관리자 대시보드</h2>
+<h3 id="-">실시간 모니터링</h3>
+<pre><code class="language-javascript"><span class="comment">// React 컴포넌트</span>
+<span class=<span class="string">"keyword"</span>>const</span> DashboardMetrics = () =&gt; {
+  <span class=<span class="string">"keyword"</span>>const</span> [metrics, setMetrics] = useState({
+    activeUsers: <span class="number">0</span>,
+    totalConversations: <span class="number">0</span>,
+    avgResponseTime: <span class="number">0</span>,
+    satisfactionRate: <span class="number">0</span>
+  });
+
+  useEffect(() =&gt; {
+    <span class=<span class="string">"keyword"</span>>const</span> socket = io(&#<span class="number">39</span>;ws:<span class="comment">//localhost:<span class="number">8000</span>&#<span class="number">39</span>;);</span>
+
+    socket.on(&#<span class="number">39</span>;metrics_update&#<span class="number">39</span>;, (data) =&gt; {
+      setMetrics(data);
+    });
+
+    <span class=<span class="string">"keyword"</span>>return</span> () =&gt; socket.disconnect();
+  }, []);
+
+  <span class=<span class="string">"keyword"</span>>return</span> (
+    &lt;Grid container spacing={<span class="number">3</span>}&gt;
+      &lt;Grid item xs={<span class="number">3</span>}&gt;
+        &lt;MetricCard
+          title=&quot;활성 사용자&quot;
+          value={metrics.activeUsers}
+          icon={&lt;PeopleIcon /&gt;}
+        /&gt;
+      &lt;/Grid&gt;
+      {/* 추가 메트릭 카드들 */}
+    &lt;/Grid&gt;
+  );
+};</code></pre>
+<h2 id="-">학습 데이터 관리</h2>
+<h3 id="fine-tuning-">Fine-tuning 데이터 준비</h3>
+<pre><code class="language-python">class TrainingDataManager:
+    def __init__(self):
+        self.db = PostgreSQL()
+
+    def prepare_training_data(self):
+        # 우수 대화 추출
+        good_conversations = self.db.query(&quot;&quot;&quot;
+            SELECT user_input, bot_response, rating
+            FROM conversations
+            WHERE rating &gt;= 4
+            AND reviewed = true
+            ORDER BY created_at DESC
+            LIMIT 10000
+        &quot;&quot;&quot;)
+
+        # JSONL 형식으로 변환
+        training_data = []
+        for conv in good_conversations:
+            training_data.append({
+                &quot;messages&quot;: [
+                    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: conv.user_input},
+                    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: conv.bot_response}
+                ]
+            })
+
+        # Fine-tuning 데이터 저장
+        with open(&#39;training_data.jsonl&#39;, &#39;w&#39;) as f:
+            for item in training_data:
+                f.write(json.dumps(item) + &#39;\n&#39;)
+
+        return len(training_data)</code></pre>
+<h2 id="-">성과 및 지표</h2>
+<h3 id="-">정량적 성과</h3>
+<ul class="ul-list">
+<li><strong>응답 시간</strong>: 평균 1.2초 (목표: 2초 이내)</li><li><strong>정확도</strong>: 89% (인간 검증 기준)</li><li><strong>처리량</strong>: 일 평균 10,000건 대화</li><li><strong>비용 절감</strong>: 상담 인력 40% 감소</li></ul>
+<h3 id="-">정성적 성과</h3>
+<ul class="ul-list">
+<li>24/7 상담 가능</li><li>다국어 고객 지원</li><li>일관된 서비스 품질</li><li>상담원 업무 부담 감소</li></ul>
+<h2 id="-">도전 과제와 해결</h2>
+<h3 id="1-">1. 할루시네이션 방지</h3>
+<p><strong></strong>: GPT가 없는 정보를 만들어내는 현상</p>
+<p><strong></strong>:</p>
+<ul class="ul-list">
+<li>RAG (Retrieval-Augmented Generation) 구현</li><li>신뢰도 점수 기반 필터링</li><li>팩트 체크 레이어 추가</li></ul>
+<h3 id="2-">2. 응답 지연</h3>
+<p><strong></strong>: GPT API 호출 시 지연</p>
+<p><strong></strong>:</p>
+<ul class="ul-list">
+<li>스트리밍 응답 구현</li><li>예측 가능한 질문 캐싱</li><li>비동기 처리 최적화</li></ul>
+<h3 id="3-">3. 비용 최적화</h3>
+<p><strong></strong>: API 사용료 증가</p>
+<p><strong></strong>:</p>
+<ul class="ul-list">
+<li>토큰 사용량 최적화</li><li>캐싱 전략 개선</li><li>GPT-3.5와 GPT-4 하이브리드 사용</li></ul>
+<h2 id="-">향후 계획</h2>
+<ol class="ol-list">
+<li><strong>음성 인터페이스</strong> 추가</li><li><strong>감정 기반 응답</strong> 고도화</li><li><strong>자체 LLM 모델</strong> 개발</li><li><strong>프로액티브 상담</strong> 기능</li></ol>
+<h2 id="-">코드 저장소</h2>
+<ul class="ul-list">
+<li><a href="#">GitHub Repository</a> (Private)</li><li><a href="#">API Documentation</a></li><li><a href="#">Demo Video</a></li></ul>
+<h2>마치며</h2>
+<p>이 프로젝트를 통해 LLM을 실제 비즈니스에 적용하는 경험을 얻었습니다. 특히 프롬프트 엔지니어링과 컨텍스트 관리의 중요성을 깊이 이해하게 되었으며, AI와 인간의 협업 모델에 대한 인사이트를 얻을 수 있었습니다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        
+        <a href="/portfolio/ko/posts/2025-10-06-ecommerce-platform.html" class="next">대규모 이커머스 플랫폼 구축 프로젝트 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/portfolio/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>

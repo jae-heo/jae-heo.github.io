@@ -1,0 +1,18 @@
+/* Main Stylesheet - Imports all modular CSS */
+
+/* Theme Variables */
+@import 'css/themes.css';
+
+/* Base Styles & Typography */
+@import 'css/base.css';
+
+/* Reusable Components */
+@import 'css/components.css';
+
+/* Page-Specific Styles */
+@import 'css/pages.css';
+
+/* Additional Global Styles */
+main {
+    min-height: calc(100vh - 200px);
+}

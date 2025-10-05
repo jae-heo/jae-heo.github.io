@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대규모 이커머스 플랫폼 구축 프로젝트 - 재영의 블로그</title>
+    <meta name="description" content="월 100만 사용자를 위한 확장 가능한 이커머스 시스템 설계와 구현">
+    <link rel="stylesheet" href="/portfolio/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/portfolio/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/portfolio/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/portfolio/ko/" class="site-title" data-nav-link>재영의 블로그</a>
+            <div class="nav-links">
+                <a href="/portfolio/ko/" data-nav-link>홈</a>
+                <a href="/portfolio/ko/categories.html" data-nav-link>카테고리</a>
+                <a href="/portfolio/ko/tags.html" data-nav-link>태그</a>
+                <a href="/portfolio/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/portfolio/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>대규모 이커머스 플랫폼 구축 프로젝트</h1>
+        <time datetime=""2025-10-06T00:00:00.000Z"">October 6, 2025</time>
+        
+        <div style="margin-top: 1rem;">
+            <a href="/portfolio/ko/categories/projects.html" class="category-badge">projects</a>
+        </div>
+        
+        
+        <div class="tags" style="margin-top: 1rem;">
+            
+            <a href="/portfolio/ko/tags/이커머스.html" class="tag">이커머스</a>
+            
+            <a href="/portfolio/ko/tags/react.html" class="tag">react</a>
+            
+            <a href="/portfolio/ko/tags/node.js.html" class="tag">node.js</a>
+            
+            <a href="/portfolio/ko/tags/aws.html" class="tag">aws</a>
+            
+            <a href="/portfolio/ko/tags/마이크로서비스.html" class="tag">마이크로서비스</a>
+            
+            <a href="/portfolio/ko/tags/프로젝트.html" class="tag">프로젝트</a>
+            
+        </div>
+        
+    </header>
+
+    <div class="post-content">
+        <h1 id="-">대규모 이커머스 플랫폼 구축 프로젝트</h1>
+<h2 id="-">프로젝트 개요</h2>
+<h3>배경</h3>
+<p>기존 모놀리식 이커머스 시스템의 성능 한계와 확장성 문제를 해결하기 위해 마이크로서비스 아키텍처 기반의 새로운 플랫폼을 구축했습니다.</p>
+<h3>목표</h3>
+<ul class="ul-list">
+<li>월 100만 활성 사용자 지원</li><li>초당 1,000건 이상의 주문 처리</li><li>99.9% 가용성 보장</li><li>글로벌 확장 가능한 아키텍처</li></ul>
+<h3>기간</h3>
+<p>2024년 3월 - 2025년 2월 (12개월)</p>
+<h3 id="-">팀 구성</h3>
+<ul class="ul-list">
+<li>백엔드 개발자 5명</li><li>프론트엔드 개발자 4명</li><li>DevOps 엔지니어 2명</li><li>QA 엔지니어 3명</li></ul>
+<h2 id="-">기술 스택</h2>
+<h3 id="frontend">Frontend</h3>
+<ul class="ul-list">
+<li><strong>React 18</strong> - 사용자 인터페이스</li><li><strong>Next.js 14</strong> - SSR/SSG</li><li><strong>TypeScript</strong> - 타입 안정성</li><li><strong>Redux Toolkit</strong> - 상태 관리</li><li><strong>React Query</strong> - 서버 상태 관리</li><li><strong>Tailwind CSS</strong> - 스타일링</li></ul>
+<h3 id="backend">Backend</h3>
+<ul class="ul-list">
+<li><strong>Node.js</strong> - 서버 런타임</li><li><strong>Express.js</strong> - API 서버</li><li><strong>GraphQL</strong> - API 레이어</li><li><strong>PostgreSQL</strong> - 메인 데이터베이스</li><li><strong>Redis</strong> - 캐싱 및 세션</li><li><strong>Elasticsearch</strong> - 검색 엔진</li></ul>
+<h3 id="infrastructure">Infrastructure</h3>
+<ul class="ul-list">
+<li><strong>AWS ECS</strong> - 컨테이너 오케스트레이션</li><li><strong>AWS RDS</strong> - 관리형 데이터베이스</li><li><strong>AWS CloudFront</strong> - CDN</li><li><strong>AWS S3</strong> - 정적 자산 저장</li><li><strong>Docker</strong> - 컨테이너화</li><li><strong>Kubernetes</strong> - 일부 서비스</li></ul>
+<h2 id="-">아키텍처 설계</h2>
+<h3 id="-">마이크로서비스 구조</h3>
+<pre><code>┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Web App   │────▶│ API Gateway │────▶│   Services  │
+└─────────────┘     └─────────────┘     └─────────────┘
+                            │                    │
+                            ▼                    ▼
+                    ┌─────────────┐     ┌─────────────┐
+                    │ Auth Service│     │Order Service│
+                    └─────────────┘     └─────────────┘
+                            │                    │
+                            ▼                    ▼
+                    ┌─────────────┐     ┌─────────────┐
+                    │   Database  │     │Message Queue│
+                    └─────────────┘     └─────────────┘</code></pre>
+<h3 id="-">주요 서비스</h3>
+<ol class="ol-list">
+<li><strong>인증 서비스</strong> - JWT 기반 인증</li><li><strong>상품 서비스</strong> - 상품 관리 및 재고</li><li><strong>주문 서비스</strong> - 주문 처리 및 결제</li><li><strong>배송 서비스</strong> - 물류 통합</li><li><strong>알림 서비스</strong> - 이메일/SMS/푸시</li></ol>
+<h2 id="-">주요 기능 구현</h2>
+<h3 id="1-">1. 실시간 재고 관리</h3>
+<pre><code class="language-javascript"><span class="comment">// Redis를 활용한 재고 관리</span>
+<span class=<span class="string">"keyword"</span>>class</span> InventoryManager {
+  <span class=<span class="string">"keyword"</span>>async</span> decreaseStock(productId, quantity) {
+    <span class=<span class="string">"keyword"</span>>const</span> key = `inventory:${productId}`;
+    <span class=<span class="string">"keyword"</span>>const</span> multi = redis.multi();
+
+    multi.decrby(key, quantity);
+    multi.expire(key, <span class="number">3600</span>); <span class="comment">// <span class="number">1</span>시간 TTL</span>
+
+    <span class=<span class="string">"keyword"</span>>const</span> results = <span class=<span class="string">"keyword"</span>>await</span> multi.exec();
+
+    <span class=<span class="string">"keyword"</span>>if</span> (results[<span class="number">0</span>][<span class="number">1</span>] &lt; <span class="number">0</span>) {
+      <span class="comment">// 재고 부족, 롤백</span>
+      <span class=<span class="string">"keyword"</span>>await</span> redis.incrby(key, quantity);
+      throw <span class=<span class="string">"keyword"</span>>new</span> OutOfStockError();
+    }
+
+    <span class=<span class="string">"keyword"</span>>return</span> results[<span class="number">0</span>][<span class="number">1</span>];
+  }
+}</code></pre>
+<h3 id="2-">2. 분산 트랜잭션 처리</h3>
+<p>Saga 패턴을 활용한 주문 처리:</p>
+<ul class="ul-list">
+<li>주문 생성</li><li>결제 처리</li><li>재고 차감</li><li>배송 생성</li><li>실패 시 보상 트랜잭션</li></ul>
+<h3 id="3-">3. 검색 최적화</h3>
+<p>Elasticsearch를 활용한 상품 검색:</p>
+<ul class="ul-list">
+<li>한글 형태소 분석기 적용</li><li>자동완성 기능</li><li>필터링 및 정렬</li><li>개인화 검색 결과</li></ul>
+<h3 id="4-">4. 성능 최적화</h3>
+<ul class="ul-list">
+<li><strong>캐싱 전략</strong>: Redis 다층 캐싱</li><li><strong>이미지 최적화</strong>: WebP 포맷, lazy loading</li><li><strong>코드 스플리팅</strong>: 동적 임포트</li><li><strong>데이터베이스 최적화</strong>: 인덱싱, 쿼리 튜닝</li></ul>
+<h2 id="-">도전 과제와 해결</h2>
+<h3 id="1-">1. 대용량 트래픽 처리</h3>
+<p><strong></strong>: 이벤트 시 트래픽 급증</p>
+<p><strong></strong>:</p>
+<ul class="ul-list">
+<li>Auto Scaling 구성</li><li>대기열 시스템 구현</li><li>Circuit Breaker 패턴</li></ul>
+<h3 id="2-">2. 데이터 일관성</h3>
+<p><strong></strong>: 분산 환경에서 데이터 동기화</p>
+<p><strong></strong>:</p>
+<ul class="ul-list">
+<li>Event Sourcing</li><li>CQRS 패턴 적용</li><li>최종 일관성 수용</li></ul>
+<h3 id="3-">3. 장애 복구</h3>
+<p><strong></strong>: 서비스 장애 시 전체 시스템 영향</p>
+<p><strong></strong>:</p>
+<ul class="ul-list">
+<li>Health Check 구현</li><li>Graceful Shutdown</li><li>장애 격리</li></ul>
+<h2>성과</h2>
+<h3 id="-">성능 개선</h3>
+<ul class="ul-list">
+<li><strong>응답 시간</strong>: 평균 200ms → 50ms (75% 개선)</li><li><strong>처리량</strong>: 초당 200건 → 1,500건 (650% 증가)</li><li><strong>가용성</strong>: 99.5% → 99.95%</li></ul>
+<h3 id="-">비즈니스 성과</h3>
+<ul class="ul-list">
+<li>전환율 15% 증가</li><li>카트 이탈률 20% 감소</li><li>고객 만족도 4.2 → 4.7</li></ul>
+<h3 id="-">기술적 성과</h3>
+<ul class="ul-list">
+<li>배포 시간 2시간 → 15분</li><li>롤백 시간 30분 → 2분</li><li>테스트 커버리지 85% 달성</li></ul>
+<h2 id="-">모니터링과 관찰성</h2>
+<h3 id="-">사용 도구</h3>
+<ul class="ul-list">
+<li><strong>Datadog</strong>: APM 및 로그 관리</li><li><strong>Grafana</strong>: 메트릭 시각화</li><li><strong>Sentry</strong>: 에러 트래킹</li><li><strong>New Relic</strong>: 성능 모니터링</li></ul>
+<h3 id="-">주요 메트릭</h3>
+<pre><code class="language-javascript"><span class="comment">// 커스텀 메트릭 수집</span>
+metrics.increment(&#<span class="number">39</span>;order.created&#<span class="number">39</span>;);
+metrics.histogram(&#<span class="number">39</span>;api.response_time&#<span class="number">39</span>;, responseTime);
+metrics.gauge(&#<span class="number">39</span>;inventory.available&#<span class="number">39</span>;, availableStock);</code></pre>
+<h2 id="-">팀 협업</h2>
+<h3 id="-">개발 프로세스</h3>
+<ul class="ul-list">
+<li>2주 스프린트 운영</li><li>일일 스탠드업 미팅</li><li>코드 리뷰 필수</li><li>페어 프로그래밍 권장</li></ul>
+<h3>문서화</h3>
+<ul class="ul-list">
+<li>API 문서 자동화 (Swagger)</li><li>아키텍처 결정 기록 (ADR)</li><li>운영 가이드 작성</li><li>장애 대응 매뉴얼</li></ul>
+<h2 id="-">학습과 개선점</h2>
+<h3 id="-">배운 점</h3>
+<ol class="ol-list">
+<li><strong>마이크로서비스의 복잡성</strong> - 운영 오버헤드 고려 필요</li><li><strong>데이터 일관성</strong> - CAP 이론의 실제 적용</li><li><strong>팀 커뮤니케이션</strong> - 서비스 간 계약 중요성</li></ol>
+<h3 id="-">개선 사항</h3>
+<ul class="ul-list">
+<li>GraphQL 페더레이션 도입 검토</li><li>서비스 메시 (Istio) 적용</li><li>ML 기반 추천 시스템 구축</li><li>실시간 분석 파이프라인</li></ul>
+<h2 id="-">코드 샘플</h2>
+<h3 id="graphql-">GraphQL 스키마</h3>
+<pre><code class="language-graphql">type Product {
+  id: ID!
+  name: String!
+  price: Float!
+  inventory: Int!
+  reviews: [Review!]!
+}
+
+type Query {
+  product(id: ID!): Product
+  products(filter: ProductFilter): [Product!]!
+}
+
+type Mutation {
+  createOrder(input: OrderInput!): Order!
+  updateInventory(productId: ID!, quantity: Int!): Product!
+}</code></pre>
+<h2 id="-">프로젝트 링크</h2>
+<ul class="ul-list">
+<li><a href="#">GitHub Repository</a> (Private)</li><li><a href="#">기술 블로그 포스트</a></li><li><a href="#">발표 자료</a></li></ul>
+<h2>마치며</h2>
+<p>이 프로젝트를 통해 대규모 시스템 설계와 운영에 대한 귀중한 경험을 얻었습니다. 특히 기술적 결정이 비즈니스에 미치는 영향과 팀워크의 중요성을 깊이 이해하게 되었습니다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/portfolio/ko/posts/2025-10-06-ai-chatbot.html" class="prev">← 기업용 AI 챗봇 플랫폼 개발</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/portfolio/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+</body>
+</html>
