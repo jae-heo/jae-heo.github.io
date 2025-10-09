@@ -3,133 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재영의 블로그</title>
-    <meta name="description" content="처음부터 만든 블로그">
+    <title>재영의 포트폴리오</title>
+    <meta name="description" content="프로젝트, 오픈소스 기여, 그리고 전문적인 작업 모음">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 블로그 RSS" href="/portfolio/ko/feed.xml">
+    <link rel="stylesheet" href="/assets/portfolio.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <script>
-        // Apply saved theme immediately to prevent flash
         const theme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', theme);
-        // Language preference
         const lang = localStorage.getItem('lang') || 'ko';
     </script>
-    <script src="/assets/js/theme-switcher.js" defer></script>
 </head>
-<body>
-    <header>
+<body class="portfolio-page">
+    <header class="portfolio-header">
         <nav>
-            <a href="/portfolio/ko/" class="site-title" data-nav-link>재영의 블로그</a>
+            <a href="/portfolio/ko/" class="site-title">
+                <span class="portfolio-logo">🚀</span>
+                <span>재영의 포트폴리오</span>
+            </a>
             <div class="nav-links">
-                <a href="/portfolio/ko/" data-nav-link>홈</a>
-                <a href="/portfolio/ko/categories.html" data-nav-link>카테고리</a>
-                <a href="/portfolio/ko/tags.html" data-nav-link>태그</a>
-                <a href="/portfolio/ko/archive.html" data-nav-link>아카이브</a>
-                <a href="/portfolio/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
-                    <option value="en">English</option>
-                    <option value="ko">한국어</option>
+                <a href="#projects" data-nav-link>Projects</a>
+                <a href="#skills" data-nav-link>Skills</a>
+                <a href="#experience" data-nav-link>Experience</a>
+                <a href="#contact" data-nav-link>Contact</a>
+                <select id="lang-select" aria-label="Select language">
+                    <option value="en" >English</option><option value="ko" selected>한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" aria-label="Toggle dark mode">
                     <span id="theme-icon">🌙</span>
                 </button>
             </div>
         </nav>
     </header>
 
-    <main>
-        <div class="home">
-    <div class="page-header">
-        <h1>최근 포스트</h1>
-        <p class="subtitle">코드, 기술, 그리고 모든 것에 대한 생각</p>
-    </div>
-
-    <div class="post-list">
-        
-        <article class="post-preview">
-            <h2><a href="/portfolio/ko/posts/2024-10-01-des-엔진.html">고성능 이산 이벤트 시뮬레이션 엔진</a></h2>
-            <time datetime=""2024-10-01T00:00:00.000Z"">October 1, 2024</time>
-            
-            <p>밀리초 미만 지연시간으로 백만 개체를 처리하는 DES 엔진 구축</p>
-            
-            
-            <div class="post-meta-bottom">
-                <a href="/portfolio/ko/categories/projects.html" class="category-badge">프로젝트</a>
+    <main class="portfolio-main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">안녕하세요, 허재영입니다</h1>
+                <p class="hero-subtitle">뛰어난 디지털 경험 구축에 열정을 가진 풀스택 개발자</p>
+                <div class="hero-cta">
+                    <a href="#projects" class="cta-button primary">View Projects</a>
+                    <a href="#contact" class="cta-button secondary">Get in Touch</a>
+                </div>
             </div>
-            
-            <a href="/portfolio/ko/posts/2024-10-01-des-엔진.html" class="read-more">더 읽기</a>
-        </article>
-        
-    </div>
+        </section>
 
-    
+        <!-- Projects Section -->
+        <section id="projects" class="projects-section">
+            <div class="container">
+                <h2 class="section-title">Featured Projects</h2>
+                <div class="projects-grid">
+                    
+            <article class="project-card">
+                
+                <div class="project-image">
+                    <img src="/assets/images/des-engine.png" alt="고성능 DES 엔진" loading="lazy">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">고성능 DES 엔진</h3>
+                    <p class="project-description">밀리초 미만의 지연 시간으로 수백만 개체를 처리할 수 있는 이산 이벤트 시뮬레이션 엔진 구축</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">C++</span><span class="tech-tag">Python</span><span class="tech-tag">성능 최적화</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://demo.example.com" class="project-link" target="_blank">
+                            <span>🔗</span> Live Demo
+                        </a>
+                        <a href="https://github.com/yourusername/des-engine" class="project-link" target="_blank">
+                            <span>📦</span> Source Code
+                        </a>
+                        <a href="/portfolio/ko/posts/2024-10-01-des-engine.html" class="project-link">
+                            <span>📖</span> Read More
+                        </a>
+                    </div>
+                </div>
+            </article>
+            <article class="project-card">
+                
+                <div class="project-image">
+                    <img src="/assets/images/analytics-dashboard.png" alt="실시간 분석 대시보드" loading="lazy">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">실시간 분석 대시보드</h3>
+                    <p class="project-description">인터랙티브 시각화와 함께 초당 10만 개 이상의 이벤트를 처리하는 실시간 분석 플랫폼 개발</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">WebSocket</span><span class="tech-tag">D3.js</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://analytics-demo.example.com" class="project-link" target="_blank">
+                            <span>🔗</span> Live Demo
+                        </a>
+                        <a href="https://github.com/yourusername/analytics" class="project-link" target="_blank">
+                            <span>📦</span> Source Code
+                        </a>
+                        
+                    </div>
+                </div>
+            </article>
+            <article class="project-card">
+                
+                <div class="project-image">
+                    <img src="/assets/images/code-review.png" alt="AI 기반 코드 리뷰 도구" loading="lazy">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">AI 기반 코드 리뷰 도구</h3>
+                    <p class="project-description">LLM을 사용하여 맥락적 제안을 제공하고 잠재적 버그를 감지하는 지능형 코드 리뷰 도구 개발</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span><span class="tech-tag">머신러닝</span><span class="tech-tag">FastAPI</span><span class="tech-tag">React</span>
+                    </div>
+                    <div class="project-links">
+                        
+                        <a href="https://github.com/yourusername/ai-reviewer" class="project-link" target="_blank">
+                            <span>📦</span> Source Code
+                        </a>
+                        
+                    </div>
+                </div>
+            </article>
+            <article class="project-card">
+                
+                <div class="project-image">
+                    <img src="/assets/images/task-scheduler.png" alt="분산 작업 스케줄러" loading="lazy">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">분산 작업 스케줄러</h3>
+                    <p class="project-description">매일 천만 개 이상의 작업을 처리하는 내결함성 분산 작업 스케줄링 시스템 설계</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Go</span><span class="tech-tag">Redis</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">Kubernetes</span>
+                    </div>
+                    <div class="project-links">
+                        
+                        <a href="https://github.com/yourusername/scheduler" class="project-link" target="_blank">
+                            <span>📦</span> Source Code
+                        </a>
+                        
+                    </div>
+                </div>
+            </article>
+                </div>
+            </div>
+        </section>
 
+        <!-- Skills Section -->
+        <section id="skills" class="skills-section">
+            <div class="container">
+                <h2 class="section-title">Technical Skills</h2>
+                <div class="skills-grid">
+                    
+            <div class="skill-category">
+                <h3 class="skill-category-title">프로그래밍 언어</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">JavaScript</span><span class="skill-tag">TypeScript</span><span class="skill-tag">Python</span><span class="skill-tag">Go</span><span class="skill-tag">C++</span><span class="skill-tag">Java</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3 class="skill-category-title">프론트엔드</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">React</span><span class="skill-tag">Vue.js</span><span class="skill-tag">Next.js</span><span class="skill-tag">HTML/CSS</span><span class="skill-tag">Tailwind</span><span class="skill-tag">D3.js</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3 class="skill-category-title">백엔드</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Node.js</span><span class="skill-tag">FastAPI</span><span class="skill-tag">Django</span><span class="skill-tag">Express</span><span class="skill-tag">GraphQL</span><span class="skill-tag">REST</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3 class="skill-category-title">데이터베이스</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">PostgreSQL</span><span class="skill-tag">MongoDB</span><span class="skill-tag">Redis</span><span class="skill-tag">Elasticsearch</span><span class="skill-tag">DynamoDB</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3 class="skill-category-title">DevOps</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Docker</span><span class="skill-tag">Kubernetes</span><span class="skill-tag">AWS</span><span class="skill-tag">CI/CD</span><span class="skill-tag">Terraform</span><span class="skill-tag">GitHub Actions</span>
+                </div>
+            </div>
+            <div class="skill-category">
+                <h3 class="skill-category-title">도구 및 기타</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Git</span><span class="skill-tag">Linux</span><span class="skill-tag">Agile</span><span class="skill-tag">TDD</span><span class="skill-tag">시스템 디자인</span><span class="skill-tag">성능 최적화</span>
+                </div>
+            </div>
+                </div>
+            </div>
+        </section>
 
-</div>
+        <!-- Experience Section -->
+        <section id="experience" class="experience-section">
+            <div class="container">
+                <h2 class="section-title">Experience</h2>
+                <div class="timeline">
+                    
+            <div class="timeline-item">
+                <div class="timeline-date">2022 - 현재</div>
+                <div class="timeline-content">
+                    <h3>시니어 소프트웨어 엔지니어</h3>
+                    <h4>테크 컴퍼니</h4>
+                    <p>클라우드 네이티브 애플리케이션 개발 주도 및 주니어 개발자 멘토링</p>
+                    
+                    <ul class="achievements">
+                        <li>최적화를 통해 API 응답 시간 60% 단축</li><li>마이크로서비스 아키텍처로의 마이그레이션 주도</li><li>5명의 주니어 개발자 멘토링</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2020 - 2022</div>
+                <div class="timeline-content">
+                    <h3>풀스택 개발자</h3>
+                    <h4>스타트업 XYZ</h4>
+                    <p>MVP에서 프로덕션까지 웹 애플리케이션 구축 및 확장</p>
+                    
+                    <ul class="achievements">
+                        <li>5만명 이상의 사용자가 사용하는 핵심 기능 개발</li><li>실시간 협업 기능 구현</li><li>배포 파이프라인 효율성 40% 향상</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2018 - 2020</div>
+                <div class="timeline-content">
+                    <h3>소프트웨어 개발자</h3>
+                    <h4>디지털 에이전시</h4>
+                    <p>다양한 클라이언트 프로젝트를 위한 맞춤형 솔루션 개발</p>
+                    
+                    <ul class="achievements">
+                        <li>15개 이상의 클라이언트 프로젝트 정시 납품</li><li>자동화된 테스팅 방식 도입</li><li>재사용 가능한 컴포넌트 라이브러리 구축</li>
+                    </ul>
+                </div>
+            </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="contact-content">
+                    <p>새로운 기회와 협업에 대해 항상 관심이 있습니다. 언제든지 연락 주세요!</p>
+                    <div class="contact-links">
+                        
+            <a href="mailto:your-email@example.com" class="contact-link">
+                <span>✉️</span> Email
+            </a>
+                        
+            <a href="https://github.com/yourusername" class="contact-link" target="_blank">
+                <span>🐙</span> GitHub
+            </a>
+                        
+            <a href="https://linkedin.com/in/yourusername" class="contact-link" target="_blank">
+                <span>💼</span> LinkedIn
+            </a>
+                        
+            <a href="https://twitter.com/yourusername" class="contact-link" target="_blank">
+                <span>🐦</span> Twitter
+            </a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer>
+    <footer class="portfolio-footer">
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
-            <div class="footer-links">
-                <a href="/portfolio/ko/feed.xml">RSS</a>
-                
-                
-            </div>
+            <p>&copy; 2025 Jae · Crafted with passion</p>
         </div>
     </footer>
 
-    <script>
-        // Parse current URL to get blog and language
-        const pathParts = window.location.pathname.split('/').filter(p => p);
-        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
-        const currentLang = pathParts[1] || 'en';
-
-        // Update navigation links - they should already be correct from server
-        // This is just for dynamic client-side updates if needed
-        function updateNavLinks() {
-            const navLinks = document.querySelectorAll('[data-nav-link]');
-            // Links are already fixed by the server, no client-side processing needed
-        }
-
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
-        // Language dropdown functionality
-        const langSelect = document.getElementById('lang-select');
-        if (langSelect) {
-            // Set current language in dropdown
-            langSelect.value = currentLang;
-
-            langSelect.addEventListener('change', (e) => {
-                const selectedLang = e.target.value;
-                localStorage.setItem('lang', selectedLang);
-
-                // Simply replace the language code in the current path
-                const newPath = window.location.pathname.replace(
-                    /\/[a-z]{2}\//,
-                    '/' + selectedLang + '/'
-                );
-
-                window.location.href = newPath;
-            });
-        }
-    </script>
+    <script src="/assets/js/portfolio.js"></script>
+    <script src="/assets/js/theme-switcher.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 
 /* Home Page - Enhanced */
 .home {
-    max-width: var(--article-width);
+    max-width: var(--max-width);
     margin: 0 auto;
     padding: 2rem;
     animation: fadeInUp 0.6s ease-out;
@@ -58,20 +58,20 @@
     margin: 0 auto;
 }
 
-/* Post List 2D Grid Layout */
+/* Post List 3D Grid Layout */
 .post-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     margin-top: 2rem;
 }
 
-/* Stagger animation for post cards in 2D grid */
+/* Stagger animation for post cards in 3D grid */
 .post-list .post-preview {
     animation: fadeInUp 0.6s ease-out backwards;
 }
 
-/* Animation delays for 2D grid pattern (row by row) */
+/* Animation delays for 3D grid pattern (row by row) */
 .post-list .post-preview:nth-child(1) { animation-delay: 0.1s; }
 .post-list .post-preview:nth-child(2) { animation-delay: 0.15s; }
 .post-list .post-preview:nth-child(3) { animation-delay: 0.2s; }
@@ -82,8 +82,17 @@
 .post-list .post-preview:nth-child(8) { animation-delay: 0.45s; }
 .post-list .post-preview:nth-child(9) { animation-delay: 0.5s; }
 .post-list .post-preview:nth-child(10) { animation-delay: 0.55s; }
+.post-list .post-preview:nth-child(11) { animation-delay: 0.6s; }
+.post-list .post-preview:nth-child(12) { animation-delay: 0.65s; }
 
 /* Responsive grid adjustments */
+@media (max-width: 1200px) {
+    .post-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
 @media (max-width: 1024px) {
     .post-list {
         grid-template-columns: repeat(2, 1fr);
@@ -100,7 +109,7 @@
 
 /* Archive Page - Enhanced like Home */
 .archive-page {
-    max-width: var(--article-width);
+    max-width: var(--max-width);
     margin: 0 auto;
     padding: 2rem;
     animation: fadeInUp 0.6s ease-out;
@@ -370,7 +379,7 @@
 /* Category & Tag List Pages */
 .category-page,
 .tag-page {
-    max-width: var(--article-width);
+    max-width: var(--max-width);
     margin: 0 auto;
     padding: 2rem;
 }
@@ -419,7 +428,7 @@
 }
 
 .page {
-    max-width: var(--article-width);
+    max-width: var(--max-width);
     margin: 0 auto;
 }
 
@@ -525,7 +534,7 @@
 
 /* Post Page */
 .post {
-    max-width: var(--article-width);
+    max-width: var(--max-width);
     margin: 0 auto;
     padding: 2rem;
 }
