@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jae's Tech Blog</title>
-    <meta name="description" content="Deep dives into programming, technology trends, and development insights">
+    <title>Jae's Life Blog</title>
+    <meta name="description" content="Personal stories, travel adventures, and life experiences beyond the code">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/life/en/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Life Blog RSS" href="/life/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <script>
         // Apply saved theme immediately to prevent flash
@@ -20,7 +20,7 @@
 <body>
     <header>
         <nav>
-            <a href="/life/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <a href="/life/en/" class="site-title" data-nav-link>Jae's Life Blog</a>
             <div class="nav-links">
                 <a href="/life/en/" data-nav-link>Home</a>
                 <a href="/life/en/archive.html" data-nav-link>Archive</a>
@@ -42,26 +42,83 @@
         <h1>Posts tagged "reflection"</h1>
     </div>
 
-    <div class="post-list">
+    <div class="posts-controls">
+        <div class="filter-section">
+            <!-- Filters button will be inserted here by JS -->
+        </div>
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" data-view="grid" title="Grid view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+            </button>
+            <button class="view-toggle-btn" data-view="list" title="List view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <!-- Filter panel will be inserted here by JS -->
+    </div>
+
+    <!-- Grid View -->
+<div class="post-list post-grid-view">
+    
+    <article class="post-preview" data-tags="life,reflection,journey" data-category="Personal">
         
-        <article class="post-preview" data-tags="life,reflection,journey" data-category="Personal">
+        <div class="post-preview-content">
+            <h2><a href="/life/en/posts/2024-10-01-journey-begins.html">The Journey Begins</a></h2>
+            <time datetime=""2024-10-01T00:00:00.000Z"">October 1, 2024</time>
             
-            <div class="post-preview-content">
-                <h2><a href="/life/en/posts/2024-10-01-journey-begins.html">The Journey Begins</a></h2>
-                <time datetime=""2024-10-01T00:00:00.000Z"">October 1, 2024</time>
-                
-                <p>Starting a new chapter and embracing the unknown</p>
-                
-                
-                <div class="post-meta-bottom">
-                    <a href="/life/en/categories/personal.html" class="category-badge">Personal</a>
+            <p>Starting a new chapter and embracing the unknown</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/life/en/categories/personal.html" class="category-badge">Personal</a>
+            </div>
+            
+            <a href="/life/en/posts/2024-10-01-journey-begins.html" class="read-more">Read more</a>
+        </div>
+    </article>
+    
+</div>
+
+    <!-- List View -->
+<div class="post-list post-list-view" style="display: none;">
+    
+    <article class="post-item" data-tags="life,reflection,journey" data-category="Personal">
+        <a href="/life/en/posts/2024-10-01-journey-begins.html" class="post-item-link">
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>The Journey Begins</h2>
+                    <div class="post-item-meta">
+                        <time datetime=""2024-10-01T00:00:00.000Z"">October 1, 2024</time>
+                        
+                        <span class="category-badge-small">Personal</span>
+                        
+                    </div>
                 </div>
                 
-                <a href="/life/en/posts/2024-10-01-journey-begins.html" class="read-more">Read more</a>
+                <p class="post-item-excerpt">Starting a new chapter and embracing the unknown</p>
+                
             </div>
-        </article>
-        
-    </div>
+        </a>
+    </article>
+    
+</div>
+
+
+    <script src="/assets/js/view-toggle.js"></script>
+    <script src="/assets/js/post-filter.js"></script>
 
     
 </div>

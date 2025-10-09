@@ -42,26 +42,83 @@
         <h1>"concurrency" 태그가 달린 포스트</h1>
     </div>
 
-    <div class="post-list">
+    <div class="posts-controls">
+        <div class="filter-section">
+            <!-- Filters button will be inserted here by JS -->
+        </div>
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" data-view="grid" title="Grid view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+            </button>
+            <button class="view-toggle-btn" data-view="list" title="List view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <!-- Filter panel will be inserted here by JS -->
+    </div>
+
+    <!-- Grid View -->
+<div class="post-list post-grid-view">
+    
+    <article class="post-preview" data-tags="python,asyncio,이벤트 루프,des,동시성" data-category="심층 분석">
         
-        <article class="post-preview" data-tags="python,asyncio,이벤트 루프,des,동시성" data-category="심층 분석">
+        <div class="post-preview-content">
+            <h2><a href="/tech/ko/posts/2024-01-15-python-asyncio-event-loop.html">Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</a></h2>
+            <time datetime=""2024-01-15T00:00:00.000Z"">January 15, 2024</time>
             
-            <div class="post-preview-content">
-                <h2><a href="/tech/ko/posts/2024-01-15-python-asyncio-event-loop.html">Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</a></h2>
-                <time datetime=""2024-01-15T00:00:00.000Z"">January 15, 2024</time>
-                
-                <p>이산 이벤트 시뮬레이션을 위한 Python asyncio 이벤트 루프 내부 구조 분석과 커스텀 구현</p>
-                
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/deep-dive.html" class="category-badge">심층 분석</a>
+            <p>이산 이벤트 시뮬레이션을 위한 Python asyncio 이벤트 루프 내부 구조 분석과 커스텀 구현</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/tech/ko/categories/deep-dive.html" class="category-badge">심층 분석</a>
+            </div>
+            
+            <a href="/tech/ko/posts/2024-01-15-python-asyncio-event-loop.html" class="read-more">더 읽기</a>
+        </div>
+    </article>
+    
+</div>
+
+    <!-- List View -->
+<div class="post-list post-list-view" style="display: none;">
+    
+    <article class="post-item" data-tags="python,asyncio,이벤트 루프,des,동시성" data-category="심층 분석">
+        <a href="/tech/ko/posts/2024-01-15-python-asyncio-event-loop.html" class="post-item-link">
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</h2>
+                    <div class="post-item-meta">
+                        <time datetime=""2024-01-15T00:00:00.000Z"">January 15, 2024</time>
+                        
+                        <span class="category-badge-small">심층 분석</span>
+                        
+                    </div>
                 </div>
                 
-                <a href="/tech/ko/posts/2024-01-15-python-asyncio-event-loop.html" class="read-more">더 읽기</a>
+                <p class="post-item-excerpt">이산 이벤트 시뮬레이션을 위한 Python asyncio 이벤트 루프 내부 구조 분석과 커스텀 구현</p>
+                
             </div>
-        </article>
-        
-    </div>
+        </a>
+    </article>
+    
+</div>
+
+
+    <script src="/assets/js/view-toggle.js"></script>
+    <script src="/assets/js/post-filter.js"></script>
 
     
 </div>

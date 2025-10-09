@@ -42,83 +42,204 @@
         <h1>"performance" 태그가 달린 포스트</h1>
     </div>
 
-    <div class="post-list">
-        
-        <article class="post-preview" data-tags="python,메모리,시뮬레이션,최적화,성능" data-category="심층 분석">
-            
-            <div class="post-preview-image">
-                <a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html">
-                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80" alt="대규모 시뮬레이션을 위한 Python 메모리 관리 최적화" loading="lazy">
-                </a>
-            </div>
-            
-            <div class="post-preview-content">
-                <h2><a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html">대규모 시뮬레이션을 위한 Python 메모리 관리 최적화</a></h2>
-                <time datetime=""2024-02-20T00:00:00.000Z"">February 20, 2024</time>
-                
-                <p>백만 개체 시뮬레이션에서 메모리 효율성을 극대화하는 고급 Python 기법</p>
-                
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/deep-dive.html" class="category-badge">심층 분석</a>
-                </div>
-                
-                <a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html" class="read-more">더 읽기</a>
-            </div>
-        </article>
-        
-        <article class="post-preview" data-tags="python,c 확장,cpython,시뮬레이션,성능" data-category="성능 최적화">
-            
-            <div class="post-preview-content">
-                <h2><a href="/tech/ko/posts/2024-03-10-cpython-extension-simulation-performance.html">시뮬레이션 성능을 위한 CPython C 확장 모듈 개발</a></h2>
-                <time datetime=""2024-03-10T00:00:00.000Z"">March 10, 2024</time>
-                
-                <p>시뮬레이션 핫패스 최적화를 위한 CPython C API 활용과 Cython 통합</p>
-                
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/performance.html" class="category-badge">성능 최적화</a>
-                </div>
-                
-                <a href="/tech/ko/posts/2024-03-10-cpython-extension-simulation-performance.html" class="read-more">더 읽기</a>
-            </div>
-        </article>
-        
-        <article class="post-preview" data-tags="des,스케줄링,알고리즘,python,성능" data-category="알고리즘">
-            
-            <div class="post-preview-content">
-                <h2><a href="/tech/ko/posts/2024-06-01-advanced-scheduling-algorithms.html">이산 이벤트 시뮬레이션을 위한 고급 스케줄링 알고리즘</a></h2>
-                <time datetime=""2024-06-01T00:00:00.000Z"">June 1, 2024</time>
-                
-                <p>Calendar Queue, Ladder Queue, Splay Tree 등 O(1) 스케줄링을 위한 고급 자료구조</p>
-                
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/algorithms.html" class="category-badge">알고리즘</a>
-                </div>
-                
-                <a href="/tech/ko/posts/2024-06-01-advanced-scheduling-algorithms.html" class="read-more">더 읽기</a>
-            </div>
-        </article>
-        
-        <article class="post-preview" data-tags="python,프로파일링,최적화,성능,시뮬레이션" data-category="성능 최적화">
-            
-            <div class="post-preview-content">
-                <h2><a href="/tech/ko/posts/2024-07-10-python-simulation-profiling.html">Python 시뮬레이션 병목 지점 프로파일링과 최적화</a></h2>
-                <time datetime=""2024-07-10T00:00:00.000Z"">July 10, 2024</time>
-                
-                <p>시뮬레이션 코드의 성능 병목을 찾고 최적화하는 고급 프로파일링 기법</p>
-                
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/performance.html" class="category-badge">성능 최적화</a>
-                </div>
-                
-                <a href="/tech/ko/posts/2024-07-10-python-simulation-profiling.html" class="read-more">더 읽기</a>
-            </div>
-        </article>
-        
+    <div class="posts-controls">
+        <div class="filter-section">
+            <!-- Filters button will be inserted here by JS -->
+        </div>
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" data-view="grid" title="Grid view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+            </button>
+            <button class="view-toggle-btn" data-view="list" title="List view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <!-- Filter panel will be inserted here by JS -->
     </div>
+
+    <!-- Grid View -->
+<div class="post-list post-grid-view">
+    
+    <article class="post-preview" data-tags="python,메모리,시뮬레이션,최적화,성능" data-category="심층 분석">
+        
+        <div class="post-preview-image">
+            <a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80" alt="대규모 시뮬레이션을 위한 Python 메모리 관리 최적화" loading="lazy">
+            </a>
+        </div>
+        
+        <div class="post-preview-content">
+            <h2><a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html">대규모 시뮬레이션을 위한 Python 메모리 관리 최적화</a></h2>
+            <time datetime=""2024-02-20T00:00:00.000Z"">February 20, 2024</time>
+            
+            <p>백만 개체 시뮬레이션에서 메모리 효율성을 극대화하는 고급 Python 기법</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/tech/ko/categories/deep-dive.html" class="category-badge">심층 분석</a>
+            </div>
+            
+            <a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html" class="read-more">더 읽기</a>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="python,c 확장,cpython,시뮬레이션,성능" data-category="성능 최적화">
+        
+        <div class="post-preview-content">
+            <h2><a href="/tech/ko/posts/2024-03-10-cpython-extension-simulation-performance.html">시뮬레이션 성능을 위한 CPython C 확장 모듈 개발</a></h2>
+            <time datetime=""2024-03-10T00:00:00.000Z"">March 10, 2024</time>
+            
+            <p>시뮬레이션 핫패스 최적화를 위한 CPython C API 활용과 Cython 통합</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/tech/ko/categories/performance.html" class="category-badge">성능 최적화</a>
+            </div>
+            
+            <a href="/tech/ko/posts/2024-03-10-cpython-extension-simulation-performance.html" class="read-more">더 읽기</a>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="des,스케줄링,알고리즘,python,성능" data-category="알고리즘">
+        
+        <div class="post-preview-content">
+            <h2><a href="/tech/ko/posts/2024-06-01-advanced-scheduling-algorithms.html">이산 이벤트 시뮬레이션을 위한 고급 스케줄링 알고리즘</a></h2>
+            <time datetime=""2024-06-01T00:00:00.000Z"">June 1, 2024</time>
+            
+            <p>Calendar Queue, Ladder Queue, Splay Tree 등 O(1) 스케줄링을 위한 고급 자료구조</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/tech/ko/categories/algorithms.html" class="category-badge">알고리즘</a>
+            </div>
+            
+            <a href="/tech/ko/posts/2024-06-01-advanced-scheduling-algorithms.html" class="read-more">더 읽기</a>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="python,프로파일링,최적화,성능,시뮬레이션" data-category="성능 최적화">
+        
+        <div class="post-preview-content">
+            <h2><a href="/tech/ko/posts/2024-07-10-python-simulation-profiling.html">Python 시뮬레이션 병목 지점 프로파일링과 최적화</a></h2>
+            <time datetime=""2024-07-10T00:00:00.000Z"">July 10, 2024</time>
+            
+            <p>시뮬레이션 코드의 성능 병목을 찾고 최적화하는 고급 프로파일링 기법</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/tech/ko/categories/performance.html" class="category-badge">성능 최적화</a>
+            </div>
+            
+            <a href="/tech/ko/posts/2024-07-10-python-simulation-profiling.html" class="read-more">더 읽기</a>
+        </div>
+    </article>
+    
+</div>
+
+    <!-- List View -->
+<div class="post-list post-list-view" style="display: none;">
+    
+    <article class="post-item" data-tags="python,메모리,시뮬레이션,최적화,성능" data-category="심층 분석">
+        <a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html" class="post-item-link">
+            
+            <div class="post-item-image">
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80" alt="대규모 시뮬레이션을 위한 Python 메모리 관리 최적화" loading="lazy">
+            </div>
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>대규모 시뮬레이션을 위한 Python 메모리 관리 최적화</h2>
+                    <div class="post-item-meta">
+                        <time datetime=""2024-02-20T00:00:00.000Z"">February 20, 2024</time>
+                        
+                        <span class="category-badge-small">심층 분석</span>
+                        
+                    </div>
+                </div>
+                
+                <p class="post-item-excerpt">백만 개체 시뮬레이션에서 메모리 효율성을 극대화하는 고급 Python 기법</p>
+                
+            </div>
+        </a>
+    </article>
+    
+    <article class="post-item" data-tags="python,c 확장,cpython,시뮬레이션,성능" data-category="성능 최적화">
+        <a href="/tech/ko/posts/2024-03-10-cpython-extension-simulation-performance.html" class="post-item-link">
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>시뮬레이션 성능을 위한 CPython C 확장 모듈 개발</h2>
+                    <div class="post-item-meta">
+                        <time datetime=""2024-03-10T00:00:00.000Z"">March 10, 2024</time>
+                        
+                        <span class="category-badge-small">성능 최적화</span>
+                        
+                    </div>
+                </div>
+                
+                <p class="post-item-excerpt">시뮬레이션 핫패스 최적화를 위한 CPython C API 활용과 Cython 통합</p>
+                
+            </div>
+        </a>
+    </article>
+    
+    <article class="post-item" data-tags="des,스케줄링,알고리즘,python,성능" data-category="알고리즘">
+        <a href="/tech/ko/posts/2024-06-01-advanced-scheduling-algorithms.html" class="post-item-link">
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>이산 이벤트 시뮬레이션을 위한 고급 스케줄링 알고리즘</h2>
+                    <div class="post-item-meta">
+                        <time datetime=""2024-06-01T00:00:00.000Z"">June 1, 2024</time>
+                        
+                        <span class="category-badge-small">알고리즘</span>
+                        
+                    </div>
+                </div>
+                
+                <p class="post-item-excerpt">Calendar Queue, Ladder Queue, Splay Tree 등 O(1) 스케줄링을 위한 고급 자료구조</p>
+                
+            </div>
+        </a>
+    </article>
+    
+    <article class="post-item" data-tags="python,프로파일링,최적화,성능,시뮬레이션" data-category="성능 최적화">
+        <a href="/tech/ko/posts/2024-07-10-python-simulation-profiling.html" class="post-item-link">
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>Python 시뮬레이션 병목 지점 프로파일링과 최적화</h2>
+                    <div class="post-item-meta">
+                        <time datetime=""2024-07-10T00:00:00.000Z"">July 10, 2024</time>
+                        
+                        <span class="category-badge-small">성능 최적화</span>
+                        
+                    </div>
+                </div>
+                
+                <p class="post-item-excerpt">시뮬레이션 코드의 성능 병목을 찾고 최적화하는 고급 프로파일링 기법</p>
+                
+            </div>
+        </a>
+    </article>
+    
+</div>
+
+
+    <script src="/assets/js/view-toggle.js"></script>
+    <script src="/assets/js/post-filter.js"></script>
 
     
 </div>
