@@ -39,11 +39,23 @@
     <main>
         <div class="home">
     <div class="page-header">
-        <h1>Recent Posts</h1>
+        <h1>Jae's Tech Blog</h1>
         <p class="subtitle">Thoughts on code, technology, and everything in between</p>
     </div>
 
-    <div class="posts-controls">
+    <!-- Tab Navigation -->
+    <div class="home-tabs">
+        <button class="home-tab active" data-tab="recent">
+            Recent Posts
+        </button>
+        <button class="home-tab" data-tab="series">
+            Series
+        </button>
+    </div>
+
+    <!-- Recent Posts Tab Content -->
+    <div class="tab-content active" data-content="recent">
+        <div class="posts-controls">
         <div class="filter-section">
             <!-- Filters button will be inserted here by JS -->
         </div>
@@ -70,7 +82,7 @@
         <!-- Filter panel will be inserted here by JS -->
     </div>
 
-    <!-- Grid View -->
+        <!-- Grid View -->
 <div class="post-list post-grid-view">
     
     <article class="post-preview" data-tags="" data-category="deep-dive">
@@ -98,7 +110,7 @@
     
 </div>
 
-    <!-- List View -->
+        <!-- List View -->
 <div class="post-list post-list-view" style="display: none;">
     
     <article class="post-item" data-tags="" data-category="deep-dive">
@@ -128,12 +140,31 @@
 </div>
 
 
-    <script src="/assets/js/view-toggle.js"></script>
-    <script src="/assets/js/post-filter.js"></script>
+        <script src="/assets/js/view-toggle.js"></script>
+        <script src="/assets/js/post-filter.js"></script>
 
+        
+
+
+    </div>
+
+    <!-- Series Tab Content -->
+    <div class="tab-content" data-content="series">
+        <!-- Homepage Series View Component - Numbered List Style -->
+<div class="series-list">
     
+        
+            <!-- Empty State -->
+            <div class="empty-state">
+                <p>No series available yet.</p>
+            </div>
+        
+    
+</div>
 
+    </div>
 
+    <script src="/assets/js/home-tabs.js"></script>
 </div>
     </main>
 

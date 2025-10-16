@@ -39,11 +39,23 @@
     <main>
         <div class="home">
     <div class="page-header">
-        <h1>최근 포스트</h1>
+        <h1>재영의 기술 블로그</h1>
         <p class="subtitle">코드, 기술, 그리고 모든 것에 대한 생각</p>
     </div>
 
-    <div class="posts-controls">
+    <!-- Tab Navigation -->
+    <div class="home-tabs">
+        <button class="home-tab active" data-tab="recent">
+            최근 포스트
+        </button>
+        <button class="home-tab" data-tab="series">
+            시리즈
+        </button>
+    </div>
+
+    <!-- Recent Posts Tab Content -->
+    <div class="tab-content active" data-content="recent">
+        <div class="posts-controls">
         <div class="filter-section">
             <!-- Filters button will be inserted here by JS -->
         </div>
@@ -70,7 +82,7 @@
         <!-- Filter panel will be inserted here by JS -->
     </div>
 
-    <!-- Grid View -->
+        <!-- Grid View -->
 <div class="post-list post-grid-view">
     
     <article class="post-preview" data-tags="" data-category="performance">
@@ -200,7 +212,7 @@
     
 </div>
 
-    <!-- List View -->
+        <!-- List View -->
 <div class="post-list post-list-view" style="display: none;">
     
     <article class="post-item" data-tags="" data-category="performance">
@@ -350,12 +362,62 @@
 </div>
 
 
-    <script src="/assets/js/view-toggle.js"></script>
-    <script src="/assets/js/post-filter.js"></script>
+        <script src="/assets/js/view-toggle.js"></script>
+        <script src="/assets/js/post-filter.js"></script>
 
+        
+
+
+    </div>
+
+    <!-- Series Tab Content -->
+    <div class="tab-content" data-content="series">
+        <!-- Homepage Series View Component - Numbered List Style -->
+<div class="series-list">
     
+        
+            
 
+            <!-- Series Group Start -->
+            
+            <div class="series-group">
+                <!-- Series Header -->
+                <div class="series-header">
+                    <h2 class="series-title">Python 비동기 프로그래밍</h2>
+                    <p class="series-description">Python 비동기 프로그래밍 깊이 파헤치기</p>
+                    <span class="series-count">
+                        1
+                        
+                            
+                                개 포스트
+                            
+                        
+                    </span>
+                </div>
 
+                <!-- Series Posts List -->
+                <ol class="series-posts">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="series-post-item">
+                        <a href="/tech/ko/posts/2024-01-15-python-asyncio-event-loop.html" class="series-post-link">Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+        
+    
+</div>
+
+    </div>
+
+    <script src="/assets/js/home-tabs.js"></script>
 </div>
     </main>
 
