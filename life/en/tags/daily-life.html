@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재영의 기술 블로그</title>
-    <meta name="description" content="처음부터 만든 기술 블로그">
+    <title>Jae's Life Blog</title>
+    <meta name="description" content="Personal stories, travel adventures, and life experiences beyond the code">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Life Blog RSS" href="/life/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <script>
         // Apply saved theme immediately to prevent flash
         const theme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
-        const lang = localStorage.getItem('lang') || 'ko';
+        const lang = localStorage.getItem('lang') || 'en';
     </script>
     <script src="/assets/js/theme-switcher.js" defer></script>
 </head>
 <body>
     <header>
         <nav>
-            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <a href="/life/en/" class="site-title" data-nav-link>Jae's Life Blog</a>
             <div class="nav-links">
-                <a href="/tech/ko/" data-nav-link>홈</a>
-                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
-                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/life/en/" data-nav-link>Home</a>
+                <a href="/life/en/archive.html" data-nav-link>Archive</a>
+                <a href="/life/en/about.html" data-nav-link>About</a>
                 <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
                     <span id="theme-icon">🌙</span>
                 </button>
             </div>
@@ -39,7 +39,7 @@
     <main>
         <div class="tag-page">
     <div class="page-header">
-        <h1>"concurrency" 태그가 달린 포스트</h1>
+        <h1>Posts tagged "daily-life"</h1>
     </div>
 
     <div class="posts-controls">
@@ -72,20 +72,37 @@
     <!-- Grid View -->
 <div class="post-list post-grid-view">
     
-    <article class="post-preview" data-tags="python,asyncio,이벤트 루프,des,동시성" data-category="심층 분석">
+    <article class="post-preview" data-tags="" data-category="personal">
         
         <div class="post-preview-content">
-            <h2><a href="/tech/ko/posts/2024-01-15-python-asyncio-event-loop.html">Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</a></h2>
-            <time datetime=""2024-01-15T00:00:00.000Z"">January 15, 2024</time>
+            <h2><a href="/life/en/posts/2025-10-15-my-daily-routine.html">My Daily Routine</a></h2>
+            <time datetime=""2025-10-15T00:00:00.000Z"">October 15, 2025</time>
             
-            <p>이산 이벤트 시뮬레이션을 위한 Python asyncio 이벤트 루프 내부 구조 분석과 커스텀 구현</p>
+            <p>Building a sustainable daily routine for a better life</p>
             
             
             <div class="post-meta-bottom">
-                <a href="/tech/ko/categories/deep-dive.html" class="category-badge">심층 분석</a>
+                <a href="/life/en/categories/personal.html" class="category-badge">personal</a>
             </div>
             
-            <a href="/tech/ko/posts/2024-01-15-python-asyncio-event-loop.html" class="read-more">더 읽기</a>
+            <a href="/life/en/posts/2025-10-15-my-daily-routine.html" class="read-more">Read more</a>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="personal">
+        
+        <div class="post-preview-content">
+            <h2><a href="/life/en/posts/2025-10-16-one-week-into-routine.html">One Week Into My New Routine</a></h2>
+            <time datetime=""2025-10-16T00:00:00.000Z"">October 16, 2025</time>
+            
+            <p>Reflections and lessons learned from the first week of my new routine</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/life/en/categories/personal.html" class="category-badge">personal</a>
+            </div>
+            
+            <a href="/life/en/posts/2025-10-16-one-week-into-routine.html" class="read-more">Read more</a>
         </div>
     </article>
     
@@ -94,21 +111,41 @@
     <!-- List View -->
 <div class="post-list post-list-view" style="display: none;">
     
-    <article class="post-item" data-tags="python,asyncio,이벤트 루프,des,동시성" data-category="심층 분석">
-        <a href="/tech/ko/posts/2024-01-15-python-asyncio-event-loop.html" class="post-item-link">
+    <article class="post-item" data-tags="" data-category="personal">
+        <a href="/life/en/posts/2025-10-15-my-daily-routine.html" class="post-item-link">
             
             <div class="post-item-content">
                 <div class="post-item-header">
-                    <h2>Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</h2>
+                    <h2>My Daily Routine</h2>
                     <div class="post-item-meta">
-                        <time datetime=""2024-01-15T00:00:00.000Z"">January 15, 2024</time>
+                        <time datetime=""2025-10-15T00:00:00.000Z"">October 15, 2025</time>
                         
-                        <span class="category-badge-small">심층 분석</span>
+                        <span class="category-badge-small">personal</span>
                         
                     </div>
                 </div>
                 
-                <p class="post-item-excerpt">이산 이벤트 시뮬레이션을 위한 Python asyncio 이벤트 루프 내부 구조 분석과 커스텀 구현</p>
+                <p class="post-item-excerpt">Building a sustainable daily routine for a better life</p>
+                
+            </div>
+        </a>
+    </article>
+    
+    <article class="post-item" data-tags="" data-category="personal">
+        <a href="/life/en/posts/2025-10-16-one-week-into-routine.html" class="post-item-link">
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>One Week Into My New Routine</h2>
+                    <div class="post-item-meta">
+                        <time datetime=""2025-10-16T00:00:00.000Z"">October 16, 2025</time>
+                        
+                        <span class="category-badge-small">personal</span>
+                        
+                    </div>
+                </div>
+                
+                <p class="post-item-excerpt">Reflections and lessons learned from the first week of my new routine</p>
                 
             </div>
         </a>
@@ -128,7 +165,7 @@
         <div class="footer-content">
             <p>&copy; 2025 Jae · Built with custom static site generator</p>
             <div class="footer-links">
-                <a href="/tech/ko/feed.xml">RSS</a>
+                <a href="/life/en/feed.xml">RSS</a>
                 
                 
             </div>

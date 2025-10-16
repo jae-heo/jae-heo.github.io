@@ -41,29 +41,61 @@
     <header class="post-header">
         <h1>Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</h1>
         <time datetime=""2024-01-15T00:00:00.000Z"">January 15, 2024</time>
-        
-        <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500;">카테고리:</span>
-            <a href="/tech/ko/categories/deep-dive.html" class="category-badge">심층 분석</a>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Python 비동기 프로그래밍 (1/1)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/deep-dive.html" class="category-badge">deep-dive</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/python.html" class="tag">python</a>
+                    
+                    <a href="/tech/ko/tags/asyncio.html" class="tag">asyncio</a>
+                    
+                    <a href="/tech/ko/tags/event-loop.html" class="tag">event-loop</a>
+                    
+                    <a href="/tech/ko/tags/des.html" class="tag">des</a>
+                    
+                    <a href="/tech/ko/tags/동시성.html" class="tag">동시성</a>
+                    
+                </div>
+            </div>
+            
         </div>
-        
-        
-        <div class="tags" style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-            <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500;">태그:</span>
-            
-            <a href="/tech/ko/tags/python.html" class="tag">python</a>
-            
-            <a href="/tech/ko/tags/asyncio.html" class="tag">asyncio</a>
-            
-            <a href="/tech/ko/tags/event-loop.html" class="tag">이벤트 루프</a>
-            
-            <a href="/tech/ko/tags/des.html" class="tag">des</a>
-            
-            <a href="/tech/ko/tags/concurrency.html" class="tag">동시성</a>
-            
-        </div>
-        
     </header>
+
+    
+    <div class="series-navigation">
+        <div class="series-header">
+            <h3>📚 Python 비동기 프로그래밍</h3>
+            <p class="series-description">Python 비동기 프로그래밍 깊이 파헤치기</p>
+        </div>
+        <ol class="series-posts">
+            
+            <li class="series-post-item current">
+                
+                <span class="series-post-title">Python asyncio 내부 구조와 커스텀 이벤트 루프 구현 <span class="current-indicator">← You are here</span></span>
+                
+            </li>
+            
+        </ol>
+    </div>
+    
 
     <div class="post-content">
         <h1 id="python-asyncio-">Python asyncio 내부 구조와 커스텀 이벤트 루프 구현</h1>
@@ -170,8 +202,10 @@ class EventPool:
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html" class="prev">← 대규모 시뮬레이션을 위한 Python 메모리 관리 최적화</a>
+        <span></span>
         
+        
+        <a href="/tech/ko/posts/2024-02-20-python-memory-management-simulation.html" class="nav-next">대규모 시뮬레이션을 위한 Python 메모리 관리 최적화 →</a>
         
     </nav>
 </article>

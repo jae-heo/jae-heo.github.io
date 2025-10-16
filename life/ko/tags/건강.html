@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>여정의 시작 - 재영의 일상 블로그</title>
-    <meta name="description" content="새로운 장을 열며 미지의 세계를 받아들이기">
+    <title>재영의 일상 블로그</title>
+    <meta name="description" content="일상 이야기, 여행 모험, 그리고 코드 너머의 삶">
     <link rel="stylesheet" href="/assets/style.css">
     <link rel="alternate" type="application/rss+xml" title="재영의 일상 블로그 RSS" href="/life/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,51 +37,91 @@
     </header>
 
     <main>
-        <article class="post">
-    <header class="post-header">
-        <h1>여정의 시작</h1>
-        <time datetime=""2024-10-01T00:00:00.000Z"">October 1, 2024</time>
-        
-        <div style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-            <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500;">카테고리:</span>
-            <a href="/life/ko/categories/personal.html" class="category-badge">개인</a>
-        </div>
-        
-        
-        <div class="tags" style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-            <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500;">태그:</span>
-            
-            <a href="/life/ko/tags/life.html" class="tag">일상</a>
-            
-            <a href="/life/ko/tags/reflection.html" class="tag">성찰</a>
-            
-            <a href="/life/ko/tags/journey.html" class="tag">여정</a>
-            
-        </div>
-        
-    </header>
-
-    <div class="post-content">
-        <h1 id="-">여정의 시작</h1>
-<p>모든 여정은 한 걸음부터 시작됩니다. 오늘은 코드 너머의 생각과 경험을 나누기 시작하는 날입니다.</p>
-<h2 id="-">왜 지금 시작하나</h2>
-<p>삶은 우리가 작성하는 코드 그 이상입니다. 우리가 모은 경험, 만나는 사람들, 그리고 그 과정에서 만들어가는 이야기들이 있습니다.</p>
-<p>일어나는 일들을 기록하는 것에는 특별한 아름다움이 있습니다 - 작은 승리들, 예상치 못한 도전들, 그리고 우리를 형성하는 조용한 성찰의 순간들.</p>
-<h2 id="-">앞으로의 이야기</h2>
-<p>이 공간에는 이런 이야기들이 담길 예정입니다:</p>
-<ul class="ul-list">
-<li>여행 모험과 문화적 발견</li><li>개인적인 성찰과 삶의 교훈</li><li>기술 외의 창의적인 활동</li><li>테크 블로그에 담기지 않는 이야기들</li></ul>
-<h2 id="-">앞으로 나아가며</h2>
-<p>앞길은 알 수 없지만, 그것이 흥미진진한 이유입니다. 새로운 시작과 아직 쓰여지지 않은 이야기들을 위하여.</p>
-<p>때로는 최고의 문서화는 코드가 아닌, 삶 그 자체에 관한 것입니다.</p>
-
+        <div class="tag-page">
+    <div class="page-header">
+        <h1>"건강" 태그가 달린 포스트</h1>
     </div>
 
-    <nav class="post-nav">
+    <div class="posts-controls">
+        <div class="filter-section">
+            <!-- Filters button will be inserted here by JS -->
+        </div>
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" data-view="grid" title="Grid view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+            </button>
+            <button class="view-toggle-btn" data-view="list" title="List view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <!-- Filter panel will be inserted here by JS -->
+    </div>
+
+    <!-- Grid View -->
+<div class="post-list post-grid-view">
+    
+    <article class="post-preview" data-tags="" data-category="personal">
         
-        
-    </nav>
-</article>
+        <div class="post-preview-content">
+            <h2><a href="/life/ko/posts/2025-10-15-my-daily-routine.html">나의 하루</a></h2>
+            <time datetime=""2025-10-15T00:00:00.000Z"">October 15, 2025</time>
+            
+            <p>새로운 하루를 만들어가는 나의 일과</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/life/ko/categories/personal.html" class="category-badge">personal</a>
+            </div>
+            
+            <a href="/life/ko/posts/2025-10-15-my-daily-routine.html" class="read-more">더 읽기</a>
+        </div>
+    </article>
+    
+</div>
+
+    <!-- List View -->
+<div class="post-list post-list-view" style="display: none;">
+    
+    <article class="post-item" data-tags="" data-category="personal">
+        <a href="/life/ko/posts/2025-10-15-my-daily-routine.html" class="post-item-link">
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>나의 하루</h2>
+                    <div class="post-item-meta">
+                        <time datetime=""2025-10-15T00:00:00.000Z"">October 15, 2025</time>
+                        
+                        <span class="category-badge-small">personal</span>
+                        
+                    </div>
+                </div>
+                
+                <p class="post-item-excerpt">새로운 하루를 만들어가는 나의 일과</p>
+                
+            </div>
+        </a>
+    </article>
+    
+</div>
+
+
+    <script src="/assets/js/view-toggle.js"></script>
+    <script src="/assets/js/post-filter.js"></script>
+
+    
+</div>
     </main>
 
     <footer>

@@ -731,25 +731,41 @@
     color: var(--text-primary);
 }
 
-.post-content h2 {
+.post-content h1 {
     margin-top: 3rem;
     margin-bottom: 1.5rem;
     font-size: 1.875rem;
     font-weight: 700;
+    color: var(--text-primary);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--accent-light);
+}
+
+.post-content h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.625rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    padding-left: 0.75rem;
+    border-left: 4px solid var(--accent);
 }
 
 .post-content h3 {
     margin-top: 2.5rem;
     margin-bottom: 1.25rem;
-    font-size: 1.5rem;
+    font-size: 1.375rem;
     font-weight: 600;
+    color: var(--accent);
 }
 
 .post-content h4 {
     margin-top: 2rem;
     margin-bottom: 1rem;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
+    color: var(--text-secondary);
+    font-style: italic;
 }
 
 .post-content p {
@@ -844,6 +860,39 @@
 
 .post-nav-next {
     text-align: right;
+}
+
+.post-nav {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.post-nav .nav-prev,
+.post-nav .nav-next {
+    display: inline-block;
+    text-decoration: none;
+    color: var(--accent);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.post-nav .nav-prev:hover,
+.post-nav .nav-next:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+
+.post-nav .nav-prev {
+    text-align: left;
+}
+
+.post-nav .nav-next {
+    text-align: right;
+    grid-column: 2;
 }
 
 /* Responsive Design */

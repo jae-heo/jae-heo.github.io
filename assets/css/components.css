@@ -185,18 +185,25 @@ nav {
 
 /* Simple Tag and Category Badges */
 .tag,
-.category-badge {
+.category-badge,
+.series-badge {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
+    padding: 0.1rem 0.5rem;
     background: var(--bg-secondary);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: 3px;
     color: var(--text-primary);
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 500;
     transition: all 0.2s ease;
     margin-right: 0.5rem;
+}
+
+.series-badge {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 .tag:hover,
@@ -206,6 +213,106 @@ nav {
     color: white;
     transform: translateY(-2px);
     box-shadow: var(--shadow-sm);
+}
+
+/* Series Navigation Box */
+.series-navigation {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border: 2px solid var(--accent-light);
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+}
+
+.series-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.series-header h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.series-description {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.series-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: series-counter;
+}
+
+.series-post-item {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+    counter-increment: series-counter;
+    position: relative;
+    padding-left: 2.5rem;
+}
+
+.series-post-item::before {
+    content: counter(series-counter);
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.series-post-item.current {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent);
+    padding-left: calc(2.5rem - 3px);
+}
+
+.series-post-item.current::before {
+    background: var(--accent);
+    color: white;
+}
+
+.series-post-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.series-post-link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.series-post-title {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.current-indicator {
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-left: 0.5rem;
 }
 
 /* Category Grid */
