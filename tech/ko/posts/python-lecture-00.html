@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 강좌 시리즈 소개 - 재영의 기술 블로그</title>
+    <meta name="description" content="파이썬 강의 계획서">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>Python 강좌 시리즈 소개</h1>
+        <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Python 강좌 시리즈 (1/2)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/강좌.html" class="category-badge">강좌</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/파이썬.html" class="tag">파이썬</a>
+                    
+                    <a href="/tech/ko/tags/프로그래밍.html" class="tag">프로그래밍</a>
+                    
+                    <a href="/tech/ko/tags/강좌소개.html" class="tag">강좌소개</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - Modular Structure -->
+    <nav class="series-navigation">
+        <!-- Series Header -->
+        <div class="series-header">
+            <h3>📚 Python 강좌 시리즈</h3>
+            <p class="series-description">깊이있게 배우는 Python 프로그래밍 강좌</p>
+        </div>
+
+        <!-- Series Posts List -->
+        <ol class="series-posts">
+            
+            <!-- Series Post Item -->
+            <li class="series-post-item current">
+                
+                <!-- Current Post (Not Clickable) -->
+                <span class="series-post-title">
+                    Python 강좌 시리즈 소개
+                    <span class="current-indicator">← You are here</span>
+                </span>
+                
+            </li>
+            
+            <!-- Series Post Item -->
+            <li class="series-post-item ">
+                
+                <!-- Other Posts (Clickable Links) -->
+                <a href="/tech/ko/posts/python-lecture-01.html" class="series-post-link">Python 강좌 1편 - 파이썬의 철학과 설계 원칙</a>
+                
+            </li>
+            
+        </ol>
+    </nav>
+    
+
+    <div class="post-content">
+        <h2 id="-">이 시리즈를 시작하게 된 계기</h2>
+<p>최근 회사에서 신입 개발자 온보딩을 담당하게 되었습니다. 효과적인 온보딩을 위해 무엇이 필요할까 고민하던 중, 우리 회사의 기술 스택을 체계적으로 정리해야겠다는 생각이 들었습니다.</p>
+<p>우리 회사의 핵심 모듈들은 대부분 파이썬으로 작성되어 있으며, 단순한 스크립팅 수준을 넘어서 파이썬의 고급 기능들을 적극적으로 활용하고 있습니다. 특히 <strong>메타클래스(Meta Class)</strong>, <strong>컨텍스트 매니저(Context Manager)</strong>, <strong>비동기 프로그래밍(Async/Await)</strong> 등 파이썬의 내부 동작 원리를 깊이 이해해야만 제대로 활용할 수 있는 기능들이 주를 이루고 있죠.</p>
+<h2 id="-">강의 준비와 교재 선정</h2>
+<p>이런 상황에서 체계적인 파이썬 교육이 필수적이라고 판단했습니다. 교재로는 제가 개인적으로 가장 좋아하는 <strong>O&#39;Reilly의 &quot;Python in a Nutshell&quot;</strong>을 선택했습니다. 이 책은 단순히 문법을 나열하는 것이 아니라, 파이썬이라는 언어의 철학과 설계 목적, 그리고 발전 방향성까지 깊이 있게 다루고 있어 우리 팀의 학습 목표와 완벽하게 일치합니다.</p>
+<h2 id="-">시리즈 소개</h2>
+<p>이번 온보딩을 위해 준비한 강의 내용들을 정리하여 <strong>&quot;파이썬 강좌&quot;</strong> 시리즈로 블로그에 연재할 예정입니다. 단순한 문법 설명을 넘어서, 연관된 여러 개념들을 같이 다룰 예정입니다.</p>
+<h2 id="-">선수 지식</h2>
+<ul class="ul-list">
+<li><strong>기본적인 CS(Computer Science) 지식</strong></li><li><strong>파이썬 기초 문법</strong>: 변수, 함수, 클래스 등의 기본 개념</li></ul>
+<hr />
+<p>💡 <strong>Note</strong>: 이 시리즈는 실제 온보딩 과정에서 사용된 내용을 바탕으로 작성되었으며, 지속적으로 업데이트될 예정입니다. 궁금한 점이나 다루었으면 하는 주제가 있다면 언제든 연락주세요!</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <span></span>
+        
+        
+        <a href="/tech/ko/posts/python-lecture-01.html" class="nav-next">Python 강좌 1편 - 파이썬의 철학과 설계 원칙 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

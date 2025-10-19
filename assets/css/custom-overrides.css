@@ -1,0 +1,52 @@
+/* Custom style overrides to differentiate h2 from blockquote */
+
+/* Keep h2 headings with original style - they already look good */
+/* The original h2 style is defined in pages.css and uses:
+   - border-left: 4px solid var(--accent)
+   - padding-left: 0.75rem
+   - font-weight: 700
+   This is kept as-is since you prefer it */
+
+/* Make blockquotes more visually distinct as quotes with subtle colors */
+.post-content blockquote {
+    margin: 2.5rem 1rem;
+    padding: 1.25rem 1.5rem;
+    background: rgba(0, 0, 0, 0.02); /* Very subtle background */
+    border-left: 3px solid rgba(0, 0, 0, 0.15); /* Subtle border */
+    border-radius: 0.5rem;
+    font-style: italic;
+    color: var(--text-secondary);
+    opacity: 0.85; /* Slightly reduced opacity for softer look */
+    position: relative;
+    quotes: """ """;
+}
+
+/* Add decorative quote mark - more subtle */
+.post-content blockquote::before {
+    content: open-quote;
+    font-size: 2.5rem;
+    position: absolute;
+    left: 0.5rem;
+    top: -0.25rem;
+    color: var(--text-secondary);
+    opacity: 0.15; /* Very subtle quote mark */
+    font-family: Georgia, serif;
+}
+
+/* Ensure nested elements in blockquote maintain the style */
+.post-content blockquote p {
+    margin-bottom: 0;
+    line-height: 1.8;
+}
+
+/* Dark mode adjustments for blockquotes */
+[data-theme="dark"] .post-content blockquote {
+    background: rgba(255, 255, 255, 0.02);
+    border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .post-content blockquote::before {
+    color: var(--text-secondary);
+    opacity: 0.1;
+}
+

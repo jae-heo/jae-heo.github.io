@@ -5,18 +5,7 @@
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 2rem;
-    animation: fadeInUp 0.6s ease-out;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    animation: fadeInUp 0.6s ease-out; /* Using animation from animations/animations.css */
 }
 
 .home .page-header {
@@ -63,40 +52,7 @@
     position: relative;
 }
 
-/* View Toggle Buttons */
-.view-toggle {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.view-toggle-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    padding: 0.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    color: var(--text-tertiary);
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.view-toggle-btn:hover {
-    background: transparent;
-    color: var(--text-secondary);
-    border-color: var(--text-secondary);
-}
-
-.view-toggle-btn.active {
-    background: transparent;
-    color: var(--accent);
-    border-color: var(--accent);
-}
-
-.view-toggle-btn svg {
-    display: block;
-}
+/* View Toggle Buttons - Using components/buttons.css */
 
 /* Post List 3D Grid Layout */
 .post-list {
@@ -114,90 +70,7 @@
     margin-top: 0;
 }
 
-.post-item {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    height: 160px;
-}
-
-.post-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    border-color: var(--accent);
-}
-
-.post-item-link {
-    display: flex;
-    text-decoration: none;
-    color: inherit;
-    height: 100%;
-}
-
-.post-item-image {
-    width: 200px;
-    height: 180px;
-    flex-shrink: 0;
-    overflow: hidden;
-    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
-}
-
-.post-item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.post-item:hover .post-item-image img {
-    transform: scale(1.05);
-}
-
-.post-item-content {
-    flex: 1;
-    padding: 1.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.post-item-header h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0 0 0.5rem 0;
-    line-height: 1.3;
-    color: var(--text-primary);
-    transition: color 0.2s ease;
-}
-
-.post-item:hover .post-item-header h2 {
-    color: var(--accent);
-}
-
-.post-item-meta {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 0.875rem;
-}
-
-.post-item-meta time {
-    color: var(--text-tertiary);
-}
-
-.category-badge-small {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    background: var(--accent);
-    color: white;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+/* Post Item Styles - Using components/cards.css */
 
 .post-item-excerpt {
     color: var(--text-secondary);

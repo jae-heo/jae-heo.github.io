@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Python Lecture Series - Jae's Tech Blog</title>
+    <meta name="description" content="Python lecture series curriculum">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>Introduction to Python Lecture Series</h1>
+        <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Python Lecture Series (1/2)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/python.html" class="tag">python</a>
+                    
+                    <a href="/tech/en/tags/programming.html" class="tag">programming</a>
+                    
+                    <a href="/tech/en/tags/lecture-introduction.html" class="tag">lecture-introduction</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - Modular Structure -->
+    <nav class="series-navigation">
+        <!-- Series Header -->
+        <div class="series-header">
+            <h3>📚 Python Lecture Series</h3>
+            <p class="series-description">Comprehensive Python programming course from basics to advanced topics</p>
+        </div>
+
+        <!-- Series Posts List -->
+        <ol class="series-posts">
+            
+            <!-- Series Post Item -->
+            <li class="series-post-item current">
+                
+                <!-- Current Post (Not Clickable) -->
+                <span class="series-post-title">
+                    Introduction to Python Lecture Series
+                    <span class="current-indicator">← You are here</span>
+                </span>
+                
+            </li>
+            
+            <!-- Series Post Item -->
+            <li class="series-post-item ">
+                
+                <!-- Other Posts (Clickable Links) -->
+                <a href="/tech/en/posts/python-lecture-01.html" class="series-post-link">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
+                
+            </li>
+            
+        </ol>
+    </nav>
+    
+
+    <div class="post-content">
+        <h2 id="the-origin-of-this-series">The Origin of This Series</h2>
+<p>I recently took on the responsibility of onboarding new developers at my company. While contemplating what would make for effective onboarding, I realized the need to systematically organize our company&#39;s technology stack.</p>
+<p>Most of our company&#39;s core modules are written in Python, and they go far beyond simple scripting - they actively utilize Python&#39;s advanced features. In particular, our codebase heavily relies on features that require a deep understanding of Python&#39;s internal mechanisms, such as <strong>Metaclasses</strong>, <strong>Context Managers</strong>, and <strong>Asynchronous Programming (Async/Await)</strong>.</p>
+<h2 id="course-preparation-and-material-selection">Course Preparation and Material Selection</h2>
+<p>Given this situation, I determined that systematic Python education was essential. For the textbook, I chose <strong>O&#39;Reilly&#39;s &quot;Python in a Nutshell&quot;</strong>, which is personally my favorite. Rather than simply listing syntax, this book deeply explores Python&#39;s philosophy, design objectives, and development direction - perfectly aligning with our team&#39;s learning goals.</p>
+<h2 id="series-introduction">Series Introduction</h2>
+<p>I plan to organize the lecture content prepared for this onboarding into a <strong>&quot;Python Lecture&quot;</strong> series on this blog. Going beyond simple syntax explanations, I&#39;ll cover multiple related concepts together.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul class="ul-list">
+<li><strong>Basic Computer Science knowledge</strong></li><li><strong>Python fundamentals</strong>: Basic concepts like variables, functions, classes, etc.</li></ul>
+<hr />
+<p>💡 <strong>Note</strong>: This series is based on content from actual onboarding sessions and will be continuously updated. If you have any questions or topics you&#39;d like to see covered, please don&#39;t hesitate to reach out!</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <span></span>
+        
+        
+        <a href="/tech/en/posts/python-lecture-01.html" class="nav-next">Python Lecture Part 1 - Python's Philosophy and Design Principles →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

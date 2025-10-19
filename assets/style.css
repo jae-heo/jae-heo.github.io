@@ -1,23 +1,115 @@
-/* Main Stylesheet - Imports all modular CSS */
+/*
+ * Main Stylesheet - Modular CSS Architecture
+ * This file imports all CSS modules in the correct order
+ */
 
-/* Theme Variables */
+/* ========================================
+   1. CORE - Foundation styles
+   ======================================== */
+
+/* CSS Reset - Must come first */
+@import 'css/core/reset.css';
+
+/* Theme Variables & Color System */
 @import 'css/themes.css';
 
-/* Base Styles & Typography */
+/* Typography System */
+@import 'css/core/typography.css';
+
+/* Base Styles */
 @import 'css/base.css';
 
-/* Reusable Components */
+/* ========================================
+   2. LAYOUTS - Grid & Flexbox systems
+   ======================================== */
+
+/* Grid Layout System */
+@import 'css/layouts/grid.css';
+
+/* Flexbox Layout System */
+@import 'css/layouts/flexbox.css';
+
+/* ========================================
+   3. COMPONENTS - Reusable UI components
+   ======================================== */
+
+/* Navigation Component */
+@import 'css/components/navigation.css';
+
+/* Card Components */
+@import 'css/components/cards.css';
+
+/* Button Components */
+@import 'css/components/buttons.css';
+
+/* Form Components */
+@import 'css/components/forms.css';
+
+/* Legacy Components (to be refactored) */
 @import 'css/components.css';
 
-/* Series View Specific Styles */
-@import 'css/series-homepage.css';  /* Homepage series tab styles */
-@import 'css/series-post.css';      /* Post page series navigation styles */
-@import 'css/series-long-list.css'; /* Long series list handling */
+/* ========================================
+   4. UTILITIES - Helper classes
+   ======================================== */
 
-/* Page-Specific Styles */
+/* Spacing Utilities */
+@import 'css/utilities/spacing.css';
+
+/* Display & Visibility Utilities */
+@import 'css/utilities/display.css';
+
+/* ========================================
+   5. ANIMATIONS - Keyframes & transitions
+   ======================================== */
+
+/* Animation Keyframes & Classes */
+@import 'css/animations/animations.css';
+
+/* ========================================
+   6. PAGE-SPECIFIC - Page-level styles
+   ======================================== */
+
+/* Series-specific styles */
+@import 'css/series-homepage.css';
+@import 'css/series-post.css';
+@import 'css/series-long-list.css';
+
+/* Page-specific Styles */
 @import 'css/pages.css';
 
-/* Additional Global Styles */
+/* ========================================
+   7. OVERRIDES - Custom overrides (last)
+   ======================================== */
+
+/* Custom Overrides - Always load last */
+@import 'css/custom-overrides.css';
+
+/* ========================================
+   8. GLOBAL - Additional global styles
+   ======================================== */
+
+/* Global Layout Constraints */
 main {
     min-height: calc(100vh - 200px);
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Print Styles */
+@media print {
+    nav,
+    .fab,
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        font-size: 12pt;
+        color: black;
+        background: white;
+    }
+
+    a {
+        color: black;
+        text-decoration: underline;
+    }
 }

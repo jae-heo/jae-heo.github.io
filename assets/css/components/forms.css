@@ -1,0 +1,335 @@
+/* Form Components */
+
+/* Form Container */
+.form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-row > * {
+    flex: 1;
+}
+
+/* Labels */
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.form-label-required::after {
+    content: ' *';
+    color: var(--error, #ef4444);
+}
+
+/* Input Fields */
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: var(--text-tertiary);
+}
+
+/* Textarea */
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Select */
+.form-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    appearance: none;
+}
+
+/* Checkbox & Radio */
+.form-checkbox,
+.form-radio {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--accent);
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.form-checkbox {
+    border-radius: 4px;
+}
+
+.form-radio {
+    border-radius: 50%;
+}
+
+.form-checkbox:checked,
+.form-radio:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.form-checkbox:focus,
+.form-radio:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Checkbox/Radio with Label */
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+/* Switch Toggle */
+.form-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.form-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.form-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--border);
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.form-switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.form-switch input:checked + .form-switch-slider {
+    background: var(--accent);
+}
+
+.form-switch input:checked + .form-switch-slider:before {
+    transform: translateX(24px);
+}
+
+/* Input Group */
+.input-group {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+.input-group-prepend,
+.input-group-append {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+}
+
+.input-group-prepend {
+    border-right: 0;
+    border-radius: 6px 0 0 6px;
+}
+
+.input-group-append {
+    border-left: 0;
+    border-radius: 0 6px 6px 0;
+}
+
+.input-group .form-input {
+    border-radius: 0;
+}
+
+.input-group .form-input:first-child {
+    border-radius: 6px 0 0 6px;
+}
+
+.input-group .form-input:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+/* Help Text */
+.form-help {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+}
+
+/* Validation States */
+.form-input-error,
+.form-textarea-error,
+.form-select-error {
+    border-color: var(--error, #ef4444);
+}
+
+.form-input-error:focus,
+.form-textarea-error:focus,
+.form-select-error:focus {
+    border-color: var(--error, #ef4444);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-input-success,
+.form-textarea-success,
+.form-select-success {
+    border-color: var(--success, #10b981);
+}
+
+.form-input-success:focus,
+.form-textarea-success:focus,
+.form-select-success:focus {
+    border-color: var(--success, #10b981);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.form-error {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--error, #ef4444);
+}
+
+.form-success {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--success, #10b981);
+}
+
+/* File Upload */
+.form-file {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.form-file input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+.form-file-label {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.form-file:hover .form-file-label {
+    background: var(--bg-tertiary);
+    border-color: var(--accent);
+}
+
+/* Search Form */
+.search-form {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 3rem 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-button {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.5rem;
+    background: var(--accent);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-button:hover {
+    background: var(--accent-hover);
+}
+
+.search-button svg {
+    width: 18px;
+    height: 18px;
+    color: white;
+}
