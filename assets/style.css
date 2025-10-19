@@ -9,6 +9,11 @@
 /* Reusable Components */
 @import 'css/components.css';
 
+/* Series View Specific Styles */
+@import 'css/series-homepage.css';  /* Homepage series tab styles */
+@import 'css/series-post.css';      /* Post page series navigation styles */
+@import 'css/series-long-list.css'; /* Long series list handling */
+
 /* Page-Specific Styles */
 @import 'css/pages.css';
 

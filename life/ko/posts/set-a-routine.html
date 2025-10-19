@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>루틴을 정하다 - 재영의 일상 블로그</title>
+    <meta name="description" content="새로운 하루를 만들어가는 나의 일과">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 일상 블로그 RSS" href="/life/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/life/ko/" class="site-title" data-nav-link>재영의 일상 블로그</a>
+            <div class="nav-links">
+                <a href="/life/ko/" data-nav-link>홈</a>
+                <a href="/life/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/life/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <header class="post-header">
+        <h1>루틴을 정하다</h1>
+        <time datetime=""2025-10-11T00:00:00.000Z"">October 11, 2025</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 열심히 사는 사람 구경하기 (1/5)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/life/ko/categories/삶.html" class="category-badge">삶</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/life/ko/tags/일상.html" class="tag">일상</a>
+                    
+                    <a href="/life/ko/tags/루틴.html" class="tag">루틴</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - Modular Structure -->
+    <nav class="series-navigation">
+        <!-- Series Header -->
+        <div class="series-header">
+            <h3>📚 열심히 사는 사람 구경하기</h3>
+            <p class="series-description">하루하루 발버둥치는 이야기</p>
+        </div>
+
+        <!-- Series Posts List -->
+        <ol class="series-posts">
+            
+            <!-- Series Post Item -->
+            <li class="series-post-item current">
+                
+                <!-- Current Post (Not Clickable) -->
+                <span class="series-post-title">
+                    루틴을 정하다
+                    <span class="current-indicator">← You are here</span>
+                </span>
+                
+            </li>
+            
+            <!-- Series Post Item -->
+            <li class="series-post-item ">
+                
+                <!-- Other Posts (Clickable Links) -->
+                <a href="/life/ko/posts/morning-diary-4.html" class="series-post-link">아침일기 4일차</a>
+                
+            </li>
+            
+            <!-- Series Post Item -->
+            <li class="series-post-item ">
+                
+                <!-- Other Posts (Clickable Links) -->
+                <a href="/life/ko/posts/morning-diary-5.html" class="series-post-link">아침일기 5일차</a>
+                
+            </li>
+            
+            <!-- Series Post Item -->
+            <li class="series-post-item ">
+                
+                <!-- Other Posts (Clickable Links) -->
+                <a href="/life/ko/posts/morning-diary-6.html" class="series-post-link">아침일기 6일차</a>
+                
+            </li>
+            
+            <!-- Series Post Item -->
+            <li class="series-post-item ">
+                
+                <!-- Other Posts (Clickable Links) -->
+                <a href="/life/ko/posts/morning-diary-7.html" class="series-post-link">아침일기 7일차</a>
+                
+            </li>
+            
+        </ol>
+    </nav>
+    
+
+    <div class="post-content">
+        <p>하루에 시간이 너무 부족하다고 느꼈다. <br />그럴때마다 조금 더 늦게자게 되었다.</p>
+<p>결과적으로 보면 효율적으로 더 안좋았다.<br />육체적, 정신적 부담이 느껴졌다.</p>
+<p>그래서 고민을 했다.<br />나는 내 능력보다 욕심이 더 큰 것 같았다.</p>
+<p>시간의 효율을 올리려면 어떻게 해야할까?<br />작은 변화부터 만들어보기로 했다.</p>
+<p>기상/수면 시간을 고정하기로 했다.<br />아침 6시에 일어나고, 저녁 10시에 자기로 했다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <span></span>
+        
+        
+        <a href="/life/ko/posts/morning-diary-4.html" class="nav-next">아침일기 4일차 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/life/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

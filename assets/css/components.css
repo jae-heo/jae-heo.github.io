@@ -215,62 +215,33 @@ nav {
     box-shadow: var(--shadow-sm);
 }
 
-/* Post Page Series Navigation Component - Clean and Organized */
-.series-navigation {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-}
+/* ===================================================================
+   SHARED SERIES STYLES - Common components for all series views
+   =================================================================== */
 
-.series-navigation .series-header {
-    margin: 0 0 1rem 0;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
-}
-
-.series-navigation .series-header h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.series-navigation .series-description {
-    margin: 0;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
-
-.series-navigation .series-posts {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* Base series list styling - overrides global ol/li from base.css */
+.series-posts {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
     counter-reset: series-counter;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
 }
 
-.series-navigation .series-post-item {
-    margin-bottom: 0;
-    border-radius: 4px;
-    transition: background 0.2s ease;
+/* Individual series post item */
+.series-post-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
     counter-increment: series-counter;
     position: relative;
+    border-radius: 4px;
+    transition: background 0.2s ease;
     background: transparent;
     height: 2.75rem;
-    display: flex;
-    align-items: center;
 }
 
-.series-navigation .series-post-item:hover {
-    background: var(--bg-tertiary);
-}
-
-.series-navigation .series-post-item::before {
+/* Numbered circle indicator */
+.series-post-item::before {
     content: counter(series-counter);
     position: absolute;
     left: 0.5rem;
@@ -283,50 +254,31 @@ nav {
     border-radius: 50%;
     font-size: 0.75rem;
     font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    line-height: 1.5rem;
+    text-align: center;
 }
 
-.series-navigation .series-post-item.current {
+/* Hover effect for post items */
+.series-post-item:hover {
     background: var(--bg-tertiary);
 }
 
-.series-navigation .series-post-item.current::before {
-    background: var(--accent);
-    color: white;
-}
-
-.series-navigation .series-post-link,
-.series-navigation .series-post-title {
+/* Series post link */
+.series-post-link {
     color: var(--text-primary);
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
-    padding-left: 3rem;
-    padding-right: 0.5rem;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+    padding: 0 0.5rem 0 3rem;
+    display: block;
+    line-height: 2.75rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.series-navigation .series-post-link:hover {
+.series-post-link:hover {
     color: var(--accent);
-}
-
-.series-navigation .series-post-title {
-    font-weight: 600;
-}
-
-.series-navigation .current-indicator {
-    color: var(--accent);
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-left: 0.5rem;
 }
 
 /* Category Grid */

@@ -947,113 +947,10 @@
     }
 }
 
-/* Homepage Series View - Numbered List Style */
-.series-list {
-    padding: 1.5rem 0;
-}
-
-.series-group {
-    margin-bottom: 3rem;
-    padding: 1.5rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-}
-
-.series-group .series-header {
-    margin: 0 0 1rem 0;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
-}
-
-.series-group .series-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0 0 0.5rem 0;
-}
-
-.series-group .series-description {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    margin: 0 0 0.75rem 0;
-    line-height: 1.6;
-}
-
-.series-group .series-count {
-    display: inline-block;
-    padding: 0.2rem 0.6rem;
-    background: var(--bg-tertiary);
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-
-/* Homepage Series Posts List - Numbered Style */
-.series-group .series-posts {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    counter-reset: series-counter;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.series-group .series-post-item {
-    margin-bottom: 0;
-    border-radius: 4px;
-    transition: background 0.2s ease;
-    counter-increment: series-counter;
-    position: relative;
-    background: transparent;
-    height: 2.75rem;
-    display: flex;
-    align-items: center;
-}
-
-.series-group .series-post-item:hover {
-    background: var(--bg-tertiary);
-}
-
-.series-group .series-post-item::before {
-    content: counter(series-counter);
-    position: absolute;
-    left: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.5rem;
-    height: 1.5rem;
-    background: var(--bg-tertiary);
-    color: var(--text-tertiary);
-    border-radius: 50%;
-    font-size: 0.75rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.series-group .series-post-link {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9rem;
-    padding-left: 3rem;
-    padding-right: 0.5rem;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.series-group .series-post-link:hover {
-    color: var(--accent);
-}
+/* Series styles moved to dedicated files:
+   - series-homepage.css for homepage series view
+   - series-post.css for post page series view
+   - Shared series components remain in components.css */
 
 .empty-state {
     text-align: center;
@@ -1096,17 +993,5 @@
     .home-tab {
         padding: 0.75rem 1rem;
         font-size: 1rem;
-    }
-
-    .series-group .series-title {
-        font-size: 1.3rem;
-    }
-
-    .series-group .series-description {
-        font-size: 0.9rem;
-    }
-
-    .series-group .series-post-link {
-        font-size: 0.85rem;
     }
 }

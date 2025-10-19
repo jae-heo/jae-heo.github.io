@@ -1,0 +1,288 @@
+/* =============================================================================
+   LONG SERIES LIST HANDLING
+   Solutions for series with many posts
+   ============================================================================= */
+
+/* =======================
+   SOLUTION 1: Collapsed/Expanded View
+   Show only nearby posts by default
+   ======================= */
+
+/* Collapsed state - Show only 5 posts around current */
+.series-navigation.collapsed .series-posts .series-post-item,
+.series-group.collapsed .series-posts .series-post-item {
+    display: none;
+}
+
+/* Show current post and 2 before/after */
+.series-navigation.collapsed .series-posts .series-post-item.current,
+.series-navigation.collapsed .series-posts .series-post-item.near-current,
+.series-group.collapsed .series-posts .series-post-item.near-current {
+    display: block;
+}
+
+/* Expand/Collapse button */
+.series-expand-btn {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.series-expand-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+.series-expand-btn::after {
+    content: ' ↓';
+}
+
+.series-navigation.expanded .series-expand-btn::after {
+    content: ' ↑';
+}
+
+/* =======================
+   SOLUTION 2: Scrollable Container
+   Fixed height with scroll
+   ======================= */
+
+.series-navigation.scrollable .series-posts,
+.series-group.scrollable .series-posts {
+    max-height: 400px;  /* About 10 items */
+    overflow-y: scroll !important;  /* Always show scrollbar */
+    padding-right: 0.5rem;
+    /* Firefox scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--text-secondary) var(--bg-tertiary);
+}
+
+/* Webkit scrollbar styling - Force always visible on macOS */
+.series-navigation.scrollable .series-posts::-webkit-scrollbar,
+.series-group.scrollable .series-posts::-webkit-scrollbar {
+    -webkit-appearance: none;  /* Override macOS default */
+    width: 8px;
+    height: 8px;
+}
+
+.series-navigation.scrollable .series-posts::-webkit-scrollbar-track,
+.series-group.scrollable .series-posts::-webkit-scrollbar-track {
+    -webkit-appearance: none;  /* Override macOS default */
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+}
+
+.series-navigation.scrollable .series-posts::-webkit-scrollbar-thumb,
+.series-group.scrollable .series-posts::-webkit-scrollbar-thumb {
+    -webkit-appearance: none;  /* Override macOS default */
+    background: var(--text-secondary);
+    border-radius: 4px;
+    min-height: 40px;
+}
+
+.series-navigation.scrollable .series-posts::-webkit-scrollbar-thumb:hover,
+.series-group.scrollable .series-posts::-webkit-scrollbar-thumb:hover {
+    background: var(--text-primary);
+}
+
+/* Force scrollbar to always be visible on macOS */
+.series-navigation.scrollable .series-posts,
+.series-group.scrollable .series-posts {
+    /* This forces the scrollbar to always be visible on macOS */
+    &::-webkit-scrollbar:vertical {
+        display: block;
+    }
+
+    /* Alternative approach for macOS */
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: auto;  /* Disable momentum scrolling which hides scrollbar */
+}
+
+
+
+/* =======================
+   SOLUTION 3: Truncated List
+   Show first/last few + current context
+   ======================= */
+
+.series-navigation.truncated .series-posts .series-post-item,
+.series-group.truncated .series-posts .series-post-item {
+    display: none;
+}
+
+/* Show first 3 posts */
+.series-navigation.truncated .series-posts .series-post-item:nth-child(-n+3),
+.series-group.truncated .series-posts .series-post-item:nth-child(-n+3) {
+    display: block;
+}
+
+/* Show last 3 posts */
+.series-navigation.truncated .series-posts .series-post-item:nth-last-child(-n+3),
+.series-group.truncated .series-posts .series-post-item:nth-last-child(-n+3) {
+    display: block;
+}
+
+/* Always show current and adjacent posts (only for post pages) */
+.series-navigation.truncated .series-posts .series-post-item.current,
+.series-navigation.truncated .series-posts .series-post-item.before-current,
+.series-navigation.truncated .series-posts .series-post-item.after-current {
+    display: block;
+}
+
+/* Ellipsis indicator */
+.series-ellipsis {
+    display: none;
+    padding: 0.5rem 0 0.5rem 3rem;
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+}
+
+.series-navigation.truncated .series-ellipsis {
+    display: block;
+}
+
+/* =======================
+   SOLUTION 4: Grouped by Sections
+   For very long series (20+ posts)
+   ======================= */
+
+.series-section {
+    margin-bottom: 1.5rem;
+}
+
+.series-section-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--border);
+    margin-bottom: 0.5rem;
+}
+
+.series-section .series-posts {
+    margin-bottom: 0;
+}
+
+/* =======================
+   SOLUTION 5: Pagination
+   For extremely long series (50+ posts)
+   ======================= */
+
+.series-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.series-page-btn {
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.series-page-btn:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.series-page-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+
+/* =======================
+   SOLUTION 6: Smart Context
+   Show relevant posts based on position
+   ======================= */
+
+.series-navigation.smart-context .series-posts {
+    position: relative;
+}
+
+/* Progress indicator */
+.series-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.series-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+}
+
+.series-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.series-progress-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+/* =======================
+   Responsive adjustments
+   ======================= */
+
+@media (max-width: 768px) {
+    .series-navigation.scrollable .series-posts {
+        max-height: 300px;  /* Shorter on mobile */
+    }
+
+    .series-expand-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* =======================
+   Utility classes for JavaScript
+   ======================= */
+
+.series-hidden {
+    display: none !important;
+}
+
+.series-fade-in {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

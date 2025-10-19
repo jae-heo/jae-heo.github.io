@@ -1,0 +1,109 @@
+/* =============================================================================
+   HOMEPAGE SERIES VIEW STYLES
+   Specific styles for series display on the homepage (Series tab)
+   ============================================================================= */
+
+/* Series List Container */
+.series-list {
+    padding: 1rem 0;
+}
+
+/* Individual Series Group */
+.series-group {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.series-group:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.series-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Series Header (Homepage version) */
+.series-group .series-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Series Title (Homepage - larger) */
+.series-group .series-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+/* Series Description (Homepage) */
+.series-group .series-description {
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+/* Series Post Count Badge */
+.series-group .series-count {
+    display: inline-block;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Series Posts List (Homepage specific overrides) */
+.series-group .series-posts {
+    margin-top: 1rem;
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN - HOMEPAGE SERIES
+   ============================================================================= */
+
+@media (max-width: 768px) {
+    .series-group {
+        padding: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .series-group .series-title {
+        font-size: 1.3rem;
+    }
+
+    .series-group .series-description {
+        font-size: 0.9rem;
+    }
+
+    .series-group .series-post-link {
+        font-size: 0.85rem;
+    }
+
+    .series-group .series-count {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .series-group {
+        padding: 0.75rem;
+        border-radius: 6px;
+    }
+
+    .series-group .series-title {
+        font-size: 1.1rem;
+    }
+
+    .series-group .series-header {
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+    }
+}
