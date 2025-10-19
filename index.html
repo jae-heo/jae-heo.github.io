@@ -81,16 +81,16 @@
 
     <main style="max-width: 1000px; margin: 0 auto; padding: 2rem;">
         <div style="text-align: center; margin-bottom: 4rem;">
-            <h1 id="welcome-text" style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Welcome to My Space</h1>
-            <p id="subtitle" style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Hello, I'm Jaeyoung Heo. The blog is still under development, so it's filled with dummy text for now.</p>
+            <h1 id="welcome-text" style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Jaeyoung's Blog</h1>
+            <p id="subtitle" style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Hello, I'm Jaeyoung Heo.</p>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem;">
             
             <a href="/life/en/" id="life-blog-link" class="blog-card">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">🌟</div>
-                <h3 id="life-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Jae's Life Blog</h3>
-                <p id="life-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Personal stories, travel adventures, and life experiences beyond the code</p>
+                <h3 id="life-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Life Blog</h3>
+                <p id="life-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Stories without screws</p>
                 <p style="color: var(--accent); font-weight: 600;">
                     <span id="life-visit">Visit Blog</span>
                     <span class="blog-arrow">→</span>
@@ -99,8 +99,8 @@
             
             <a href="/tech/en/" id="tech-blog-link" class="blog-card">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">💻</div>
-                <h3 id="tech-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Jae's Tech Blog</h3>
-                <p id="tech-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Deep dives into programming, technology trends, and development insights</p>
+                <h3 id="tech-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Tech Blog</h3>
+                <p id="tech-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Stories with screws</p>
                 <p style="color: var(--accent); font-weight: 600;">
                     <span id="tech-visit">Visit Blog</span>
                     <span class="blog-arrow">→</span>
@@ -109,8 +109,8 @@
             
             <a href="/portfolio/en/" id="portfolio-blog-link" class="blog-card">
                 <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
-                <h3 id="portfolio-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Jae's Portfolio</h3>
-                <p id="portfolio-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Showcase of my projects, open source contributions, and professional work</p>
+                <h3 id="portfolio-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">Portfolio</h3>
+                <p id="portfolio-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">My journey as a developer</p>
                 <p style="color: var(--accent); font-weight: 600;">
                     <span id="portfolio-visit">Visit Portfolio</span>
                     <span class="blog-arrow">→</span>
@@ -135,21 +135,21 @@
         // Translations are embedded during build
         const translations = {
             en: {
-                welcome: "Welcome to My Space",
-                subtitle: "Hello, I'm Jaeyoung Heo. The blog is still under development, so it's filled with dummy text for now.",
-                lifeTitle: "Jae's Life Blog",
-                lifeDesc: "Personal stories, travel adventures, and life experiences beyond the code",
+                welcome: "Jaeyoung's Blog",
+                subtitle: "Hello, I'm Jaeyoung Heo.",
+                lifeTitle: "Life Blog",
+                lifeDesc: "Stories without screws",
                 lifeVisit: "Visit Blog",
-                techTitle: "Jae's Tech Blog",
-                techDesc: "Deep dives into programming, technology trends, and development insights",
+                techTitle: "Tech Blog",
+                techDesc: "Stories with screws",
                 techVisit: "Visit Blog",
-                portfolioTitle: "Jae's Portfolio",
-                portfolioDesc: "Showcase of my projects, open source contributions, and professional work",
+                portfolioTitle: "Portfolio",
+                portfolioDesc: "My journey as a developer",
                 portfolioVisit: "Visit Portfolio"
             },
             ko: {
-                welcome: "재영 공간",
-                subtitle: "안녕하세요, 허재영입니다. 아직 블로그는 개발중이라 Dummy Text로 채워져 있습니다.",
+                welcome: "재영의 블로그",
+                subtitle: "안녕하세요, 허재영입니다.",
                 lifeTitle: "일상 블로그",
                 lifeDesc: "나사빠진 이야기",
                 lifeVisit: "블로그 방문",
