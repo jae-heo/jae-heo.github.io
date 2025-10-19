@@ -1,0 +1,32 @@
+# Robots.txt for Jae's Blog
+# Generated on 2025-10-19
+
+User-agent: *
+Allow: /
+Crawl-delay: 1
+
+# Blocked paths
+Disallow: /admin/
+Disallow: /private/
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /content/
+Disallow: *.json
+
+# Explicitly allowed paths
+Allow: /life/
+Allow: /tech/
+Allow: /portfolio/
+Allow: /assets/
+Allow: /sitemap.xml
+Allow: /*/sitemap.xml
+
+# Sitemaps
+Sitemap: https://jae-heo.github.io/sitemap.xml
+Sitemap: https://jae-heo.github.io/life/en/sitemap.xml
+Sitemap: https://jae-heo.github.io/life/ko/sitemap.xml
+Sitemap: https://jae-heo.github.io/tech/en/sitemap.xml
+Sitemap: https://jae-heo.github.io/tech/ko/sitemap.xml
+Sitemap: https://jae-heo.github.io/portfolio/en/sitemap.xml
+Sitemap: https://jae-heo.github.io/portfolio/ko/sitemap.xml
