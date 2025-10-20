@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jae's Life Blog</title>
-    <meta name="description" content="Personal stories, travel adventures, and life experiences beyond the code">
+    <title>재영의 일상 블로그</title>
+    <meta name="description" content="일상 이야기, 여행 모험, 그리고 코드 너머의 삶">
     <meta name="author" content="Jae">
 
     <!-- Canonical URL -->
@@ -16,9 +16,9 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://jae-heo.github.io">
-    <meta property="og:title" content="Jae's Life Blog">
-    <meta property="og:description" content="Personal stories, travel adventures, and life experiences beyond the code">
-    <meta property="og:site_name" content="Jae's Life Blog">
+    <meta property="og:title" content="재영의 일상 블로그">
+    <meta property="og:description" content="일상 이야기, 여행 모험, 그리고 코드 너머의 삶">
+    <meta property="og:site_name" content="재영의 일상 블로그">
     <meta property="og:locale" content="en_US">
     
     <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
@@ -28,8 +28,8 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://jae-heo.github.io">
-    <meta name="twitter:title" content="Jae's Life Blog">
-    <meta name="twitter:description" content="Personal stories, travel adventures, and life experiences beyond the code">
+    <meta name="twitter:title" content="재영의 일상 블로그">
+    <meta name="twitter:description" content="일상 이야기, 여행 모험, 그리고 코드 너머의 삶">
     
     <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
     
@@ -37,7 +37,7 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="Jae's Life Blog RSS" href="/life/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 일상 블로그 RSS" href="/life/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <!-- Structured Data (JSON-LD) -->
@@ -48,23 +48,23 @@
         const theme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
-        const lang = localStorage.getItem('lang') || 'en';
+        const lang = localStorage.getItem('lang') || 'ko';
     </script>
     <script src="/assets/js/theme-switcher.js" defer></script>
 </head>
 <body>
     <header>
         <nav>
-            <a href="/life/en/" class="site-title" data-nav-link>Jae's Life Blog</a>
+            <a href="/life/ko/" class="site-title" data-nav-link>재영의 일상 블로그</a>
             <div class="nav-links">
-                <a href="/life/en/" data-nav-link>Home</a>
-                <a href="/life/en/archive.html" data-nav-link>Archive</a>
-                <a href="/life/en/about.html" data-nav-link>About</a>
+                <a href="/life/ko/" data-nav-link>홈</a>
+                <a href="/life/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/life/ko/about.html" data-nav-link>소개</a>
                 <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
                     <span id="theme-icon">🌙</span>
                 </button>
             </div>
@@ -72,110 +72,90 @@
     </header>
 
     <main>
-        <div class="archive-page">
+        <div class="tag-page">
     <div class="page-header">
-        <h1>Archive</h1>
-        <p class="subtitle">All posts by date</p>
+        <h1>"주말" 태그가 달린 포스트</h1>
     </div>
 
-    <div class="archive-timeline">
-        
-        
-        <div class="archive-year-section">
-            <h2 class="archive-year">2025 - October</h2>
-            <div class="archive-posts">
-        
-        
-        
-        
-        
-        
-                <article class="archive-entry">
-                    <time class="archive-date">October 19, 2025</time>
-                    <div class="archive-content">
-                        <h3 class="archive-title">
-                            <a href="/life/en/posts/temptation-of-bed-and-sofa.html">The Temptation of Bed and Sofa</a>
-                        </h3>
-                        
-                        <span class="archive-category">personal</span>
-                        
-                    </div>
-                </article>
-        
-        
-        
-        
-        
-                <article class="archive-entry">
-                    <time class="archive-date">October 18, 2025</time>
-                    <div class="archive-content">
-                        <h3 class="archive-title">
-                            <a href="/life/en/posts/morning-as-rest.html">Morning as Rest</a>
-                        </h3>
-                        
-                        <span class="archive-category">personal</span>
-                        
-                    </div>
-                </article>
-        
-        
-        
-        
-        
-                <article class="archive-entry">
-                    <time class="archive-date">October 17, 2025</time>
-                    <div class="archive-content">
-                        <h3 class="archive-title">
-                            <a href="/life/en/posts/moment-of-not-knowing-myself.html">The Moment of Not Knowing Myself</a>
-                        </h3>
-                        
-                        <span class="archive-category">personal</span>
-                        
-                    </div>
-                </article>
-        
-        
-        
-        
-        
-                <article class="archive-entry">
-                    <time class="archive-date">October 16, 2025</time>
-                    <div class="archive-content">
-                        <h3 class="archive-title">
-                            <a href="/life/en/posts/routine-and-heart.html">Between Routine and Heart</a>
-                        </h3>
-                        
-                        <span class="archive-category">personal</span>
-                        
-                    </div>
-                </article>
-        
-        
-        
-        
-        
-                <article class="archive-entry">
-                    <time class="archive-date">October 11, 2025</time>
-                    <div class="archive-content">
-                        <h3 class="archive-title">
-                            <a href="/life/en/posts/setting-a-routine.html">Setting a Routine</a>
-                        </h3>
-                        
-                        <span class="archive-category">personal</span>
-                        
-                    </div>
-                </article>
-        
-        
-        
-        
-        
-        
-            </div>
+    <div class="posts-controls">
+        <div class="filter-section">
+            <!-- Filters button will be inserted here by JS -->
         </div>
-        
-        
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" data-view="grid" title="Grid view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+            </button>
+            <button class="view-toggle-btn" data-view="list" title="List view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <!-- Filter panel will be inserted here by JS -->
     </div>
+
+    <!-- Grid View -->
+<div class="post-list post-grid-view">
+    
+    <article class="post-preview" data-tags="" data-category="삶">
+        
+        <div class="post-preview-content">
+            <h2><a href="/life/ko/posts/temptation-of-bed-and-sofa.html">침대와 소파의 유혹</a></h2>
+            <time datetime=""2025-10-19T00:00:00.000Z"">October 19, 2025</time>
+            
+            <p>주말을 효율적으로 보내기 위해 밖으로 나가야겠다는 다짐</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/life/ko/categories/삶.html" class="category-badge">삶</a>
+            </div>
+            
+            <a href="/life/ko/posts/temptation-of-bed-and-sofa.html" class="read-more">더 읽기</a>
+        </div>
+    </article>
+    
+</div>
+
+    <!-- List View -->
+<div class="post-list post-list-view" style="display: none;">
+    
+    <article class="post-item" data-tags="" data-category="삶">
+        <a href="/life/ko/posts/temptation-of-bed-and-sofa.html" class="post-item-link">
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>침대와 소파의 유혹</h2>
+                    <div class="post-item-meta">
+                        <time datetime=""2025-10-19T00:00:00.000Z"">October 19, 2025</time>
+                        
+                        <span class="category-badge-small">삶</span>
+                        
+                    </div>
+                </div>
+                
+                <p class="post-item-excerpt">주말을 효율적으로 보내기 위해 밖으로 나가야겠다는 다짐</p>
+                
+            </div>
+        </a>
+    </article>
+    
+</div>
+
+
+    <script src="/assets/js/view-toggle.js"></script>
+    <script src="/assets/js/post-filter.js"></script>
+
+    
 </div>
     </main>
 
@@ -183,7 +163,7 @@
         <div class="footer-content">
             <p>&copy; 2025 Jae · Built with custom static site generator</p>
             <div class="footer-links">
-                <a href="/life/en/feed.xml">RSS</a>
+                <a href="/life/ko/feed.xml">RSS</a>
                 
                 
             </div>

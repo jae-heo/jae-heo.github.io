@@ -14,25 +14,25 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/en/posts/morning-diary-day-7.html</loc>
+    <loc>https://jae-heo.github.io/life/en/posts/temptation-of-bed-and-sofa.html</loc>
     <lastmod>2025-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/en/posts/morning-diary-day-6.html</loc>
+    <loc>https://jae-heo.github.io/life/en/posts/morning-as-rest.html</loc>
     <lastmod>2025-10-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/en/posts/morning-diary-day-5.html</loc>
+    <loc>https://jae-heo.github.io/life/en/posts/moment-of-not-knowing-myself.html</loc>
     <lastmod>2025-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/en/posts/morning-diary-day-4.html</loc>
+    <loc>https://jae-heo.github.io/life/en/posts/routine-and-heart.html</loc>
     <lastmod>2025-10-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -74,12 +74,32 @@
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/en/tags/morning-diary.html</loc>
+    <loc>https://jae-heo.github.io/life/en/tags/reflection.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/en/series/daily-struggle.html</loc>
+    <loc>https://jae-heo.github.io/life/en/tags/self-reflection.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/tags/leisure.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/tags/weekend.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/series/daily_struggle.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/series/morning-notes.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
