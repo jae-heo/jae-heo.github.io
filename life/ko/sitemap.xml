@@ -14,6 +14,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/life/ko/posts/fluctuations-of-the-mind.html</loc>
+    <lastmod>2025-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/life/ko/posts/temptation-of-bed-and-sofa.html</loc>
     <lastmod>2025-10-19</lastmod>
     <changefreq>monthly</changefreq>
@@ -54,7 +60,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/categories/.html</loc>
+    <loc>https://jae-heo.github.io/life/ko/categories/life.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -64,39 +70,59 @@
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/tags/.html</loc>
+    <loc>https://jae-heo.github.io/life/ko/tags/routine.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/tags/.html</loc>
+    <loc>https://jae-heo.github.io/life/ko/tags/productivity.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/tags/.html</loc>
+    <loc>https://jae-heo.github.io/life/ko/tags/self-improvement.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/tags/.html</loc>
+    <loc>https://jae-heo.github.io/life/ko/tags/balance.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/tags/.html</loc>
+    <loc>https://jae-heo.github.io/life/ko/tags/relationships.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/tags/.html</loc>
+    <loc>https://jae-heo.github.io/life/ko/tags/self-reflection.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/series/daily-struggle.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://jae-heo.github.io/life/ko/tags/motivation.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/ko/tags/mindfulness.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/ko/tags/work-life-balance.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/ko/tags/weekend.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/ko/tags/mental-state.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://jae-heo.github.io/life/ko/series/morning-notes.html</loc>
