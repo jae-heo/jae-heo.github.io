@@ -81,6 +81,14 @@
     gap: 0.75rem;
 }
 
+/* Post Card Footer - Contains category badge and read more button */
+.post-card-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
 .post-preview h2 {
     font-size: 1.35rem;
     font-weight: 700;
@@ -200,8 +208,9 @@
 .category-badge-small {
     display: inline-block;
     padding: 0.25rem 0.75rem;
-    background: var(--accent);
-    color: white;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
     border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 600;
@@ -212,7 +221,9 @@
 
 .category-badge:hover,
 .category-badge-small:hover {
-    background: var(--accent-hover);
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
     transform: translateY(-1px);
 }
 
@@ -237,6 +248,20 @@
 
 .tag:hover {
     background: var(--accent);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Tags in list view - outlined by default, filled on hover */
+.post-item .tag {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+}
+
+.post-item .tag:hover {
+    background: var(--accent);
+    border-color: var(--accent);
     color: white;
     transform: translateY(-1px);
 }

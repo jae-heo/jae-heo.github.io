@@ -14,6 +14,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/life/en/posts/instant-action-builds-trust.html</loc>
+    <lastmod>2025-10-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/life/en/posts/running-in-the-morning.html</loc>
     <lastmod>2025-10-24</lastmod>
     <changefreq>monthly</changefreq>
@@ -66,7 +72,22 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/en/categories/life.html</loc>
+    <loc>https://jae-heo.github.io/life/en/categories/routine.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/categories/self-reflection.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/categories/social.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/categories/work-stories.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -147,6 +168,26 @@
   </url>
   <url>
     <loc>https://jae-heo.github.io/life/en/tags/gratitude.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/tags/feedback.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/tags/action.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/tags/trust.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/en/tags/work-relationships.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
