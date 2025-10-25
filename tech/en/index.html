@@ -80,16 +80,85 @@
 
     <!-- Tab Navigation -->
     <div class="home-tabs">
-        <button class="home-tab active" data-tab="recent">
-            Recent Posts
-        </button>
-        <button class="home-tab" data-tab="series">
+        <button class="home-tab active" data-tab="series">
             Series
+        </button>
+        <button class="home-tab" data-tab="recent">
+            Recent Posts
         </button>
     </div>
 
+    <!-- Series Tab Content -->
+    <div class="tab-content active" data-content="series">
+        <!-- Homepage Series View Component - Grid Layout with Numbered Posts -->
+<div class="home-series-list">
+    
+        
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <h2 class="home-series-title">
+                        Python Lecture Series
+                    </h2>
+                    <p class="home-series-description">Comprehensive Python programming course from basics to advanced topics</p>
+                    <div class="home-series-count">
+                        2
+                        
+                            
+                                 posts
+                            
+                        
+                    </div>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 3">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/python-lecture-01.html" class="home-series-post-link">
+                            Python Lecture Part 1 - Python's Philosophy and Design Principles
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/python-lecture-00.html" class="home-series-post-link">
+                            Introduction to Python Lecture Series
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+        
+    
+</div>
+
+    </div>
+
     <!-- Recent Posts Tab Content -->
-    <div class="tab-content active" data-content="recent">
+    <div class="tab-content" data-content="recent">
         <div class="posts-controls">
         <div class="filter-section">
             <!-- Filters button will be inserted here by JS -->
@@ -122,8 +191,11 @@
     
     <article class="post-preview" data-tags="" data-category="Lectures">
         
+        
         <div class="post-preview-content">
-            <h2><a href="/tech/en/posts/python-lecture-01.html">Python Lecture Part 1 - Python's Philosophy and Design Principles</a></h2>
+            <h2>
+                <a href="/tech/en/posts/python-lecture-01.html">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
+            </h2>
             <time datetime=""2025-10-19T00:00:00.000Z"">October 19, 2025</time>
             
             <p>Python's values, design philosophy, and the art of trade-offs</p>
@@ -139,8 +211,11 @@
     
     <article class="post-preview" data-tags="" data-category="Lectures">
         
+        
         <div class="post-preview-content">
-            <h2><a href="/tech/en/posts/python-lecture-00.html">Introduction to Python Lecture Series</a></h2>
+            <h2>
+                <a href="/tech/en/posts/python-lecture-00.html">Introduction to Python Lecture Series</a>
+            </h2>
             <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
             
             <p>Python lecture series curriculum</p>
@@ -160,41 +235,47 @@
 <div class="post-list post-list-view" style="display: none;">
     
     <article class="post-item" data-tags="" data-category="Lectures">
+        
         <a href="/tech/en/posts/python-lecture-01.html" class="post-item-link">
             
             <div class="post-item-content">
                 <div class="post-item-header">
-                    <h2>Python Lecture Part 1 - Python's Philosophy and Design Principles</h2>
-                    <div class="post-item-meta">
-                        <time datetime=""2025-10-19T00:00:00.000Z"">October 19, 2025</time>
-                        
-                        <span class="category-badge-small">Lectures</span>
-                        
-                    </div>
+                    <h2>
+                        Python Lecture Part 1 - Python's Philosophy and Design Principles
+                    </h2>
                 </div>
                 
                 <p class="post-item-excerpt">Python's values, design philosophy, and the art of trade-offs</p>
                 
+                <div class="post-item-meta">
+                    <time datetime=""2025-10-19T00:00:00.000Z"">October 19, 2025</time>
+                    
+                    <span class="category-badge-small">Lectures</span>
+                    
+                </div>
             </div>
         </a>
     </article>
     
     <article class="post-item" data-tags="" data-category="Lectures">
+        
         <a href="/tech/en/posts/python-lecture-00.html" class="post-item-link">
             
             <div class="post-item-content">
                 <div class="post-item-header">
-                    <h2>Introduction to Python Lecture Series</h2>
-                    <div class="post-item-meta">
-                        <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
-                        
-                        <span class="category-badge-small">Lectures</span>
-                        
-                    </div>
+                    <h2>
+                        Introduction to Python Lecture Series
+                    </h2>
                 </div>
                 
                 <p class="post-item-excerpt">Python lecture series curriculum</p>
                 
+                <div class="post-item-meta">
+                    <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
+                    
+                    <span class="category-badge-small">Lectures</span>
+                    
+                </div>
             </div>
         </a>
     </article>
@@ -207,66 +288,6 @@
 
         
 
-
-    </div>
-
-    <!-- Series Tab Content -->
-    <div class="tab-content" data-content="series">
-        <!-- Homepage Series View Component - Numbered List Style -->
-<div class="series-list">
-    
-        
-            
-
-            <!-- Series Group Start -->
-            
-            <div class="series-group">
-                <!-- Series Header -->
-                <div class="series-header">
-                    <h2 class="series-title">Python Lecture Series</h2>
-                    <p class="series-description">Comprehensive Python programming course from basics to advanced topics</p>
-                    <div class="series-count">
-                        2
-                        
-                            
-                                 posts
-                            
-                        
-                    </div>
-                </div>
-
-                <!-- Series Posts List -->
-                <ol class="series-posts">
-            
-
-                    <!-- Series Post Item -->
-                    <li class="series-post-item">
-                        <a href="/tech/en/posts/python-lecture-00.html" class="series-post-link">Introduction to Python Lecture Series</a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="series-post-item">
-                        <a href="/tech/en/posts/python-lecture-01.html" class="series-post-link">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-                </ol>
-            </div>
-            
-
-            
-        
-    
-</div>
 
     </div>
 

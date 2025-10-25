@@ -25,7 +25,7 @@
     border: 1px solid var(--border);
     border-radius: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
+    overflow: visible;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
@@ -42,6 +42,7 @@
     overflow: hidden;
     position: relative;
     background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+    border-radius: 8px 8px 0 0;
 }
 
 .post-preview-image::after {
@@ -110,6 +111,7 @@
 .post-preview .post-excerpt {
     color: var(--text-secondary);
     line-height: 1.6;
+    padding-bottom: 0.2rem;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -119,10 +121,11 @@
 
 /* Post List Item (List View) */
 .post-item {
+    position: relative;
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 8px;
-    overflow: hidden;
+    overflow: visible;
     transition: all 0.3s ease;
     height: 160px;
 }
@@ -146,6 +149,7 @@
     flex-shrink: 0;
     overflow: hidden;
     background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
+    border-radius: 8px 0 0 8px;
 }
 
 .post-item-image img {
@@ -164,13 +168,13 @@
     padding: 1.5rem 2rem;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.4rem;
 }
 
 .post-item-header h2 {
     font-size: 1.5rem;
     font-weight: 700;
-    margin: 0 0 0.5rem 0;
+    margin: 0;
     line-height: 1.3;
     color: var(--text-primary);
     transition: color 0.2s ease;
@@ -235,4 +239,22 @@
     background: var(--accent);
     color: white;
     transform: translateY(-1px);
+}
+
+/* NEW Badge positioning for post cards */
+.post-preview > .new-badge,
+.post-item > .new-badge {
+    position: absolute;
+    top: -0.5rem;
+    right: 1rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--accent);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
 }

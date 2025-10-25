@@ -192,38 +192,39 @@
     </header>
 
     
-    <!-- Post Series Navigation Component - Modular Structure -->
-    <nav class="series-navigation">
-        <!-- Series Header -->
-        <div class="series-header">
-            <h3>📚 Python Lecture Series</h3>
-            <p class="series-description">Comprehensive Python programming course from basics to advanced topics</p>
-        </div>
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Python Lecture Series</h3>
+        <p class="post-series-description">Comprehensive Python programming course from basics to advanced topics</p>
+    </div>
 
-        <!-- Series Posts List -->
-        <ol class="series-posts">
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
             
-            <!-- Series Post Item -->
-            <li class="series-post-item current">
-                
-                <!-- Current Post (Not Clickable) -->
-                <span class="series-post-title">
-                    Introduction to Python Lecture Series
-                    <span class="current-indicator">← You are here</span>
-                </span>
-                
-            </li>
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Introduction to Python Lecture Series
+                <span class="current-indicator">← You are here</span>
+            </span>
             
-            <!-- Series Post Item -->
-            <li class="series-post-item ">
-                
-                <!-- Other Posts (Clickable Links) -->
-                <a href="/tech/en/posts/python-lecture-01.html" class="series-post-link">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
-                
-            </li>
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
             
-        </ol>
-    </nav>
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-01.html" class="post-series-link">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
     
 
     <div class="post-content">

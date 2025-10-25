@@ -162,7 +162,7 @@
             <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
                 <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
                 <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 아침 기록 (2/6)</span>
+                    <span class="series-badge">📚 아침 기록 (1/5)</span>
                 </div>
             </div>
             
@@ -192,78 +192,74 @@
     </header>
 
     
-    <!-- Post Series Navigation Component - Modular Structure -->
-    <nav class="series-navigation">
-        <!-- Series Header -->
-        <div class="series-header">
-            <h3>📚 아침 기록</h3>
-            <p class="series-description">아침 루틴 속에서 떠오르는 생각과 단상</p>
-        </div>
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 아침 기록</h3>
+        <p class="post-series-description">아침 루틴 속에서 떠오르는 생각과 단상</p>
+    </div>
 
-        <!-- Series Posts List -->
-        <ol class="series-posts">
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
             
-            <!-- Series Post Item -->
-            <li class="series-post-item ">
-                
-                <!-- Other Posts (Clickable Links) -->
-                <a href="/life/ko/posts/setting-a-routine.html" class="series-post-link">루틴을 정하다</a>
-                
-            </li>
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                루틴과 마음 사이
+                <span class="current-indicator">← You are here</span>
+            </span>
             
-            <!-- Series Post Item -->
-            <li class="series-post-item current">
-                
-                <!-- Current Post (Not Clickable) -->
-                <span class="series-post-title">
-                    루틴과 마음 사이
-                    <span class="current-indicator">← You are here</span>
-                </span>
-                
-            </li>
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
             
-            <!-- Series Post Item -->
-            <li class="series-post-item ">
-                
-                <!-- Other Posts (Clickable Links) -->
-                <a href="/life/ko/posts/moment-of-not-knowing-myself.html" class="series-post-link">나 자신을 모르는 순간</a>
-                
-            </li>
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/life/ko/posts/moment-of-not-knowing-myself.html" class="post-series-link">나 자신을 모르는 순간</a>
             
-            <!-- Series Post Item -->
-            <li class="series-post-item ">
-                
-                <!-- Other Posts (Clickable Links) -->
-                <a href="/life/ko/posts/morning-as-rest.html" class="series-post-link">아침이 주는 휴식</a>
-                
-            </li>
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
             
-            <!-- Series Post Item -->
-            <li class="series-post-item ">
-                
-                <!-- Other Posts (Clickable Links) -->
-                <a href="/life/ko/posts/temptation-of-bed-and-sofa.html" class="series-post-link">침대와 소파의 유혹</a>
-                
-            </li>
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/life/ko/posts/morning-as-rest.html" class="post-series-link">아침이 주는 휴식</a>
             
-            <!-- Series Post Item -->
-            <li class="series-post-item ">
-                
-                <!-- Other Posts (Clickable Links) -->
-                <a href="/life/ko/posts/fluctuations-of-the-mind.html" class="series-post-link">머리의 변덕</a>
-                
-            </li>
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
             
-        </ol>
-    </nav>
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/life/ko/posts/temptation-of-bed-and-sofa.html" class="post-series-link">침대와 소파의 유혹</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/life/ko/posts/fluctuations-of-the-mind.html" class="post-series-link">머리의 기복</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
     
 
     <div class="post-content">
-        <p>오늘은 아침에 6시 30분에 일어났다.<br />루틴을 시행한지 4일만에 30분 늦잠을 자게 된 것이다.</p>
-<p>사실 여기에는 이유가 있다.<br />어젯 밤 퇴근 후 잠시 여자친구를 보러갔다.</p>
-<p>같이 저녁을 먹고 근처 카페에서 스터디를 했다.<br />밤 10시에 자는 루틴이기 때문에 9시에 집에 오려고 했다.</p>
-<p>하지만 발걸음이 떨어지지 않았다. 괜히 아쉬웠다.<br />그래서 9시 15분에 집에 갔다.</p>
-<p>잠을 조금 늦게잤다. 10시 20분에 잠에 들었다.</p>
+        <h2 id="30-">30분의 늦잠</h2>
+<p>오늘은 아침 6시 30분에 일어났다. <br />루틴을 시작한 지 4일 만에 처음으로 30분 늦잠을 자게 되었다.</p>
+<h2 id="-">늦잠의 이유</h2>
+<p>사실 이유가 있다. 어젯밤 퇴근 후 잠시 여자친구를 만났다.<br />함께 저녁을 먹고 근처 카페에서 스터디를 했다. </p>
+<p>밤 10시에 자는 루틴을 지키려면 9시에는 집에 와야 했다.<br />하지만 발걸음이 떨어지지 않았다. 괜히 아쉬웠다. 조금 더 함께 있고 싶었다.</p>
+<p>결국 9시 15분에 집에 도착했고, 잠에 든 시간은 10시 20분이 되었다.</p>
+<h2 id="-">루틴과 마음의 균형</h2>
+<p>완벽한 루틴을 지키는 것도 중요하지만, 때로는 마음이 원하는 것에 귀 기울이는 것도 필요하다.<br />30분의 늦잠은 그 균형을 찾아가는 과정인 것 같다.</p>
 
     </div>
 

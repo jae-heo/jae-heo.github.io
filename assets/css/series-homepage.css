@@ -3,54 +3,54 @@
    Specific styles for series display on the homepage (Series tab)
    ============================================================================= */
 
-/* Series List Container */
-.series-list {
+/* Homepage Series List Container - Grid Layout */
+.home-series-list {
     padding: 1rem 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
 }
 
 /* Individual Series Group */
-.series-group {
+.home-series-group {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 8px;
-    margin-bottom: 3rem;
+    margin-bottom: 0;
     padding: 1.5rem;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
 }
 
-.series-group:hover {
+.home-series-group:hover {
     border-color: var(--border-hover);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.series-group:last-child {
-    margin-bottom: 0;
-}
-
-/* Series Header (Homepage version) */
-.series-group .series-header {
+/* Series Header */
+.home-series-header {
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--border);
 }
 
-/* Series Title (Homepage - larger) */
-.series-group .series-title {
+/* Series Title */
+.home-series-title {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
     color: var(--text-primary);
 }
 
-/* Series Description (Homepage) */
-.series-group .series-description {
+/* Series Description */
+.home-series-description {
     color: var(--text-secondary);
     margin-bottom: 0.75rem;
     line-height: 1.6;
 }
 
 /* Series Post Count Badge */
-.series-group .series-count {
+.home-series-count {
     display: inline-block;
     background: var(--bg-tertiary);
     color: var(--text-secondary);
@@ -60,50 +60,163 @@
     font-weight: 500;
 }
 
-/* Series Posts List (Homepage specific overrides) */
-.series-group .series-posts {
+/* Series Posts List */
+.home-series-posts {
     margin-top: 1rem;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    counter-reset: home-series-counter;
+}
+
+/* Individual series post item */
+.home-series-post-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    counter-increment: home-series-counter -1;
+    position: relative;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+    background: transparent;
+    height: 2.75rem;
+}
+
+/* Numbered circle indicator */
+.home-series-post-item::before {
+    content: counter(home-series-counter);
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
+}
+
+/* Series post link */
+.home-series-post-link {
+    display: block;
+    padding: 0.6rem 1rem 0.6rem 2.75rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.home-series-post-item:hover {
+    background: var(--bg-tertiary);
+}
+
+.home-series-post-link:hover {
+    color: var(--accent);
+}
+
+/* NEW Badge for posts */
+.new-badge {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.1rem 0.3rem;
+    background: var(--accent);
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 700;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    vertical-align: middle;
+}
+
+/* UPDATED Badge for series - positioned at top edge */
+.home-series-group .updated-badge {
+    position: absolute;
+    top: -0.5rem;
+    right: 1rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--accent);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* =============================================================================
    RESPONSIVE DESIGN - HOMEPAGE SERIES
    ============================================================================= */
 
+@media (max-width: 1024px) {
+    .home-series-list {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
 @media (max-width: 768px) {
-    .series-group {
-        padding: 1rem;
-        margin-bottom: 2rem;
+    .home-series-list {
+        gap: 1.5rem;
     }
 
-    .series-group .series-title {
+    .home-series-group {
+        padding: 1rem;
+    }
+
+    .home-series-title {
         font-size: 1.3rem;
     }
 
-    .series-group .series-description {
+    .home-series-description {
         font-size: 0.9rem;
     }
 
-    .series-group .series-post-link {
+    .home-series-post-link {
         font-size: 0.85rem;
     }
 
-    .series-group .series-count {
+    .home-series-count {
         font-size: 0.75rem;
     }
 }
 
 @media (max-width: 480px) {
-    .series-group {
+    .home-series-list {
+        gap: 1rem;
+    }
+
+    .home-series-group {
         padding: 0.75rem;
         border-radius: 6px;
     }
 
-    .series-group .series-title {
+    .home-series-title {
         font-size: 1.1rem;
     }
 
-    .series-group .series-header {
+    .home-series-header {
         margin-bottom: 1rem;
         padding-bottom: 0.75rem;
+    }
+
+    .new-badge {
+        font-size: 0.55rem;
+        padding: 0.1rem 0.3rem;
+    }
+
+    .home-series-group .updated-badge {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.4rem;
+        top: -0.4rem;
+        right: 0.75rem;
     }
 }

@@ -72,90 +72,96 @@
     </header>
 
     <main>
-        <div class="tags-index">
+        <div class="tag-page">
     <div class="page-header">
-        <h1>모든 태그</h1>
-        <p class="subtitle">총 개의 태그</p>
+        <h1>"running" 태그가 달린 포스트</h1>
     </div>
 
-    <div class="tags-cloud">
-        
-        <a href="/life/ko/tags/routine.html" class="tag-item">
-            <span class="tag-name">routine</span>
-            <span class="tag-count">7</span>
-        </a>
-        
-        <a href="/life/ko/tags/productivity.html" class="tag-item">
-            <span class="tag-name">productivity</span>
-            <span class="tag-count">2</span>
-        </a>
-        
-        <a href="/life/ko/tags/self-reflection.html" class="tag-item">
-            <span class="tag-name">self-reflection</span>
-            <span class="tag-count">2</span>
-        </a>
-        
-        <a href="/life/ko/tags/self-improvement.html" class="tag-item">
-            <span class="tag-name">self-improvement</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/balance.html" class="tag-item">
-            <span class="tag-name">balance</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/relationships.html" class="tag-item">
-            <span class="tag-name">relationships</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/motivation.html" class="tag-item">
-            <span class="tag-name">motivation</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/mindfulness.html" class="tag-item">
-            <span class="tag-name">mindfulness</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/work-life-balance.html" class="tag-item">
-            <span class="tag-name">work-life-balance</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/weekend.html" class="tag-item">
-            <span class="tag-name">weekend</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/mental-state.html" class="tag-item">
-            <span class="tag-name">mental-state</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/running.html" class="tag-item">
-            <span class="tag-name">running</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/colleagues.html" class="tag-item">
-            <span class="tag-name">colleagues</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/workplace.html" class="tag-item">
-            <span class="tag-name">workplace</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/life/ko/tags/gratitude.html" class="tag-item">
-            <span class="tag-name">gratitude</span>
-            <span class="tag-count">1</span>
-        </a>
-        
+    <div class="posts-controls">
+        <div class="filter-section">
+            <!-- Filters button will be inserted here by JS -->
+        </div>
+        <div class="view-toggle">
+            <button class="view-toggle-btn active" data-view="grid" title="Grid view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+            </button>
+            <button class="view-toggle-btn" data-view="list" title="List view">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <!-- Filter panel will be inserted here by JS -->
     </div>
+
+    <!-- Grid View -->
+<div class="post-list post-grid-view">
+    
+    <article class="post-preview" data-tags="" data-category="life">
+        
+        
+        <div class="post-preview-content">
+            <h2>
+                <a href="/life/ko/posts/running-in-the-morning.html">동료들과의 아침 러닝</a>
+            </h2>
+            <time datetime=""2025-10-24T00:00:00.000Z"">October 24, 2025</time>
+            
+            <p>동료들과 함께하는 러닝. 2주가 지나며 느낀 변화.</p>
+            
+            
+            <div class="post-meta-bottom">
+                <a href="/life/ko/categories/life.html" class="category-badge">life</a>
+            </div>
+            
+            <a href="/life/ko/posts/running-in-the-morning.html" class="read-more">더 읽기</a>
+        </div>
+    </article>
+    
+</div>
+
+    <!-- List View -->
+<div class="post-list post-list-view" style="display: none;">
+    
+    <article class="post-item" data-tags="" data-category="life">
+        
+        <a href="/life/ko/posts/running-in-the-morning.html" class="post-item-link">
+            
+            <div class="post-item-content">
+                <div class="post-item-header">
+                    <h2>
+                        동료들과의 아침 러닝
+                    </h2>
+                </div>
+                
+                <p class="post-item-excerpt">동료들과 함께하는 러닝. 2주가 지나며 느낀 변화.</p>
+                
+                <div class="post-item-meta">
+                    <time datetime=""2025-10-24T00:00:00.000Z"">October 24, 2025</time>
+                    
+                    <span class="category-badge-small">life</span>
+                    
+                </div>
+            </div>
+        </a>
+    </article>
+    
+</div>
+
+
+    <script src="/assets/js/view-toggle.js"></script>
+    <script src="/assets/js/post-filter.js"></script>
+
+    
 </div>
     </main>
 

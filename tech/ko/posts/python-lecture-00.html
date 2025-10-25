@@ -192,38 +192,39 @@
     </header>
 
     
-    <!-- Post Series Navigation Component - Modular Structure -->
-    <nav class="series-navigation">
-        <!-- Series Header -->
-        <div class="series-header">
-            <h3>📚 Python 강좌 시리즈</h3>
-            <p class="series-description">깊이있게 배우는 Python 프로그래밍 강좌</p>
-        </div>
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Python 강좌 시리즈</h3>
+        <p class="post-series-description">깊이있게 배우는 Python 프로그래밍 강좌</p>
+    </div>
 
-        <!-- Series Posts List -->
-        <ol class="series-posts">
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
             
-            <!-- Series Post Item -->
-            <li class="series-post-item current">
-                
-                <!-- Current Post (Not Clickable) -->
-                <span class="series-post-title">
-                    Python 강좌 시리즈 소개
-                    <span class="current-indicator">← You are here</span>
-                </span>
-                
-            </li>
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Python 강좌 시리즈 소개
+                <span class="current-indicator">← You are here</span>
+            </span>
             
-            <!-- Series Post Item -->
-            <li class="series-post-item ">
-                
-                <!-- Other Posts (Clickable Links) -->
-                <a href="/tech/ko/posts/python-lecture-01.html" class="series-post-link">Python 강좌 1편 - 파이썬의 철학과 설계 원칙</a>
-                
-            </li>
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
             
-        </ol>
-    </nav>
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/python-lecture-01.html" class="post-series-link">Python 강좌 1편 - 파이썬의 철학과 설계 원칙</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
     
 
     <div class="post-content">

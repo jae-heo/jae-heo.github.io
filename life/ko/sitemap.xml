@@ -14,6 +14,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/life/ko/posts/running-in-the-morning.html</loc>
+    <lastmod>2025-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/life/ko/posts/fluctuations-of-the-mind.html</loc>
     <lastmod>2025-10-22</lastmod>
     <changefreq>monthly</changefreq>
@@ -125,12 +131,32 @@
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/series/morning-notes.html</loc>
+    <loc>https://jae-heo.github.io/life/ko/tags/running.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/ko/tags/colleagues.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/ko/tags/workplace.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/ko/tags/gratitude.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/life/ko/series/daily-struggle.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://jae-heo.github.io/life/ko/series/daily-routine.html</loc>
+    <loc>https://jae-heo.github.io/life/ko/series/morning-notes.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

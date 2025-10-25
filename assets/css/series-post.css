@@ -24,76 +24,117 @@
     color: var(--accent);
 }
 
-/* Series Navigation Container */
-.series-navigation {
-    display: block;  /* Ensure vertical block layout */
+/* Post Series Navigation Container */
+.post-series-navigation {
+    display: block;
     background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 8px;
     margin: 2rem 0;
     padding: 1.5rem;
-    overflow: hidden;  /* Clear any floats */
 }
 
-/* Ensure series posts list appears below header */
-.series-navigation .series-posts {
+/* Post Series Header */
+.post-series-header {
     display: block;
-    clear: both;  /* Clear any potential floats */
-    margin-top: 1rem;  /* Add space between header and list */
-}
-
-/* Series Header (Post page version) */
-.series-navigation .series-header {
-    display: block;  /* Ensure block layout */
     margin-bottom: 1rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid var(--border);
-    width: 100%;  /* Full width */
 }
 
-.series-navigation .series-header h3 {
-    display: block;  /* Ensure title is block level */
+.post-series-header h3 {
+    display: block;
     font-size: 1.2rem;
     font-weight: 600;
     margin: 0 0 0.5rem 0;
     color: var(--text-primary);
 }
 
-/* Series Description (Post page) */
-.series-navigation .series-description {
-    display: block;  /* Ensure block layout */
+/* Post Series Description */
+.post-series-description {
+    display: block;
     color: var(--text-secondary);
     font-size: 0.9rem;
     line-height: 1.5;
     margin: 0;
-    width: 100%;  /* Full width */
+}
+
+/* Post Series List */
+.post-series-list {
+    display: block;
+    margin-top: 1rem;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    counter-reset: post-series-counter;
+}
+
+/* Individual Post Series Item */
+.post-series-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    counter-increment: post-series-counter;
+    position: relative;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+    background: transparent;
+    height: 2.75rem;
+}
+
+/* Numbered circle indicator */
+.post-series-item::before {
+    content: counter(post-series-counter);
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.5rem;
+    height: 1.5rem;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1.5px solid var(--border);
 }
 
 /* Current Post Indicator */
-.series-navigation .series-post-item.current {
+.post-series-item.current {
     background: var(--bg-tertiary);
     border-radius: 6px;
-    position: relative;
 }
 
-.series-navigation .series-post-item.current::before {
+.post-series-item.current::before {
     background: var(--accent);
     color: white;
-    font-weight: 600;
+    border-color: var(--accent);
+}
+
+/* Post Series Link */
+.post-series-link {
+    display: block;
+    padding: 0.6rem 1rem 0.6rem 2.75rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-size: 0.9rem;
 }
 
 /* Current Post Title (non-clickable) */
-.series-navigation .series-post-title {
-    padding: 0 0.5rem 0 3rem;
+.post-series-title {
     display: block;
-    line-height: 2.75rem;
+    padding: 0.6rem 1rem 0.6rem 2.75rem;
     color: var(--text-primary);
     font-weight: 500;
-    position: relative;
+    font-size: 0.9rem;
 }
 
 /* "You are here" Indicator */
-.series-navigation .current-indicator {
+.current-indicator {
     color: var(--accent);
     font-size: 0.75rem;
     font-weight: 600;
@@ -101,17 +142,12 @@
     white-space: nowrap;
 }
 
-/* Navigation Links Styling */
-.series-navigation .series-post-link {
-    transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-.series-navigation .series-post-item:not(.current):hover {
+/* Hover Effects */
+.post-series-item:not(.current):hover {
     background: var(--bg-tertiary);
-    border-radius: 6px;
 }
 
-.series-navigation .series-post-item:not(.current):hover .series-post-link {
+.post-series-link:hover {
     color: var(--accent);
 }
 
@@ -125,20 +161,20 @@
         padding: 0.1rem 0.4rem;
     }
 
-    .series-navigation {
+    .post-series-navigation {
         margin: 1.5rem 0;
         padding: 1rem;
     }
 
-    .series-navigation .series-header h3 {
+    .post-series-header h3 {
         font-size: 1.1rem;
     }
 
-    .series-navigation .series-description {
+    .post-series-description {
         font-size: 0.85rem;
     }
 
-    .series-navigation .current-indicator {
+    .current-indicator {
         display: block;
         margin-left: 0;
         margin-top: 0.25rem;
@@ -146,27 +182,27 @@
 }
 
 @media (max-width: 480px) {
-    .series-navigation {
+    .post-series-navigation {
         margin: 1rem 0;
         padding: 0.75rem;
         border-radius: 6px;
     }
 
-    .series-navigation .series-header {
+    .post-series-header {
         margin-bottom: 0.75rem;
     }
 
-    .series-navigation .series-header h3 {
+    .post-series-header h3 {
         font-size: 1rem;
     }
 
-    .series-navigation .series-post-title,
-    .series-navigation .series-post-link {
+    .post-series-title,
+    .post-series-link {
         font-size: 0.85rem;
         padding-left: 2.5rem;
     }
 
-    .series-navigation .series-post-item::before {
+    .post-series-item::before {
         width: 1.25rem;
         height: 1.25rem;
         font-size: 0.7rem;
