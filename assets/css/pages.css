@@ -538,6 +538,8 @@
     border: 1px solid var(--code-border);
     border-radius: 0.5rem;
     overflow-x: auto;
+    width: fit-content;
+    max-width: 100%;
 }
 
 .page-content strong {
@@ -669,6 +671,8 @@
     border: 1px solid var(--code-border);
     border-radius: 0.5rem;
     overflow-x: auto;
+    width: fit-content;
+    max-width: 100%;
 }
 
 .post-content code {

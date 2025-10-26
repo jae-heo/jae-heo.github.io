@@ -271,6 +271,8 @@ pre {
     padding: 1.5rem;
     overflow-x: auto;
     margin-bottom: 1.5rem;
+    width: fit-content;
+    max-width: 100%;
 }
 
 pre code {

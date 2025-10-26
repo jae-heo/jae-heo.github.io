@@ -51,6 +51,49 @@
         const lang = localStorage.getItem('lang') || 'ko';
     </script>
     <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
 </head>
 <body>
     <header>
@@ -74,7 +117,7 @@
     <main>
         <div class="tag-page">
     <div class="page-header">
-        <h1>"파이썬" 태그가 달린 포스트</h1>
+        <h1>"lexical-analysis" 태그가 달린 포스트</h1>
     </div>
 
     <div class="posts-controls">
@@ -107,24 +150,24 @@
     <!-- Grid View -->
 <div class="post-list post-grid-view">
     
-    <article class="post-preview" data-tags="" data-category="강좌">
+    <article class="post-preview" data-tags="" data-category="Lectures">
         
         
         <div class="post-preview-content">
             <h2>
-                <a href="/tech/ko/posts/python-lecture-00.html">Python 강좌 시리즈 소개</a>
+                <a href="/tech/ko/posts/python-lecture-02.html">Python 강좌 2편 - 파이썬의 어휘구조</a>
             </h2>
-            <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
+            <time datetime=""2025-10-26T00:00:00.000Z"">October 26, 2025</time>
             
-            <p class="post-excerpt">파이썬 강의 계획서</p>
+            <p class="post-excerpt">파이썬이 우리가 쓴 코드를 어떻게 읽는지, 그 첫 번째 단계를 쉽게 풀어봅니다</p>
             
             <div class="post-card-footer">
                 
                 <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/강좌.html" class="category-badge">강좌</a>
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/python-lecture-00.html" class="read-more">더 읽기</a>
+                <a href="/tech/ko/posts/python-lecture-02.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -134,23 +177,23 @@
     <!-- List View -->
 <div class="post-list post-list-view" style="display: none;">
     
-    <article class="post-item" data-tags="" data-category="강좌">
+    <article class="post-item" data-tags="" data-category="Lectures">
         
-        <a href="/tech/ko/posts/python-lecture-00.html" class="post-item-link">
+        <a href="/tech/ko/posts/python-lecture-02.html" class="post-item-link">
             
             <div class="post-item-content">
                 <div class="post-item-header">
                     <h2>
-                        Python 강좌 시리즈 소개
+                        Python 강좌 2편 - 파이썬의 어휘구조
                     </h2>
                 </div>
                 
-                <p class="post-item-excerpt">파이썬 강의 계획서</p>
+                <p class="post-item-excerpt">파이썬이 우리가 쓴 코드를 어떻게 읽는지, 그 첫 번째 단계를 쉽게 풀어봅니다</p>
                 
                 <div class="post-item-meta">
-                    <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
+                    <time datetime=""2025-10-26T00:00:00.000Z"">October 26, 2025</time>
                     
-                    <span class="category-badge-small">강좌</span>
+                    <span class="category-badge-small">Lectures</span>
                     
                 </div>
             </div>

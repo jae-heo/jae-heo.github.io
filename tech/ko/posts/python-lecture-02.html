@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 강좌 2편 - 파이썬의 어휘구조 - 재영의 기술 블로그</title>
+    <meta name="description" content="파이썬이 우리가 쓴 코드를 어떻게 읽는지, 그 첫 번째 단계를 쉽게 풀어봅니다">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/python-lecture-02.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/python-lecture-02.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/ko/posts/python-lecture-02.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/python-lecture-02.html">
+    <meta property="og:title" content="Python 강좌 2편 - 파이썬의 어휘구조">
+    <meta property="og:description" content="파이썬이 우리가 쓴 코드를 어떻게 읽는지, 그 첫 번째 단계를 쉽게 풀어봅니다">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2025-10-26T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="python">
+    
+    <meta property="article:tag" content="programming">
+    
+    <meta property="article:tag" content="lecture">
+    
+    <meta property="article:tag" content="lexical-analysis">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/python-lecture-02.html">
+    <meta name="twitter:title" content="Python 강좌 2편 - 파이썬의 어휘구조">
+    <meta name="twitter:description" content="파이썬이 우리가 쓴 코드를 어떻게 읽는지, 그 첫 번째 단계를 쉽게 풀어봅니다">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Python 강좌 2편 - 파이썬의 어휘구조",
+  "description": [
+    "파이썬이 우리가 쓴 코드를 어떻게 읽는지",
+    "그 첫 번째 단계를 쉽게 풀어봅니다"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2025-10-26T00:00:00.000Z",
+  "dateModified": "2025-10-26T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/python-lecture-02.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "python, programming, lecture, lexical-analysis"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Python 강좌 2편 - 파이썬의 어휘구조">Python 강좌 2편 - 파이썬의 어휘구조</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Python 강좌 2편 - 파이썬의 어휘구조</h1>
+        <time datetime=""2025-10-26T00:00:00.000Z"">October 26, 2025</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Python 강좌 시리즈 (3/3)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/python.html" class="tag">python</a>
+                    
+                    <a href="/tech/ko/tags/programming.html" class="tag">programming</a>
+                    
+                    <a href="/tech/ko/tags/lecture.html" class="tag">lecture</a>
+                    
+                    <a href="/tech/ko/tags/lexical-analysis.html" class="tag">lexical-analysis</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Python 강좌 시리즈</h3>
+        <p class="post-series-description">깊이있게 배우는 Python 프로그래밍 강좌</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/python-lecture-00.html" class="post-series-link">Python 강좌 시리즈 소개</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/python-lecture-01.html" class="post-series-link">Python 강좌 1편 - 파이썬의 철학과 설계 원칙</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Python 강좌 2편 - 파이썬의 어휘구조
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2>어휘구조란?</h2>
+<p>우리가 파이썬 코드를 작성하면, 파이썬은 그것을 어떻게 이해할까요?</p>
+<pre><code class="language-python">x = 42 + y</code></pre>
+<p>우리 눈에는 &quot;변수 x에 42와 y를 더한 값을 넣어라&quot;라고 보이지만, 파이썬 입장에서는 그냥 문자들의 나열일 뿐입니다.</p>
+<pre><code>&#39;x&#39;, &#39; &#39;, &#39;=&#39;, &#39; &#39;, &#39;4&#39;, &#39;2&#39;, &#39; &#39;, &#39;+&#39;, &#39; &#39;, &#39;y&#39;</code></pre>
+<p>파이썬이 코드를 실행하려면 먼저 이 문자들을 <strong>의미 있는 단위</strong>로 쪼개야 합니다. 마치 우리가 책을 읽을 때 글자들을 단어로 인식하는 것처럼요.</p>
+<h3 id="-">토큰: 의미의 최소 단위</h3>
+<p>코드를 쪼갠 의미 있는 조각들을 <strong>토큰(Token)</strong>이라고 부릅니다.</p>
+<pre><code class="language-python">x = 42 + y
+
+# 파이썬이 보는 토큰들:
+# NAME: &#39;x&#39;
+# OP: &#39;=&#39;
+# NUMBER: 42
+# OP: &#39;+&#39;
+# NAME: &#39;y&#39;</code></pre>
+<p>자연어와 비교하면 더 쉽습니다:</p>
+<pre><code>문장: &quot;나는 밥을 먹는다&quot;
+단어: [&quot;나는&quot;, &quot;밥을&quot;, &quot;먹는다&quot;]
+
+코드: &quot;x = 42&quot;
+토큰: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
+<h3 id="-">어휘 분석: 토큰으로 쪼개기</h3>
+<p><strong>어휘 분석(Lexical Analysis)</strong>은 코드를 읽어서 토큰으로 쪼개는 과정입니다.<br />이것이 파이썬 인터프리터가 하는 첫 번째 일입니다.</p>
+<pre><code>[소스 코드]
+    ↓
+[어휘 분석] ← 이번 강좌의 주제
+    ↓
+[토큰 리스트]
+    ↓
+[구문 분석]
+    ↓
+...</code></pre>
+<p>왜 이런 과정이 필요할까요?</p>
+<p>코드를 한 번에 이해하려면 너무 복잡하기 때문입니다. 그래서 파이썬은 단계별로 나눠서 처리합니다. 어휘 분석은 그 첫 단계입니다.</p>
+<h2 id="-">어휘구조분석기가 작동하는 원리</h2>
+<p>어휘 분석기는 <strong>상태 기계(State Machine)</strong>라는 방식으로 작동합니다.<br />상태 기계가 뭔지 어렵게 느껴질 수 있는데, 우리 주변에서 흔히 볼 수 있는 개념입니다.</p>
+<h3 id="state-machine-">State Machine의 예시</h3>
+<h4 id="1-">1. 사람의 배고픔 상태</h4>
+<p>우리의 배고픔 상태를 생각해봅시다:</p>
+<pre class="mermaid">stateDiagram-v2
+    배고픔 --> 배부름: 식사
+    배부름 --> 배고픔: 운동</pre>
+<ul class="ul-list">
+<li><strong>상태</strong>: 배고픔, 배부름</li><li><strong>전이(transition)</strong>: 식사를 하면 배고픔에서 배부름으로</li><li><strong>다시 전이</strong>: 운동을 하면 배부름에서 배고픔으로</li></ul>
+<p>이것이 바로 상태 기계입니다! 특정 <strong>상태</strong>에 있다가, <strong>입력</strong>이 들어오면 다른 <strong>상태</strong>로 바뀌는 시스템이죠.</p>
+<h4 id="2-">2. 신호등</h4>
+<p>신호등도 상태 기계입니다:</p>
+<pre class="mermaid">stateDiagram-v2
+    빨간불 --> 초록불: 30초 경과
+    초록불 --> 노란불: 30초 경과
+    노란불 --> 빨간불: 3초 경과</pre>
+<ul class="ul-list">
+<li><strong>상태</strong>: 빨간불, 노란불, 초록불</li><li><strong>전이</strong>: 시간이 지나면 상태가 바뀜</li><li><strong>규칙</strong>: 빨간불 → 초록불 → 노란불 → 빨간불 (반복)</li></ul>
+<h4 id="3-">3. 계산기의 입력 상태</h4>
+<p>계산기를 사용할 때를 생각해봅시다:</p>
+<pre class="mermaid">stateDiagram-v2
+    시작 --> 숫자대기
+    숫자대기 --> 연산자대기: 숫자 입력 (53, 10)
+    연산자대기 --> 숫자대기: 연산자 입력 (+)
+    연산자대기 --> 종료: (=) 입력</pre>
+<p>계산기는 항상 두 가지 상태 중 하나에 있습니다:<br />- <strong>숫자를 기다리는 상태</strong> (숫자대기)<br />- <strong>연산자를 기다리는 상태</strong> (연산자대기)</p>
+<p>입력 &quot;5 + 3 =&quot;을 처리하는 과정:<br />1. 시작 → 숫자대기 → &#39;53&#39; 입력 → 연산자대기<br />2. 연산자대기 → &#39;+&#39; 입력 → 숫자대기<br />3. 숫자대기 → &#39;10&#39; 입력 → 연산자대기<br />4. 연산자대기 → &#39;=&#39; 입력 → 완료</p>
+<p>이렇게 상태를 바꿔가며 입력을 처리하는 것이 <strong>상태 기계</strong>입니다.</p>
+<h3 id="-state-machine">어휘구조 분석 State Machine</h3>
+<p>이제 파이썬의 어휘 분석이 어떻게 작동하는지 살펴봅시다.</p>
+<h4 id="-">정수 인식하기</h4>
+<p><code class="inline-code">123</code>이라는 문자열을 읽을 때의 상태 전이:</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> 시작
+    시작 --> 숫자읽는중: 숫자 ('1')
+    숫자읽는중 --> 숫자읽는중: 숫자 ('2', '3')
+    숫자읽는중 --> [*]: 공백 또는 연산자
+
+    note right of 숫자읽는중
+        계속 숫자를 모음
+        예: "123"
+    end note</pre>
+<p>한 글자씩 읽으면서 &quot;지금 숫자를 읽고 있구나&quot;라는 상태를 유지하다가, 숫자가 아닌 문자를 만나면 토큰을 완성합니다.</p>
+<p>결과: <code class="inline-code">NUMBER 토큰: 123</code></p>
+<h4 id="-">실수도 인식하기</h4>
+<p><code class="inline-code">3.14</code>처럼 소수점이 있으면 어떻게 될까요?</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> 시작
+    시작 --> 정수읽는중: 숫자 ('3')
+    정수읽는중 --> 정수읽는중: 숫자
+    정수읽는중 --> 실수읽는중: 소수점 ('.')
+    실수읽는중 --> 실수읽는중: 숫자 ('1', '4')
+    정수읽는중 --> [*]: 공백/연산자
+    실수읽는중 --> [*]: 공백/연산자
+
+    note right of 실수읽는중
+        소수점 이하 숫자들을 모음
+        예: "3.14"
+    end note</pre>
+<p>정수를 읽다가 <code class="inline-code">.</code>을 만나면 &quot;아, 실수구나!&quot; 하고 상태를 바꿔서 소수점 이하 숫자들을 계속 읽습니다.</p>
+<p>결과: <code class="inline-code">NUMBER 토큰: 3.14</code></p>
+<h4 id="-">여러 종류 토큰 인식하기</h4>
+<p>실제 파이썬 코드 <code class="inline-code">x = 42 + y</code>를 어떻게 읽을까요?</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> 시작
+    시작 --> 식별자읽기: 문자 ('x')
+    시작 --> 숫자읽기: 숫자 ('4')
+    시작 --> 연산자: 연산자 ('+', '=')
+
+    식별자읽기 --> 식별자읽기: 문자/숫자
+    식별자읽기 --> 시작: 공백 (NAME 토큰 생성)
+
+    숫자읽기 --> 숫자읽기: 숫자
+    숫자읽기 --> 시작: 공백 (NUMBER 토큰 생성)
+
+    연산자 --> 시작: (OP 토큰 생성)
+
+    시작 --> [*]: 문자열 끝</pre>
+<p>코드 <code class="inline-code">x = 42 + y</code> 처리 과정:<br />1. <code class="inline-code">x</code> → 문자 → 식별자 읽기 → 공백 → <strong>NAME: &#39;x&#39;</strong><br />2. <code class="inline-code">=</code> → 연산자 → <strong>OP: &#39;=&#39;</strong><br />3. <code class="inline-code">42</code> → 숫자들 → 공백 → <strong>NUMBER: 42</strong><br />4. <code class="inline-code">+</code> → 연산자 → <strong>OP: &#39;+&#39;</strong><br />5. <code class="inline-code">y</code> → 문자 → 끝 → <strong>NAME: &#39;y&#39;</strong></p>
+<p><strong>최종 결과</strong>: <code class="inline-code">[NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42, OP:&#39;+&#39;, NAME:&#39;y&#39;]</code></p>
+<p>이렇게 상태 기계를 사용하면 복잡한 코드를 체계적으로 토큰으로 쪼갤 수 있습니다!</p>
+<h2 id="-">파이썬의 어휘구조</h2>
+<p>파이썬만의 특별한 어휘 규칙들을 알아봅시다.</p>
+<h3 id="1-">1. 들여쓰기도 토큰이다</h3>
+<p>파이썬의 가장 큰 특징은 <strong>들여쓰기가 문법</strong>이라는 것입니다.</p>
+<pre><code class="language-python">def greet():
+    print(&quot;hello&quot;)  # 들여쓰기 1단계
+    if True:
+        print(&quot;world&quot;)  # 들여쓰기 2단계</code></pre>
+<p>다른 언어들은 중괄호 <code class="inline-code">{}</code>를 사용하지만, 파이썬은 들여쓰기를 토큰으로 만듭니다:</p>
+<pre><code class="language-python"># 파이썬이 보는 토큰들:
+[
+    NAME: &#39;def&#39;,
+    NAME: &#39;greet&#39;,
+    OP: &#39;(&#39;,
+    OP: &#39;)&#39;,
+    OP: &#39;:&#39;,
+    NEWLINE,
+    INDENT,        # 들여쓰기 시작!
+    NAME: &#39;print&#39;,
+    ...
+    NEWLINE,
+    DEDENT,        # 들여쓰기 끝!
+]</code></pre>
+<h3 id="2-">2. 여러 가지 문자열 표현</h3>
+<p>파이썬은 문자열을 다양하게 표현할 수 있습니다:</p>
+<pre><code class="language-python"># 기본 문자열
+s1 = &#39;hello&#39;
+s2 = &quot;world&quot;
+
+# 여러 줄 문자열
+s3 = &quot;&quot;&quot;
+여러 줄에 걸쳐
+문자열을 쓸 수 있습니다
+&quot;&quot;&quot;
+
+# 이스케이프를 무시하는 Raw 문자열
+s4 = r&#39;\n은 줄바꿈이 아니라 그냥 \n 입니다&#39;
+
+# 변수를 넣을 수 있는 f-string
+name = &quot;파이썬&quot;
+s5 = f&quot;안녕하세요, {name}!&quot;  # &quot;안녕하세요, 파이썬!&quot;</code></pre>
+<h3 id="3-">3. 다양한 숫자 표현</h3>
+<p>파이썬은 숫자를 여러 방식으로 쓸 수 있습니다:</p>
+<pre><code class="language-python"># 일반 숫자
+a = 42
+
+# 2진수 (0과 1만)
+b = 0b1010  # 10
+
+# 8진수 (0~7)
+c = 0o12    # 10
+
+# 16진수 (0~9, A~F)
+d = 0xA     # 10
+
+# 실수
+e = 3.14
+
+# 큰 숫자는 _로 구분 (읽기 쉽게)
+f = 1_000_000  # 1000000
+
+# 복소수
+g = 3 + 4j</code></pre>
+<h3 id="4-">4. 실제 파이썬 토크나이저 확인하기</h3>
+<p>파이썬에는 토큰 분석을 직접 확인할 수 있는 <code class="inline-code">tokenize</code> 모듈이 있습니다.</p>
+<p>코드 <code class="inline-code">x = 42</code>를 토큰으로 분석하면 이렇게 나옵니다:</p>
+<pre><code>NAME       : &#39;x&#39;
+OP         : &#39;=&#39;
+NUMBER     : &#39;42&#39;
+NEWLINE    : &#39;\n&#39;
+ENDMARKER  : &#39;&#39;</code></pre>
+<p>우리가 예상한 대로 NAME, OP, NUMBER 토큰으로 쪼개지는 걸 확인할 수 있습니다!</p>
+<h2>정리</h2>
+<h3 id="-">배운 내용</h3>
+<ol class="ol-list">
+<li><strong>어휘 분석</strong>: 코드를 토큰으로 쪼개는 첫 번째 단계</li><li><strong>토큰</strong>: 의미 있는 최소 단위 (변수명, 숫자, 연산자 등)</li><li><strong>상태 기계</strong>: 상태를 바꿔가며 입력을 처리하는 방식</li></ol>
+<ul class="ul-list">
+<li>배고픔/배부름 (사람)</li><li>신호등 (빨강/노랑/초록)</li><li>계산기 (숫자 대기/연산자 대기)</li></ul>
+<h3 id="-">파이썬의 특별함</h3>
+<ul class="ul-list">
+<li>들여쓰기가 토큰 (<code class="inline-code">INDENT</code>, <code class="inline-code">DEDENT</code>)</li><li>다양한 문자열 표현 (따옴표, f-string, raw 문자열)</li><li>여러 진법의 숫자 (2진수, 8진수, 16진수)</li><li><code class="inline-code">tokenize</code> 모듈로 직접 토큰 확인 가능</li></ul>
+<h3 id="-">왜 중요한가?</h3>
+<p>어휘 분석을 이해하면:<br />- 파이썬이 코드를 어떻게 읽는지 알 수 있습니다<br />- 문법 오류를 더 잘 이해할 수 있습니다<br />- 나만의 언어를 만들 수도 있습니다!</p>
+<h3 id="-">다음 강좌</h3>
+<p>다음 시간에는 토큰들을 조합해서 <strong>의미 있는 문법 구조</strong>를 만드는 <strong>구문 분석(Syntax Analysis)</strong>에 대해 알아보겠습니다.</p>
+<p>토큰 <code class="inline-code">[NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code>가 어떻게 &quot;변수 대입문&quot;이라는 구조로 인식되는지 배워봅시다!</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/python-lecture-01.html" class="nav-prev">← Python 강좌 1편 - 파이썬의 철학과 설계 원칙</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

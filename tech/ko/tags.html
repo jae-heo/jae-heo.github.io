@@ -51,6 +51,49 @@
         const lang = localStorage.getItem('lang') || 'ko';
     </script>
     <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
 </head>
 <body>
     <header>
@@ -80,54 +123,34 @@
 
     <div class="tags-cloud">
         
-        <a href="/tech/ko/tags/프로그래밍.html" class="tag-item">
-            <span class="tag-name">프로그래밍</span>
-            <span class="tag-count">2</span>
-        </a>
-        
         <a href="/tech/ko/tags/python.html" class="tag-item">
             <span class="tag-name">python</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/tech/ko/tags/파이썬.html" class="tag-item">
-            <span class="tag-name">파이썬</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/tech/ko/tags/강좌소개.html" class="tag-item">
-            <span class="tag-name">강좌소개</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/tech/ko/tags/강좌.html" class="tag-item">
-            <span class="tag-name">강좌</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/tech/ko/tags/파이썬철학.html" class="tag-item">
-            <span class="tag-name">파이썬철학</span>
-            <span class="tag-count">1</span>
+            <span class="tag-count">3</span>
         </a>
         
         <a href="/tech/ko/tags/programming.html" class="tag-item">
             <span class="tag-name">programming</span>
-            <span class="tag-count">0</span>
-        </a>
-        
-        <a href="/tech/ko/tags/lecture-introduction.html" class="tag-item">
-            <span class="tag-name">lecture-introduction</span>
-            <span class="tag-count">0</span>
+            <span class="tag-count">3</span>
         </a>
         
         <a href="/tech/ko/tags/lecture.html" class="tag-item">
             <span class="tag-name">lecture</span>
-            <span class="tag-count">0</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/tech/ko/tags/lecture-introduction.html" class="tag-item">
+            <span class="tag-name">lecture-introduction</span>
+            <span class="tag-count">1</span>
         </a>
         
         <a href="/tech/ko/tags/python-philosophy.html" class="tag-item">
             <span class="tag-name">python-philosophy</span>
-            <span class="tag-count">0</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/lexical-analysis.html" class="tag-item">
+            <span class="tag-name">lexical-analysis</span>
+            <span class="tag-count">1</span>
         </a>
         
     </div>
