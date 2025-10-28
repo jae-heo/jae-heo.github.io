@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Lecture 2 - Lexical Structure of Python - Jae's Tech Blog</title>
+    <meta name="description" content="Learn how Python reads and understands your code, starting from the first step of lexical analysis">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/python-lecture-02.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/python-lecture-02.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/python-lecture-02.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/python-lecture-02.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/python-lecture-02.html">
+    <meta property="og:title" content="Python Lecture 2 - Lexical Structure of Python">
+    <meta property="og:description" content="Learn how Python reads and understands your code, starting from the first step of lexical analysis">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2025-10-26T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="python">
+    
+    <meta property="article:tag" content="programming">
+    
+    <meta property="article:tag" content="lecture">
+    
+    <meta property="article:tag" content="lexical-analysis">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/python-lecture-02.html">
+    <meta name="twitter:title" content="Python Lecture 2 - Lexical Structure of Python">
+    <meta name="twitter:description" content="Learn how Python reads and understands your code, starting from the first step of lexical analysis">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Python Lecture 2 - Lexical Structure of Python",
+  "description": [
+    "Learn how Python reads and understands your code",
+    "starting from the first step of lexical analysis"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2025-10-26T00:00:00.000Z",
+  "dateModified": "2025-10-26T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/python-lecture-02.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "python, programming, lecture, lexical-analysis"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Python Lecture 2 - Lexical Structure of Python">Python Lecture 2 - Lexical Structure of Python</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Python Lecture 2 - Lexical Structure of Python</h1>
+        <time datetime=""2025-10-26T00:00:00.000Z"">October 26, 2025</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Python Lecture Series (3/4)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/python.html" class="tag">python</a>
+                    
+                    <a href="/tech/en/tags/programming.html" class="tag">programming</a>
+                    
+                    <a href="/tech/en/tags/lecture.html" class="tag">lecture</a>
+                    
+                    <a href="/tech/en/tags/lexical-analysis.html" class="tag">lexical-analysis</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Python Lecture Series</h3>
+        <p class="post-series-description">Comprehensive Python programming course from basics to advanced topics</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-00.html" class="post-series-link">Introduction to Python Lecture Series</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-01.html" class="post-series-link">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Python Lecture 2 - Lexical Structure of Python
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-03.html" class="post-series-link">Python Lecture 3 - Containers and Generators</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="what-is-lexical-structure">What is Lexical Structure?</h2>
+<p>When we write Python code, how does Python understand it?</p>
+<pre><code class="language-python">x = 42 + y</code></pre>
+<p>To us, this means &quot;assign the sum of 42 and y to variable x,&quot; but to Python, it&#39;s just a sequence of characters.</p>
+<pre><code>&#39;x&#39;, &#39; &#39;, &#39;=&#39;, &#39; &#39;, &#39;4&#39;, &#39;2&#39;, &#39; &#39;, &#39;+&#39;, &#39; &#39;, &#39;y&#39;</code></pre>
+<p>Before Python can execute code, it must break these characters into <strong>meaningful units</strong>, just like we recognize letters as words when reading.</p>
+<h3 id="tokens-the-smallest-units-of-meaning">Tokens: The Smallest Units of Meaning</h3>
+<p>The meaningful pieces extracted from code are called <strong>tokens</strong>.</p>
+<pre><code class="language-python">x = 42 + y
+
+# Tokens Python sees:
+# NAME: &#39;x&#39;
+# OP: &#39;=&#39;
+# NUMBER: 42
+# OP: &#39;+&#39;
+# NAME: &#39;y&#39;</code></pre>
+<p>Comparing with natural language makes this clearer.</p>
+<pre><code>Sentence: &quot;I eat rice&quot;
+Words: [&quot;I&quot;, &quot;eat&quot;, &quot;rice&quot;]
+
+Code: &quot;x = 42&quot;
+Tokens: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
+<h3 id="lexical-analysis-breaking-into-tokens">Lexical Analysis: Breaking into Tokens</h3>
+<p><strong>Lexical Analysis</strong> is the process of reading code and breaking it into tokens.<br />This is the first step the Python interpreter performs.</p>
+<pre><code>[Source Code]
+    ↓
+[Lexical Analysis] ← Today&#39;s topic
+    ↓
+[Token List]
+    ↓
+[Syntax Analysis]
+    ↓
+...</code></pre>
+<p>Why is this process necessary?</p>
+<p>Understanding code all at once is too complex. Python processes it step by step, with lexical analysis as the first stage.</p>
+<h2 id="how-lexical-analyzers-work">How Lexical Analyzers Work</h2>
+<p>Lexical analyzers operate using a <strong>State Machine</strong>.<br />Though this might sound complex, it&#39;s a concept we encounter everywhere in daily life.</p>
+<h3 id="state-machine-examples">State Machine Examples</h3>
+<h4 id="1-human-hunger-states">1. Human Hunger States</h4>
+<p>Consider our hunger states.</p>
+<pre class="mermaid">stateDiagram-v2
+    Hungry --> Full: Eat
+    Full --> Hungry: Exercise</pre>
+<ul class="ul-list">
+<li><strong>States</strong>: Hungry, Full</li><li><strong>Transition</strong>: From hungry to full when eating</li><li><strong>Reverse transition</strong>: From full to hungry when exercising</li></ul>
+<p>This is a state machine! A system in a specific <strong>state</strong> that changes to another <strong>state</strong> when it receives <strong>input</strong>.</p>
+<h4 id="2-traffic-lights">2. Traffic Lights</h4>
+<p>Traffic lights are also state machines.</p>
+<pre class="mermaid">stateDiagram-v2
+    Red --> Green: 30 seconds
+    Green --> Yellow: 30 seconds
+    Yellow --> Red: 3 seconds</pre>
+<ul class="ul-list">
+<li><strong>States</strong>: Red, Yellow, Green</li><li><strong>Transition</strong>: States change as time passes</li><li><strong>Pattern</strong>: Red → Green → Yellow → Red (repeats)</li></ul>
+<h4 id="3-calculator-input-states">3. Calculator Input States</h4>
+<p>Think about using a calculator.</p>
+<pre class="mermaid">stateDiagram-v2
+    Start --> WaitingNumber
+    WaitingNumber --> WaitingOperator: Number input (5, 3)
+    WaitingOperator --> WaitingNumber: Operator input (+)
+    WaitingOperator --> End: (=) input</pre>
+<p>A calculator is always in one of two states:<br />- <strong>Waiting for number</strong> (WaitingNumber)<br />- <strong>Waiting for operator</strong> (WaitingOperator)</p>
+<p>Processing &quot;5 + 3 =&quot;.</p>
+<ol class="ol-list">
+<li>Start → WaitingNumber → &#39;5&#39; input → WaitingOperator</li><li>WaitingOperator → &#39;+&#39; input → WaitingNumber</li><li>WaitingNumber → &#39;3&#39; input → WaitingOperator</li><li>WaitingOperator → &#39;=&#39; input → Complete</li></ol>
+<p>This is how <strong>state machines</strong> process input by changing states.</p>
+<h3 id="lexical-analysis-state-machine">Lexical Analysis State Machine</h3>
+<p>Now let&#39;s see how Python&#39;s lexical analysis works.</p>
+<h4 id="recognizing-integers">Recognizing Integers</h4>
+<p>State transitions when reading the string <code class="inline-code">123</code>.</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> Start
+    Start --> ReadingNumber: Digit ('1')
+    ReadingNumber --> ReadingNumber: Digits ('2', '3')
+    ReadingNumber --> [*]: Space or operator
+
+    note right of ReadingNumber
+        Collecting digits
+        Example: "123"
+    end note</pre>
+<p>Reading character by character, maintaining the &quot;I&#39;m reading a number&quot; state, then completing the token when encountering a non-digit character.</p>
+<p>Result: <code class="inline-code">NUMBER token: 123</code></p>
+<h4 id="recognizing-floats">Recognizing Floats</h4>
+<p>What happens with <code class="inline-code">3.14</code> that has a decimal point?</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> Start
+    Start --> ReadingInteger: Digit ('3')
+    ReadingInteger --> ReadingInteger: Digit
+    ReadingInteger --> ReadingFloat: Decimal ('.')
+    ReadingFloat --> ReadingFloat: Digits ('1', '4')
+    ReadingInteger --> [*]: Space/operator
+    ReadingFloat --> [*]: Space/operator
+
+    note right of ReadingFloat
+        Collecting decimal digits
+        Example: "3.14"
+    end note</pre>
+<p>When reading an integer and encountering <code class="inline-code">.</code>, it thinks &quot;Ah, a float!&quot; and changes state to continue reading decimal digits.</p>
+<p>Result: <code class="inline-code">NUMBER token: 3.14</code></p>
+<h4 id="recognizing-multiple-token-types">Recognizing Multiple Token Types</h4>
+<p>How does Python read the code <code class="inline-code">x = 42 + y</code>?</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> Start
+    Start --> ReadingIdentifier: Letter ('x')
+    Start --> ReadingNumber: Digit ('4')
+    Start --> Operator: Operators ('+', '=')
+
+    ReadingIdentifier --> ReadingIdentifier: Letter/digit
+    ReadingIdentifier --> Start: Space (create NAME token)
+
+    ReadingNumber --> ReadingNumber: Digit
+    ReadingNumber --> Start: Space (create NUMBER token)
+
+    Operator --> Start: (create OP token)
+
+    Start --> [*]: End of string</pre>
+<p>Processing code <code class="inline-code">x = 42 + y</code>.</p>
+<ol class="ol-list">
+<li><code class="inline-code">x</code> → letter → reading identifier → space → <strong>NAME: &#39;x&#39;</strong></li><li><code class="inline-code">=</code> → operator → <strong>OP: &#39;=&#39;</strong></li><li><code class="inline-code">42</code> → digits → space → <strong>NUMBER: 42</strong></li><li><code class="inline-code">+</code> → operator → <strong>OP: &#39;+&#39;</strong></li><li><code class="inline-code">y</code> → letter → end → <strong>NAME: &#39;y&#39;</strong></li></ol>
+<p><strong>Final result</strong>: <code class="inline-code">[NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42, OP:&#39;+&#39;, NAME:&#39;y&#39;]</code></p>
+<p>Using state machines allows systematic breaking of complex code into tokens!</p>
+<h2 id="python39s-lexical-structure">Python&#39;s Lexical Structure</h2>
+<p>Let&#39;s explore Python&#39;s unique lexical rules.</p>
+<h3 id="1-indentation-is-a-token">1. Indentation is a Token</h3>
+<p>Python&#39;s most distinctive feature is that <strong>indentation is syntax</strong>.</p>
+<pre><code class="language-python">def greet():
+    print(&quot;hello&quot;)  # Indentation level 1
+    if True:
+        print(&quot;world&quot;)  # Indentation level 2</code></pre>
+<p>While other languages use curly braces <code class="inline-code">{}</code>, Python creates tokens from indentation.</p>
+<pre><code class="language-python"># Tokens Python sees:
+[
+    NAME: &#39;def&#39;,
+    NAME: &#39;greet&#39;,
+    OP: &#39;(&#39;,
+    OP: &#39;)&#39;,
+    OP: &#39;:&#39;,
+    NEWLINE,
+    INDENT,        # Indentation starts!
+    NAME: &#39;print&#39;,
+    ...
+    NEWLINE,
+    DEDENT,        # Indentation ends!
+]</code></pre>
+<h3 id="2-various-string-representations">2. Various String Representations</h3>
+<p>Python can represent strings in many ways.</p>
+<pre><code class="language-python"># Basic strings
+s1 = &#39;hello&#39;
+s2 = &quot;world&quot;
+
+# Multi-line strings
+s3 = &quot;&quot;&quot;
+Multiple lines
+of text
+&quot;&quot;&quot;
+
+# Raw strings (ignore escapes)
+s4 = r&#39;\n is not a newline, just \n&#39;
+
+# f-strings (variable interpolation)
+name = &quot;Python&quot;
+s5 = f&quot;Hello, {name}!&quot;  # &quot;Hello, Python!&quot;</code></pre>
+<h3 id="3-various-number-representations">3. Various Number Representations</h3>
+<p>Python supports numbers in multiple formats.</p>
+<pre><code class="language-python"># Regular number
+a = 42
+
+# Binary (0s and 1s only)
+b = 0b1010  # 10
+
+# Octal (0~7)
+c = 0o12    # 10
+
+# Hexadecimal (0~9, A~F)
+d = 0xA     # 10
+
+# Float
+e = 3.14
+
+# Underscores for readability
+f = 1_000_000  # 1000000
+
+# Complex numbers
+g = 3 + 4j</code></pre>
+<h3 id="4-python39s-built-in-tokenizer">4. Python&#39;s Built-in Tokenizer</h3>
+<p>Python has a <code class="inline-code">tokenize</code> module to view token analysis directly.</p>
+<p>Tokenizing <code class="inline-code">x = 42</code> gives.</p>
+<pre><code>NAME       : &#39;x&#39;
+OP         : &#39;=&#39;
+NUMBER     : &#39;42&#39;
+NEWLINE    : &#39;\n&#39;
+ENDMARKER  : &#39;&#39;</code></pre>
+<p>We can confirm it breaks into NAME, OP, NUMBER tokens as expected!</p>
+<h2 id="summary">Summary</h2>
+<h3 id="what-we-learned">What We Learned</h3>
+<ol class="ol-list">
+<li><strong>Lexical Analysis</strong>: The first step of breaking code into tokens</li><li><strong>Tokens</strong>: Smallest meaningful units (variable names, numbers, operators, etc.)</li><li><strong>State Machine</strong>: A method of processing input by changing states</li></ol>
+<ul class="ul-list">
+<li>Hunger/Full (humans)</li><li>Traffic lights (red/yellow/green)</li><li>Calculator (waiting for number/operator)</li></ul>
+<h3 id="python39s-unique-features">Python&#39;s Unique Features</h3>
+<ul class="ul-list">
+<li>Indentation as tokens (<code class="inline-code">INDENT</code>, <code class="inline-code">DEDENT</code>)</li><li>Various string representations (quotes, f-strings, raw strings)</li><li>Multiple number bases (binary, octal, hexadecimal)</li><li>Direct token viewing with <code class="inline-code">tokenize</code> module</li></ul>
+<h3 id="why-this-matters">Why This Matters</h3>
+<p>Understanding lexical analysis helps you:<br />- Know how Python reads code<br />- Better understand syntax errors<br />- Even create your own programming language!</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/python-lecture-01.html" class="nav-prev">← Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
+        
+        
+        <a href="/tech/en/posts/python-lecture-03.html" class="nav-next">Python Lecture 3 - Containers and Generators →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

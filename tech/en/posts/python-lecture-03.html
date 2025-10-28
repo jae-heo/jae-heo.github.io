@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Lecture 3 - Containers and Generators - Jae's Tech Blog</title>
+    <meta name="description" content="Learn about Python's container concept, list internals, and efficient iteration with generators">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/python-lecture-03.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/python-lecture-03.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/python-lecture-03.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/python-lecture-03.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/python-lecture-03.html">
+    <meta property="og:title" content="Python Lecture 3 - Containers and Generators">
+    <meta property="og:description" content="Learn about Python's container concept, list internals, and efficient iteration with generators">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2025-10-27T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="python">
+    
+    <meta property="article:tag" content="programming">
+    
+    <meta property="article:tag" content="lecture">
+    
+    <meta property="article:tag" content="container">
+    
+    <meta property="article:tag" content="list">
+    
+    <meta property="article:tag" content="generator">
+    
+    <meta property="article:tag" content="iterator">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/python-lecture-03.html">
+    <meta name="twitter:title" content="Python Lecture 3 - Containers and Generators">
+    <meta name="twitter:description" content="Learn about Python's container concept, list internals, and efficient iteration with generators">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Python Lecture 3 - Containers and Generators",
+  "description": [
+    "Learn about Python's container concept",
+    "list internals",
+    "and efficient iteration with generators"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2025-10-27T00:00:00.000Z",
+  "dateModified": "2025-10-27T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/python-lecture-03.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "python, programming, lecture, container, list, generator, iterator"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Python Lecture 3 - Containers and Generators">Python Lecture 3 - Containers and Generators</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Python Lecture 3 - Containers and Generators</h1>
+        <time datetime=""2025-10-27T00:00:00.000Z"">October 27, 2025</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Python Lecture Series (4/4)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/python.html" class="tag">python</a>
+                    
+                    <a href="/tech/en/tags/programming.html" class="tag">programming</a>
+                    
+                    <a href="/tech/en/tags/lecture.html" class="tag">lecture</a>
+                    
+                    <a href="/tech/en/tags/container.html" class="tag">container</a>
+                    
+                    <a href="/tech/en/tags/list.html" class="tag">list</a>
+                    
+                    <a href="/tech/en/tags/generator.html" class="tag">generator</a>
+                    
+                    <a href="/tech/en/tags/iterator.html" class="tag">iterator</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Python Lecture Series</h3>
+        <p class="post-series-description">Comprehensive Python programming course from basics to advanced topics</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-00.html" class="post-series-link">Introduction to Python Lecture Series</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-01.html" class="post-series-link">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-02.html" class="post-series-link">Python Lecture 2 - Lexical Structure of Python</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Python Lecture 3 - Containers and Generators
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="what-is-a-container">What is a Container?</h2>
+<p>In Python, a <strong>Container</strong> is a data structure that can hold other objects.</p>
+<pre><code class="language-python"># Various containers
+my_list = [1, 2, 3, 4, 5]           # List
+my_tuple = (1, 2, 3)                # Tuple
+my_set = {1, 2, 3}                  # Set
+my_dict = {&quot;name&quot;: &quot;Python&quot;}        # Dictionary
+my_string = &quot;hello&quot;                 # String is also a container!</code></pre>
+<p>They all share the common trait of <strong>holding multiple pieces of data</strong>.</p>
+<h3 id="container-characteristics">Container Characteristics</h3>
+<p>Containers have two important characteristics.</p>
+<h4 id="1-membership-test">1. Membership Test</h4>
+<pre><code class="language-python">numbers = [1, 2, 3, 4, 5]
+
+# Check &quot;is this value in the container?&quot;
+print(3 in numbers)      # True
+print(10 in numbers)     # False
+print(10 not in numbers) # True</code></pre>
+<p>Being able to use the <code class="inline-code">in</code> operator is the first characteristic of containers.</p>
+<h4 id="2-iterable">2. Iterable</h4>
+<pre><code class="language-python"># Can be accessed one by one with a for loop
+for num in numbers:
+    print(num)</code></pre>
+<p>You can traverse container elements one by one.</p>
+<h3 id="python39s-main-containers">Python&#39;s Main Containers</h3>
+<table>
+<thead>
+<tr><th>Container</th><th>Ordered</th><th>Duplicates</th><th>Mutable</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>list</strong></td><td>Yes</td><td>Yes</td><td>Yes</td><td>Ordered data collection</td></tr>
+<tr><td><strong>tuple</strong></td><td>Yes</td><td>Yes</td><td>No</td><td>Immutable data</td></tr>
+<tr><td><strong>set</strong></td><td>No</td><td>No</td><td>Yes</td><td>Unique data</td></tr>
+<tr><td><strong>dict</strong></td><td>Yes (3.7+)</td><td>No (keys)</td><td>Yes</td><td>Key-value pairs</td></tr>
+<tr><td><strong>str</strong></td><td>Yes</td><td>Yes</td><td>No</td><td>Character sequence</td></tr>
+</tbody>
+</table>
+<p>Among these, the most commonly used and important is <strong>List</strong>!</p>
+<h2 id="list-the-representative-container">List - The Representative Container</h2>
+<p>Lists are the most frequently used container in Python.</p>
+<pre><code class="language-python">numbers = [1, 2, 3, 4, 5]
+fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;orange&quot;]
+mixed = [1, &quot;hello&quot;, 3.14, True]  # Can hold different types!</code></pre>
+<h3 id="list-internal-structure">List Internal Structure</h3>
+<h4 id="how-lists-look-in-memory">How Lists Look in Memory</h4>
+<p>How does Python store a list in memory?</p>
+<pre><code class="language-python">my_list = [10, 20, 30]</code></pre>
+<p>Lists are actually implemented as <strong>arrays</strong>, but slightly different from typical arrays.</p>
+<pre><code>Memory structure:
+
+List object:
+┌─────────────┐
+│ size: 3     │  ← Current element count
+│ capacity: 4 │  ← Allocated space size
+│ items: ───┐ │  ← Pointer to actual elements
+└───────────┼─┘
+            │
+            ▼
+Element array:
+┌────┬────┬────┬────┐
+│ •  │ •  │ •  │    │
+└─┼──┴─┼──┴─┼──┴────┘
+  │    │    │
+  ▼    ▼    ▼
+  10   20   30</code></pre>
+<p>Lists maintain two pieces of information.<br />- <strong>size</strong>: Actual number of elements<br />- <strong>capacity</strong>: Allocated memory space size</p>
+<h4 id="why-is-capacity-larger-than-size">Why is Capacity Larger Than Size?</h4>
+<p>Reallocating memory every time an element is added would be too slow.<br />So Python pre-allocates extra space.</p>
+<pre><code class="language-python">my_list = []  # capacity: 0
+my_list.append(1)  # capacity: 4 (allocates 4 slots at once)
+my_list.append(2)  # capacity: 4 (still has room)
+my_list.append(3)  # capacity: 4
+my_list.append(4)  # capacity: 4
+my_list.append(5)  # capacity: 8 (out of space, doubles capacity)</code></pre>
+<p>This approach is called a <strong>Dynamic Array</strong>.</p>
+<h3 id="time-complexity-of-list-operations">Time Complexity of List Operations</h3>
+<p>Let&#39;s see how fast each list operation is.</p>
+<h4 id="fast-operations-o1-constant-time">Fast Operations (O(1) - constant time)</h4>
+<pre><code class="language-python"># Index access
+value = my_list[2]  # Very fast
+
+# Append to end
+my_list.append(10)  # Fast on average
+
+# Remove from end
+my_list.pop()  # Fast</code></pre>
+<h4 id="slow-operations-on-proportional-to-list-size">Slow Operations (O(n) - proportional to list size)</h4>
+<pre><code class="language-python"># Insert in middle
+my_list.insert(0, 5)  # Slow (must shift all elements)
+
+# Remove from middle
+my_list.pop(0)  # Slow (must shift all elements forward)
+
+# Search for element
+if 10 in my_list:  # Slow (searches from start to end)
+    pass</code></pre>
+<h3 id="the-secret-of-list-copying">The Secret of List Copying</h3>
+<p>Be careful when copying lists.</p>
+<pre><code class="language-python"># Shallow copy
+original = [1, 2, 3]
+copy1 = original  # Points to same list!
+
+copy1.append(4)
+print(original)  # [1, 2, 3, 4] - original changed too!
+
+# Real copy
+copy2 = original.copy()  # or original[:]
+copy2.append(5)
+print(original)  # [1, 2, 3, 4] - original unchanged</code></pre>
+<p>Be extra careful with nested lists.</p>
+<pre><code class="language-python"># 2D list
+matrix = [[1, 2], [3, 4]]
+shallow = matrix.copy()
+
+shallow[0].append(99)
+print(matrix)  # [[1, 2, 99], [3, 4]] - inner lists are shared!
+
+# Deep copy
+import copy
+deep = copy.deepcopy(matrix)
+deep[0].append(100)
+print(matrix)  # [[1, 2, 99], [3, 4]] - original is safe</code></pre>
+<h2 id="iterator-and-iterable">Iterator and Iterable</h2>
+<p>To traverse containers, you need to understand <strong>Iterator</strong> and <strong>Iterable</strong>.</p>
+<h3 id="what-is-an-iterable">What is an Iterable?</h3>
+<p>An <strong>Iterable</strong> is an object that can be iterated. Simply put, anything you can put in a <code class="inline-code">for</code> loop.</p>
+<pre><code class="language-python"># These are all Iterable
+for x in [1, 2, 3]:        # List
+    print(x)
+
+for x in (1, 2, 3):        # Tuple
+    print(x)
+
+for x in &quot;hello&quot;:          # String
+    print(x)
+
+for x in {1, 2, 3}:        # Set
+    print(x)</code></pre>
+<h3 id="what-is-an-iterator">What is an Iterator?</h3>
+<p>An <strong>Iterator</strong> is an object that actually retrieves values one by one.</p>
+<pre><code class="language-python">numbers = [1, 2, 3]
+
+# Create Iterator with iter()
+iterator = iter(numbers)
+
+# Retrieve values one by one with next()
+print(next(iterator))  # 1
+print(next(iterator))  # 2
+print(next(iterator))  # 3
+print(next(iterator))  # StopIteration error!</code></pre>
+<h3 id="the-secret-of-for-loops">The Secret of for Loops</h3>
+<p>The <code class="inline-code">for</code> loops we write actually work like this.</p>
+<pre><code class="language-python"># Code we write
+for num in [1, 2, 3]:
+    print(num)
+
+# What Python actually does
+iterator = iter([1, 2, 3])  # Convert Iterable to Iterator
+while True:
+    try:
+        num = next(iterator)  # Get next value
+        print(num)
+    except StopIteration:     # Stop when no more values
+        break</code></pre>
+<h3 id="iterable-vs-iterator">Iterable vs Iterator</h3>
+<pre><code>┌──────────────┐
+│   Iterable   │  &quot;Iterable object&quot; (list, tuple, str, etc.)
+└──────┬───────┘
+       │ iter()
+       ▼
+┌──────────────┐
+│   Iterator   │  &quot;Object that retrieves values one by one&quot;
+└──────┬───────┘
+       │ next()
+       ▼
+    Returns value</code></pre>
+<p>Key points:<br />- <strong>Iterable</strong>: Calling <code class="inline-code">iter()</code> returns an Iterator<br />- <strong>Iterator</strong>: Calling <code class="inline-code">next()</code> returns the next value</p>
+<h3 id="creating-your-own">Creating Your Own</h3>
+<pre><code class="language-python">class CountUp:
+    &quot;&quot;&quot;Iterable that counts from 1 to n&quot;&quot;&quot;
+    def __init__(self, max):
+        self.max = max
+
+    def __iter__(self):
+        &quot;&quot;&quot;Returns an Iterator&quot;&quot;&quot;
+        return CountUpIterator(self.max)
+
+class CountUpIterator:
+    &quot;&quot;&quot;Iterator that actually returns values&quot;&quot;&quot;
+    def __init__(self, max):
+        self.max = max
+        self.current = 0
+
+    def __next__(self):
+        &quot;&quot;&quot;Returns next value&quot;&quot;&quot;
+        if self.current &gt;= self.max:
+            raise StopIteration
+        self.current += 1
+        return self.current
+
+# Usage
+counter = CountUp(5)
+for num in counter:
+    print(num)
+# 1, 2, 3, 4, 5</code></pre>
+<p>Looks complex? There&#39;s a simpler way: <strong>Generators</strong>!</p>
+<h2 id="generator-a-smart-iterator">Generator - A Smart Iterator</h2>
+<h3 id="problem-memory-waste">Problem: Memory Waste</h3>
+<p>We want to process a million numbers.</p>
+<pre><code class="language-python"># Creating as a list (Container)
+numbers = [i for i in range(1000000)]  # All million in memory!
+
+for num in numbers:
+    print(num)</code></pre>
+<p>Problems:<br />- Stores <strong>all million numbers in memory</strong><br />- Only <strong>needs one at a time</strong> - inefficient</p>
+<h3 id="enter-generators">Enter Generators</h3>
+<p>A <strong>Generator</strong> is a smart Iterator that creates values one at a time as needed.</p>
+<pre><code class="language-python"># Generator version
+def number_generator():
+    for i in range(1000000):
+        yield i  # Returns values one by one
+
+for num in number_generator():
+    print(num)</code></pre>
+<p>Differences:</p>
+<table>
+<thead>
+<tr><th></th><th>List (Container)</th><th>Generator (Iterator)</th></tr>
+</thead>
+<tbody>
+<tr><td>Memory</td><td>Stores all values (1 million)</td><td>Creates one at a time (1)</td></tr>
+<tr><td>Speed</td><td>Slow initial creation</td><td>Starts immediately</td></tr>
+<tr><td>Reuse</td><td>Can iterate multiple times</td><td>Can iterate once</td></tr>
+</tbody>
+</table>
+<p>Generators are <strong>an easy way to create Iterators</strong>!</p>
+<h3 id="the-yield-keyword">The yield Keyword</h3>
+<p><code class="inline-code">yield</code> is similar to <code class="inline-code">return</code>, but remembers the function&#39;s state.</p>
+<pre><code class="language-python">def simple_generator():
+    print(&quot;Creating first value&quot;)
+    yield 1
+    print(&quot;Creating second value&quot;)
+    yield 2
+    print(&quot;Creating third value&quot;)
+    yield 3
+
+gen = simple_generator()
+print(next(gen))  # &quot;Creating first value&quot; → 1
+print(next(gen))  # &quot;Creating second value&quot; → 2
+print(next(gen))  # &quot;Creating third value&quot; → 3</code></pre>
+<p>When encountering <code class="inline-code">yield</code>:<br />1. Returns a value<br />2. <strong>Pauses</strong> the function<br />3. <strong>Resumes</strong> from where it left off on next call</p>
+<h3 id="generator-advantages">Generator Advantages</h3>
+<pre><code class="language-python"># Can even create infinite sequences!
+def infinite_numbers():
+    num = 0
+    while True:
+        yield num
+        num += 1
+
+gen = infinite_numbers()
+print(next(gen))  # 0
+print(next(gen))  # 1
+print(next(gen))  # 2
+# Can continue indefinitely...</code></pre>
+<p>Impossible with lists - would require infinite memory!</p>
+<h2 id="for-loops-and-generators">for Loops and Generators</h2>
+<h3 id="the-principle-of-for-loops">The Principle of for Loops</h3>
+<p><code class="inline-code">for</code> loops actually use generators.</p>
+<pre><code class="language-python"># Code we write
+for num in [1, 2, 3]:
+    print(num)
+
+# What actually happens
+iterator = iter([1, 2, 3])
+while True:
+    try:
+        num = next(iterator)
+        print(num)
+    except StopIteration:
+        break</code></pre>
+<h3 id="creating-generators-with-for-loops">Creating Generators with for Loops</h3>
+<pre><code class="language-python">def count_up_to(max):
+    count = 1
+    while count &lt;= max:
+        yield count
+        count += 1
+
+for num in count_up_to(5):
+    print(num)
+# 1
+# 2
+# 3
+# 4
+# 5</code></pre>
+<p>Using <code class="inline-code">yield</code> inside a <code class="inline-code">while</code> loop lets you keep generating values.</p>
+<h3 id="real-example-1-reading-files">Real Example 1: Reading Files</h3>
+<p>Generators are useful for reading large files.</p>
+<pre><code class="language-python">def read_large_file(file_path):
+    &quot;&quot;&quot;Generator that reads file line by line&quot;&quot;&quot;
+    with open(file_path) as file:
+        for line in file:
+            yield line.strip()
+
+# Process 100GB file without memory burden
+for line in read_large_file(&quot;huge_file.txt&quot;):
+    process(line)</code></pre>
+<h3 id="real-example-2-fibonacci-sequence">Real Example 2: Fibonacci Sequence</h3>
+<pre><code class="language-python">def fibonacci():
+    &quot;&quot;&quot;Infinite Fibonacci sequence generator&quot;&quot;&quot;
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+# Get first 10 numbers
+fib = fibonacci()
+for _ in range(10):
+    print(next(fib))
+# 0, 1, 1, 2, 3, 5, 8, 13, 21, 34</code></pre>
+<h3 id="real-example-3-data-filtering">Real Example 3: Data Filtering</h3>
+<pre><code class="language-python">def even_numbers(numbers):
+    &quot;&quot;&quot;Generator that returns only even numbers&quot;&quot;&quot;
+    for num in numbers:
+        if num % 2 == 0:
+            yield num
+
+# Usage
+for num in even_numbers(range(10)):
+    print(num)
+# 0, 2, 4, 6, 8</code></pre>
+<h3 id="generator-expressions">Generator Expressions</h3>
+<p>Similar to list comprehensions but uses <code class="inline-code">()</code> instead of <code class="inline-code">[]</code>.</p>
+<pre><code class="language-python"># List comprehension (uses lots of memory)
+squares_list = [x**2 for x in range(1000000)]
+
+# Generator expression (saves memory)
+squares_gen = (x**2 for x in range(1000000))
+
+# Computed only when needed
+print(next(squares_gen))  # 0
+print(next(squares_gen))  # 1
+print(next(squares_gen))  # 4</code></pre>
+<h2 id="while-loops-and-generators">while Loops and Generators</h2>
+<p>You can create more complex generators with <code class="inline-code">while</code> loops.</p>
+<h3 id="conditional-generation">Conditional Generation</h3>
+<pre><code class="language-python">def numbers_until_condition(limit):
+    &quot;&quot;&quot;Generate numbers until sum exceeds limit&quot;&quot;&quot;
+    total = 0
+    num = 1
+    while total &lt; limit:
+        yield num
+        total += num
+        num += 1
+
+for n in numbers_until_condition(20):
+    print(n)
+# 1, 2, 3, 4, 5 (1+2+3+4+5=15, adding 6 would make 21, so stop)</code></pre>
+<h3 id="stateful-generators">Stateful Generators</h3>
+<pre><code class="language-python">def countdown(start):
+    &quot;&quot;&quot;Countdown generator&quot;&quot;&quot;
+    current = start
+    while current &gt; 0:
+        yield current
+        current -= 1
+    yield &quot;Liftoff!&quot;
+
+for count in countdown(5):
+    print(count)
+# 5, 4, 3, 2, 1, Liftoff!</code></pre>
+<h3 id="generator-chaining">Generator Chaining</h3>
+<pre><code class="language-python">def first_n(generator, n):
+    &quot;&quot;&quot;Take first n items from generator&quot;&quot;&quot;
+    count = 0
+    while count &lt; n:
+        yield next(generator)
+        count += 1
+
+# Infinite generator + limit
+def all_numbers():
+    num = 0
+    while True:
+        yield num
+        num += 1
+
+limited = first_n(all_numbers(), 5)
+print(list(limited))  # [0, 1, 2, 3, 4]</code></pre>
+<h2 id="containers-vs-generators">Containers vs Generators</h2>
+<p>When should you use what?</p>
+<h3 id="use-containers-lists">Use Containers (Lists)</h3>
+<pre><code class="language-python"># 1. Need multiple accesses
+data = [1, 2, 3, 4, 5]
+print(data[2])  # Index access
+print(len(data))  # Length check
+print(data[:3])  # Slicing
+
+# 2. Small data size
+small_list = [x for x in range(100)]  # OK
+
+# 3. Need all data
+sorted_data = sorted([3, 1, 2])  # Sorting needs all data
+
+# 4. Need multiple iterations
+for x in data:
+    print(x)
+for x in data:  # Can iterate again!
+    print(x * 2)</code></pre>
+<h3 id="use-generators-iterators">Use Generators (Iterators)</h3>
+<pre><code class="language-python"># 1. Large data
+huge_data = (x for x in range(10000000))  # Saves memory
+
+# 2. Single iteration
+for item in huge_data:
+    process(item)
+
+# 3. Infinite sequences
+def infinite():
+    while True:
+        yield get_next_value()
+
+# 4. Pipeline processing (chaining)
+data = (x for x in range(100))
+filtered = (x for x in data if x % 2 == 0)
+squared = (x**2 for x in filtered)
+
+# 5. Need lazy evaluation
+# Defers computation until the moment it&#39;s needed</code></pre>
+<h2 id="summary">Summary</h2>
+<h3 id="concept-hierarchy">Concept Hierarchy</h3>
+<pre class="mermaid">graph TD
+    A["Container<br/>Most general concept<br/>Data structures<br/>list, tuple, set, dict, str"]
+    B["Iterable<br/>Iterable objects<br/>Can use in for loop<br/>Calling iter() returns Iterator"]
+    C["Iterator<br/>Retrieves values one by one<br/>Returns next value with next()<br/>Can iterate only once"]
+    D["Generator<br/>Convenient Iterator<br/>Creates values with yield<br/>Memory efficient, infinite sequences"]
+
+    A -->|"All Containers are..."| B
+    B -->|"iter()"| C
+    C -->|"Easy way to create"| D
+
+    style A fill:#e3f2fd
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e9</pre>
+<h3 id="container">Container</h3>
+<ol class="ol-list">
+<li><strong>Definition</strong>: Data structure that can hold multiple objects</li><li><strong>Features</strong>:</li></ol>
+<ul class="ul-list">
+<li>Membership test (<code class="inline-code">in</code> operator)</li><li>Iterable</li></ul>
+<ol class="ol-list">
+<li><strong>Types</strong>: list, tuple, set, dict, str</li></ol>
+<h3 id="list">List</h3>
+<ol class="ol-list">
+<li><strong>Internal structure</strong>: Implemented as dynamic array</li><li><strong>capacity</strong>: Pre-allocates space for efficiency</li><li><strong>Time complexity</strong>:</li></ol>
+<ul class="ul-list">
+<li>Fast: index access, append/remove from end</li><li>Slow: insert/remove from middle, search</li></ul>
+<ol class="ol-list">
+<li><strong>Copy caution</strong>: shallow copy vs deep copy</li></ol>
+<h3 id="iterator-and-iterable">Iterator and Iterable</h3>
+<ol class="ol-list">
+<li><strong>Iterable</strong>: Calling <code class="inline-code">iter()</code> returns an Iterator</li><li><strong>Iterator</strong>: Calling <code class="inline-code">next()</code> returns the next value</li><li><strong>for loops</strong>: Internally use <code class="inline-code">iter()</code> and <code class="inline-code">next()</code></li><li><strong>Difference</strong>: Iterable can iterate multiple times, Iterator only once</li></ol>
+<h3 id="generator">Generator</h3>
+<ol class="ol-list">
+<li><strong>Definition</strong>: Easy way to create Iterators</li><li><strong>yield</strong>: Returns values one by one and maintains state</li><li><strong>Advantages</strong>: Memory efficient, infinite sequences possible</li><li><strong>Usage</strong>:</li></ol>
+<ul class="ul-list">
+<li><code class="inline-code">for</code> loop with <code class="inline-code">yield</code></li><li><code class="inline-code">while</code> loop with <code class="inline-code">yield</code> (conditional generation)</li><li>Generator expressions <code class="inline-code">(x for x in ...)</code></li></ul>
+<h3 id="when-to-use-what">When to Use What?</h3>
+<table>
+<thead>
+<tr><th>Situation</th><th>Use</th><th>Reason</th></tr>
+</thead>
+<tbody>
+<tr><td>Small data</td><td>Container (List)</td><td>Fast and convenient</td></tr>
+<tr><td>Multiple iterations</td><td>Container (List)</td><td>Reusable</td></tr>
+<tr><td>Index access</td><td>Container (List)</td><td>Random access</td></tr>
+<tr><td>Large data</td><td>Generator</td><td>Memory savings</td></tr>
+<tr><td>Single iteration</td><td>Generator</td><td>Efficient</td></tr>
+<tr><td>Infinite sequences</td><td>Generator</td><td>Required</td></tr>
+<tr><td>Pipelines</td><td>Generator</td><td>Chain composition</td></tr>
+</tbody>
+</table>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/python-lecture-02.html" class="nav-prev">← Python Lecture 2 - Lexical Structure of Python</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

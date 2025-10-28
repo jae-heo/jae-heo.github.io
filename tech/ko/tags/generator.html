@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jae's Tech Blog</title>
-    <meta name="description" content="Deep dives into programming, technology trends, and development insights">
+    <title>재영의 기술 블로그</title>
+    <meta name="description" content="처음부터 만든 기술 블로그">
     <meta name="author" content="Jae">
 
     <!-- Canonical URL -->
@@ -16,9 +16,9 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://jae-heo.github.io">
-    <meta property="og:title" content="Jae's Tech Blog">
-    <meta property="og:description" content="Deep dives into programming, technology trends, and development insights">
-    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:title" content="재영의 기술 블로그">
+    <meta property="og:description" content="처음부터 만든 기술 블로그">
+    <meta property="og:site_name" content="재영의 기술 블로그">
     <meta property="og:locale" content="en_US">
     
     <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
@@ -28,8 +28,8 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://jae-heo.github.io">
-    <meta name="twitter:title" content="Jae's Tech Blog">
-    <meta name="twitter:description" content="Deep dives into programming, technology trends, and development insights">
+    <meta name="twitter:title" content="재영의 기술 블로그">
+    <meta name="twitter:description" content="처음부터 만든 기술 블로그">
     
     <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
     
@@ -37,7 +37,7 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <!-- Structured Data (JSON-LD) -->
@@ -48,7 +48,7 @@
         const theme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
-        const lang = localStorage.getItem('lang') || 'en';
+        const lang = localStorage.getItem('lang') || 'ko';
     </script>
     <script src="/assets/js/theme-switcher.js" defer></script>
 
@@ -98,16 +98,16 @@
 <body>
     <header>
         <nav>
-            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
             <div class="nav-links">
-                <a href="/tech/en/" data-nav-link>Home</a>
-                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
-                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
                 <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
                     <span id="theme-icon">🌙</span>
                 </button>
             </div>
@@ -115,10 +115,9 @@
     </header>
 
     <main>
-        <div class="category-page">
+        <div class="tag-page">
     <div class="page-header">
-        <h1>Lectures</h1>
-        <p class="subtitle">All posts in the Lectures</p>
+        <h1>"generator" 태그가 달린 포스트</h1>
     </div>
 
     <div class="posts-controls">
@@ -156,85 +155,19 @@
         
         <div class="post-preview-content">
             <h2>
-                <a href="/tech/en/posts/python-lecture-00.html">Introduction to Python Lecture Series</a>
-            </h2>
-            <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
-            
-            <p class="post-excerpt">Python lecture series curriculum</p>
-            
-            <div class="post-card-footer">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                <a href="/tech/en/posts/python-lecture-00.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <h2>
-                <a href="/tech/en/posts/python-lecture-01.html">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
-            </h2>
-            <time datetime=""2025-10-19T00:00:00.000Z"">October 19, 2025</time>
-            
-            <p class="post-excerpt">Python's values, design philosophy, and the art of trade-offs</p>
-            
-            <div class="post-card-footer">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                <a href="/tech/en/posts/python-lecture-01.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <h2>
-                <a href="/tech/en/posts/python-lecture-02.html">Python Lecture 2 - Lexical Structure of Python</a>
-            </h2>
-            <time datetime=""2025-10-26T00:00:00.000Z"">October 26, 2025</time>
-            
-            <p class="post-excerpt">Learn how Python reads and understands your code, starting from the first step of lexical analysis</p>
-            
-            <div class="post-card-footer">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                <a href="/tech/en/posts/python-lecture-02.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <h2>
-                <a href="/tech/en/posts/python-lecture-03.html">Python Lecture 3 - Containers and Generators</a>
+                <a href="/tech/ko/posts/python-lecture-03.html">Python 강좌 3편 - 컨테이너와 제너레이터</a>
             </h2>
             <time datetime=""2025-10-27T00:00:00.000Z"">October 27, 2025</time>
             
-            <p class="post-excerpt">Learn about Python's container concept, list internals, and efficient iteration with generators</p>
+            <p class="post-excerpt">파이썬의 컨테이너 개념부터 리스트의 내부 구조, 그리고 제너레이터를 이용한 효율적인 반복 처리까지 배워봅니다</p>
             
             <div class="post-card-footer">
                 
                 <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/python-lecture-03.html" class="read-more">Read more</a>
+                <a href="/tech/ko/posts/python-lecture-03.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -246,85 +179,16 @@
     
     <article class="post-item" data-tags="" data-category="Lectures">
         
-        <a href="/tech/en/posts/python-lecture-00.html" class="post-item-link">
+        <a href="/tech/ko/posts/python-lecture-03.html" class="post-item-link">
             
             <div class="post-item-content">
                 <div class="post-item-header">
                     <h2>
-                        Introduction to Python Lecture Series
+                        Python 강좌 3편 - 컨테이너와 제너레이터
                     </h2>
                 </div>
                 
-                <p class="post-item-excerpt">Python lecture series curriculum</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/python-lecture-01.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Python Lecture Part 1 - Python's Philosophy and Design Principles
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">Python's values, design philosophy, and the art of trade-offs</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-10-19T00:00:00.000Z"">October 19, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/python-lecture-02.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Python Lecture 2 - Lexical Structure of Python
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">Learn how Python reads and understands your code, starting from the first step of lexical analysis</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-10-26T00:00:00.000Z"">October 26, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/python-lecture-03.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Python Lecture 3 - Containers and Generators
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">Learn about Python's container concept, list internals, and efficient iteration with generators</p>
+                <p class="post-item-excerpt">파이썬의 컨테이너 개념부터 리스트의 내부 구조, 그리고 제너레이터를 이용한 효율적인 반복 처리까지 배워봅니다</p>
                 
                 <div class="post-item-meta">
                     <time datetime=""2025-10-27T00:00:00.000Z"">October 27, 2025</time>
@@ -350,7 +214,7 @@
         <div class="footer-content">
             <p>&copy; 2025 Jae · Built with custom static site generator</p>
             <div class="footer-links">
-                <a href="/tech/en/feed.xml">RSS</a>
+                <a href="/tech/ko/feed.xml">RSS</a>
                 
                 
             </div>

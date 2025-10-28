@@ -1,5 +1,5 @@
 # Robots.txt for Jae's Blog
-# Generated on 2025-10-26
+# Generated on 2025-10-28
 
 User-agent: *
 Allow: /

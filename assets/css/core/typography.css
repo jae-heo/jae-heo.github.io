@@ -118,6 +118,78 @@ blockquote {
     color: var(--text-secondary);
 }
 
+/* Tables */
+table {
+    width: 100%;
+    margin: 2rem 0;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
+}
+
+table thead {
+    background: var(--bg-tertiary);
+    border-bottom: 2px solid var(--border);
+}
+
+table thead th {
+    padding: 1rem;
+    font-weight: 600;
+    text-align: left;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-size: var(--text-xs);
+    color: var(--text-primary);
+}
+
+table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+table tbody tr:hover {
+    background-color: var(--bg-secondary);
+}
+
+table tbody tr:last-child {
+    border-bottom: none;
+}
+
+table tbody td {
+    padding: 1rem;
+    vertical-align: top;
+}
+
+table tbody td strong,
+table tbody td code {
+    font-weight: 600;
+}
+
+/* Striped table variant */
+table.table-striped tbody tr:nth-child(even) {
+    background-color: var(--bg-tertiary);
+}
+
+table.table-striped tbody tr:hover {
+    background-color: var(--bg-secondary);
+}
+
+/* Responsive tables */
+@media (max-width: 768px) {
+    table {
+        font-size: var(--text-xs);
+    }
+
+    table thead th,
+    table tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
 /* Text Utility Classes */
 .text-xs { font-size: var(--text-xs); }
 .text-sm { font-size: var(--text-sm); }
