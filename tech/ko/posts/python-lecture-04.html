@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 강좌 4편 - 클래스의 내부 구조와 디스크립터 - 재영의 기술 블로그</title>
+    <meta name="description" content="파이썬 클래스가 내부적으로 어떻게 작동하는지, 바운드 메서드와 디스크립터의 비밀을 파헤쳐봅니다">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/python-lecture-04.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/python-lecture-04.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/python-lecture-04.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/python-lecture-04.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/python-lecture-04.html">
+    <meta property="og:title" content="Python 강좌 4편 - 클래스의 내부 구조와 디스크립터">
+    <meta property="og:description" content="파이썬 클래스가 내부적으로 어떻게 작동하는지, 바운드 메서드와 디스크립터의 비밀을 파헤쳐봅니다">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2025-10-30T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="python">
+    
+    <meta property="article:tag" content="programming">
+    
+    <meta property="article:tag" content="lecture">
+    
+    <meta property="article:tag" content="oop">
+    
+    <meta property="article:tag" content="class">
+    
+    <meta property="article:tag" content="descriptor">
+    
+    <meta property="article:tag" content="bound-method">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/python-lecture-04.html">
+    <meta name="twitter:title" content="Python 강좌 4편 - 클래스의 내부 구조와 디스크립터">
+    <meta name="twitter:description" content="파이썬 클래스가 내부적으로 어떻게 작동하는지, 바운드 메서드와 디스크립터의 비밀을 파헤쳐봅니다">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Python 강좌 4편 - 클래스의 내부 구조와 디스크립터",
+  "description": [
+    "파이썬 클래스가 내부적으로 어떻게 작동하는지",
+    "바운드 메서드와 디스크립터의 비밀을 파헤쳐봅니다"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2025-10-30T00:00:00.000Z",
+  "dateModified": "2025-10-30T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/python-lecture-04.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "python, programming, lecture, oop, class, descriptor, bound-method"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Python 강좌 4편 - 클래스의 내부 구조와 디스크립터">Python 강좌 4편 - 클래스의 내부 구조와 디스크립터</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Python 강좌 4편 - 클래스의 내부 구조와 디스크립터</h1>
+        <time datetime=""2025-10-30T00:00:00.000Z"">October 30, 2025</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Python 강좌 시리즈 (5/5)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/python.html" class="tag">python</a>
+                    
+                    <a href="/tech/ko/tags/programming.html" class="tag">programming</a>
+                    
+                    <a href="/tech/ko/tags/lecture.html" class="tag">lecture</a>
+                    
+                    <a href="/tech/ko/tags/oop.html" class="tag">oop</a>
+                    
+                    <a href="/tech/ko/tags/class.html" class="tag">class</a>
+                    
+                    <a href="/tech/ko/tags/descriptor.html" class="tag">descriptor</a>
+                    
+                    <a href="/tech/ko/tags/bound-method.html" class="tag">bound-method</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Python 강좌 시리즈</h3>
+        <p class="post-series-description">깊이있게 배우는 Python 프로그래밍 강좌</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/python-lecture-00.html" class="post-series-link">Python 강좌 시리즈 소개</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/python-lecture-01.html" class="post-series-link">Python 강좌 1편 - 파이썬의 철학과 설계 원칙</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/python-lecture-02.html" class="post-series-link">Python 강좌 2편 - 파이썬의 어휘구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/python-lecture-03.html" class="post-series-link">Python 강좌 3편 - 컨테이너와 제너레이터</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Python 강좌 4편 - 클래스의 내부 구조와 디스크립터
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">클래스의 내부 구조</h2>
+<p>파이썬에서 &quot;모든 것은 객체&quot;라고 하죠. 그렇다면 클래스 내부는 어떻게 생겼을까요?</p>
+<h3 id="__dict__-"><code class="inline-code">__dict__</code>: 속성 저장소</h3>
+<p>파이썬에서 객체의 속성들은 <strong>딕셔너리</strong>로 저장됩니다.</p>
+<pre><code class="language-python">class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+person = Person(&quot;영희&quot;, 25)
+
+# 객체의 속성들을 직접 확인
+print(person.__dict__)
+# {&#39;name&#39;: &#39;영희&#39;, &#39;age&#39;: 25}
+
+# 속성 추가
+person.city = &quot;서울&quot;
+print(person.__dict__)
+# {&#39;name&#39;: &#39;영희&#39;, &#39;age&#39;: 25, &#39;city&#39;: &#39;서울&#39;}</code></pre>
+<p><strong>실제로 속성에 접근할 때 일어나는 일:</strong></p>
+<pre><code class="language-python"># 우리가 쓰는 코드
+print(person.name)
+
+# 실제로 파이썬이 하는 일
+print(person.__dict__[&#39;name&#39;])</code></pre>
+<h3 id="-vs-">클래스 변수 vs 인스턴스 변수</h3>
+<pre><code class="language-python">class Dog:
+    # 클래스 변수: 모든 개가 공유
+    species = &quot;Canis familiaris&quot;
+    legs = 4
+
+    def __init__(self, name):
+        # 인스턴스 변수: 각 개마다 다름
+        self.name = name
+
+dog1 = Dog(&quot;멍멍이&quot;)
+dog2 = Dog(&quot;바둑이&quot;)
+
+print(dog1.name)     # &quot;멍멍이&quot; (각자 다름)
+print(dog2.name)     # &quot;바둑이&quot;
+
+print(dog1.legs)     # 4 (모두 같음)
+print(dog2.legs)     # 4
+
+# 클래스 변수를 바꾸면?
+Dog.species = &quot;Canis lupus&quot;
+print(dog1.species)  # &quot;Canis lupus&quot; (모두 변경됨!)
+print(dog2.species)  # &quot;Canis lupus&quot;</code></pre>
+<p><strong>메모리 구조:</strong></p>
+<pre class="mermaid">graph BT
+    A["dog1<br/>name: 멍멍이"] -->|__class__| C
+    B["dog2<br/>name: 바둑이"] -->|__class__| C
+    C["Dog 클래스<br/>species: Canis familiaris<br/>legs: 4"]
+
+    style C fill:#e8f5e9
+    style A fill:#e3f2fd
+    style B fill:#e3f2fd</pre>
+<h3 id="__class__-"><code class="inline-code">__class__</code>: 클래스 참조</h3>
+<p>모든 객체는 자신이 어떤 클래스로부터 만들어졌는지 알고 있습니다.</p>
+<pre><code class="language-python">print(dog1.__class__)              # &lt;class &#39;__main__.Dog&#39;&gt;
+print(dog1.__class__.__name__)     # &quot;Dog&quot;
+
+# 같은 클래스로 만들어진 객체들
+print(dog1.__class__ is dog2.__class__)  # True
+
+# 클래스 변수 접근
+print(dog1.__class__.species)      # &quot;Canis familiaris&quot;</code></pre>
+<h3 id="-">속성 찾기 순서</h3>
+<p>파이썬이 속성을 어떻게 찾는지 알아봅시다.</p>
+<pre><code class="language-python">class Animal:
+    species = &quot;Unknown&quot;
+
+    def speak(self):
+        return &quot;...&quot;
+
+class Cat(Animal):
+    species = &quot;Felis catus&quot;
+
+cat = Cat()
+print(cat.species)   # &quot;Felis catus&quot;
+print(cat.speak())   # &quot;...&quot;</code></pre>
+<p><strong>속성 찾기 과정:</strong></p>
+<pre class="mermaid">flowchart TD
+    S1["cat.species 접근"] --> A1{"cat.__dict__에<br/>species 있는가?"}
+    A1 -->|없음| B1{"Cat 클래스에<br/>species 있는가?"}
+    B1 -->|있음!| C1["Cat.species 반환<br/>(Felis catus)"]
+
+    style S1 fill:#e3f2fd
+    style C1 fill:#e8f5e9</pre>
+<pre class="mermaid">flowchart TD
+    S2["cat.speak&#40;&#41; 호출"] --> A2{"cat.__dict__에<br/>speak 있는가?"}
+    A2 -->|없음| B2{"Cat 클래스에<br/>speak 있는가?"}
+    B2 -->|없음| C2{"Animal 클래스에<br/>speak 있는가?"}
+    C2 -->|있음!| D2["Animal.speak 호출"]
+
+    style S2 fill:#e3f2fd
+    style D2 fill:#e8f5e9</pre>
+<p>이 순서를 <strong>MRO (Method Resolution Order)</strong>라고 합니다.</p>
+<pre><code class="language-python"># MRO 확인하기
+print(Cat.__mro__)
+# (&lt;class &#39;Cat&#39;&gt;, &lt;class &#39;Animal&#39;&gt;, &lt;class &#39;object&#39;&gt;)</code></pre>
+<h2 id="-bound-method">바운드 메서드(Bound Method)</h2>
+<p><code class="inline-code">__dict__</code>와 <code class="inline-code">__class__</code>를 통해 클래스의 내부 구조를 살펴봤습니다. 이제 메서드가 내부적으로 어떻게 작동하는지 알아봅시다.</p>
+<h3 id="-">메서드의 두 얼굴</h3>
+<p>사실, 클래스의 메서드는 <strong>두 가지 형태</strong>를 가지고 있습니다.</p>
+<pre><code class="language-python">class Calculator:
+    def __init__(self, value):
+        self.value = value
+
+    def add(self, n):
+        self.value += n
+        return self.value
+
+calc = Calculator(10)
+
+# 메서드의 두 얼굴
+print(type(Calculator.add))  # &lt;class &#39;function&#39;&gt;
+print(type(calc.add))         # &lt;class &#39;method&#39;&gt;</code></pre>
+<p>클래스에서 보면 <strong>함수(function)</strong>지만, 인스턴스에서 보면 <strong>메서드(method)</strong>입니다.</p>
+<h3 id="-">바운드 메서드란?</h3>
+<p><strong>바운드 메서드(Bound Method)</strong>는 특정 인스턴스에 &quot;묶인(bound)&quot; 메서드를 말합니다.</p>
+<pre><code class="language-python">calc = Calculator(10)
+
+# calc.add는 calc 인스턴스에 묶여있음
+print(calc.add)
+# &lt;bound method Calculator.add of &lt;__main__.Calculator object at 0x...&gt;&gt;
+
+# 메서드를 변수에 저장 가능
+add_method = calc.add
+add_method(5)  # calc.value가 15가 됨
+print(calc.value)  # 15</code></pre>
+<h3 id="-">바운드 메서드의 비밀</h3>
+<p>파이썬이 메서드를 어떻게 바인딩하는지 봅시다:</p>
+<pre><code class="language-python">class MyClass:
+    def method(self, x):
+        return f&quot;값: {x}&quot;
+
+obj = MyClass()
+
+# 이 두 줄은 완전히 같은 일을 합니다!
+obj.method(42)              # 일반적인 방법
+MyClass.method(obj, 42)     # 직접 호출</code></pre>
+<p><strong>메서드 호출의 비밀:</strong></p>
+<pre><code class="language-python"># 우리가 쓰는 코드
+result = obj.method(42)
+
+# 실제로 파이썬이 하는 일:
+method_func = MyClass.method    # 1. 함수를 가져옴
+result = method_func(obj, 42)   # 2. obj를 첫 번째 인자로 전달</code></pre>
+<p>이것이 <code class="inline-code">self</code> 파라미터의 정체입니다!</p>
+<h3 id="-">바운드 메서드의 내부</h3>
+<p>더 깊이 들어가봅시다:</p>
+<pre><code class="language-python">class Counter:
+    def __init__(self):
+        self.count = 0
+
+    def increment(self):
+        self.count += 1
+
+counter = Counter()
+
+# 바운드 메서드 상세 정보
+bound = counter.increment
+print(bound.__self__)    # counter 객체를 가리킴
+print(bound.__func__)    # Counter.increment 함수를 가리킴
+
+# 바운드 메서드는 내부적으로 이렇게 작동:
+# bound() → bound.__func__(bound.__self__)</code></pre>
+<h3 id="-">실전 예제: 콜백 함수</h3>
+<p>바운드 메서드는 콜백 함수로 자주 사용됩니다:</p>
+<pre><code class="language-python">class Button:
+    def __init__(self, label):
+        self.label = label
+        self.click_count = 0
+
+    def on_click(self):
+        self.click_count += 1
+        print(f&quot;{self.label} 버튼 클릭됨 ({self.click_count}번)&quot;)
+
+# 버튼 생성
+save_button = Button(&quot;저장&quot;)
+cancel_button = Button(&quot;취소&quot;)
+
+# 콜백으로 메서드 등록
+callbacks = [save_button.on_click, cancel_button.on_click]
+
+# 버튼 클릭 시뮬레이션
+callbacks[0]()  # &quot;저장 버튼 클릭됨 (1번)&quot;
+callbacks[0]()  # &quot;저장 버튼 클릭됨 (2번)&quot;
+callbacks[1]()  # &quot;취소 버튼 클릭됨 (1번)&quot;</code></pre>
+<h2 id="descriptor">디스크립터(Descriptor)</h2>
+<p>바운드 메서드의 동작 원리를 이해했으니, 이제 그 뒤에 있는 더 근본적인 메커니즘을 살펴볼 차례입니다. 디스크립터는 잘 알려지지 않았지만 파이썬에서 가장 강력한 기능 중 하나입니다.</p>
+<h3>디스크립터란?</h3>
+<p><strong>디스크립터(Descriptor)</strong>는 속성 접근을 제어하는 객체입니다.</p>
+<pre><code class="language-python">class Descriptor:
+    def __get__(self, obj, objtype=None):
+        print(&quot;__get__ 호출됨&quot;)
+        return obj._value
+
+    def __set__(self, obj, value):
+        print(f&quot;__set__ 호출됨: {value}&quot;)
+        obj._value = value
+
+    def __delete__(self, obj):
+        print(&quot;__delete__ 호출됨&quot;)
+        del obj._value
+
+class MyClass:
+    attr = Descriptor()  # 디스크립터를 클래스 변수로
+
+    def __init__(self):
+        self._value = 0
+
+obj = MyClass()
+obj.attr = 10      # &quot;__set__ 호출됨: 10&quot;
+print(obj.attr)    # &quot;__get__ 호출됨&quot; → 10
+del obj.attr       # &quot;__delete__ 호출됨&quot;</code></pre>
+<h3 id="-">디스크립터 프로토콜</h3>
+<p>디스크립터는 세 가지 특수 메서드를 구현합니다:</p>
+<pre><code class="language-python">class Descriptor:
+    def __get__(self, instance, owner):
+        &quot;&quot;&quot;
+        instance: 속성에 접근하는 객체 (obj.attr의 obj)
+        owner: 객체의 클래스 (MyClass)
+        &quot;&quot;&quot;
+        pass
+
+    def __set__(self, instance, value):
+        &quot;&quot;&quot;
+        instance: 속성을 설정하는 객체
+        value: 설정할 값
+        &quot;&quot;&quot;
+        pass
+
+    def __delete__(self, instance):
+        &quot;&quot;&quot;
+        instance: 속성을 삭제하는 객체
+        &quot;&quot;&quot;
+        pass</code></pre>
+<h3 id="-vs-">데이터 디스크립터 vs 비데이터 디스크립터</h3>
+<pre><code class="language-python"># 데이터 디스크립터: __set__ 또는 __delete__가 있음
+class DataDescriptor:
+    def __get__(self, obj, objtype=None):
+        return &quot;data descriptor&quot;
+
+    def __set__(self, obj, value):
+        pass
+
+# 비데이터 디스크립터: __get__만 있음
+class NonDataDescriptor:
+    def __get__(self, obj, objtype=None):
+        return &quot;non-data descriptor&quot;
+
+class MyClass:
+    data_desc = DataDescriptor()
+    non_data_desc = NonDataDescriptor()
+
+obj = MyClass()
+
+# 인스턴스 속성 vs 디스크립터 우선순위
+obj.__dict__[&#39;non_data_desc&#39;] = &quot;instance attr&quot;
+print(obj.non_data_desc)  # &quot;instance attr&quot; (인스턴스 속성이 우선)
+
+obj.__dict__[&#39;data_desc&#39;] = &quot;instance attr&quot;
+print(obj.data_desc)  # &quot;data descriptor&quot; (데이터 디스크립터가 우선)</code></pre>
+<h3 id="-1-">실전 예제 1: 타입 검증</h3>
+<pre><code class="language-python">class TypedProperty:
+    &quot;&quot;&quot;타입을 강제하는 디스크립터&quot;&quot;&quot;
+    def __init__(self, name, expected_type):
+        self.name = name
+        self.expected_type = expected_type
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return instance.__dict__.get(self.name)
+
+    def __set__(self, instance, value):
+        if not isinstance(value, self.expected_type):
+            raise TypeError(
+                f&quot;{self.name}은(는) {self.expected_type.__name__} &quot;
+                f&quot;타입이어야 합니다. {type(value).__name__}이(가) 주어졌습니다.&quot;
+            )
+        instance.__dict__[self.name] = value
+
+class Person:
+    name = TypedProperty(&quot;name&quot;, str)
+    age = TypedProperty(&quot;age&quot;, int)
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+# 정상 작동
+person = Person(&quot;영희&quot;, 25)
+print(person.name)  # &quot;영희&quot;
+
+# 타입 에러!
+try:
+    person.age = &quot;스물다섯&quot;
+except TypeError as e:
+    print(e)  # &quot;age은(는) int 타입이어야 합니다. str이(가) 주어졌습니다.&quot;</code></pre>
+<h3 id="-2-">실전 예제 2: 값 범위 검증</h3>
+<pre><code class="language-python">class RangeValue:
+    &quot;&quot;&quot;값의 범위를 제한하는 디스크립터&quot;&quot;&quot;
+    def __init__(self, name, min_value=None, max_value=None):
+        self.name = name
+        self.min_value = min_value
+        self.max_value = max_value
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return instance.__dict__.get(self.name)
+
+    def __set__(self, instance, value):
+        if self.min_value is not None and value &lt; self.min_value:
+            raise ValueError(
+                f&quot;{self.name}은(는) {self.min_value} 이상이어야 합니다&quot;
+            )
+        if self.max_value is not None and value &gt; self.max_value:
+            raise ValueError(
+                f&quot;{self.name}은(는) {self.max_value} 이하여야 합니다&quot;
+            )
+        instance.__dict__[self.name] = value
+
+class Game:
+    health = RangeValue(&quot;health&quot;, min_value=0, max_value=100)
+    level = RangeValue(&quot;level&quot;, min_value=1)
+
+    def __init__(self):
+        self.health = 100
+        self.level = 1
+
+    def take_damage(self, damage):
+        self.health -= damage
+
+# 사용
+game = Game()
+print(game.health)  # 100
+
+game.take_damage(30)
+print(game.health)  # 70
+
+try:
+    game.take_damage(80)  # health가 -10이 되려고 함
+except ValueError as e:
+    print(e)  # &quot;health은(는) 0 이상이어야 합니다&quot;</code></pre>
+<h3 id="-3-">실전 예제 3: 로깅 디스크립터</h3>
+<pre><code class="language-python">class LoggedProperty:
+    &quot;&quot;&quot;속성 접근을 로깅하는 디스크립터&quot;&quot;&quot;
+    def __init__(self, name):
+        self.name = name
+        self.internal_name = f&quot;_{name}&quot;
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        value = getattr(instance, self.internal_name, None)
+        print(f&quot;[GET] {self.name} = {value}&quot;)
+        return value
+
+    def __set__(self, instance, value):
+        print(f&quot;[SET] {self.name} = {value}&quot;)
+        setattr(instance, self.internal_name, value)
+
+class Account:
+    balance = LoggedProperty(&quot;balance&quot;)
+
+    def __init__(self, initial_balance):
+        self.balance = initial_balance
+
+    def deposit(self, amount):
+        self.balance += amount
+
+# 사용
+account = Account(1000)
+# [SET] balance = 1000
+
+print(account.balance)
+# [GET] balance = 1000
+
+account.deposit(500)
+# [GET] balance = 1000
+# [SET] balance = 1500</code></pre>
+<h2 id="property-">프로퍼티(Property): 디스크립터의 간편한 버전</h2>
+<h3 id="property-"><code class="inline-code">@property</code> 데코레이터</h3>
+<p>디스크립터를 매번 클래스로 만들기는 번거롭습니다. <code class="inline-code">@property</code>는 디스크립터를 쉽게 사용하는 방법입니다:</p>
+<pre><code class="language-python">class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+
+    @property
+    def radius(self):
+        &quot;&quot;&quot;반지름 getter&quot;&quot;&quot;
+        return self._radius
+
+    @radius.setter
+    def radius(self, value):
+        &quot;&quot;&quot;반지름 setter&quot;&quot;&quot;
+        if value &lt; 0:
+            raise ValueError(&quot;반지름은 0 이상이어야 합니다&quot;)
+        self._radius = value
+
+    @property
+    def area(self):
+        &quot;&quot;&quot;넓이 (읽기 전용)&quot;&quot;&quot;
+        return 3.14159 * self._radius ** 2
+
+    @property
+    def diameter(self):
+        &quot;&quot;&quot;지름&quot;&quot;&quot;
+        return self._radius * 2
+
+    @diameter.setter
+    def diameter(self, value):
+        self._radius = value / 2
+
+# 사용
+circle = Circle(5)
+print(circle.radius)   # 5
+print(circle.area)     # 78.53975
+
+circle.radius = 10
+print(circle.area)     # 314.159
+
+# diameter를 설정하면 radius가 자동 계산됨
+circle.diameter = 20
+print(circle.radius)   # 10.0</code></pre>
+<h3 id="property-">property의 정체</h3>
+<p><code class="inline-code">@property</code>는 사실 디스크립터입니다!</p>
+<pre><code class="language-python">class MyProperty:
+    &quot;&quot;&quot;property의 간단한 구현&quot;&quot;&quot;
+    def __init__(self, fget=None, fset=None):
+        self.fget = fget
+        self.fset = fset
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        if self.fget is None:
+            raise AttributeError(&quot;읽을 수 없는 속성&quot;)
+        return self.fget(instance)
+
+    def __set__(self, instance, value):
+        if self.fset is None:
+            raise AttributeError(&quot;설정할 수 없는 속성&quot;)
+        self.fset(instance, value)
+
+    def setter(self, fset):
+        return MyProperty(self.fget, fset)
+
+class Temperature:
+    def __init__(self, celsius):
+        self._celsius = celsius
+
+    @MyProperty
+    def celsius(self):
+        return self._celsius
+
+    @celsius.setter
+    def celsius(self, value):
+        if value &lt; -273.15:
+            raise ValueError(&quot;절대영도보다 낮을 수 없습니다&quot;)
+        self._celsius = value
+
+# 동작 확인
+temp = Temperature(25)
+print(temp.celsius)  # 25</code></pre>
+<h3 id="-">계산된 속성</h3>
+<p>프로퍼티의 강력한 기능은 <strong>계산된 속성</strong>입니다:</p>
+<pre><code class="language-python">class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    @property
+    def area(self):
+        &quot;&quot;&quot;넓이는 계산됨&quot;&quot;&quot;
+        return self.width * self.height
+
+    @property
+    def perimeter(self):
+        &quot;&quot;&quot;둘레는 계산됨&quot;&quot;&quot;
+        return 2 * (self.width + self.height)
+
+rect = Rectangle(10, 20)
+print(rect.area)      # 200
+print(rect.perimeter) # 60
+
+# width를 바꾸면 area도 자동으로 바뀜
+rect.width = 15
+print(rect.area)      # 300</code></pre>
+<h2 id="-">메서드도 디스크립터다</h2>
+<p>디스크립터와 프로퍼티를 배웠으니, 이제 퍼즐의 마지막 조각입니다. 앞에서 배운 바운드 메서드가 어떻게 만들어지는지, 디스크립터를 통해 설명할 수 있습니다.</p>
+<h3 id="-">함수는 디스크립터</h3>
+<pre><code class="language-python">class Function:
+    &quot;&quot;&quot;메서드의 간단한 구현&quot;&quot;&quot;
+    def __init__(self, func):
+        self.func = func
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            # 클래스에서 접근: 그냥 함수 반환
+            return self.func
+        # 인스턴스에서 접근: 바운드 메서드 생성
+        return lambda *args, **kwargs: self.func(instance, *args, **kwargs)
+
+class MyClass:
+    @Function
+    def method(self, x):
+        return f&quot;{self} 의 값: {x}&quot;
+
+obj = MyClass()
+
+# 클래스에서 접근
+print(type(MyClass.method))  # function
+
+# 인스턴스에서 접근
+print(type(obj.method))      # function (간단 구현이라 method는 아님)
+print(obj.method(42))        # 작동함!</code></pre>
+<p>실제 파이썬의 함수 객체는 <code class="inline-code">__get__</code> 메서드를 가지고 있습니다:</p>
+<pre><code class="language-python">def my_function(self, x):
+    return x
+
+# 함수는 디스크립터!
+print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
+<h2>정리</h2>
+<h3 id="-">클래스 내부 구조</h3>
+<pre class="mermaid">graph TD
+    A["인스턴스<br/>obj"]
+    B["obj.__dict__<br/>인스턴스 속성들"]
+    C["obj.__class__<br/>클래스 참조"]
+    D["클래스<br/>MyClass"]
+    E["클래스 변수<br/>디스크립터"]
+
+    A --> B
+    A --> C
+    C --> D
+    D --> E
+
+    style A fill:#e3f2fd
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e9</pre>
+<h3 id="-">속성 찾기 우선순위</h3>
+<ol class="ol-list">
+<li><strong>데이터 디스크립터</strong> (클래스/부모 클래스에서 <code class="inline-code">__set__</code>이 있는 디스크립터)</li><li><strong>인스턴스 `__dict__`</strong> (인스턴스 변수)</li><li><strong>비데이터 디스크립터 및 일반 클래스 변수</strong> (클래스/부모 클래스에서 <code class="inline-code">__get__</code>만 있거나 디스크립터가 아닌 변수)</li></ol>
+<blockquote><p>각 단계에서 현재 클래스 → 부모 클래스 순서(MRO)로 탐색합니다.</p>
+</blockquote>
+<h3 id="-">바운드 메서드</h3>
+<pre><code class="language-python"># 메서드 호출
+obj.method(x)
+
+# 실제 내부 동작
+method = obj.__class__.method  # 함수 가져오기
+method.__get__(obj, type(obj))(x)  # 디스크립터 프로토콜</code></pre>
+<h3 id="-">디스크립터 프로토콜</h3>
+<table>
+<thead>
+<tr><th>메서드</th><th>호출 시점</th><th>용도</th></tr>
+</thead>
+<tbody>
+<tr><td><code class="inline-code"><strong>get</strong>(self, instance, owner)</code></td><td><code class="inline-code">obj.attr</code></td><td>속성 읽기</td></tr>
+<tr><td><code class="inline-code"><strong>set</strong>(self, instance, value)</code></td><td><code class="inline-code">obj.attr = value</code></td><td>속성 쓰기</td></tr>
+<tr><td><code class="inline-code"><strong>delete</strong>(self, instance)</code></td><td><code class="inline-code">del obj.attr</code></td><td>속성 삭제</td></tr>
+</tbody>
+</table>
+<h3 id="-">언제 무엇을 사용할까?</h3>
+<table>
+<thead>
+<tr><th>상황</th><th>사용</th><th>이유</th></tr>
+</thead>
+<tbody>
+<tr><td>간단한 getter/setter</td><td><code class="inline-code">@property</code></td><td>편리하고 깔끔</td></tr>
+<tr><td>여러 클래스에서 재사용</td><td>디스크립터 클래스</td><td>DRY 원칙</td></tr>
+<tr><td>타입/범위 검증</td><td>디스크립터</td><td>재사용 가능</td></tr>
+<tr><td>계산된 속성</td><td><code class="inline-code">@property</code></td><td>자동 계산</td></tr>
+<tr><td>로깅/캐싱</td><td>디스크립터</td><td>투명한 추가 기능</td></tr>
+</tbody>
+</table>
+<h3 id="-">배운 내용</h3>
+<ol class="ol-list">
+<li><strong>모든 것은 객체</strong>: 클래스도, 함수도, 메서드도 객체</li><li><strong>디스크립터</strong>: 속성 접근을 제어하는 프로토콜</li><li><strong>바운드 메서드</strong>: 디스크립터로 구현된 메서드 바인딩</li><li><strong>프로퍼티</strong>: 디스크립터의 편리한 래퍼</li></ol>
+<h3 id="-">왜 중요한가?</h3>
+<p>디스크립터를 이해하면:<br />- <code class="inline-code">@property</code>, <code class="inline-code">@staticmethod</code>, <code class="inline-code">@classmethod</code>가 내부적으로 어떻게 작동하는지 알 수 있습니다<br />- 커스텀 검증 로직을 재사용 가능한 형태로 만들 수 있습니다<br />- 파이썬의 &quot;마법&quot;처럼 보이는 동작들이 실제로는 일관된 프로토콜 위에 구축되어 있다는 것을 알게 됩니다</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/python-lecture-03.html" class="nav-prev">← Python 강좌 3편 - 컨테이너와 제너레이터</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

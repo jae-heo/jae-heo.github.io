@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jae's Portfolio</title>
-    <meta name="description" content="Showcase of my projects, open source contributions, and professional work">
+    <meta name="description" content="Simulation engine performance engineering and architecture design">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
     <link rel="stylesheet" href="/assets/portfolio.css">
@@ -42,7 +42,7 @@
         <section class="hero">
             <div class="hero-content">
                 <h1 class="hero-title">Hi, I'm Jae</h1>
-                <p class="hero-subtitle">Full-Stack Developer passionate about building exceptional digital experiences</p>
+                <p class="hero-subtitle">I make manufacturing simulations run faster through better architecture and relentless profiling</p>
                 <div class="hero-cta">
                     <a href="#projects" class="cta-button primary">View Projects</a>
                     <a href="#contact" class="cta-button secondary">Get in Touch</a>
@@ -58,86 +58,45 @@
                     
             <article class="project-card">
                 
-                <div class="project-image">
-                    <img src="/assets/images/des-engine.png" alt="High-Performance DES Engine" loading="lazy">
-                </div>
                 <div class="project-content">
-                    <h3 class="project-title">High-Performance DES Engine</h3>
-                    <p class="project-description">Built a discrete event simulation engine capable of handling millions of entities with sub-millisecond latency</p>
+                    <h3 class="project-title">95% DB Write Time Reduction</h3>
+                    <p class="project-description">Cut database saving time from 168s to 8s in a ~10min simulation (50K+ entities). Built a lock-free SPSC ring buffer over 2GB shared memory to hand off writes to a separate process, with PostgreSQL COPY bulk inserts at 10K records per batch. Profiled hot paths with cProfile, replacing DataFrame scans with O(1) lookups and caching 136M repeated attribute accesses.</p>
                     <div class="project-tech">
-                        <span class="tech-tag">C++</span><span class="tech-tag">Python</span><span class="tech-tag">Performance Optimization</span>
+                        <span class="tech-tag">Python</span><span class="tech-tag">Shared Memory</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">cProfile</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://demo.example.com" class="project-link" target="_blank">
-                            <span>🔗</span> Live Demo
-                        </a>
-                        <a href="https://github.com/yourusername/des-engine" class="project-link" target="_blank">
-                            <span>📦</span> Source Code
-                        </a>
-                        <a href="/portfolio/en/posts/2024-10-01-des-engine.html" class="project-link">
-                            <span>📖</span> Read More
-                        </a>
-                    </div>
-                </div>
-            </article>
-            <article class="project-card">
-                
-                <div class="project-image">
-                    <img src="/assets/images/analytics-dashboard.png" alt="Real-Time Analytics Dashboard" loading="lazy">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">Real-Time Analytics Dashboard</h3>
-                    <p class="project-description">Developed a real-time analytics platform processing 100K+ events per second with interactive visualizations</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">WebSocket</span><span class="tech-tag">D3.js</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://analytics-demo.example.com" class="project-link" target="_blank">
-                            <span>🔗</span> Live Demo
-                        </a>
-                        <a href="https://github.com/yourusername/analytics" class="project-link" target="_blank">
-                            <span>📦</span> Source Code
-                        </a>
+                        
+                        
                         
                     </div>
                 </div>
             </article>
             <article class="project-card">
                 
-                <div class="project-image">
-                    <img src="/assets/images/code-review.png" alt="AI-Powered Code Review Tool" loading="lazy">
-                </div>
                 <div class="project-content">
-                    <h3 class="project-title">AI-Powered Code Review Tool</h3>
-                    <p class="project-description">Created an intelligent code review assistant using LLMs to provide contextual suggestions and detect potential bugs</p>
+                    <h3 class="project-title">ECS Architecture for Simulation Engines</h3>
+                    <p class="project-description">Redesigned monolithic machine centers into an Entity Component System with 7 data-only components and 3 behavior systems. Struct-of-Arrays layout keeps data cache-friendly and vectorization-ready.</p>
                     <div class="project-tech">
-                        <span class="tech-tag">Python</span><span class="tech-tag">Machine Learning</span><span class="tech-tag">FastAPI</span><span class="tech-tag">React</span>
+                        <span class="tech-tag">Python</span><span class="tech-tag">ECS</span><span class="tech-tag">Adapter Pattern</span><span class="tech-tag">Struct-of-Arrays</span>
                     </div>
                     <div class="project-links">
                         
-                        <a href="https://github.com/yourusername/ai-reviewer" class="project-link" target="_blank">
-                            <span>📦</span> Source Code
-                        </a>
+                        
                         
                     </div>
                 </div>
             </article>
             <article class="project-card">
                 
-                <div class="project-image">
-                    <img src="/assets/images/task-scheduler.png" alt="Distributed Task Scheduler" loading="lazy">
-                </div>
                 <div class="project-content">
-                    <h3 class="project-title">Distributed Task Scheduler</h3>
-                    <p class="project-description">Architected a fault-tolerant distributed task scheduling system handling 10M+ jobs daily</p>
+                    <h3 class="project-title">Event-Driven Decoupling</h3>
+                    <p class="project-description">Introduced Pub/Sub to separate core simulation logic from I/O side effects across 24 data tables. An event bridge converts low-level signals into domain events without touching the core engine code.</p>
                     <div class="project-tech">
-                        <span class="tech-tag">Go</span><span class="tech-tag">Redis</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">Kubernetes</span>
+                        <span class="tech-tag">Python</span><span class="tech-tag">Pub/Sub</span><span class="tech-tag">Event-Driven Architecture</span>
                     </div>
                     <div class="project-links">
                         
-                        <a href="https://github.com/yourusername/scheduler" class="project-link" target="_blank">
-                            <span>📦</span> Source Code
-                        </a>
+                        
                         
                     </div>
                 </div>
@@ -153,39 +112,21 @@
                 <div class="skills-grid">
                     
             <div class="skill-category">
-                <h3 class="skill-category-title">Languages</h3>
+                <h3 class="skill-category-title">Core</h3>
                 <div class="skill-tags">
-                    <span class="skill-tag">JavaScript</span><span class="skill-tag">TypeScript</span><span class="skill-tag">Python</span><span class="skill-tag">Go</span><span class="skill-tag">C++</span><span class="skill-tag">Java</span>
+                    <span class="skill-tag">Python (Expert)</span><span class="skill-tag">SQL</span><span class="skill-tag">NumPy</span><span class="skill-tag">Pandas</span><span class="skill-tag">multiprocessing</span>
                 </div>
             </div>
             <div class="skill-category">
-                <h3 class="skill-category-title">Frontend</h3>
+                <h3 class="skill-category-title">Architecture & Systems</h3>
                 <div class="skill-tags">
-                    <span class="skill-tag">React</span><span class="skill-tag">Vue.js</span><span class="skill-tag">Next.js</span><span class="skill-tag">HTML/CSS</span><span class="skill-tag">Tailwind</span><span class="skill-tag">D3.js</span>
+                    <span class="skill-tag">Entity Component System</span><span class="skill-tag">Pub/Sub</span><span class="skill-tag">Discrete Event Simulation</span><span class="skill-tag">Lock-free Structures</span><span class="skill-tag">Shared Memory IPC</span>
                 </div>
             </div>
             <div class="skill-category">
-                <h3 class="skill-category-title">Backend</h3>
+                <h3 class="skill-category-title">Performance & Infrastructure</h3>
                 <div class="skill-tags">
-                    <span class="skill-tag">Node.js</span><span class="skill-tag">FastAPI</span><span class="skill-tag">Django</span><span class="skill-tag">Express</span><span class="skill-tag">GraphQL</span><span class="skill-tag">REST</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3 class="skill-category-title">Databases</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">PostgreSQL</span><span class="skill-tag">MongoDB</span><span class="skill-tag">Redis</span><span class="skill-tag">Elasticsearch</span><span class="skill-tag">DynamoDB</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3 class="skill-category-title">DevOps</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">Docker</span><span class="skill-tag">Kubernetes</span><span class="skill-tag">AWS</span><span class="skill-tag">CI/CD</span><span class="skill-tag">Terraform</span><span class="skill-tag">GitHub Actions</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3 class="skill-category-title">Tools & Others</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">Git</span><span class="skill-tag">Linux</span><span class="skill-tag">Agile</span><span class="skill-tag">TDD</span><span class="skill-tag">System Design</span><span class="skill-tag">Performance Optimization</span>
+                    <span class="skill-tag">Profiling & Optimization</span><span class="skill-tag">Caching Strategies</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">GitHub Actions CI/CD</span>
                 </div>
             </div>
                 </div>
@@ -199,38 +140,38 @@
                 <div class="timeline">
                     
             <div class="timeline-item">
-                <div class="timeline-date">2022 - Present</div>
+                <div class="timeline-date">Phase 3</div>
                 <div class="timeline-content">
-                    <h3>Senior Software Engineer</h3>
-                    <h4>Tech Company Inc.</h4>
-                    <p>Leading development of cloud-native applications and mentoring junior developers</p>
+                    <h3>Performance Optimization</h3>
+                    <h4>Simulation Engine</h4>
+                    <p>Systematic profiling and optimization of DB write operations in a ~10min simulation</p>
                     
                     <ul class="achievements">
-                        <li>Reduced API response time by 60% through optimization</li><li>Led migration to microservices architecture</li><li>Mentored 5 junior developers</li>
+                        <li>168s to 8s DB write time via shared memory ring buffer and cProfile-driven optimization</li><li>O(1) lookups replacing DataFrame scans across hot paths</li><li>Module-level caching eliminating 136M redundant attribute accesses</li>
                     </ul>
                 </div>
             </div>
             <div class="timeline-item">
-                <div class="timeline-date">2020 - 2022</div>
+                <div class="timeline-date">Phase 2</div>
                 <div class="timeline-content">
-                    <h3>Full-Stack Developer</h3>
-                    <h4>Startup XYZ</h4>
-                    <p>Built and scaled web applications from MVP to production</p>
+                    <h3>Architecture Redesign</h3>
+                    <h4>Simulation Engine</h4>
+                    <p>Restructured the engine core for maintainability and future scalability</p>
                     
                     <ul class="achievements">
-                        <li>Developed core features used by 50K+ users</li><li>Implemented real-time collaboration features</li><li>Improved deployment pipeline efficiency by 40%</li>
+                        <li>ECS decomposition of monolithic machine center classes</li><li>Pub/Sub layer isolating I/O from core simulation logic</li><li>Event bridge enabling domain events without modifying the engine</li>
                     </ul>
                 </div>
             </div>
             <div class="timeline-item">
-                <div class="timeline-date">2018 - 2020</div>
+                <div class="timeline-date">Phase 1</div>
                 <div class="timeline-content">
-                    <h3>Software Developer</h3>
-                    <h4>Digital Agency</h4>
-                    <p>Developed custom solutions for diverse client projects</p>
+                    <h3>Infrastructure</h3>
+                    <h4>Simulation Engine</h4>
+                    <p>Built the foundational systems the engine runs on</p>
                     
                     <ul class="achievements">
-                        <li>Delivered 15+ client projects on time</li><li>Introduced automated testing practices</li><li>Built reusable component library</li>
+                        <li>CI/CD benchmarking pipeline with automated regression detection</li><li>Technical documentation covering 16 system concepts and 90 data references</li>
                     </ul>
                 </div>
             </div>
@@ -243,24 +184,15 @@
             <div class="container">
                 <h2 class="section-title">Get In Touch</h2>
                 <div class="contact-content">
-                    <p>I'm always interested in hearing about new opportunities and collaborations. Feel free to reach out!</p>
+                    <p>Interested in simulation systems, performance engineering, or architecture design? Let's talk.</p>
                     <div class="contact-links">
                         
-            <a href="mailto:your-email@example.com" class="contact-link">
-                <span>✉️</span> Email
-            </a>
                         
-            <a href="https://github.com/yourusername" class="contact-link" target="_blank">
+            <a href="https://github.com/jae-heo" class="contact-link" target="_blank">
                 <span>🐙</span> GitHub
             </a>
                         
-            <a href="https://linkedin.com/in/yourusername" class="contact-link" target="_blank">
-                <span>💼</span> LinkedIn
-            </a>
                         
-            <a href="https://twitter.com/yourusername" class="contact-link" target="_blank">
-                <span>🐦</span> Twitter
-            </a>
                     </div>
                 </div>
             </div>

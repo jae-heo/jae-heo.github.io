@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>재영의 포트폴리오</title>
-    <meta name="description" content="프로젝트, 오픈소스 기여, 그리고 전문적인 작업 모음">
+    <meta name="description" content="시뮬레이션 엔진 성능 엔지니어링과 아키텍처 설계">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
     <link rel="stylesheet" href="/assets/portfolio.css">
@@ -42,7 +42,7 @@
         <section class="hero">
             <div class="hero-content">
                 <h1 class="hero-title">안녕하세요, 허재영입니다</h1>
-                <p class="hero-subtitle">뛰어난 디지털 경험 구축에 열정을 가진 풀스택 개발자</p>
+                <p class="hero-subtitle">더 나은 아키텍처와 끈질긴 프로파일링으로 제조 시뮬레이션을 빠르게 만듭니다</p>
                 <div class="hero-cta">
                     <a href="#projects" class="cta-button primary">View Projects</a>
                     <a href="#contact" class="cta-button secondary">Get in Touch</a>
@@ -58,86 +58,45 @@
                     
             <article class="project-card">
                 
-                <div class="project-image">
-                    <img src="/assets/images/des-engine.png" alt="고성능 DES 엔진" loading="lazy">
-                </div>
                 <div class="project-content">
-                    <h3 class="project-title">고성능 DES 엔진</h3>
-                    <p class="project-description">밀리초 미만의 지연 시간으로 수백만 개체를 처리할 수 있는 이산 이벤트 시뮬레이션 엔진 구축</p>
+                    <h3 class="project-title">DB 저장 시간 95% 단축</h3>
+                    <p class="project-description">전체 약 10분 시뮬레이션(5만 개 이상 엔티티)에서 DB 저장 시간을 168초에서 8초로 단축. 2GB 공유 메모리 위에 Lock-free SPSC 링 버퍼를 구축하여 쓰기를 별도 프로세스에 위임하고, PostgreSQL COPY 벌크 삽입으로 배치당 1만 건을 처리. cProfile로 핫 패스를 분석하여 DataFrame 스캔을 O(1) 조회로 대체하고 1억 3,600만 회 속성 접근을 캐싱.</p>
                     <div class="project-tech">
-                        <span class="tech-tag">C++</span><span class="tech-tag">Python</span><span class="tech-tag">성능 최적화</span>
+                        <span class="tech-tag">Python</span><span class="tech-tag">공유 메모리</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">cProfile</span>
                     </div>
                     <div class="project-links">
-                        <a href="https://demo.example.com" class="project-link" target="_blank">
-                            <span>🔗</span> Live Demo
-                        </a>
-                        <a href="https://github.com/yourusername/des-engine" class="project-link" target="_blank">
-                            <span>📦</span> Source Code
-                        </a>
-                        <a href="/portfolio/ko/posts/2024-10-01-des-engine.html" class="project-link">
-                            <span>📖</span> Read More
-                        </a>
-                    </div>
-                </div>
-            </article>
-            <article class="project-card">
-                
-                <div class="project-image">
-                    <img src="/assets/images/analytics-dashboard.png" alt="실시간 분석 대시보드" loading="lazy">
-                </div>
-                <div class="project-content">
-                    <h3 class="project-title">실시간 분석 대시보드</h3>
-                    <p class="project-description">인터랙티브 시각화와 함께 초당 10만 개 이상의 이벤트를 처리하는 실시간 분석 플랫폼 개발</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">WebSocket</span><span class="tech-tag">D3.js</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://analytics-demo.example.com" class="project-link" target="_blank">
-                            <span>🔗</span> Live Demo
-                        </a>
-                        <a href="https://github.com/yourusername/analytics" class="project-link" target="_blank">
-                            <span>📦</span> Source Code
-                        </a>
+                        
+                        
                         
                     </div>
                 </div>
             </article>
             <article class="project-card">
                 
-                <div class="project-image">
-                    <img src="/assets/images/code-review.png" alt="AI 기반 코드 리뷰 도구" loading="lazy">
-                </div>
                 <div class="project-content">
-                    <h3 class="project-title">AI 기반 코드 리뷰 도구</h3>
-                    <p class="project-description">LLM을 사용하여 맥락적 제안을 제공하고 잠재적 버그를 감지하는 지능형 코드 리뷰 도구 개발</p>
+                    <h3 class="project-title">시뮬레이션 엔진용 ECS 아키텍처</h3>
+                    <p class="project-description">모놀리식 머신센터를 7개 데이터 전용 컴포넌트와 3개 행위 시스템으로 구성된 Entity Component System으로 재설계. Struct-of-Arrays 레이아웃으로 캐시 친화적이고 벡터화 가능한 구조를 확보.</p>
                     <div class="project-tech">
-                        <span class="tech-tag">Python</span><span class="tech-tag">머신러닝</span><span class="tech-tag">FastAPI</span><span class="tech-tag">React</span>
+                        <span class="tech-tag">Python</span><span class="tech-tag">ECS</span><span class="tech-tag">어댑터 패턴</span><span class="tech-tag">Struct-of-Arrays</span>
                     </div>
                     <div class="project-links">
                         
-                        <a href="https://github.com/yourusername/ai-reviewer" class="project-link" target="_blank">
-                            <span>📦</span> Source Code
-                        </a>
+                        
                         
                     </div>
                 </div>
             </article>
             <article class="project-card">
                 
-                <div class="project-image">
-                    <img src="/assets/images/task-scheduler.png" alt="분산 작업 스케줄러" loading="lazy">
-                </div>
                 <div class="project-content">
-                    <h3 class="project-title">분산 작업 스케줄러</h3>
-                    <p class="project-description">매일 천만 개 이상의 작업을 처리하는 내결함성 분산 작업 스케줄링 시스템 설계</p>
+                    <h3 class="project-title">이벤트 기반 디커플링</h3>
+                    <p class="project-description">Pub/Sub를 도입하여 핵심 시뮬레이션 로직과 24개 데이터 테이블의 I/O 부수효과를 분리. 이벤트 브릿지가 저수준 시그널을 도메인 이벤트로 변환하되 핵심 엔진 코드는 수정하지 않는 구조.</p>
                     <div class="project-tech">
-                        <span class="tech-tag">Go</span><span class="tech-tag">Redis</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">Kubernetes</span>
+                        <span class="tech-tag">Python</span><span class="tech-tag">Pub/Sub</span><span class="tech-tag">이벤트 기반 아키텍처</span>
                     </div>
                     <div class="project-links">
                         
-                        <a href="https://github.com/yourusername/scheduler" class="project-link" target="_blank">
-                            <span>📦</span> Source Code
-                        </a>
+                        
                         
                     </div>
                 </div>
@@ -153,39 +112,21 @@
                 <div class="skills-grid">
                     
             <div class="skill-category">
-                <h3 class="skill-category-title">프로그래밍 언어</h3>
+                <h3 class="skill-category-title">핵심 기술</h3>
                 <div class="skill-tags">
-                    <span class="skill-tag">JavaScript</span><span class="skill-tag">TypeScript</span><span class="skill-tag">Python</span><span class="skill-tag">Go</span><span class="skill-tag">C++</span><span class="skill-tag">Java</span>
+                    <span class="skill-tag">Python (Expert)</span><span class="skill-tag">SQL</span><span class="skill-tag">NumPy</span><span class="skill-tag">Pandas</span><span class="skill-tag">multiprocessing</span>
                 </div>
             </div>
             <div class="skill-category">
-                <h3 class="skill-category-title">프론트엔드</h3>
+                <h3 class="skill-category-title">아키텍처 & 시스템</h3>
                 <div class="skill-tags">
-                    <span class="skill-tag">React</span><span class="skill-tag">Vue.js</span><span class="skill-tag">Next.js</span><span class="skill-tag">HTML/CSS</span><span class="skill-tag">Tailwind</span><span class="skill-tag">D3.js</span>
+                    <span class="skill-tag">Entity Component System</span><span class="skill-tag">Pub/Sub</span><span class="skill-tag">이산 이벤트 시뮬레이션</span><span class="skill-tag">Lock-free 자료구조</span><span class="skill-tag">공유 메모리 IPC</span>
                 </div>
             </div>
             <div class="skill-category">
-                <h3 class="skill-category-title">백엔드</h3>
+                <h3 class="skill-category-title">성능 & 인프라</h3>
                 <div class="skill-tags">
-                    <span class="skill-tag">Node.js</span><span class="skill-tag">FastAPI</span><span class="skill-tag">Django</span><span class="skill-tag">Express</span><span class="skill-tag">GraphQL</span><span class="skill-tag">REST</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3 class="skill-category-title">데이터베이스</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">PostgreSQL</span><span class="skill-tag">MongoDB</span><span class="skill-tag">Redis</span><span class="skill-tag">Elasticsearch</span><span class="skill-tag">DynamoDB</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3 class="skill-category-title">DevOps</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">Docker</span><span class="skill-tag">Kubernetes</span><span class="skill-tag">AWS</span><span class="skill-tag">CI/CD</span><span class="skill-tag">Terraform</span><span class="skill-tag">GitHub Actions</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3 class="skill-category-title">도구 및 기타</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">Git</span><span class="skill-tag">Linux</span><span class="skill-tag">Agile</span><span class="skill-tag">TDD</span><span class="skill-tag">시스템 디자인</span><span class="skill-tag">성능 최적화</span>
+                    <span class="skill-tag">프로파일링 & 최적화</span><span class="skill-tag">캐싱 전략</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">GitHub Actions CI/CD</span>
                 </div>
             </div>
                 </div>
@@ -199,38 +140,38 @@
                 <div class="timeline">
                     
             <div class="timeline-item">
-                <div class="timeline-date">2022 - 현재</div>
+                <div class="timeline-date">Phase 3</div>
                 <div class="timeline-content">
-                    <h3>시니어 소프트웨어 엔지니어</h3>
-                    <h4>테크 컴퍼니</h4>
-                    <p>클라우드 네이티브 애플리케이션 개발 주도 및 주니어 개발자 멘토링</p>
+                    <h3>성능 최적화</h3>
+                    <h4>시뮬레이션 엔진</h4>
+                    <p>전체 약 10분 시뮬레이션의 DB 저장 작업 체계적 프로파일링과 최적화</p>
                     
                     <ul class="achievements">
-                        <li>최적화를 통해 API 응답 시간 60% 단축</li><li>마이크로서비스 아키텍처로의 마이그레이션 주도</li><li>5명의 주니어 개발자 멘토링</li>
+                        <li>공유 메모리 링 버퍼와 cProfile 기반 최적화로 DB 저장 시간 168초 → 8초 달성</li><li>핫 패스의 DataFrame 스캔을 O(1) 조회로 대체</li><li>1억 3,600만 회 중복 속성 접근을 모듈 레벨 캐싱으로 제거</li>
                     </ul>
                 </div>
             </div>
             <div class="timeline-item">
-                <div class="timeline-date">2020 - 2022</div>
+                <div class="timeline-date">Phase 2</div>
                 <div class="timeline-content">
-                    <h3>풀스택 개발자</h3>
-                    <h4>스타트업 XYZ</h4>
-                    <p>MVP에서 프로덕션까지 웹 애플리케이션 구축 및 확장</p>
+                    <h3>아키텍처 재설계</h3>
+                    <h4>시뮬레이션 엔진</h4>
+                    <p>유지보수성과 확장성을 위한 엔진 코어 구조 개편</p>
                     
                     <ul class="achievements">
-                        <li>5만명 이상의 사용자가 사용하는 핵심 기능 개발</li><li>실시간 협업 기능 구현</li><li>배포 파이프라인 효율성 40% 향상</li>
+                        <li>모놀리식 머신센터 클래스를 ECS로 분해</li><li>핵심 시뮬레이션 로직과 I/O를 분리하는 Pub/Sub 레이어 구축</li><li>엔진 수정 없이 도메인 이벤트를 전달하는 이벤트 브릿지 설계</li>
                     </ul>
                 </div>
             </div>
             <div class="timeline-item">
-                <div class="timeline-date">2018 - 2020</div>
+                <div class="timeline-date">Phase 1</div>
                 <div class="timeline-content">
-                    <h3>소프트웨어 개발자</h3>
-                    <h4>디지털 에이전시</h4>
-                    <p>다양한 클라이언트 프로젝트를 위한 맞춤형 솔루션 개발</p>
+                    <h3>인프라 구축</h3>
+                    <h4>시뮬레이션 엔진</h4>
+                    <p>엔진이 돌아가는 기반 시스템 구축</p>
                     
                     <ul class="achievements">
-                        <li>15개 이상의 클라이언트 프로젝트 정시 납품</li><li>자동화된 테스팅 방식 도입</li><li>재사용 가능한 컴포넌트 라이브러리 구축</li>
+                        <li>자동 회귀 감지를 포함한 CI/CD 벤치마킹 파이프라인 구축</li><li>16개 시스템 개념과 90개 데이터 레퍼런스를 다루는 기술 문서 작성</li>
                     </ul>
                 </div>
             </div>
@@ -243,24 +184,15 @@
             <div class="container">
                 <h2 class="section-title">Get In Touch</h2>
                 <div class="contact-content">
-                    <p>새로운 기회와 협업에 대해 항상 관심이 있습니다. 언제든지 연락 주세요!</p>
+                    <p>시뮬레이션 시스템, 성능 엔지니어링, 아키텍처 설계에 관심이 있으시다면 편하게 연락 주세요.</p>
                     <div class="contact-links">
                         
-            <a href="mailto:your-email@example.com" class="contact-link">
-                <span>✉️</span> Email
-            </a>
                         
-            <a href="https://github.com/yourusername" class="contact-link" target="_blank">
+            <a href="https://github.com/jae-heo" class="contact-link" target="_blank">
                 <span>🐙</span> GitHub
             </a>
                         
-            <a href="https://linkedin.com/in/yourusername" class="contact-link" target="_blank">
-                <span>💼</span> LinkedIn
-            </a>
                         
-            <a href="https://twitter.com/yourusername" class="contact-link" target="_blank">
-                <span>🐦</span> Twitter
-            </a>
                     </div>
                 </div>
             </div>

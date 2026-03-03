@@ -81,8 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Observe all project cards and skill categories
     const animatedElements = document.querySelectorAll('.project-card, .skill-category, .timeline-item');
     animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
+        el.classList.add('animate-on-scroll');
         observer.observe(el);
     });
 
@@ -111,15 +110,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add animation classes
     const style = document.createElement('style');
     style.textContent = `
-        .fade-in-up {
-            animation: fadeInUpAnimation 0.6s ease-out forwards;
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        @keyframes fadeInUpAnimation {
-            to {
-                opacity: 1 !important;
-                transform: translateY(0) !important;
-            }
+        .animate-on-scroll.fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         [data-nav-link].active {

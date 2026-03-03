@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Lecture 04 - Class Internals and Descriptors - Jae's Tech Blog</title>
+    <meta name="description" content="Deep dive into how Python classes work internally, uncovering the secrets of bound methods and descriptors">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/python-lecture-04.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/python-lecture-04.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/python-lecture-04.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/python-lecture-04.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/python-lecture-04.html">
+    <meta property="og:title" content="Python Lecture 04 - Class Internals and Descriptors">
+    <meta property="og:description" content="Deep dive into how Python classes work internally, uncovering the secrets of bound methods and descriptors">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2025-10-30T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="python">
+    
+    <meta property="article:tag" content="programming">
+    
+    <meta property="article:tag" content="lecture">
+    
+    <meta property="article:tag" content="oop">
+    
+    <meta property="article:tag" content="class">
+    
+    <meta property="article:tag" content="descriptor">
+    
+    <meta property="article:tag" content="bound-method">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/python-lecture-04.html">
+    <meta name="twitter:title" content="Python Lecture 04 - Class Internals and Descriptors">
+    <meta name="twitter:description" content="Deep dive into how Python classes work internally, uncovering the secrets of bound methods and descriptors">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Python Lecture 04 - Class Internals and Descriptors",
+  "description": [
+    "Deep dive into how Python classes work internally",
+    "uncovering the secrets of bound methods and descriptors"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2025-10-30T00:00:00.000Z",
+  "dateModified": "2025-10-30T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/python-lecture-04.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "python, programming, lecture, oop, class, descriptor, bound-method"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Python Lecture 04 - Class Internals and Descriptors">Python Lecture 04 - Class Internals and Descriptors</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Python Lecture 04 - Class Internals and Descriptors</h1>
+        <time datetime=""2025-10-30T00:00:00.000Z"">October 30, 2025</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Python Lecture Series (5/5)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/python.html" class="tag">python</a>
+                    
+                    <a href="/tech/en/tags/programming.html" class="tag">programming</a>
+                    
+                    <a href="/tech/en/tags/lecture.html" class="tag">lecture</a>
+                    
+                    <a href="/tech/en/tags/oop.html" class="tag">oop</a>
+                    
+                    <a href="/tech/en/tags/class.html" class="tag">class</a>
+                    
+                    <a href="/tech/en/tags/descriptor.html" class="tag">descriptor</a>
+                    
+                    <a href="/tech/en/tags/bound-method.html" class="tag">bound-method</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Python Lecture Series</h3>
+        <p class="post-series-description">Comprehensive Python programming course from basics to advanced topics</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-00.html" class="post-series-link">Introduction to Python Lecture Series</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-01.html" class="post-series-link">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-02.html" class="post-series-link">Python Lecture 2 - Lexical Structure of Python</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/python-lecture-03.html" class="post-series-link">Python Lecture 3 - Containers and Generators</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Python Lecture 04 - Class Internals and Descriptors
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="class-internals">Class Internals</h2>
+<p>In Python, &quot;everything is an object.&quot; So what does the inside of a class look like?</p>
+<h3 id="__dict__-attribute-storage"><code class="inline-code">__dict__</code>: Attribute Storage</h3>
+<p>In Python, object attributes are stored as a <strong>dictionary</strong>.</p>
+<pre><code class="language-python">class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+person = Person(&quot;Alice&quot;, 25)
+
+# Check object&#39;s attributes directly
+print(person.__dict__)
+# {&#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 25}
+
+# Add attribute
+person.city = &quot;Seoul&quot;
+print(person.__dict__)
+# {&#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 25, &#39;city&#39;: &#39;Seoul&#39;}</code></pre>
+<p><strong>What actually happens when accessing attributes:</strong></p>
+<pre><code class="language-python"># Code we write
+print(person.name)
+
+# What Python actually does
+print(person.__dict__[&#39;name&#39;])</code></pre>
+<h3 id="class-variables-vs-instance-variables">Class Variables vs Instance Variables</h3>
+<pre><code class="language-python">class Dog:
+    # Class variable: shared by all dogs
+    species = &quot;Canis familiaris&quot;
+    legs = 4
+
+    def __init__(self, name):
+        # Instance variable: different for each dog
+        self.name = name
+
+dog1 = Dog(&quot;Buddy&quot;)
+dog2 = Dog(&quot;Max&quot;)
+
+print(dog1.name)     # &quot;Buddy&quot; (different for each)
+print(dog2.name)     # &quot;Max&quot;
+
+print(dog1.legs)     # 4 (same for all)
+print(dog2.legs)     # 4
+
+# Changing class variable?
+Dog.species = &quot;Canis lupus&quot;
+print(dog1.species)  # &quot;Canis lupus&quot; (all changed!)
+print(dog2.species)  # &quot;Canis lupus&quot;</code></pre>
+<p><strong>Memory Structure:</strong></p>
+<pre class="mermaid">graph BT
+    A["dog1<br/>name: Buddy"] -->|__class__| C
+    B["dog2<br/>name: Max"] -->|__class__| C
+    C["Dog class<br/>species: Canis familiaris<br/>legs: 4"]
+
+    style C fill:#e8f5e9
+    style A fill:#e3f2fd
+    style B fill:#e3f2fd</pre>
+<h3 id="__class__-class-reference"><code class="inline-code">__class__</code>: Class Reference</h3>
+<p>Every object knows which class it was created from.</p>
+<pre><code class="language-python">print(dog1.__class__)              # &lt;class &#39;__main__.Dog&#39;&gt;
+print(dog1.__class__.__name__)     # &quot;Dog&quot;
+
+# Objects from same class
+print(dog1.__class__ is dog2.__class__)  # True
+
+# Access class variables
+print(dog1.__class__.species)      # &quot;Canis familiaris&quot;</code></pre>
+<h3 id="attribute-lookup-order">Attribute Lookup Order</h3>
+<p>Let&#39;s see how Python finds attributes.</p>
+<pre><code class="language-python">class Animal:
+    species = &quot;Unknown&quot;
+
+    def speak(self):
+        return &quot;...&quot;
+
+class Cat(Animal):
+    species = &quot;Felis catus&quot;
+
+cat = Cat()
+print(cat.species)   # &quot;Felis catus&quot;
+print(cat.speak())   # &quot;...&quot;</code></pre>
+<p><strong>Attribute lookup process:</strong></p>
+<pre class="mermaid">flowchart TD
+    S1["cat.species access"] --> A1{"'species' in<br/>cat.__dict__?"}
+    A1 -->|Not found| B1{"'species' in<br/>Cat class?"}
+    B1 -->|Found!| C1["Return Cat.species<br/>(Felis catus)"]
+
+    style S1 fill:#e3f2fd
+    style C1 fill:#e8f5e9</pre>
+<pre class="mermaid">flowchart TD
+    S2["cat.speak&#40;&#41; call"] --> A2{"'speak' in<br/>cat.__dict__?"}
+    A2 -->|Not found| B2{"'speak' in<br/>Cat class?"}
+    B2 -->|Not found| C2{"'speak' in<br/>Animal class?"}
+    C2 -->|Found!| D2["Call Animal.speak"]
+
+    style S2 fill:#e3f2fd
+    style D2 fill:#e8f5e9</pre>
+<p>This order is called <strong>MRO (Method Resolution Order)</strong>.</p>
+<pre><code class="language-python"># Check MRO
+print(Cat.__mro__)
+# (&lt;class &#39;Cat&#39;&gt;, &lt;class &#39;Animal&#39;&gt;, &lt;class &#39;object&#39;&gt;)</code></pre>
+<h2 id="bound-methods">Bound Methods</h2>
+<p>We&#39;ve explored the internal structure of classes through <code class="inline-code">__dict__</code> and <code class="inline-code">__class__</code>. Now let&#39;s see how methods work internally.</p>
+<h3 id="two-faces-of-methods">Two Faces of Methods</h3>
+<p>As it turns out, class methods have <strong>two forms</strong>.</p>
+<pre><code class="language-python">class Calculator:
+    def __init__(self, value):
+        self.value = value
+
+    def add(self, n):
+        self.value += n
+        return self.value
+
+calc = Calculator(10)
+
+# Two faces of a method
+print(type(Calculator.add))  # &lt;class &#39;function&#39;&gt;
+print(type(calc.add))         # &lt;class &#39;method&#39;&gt;</code></pre>
+<p>From the class perspective it&#39;s a <strong>function</strong>, but from the instance perspective it&#39;s a <strong>method</strong>.</p>
+<h3 id="what-is-a-bound-method">What is a Bound Method?</h3>
+<p>A <strong>Bound Method</strong> is a method &quot;bound&quot; to a specific instance.</p>
+<pre><code class="language-python">calc = Calculator(10)
+
+# calc.add is bound to calc instance
+print(calc.add)
+# &lt;bound method Calculator.add of &lt;__main__.Calculator object at 0x...&gt;&gt;
+
+# You can store the method in a variable
+add_method = calc.add
+add_method(5)  # calc.value becomes 15
+print(calc.value)  # 15</code></pre>
+<h3 id="the-secret-of-bound-methods">The Secret of Bound Methods</h3>
+<p>Let&#39;s see how Python binds methods:</p>
+<pre><code class="language-python">class MyClass:
+    def method(self, x):
+        return f&quot;Value: {x}&quot;
+
+obj = MyClass()
+
+# These two lines do exactly the same thing!
+obj.method(42)              # Normal way
+MyClass.method(obj, 42)     # Direct call</code></pre>
+<p><strong>The secret of method calls:</strong></p>
+<pre><code class="language-python"># Code we write
+result = obj.method(42)
+
+# What Python actually does:
+method_func = MyClass.method    # 1. Get the function
+result = method_func(obj, 42)   # 2. Pass obj as first argument</code></pre>
+<p>This is the true identity of the <code class="inline-code">self</code> parameter!</p>
+<h3 id="inside-bound-methods">Inside Bound Methods</h3>
+<p>Let&#39;s go deeper:</p>
+<pre><code class="language-python">class Counter:
+    def __init__(self):
+        self.count = 0
+
+    def increment(self):
+        self.count += 1
+
+counter = Counter()
+
+# Bound method details
+bound = counter.increment
+print(bound.__self__)    # Points to counter object
+print(bound.__func__)    # Points to Counter.increment function
+
+# Bound method works internally like:
+# bound() → bound.__func__(bound.__self__)</code></pre>
+<h3 id="real-example-callback-functions">Real Example: Callback Functions</h3>
+<p>Bound methods are frequently used as callback functions:</p>
+<pre><code class="language-python">class Button:
+    def __init__(self, label):
+        self.label = label
+        self.click_count = 0
+
+    def on_click(self):
+        self.click_count += 1
+        print(f&quot;{self.label} button clicked ({self.click_count} times)&quot;)
+
+# Create buttons
+save_button = Button(&quot;Save&quot;)
+cancel_button = Button(&quot;Cancel&quot;)
+
+# Register methods as callbacks
+callbacks = [save_button.on_click, cancel_button.on_click]
+
+# Simulate button clicks
+callbacks[0]()  # &quot;Save button clicked (1 times)&quot;
+callbacks[0]()  # &quot;Save button clicked (2 times)&quot;
+callbacks[1]()  # &quot;Cancel button clicked (1 times)&quot;</code></pre>
+<h2 id="descriptors">Descriptors</h2>
+<p>Now that we understand how bound methods work, let&#39;s look at the more fundamental mechanism behind them. Descriptors are lesser-known but one of Python&#39;s most powerful features.</p>
+<h3 id="what-is-a-descriptor">What is a Descriptor?</h3>
+<p>A <strong>Descriptor</strong> is an object that controls attribute access.</p>
+<pre><code class="language-python">class Descriptor:
+    def __get__(self, obj, objtype=None):
+        print(&quot;__get__ called&quot;)
+        return obj._value
+
+    def __set__(self, obj, value):
+        print(f&quot;__set__ called: {value}&quot;)
+        obj._value = value
+
+    def __delete__(self, obj):
+        print(&quot;__delete__ called&quot;)
+        del obj._value
+
+class MyClass:
+    attr = Descriptor()  # Descriptor as class variable
+
+    def __init__(self):
+        self._value = 0
+
+obj = MyClass()
+obj.attr = 10      # &quot;__set__ called: 10&quot;
+print(obj.attr)    # &quot;__get__ called&quot; → 10
+del obj.attr       # &quot;__delete__ called&quot;</code></pre>
+<h3 id="descriptor-protocol">Descriptor Protocol</h3>
+<p>Descriptors implement three special methods:</p>
+<pre><code class="language-python">class Descriptor:
+    def __get__(self, instance, owner):
+        &quot;&quot;&quot;
+        instance: object accessing the attribute (obj in obj.attr)
+        owner: object&#39;s class (MyClass)
+        &quot;&quot;&quot;
+        pass
+
+    def __set__(self, instance, value):
+        &quot;&quot;&quot;
+        instance: object setting the attribute
+        value: value to set
+        &quot;&quot;&quot;
+        pass
+
+    def __delete__(self, instance):
+        &quot;&quot;&quot;
+        instance: object deleting the attribute
+        &quot;&quot;&quot;
+        pass</code></pre>
+<h3 id="data-descriptors-vs-non-data-descriptors">Data Descriptors vs Non-Data Descriptors</h3>
+<pre><code class="language-python"># Data descriptor: has __set__ or __delete__
+class DataDescriptor:
+    def __get__(self, obj, objtype=None):
+        return &quot;data descriptor&quot;
+
+    def __set__(self, obj, value):
+        pass
+
+# Non-data descriptor: only has __get__
+class NonDataDescriptor:
+    def __get__(self, obj, objtype=None):
+        return &quot;non-data descriptor&quot;
+
+class MyClass:
+    data_desc = DataDescriptor()
+    non_data_desc = NonDataDescriptor()
+
+obj = MyClass()
+
+# Instance attribute vs descriptor priority
+obj.__dict__[&#39;non_data_desc&#39;] = &quot;instance attr&quot;
+print(obj.non_data_desc)  # &quot;instance attr&quot; (instance wins)
+
+obj.__dict__[&#39;data_desc&#39;] = &quot;instance attr&quot;
+print(obj.data_desc)  # &quot;data descriptor&quot; (data descriptor wins)</code></pre>
+<h3 id="real-example-1-type-validation">Real Example 1: Type Validation</h3>
+<pre><code class="language-python">class TypedProperty:
+    &quot;&quot;&quot;Descriptor that enforces type&quot;&quot;&quot;
+    def __init__(self, name, expected_type):
+        self.name = name
+        self.expected_type = expected_type
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return instance.__dict__.get(self.name)
+
+    def __set__(self, instance, value):
+        if not isinstance(value, self.expected_type):
+            raise TypeError(
+                f&quot;{self.name} must be of type {self.expected_type.__name__}. &quot;
+                f&quot;Got {type(value).__name__}.&quot;
+            )
+        instance.__dict__[self.name] = value
+
+class Person:
+    name = TypedProperty(&quot;name&quot;, str)
+    age = TypedProperty(&quot;age&quot;, int)
+
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+# Works normally
+person = Person(&quot;Alice&quot;, 25)
+print(person.name)  # &quot;Alice&quot;
+
+# Type error!
+try:
+    person.age = &quot;twenty-five&quot;
+except TypeError as e:
+    print(e)  # &quot;age must be of type int. Got str.&quot;</code></pre>
+<h3 id="real-example-2-value-range-validation">Real Example 2: Value Range Validation</h3>
+<pre><code class="language-python">class RangeValue:
+    &quot;&quot;&quot;Descriptor that limits value range&quot;&quot;&quot;
+    def __init__(self, name, min_value=None, max_value=None):
+        self.name = name
+        self.min_value = min_value
+        self.max_value = max_value
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return instance.__dict__.get(self.name)
+
+    def __set__(self, instance, value):
+        if self.min_value is not None and value &lt; self.min_value:
+            raise ValueError(
+                f&quot;{self.name} must be at least {self.min_value}&quot;
+            )
+        if self.max_value is not None and value &gt; self.max_value:
+            raise ValueError(
+                f&quot;{self.name} must be at most {self.max_value}&quot;
+            )
+        instance.__dict__[self.name] = value
+
+class Game:
+    health = RangeValue(&quot;health&quot;, min_value=0, max_value=100)
+    level = RangeValue(&quot;level&quot;, min_value=1)
+
+    def __init__(self):
+        self.health = 100
+        self.level = 1
+
+    def take_damage(self, damage):
+        self.health -= damage
+
+# Usage
+game = Game()
+print(game.health)  # 100
+
+game.take_damage(30)
+print(game.health)  # 70
+
+try:
+    game.take_damage(80)  # health would become -10
+except ValueError as e:
+    print(e)  # &quot;health must be at least 0&quot;</code></pre>
+<h3 id="real-example-3-logging-descriptor">Real Example 3: Logging Descriptor</h3>
+<pre><code class="language-python">class LoggedProperty:
+    &quot;&quot;&quot;Descriptor that logs attribute access&quot;&quot;&quot;
+    def __init__(self, name):
+        self.name = name
+        self.internal_name = f&quot;_{name}&quot;
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        value = getattr(instance, self.internal_name, None)
+        print(f&quot;[GET] {self.name} = {value}&quot;)
+        return value
+
+    def __set__(self, instance, value):
+        print(f&quot;[SET] {self.name} = {value}&quot;)
+        setattr(instance, self.internal_name, value)
+
+class Account:
+    balance = LoggedProperty(&quot;balance&quot;)
+
+    def __init__(self, initial_balance):
+        self.balance = initial_balance
+
+    def deposit(self, amount):
+        self.balance += amount
+
+# Usage
+account = Account(1000)
+# [SET] balance = 1000
+
+print(account.balance)
+# [GET] balance = 1000
+
+account.deposit(500)
+# [GET] balance = 1000
+# [SET] balance = 1500</code></pre>
+<h2 id="properties-convenient-descriptors">Properties: Convenient Descriptors</h2>
+<h3 id="property-decorator"><code class="inline-code">@property</code> Decorator</h3>
+<p>Creating descriptor classes every time is cumbersome. <code class="inline-code">@property</code> is an easier way to use descriptors:</p>
+<pre><code class="language-python">class Circle:
+    def __init__(self, radius):
+        self._radius = radius
+
+    @property
+    def radius(self):
+        &quot;&quot;&quot;Radius getter&quot;&quot;&quot;
+        return self._radius
+
+    @radius.setter
+    def radius(self, value):
+        &quot;&quot;&quot;Radius setter&quot;&quot;&quot;
+        if value &lt; 0:
+            raise ValueError(&quot;Radius must be non-negative&quot;)
+        self._radius = value
+
+    @property
+    def area(self):
+        &quot;&quot;&quot;Area (read-only)&quot;&quot;&quot;
+        return 3.14159 * self._radius ** 2
+
+    @property
+    def diameter(self):
+        &quot;&quot;&quot;Diameter&quot;&quot;&quot;
+        return self._radius * 2
+
+    @diameter.setter
+    def diameter(self, value):
+        self._radius = value / 2
+
+# Usage
+circle = Circle(5)
+print(circle.radius)   # 5
+print(circle.area)     # 78.53975
+
+circle.radius = 10
+print(circle.area)     # 314.159
+
+# Setting diameter automatically calculates radius
+circle.diameter = 20
+print(circle.radius)   # 10.0</code></pre>
+<h3 id="the-true-nature-of-property">The True Nature of property</h3>
+<p><code class="inline-code">@property</code> is actually a descriptor!</p>
+<pre><code class="language-python">class MyProperty:
+    &quot;&quot;&quot;Simple implementation of property&quot;&quot;&quot;
+    def __init__(self, fget=None, fset=None):
+        self.fget = fget
+        self.fset = fset
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        if self.fget is None:
+            raise AttributeError(&quot;unreadable attribute&quot;)
+        return self.fget(instance)
+
+    def __set__(self, instance, value):
+        if self.fset is None:
+            raise AttributeError(&quot;can&#39;t set attribute&quot;)
+        self.fset(instance, value)
+
+    def setter(self, fset):
+        return MyProperty(self.fget, fset)
+
+class Temperature:
+    def __init__(self, celsius):
+        self._celsius = celsius
+
+    @MyProperty
+    def celsius(self):
+        return self._celsius
+
+    @celsius.setter
+    def celsius(self, value):
+        if value &lt; -273.15:
+            raise ValueError(&quot;Cannot be lower than absolute zero&quot;)
+        self._celsius = value
+
+# Test it works
+temp = Temperature(25)
+print(temp.celsius)  # 25</code></pre>
+<h3 id="computed-attributes">Computed Attributes</h3>
+<p>A powerful feature of properties is <strong>computed attributes</strong>:</p>
+<pre><code class="language-python">class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    @property
+    def area(self):
+        &quot;&quot;&quot;Area is computed&quot;&quot;&quot;
+        return self.width * self.height
+
+    @property
+    def perimeter(self):
+        &quot;&quot;&quot;Perimeter is computed&quot;&quot;&quot;
+        return 2 * (self.width + self.height)
+
+rect = Rectangle(10, 20)
+print(rect.area)      # 200
+print(rect.perimeter) # 60
+
+# Changing width automatically changes area
+rect.width = 15
+print(rect.area)      # 300</code></pre>
+<h2 id="methods-are-descriptors-too">Methods Are Descriptors Too</h2>
+<p>Now that we&#39;ve covered descriptors and properties, here&#39;s the final piece of the puzzle. The bound methods we learned about earlier can be fully explained through descriptors.</p>
+<h3 id="functions-are-descriptors">Functions Are Descriptors</h3>
+<pre><code class="language-python">class Function:
+    &quot;&quot;&quot;Simple implementation of method&quot;&quot;&quot;
+    def __init__(self, func):
+        self.func = func
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            # Access from class: return just the function
+            return self.func
+        # Access from instance: create bound method
+        return lambda *args, **kwargs: self.func(instance, *args, **kwargs)
+
+class MyClass:
+    @Function
+    def method(self, x):
+        return f&quot;{self} value: {x}&quot;
+
+obj = MyClass()
+
+# Access from class
+print(type(MyClass.method))  # function
+
+# Access from instance
+print(type(obj.method))      # function (not method in simple impl)
+print(obj.method(42))        # Works!</code></pre>
+<p>Actual Python function objects have a <code class="inline-code">__get__</code> method:</p>
+<pre><code class="language-python">def my_function(self, x):
+    return x
+
+# Functions are descriptors!
+print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
+<h2 id="summary">Summary</h2>
+<h3 id="class-internals">Class Internals</h3>
+<pre class="mermaid">graph TD
+    A["Instance<br/>obj"]
+    B["obj.__dict__<br/>Instance attributes"]
+    C["obj.__class__<br/>Class reference"]
+    D["Class<br/>MyClass"]
+    E["Class variables<br/>Descriptors"]
+
+    A --> B
+    A --> C
+    C --> D
+    D --> E
+
+    style A fill:#e3f2fd
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e9</pre>
+<h3 id="attribute-lookup-priority">Attribute Lookup Priority</h3>
+<ol class="ol-list">
+<li><strong>Data descriptors</strong> (descriptors with <code class="inline-code">__set__</code> from the class/parent chain)</li><li><strong>Instance `__dict__`</strong> (instance variables)</li><li><strong>Non-data descriptors and regular class variables</strong> (descriptors with only <code class="inline-code">__get__</code>, or non-descriptor variables from the class/parent chain)</li></ol>
+<blockquote><p>At each step, Python searches the current class → parent classes in MRO order.</p>
+</blockquote>
+<h3 id="bound-methods">Bound Methods</h3>
+<pre><code class="language-python"># Method call
+obj.method(x)
+
+# Actual internal operation
+method = obj.__class__.method  # Get function
+method.__get__(obj, type(obj))(x)  # Descriptor protocol</code></pre>
+<h3 id="descriptor-protocol">Descriptor Protocol</h3>
+<table>
+<thead>
+<tr><th>Method</th><th>When Called</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><code class="inline-code"><strong>get</strong>(self, instance, owner)</code></td><td><code class="inline-code">obj.attr</code></td><td>Read attribute</td></tr>
+<tr><td><code class="inline-code"><strong>set</strong>(self, instance, value)</code></td><td><code class="inline-code">obj.attr = value</code></td><td>Write attribute</td></tr>
+<tr><td><code class="inline-code"><strong>delete</strong>(self, instance)</code></td><td><code class="inline-code">del obj.attr</code></td><td>Delete attribute</td></tr>
+</tbody>
+</table>
+<h3 id="when-to-use-what">When to Use What?</h3>
+<table>
+<thead>
+<tr><th>Situation</th><th>Use</th><th>Reason</th></tr>
+</thead>
+<tbody>
+<tr><td>Simple getter/setter</td><td><code class="inline-code">@property</code></td><td>Convenient and clean</td></tr>
+<tr><td>Reuse across classes</td><td>Descriptor class</td><td>DRY principle</td></tr>
+<tr><td>Type/range validation</td><td>Descriptor</td><td>Reusable</td></tr>
+<tr><td>Computed attributes</td><td><code class="inline-code">@property</code></td><td>Auto-calculation</td></tr>
+<tr><td>Logging/caching</td><td>Descriptor</td><td>Transparent additions</td></tr>
+</tbody>
+</table>
+<h3 id="what-we-learned">What We Learned</h3>
+<ol class="ol-list">
+<li><strong>Everything is an object</strong>: Classes, functions, methods are all objects</li><li><strong>Descriptors</strong>: Protocol for controlling attribute access</li><li><strong>Bound methods</strong>: Method binding implemented via descriptors</li><li><strong>Properties</strong>: Convenient wrapper around descriptors</li></ol>
+<h3 id="why-does-this-matter">Why Does This Matter?</h3>
+<p>Understanding descriptors lets you:<br />- See how <code class="inline-code">@property</code>, <code class="inline-code">@staticmethod</code>, and <code class="inline-code">@classmethod</code> work internally<br />- Build reusable custom validation logic<br />- Recognize that Python&#39;s &quot;magical&quot; behaviors are built on a consistent protocol</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/python-lecture-03.html" class="nav-prev">← Python Lecture 3 - Containers and Generators</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>
