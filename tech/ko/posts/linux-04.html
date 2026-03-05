@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리눅스 내부 구조 04 - 메모리 관리 - 재영의 기술 블로그</title>
+    <meta name="description" content="가상 메모리의 개념과 리눅스 커널이 메모리를 관리하는 방법">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/linux-04.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/linux-04.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/linux-04.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/linux-04.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/linux-04.html">
+    <meta property="og:title" content="리눅스 내부 구조 04 - 메모리 관리">
+    <meta property="og:description" content="가상 메모리의 개념과 리눅스 커널이 메모리를 관리하는 방법">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-01-19T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="memory">
+    
+    <meta property="article:tag" content="virtual-memory">
+    
+    <meta property="article:tag" content="paging">
+    
+    <meta property="article:tag" content="mmu">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/linux-04.html">
+    <meta name="twitter:title" content="리눅스 내부 구조 04 - 메모리 관리">
+    <meta name="twitter:description" content="가상 메모리의 개념과 리눅스 커널이 메모리를 관리하는 방법">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "리눅스 내부 구조 04 - 메모리 관리",
+  "description": "가상 메모리의 개념과 리눅스 커널이 메모리를 관리하는 방법",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-19T00:00:00.000Z",
+  "dateModified": "2026-01-19T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/linux-04.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "linux, memory, virtual-memory, paging, mmu"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="리눅스 내부 구조 04 - 메모리 관리">리눅스 내부 구조 04 - 메모리 관리</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>리눅스 내부 구조 04 - 메모리 관리</h1>
+        <time datetime=""2026-01-19T00:00:00.000Z"">January 19, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 리눅스 내부 구조 (4/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/linux.html" class="tag">linux</a>
+                    
+                    <a href="/tech/ko/tags/memory.html" class="tag">memory</a>
+                    
+                    <a href="/tech/ko/tags/virtual-memory.html" class="tag">virtual-memory</a>
+                    
+                    <a href="/tech/ko/tags/paging.html" class="tag">paging</a>
+                    
+                    <a href="/tech/ko/tags/mmu.html" class="tag">mmu</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 리눅스 내부 구조</h3>
+        <p class="post-series-description">프로세스와 메모리부터 컨테이너까지, 리눅스 커널의 내부 동작 이해하기</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-01.html" class="post-series-link">리눅스 내부 구조 01 - 운영체제 개요</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-02.html" class="post-series-link">리눅스 내부 구조 02 - 프로세스와 스레드</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-03.html" class="post-series-link">리눅스 내부 구조 03 - 프로세스 스케줄링</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                리눅스 내부 구조 04 - 메모리 관리
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-05.html" class="post-series-link">리눅스 내부 구조 05 - 파일 시스템</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-06.html" class="post-series-link">리눅스 내부 구조 06 - 시스템 콜과 커널</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-07.html" class="post-series-link">리눅스 내부 구조 07 - I/O와 디바이스</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-08.html" class="post-series-link">리눅스 내부 구조 08 - 동기화와 동시성</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-09.html" class="post-series-link">리눅스 내부 구조 09 - 네트워킹</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-10.html" class="post-series-link">리눅스 내부 구조 10 - 컨테이너와 가상화</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">가상 메모리는 왜 존재하는가?</h2>
+<p>초기 컴퓨터에서는 프로그램이 물리 메모리에 직접 접근했다. 프로그램 A가 주소 0x1000을 사용하고 있을 때 프로그램 B도 같은 주소를 사용하려 하면 충돌이 발생했다. 프로그램 하나가 다른 프로그램의 메모리를 덮어쓸 수 있었고, 물리 메모리보다 큰 프로그램은 실행 자체가 불가능했다.</p>
+<p>가상 메모리는 이 문제를 해결한다. 각 프로세스에게 자신만의 연속적인 주소 공간을 제공하되, 이 주소가 물리 메모리의 어디에 매핑되는지는 프로세스가 알 필요 없게 하는 것이다. 프로세스 A가 주소 0x1000을 읽으면 물리 메모리 0x50000에 접근하고, 프로세스 B가 같은 주소 0x1000을 읽으면 물리 메모리 0x80000에 접근하는 식이다. 두 프로세스 모두 자신이 메모리 전체를 독점하고 있다고 생각하지만, 실제로는 커널이 그 환상을 유지하고 있는 셈이다.</p>
+<h2 id="-">주소 공간의 구조</h2>
+<p>리눅스에서 각 프로세스의 가상 주소 공간은 일정한 구조를 갖는다. 64비트 시스템을 기준으로, 하위 영역은 유저 공간이고 상위 영역은 커널 공간이다.</p>
+<pre><code>높은 주소  ┌──────────────────┐
+          │   커널 공간        │ (모든 프로세스가 동일한 매핑)
+          ├──────────────────┤
+          │   스택 (Stack)     │ ↓ 아래로 성장
+          │       ...         │
+          │   빈 공간          │
+          │       ...         │
+          │   힙 (Heap)       │ ↑ 위로 성장
+          ├──────────────────┤
+          │   BSS (초기화되지   │
+          │     않은 전역변수)   │
+          ├──────────────────┤
+          │   Data (초기화된   │
+          │     전역변수)       │
+          ├──────────────────┤
+          │   Text (코드)      │
+낮은 주소  └──────────────────┘</code></pre>
+<p>Text 영역에는 실행할 기계어 코드가 담기고, Data와 BSS 영역에는 전역 변수가 위치한다. 힙은 <code class="inline-code">malloc()</code> 같은 동적 할당에 사용되며 위쪽으로 성장하고, 스택은 함수 호출과 지역 변수에 사용되며 아래쪽으로 성장한다. 힙과 스택 사이의 넓은 빈 공간이 존재하는 이유는 양쪽이 서로를 향해 성장할 수 있도록 여유를 두기 위한 것이다.</p>
+<h2 id="-mmu">페이지 테이블과 MMU</h2>
+<p>가상 주소를 물리 주소로 변환하는 작업은 CPU의 MMU(Memory Management Unit)가 수행한다. 이 변환은 메모리 전체를 한 번에 매핑하는 것이 아니라, 페이지라는 고정 크기 단위(일반적으로 4KB)로 이루어진다.</p>
+<p>커널은 각 프로세스마다 페이지 테이블을 유지한다. 페이지 테이블은 가상 페이지 번호를 물리 프레임 번호로 매핑하는 자료구조이다. 프로세스가 가상 주소에 접근하면, MMU가 페이지 테이블을 참조하여 해당 물리 주소를 찾아내는 것이다.</p>
+<pre><code>가상 주소:  [가상 페이지 번호 | 페이지 내 오프셋]
+               │
+               ▼  (페이지 테이블 조회)
+물리 주소:  [물리 프레임 번호 | 페이지 내 오프셋]</code></pre>
+<p>64비트 시스템에서 가상 주소 공간은 방대하기 때문에, 단일 페이지 테이블로는 메모리가 부족하다. 그래서 리눅스는 다단계 페이지 테이블을 사용한다. x86-64 아키텍처에서는 4단계 페이지 테이블(PGD → PUD → PMD → PTE)을 사용하며, 최신 프로세서는 5단계까지 지원한다. 이 다단계 구조 덕분에 실제로 사용되는 주소 범위에 대해서만 페이지 테이블 항목을 할당하면 되므로, 메모리를 크게 절약할 수 있는 것이다.</p>
+<p>매번 다단계 테이블을 순회하면 메모리 접근마다 여러 번의 추가 메모리 접근이 발생한다. 이 비용을 줄이기 위해 CPU는 TLB(Translation Lookaside Buffer)라는 캐시를 사용한다. TLB는 최근에 변환된 가상-물리 주소 쌍을 저장해두고, 같은 가상 주소에 다시 접근할 때 페이지 테이블 순회 없이 즉시 물리 주소를 반환한다. TLB 적중률이 성능에 미치는 영향은 매우 크며, 컨텍스트 스위칭 시 TLB가 무효화되는 것이 성능 저하의 주요 원인인 것이다.</p>
+<h2 id="-">요구 페이징</h2>
+<p>과연 프로세스가 시작될 때 모든 페이지를 물리 메모리에 올려야 하는가? 그렇지 않다. 리눅스는 요구 페이징(demand paging)을 사용한다. 프로세스의 가상 주소 공간은 처음부터 모두 물리 메모리에 매핑되지 않으며, 실제로 접근하는 시점에 비로소 물리 페이지가 할당되는 것이다.</p>
+<p>프로세스가 아직 물리 메모리에 매핑되지 않은 가상 주소에 접근하면 페이지 폴트가 발생한다. 페이지 폴트는 CPU가 발생시키는 예외로, 커널의 페이지 폴트 핸들러가 이를 처리한다. 핸들러는 해당 접근이 유효한지 확인한 뒤, 유효하다면 물리 페이지를 할당하고 페이지 테이블을 업데이트하여 프로세스가 계속 실행되게 한다. 유효하지 않은 접근이라면 세그멘테이션 폴트(SIGSEGV)를 발생시켜 프로세스를 종료하는 것이다.</p>
+<p>페이지 폴트는 크게 두 종류로 나뉜다. <strong>마이너 페이지 폴트</strong>는 디스크 I/O 없이 해결되는 경우로, 새 페이지를 할당하거나 Copy-on-Write 처리가 여기에 해당한다. <strong>메이저 페이지 폴트</strong>는 디스크에서 데이터를 읽어와야 하는 경우로, 스왑 영역에서 페이지를 복원하거나 파일 매핑된 페이지를 디스크에서 읽어오는 것이 여기에 해당한다. 메이저 페이지 폴트는 디스크 I/O를 수반하므로 마이너 페이지 폴트보다 수백 배 이상 느린 것이다.</p>
+<h2>스왑</h2>
+<p>물리 메모리가 부족해지면 커널은 당장 사용되지 않는 페이지를 디스크의 스왑 영역으로 내보낸다. 나중에 해당 페이지에 다시 접근하면 메이저 페이지 폴트가 발생하고, 커널은 스왑 영역에서 해당 페이지를 다시 물리 메모리로 읽어오는 것이다.</p>
+<p>스왑은 물리 메모리보다 큰 작업 세트를 다룰 수 있게 해주지만, 디스크는 메모리보다 수만 배 느리므로 스왑이 빈번하게 발생하면 시스템 성능이 극적으로 저하된다. 이 현상을 스래싱(thrashing)이라 하며, 페이지를 내보내자마자 다시 필요해져서 끊임없이 디스크 I/O가 발생하는 악순환에 빠지는 것이다.</p>
+<pre><code class="language-bash"># 스왑 사용량 확인
+free -h
+              total    used    free    shared  buff/cache  available
+Mem:          16Gi     8.2Gi   1.1Gi   512Mi   6.7Gi       7.0Gi
+Swap:         4.0Gi    256Mi   3.7Gi
+
+# 스왑 활동 모니터링 (si: swap in, so: swap out)
+vmstat 1
+procs  memory         swap    io
+ r  b  swpd  free     si  so  bi  bo
+ 1  0  256k  1.1G     0   0   12  28</code></pre>
+<h2 id="-">메모리 할당: 버디 시스템과 슬랩 할당자</h2>
+<p>커널 내부에서 물리 메모리를 할당하는 방식도 중요하다. 리눅스는 두 가지 수준의 할당 메커니즘을 사용한다.</p>
+<p><strong>버디 시스템</strong>은 물리 메모리를 2의 거듭제곱 크기의 블록으로 관리한다. 4KB 페이지를 기본 단위로 하여, 1페이지(4KB), 2페이지(8KB), 4페이지(16KB) 등의 블록 목록을 유지한다. 메모리 할당 요청이 들어오면 요청 크기에 맞는 가장 작은 블록을 찾아 제공한다. 적합한 크기의 블록이 없으면 더 큰 블록을 반으로 나누고(이 과정에서 두 블록이 &quot;버디&quot;가 된다), 해제 시에는 인접한 버디끼리 합쳐져서 더 큰 블록을 복원한다. 이 방식은 외부 단편화를 최소화하면서도 할당과 해제가 빠른 것이다.</p>
+<p>하지만 커널에서는 <code class="inline-code">task_struct</code>나 <code class="inline-code">inode</code> 같은 작은 객체를 빈번하게 할당하고 해제한다. 이런 객체 하나에 4KB 페이지 전체를 사용하는 것은 낭비이다. <strong>슬랩 할당자</strong>는 이 문제를 해결하기 위해 페이지를 동일한 크기의 작은 객체들로 미리 나누어 놓는다. 같은 유형의 객체가 반복적으로 할당되고 해제되므로, 해제된 객체의 메모리를 그대로 재사용할 수 있어 할당 속도가 빠르고 내부 단편화도 줄어드는 것이다.</p>
+<h2 id="oom-killer">OOM Killer</h2>
+<p>물리 메모리와 스왑이 모두 소진되면 어떻게 되는가? 리눅스 커널은 OOM(Out of Memory) Killer를 호출한다. OOM Killer는 시스템 전체가 멈추는 것을 방지하기 위해 프로세스를 강제로 종료하여 메모리를 확보하는 최후의 수단이다.</p>
+<p>OOM Killer는 각 프로세스에 대해 점수를 매긴다. 메모리를 많이 사용하는 프로세스가 높은 점수를 받으며, 점수가 가장 높은 프로세스가 종료 대상이 된다. PID 1이나 커널 스레드는 보호되며, <code class="inline-code">/proc/[pid]/oom_score_adj</code> 값을 통해 특정 프로세스의 점수를 조정할 수 있다. 값을 -1000으로 설정하면 OOM Killer의 대상에서 제외되는 것이다.</p>
+<pre><code class="language-bash"># 프로세스의 OOM 점수 확인
+cat /proc/1234/oom_score
+
+# OOM Killer에서 보호 (-1000 ~ 1000)
+echo -1000 &gt; /proc/1234/oom_score_adj</code></pre>
+<p>과연 OOM Killer가 올바른 프로세스를 종료하는가? 항상 그렇지는 않다. 메모리를 가장 많이 사용하는 프로세스가 가장 중요한 프로세스일 수 있기 때문이다. 데이터베이스 서버가 메모리를 많이 사용한다는 이유로 종료되면 시스템의 핵심 서비스가 중단되는 셈이다. 그래서 프로덕션 환경에서는 중요한 프로세스의 <code class="inline-code">oom_score_adj</code>를 적절히 설정해두는 것이 일반적인 관행인 것이다.</p>
+<h2 id="-mmap">메모리 매핑: mmap</h2>
+<p><code class="inline-code">mmap()</code>은 파일이나 장치를 프로세스의 가상 주소 공간에 직접 매핑하는 시스템 콜이다. 매핑된 영역에 대한 읽기와 쓰기가 곧 파일에 대한 읽기와 쓰기가 되므로, <code class="inline-code">read()</code>와 <code class="inline-code">write()</code> 시스템 콜을 반복하지 않아도 된다.</p>
+<pre><code class="language-c">// 파일을 메모리에 매핑
+int fd = open(&quot;data.bin&quot;, O_RDONLY);
+void *addr = mmap(NULL, file_size, PROT_READ, MAP_PRIVATE, fd, 0);
+
+// 이제 addr을 통해 파일 내용에 직접 접근 가능
+printf(&quot;%c&quot;, ((char *)addr)[0]);
+
+munmap(addr, file_size);</code></pre>
+<p><code class="inline-code">mmap()</code>의 중요한 쓰임새 중 하나는 공유 라이브러리의 로딩이다. <code class="inline-code">libc.so</code> 같은 공유 라이브러리는 여러 프로세스가 동시에 사용하는데, 각 프로세스가 라이브러리의 복사본을 갖는 것은 물리 메모리 낭비이다. <code class="inline-code">mmap()</code>으로 공유 라이브러리를 매핑하면 같은 물리 페이지를 여러 프로세스가 공유할 수 있으므로, 물리 메모리 사용량이 크게 줄어드는 것이다.</p>
+<p>익명 매핑(anonymous mapping)도 있다. 파일과 연결되지 않은 메모리 영역을 매핑하는 것으로, <code class="inline-code">malloc()</code>이 큰 메모리 블록을 할당할 때 내부적으로 <code class="inline-code">mmap()</code>의 익명 매핑을 사용한다. 또한 프로세스 간 공유 메모리를 구현할 때도 <code class="inline-code">mmap()</code>의 <code class="inline-code">MAP_SHARED | MAP_ANONYMOUS</code> 플래그 조합이 사용되는 것이다.</p>
+<p>다음 포스트에서는 파일 시스템과 VFS를 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/platform-engineering-04.html" class="nav-prev">← 플랫폼 엔지니어링 04 - 골든 패스 설계하기</a>
+        
+        
+        <a href="/tech/ko/posts/compiler-06.html" class="nav-next">오토마타와 컴파일러 06 - 어휘 분석 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

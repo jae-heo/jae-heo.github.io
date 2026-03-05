@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Internals 10 - Containers and Virtualization - Jae's Tech Blog</title>
+    <meta name="description" content="How namespaces and cgroups create containers, and a wrap-up connecting all kernel concepts">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/linux-10.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/linux-10.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/linux-10.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/linux-10.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/linux-10.html">
+    <meta property="og:title" content="Linux Internals 10 - Containers and Virtualization">
+    <meta property="og:description" content="How namespaces and cgroups create containers, and a wrap-up connecting all kernel concepts">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-03-05T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="container">
+    
+    <meta property="article:tag" content="cgroups">
+    
+    <meta property="article:tag" content="namespaces">
+    
+    <meta property="article:tag" content="docker">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/linux-10.html">
+    <meta name="twitter:title" content="Linux Internals 10 - Containers and Virtualization">
+    <meta name="twitter:description" content="How namespaces and cgroups create containers, and a wrap-up connecting all kernel concepts">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux Internals 10 - Containers and Virtualization",
+  "description": [
+    "How namespaces and cgroups create containers",
+    "and a wrap-up connecting all kernel concepts"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-03-05T00:00:00.000Z",
+  "dateModified": "2026-03-05T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/linux-10.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "linux, container, cgroups, namespaces, docker"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Linux Internals 10 - Containers and Virtualization">Linux Internals 10 - Containers and Virtualization</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Linux Internals 10 - Containers and Virtualization</h1>
+        <time datetime=""2026-03-05T00:00:00.000Z"">March 5, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Linux Internals (10/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/linux.html" class="tag">linux</a>
+                    
+                    <a href="/tech/en/tags/container.html" class="tag">container</a>
+                    
+                    <a href="/tech/en/tags/cgroups.html" class="tag">cgroups</a>
+                    
+                    <a href="/tech/en/tags/namespaces.html" class="tag">namespaces</a>
+                    
+                    <a href="/tech/en/tags/docker.html" class="tag">docker</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Linux Internals</h3>
+        <p class="post-series-description">Understanding the Linux kernel from processes and memory to containers</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-01.html" class="post-series-link">Linux Internals 01 - Operating System Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-02.html" class="post-series-link">Linux Internals 02 - Processes and Threads</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-03.html" class="post-series-link">Linux Internals 03 - Process Scheduling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-04.html" class="post-series-link">Linux Internals 04 - Memory Management</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-05.html" class="post-series-link">Linux Internals 05 - File Systems</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-06.html" class="post-series-link">Linux Internals 06 - System Calls and the Kernel</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-07.html" class="post-series-link">Linux Internals 07 - I/O and Devices</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-08.html" class="post-series-link">Linux Internals 08 - Synchronization and Concurrency</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-09.html" class="post-series-link">Linux Internals 09 - Networking</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Linux Internals 10 - Containers and Virtualization
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="a-container-is-a-combination-of-kernel-features">A Container Is a Combination of Kernel Features</h2>
+<p>When first encountering the concept of containers, they feel like lightweight virtual machines. But containers and virtual machines are fundamentally different technologies. A virtual machine uses a hypervisor to emulate hardware and runs a complete operating system on top of it. A container isolates processes using only host kernel features, without any hardware emulation.</p>
+<p>Can process isolation alone achieve an effect similar to a virtual machine? Two mechanisms provided by the Linux kernel — namespaces and cgroups — make this possible. Namespaces limit the scope of system resources a process can see, while cgroups limit the amount of resources a process can use. When these two are combined, a process behaves as if it were running on an independent system.</p>
+<h2 id="namespaces-limiting-what-can-be-seen">Namespaces: Limiting What Can Be Seen</h2>
+<p>Linux namespaces partition kernel resources so that a group of processes can see only a specific set of resources. Linux currently provides eight types of namespaces.</p>
+<table>
+<thead>
+<tr><th>Namespace</th><th>Isolates</th><th>Introduced In</th></tr>
+</thead>
+<tbody>
+<tr><td>Mount (mnt)</td><td>Filesystem mount points</td><td>2.4.19</td></tr>
+<tr><td>UTS</td><td>Hostname and domain name</td><td>2.6.19</td></tr>
+<tr><td>IPC</td><td>System V IPC, POSIX message queues</td><td>2.6.19</td></tr>
+<tr><td>PID</td><td>Process IDs</td><td>2.6.24</td></tr>
+<tr><td>Network (net)</td><td>Network devices, stack, ports</td><td>2.6.29</td></tr>
+<tr><td>User</td><td>User and group IDs</td><td>3.8</td></tr>
+<tr><td>Cgroup</td><td>Cgroup root directory</td><td>4.6</td></tr>
+<tr><td>Time</td><td>Boot time, monotonic time</td><td>5.6</td></tr>
+</tbody>
+</table>
+<p>Take the PID namespace as an example. The first process inside a container has PID 1. From the host, this same process has an entirely different PID — say, 4523. Running <code class="inline-code">ps</code> inside the container shows only the processes belonging to its namespace; processes on the host or in other containers are invisible. It is not that the processes&#39; existence is hidden, but rather that the visible scope is restricted within that namespace.</p>
+<p>The Mount namespace provides filesystem isolation. Each container can have its own root filesystem and configure mounts completely independently from the host&#39;s filesystem structure. This is why a CentOS container can run on an Ubuntu host. The kernel is shared with the host, but the user-space filesystem can belong to an entirely different distribution.</p>
+<p>The Network namespace, as we saw in the previous post, isolates the entire network stack. The User namespace makes it possible to operate as root inside a container while being mapped to an unprivileged user on the host, providing a security layer that minimizes damage in the event of a container escape.</p>
+<h2 id="cgroups-limiting-how-much-can-be-used">Cgroups: Limiting How Much Can Be Used</h2>
+<p>If namespaces limit visibility, cgroups (control groups) limit usage. Cgroups are a kernel feature that controls and monitors the CPU, memory, disk I/O, and network bandwidth usage of process groups.</p>
+<p>Without cgroups, a single container could exhaust all of the host&#39;s memory or monopolize the CPU, affecting other containers. Cgroups prevent such resource abuse and are the core mechanism for ensuring fair resource distribution in multi-tenant environments.</p>
+<p>Cgroup v1 had each resource controller (cpu, memory, blkio, etc.) maintaining its own independent hierarchy. This design was flexible but complex. A single process could belong to different groups under different controllers, which made management difficult.</p>
+<p>Cgroup v2 adopted a single unified hierarchy to resolve this complexity. All controllers share a single tree, and a process belongs to exactly one cgroup. Additionally, v2&#39;s memory controller supports PSI (Pressure Stall Information), enabling more accurate detection of resource pressure situations.</p>
+<pre><code>Cgroup v2 hierarchy example:
+
+/sys/fs/cgroup/
+├── cgroup.controllers    (available controllers)
+├── cgroup.subtree_control (controllers enabled for children)
+├── container-a/
+│   ├── memory.max        (memory limit: 512M)
+│   ├── cpu.max           (CPU allocation: 50%)
+│   └── cgroup.procs      (member processes)
+└── container-b/
+    ├── memory.max        (memory limit: 1G)
+    ├── cpu.max           (CPU allocation: 100%)
+    └── cgroup.procs</code></pre>
+<h2 id="building-a-minimal-container-with-unshare">Building a Minimal Container with unshare</h2>
+<p>The fact that a container is a combination of namespaces and cgroups can be verified directly with the <code class="inline-code">unshare</code> command. <code class="inline-code">unshare</code> is a utility that creates new namespaces and runs a command inside them.</p>
+<pre><code class="language-bash"># Create new PID, Mount, UTS, and Network namespaces and run a shell
+sudo unshare --pid --mount --uts --net --fork --mount-proc /bin/bash
+
+# Inside the container:
+hostname my-container      # Hostname can be changed thanks to UTS namespace
+ps aux                     # Process list starting from PID 1
+ip addr                    # Empty network interfaces</code></pre>
+<p>In this state, the host&#39;s processes are invisible and the network is isolated. Add chroot or pivot_root to replace the root filesystem, apply cgroup resource limits, and the result is an environment essentially identical to a Docker container. What Docker does is closer to wrapping these kernel features in a convenient interface and automating image distribution and networking.</p>
+<h2 id="overlay-filesystem">Overlay Filesystem</h2>
+<p>How are container images efficiently stored and used? The key is the overlay filesystem (OverlayFS). OverlayFS layers multiple directories hierarchically to present a single unified view.</p>
+<p>A container image is composed of a stack of read-only layers. A package installation layer sits on top of a base OS layer, and an application code layer sits on top of that. When a container runs, a single writable layer is added on top of this read-only stack. When reading a file, the layers are searched from top to bottom and the first match is returned. When modifying a file, the original is left intact and a copy is made in the writable layer for modification (copy-on-write).</p>
+<pre><code>┌──────────────────────────┐
+│  Writable layer (container)│  ← stores only changes
+├──────────────────────────┤
+│  Layer 3: App code        │  ← read-only
+├──────────────────────────┤
+│  Layer 2: Package install │  ← read-only
+├──────────────────────────┤
+│  Layer 1: Base OS         │  ← read-only
+└──────────────────────────┘</code></pre>
+<p>The advantage of this design is that multiple containers using the same image can share the read-only layers. Even if 100 containers use the same Ubuntu image, the base layer is stored only once on disk, and each container has only its own writable layer. The same copy-on-write principle we covered at the virtual memory level in an earlier post is applied here at the filesystem level.</p>
+<h2 id="seccomp-and-capabilities">Seccomp and Capabilities</h2>
+<p>While namespaces and cgroups provide isolation and resource limits, additional defense layers are needed from a security perspective. Processes inside a container still share the host&#39;s kernel and can access it directly through system calls.</p>
+<p>Seccomp (Secure Computing Mode) restricts which system calls a process can use. Docker applies a default seccomp profile that blocks approximately 40 dangerous system calls. For example, system calls like <code class="inline-code">reboot()</code>, <code class="inline-code">mount()</code>, and <code class="inline-code">kexec_load()</code> cannot be invoked from inside a container. Applying a whitelist approach that permits only the system calls a container needs can greatly reduce the attack surface even if a kernel vulnerability is discovered.</p>
+<p>Linux Capabilities subdivide the traditional root privileges. In the past, it was a binary distinction — root or not root. With Capabilities, root privileges are separated into over 30 individual permissions. For example, granting only <code class="inline-code">CAP_NET_BIND_SERVICE</code> allows binding to ports below 1024 but confers no other root privileges. Docker grants containers only a restricted set of Capabilities by default, so even when running as root, the actual level of privilege is very different from that of host root.</p>
+<h2 id="containers-vs-virtual-machines">Containers vs Virtual Machines</h2>
+<p>Understanding the difference between containers and virtual machines clarifies the appropriate use cases for each.</p>
+<pre><code>Virtual Machines:                    Containers:
+
+┌─────────┐ ┌─────────┐          ┌─────────┐ ┌─────────┐
+│  App A  │ │  App B  │          │  App A  │ │  App B  │
+├─────────┤ ├─────────┤          ├─────────┤ ├─────────┤
+│Guest OS │ │Guest OS │          │  Bins/  │ │  Bins/  │
+│ (full)  │ │ (full)  │          │  Libs   │ │  Libs   │
+├─────────┴─┴─────────┤          ├─────────┴─┴─────────┤
+│      Hypervisor      │          │   Host OS Kernel     │
+├─────────────────────┤          ├─────────────────────┤
+│       Hardware       │          │       Hardware       │
+└─────────────────────┘          └─────────────────────┘</code></pre>
+<p>With virtual machines, the hypervisor emulates hardware and runs a complete guest OS on top. The level of isolation is very high, allowing different operating systems to run, but guest OS boot time and resource consumption become overhead. Containers share the host kernel, so they can start in milliseconds with minimal memory consumption, but they must use the same kernel as the host and their isolation level is lower than that of virtual machines.</p>
+<p>Can containers fully replace virtual machines? Not entirely. Virtual machines are still needed for workloads requiring a different kernel (for example, running Windows on a Linux host) or environments where strong security isolation is essential. However, for the majority of cases where application-level isolation on the same kernel is needed, containers are the far more efficient choice. Recently, there have been efforts like Kata Containers to combine the advantages of both by running containers inside lightweight virtual machines.</p>
+<h2 id="oci-runtime-specification">OCI Runtime Specification</h2>
+<p>In the early container ecosystem, Docker was the de facto standard. But as container technology matured, the need for standardization emerged, and the OCI (Open Container Initiative) was born.</p>
+<p>OCI defines two core specifications. The Runtime Specification defines the execution environment for a container. The root filesystem path, which namespaces to apply, cgroup settings, seccomp profiles, and more are described in JSON format. The Image Specification defines the format of container images, ensuring compatibility across different runtimes.</p>
+<p><code class="inline-code">runc</code> is the reference implementation of the OCI Runtime Specification. Docker itself uses runc internally to create and run containers. Thanks to this standardization, various container runtimes such as Docker, Podman, and containerd can use the same images and run compatible containers.</p>
+<h2 id="wrapping-up-the-series-connecting-kernel-concepts">Wrapping Up the Series: Connecting Kernel Concepts</h2>
+<p>This series began with an operating system overview and has arrived at containers, examining the core concepts of the Linux kernel along the way. Looking back, these concepts do not exist in isolation — they are intimately connected to each other.</p>
+<p>The <code class="inline-code">fork()</code> and <code class="inline-code">clone()</code> calls we learned about in process management are used directly for creating container namespaces. Passing flags like <code class="inline-code">CLONE_NEWPID</code> and <code class="inline-code">CLONE_NEWNET</code> to the <code class="inline-code">clone()</code> system call creates a process in new namespaces. The CFS scheduler integrates with cgroup&#39;s CPU controller to manage CPU distribution across containers.</p>
+<p>The copy-on-write concept we learned in virtual memory is the same principle behind how the overlay filesystem works. An optimization at the page level has been applied at the filesystem level as well. The OOM Killer from memory management works in conjunction with the cgroup memory controller, so when a container exceeds its memory limit, it terminates processes inside that container rather than on the host.</p>
+<p>The VFS abstraction layer we learned about in file systems is the foundation on which OverlayFS operates. The unified interface provided by VFS makes it possible to layer various filesystems on top of one another. Seccomp, which we covered in system calls, is used directly for container system call filtering.</p>
+<p>The network namespaces, veth pairs, and bridges we learned about in networking are the very building blocks of container networking. RCU and lock-free data structures from synchronization are the foundation that allows all of these subsystems to maintain high performance in multicore environments.</p>
+<p>Ultimately, a container is not a new technology but a sophisticated combination of Linux kernel features that have evolved over decades. Understanding each kernel subsystem naturally leads to understanding how containers work, and it also makes clear where the limitations of containers lie. It is my hope that this series has served as a starting point for understanding the inner workings of the Linux kernel.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/mlops-10.html" class="nav-prev">← MLOps 10 - Building an MLOps Platform</a>
+        
+        
+        <a href="/tech/en/posts/compiler-12.html" class="nav-next">Automata and Compilers 12 - Code Generation →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

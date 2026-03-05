@@ -20,6 +20,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-10.html</loc>
+    <lastmod>2026-03-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/mlops-10.html</loc>
     <lastmod>2026-03-05</lastmod>
     <changefreq>monthly</changefreq>
@@ -40,6 +46,12 @@
   <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/platform-engineering-10.html</loc>
     <lastmod>2026-02-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-09.html</loc>
+    <lastmod>2026-02-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -68,6 +80,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-08.html</loc>
+    <lastmod>2026-02-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/mlops-07.html</loc>
     <lastmod>2026-02-13</lastmod>
     <changefreq>monthly</changefreq>
@@ -76,6 +94,12 @@
   <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/platform-engineering-08.html</loc>
     <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-07.html</loc>
+    <lastmod>2026-02-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -104,6 +128,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-06.html</loc>
+    <lastmod>2026-02-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/platform-engineering-06.html</loc>
     <lastmod>2026-01-31</lastmod>
     <changefreq>monthly</changefreq>
@@ -112,6 +142,12 @@
   <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/mlops-05.html</loc>
     <lastmod>2026-01-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-05.html</loc>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -140,6 +176,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-04.html</loc>
+    <lastmod>2026-01-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/platform-engineering-04.html</loc>
     <lastmod>2026-01-17</lastmod>
     <changefreq>monthly</changefreq>
@@ -154,6 +196,12 @@
   <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/compiler-05.html</loc>
     <lastmod>2026-01-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-03.html</loc>
+    <lastmod>2026-01-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -176,6 +224,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-02.html</loc>
+    <lastmod>2026-01-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/platform-engineering-02.html</loc>
     <lastmod>2026-01-02</lastmod>
     <changefreq>monthly</changefreq>
@@ -190,6 +244,12 @@
   <url>
     <loc>https://jae-heo.github.io/tech/ko/posts/compiler-03.html</loc>
     <lastmod>2025-12-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/posts/linux-01.html</loc>
+    <lastmod>2025-12-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -392,6 +452,26 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/linux.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/os.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/kernel.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/system-programming.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/cfg.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
@@ -423,6 +503,26 @@
   </url>
   <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/architecture.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/process.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/thread.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/fork.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/exec.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -472,6 +572,26 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/scheduler.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/cfs.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/scheduling.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/cpu.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/phases.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
@@ -513,6 +633,26 @@
   </url>
   <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/templates.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/memory.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/virtual-memory.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/paging.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/mmu.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -577,6 +717,26 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/filesystem.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/vfs.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/ext4.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/inode.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/model-serving.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
@@ -608,6 +768,21 @@
   </url>
   <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/service-catalog.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/syscall.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/trap.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/kernel-module.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -672,6 +847,26 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/io.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/device-driver.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/dma.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/block-device.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/cicd.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
@@ -693,6 +888,26 @@
   </url>
   <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/pipelines.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/synchronization.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/mutex.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/semaphore.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/concurrency.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -743,6 +958,26 @@
   </url>
   <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/llvm.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/networking.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/tcp-ip.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/socket.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/netfilter.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -812,6 +1047,21 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/cgroups.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/namespaces.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/tags/docker.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/tags/platform.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
@@ -847,6 +1097,11 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/ko/page/6/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/ko/series/python-lecture.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -858,6 +1113,11 @@
   </url>
   <url>
     <loc>https://jae-heo.github.io/tech/ko/series/platform-engineering.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/ko/series/linux.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

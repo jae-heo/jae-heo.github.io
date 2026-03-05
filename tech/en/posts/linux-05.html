@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Internals 05 - File Systems - Jae's Tech Blog</title>
+    <meta name="description" content="How VFS, inodes, and ext4 work in the world where everything is a file">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/linux-05.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/linux-05.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/linux-05.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/linux-05.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/linux-05.html">
+    <meta property="og:title" content="Linux Internals 05 - File Systems">
+    <meta property="og:description" content="How VFS, inodes, and ext4 work in the world where everything is a file">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-01-28T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="filesystem">
+    
+    <meta property="article:tag" content="vfs">
+    
+    <meta property="article:tag" content="ext4">
+    
+    <meta property="article:tag" content="inode">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/linux-05.html">
+    <meta name="twitter:title" content="Linux Internals 05 - File Systems">
+    <meta name="twitter:description" content="How VFS, inodes, and ext4 work in the world where everything is a file">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux Internals 05 - File Systems",
+  "description": [
+    "How VFS",
+    "inodes",
+    "and ext4 work in the world where everything is a file"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-28T00:00:00.000Z",
+  "dateModified": "2026-01-28T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/linux-05.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "linux, filesystem, vfs, ext4, inode"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Linux Internals 05 - File Systems">Linux Internals 05 - File Systems</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Linux Internals 05 - File Systems</h1>
+        <time datetime=""2026-01-28T00:00:00.000Z"">January 28, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Linux Internals (5/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/linux.html" class="tag">linux</a>
+                    
+                    <a href="/tech/en/tags/filesystem.html" class="tag">filesystem</a>
+                    
+                    <a href="/tech/en/tags/vfs.html" class="tag">vfs</a>
+                    
+                    <a href="/tech/en/tags/ext4.html" class="tag">ext4</a>
+                    
+                    <a href="/tech/en/tags/inode.html" class="tag">inode</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Linux Internals</h3>
+        <p class="post-series-description">Understanding the Linux kernel from processes and memory to containers</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-01.html" class="post-series-link">Linux Internals 01 - Operating System Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-02.html" class="post-series-link">Linux Internals 02 - Processes and Threads</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-03.html" class="post-series-link">Linux Internals 03 - Process Scheduling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-04.html" class="post-series-link">Linux Internals 04 - Memory Management</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Linux Internals 05 - File Systems
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-06.html" class="post-series-link">Linux Internals 06 - System Calls and the Kernel</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-07.html" class="post-series-link">Linux Internals 07 - I/O and Devices</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-08.html" class="post-series-link">Linux Internals 08 - Synchronization and Concurrency</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-09.html" class="post-series-link">Linux Internals 09 - Networking</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-10.html" class="post-series-link">Linux Internals 10 - Containers and Virtualization</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="everything-is-a-file">Everything Is a File</h2>
+<p>The most fundamental design principle running through Linux is the philosophy that &quot;everything is a file.&quot; Not just documents stored on disk, but process information (/proc), devices (/dev), and even network sockets can all be accessed through the same file interface. Why is this principle so powerful? Because knowing just four system calls — open, read, write, close — lets you interact with disk files, serial ports, and kernel parameters in exactly the same way.</p>
+<p>Without this philosophy, a separate API would have been needed for every device, and programmers would have had to learn an entirely different interface each time new hardware was added. Thanks to the single abstraction of files, reading CPU information with <code class="inline-code">cat /proc/cpuinfo</code> and reading a configuration file with <code class="inline-code">cat /etc/hostname</code> become exactly the same operation.</p>
+<h2 id="vfs-a-file-system-above-file-systems">VFS: A File System Above File Systems</h2>
+<p>Linux supports dozens of file systems — ext4, XFS, Btrfs, tmpfs, procfs, and more. Yet when a user runs <code class="inline-code">ls</code>, they never need to care which file system the current directory resides on. This is possible because of an abstraction layer called VFS (Virtual File System).</p>
+<p>VFS defines a common interface that all file systems must implement. Each file system provides its own implementation conforming to this interface, and the rest of the kernel only needs to call the VFS interface. This is essentially the same concept as polymorphism in object-oriented design.</p>
+<pre><code>┌─────────────────────────────────────┐
+│        User Space Processes          │
+│     open() / read() / write()       │
+├─────────────────────────────────────┤
+│       VFS (Virtual File System)      │
+│  superblock · inode · dentry · file  │
+├────────┬────────┬────────┬──────────┤
+│  ext4  │  XFS   │ tmpfs  │  procfs  │
+├────────┴────────┴────────┴──────────┤
+│          Block Device Layer          │
+├─────────────────────────────────────┤
+│        Physical Disk / SSD           │
+└─────────────────────────────────────┘</code></pre>
+<p>VFS manages four core objects. The superblock holds metadata about the entire file system (block size, mount status, and so on). The inode represents metadata for an individual file. The dentry is a directory entry that provides the mapping between a file name and its inode. The file object tracks the state of a file that a process has open (current offset, access mode, etc.).</p>
+<h2 id="inodes-the-identity-of-a-file">Inodes: The Identity of a File</h2>
+<p>In a file system, a file&#39;s name is not actually its essence. A file&#39;s true identity is its inode number. The inode records the file&#39;s owner, permissions, size, timestamps, and the locations of disk blocks where actual data is stored. What&#39;s interesting is that the file name is not stored in the inode. File names live in the dentry of a directory, and it is the dentry that points to the inode.</p>
+<p>This design is what makes hard links possible. Since multiple dentries can point to a single inode, a single file can have multiple names. You can check a file&#39;s inode number with <code class="inline-code">ls -i</code> and view detailed inode information with <code class="inline-code">stat</code>.</p>
+<pre><code class="language-bash">$ ls -i /etc/hostname
+1234567 /etc/hostname
+
+$ stat /etc/hostname
+  File: /etc/hostname
+  Size: 12        Blocks: 8        IO Block: 4096   regular file
+Device: 801h/2049d   Inode: 1234567   Links: 1
+Access: (0644/-rw-r--r--)  Uid: (0/root)   Gid: (0/root)
+Access: 2026-01-15 10:30:00.000000000 +0900
+Modify: 2026-01-10 08:00:00.000000000 +0900
+Change: 2026-01-10 08:00:00.000000000 +0900</code></pre>
+<h2 id="hard-links-and-symbolic-links">Hard Links and Symbolic Links</h2>
+<p>A hard link creates another dentry pointing to the same inode. The original file and the hard link are completely equal — there is no way to distinguish which is the &quot;original.&quot; The file&#39;s inode contains a link count, and the actual data blocks are freed only when all hard links are deleted and the link count drops to zero.</p>
+<p>Why are symbolic links (soft links) needed, then? Because hard links have two limitations. First, hard links can only be created within the same file system. Since different file systems have independent inode number spaces, cross-referencing is impossible. Second, hard links to directories are generally disallowed because they can create circular reference problems.</p>
+<p>Symbolic links work around these limitations. A symbolic link has its own separate inode, and its content is a path string pointing to the target file. When the kernel encounters a symbolic link, it follows the stored path to find the actual file. If the target file is deleted, the symbolic link becomes a dangling link — something that never happens with hard links.</p>
+<h2 id="ext4-file-system-internals">ext4 File System Internals</h2>
+<p>ext4 is currently the most widely used file system on Linux. It is the product of an evolution that started with ext2, added journaling in ext3, and enhanced support for large files and large partitions in ext4.</p>
+<p>ext4 manages the disk by dividing it into units called block groups. Each block group contains that group&#39;s inode table, data block bitmap, and inode bitmap. The reason for maintaining this locality is to reduce disk seek time by placing the inodes and data of related files in physically close locations.</p>
+<pre><code>┌──────────────────────────────────────────┐
+│            ext4 Disk Layout              │
+├──────┬───────────────────────────────────┤
+│Super │          Block Group 0            │
+│block │ GDT│Bitmap│Inode Table│Data Blocks │
+├──────┼───────────────────────────────────┤
+│      │          Block Group 1            │
+│      │ GDT│Bitmap│Inode Table│Data Blocks │
+├──────┼───────────────────────────────────┤
+│      │          Block Group N            │
+│      │ GDT│Bitmap│Inode Table│Data Blocks │
+└──────┴───────────────────────────────────┘</code></pre>
+<p>One important innovation in ext4 is extent-based block mapping. The previous generation — ext2/ext3 — used indirect block pointers to track each block of a file individually. For large files, this required traversing double and triple indirect pointers, degrading performance. ext4&#39;s extents need only record the starting position and length of contiguous blocks, dramatically reducing metadata overhead for large files.</p>
+<h2 id="journaling-and-crash-recovery">Journaling and Crash Recovery</h2>
+<p>Writing data to a file system involves multiple stages of disk writes. The inode must be updated, data blocks written, and bitmaps refreshed. What happens if a power failure occurs in the middle of this process? Without journaling, the file system can end up in an inconsistent state. The inode might point to a data block whose data was never actually written, or vice versa.</p>
+<p>Journaling solves this problem. Before writing the actual data, it first writes a record to a separate journal area saying &quot;these are the changes I intend to make.&quot; Once the changes are complete, the journal entry is marked as committed. If a crash occurs, the journal is replayed to either roll back or reapply incomplete changes. This is called write-ahead logging — the same principle that databases have used for decades.</p>
+<p>ext4 offers three journaling modes. Journal mode records both metadata and data to the journal, providing the highest safety but the lowest performance. Ordered mode records only metadata to the journal but guarantees that data blocks are written to disk before the metadata commit. Writeback mode records only metadata to the journal without guaranteeing data write order — the fastest option, but file contents may be corrupted after a crash. The default is ordered mode, striking a balance between safety and performance.</p>
+<h2 id="file-descriptors">File Descriptors</h2>
+<p>When a process opens a file, the kernel returns an integer called a file descriptor. This integer is an index into the process&#39;s file descriptor table, where each entry points to a kernel file table entry, which in turn points to an inode.</p>
+<p>Every process starts with three file descriptors by default. Descriptor 0 is standard input (stdin), 1 is standard output (stdout), and 2 is standard error (stderr). The <code class="inline-code">&gt;</code> redirection in the shell works precisely because of file descriptors. <code class="inline-code">command &gt; output.txt</code> simply changes file descriptor 1 to point to the output.txt file.</p>
+<pre><code class="language-bash">$ ls -l /proc/self/fd
+lrwx------ 1 user user 64 Jan 28 10:00 0 -&gt; /dev/pts/0
+lrwx------ 1 user user 64 Jan 28 10:00 1 -&gt; /dev/pts/0
+lrwx------ 1 user user 64 Jan 28 10:00 2 -&gt; /dev/pts/0</code></pre>
+<p>File descriptors are simple integers, but this abstraction forms the backbone of Unix pipelines. In <code class="inline-code">ls | grep txt</code>, the stdout (fd 1) of ls connects to the write end of a pipe, and the stdin (fd 0) of grep connects to the read end — and that is how data flows between processes.</p>
+<h2 id="mount-points">Mount Points</h2>
+<p>To use a file system in Linux, it must first be mounted at a specific point in the directory tree. This point is the mount point. Unlike Windows, which uses drive letters like C: and D:, Linux integrates all file systems into a single directory tree.</p>
+<p>The root file system (/) forms the base of the tree, and other file systems are mounted at subdirectories within it. <code class="inline-code">/home</code> might be a separate partition, <code class="inline-code">/tmp</code> might be a memory-based tmpfs, but to the user it all appears as one continuous directory tree. This is the transparency that VFS&#39;s mount abstraction provides.</p>
+<pre><code class="language-bash">$ mount
+/dev/sda1 on / type ext4 (rw,relatime)
+/dev/sda2 on /home type ext4 (rw,relatime)
+tmpfs on /tmp type tmpfs (rw,nosuid,nodev)
+proc on /proc type proc (rw,nosuid,nodev,noexec)
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec)</code></pre>
+<p>Virtual file systems like <code class="inline-code">/proc</code> and <code class="inline-code">/sys</code> — which have no actual disk behind them — are mounted in exactly the same way. They don&#39;t store data on disk, but they serve as a means for the kernel to expose information through the file system interface. This is precisely why process information, hardware parameters, and kernel statistics can all be read as if they were files.</p>
+<p>In the next post, we&#39;ll look at system calls and the internal workings of the kernel.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/compiler-07.html" class="nav-prev">← Automata and Compilers 07 - Top-Down Parsing</a>
+        
+        
+        <a href="/tech/en/posts/mlops-05.html" class="nav-next">MLOps 05 - Model Serving and Deployment Strategies →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

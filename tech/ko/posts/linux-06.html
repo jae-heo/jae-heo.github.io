@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리눅스 내부 구조 06 - 시스템 콜과 커널 - 재영의 기술 블로그</title>
+    <meta name="description" content="시스템 콜이 유저 공간에서 커널 공간으로 전환되는 과정과 커널 모듈의 동작 원리">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/linux-06.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/linux-06.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/linux-06.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/linux-06.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/linux-06.html">
+    <meta property="og:title" content="리눅스 내부 구조 06 - 시스템 콜과 커널">
+    <meta property="og:description" content="시스템 콜이 유저 공간에서 커널 공간으로 전환되는 과정과 커널 모듈의 동작 원리">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-03T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="syscall">
+    
+    <meta property="article:tag" content="kernel">
+    
+    <meta property="article:tag" content="trap">
+    
+    <meta property="article:tag" content="kernel-module">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/linux-06.html">
+    <meta name="twitter:title" content="리눅스 내부 구조 06 - 시스템 콜과 커널">
+    <meta name="twitter:description" content="시스템 콜이 유저 공간에서 커널 공간으로 전환되는 과정과 커널 모듈의 동작 원리">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "리눅스 내부 구조 06 - 시스템 콜과 커널",
+  "description": "시스템 콜이 유저 공간에서 커널 공간으로 전환되는 과정과 커널 모듈의 동작 원리",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-03T00:00:00.000Z",
+  "dateModified": "2026-02-03T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/linux-06.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "linux, syscall, kernel, trap, kernel-module"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="리눅스 내부 구조 06 - 시스템 콜과 커널">리눅스 내부 구조 06 - 시스템 콜과 커널</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>리눅스 내부 구조 06 - 시스템 콜과 커널</h1>
+        <time datetime=""2026-02-03T00:00:00.000Z"">February 3, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 리눅스 내부 구조 (6/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/linux.html" class="tag">linux</a>
+                    
+                    <a href="/tech/ko/tags/syscall.html" class="tag">syscall</a>
+                    
+                    <a href="/tech/ko/tags/kernel.html" class="tag">kernel</a>
+                    
+                    <a href="/tech/ko/tags/trap.html" class="tag">trap</a>
+                    
+                    <a href="/tech/ko/tags/kernel-module.html" class="tag">kernel-module</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 리눅스 내부 구조</h3>
+        <p class="post-series-description">프로세스와 메모리부터 컨테이너까지, 리눅스 커널의 내부 동작 이해하기</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-01.html" class="post-series-link">리눅스 내부 구조 01 - 운영체제 개요</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-02.html" class="post-series-link">리눅스 내부 구조 02 - 프로세스와 스레드</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-03.html" class="post-series-link">리눅스 내부 구조 03 - 프로세스 스케줄링</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-04.html" class="post-series-link">리눅스 내부 구조 04 - 메모리 관리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-05.html" class="post-series-link">리눅스 내부 구조 05 - 파일 시스템</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                리눅스 내부 구조 06 - 시스템 콜과 커널
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-07.html" class="post-series-link">리눅스 내부 구조 07 - I/O와 디바이스</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-08.html" class="post-series-link">리눅스 내부 구조 08 - 동기화와 동시성</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-09.html" class="post-series-link">리눅스 내부 구조 09 - 네트워킹</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-10.html" class="post-series-link">리눅스 내부 구조 10 - 컨테이너와 가상화</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">시스템 콜이란 무엇인가?</h2>
+<p>유저 공간의 프로그램은 하드웨어에 직접 접근할 수 없다. 파일을 읽거나, 프로세스를 생성하거나, 네트워크 패킷을 전송하려면 반드시 커널에 요청해야 한다. 이 요청의 통로가 바로 시스템 콜이다. 시스템 콜은 유저 공간과 커널 공간 사이의 유일한 공식 인터페이스이며, 커널이 제공하는 서비스를 사용하기 위한 계약과 같은 것이다.</p>
+<p>리눅스 커널은 약 450개의 시스템 콜을 제공한다. open, read, write, close 같은 파일 관련 콜부터 fork, exec, wait 같은 프로세스 관련 콜, socket, bind, listen 같은 네트워크 관련 콜까지 운영체제의 모든 기능이 시스템 콜을 통해 노출된다. 프로그래머가 작성하는 대부분의 코드는 결국 이 시스템 콜들의 조합으로 귀결되는 셈이다.</p>
+<h2 id="-">시스템 콜의 실행 과정</h2>
+<p>시스템 콜이 호출되면 CPU의 실행 모드가 유저 모드에서 커널 모드로 전환된다. 이 전환은 단순한 함수 호출이 아니라, CPU의 권한 수준이 바뀌는 근본적인 모드 변경이다. 그 과정을 단계별로 살펴보면 다음과 같다.</p>
+<p>먼저, 프로그램이 시스템 콜을 호출하면 시스템 콜 번호가 레지스터(x86-64에서는 rax)에 저장되고, 인자들이 정해진 레지스터(rdi, rsi, rdx 등)에 배치된다. 그 다음 x86-64에서는 <code class="inline-code">syscall</code> 명령어가 실행되어 CPU가 커널 모드로 전환된다. 커널은 시스템 콜 테이블에서 rax에 저장된 번호에 해당하는 핸들러 함수를 찾아 실행한다. 핸들러가 작업을 완료하면 결과값이 rax에 저장되고, <code class="inline-code">sysret</code> 명령어를 통해 유저 모드로 복귀한다.</p>
+<pre><code>유저 공간                          커널 공간
+┌────────────┐                   ┌────────────────┐
+│ 프로그램    │                   │                │
+│            │  ① rax = 콜 번호   │                │
+│ write(fd,  │  ② syscall 명령   │  시스템 콜 테이블 │
+│   buf, n)  │ ──────────────►   │  ┌───┬────────┐│
+│            │                   │  │ 0 │sys_read ││
+│            │  ⑤ sysret        │  │ 1 │sys_write││
+│            │ ◄──────────────   │  │ 2 │sys_open ││
+│ 반환값 확인 │                   │  │...│  ...    ││
+└────────────┘                   │  └───┴────────┘│
+                                 │  ③ 핸들러 실행   │
+                                 │  ④ 결과 → rax   │
+                                 └────────────────┘</code></pre>
+<p>이 과정에서 중요한 것은 유저 공간의 스택과 커널 공간의 스택이 별도로 존재한다는 점이다. 커널 모드로 전환될 때 CPU는 커널 스택으로 전환하며, 유저 공간의 레지스터 상태를 저장한다. 이 분리가 없다면 악의적인 프로그램이 커널의 스택을 조작하여 시스템 전체를 장악할 수 있을 것이다.</p>
+<h2 id="-">트랩과 인터럽트</h2>
+<p>시스템 콜은 소프트웨어 트랩의 한 종류이다. 트랩은 프로그램이 의도적으로 발생시키는 CPU 예외로, 시스템 콜 외에도 디버그 브레이크포인트나 0으로 나누기 같은 상황에서 발생한다. 트랩은 동기적이다. 즉, 프로그램이 특정 명령을 실행하는 시점에 정확히 발생하는 것이다.</p>
+<p>이에 반해 인터럽트는 비동기적이다. 키보드 입력, 디스크 I/O 완료, 네트워크 패킷 수신 같은 외부 이벤트가 발생할 때 하드웨어가 CPU에 신호를 보내는 것이다. CPU는 현재 실행 중인 명령을 완료한 후 인터럽트 핸들러로 분기하여 이벤트를 처리한다.</p>
+<p>과연 트랩과 인터럽트의 구분이 실질적으로 중요한가? 그렇다. 트랩은 현재 프로세스의 맥락에서 처리되지만, 인터럽트는 어떤 프로세스가 실행 중이든 상관없이 발생한다. 커널은 인터럽트 처리 중에 가능한 한 적은 작업만 수행하고(top half), 나머지를 나중에 처리(bottom half)하는 전략을 사용한다. 이 분리가 없으면 잦은 인터럽트로 인해 시스템의 응답성이 크게 저하될 수 있는 것이다.</p>
+<h2 id="glibc-">glibc의 래퍼 함수</h2>
+<p>C 프로그램에서 <code class="inline-code">write()</code>를 호출할 때, 프로그래머가 직접 레지스터를 설정하고 <code class="inline-code">syscall</code> 명령어를 실행하는 것은 아니다. glibc(GNU C Library)가 이 과정을 래퍼 함수로 감싸고 있기 때문이다.</p>
+<p>glibc의 래퍼 함수는 단순히 시스템 콜을 대신 호출하는 것 이상의 역할을 한다. 에러 처리를 표준화하여 시스템 콜이 실패하면 errno를 설정하고 -1을 반환한다. 또한 일부 시스템 콜은 glibc 내부에서 버퍼링이나 캐싱을 수행하여 불필요한 커널 진입을 줄인다. printf가 매번 write 시스템 콜을 호출하지 않고 버퍼가 찰 때까지 유저 공간에서 데이터를 모으는 것이 그 예이다.</p>
+<pre><code class="language-c">// 프로그래머가 작성하는 코드
+ssize_t n = write(fd, buf, count);
+if (n == -1) {
+    perror(&quot;write failed&quot;);
+}
+
+// glibc 내부에서 일어나는 일 (개념적)
+ssize_t write(int fd, const void *buf, size_t count) {
+    long ret;
+    asm volatile (
+        &quot;syscall&quot;
+        : &quot;=a&quot; (ret)
+        : &quot;a&quot; (__NR_write), &quot;D&quot; (fd), &quot;S&quot; (buf), &quot;d&quot; (count)
+        : &quot;rcx&quot;, &quot;r11&quot;, &quot;memory&quot;
+    );
+    if (ret &lt; 0) {
+        errno = -ret;
+        return -1;
+    }
+    return ret;
+}</code></pre>
+<h2 id="strace-">strace로 시스템 콜 추적하기</h2>
+<p>프로그램이 어떤 시스템 콜을 호출하는지 실시간으로 관찰할 수 있는 도구가 strace이다. strace는 ptrace 시스템 콜을 이용하여 대상 프로세스의 모든 시스템 콜 진입과 반환을 가로챈다.</p>
+<pre><code class="language-bash">$ strace ls /tmp
+execve(&quot;/usr/bin/ls&quot;, [&quot;ls&quot;, &quot;/tmp&quot;], 0x7ffd...) = 0
+...
+openat(AT_FDCWD, &quot;/tmp&quot;, O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3
+getdents64(3, /* 5 entries */, 32768)   = 160
+getdents64(3, /* 0 entries */, 32768)   = 0
+close(3)                                = 0
+write(1, &quot;file1.txt  file2.txt\n&quot;, 21)  = 21
+close(1)                                = 0
+close(2)                                = 0
+exit_group(0)                           = ?</code></pre>
+<p>이 출력에서 단순한 <code class="inline-code">ls /tmp</code> 명령이 실제로는 수십 개의 시스템 콜을 호출한다는 것을 알 수 있다. openat으로 디렉터리를 열고, getdents64로 디렉터리 엔트리를 읽고, write로 결과를 출력하는 과정이 보인다. 프로그램이 기대대로 동작하지 않을 때 strace는 문제의 원인이 어떤 시스템 콜에서 실패했는지를 정확히 짚어주는 강력한 디버깅 도구인 것이다.</p>
+<p><code class="inline-code">strace -c</code>를 사용하면 시스템 콜별 호출 횟수와 소요 시간의 통계를 볼 수 있어 성능 분석에도 유용하다. <code class="inline-code">strace -e trace=file</code>처럼 특정 카테고리의 시스템 콜만 필터링할 수도 있다.</p>
+<h2 id="-">커널 모듈</h2>
+<p>리눅스는 모놀리식 커널이지만, 모든 기능을 부팅 시점에 메모리에 올려야 하는 것은 아니다. 커널 모듈은 실행 중인 커널에 동적으로 로드하거나 언로드할 수 있는 코드 조각이다. 디바이스 드라이버, 파일 시스템, 네트워크 프로토콜 등이 커널 모듈로 구현되는 경우가 많다.</p>
+<p>커널 모듈을 관리하는 기본 명령어는 세 가지이다. <code class="inline-code">insmod</code>는 모듈을 커널에 로드하고, <code class="inline-code">rmmod</code>는 모듈을 언로드하며, <code class="inline-code">lsmod</code>는 현재 로드된 모듈 목록을 보여준다. 실무에서는 insmod 대신 <code class="inline-code">modprobe</code>를 더 많이 사용하는데, modprobe는 모듈의 의존성을 자동으로 해결하여 필요한 모듈을 순서대로 로드해 주기 때문이다.</p>
+<pre><code class="language-bash">$ lsmod | head -5
+Module                  Size  Used by
+snd_hda_intel         57344  2
+snd_intel_dspcfg      28672  1 snd_hda_intel
+snd_hda_codec        172032  1 snd_hda_intel
+snd_hda_core         106496  2 snd_hda_codec,snd_hda_intel</code></pre>
+<h2 id="-">간단한 커널 모듈 작성</h2>
+<p>커널 모듈이 어떻게 동작하는지 이해하는 가장 좋은 방법은 직접 작성해 보는 것이다. 아래는 로드될 때 메시지를 출력하고 언로드될 때 또 다른 메시지를 출력하는 최소한의 커널 모듈이다.</p>
+<pre><code class="language-c">#include &lt;linux/init.h&gt;
+#include &lt;linux/module.h&gt;
+#include &lt;linux/kernel.h&gt;
+
+MODULE_LICENSE(&quot;GPL&quot;);
+MODULE_AUTHOR(&quot;example&quot;);
+MODULE_DESCRIPTION(&quot;A minimal kernel module&quot;);
+
+static int __init hello_init(void) {
+    printk(KERN_INFO &quot;hello: module loaded\n&quot;);
+    return 0;
+}
+
+static void __exit hello_exit(void) {
+    printk(KERN_INFO &quot;hello: module unloaded\n&quot;);
+}
+
+module_init(hello_init);
+module_exit(hello_exit);</code></pre>
+<p>이 코드에서 주목할 점이 몇 가지 있다. 커널 모듈은 일반적인 C 프로그램과 달리 main 함수가 없다. 대신 <code class="inline-code">module_init</code>과 <code class="inline-code">module_exit</code> 매크로로 진입점과 종료점을 지정한다. 출력에는 printf가 아닌 <code class="inline-code">printk</code>를 사용하는데, 커널 공간에서는 표준 C 라이브러리를 사용할 수 없기 때문이다. printk의 출력은 커널 링 버퍼에 기록되며 <code class="inline-code">dmesg</code> 명령으로 확인할 수 있다.</p>
+<p>커널 모듈은 커널과 동일한 권한으로 실행되므로, 버그가 있는 모듈은 시스템 전체를 크래시시킬 수 있다. 이것이 커널 개발이 유저 공간 개발보다 훨씬 신중해야 하는 이유인 것이다.</p>
+<h2 id="proc-sys-">/proc과 /sys 인터페이스</h2>
+<p>커널은 자신의 내부 상태를 유저 공간에 노출하기 위해 가상 파일 시스템을 사용한다. /proc과 /sys가 대표적이다.</p>
+<p>/proc 파일 시스템은 원래 프로세스 정보를 위해 설계되었다. /proc 아래에는 실행 중인 각 프로세스의 PID를 이름으로 하는 디렉터리가 있으며, 그 안에서 프로세스의 메모리 맵, 열린 파일 디스크립터, 명령행 인자 등을 확인할 수 있다. 시간이 지나면서 /proc에는 프로세스와 무관한 시스템 전체 정보도 추가되었다. /proc/meminfo는 메모리 사용량을, /proc/cpuinfo는 CPU 정보를, /proc/interrupts는 인터럽트 통계를 보여준다.</p>
+<pre><code class="language-bash">$ cat /proc/self/status | head -8
+Name:   cat
+Umask:  0022
+State:  R (running)
+Tgid:   12345
+Ngid:   0
+Pid:    12345
+PPid:   12300
+TracerPid:   0</code></pre>
+<p>/sys 파일 시스템은 /proc의 혼잡함을 해소하기 위해 도입되었다. /sys는 커널의 장치 모델을 계층적으로 반영하며, 디바이스, 버스, 드라이버 등의 정보를 체계적으로 제공한다. /proc가 역사적 이유로 정리되지 않은 정보가 뒤섞인 반면, /sys는 처음부터 구조화된 설계를 갖추고 있는 것이다.</p>
+<p>이 가상 파일 시스템들은 읽기만 가능한 것이 아니다. 특정 파일에 값을 쓰면 커널의 동작을 변경할 수도 있다. 예를 들어 <code class="inline-code">/proc/sys/net/ipv4/ip_forward</code>에 1을 쓰면 IP 포워딩이 활성화된다. 이러한 인터페이스 덕분에 별도의 API나 도구 없이 표준 파일 I/O만으로 커널을 설정할 수 있는 것이다.</p>
+<p>다음 포스트에서는 I/O와 디바이스 관리를 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/platform-engineering-06.html" class="nav-prev">← 플랫폼 엔지니어링 06 - 개발자 포털과 서비스 카탈로그</a>
+        
+        
+        <a href="/tech/ko/posts/compiler-08.html" class="nav-next">오토마타와 컴파일러 08 - 상향식 파싱 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

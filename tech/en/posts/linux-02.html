@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Internals 02 - Processes and Threads - Jae's Tech Blog</title>
+    <meta name="description" content="How processes are created and managed in Linux, and how threads relate to them">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/linux-02.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/linux-02.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/linux-02.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/linux-02.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/linux-02.html">
+    <meta property="og:title" content="Linux Internals 02 - Processes and Threads">
+    <meta property="og:description" content="How processes are created and managed in Linux, and how threads relate to them">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-01-05T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="process">
+    
+    <meta property="article:tag" content="thread">
+    
+    <meta property="article:tag" content="fork">
+    
+    <meta property="article:tag" content="exec">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/linux-02.html">
+    <meta name="twitter:title" content="Linux Internals 02 - Processes and Threads">
+    <meta name="twitter:description" content="How processes are created and managed in Linux, and how threads relate to them">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux Internals 02 - Processes and Threads",
+  "description": [
+    "How processes are created and managed in Linux",
+    "and how threads relate to them"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-05T00:00:00.000Z",
+  "dateModified": "2026-01-05T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/linux-02.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "linux, process, thread, fork, exec"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Linux Internals 02 - Processes and Threads">Linux Internals 02 - Processes and Threads</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Linux Internals 02 - Processes and Threads</h1>
+        <time datetime=""2026-01-05T00:00:00.000Z"">January 5, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Linux Internals (2/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/linux.html" class="tag">linux</a>
+                    
+                    <a href="/tech/en/tags/process.html" class="tag">process</a>
+                    
+                    <a href="/tech/en/tags/thread.html" class="tag">thread</a>
+                    
+                    <a href="/tech/en/tags/fork.html" class="tag">fork</a>
+                    
+                    <a href="/tech/en/tags/exec.html" class="tag">exec</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Linux Internals</h3>
+        <p class="post-series-description">Understanding the Linux kernel from processes and memory to containers</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-01.html" class="post-series-link">Linux Internals 01 - Operating System Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Linux Internals 02 - Processes and Threads
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-03.html" class="post-series-link">Linux Internals 03 - Process Scheduling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-04.html" class="post-series-link">Linux Internals 04 - Memory Management</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-05.html" class="post-series-link">Linux Internals 05 - File Systems</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-06.html" class="post-series-link">Linux Internals 06 - System Calls and the Kernel</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-07.html" class="post-series-link">Linux Internals 07 - I/O and Devices</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-08.html" class="post-series-link">Linux Internals 08 - Synchronization and Concurrency</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-09.html" class="post-series-link">Linux Internals 09 - Networking</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-10.html" class="post-series-link">Linux Internals 10 - Containers and Virtualization</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="what-is-a-process">What Is a Process?</h2>
+<p>A program and a process are different things. A program is an executable file stored on disk, while a process is that program loaded into memory and actively running. Running the same program twice creates two independent processes, each with its own memory space and execution state.</p>
+<p>The Linux kernel manages each process through a structure called <code class="inline-code">task_struct</code>. This structure contains everything the kernel needs to know about a process — its process ID, state, memory map, list of open files, scheduling information, signal handlers, and more. In the kernel source, <code class="inline-code">task_struct</code> is several kilobytes in size, which reflects just how much information the kernel must track to properly manage a single process.</p>
+<p>Every process receives a unique PID (Process ID). The very first process created on the system has PID 1. Traditionally this was <code class="inline-code">init</code>, and on modern distributions <code class="inline-code">systemd</code> fills this role. PID 1 serves as the ancestor of every process on the system and also takes on the responsibility of adopting orphaned processes.</p>
+<h2 id="fork-and-exec-how-processes-are-born">fork and exec: How Processes Are Born</h2>
+<p>The way Linux creates new processes is somewhat unusual. Rather than constructing a process from scratch, it duplicates an existing process and then replaces the duplicate with a new program — a two-step procedure.</p>
+<p>The first step is <code class="inline-code">fork()</code>. Calling <code class="inline-code">fork()</code> creates a nearly identical copy of the current process. The parent and child have the same code, same data, and same open files — only their PIDs differ. The return value of <code class="inline-code">fork()</code> distinguishes the two: the parent receives the child&#39;s PID, while the child receives 0.</p>
+<pre><code class="language-c">pid_t pid = fork();
+if (pid == 0) {
+    // Child process: execute a new program
+    execvp(&quot;ls&quot;, args);
+} else if (pid &gt; 0) {
+    // Parent process: wait for child to finish
+    waitpid(pid, &amp;status, 0);
+}</code></pre>
+<p>The second step is the <code class="inline-code">exec()</code> family of functions. <code class="inline-code">exec()</code> replaces the current process&#39;s memory entirely with a new program. The code, data, heap, and stack are all replaced with those of the new program, but the PID remains the same. Every time you run a command in the shell, this fork-exec combination is what happens behind the scenes.</p>
+<p>Is it efficient to copy all the memory every time? No, it isn&#39;t. That&#39;s why Linux uses a technique called Copy-on-Write (COW). At the time of <code class="inline-code">fork()</code>, the memory is not actually copied. Instead, the parent and child share the same physical memory pages. Only when one side attempts to modify a page is that page actually copied. If <code class="inline-code">exec()</code> is called right after <code class="inline-code">fork()</code>, the child&#39;s memory is entirely replaced by the new program, so the pages never needed to be copied at all.</p>
+<h2 id="process-states">Process States</h2>
+<p>A process transitions through several states from creation to termination. The main states a Linux process can have are as follows.</p>
+<pre><code>                   Selected by
+    ┌──────────── scheduler ──────────┐
+    │                                 ▼
+ ┌──┴────────┐                 ┌──────────┐
+ │   READY   │                 │ RUNNING  │
+ │  (queued) │◄────────────────│(on CPU)  │
+ └───────────┘  Time slice     └────┬─────┘
+                exhausted           │
+                               I/O request
+                                    ▼
+                             ┌──────────┐
+                             │ SLEEPING │
+                             │(waiting) │
+                             └──────────┘</code></pre>
+<p><strong>TASK_RUNNING</strong> means the process is either executing on a CPU or waiting in the run queue for its turn. <strong>TASK_INTERRUPTIBLE</strong> means it is sleeping while waiting for a specific event and can be woken by a signal. Processes waiting for disk I/O or network packets are typically in this state. <strong>TASK_UNINTERRUPTIBLE</strong> is a deeper sleep that cannot be interrupted even by signals — it is used in situations where interruption could cause data corruption, such as waiting for a hardware response.</p>
+<p>Then there is <strong>TASK_ZOMBIE</strong>. A zombie process is one that has finished executing but whose parent has not yet collected its exit status. When a process terminates, the kernel releases most of its resources, but the <code class="inline-code">task_struct</code> and exit code are kept until the parent calls <code class="inline-code">wait()</code>. If the parent never calls <code class="inline-code">wait()</code>, the zombie persists. A zombie itself consumes almost no memory, but it occupies a PID. If zombies accumulate in large numbers, they can exhaust the PID space and become a real problem.</p>
+<h2 id="the-process-tree">The Process Tree</h2>
+<p>All processes in Linux form a tree structure. PID 1, <code class="inline-code">init</code> (or <code class="inline-code">systemd</code>), sits at the root, and every subsequent process must have a parent. The <code class="inline-code">pstree</code> command makes this structure visible.</p>
+<pre><code>systemd─┬─sshd───sshd───bash───vim
+        ├─nginx─┬─nginx
+        │       └─nginx
+        ├─cron
+        └─rsyslogd</code></pre>
+<p>If a parent process terminates before its children, those children become orphan processes. The kernel reassigns their parent to PID 1. Because PID 1 periodically calls <code class="inline-code">wait()</code> to collect the exit status of its adopted children, this prevents zombies from accumulating indefinitely. This is precisely why the PID 1 problem matters in container environments. If the process running as PID 1 inside a container does not perform this reaping duty, zombie processes will pile up.</p>
+<h2 id="threads-processes-within-a-process">Threads: Processes Within a Process?</h2>
+<p>Traditionally, a process had only a single flow of execution. But if a web server needs to handle thousands of concurrent requests, creating a new process for each request is expensive. Each process has its own independent address space, so sharing data between processes requires separate mechanisms like IPC.</p>
+<p>Threads solve this problem. Threads within the same process share code, data, the heap, and open files, while each maintains only its own stack and register state. Because memory sharing is the default, data exchange is fast, and creating a new thread costs far less than creating a new process.</p>
+<p>The way Linux implements threads has an interesting distinction from other operating systems. The Linux kernel does not treat threads as a concept separate from processes. From the kernel&#39;s perspective, a thread is simply a process that shares resources with another process. Both are represented by <code class="inline-code">task_struct</code>.</p>
+<p>What makes this possible is the <code class="inline-code">clone()</code> system call. While <code class="inline-code">fork()</code> copies nearly all resources, <code class="inline-code">clone()</code> allows fine-grained control through flags over which resources are shared and which are copied.</p>
+<pre><code class="language-c">// Similar to fork: copies most resources
+clone(fn, stack, 0, arg);
+
+// Thread creation: shares memory, file descriptors, signal handlers, etc.
+clone(fn, stack, CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND, arg);</code></pre>
+<p><code class="inline-code">CLONE_VM</code> shares the memory space, <code class="inline-code">CLONE_FILES</code> shares the file descriptor table, and <code class="inline-code">CLONE_SIGHAND</code> shares signal handlers. By combining these flags, you can create anything on a continuous spectrum from a fully independent process to a thread that shares everything.</p>
+<h2 id="posix-threads">POSIX Threads</h2>
+<p>In application code, threads are typically created not by calling <code class="inline-code">clone()</code> directly but through the POSIX threads (pthread) API. On Linux, NPTL (Native POSIX Threads Library), the implementation of pthreads, internally calls <code class="inline-code">clone()</code> to create threads.</p>
+<pre><code class="language-c">#include &lt;pthread.h&gt;
+
+void *worker(void *arg) {
+    // Work to be performed by the thread
+    return NULL;
+}
+
+int main() {
+    pthread_t thread;
+    pthread_create(&amp;thread, NULL, worker, NULL);
+    pthread_join(thread, NULL);  // Wait for thread to finish
+    return 0;
+}</code></pre>
+<p>Are threads always a better choice than processes? No, they are not. Because threads share memory, a bug in one thread can affect every other thread in the same process. A single bad pointer dereference can bring down the entire process. Processes, on the other hand, have separate address spaces, so one process crashing does not affect the others. Nginx uses a worker process model, and Chrome runs each tab in a separate process, precisely to gain this isolation benefit.</p>
+<h2 id="the-proc-filesystem">The /proc Filesystem</h2>
+<p>Linux exposes information about running processes to user space through the <code class="inline-code">/proc</code> filesystem. <code class="inline-code">/proc</code> is not a real filesystem on disk — it is a virtual filesystem generated dynamically by the kernel.</p>
+<pre><code class="language-bash"># Information for process with PID 1234
+ls /proc/1234/
+cmdline  cwd  environ  exe  fd  maps  status  ...
+
+# View the process&#39;s memory map
+cat /proc/1234/maps
+
+# View the process&#39;s status
+cat /proc/1234/status
+Name:   nginx
+State:  S (sleeping)
+Pid:    1234
+PPid:   1
+Threads: 4
+VmRSS:  12340 kB</code></pre>
+<p>The <code class="inline-code">/proc/[pid]/fd</code> directory contains symbolic links representing every file descriptor the process has open. <code class="inline-code">/proc/[pid]/maps</code> shows the layout of the process&#39;s virtual memory regions. When system administrators or monitoring tools need to inspect a process&#39;s state, reading <code class="inline-code">/proc</code> is sufficient — there is no need to access kernel data structures directly. Tools like <code class="inline-code">ps</code>, <code class="inline-code">top</code>, and <code class="inline-code">htop</code> all read their information from <code class="inline-code">/proc</code> internally.</p>
+<p>In the next post, we&#39;ll look at process scheduling.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-02.html" class="nav-prev">← Platform Engineering 02 - Anatomy of an Internal Developer Platform</a>
+        
+        
+        <a href="/tech/en/posts/compiler-04.html" class="nav-next">Automata and Compilers 04 - Pushdown Automata →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

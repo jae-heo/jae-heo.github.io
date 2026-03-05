@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Internals 03 - Process Scheduling - Jae's Tech Blog</title>
+    <meta name="description" content="How the Linux kernel distributes CPU time among processes and how CFS works">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/linux-03.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/linux-03.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/linux-03.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/linux-03.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/linux-03.html">
+    <meta property="og:title" content="Linux Internals 03 - Process Scheduling">
+    <meta property="og:description" content="How the Linux kernel distributes CPU time among processes and how CFS works">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-01-12T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="scheduler">
+    
+    <meta property="article:tag" content="cfs">
+    
+    <meta property="article:tag" content="scheduling">
+    
+    <meta property="article:tag" content="cpu">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/linux-03.html">
+    <meta name="twitter:title" content="Linux Internals 03 - Process Scheduling">
+    <meta name="twitter:description" content="How the Linux kernel distributes CPU time among processes and how CFS works">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux Internals 03 - Process Scheduling",
+  "description": "How the Linux kernel distributes CPU time among processes and how CFS works",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-12T00:00:00.000Z",
+  "dateModified": "2026-01-12T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/linux-03.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "linux, scheduler, cfs, scheduling, cpu"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Linux Internals 03 - Process Scheduling">Linux Internals 03 - Process Scheduling</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Linux Internals 03 - Process Scheduling</h1>
+        <time datetime=""2026-01-12T00:00:00.000Z"">January 12, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Linux Internals (3/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/linux.html" class="tag">linux</a>
+                    
+                    <a href="/tech/en/tags/scheduler.html" class="tag">scheduler</a>
+                    
+                    <a href="/tech/en/tags/cfs.html" class="tag">cfs</a>
+                    
+                    <a href="/tech/en/tags/scheduling.html" class="tag">scheduling</a>
+                    
+                    <a href="/tech/en/tags/cpu.html" class="tag">cpu</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Linux Internals</h3>
+        <p class="post-series-description">Understanding the Linux kernel from processes and memory to containers</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-01.html" class="post-series-link">Linux Internals 01 - Operating System Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-02.html" class="post-series-link">Linux Internals 02 - Processes and Threads</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Linux Internals 03 - Process Scheduling
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-04.html" class="post-series-link">Linux Internals 04 - Memory Management</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-05.html" class="post-series-link">Linux Internals 05 - File Systems</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-06.html" class="post-series-link">Linux Internals 06 - System Calls and the Kernel</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-07.html" class="post-series-link">Linux Internals 07 - I/O and Devices</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-08.html" class="post-series-link">Linux Internals 08 - Synchronization and Concurrency</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-09.html" class="post-series-link">Linux Internals 09 - Networking</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-10.html" class="post-series-link">Linux Internals 10 - Containers and Virtualization</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="why-scheduling-matters">Why Scheduling Matters</h2>
+<p>Hundreds of processes run simultaneously on a modern system, yet the number of CPU cores is limited, and a single core can execute only one process at a time. The scheduler is the kernel component that decides which process gets to use the CPU and when.</p>
+<p>If scheduling were simply a matter of ordering, it would not be particularly difficult. In reality, however, the problems a scheduler must solve are multifaceted. Interactive processes need to respond to user input quickly, batch jobs want maximum throughput, and real-time processes must execute within strict time constraints. Satisfying these conflicting demands simultaneously is the core challenge of scheduling.</p>
+<h2 id="preemptive-vs-cooperative">Preemptive vs Cooperative</h2>
+<p>Scheduling approaches fall into two broad categories. In cooperative (non-preemptive) scheduling, other processes must wait until the running process voluntarily yields the CPU. If a single process refuses to yield, every other process waits indefinitely and the entire system appears frozen. Early versions of Windows and Mac OS used this approach, which is why a single hung program often required rebooting the entire system.</p>
+<p>In preemptive scheduling, the kernel can forcibly interrupt a running process and hand the CPU to another. Linux uses preemptive scheduling. Each process is assigned a time slice of CPU usage, and when that time is exhausted, the kernel intervenes and runs a different process. This ensures that even if one process enters an infinite loop, the rest of the system continues to function normally.</p>
+<h2 id="history-of-the-o1-scheduler">History of the O(1) Scheduler</h2>
+<p>Linux scheduling has evolved through several iterations. The early Linux scheduler was simple in structure but suffered performance degradation as the number of processes grew. In 2003, Ingo Molnar introduced the O(1) scheduler in Linux 2.6. As its name implies, this scheduler could select the next process to run in constant time regardless of how many processes existed.</p>
+<p>The O(1) scheduler used two priority arrays called the active queue and the expired queue. Each array had 140 priority levels, and a bitmap allowed the process with the highest priority to be found instantly. When all processes in the active queue exhausted their time slices, the scheduler simply swapped the pointers of the two queues. This design worked well in server environments but had responsiveness problems with interactive processes on the desktop. The heuristics for identifying interactive processes were complex and difficult to predict.</p>
+<h2 id="cfs-the-completely-fair-scheduler">CFS: The Completely Fair Scheduler</h2>
+<p>In 2007, Linux 2.6.23 introduced the Completely Fair Scheduler (CFS), created by Ingo Molnar and influenced by ideas from Con Kolivas. The core philosophy of CFS is to simulate an ideal multitasking CPU. An ideal CPU would provide each of n processes with exactly 1/n of CPU time simultaneously. This is impossible in reality, but CFS strives to distribute CPU time as close to this ideal as possible.</p>
+<p>The central concept in CFS is <strong>vruntime</strong> (virtual runtime). Each process maintains a vruntime value that tracks how much CPU time it has actually consumed. CFS always selects the process with the smallest vruntime as the next one to run. A process that has used a lot of CPU time has a large vruntime and gets pushed to the back, while a process that has used little CPU time has a small vruntime and gets priority.</p>
+<pre><code>Sorted by vruntime, smallest first (red-black tree)
+
+        [vruntime=5]
+       /            \
+  [vruntime=3]    [vruntime=8]
+     /
+[vruntime=1]  ← next process to run</code></pre>
+<p>To manage these processes efficiently, CFS uses a red-black tree. A red-black tree is a self-balancing binary search tree where insertion, deletion, and minimum lookup all run in O(log n) time. The leftmost node is the process with the smallest vruntime, so finding the next process to execute is simply a matter of selecting the leftmost node in the tree.</p>
+<h2 id="nice-values-and-priorities">Nice Values and Priorities</h2>
+<p>Is it always fair to give every process the same amount of CPU time? Not necessarily. It may not be desirable for a critical service process and a background log cleanup task to receive equal shares of CPU. Nice values address this problem.</p>
+<p>Nice values range from -20 to 19. A lower value means higher priority, and a higher value means lower priority. The origin of the name is telling — a process with a high nice value is being &quot;nice&quot; to other processes by yielding to them.</p>
+<p>In CFS, the nice value affects the rate at which vruntime increases. A process with a low nice value (high priority) has its vruntime increase more slowly than its actual execution time, so it receives more CPU time. A process with a high nice value (low priority) has its vruntime increase faster, so it receives less. The advantage of this approach is that even low-priority processes never get completely starved of CPU time. Starvation is structurally prevented.</p>
+<pre><code class="language-bash"># Check the current process&#39;s nice value
+nice
+
+# Run a process with nice value 10
+nice -n 10 ./background_job
+
+# Change the nice value of a running process
+renice -n -5 -p 1234</code></pre>
+<h2 id="real-time-scheduling">Real-Time Scheduling</h2>
+<p>CFS is suitable for ordinary processes, but some processes must execute within a guaranteed time window. Audio processing, industrial control systems, and telecommunications equipment are examples. Linux provides real-time scheduling policies for these requirements.</p>
+<p><strong>SCHED_FIFO</strong> is a first-in-first-out real-time scheduling policy. A SCHED<em>FIFO process always runs before any normal process and continues to execute until it voluntarily yields the CPU or a higher-priority SCHED</em>FIFO process appears. There is no time slice concept, so there is no limit on execution time.</p>
+<p><strong>SCHED_RR</strong> is identical to SCHED_FIFO except that processes at the same priority level share CPU time in a round-robin fashion with time slices. This prevents a single process from monopolizing the CPU when multiple processes share the same priority.</p>
+<p>Real-time process priorities range from 1 to 99, and they are always higher than normal process (CFS) priorities. This means that while a real-time process is ready to run, normal processes receive no CPU time at all. If a poorly designed real-time process enters an infinite loop, the entire system can become unresponsive, which is why real-time scheduling must be used carefully.</p>
+<h2 id="the-cost-of-context-switching">The Cost of Context Switching</h2>
+<p>When the scheduler replaces the running process, a context switch occurs. During this operation, the CPU register state of the current process is saved, the register state of the next process is restored, and the memory map (page tables) is switched.</p>
+<p>Saving and restoring registers is fast on its own, but the real cost lies in indirect effects. When page tables are switched, the TLB (Translation Lookaside Buffer) is invalidated. Since the new process&#39;s data is not in the CPU cache, cache misses become frequent. These indirect costs are far greater than the direct costs, and they grow as the memory footprint of the processes increases.</p>
+<p>Switching between threads within the same process is lighter than switching between processes. Because threads share the same address space, no page table switch is needed and the TLB can be preserved. This is one of the performance advantages of multithreaded programming.</p>
+<h2 id="cpu-affinity">CPU Affinity</h2>
+<p>By default, the scheduler can run a process on any CPU core. But when a process migrates from one core to another, the data cached on the previous core must be reloaded on the new one, causing a performance penalty.</p>
+<p>CPU affinity is a mechanism that restricts which CPU cores a process can run on. Pinning a process to a specific core improves cache efficiency, and on NUMA architectures, it can ensure local memory access.</p>
+<pre><code class="language-bash"># Restrict process 1234 to run only on CPUs 0 and 1
+taskset -p -c 0,1 1234
+
+# Start a program pinned to CPU 2
+taskset -c 2 ./my_program</code></pre>
+<p>The Linux scheduler itself is aware of this issue and applies soft affinity by default, preferring to run a process on the core where it last executed. What <code class="inline-code">taskset</code> configures is hard affinity — a stronger constraint that forces the process to run exclusively on the specified cores.</p>
+<p>In the next post, we&#39;ll look at memory management.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/mlops-02.html" class="nav-prev">← MLOps 02 - Data Pipelines and Feature Engineering</a>
+        
+        
+        <a href="/tech/en/posts/compiler-05.html" class="nav-next">Automata and Compilers 05 - Compiler Overview — Phases and Architecture →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

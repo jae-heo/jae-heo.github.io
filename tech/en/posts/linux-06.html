@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Internals 06 - System Calls and the Kernel - Jae's Tech Blog</title>
+    <meta name="description" content="How a system call transitions from user space to kernel space, and how kernel modules work">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/linux-06.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/linux-06.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/linux-06.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/linux-06.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/linux-06.html">
+    <meta property="og:title" content="Linux Internals 06 - System Calls and the Kernel">
+    <meta property="og:description" content="How a system call transitions from user space to kernel space, and how kernel modules work">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-03T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="syscall">
+    
+    <meta property="article:tag" content="kernel">
+    
+    <meta property="article:tag" content="trap">
+    
+    <meta property="article:tag" content="kernel-module">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/linux-06.html">
+    <meta name="twitter:title" content="Linux Internals 06 - System Calls and the Kernel">
+    <meta name="twitter:description" content="How a system call transitions from user space to kernel space, and how kernel modules work">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux Internals 06 - System Calls and the Kernel",
+  "description": [
+    "How a system call transitions from user space to kernel space",
+    "and how kernel modules work"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-03T00:00:00.000Z",
+  "dateModified": "2026-02-03T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/linux-06.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "linux, syscall, kernel, trap, kernel-module"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Linux Internals 06 - System Calls and the Kernel">Linux Internals 06 - System Calls and the Kernel</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Linux Internals 06 - System Calls and the Kernel</h1>
+        <time datetime=""2026-02-03T00:00:00.000Z"">February 3, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Linux Internals (6/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/linux.html" class="tag">linux</a>
+                    
+                    <a href="/tech/en/tags/syscall.html" class="tag">syscall</a>
+                    
+                    <a href="/tech/en/tags/kernel.html" class="tag">kernel</a>
+                    
+                    <a href="/tech/en/tags/trap.html" class="tag">trap</a>
+                    
+                    <a href="/tech/en/tags/kernel-module.html" class="tag">kernel-module</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Linux Internals</h3>
+        <p class="post-series-description">Understanding the Linux kernel from processes and memory to containers</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-01.html" class="post-series-link">Linux Internals 01 - Operating System Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-02.html" class="post-series-link">Linux Internals 02 - Processes and Threads</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-03.html" class="post-series-link">Linux Internals 03 - Process Scheduling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-04.html" class="post-series-link">Linux Internals 04 - Memory Management</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-05.html" class="post-series-link">Linux Internals 05 - File Systems</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Linux Internals 06 - System Calls and the Kernel
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-07.html" class="post-series-link">Linux Internals 07 - I/O and Devices</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-08.html" class="post-series-link">Linux Internals 08 - Synchronization and Concurrency</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-09.html" class="post-series-link">Linux Internals 09 - Networking</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-10.html" class="post-series-link">Linux Internals 10 - Containers and Virtualization</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="what-is-a-system-call">What Is a System Call?</h2>
+<p>Programs in user space cannot access hardware directly. To read a file, create a process, or send a network packet, they must ask the kernel. The channel for these requests is the system call. System calls are the only official interface between user space and kernel space — a contract for using the services the kernel provides.</p>
+<p>The Linux kernel offers roughly 450 system calls. From file-related calls like open, read, write, and close, to process-related calls like fork, exec, and wait, to network-related calls like socket, bind, and listen, every operating system function is exposed through system calls. Most code a programmer writes ultimately boils down to combinations of these system calls.</p>
+<h2 id="how-a-system-call-executes">How a System Call Executes</h2>
+<p>When a system call is invoked, the CPU&#39;s execution mode switches from user mode to kernel mode. This is not a simple function call — it is a fundamental mode change where the CPU&#39;s privilege level shifts. Here is the process step by step.</p>
+<p>First, when the program invokes a system call, the system call number is placed in a register (rax on x86-64), and arguments are placed in designated registers (rdi, rsi, rdx, and so on). Then the <code class="inline-code">syscall</code> instruction executes on x86-64, causing the CPU to switch to kernel mode. The kernel looks up the handler function corresponding to the number in rax from the system call table and executes it. When the handler completes, the return value is stored in rax, and the <code class="inline-code">sysret</code> instruction returns to user mode.</p>
+<pre><code>User Space                          Kernel Space
+┌────────────┐                   ┌─────────────────┐
+│ Program    │                   │                 │
+│            │  1. rax = call #  │                 │
+│ write(fd,  │  2. syscall inst  │  Syscall Table  │
+│   buf, n)  │ ──────────────►   │  ┌───┬─────────┐│
+│            │                   │  │ 0 │sys_read  ││
+│            │  5. sysret        │  │ 1 │sys_write ││
+│            │ ◄──────────────   │  │ 2 │sys_open  ││
+│ Check ret  │                   │  │...│  ...     ││
+└────────────┘                   │  └───┴─────────┘│
+                                 │  3. Run handler  │
+                                 │  4. Result → rax │
+                                 └─────────────────┘</code></pre>
+<p>A critical detail in this process is that user space and kernel space have separate stacks. When switching to kernel mode, the CPU transitions to the kernel stack and saves the user space register state. Without this separation, a malicious program could manipulate the kernel&#39;s stack and compromise the entire system.</p>
+<h2 id="traps-and-interrupts">Traps and Interrupts</h2>
+<p>A system call is one type of software trap. A trap is a CPU exception intentionally triggered by a program. Beyond system calls, traps also occur for debug breakpoints and division by zero. Traps are synchronous — they occur at the precise moment a program executes a specific instruction.</p>
+<p>Interrupts, by contrast, are asynchronous. When an external event occurs — a keyboard press, disk I/O completion, or network packet arrival — the hardware sends a signal to the CPU. The CPU finishes the currently executing instruction and then branches to the interrupt handler to process the event.</p>
+<p>Does the distinction between traps and interrupts matter in practice? It does. Traps are handled in the context of the current process, while interrupts can occur regardless of which process is running. The kernel employs a strategy of doing as little work as possible during interrupt handling (the top half) and deferring the rest for later processing (the bottom half). Without this separation, frequent interrupts could severely degrade system responsiveness.</p>
+<h2 id="glibc-wrapper-functions">glibc Wrapper Functions</h2>
+<p>When a C program calls <code class="inline-code">write()</code>, the programmer is not manually setting registers and executing the <code class="inline-code">syscall</code> instruction. That is because glibc (the GNU C Library) wraps this process in a wrapper function.</p>
+<p>glibc wrapper functions do more than simply invoke system calls on the programmer&#39;s behalf. They standardize error handling — when a system call fails, the wrapper sets errno and returns -1. Some wrappers also perform buffering or caching within glibc to reduce unnecessary kernel entries. A good example is printf, which does not call the write system call every time but instead accumulates data in user space until the buffer is full.</p>
+<pre><code class="language-c">// What the programmer writes
+ssize_t n = write(fd, buf, count);
+if (n == -1) {
+    perror(&quot;write failed&quot;);
+}
+
+// What happens inside glibc (conceptual)
+ssize_t write(int fd, const void *buf, size_t count) {
+    long ret;
+    asm volatile (
+        &quot;syscall&quot;
+        : &quot;=a&quot; (ret)
+        : &quot;a&quot; (__NR_write), &quot;D&quot; (fd), &quot;S&quot; (buf), &quot;d&quot; (count)
+        : &quot;rcx&quot;, &quot;r11&quot;, &quot;memory&quot;
+    );
+    if (ret &lt; 0) {
+        errno = -ret;
+        return -1;
+    }
+    return ret;
+}</code></pre>
+<h2 id="tracing-system-calls-with-strace">Tracing System Calls with strace</h2>
+<p>strace is a tool that lets you observe in real time which system calls a program makes. It uses the ptrace system call to intercept every system call entry and return of the target process.</p>
+<pre><code class="language-bash">$ strace ls /tmp
+execve(&quot;/usr/bin/ls&quot;, [&quot;ls&quot;, &quot;/tmp&quot;], 0x7ffd...) = 0
+...
+openat(AT_FDCWD, &quot;/tmp&quot;, O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3
+getdents64(3, /* 5 entries */, 32768)   = 160
+getdents64(3, /* 0 entries */, 32768)   = 0
+close(3)                                = 0
+write(1, &quot;file1.txt  file2.txt\n&quot;, 21)  = 21
+close(1)                                = 0
+close(2)                                = 0
+exit_group(0)                           = ?</code></pre>
+<p>This output reveals that a simple <code class="inline-code">ls /tmp</code> command actually invokes dozens of system calls. You can see it opening the directory with openat, reading directory entries with getdents64, and writing the results with write. When a program does not behave as expected, strace is a powerful debugging tool that pinpoints exactly which system call failed and why.</p>
+<p>Using <code class="inline-code">strace -c</code> shows statistics on call counts and time spent per system call, making it useful for performance analysis as well. You can also filter specific categories with options like <code class="inline-code">strace -e trace=file</code>.</p>
+<h2 id="kernel-modules">Kernel Modules</h2>
+<p>Linux is a monolithic kernel, but not all functionality needs to be loaded into memory at boot time. Kernel modules are pieces of code that can be dynamically loaded into or unloaded from a running kernel. Device drivers, file systems, and network protocols are often implemented as kernel modules.</p>
+<p>Three basic commands manage kernel modules. <code class="inline-code">insmod</code> loads a module into the kernel, <code class="inline-code">rmmod</code> unloads a module, and <code class="inline-code">lsmod</code> shows the list of currently loaded modules. In practice, <code class="inline-code">modprobe</code> is used more often than insmod because modprobe automatically resolves module dependencies and loads required modules in the correct order.</p>
+<pre><code class="language-bash">$ lsmod | head -5
+Module                  Size  Used by
+snd_hda_intel         57344  2
+snd_intel_dspcfg      28672  1 snd_hda_intel
+snd_hda_codec        172032  1 snd_hda_intel
+snd_hda_core         106496  2 snd_hda_codec,snd_hda_intel</code></pre>
+<h2 id="writing-a-simple-kernel-module">Writing a Simple Kernel Module</h2>
+<p>The best way to understand how kernel modules work is to write one. Below is a minimal kernel module that prints a message when loaded and another when unloaded.</p>
+<pre><code class="language-c">#include &lt;linux/init.h&gt;
+#include &lt;linux/module.h&gt;
+#include &lt;linux/kernel.h&gt;
+
+MODULE_LICENSE(&quot;GPL&quot;);
+MODULE_AUTHOR(&quot;example&quot;);
+MODULE_DESCRIPTION(&quot;A minimal kernel module&quot;);
+
+static int __init hello_init(void) {
+    printk(KERN_INFO &quot;hello: module loaded\n&quot;);
+    return 0;
+}
+
+static void __exit hello_exit(void) {
+    printk(KERN_INFO &quot;hello: module unloaded\n&quot;);
+}
+
+module_init(hello_init);
+module_exit(hello_exit);</code></pre>
+<p>Several things are worth noting in this code. Unlike a regular C program, a kernel module has no main function. Instead, the <code class="inline-code">module_init</code> and <code class="inline-code">module_exit</code> macros designate the entry and exit points. Output uses <code class="inline-code">printk</code> rather than printf, because the standard C library is not available in kernel space. The output from printk is written to the kernel ring buffer and can be viewed with the <code class="inline-code">dmesg</code> command.</p>
+<p>Kernel modules run with the same privileges as the kernel itself, so a buggy module can crash the entire system. This is why kernel development demands far more caution than user-space development.</p>
+<h2 id="the-proc-and-sys-interfaces">The /proc and /sys Interfaces</h2>
+<p>The kernel uses virtual file systems to expose its internal state to user space. /proc and /sys are the two primary examples.</p>
+<p>The /proc file system was originally designed for process information. Under /proc, there is a directory named after the PID of each running process, where you can examine the process&#39;s memory map, open file descriptors, command-line arguments, and more. Over time, system-wide information unrelated to processes was also added to /proc. /proc/meminfo shows memory usage, /proc/cpuinfo shows CPU information, and /proc/interrupts shows interrupt statistics.</p>
+<pre><code class="language-bash">$ cat /proc/self/status | head -8
+Name:   cat
+Umask:  0022
+State:  R (running)
+Tgid:   12345
+Ngid:   0
+Pid:    12345
+PPid:   12300
+TracerPid:   0</code></pre>
+<p>The /sys file system was introduced to address the clutter in /proc. It hierarchically reflects the kernel&#39;s device model, providing structured information about devices, buses, and drivers. While /proc accumulated unorganized information for historical reasons, /sys was designed with a structured layout from the start.</p>
+<p>These virtual file systems are not read-only. Writing a value to certain files can change the kernel&#39;s behavior. For example, writing 1 to <code class="inline-code">/proc/sys/net/ipv4/ip_forward</code> enables IP forwarding. Thanks to these interfaces, the kernel can be configured using nothing more than standard file I/O — no special APIs or tools required.</p>
+<p>In the next post, we&#39;ll look at I/O and device management.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-06.html" class="nav-prev">← Platform Engineering 06 - Developer Portals and Service Catalogs</a>
+        
+        
+        <a href="/tech/en/posts/compiler-08.html" class="nav-next">Automata and Compilers 08 - Bottom-Up Parsing →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리눅스 내부 구조 05 - 파일 시스템 - 재영의 기술 블로그</title>
+    <meta name="description" content="모든 것이 파일인 리눅스에서 VFS, inode, ext4가 어떻게 동작하는지">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/linux-05.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/linux-05.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/linux-05.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/linux-05.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/linux-05.html">
+    <meta property="og:title" content="리눅스 내부 구조 05 - 파일 시스템">
+    <meta property="og:description" content="모든 것이 파일인 리눅스에서 VFS, inode, ext4가 어떻게 동작하는지">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-01-28T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="filesystem">
+    
+    <meta property="article:tag" content="vfs">
+    
+    <meta property="article:tag" content="ext4">
+    
+    <meta property="article:tag" content="inode">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/linux-05.html">
+    <meta name="twitter:title" content="리눅스 내부 구조 05 - 파일 시스템">
+    <meta name="twitter:description" content="모든 것이 파일인 리눅스에서 VFS, inode, ext4가 어떻게 동작하는지">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "리눅스 내부 구조 05 - 파일 시스템",
+  "description": [
+    "모든 것이 파일인 리눅스에서 VFS",
+    "inode",
+    "ext4가 어떻게 동작하는지"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-28T00:00:00.000Z",
+  "dateModified": "2026-01-28T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/linux-05.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "linux, filesystem, vfs, ext4, inode"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="리눅스 내부 구조 05 - 파일 시스템">리눅스 내부 구조 05 - 파일 시스템</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>리눅스 내부 구조 05 - 파일 시스템</h1>
+        <time datetime=""2026-01-28T00:00:00.000Z"">January 28, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 리눅스 내부 구조 (5/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/linux.html" class="tag">linux</a>
+                    
+                    <a href="/tech/ko/tags/filesystem.html" class="tag">filesystem</a>
+                    
+                    <a href="/tech/ko/tags/vfs.html" class="tag">vfs</a>
+                    
+                    <a href="/tech/ko/tags/ext4.html" class="tag">ext4</a>
+                    
+                    <a href="/tech/ko/tags/inode.html" class="tag">inode</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 리눅스 내부 구조</h3>
+        <p class="post-series-description">프로세스와 메모리부터 컨테이너까지, 리눅스 커널의 내부 동작 이해하기</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-01.html" class="post-series-link">리눅스 내부 구조 01 - 운영체제 개요</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-02.html" class="post-series-link">리눅스 내부 구조 02 - 프로세스와 스레드</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-03.html" class="post-series-link">리눅스 내부 구조 03 - 프로세스 스케줄링</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-04.html" class="post-series-link">리눅스 내부 구조 04 - 메모리 관리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                리눅스 내부 구조 05 - 파일 시스템
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-06.html" class="post-series-link">리눅스 내부 구조 06 - 시스템 콜과 커널</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-07.html" class="post-series-link">리눅스 내부 구조 07 - I/O와 디바이스</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-08.html" class="post-series-link">리눅스 내부 구조 08 - 동기화와 동시성</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-09.html" class="post-series-link">리눅스 내부 구조 09 - 네트워킹</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/linux-10.html" class="post-series-link">리눅스 내부 구조 10 - 컨테이너와 가상화</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">모든 것은 파일이다</h2>
+<p>리눅스를 관통하는 설계 원칙 중 가장 근본적인 것은 &quot;모든 것은 파일이다&quot;라는 철학이다. 디스크에 저장된 문서뿐 아니라, 프로세스 정보(/proc), 디바이스(/dev), 네트워크 소켓까지 모두 파일이라는 동일한 인터페이스로 접근할 수 있다. 이 원칙이 왜 강력한가? open, read, write, close라는 네 가지 시스템 콜만 알면 디스크 파일이든 시리얼 포트든 커널 파라미터든 동일한 방식으로 다룰 수 있기 때문이다.</p>
+<p>이 철학이 없었다면 디바이스마다 별도의 API를 만들어야 했을 것이고, 프로그래머는 새로운 하드웨어가 추가될 때마다 전혀 다른 인터페이스를 학습해야 했을 것이다. 파일이라는 단일 추상화 덕분에 <code class="inline-code">cat /proc/cpuinfo</code>로 CPU 정보를 읽는 것과 <code class="inline-code">cat /etc/hostname</code>으로 설정 파일을 읽는 것이 완전히 동일한 동작이 되는 셈이다.</p>
+<h2 id="vfs-">VFS: 파일 시스템 위의 파일 시스템</h2>
+<p>리눅스는 ext4, XFS, Btrfs, tmpfs, procfs 등 수십 가지 파일 시스템을 지원한다. 그런데 사용자가 <code class="inline-code">ls</code> 명령을 실행할 때 현재 디렉터리가 어떤 파일 시스템 위에 있는지 신경 쓸 필요가 없다. 이것이 가능한 이유는 VFS(Virtual File System)라는 추상화 계층이 존재하기 때문이다.</p>
+<p>VFS는 모든 파일 시스템이 구현해야 하는 공통 인터페이스를 정의한다. 각 파일 시스템은 이 인터페이스에 맞추어 자신만의 구현을 제공하고, 커널의 나머지 부분은 VFS 인터페이스만 호출하면 되는 것이다. 이는 객체 지향 설계에서의 다형성과 본질적으로 같은 개념이다.</p>
+<pre><code>┌─────────────────────────────────────┐
+│          유저 공간 프로세스            │
+│     open() / read() / write()       │
+├─────────────────────────────────────┤
+│          VFS (Virtual File System)   │
+│   superblock · inode · dentry · file │
+├────────┬────────┬────────┬──────────┤
+│  ext4  │  XFS   │ tmpfs  │  procfs  │
+├────────┴────────┴────────┴──────────┤
+│          블록 디바이스 계층            │
+├─────────────────────────────────────┤
+│          물리 디스크 / SSD            │
+└─────────────────────────────────────┘</code></pre>
+<p>VFS가 관리하는 핵심 객체는 네 가지이다. superblock은 파일 시스템 전체의 메타데이터(블록 크기, 마운트 상태 등)를 담는다. inode는 개별 파일의 메타데이터를 나타낸다. dentry는 디렉터리 항목으로, 파일 이름과 inode 사이의 매핑을 제공한다. file 객체는 프로세스가 열어 놓은 파일의 상태(현재 오프셋, 접근 모드 등)를 추적한다.</p>
+<h2 id="inode-">inode: 파일의 정체성</h2>
+<p>파일 시스템에서 파일의 이름은 사실 본질이 아니다. 파일의 진짜 정체성은 inode 번호이다. inode에는 파일의 소유자, 권한, 크기, 타임스탬프, 그리고 실제 데이터가 저장된 디스크 블록의 위치가 기록된다. 흥미로운 것은 파일 이름이 inode에 저장되지 않는다는 점이다. 파일 이름은 디렉터리의 dentry에 존재하며, dentry가 inode를 가리키는 구조이다.</p>
+<p>이 설계가 하드 링크를 가능하게 한다. 하나의 inode를 여러 dentry가 가리킬 수 있으므로, 하나의 파일이 여러 이름을 가질 수 있는 것이다. <code class="inline-code">ls -i</code> 명령으로 파일의 inode 번호를 확인할 수 있고, <code class="inline-code">stat</code> 명령으로 inode의 상세 정보를 볼 수 있다.</p>
+<pre><code class="language-bash">$ ls -i /etc/hostname
+1234567 /etc/hostname
+
+$ stat /etc/hostname
+  File: /etc/hostname
+  Size: 12        Blocks: 8        IO Block: 4096   regular file
+Device: 801h/2049d   Inode: 1234567   Links: 1
+Access: (0644/-rw-r--r--)  Uid: (0/root)   Gid: (0/root)
+Access: 2026-01-15 10:30:00.000000000 +0900
+Modify: 2026-01-10 08:00:00.000000000 +0900
+Change: 2026-01-10 08:00:00.000000000 +0900</code></pre>
+<h2 id="-">하드 링크와 심볼릭 링크</h2>
+<p>하드 링크는 동일한 inode를 가리키는 또 다른 dentry를 생성하는 것이다. 원본 파일과 하드 링크는 완전히 동등하며, 어느 쪽이 &quot;원본&quot;인지 구분할 수 없다. 파일의 inode에는 링크 카운트가 있어서, 모든 하드 링크가 삭제되어 링크 카운트가 0이 되어야 비로소 실제 데이터 블록이 해제된다.</p>
+<p>그렇다면 심볼릭 링크(소프트 링크)는 왜 필요한가? 하드 링크에는 두 가지 제약이 있기 때문이다. 첫째, 하드 링크는 같은 파일 시스템 안에서만 생성할 수 있다. 서로 다른 파일 시스템은 inode 번호 공간이 독립적이기 때문에 교차 참조가 불가능한 것이다. 둘째, 디렉터리에 대한 하드 링크는 순환 참조 문제를 일으킬 수 있어 일반적으로 허용되지 않는다.</p>
+<p>심볼릭 링크는 이러한 제약을 우회한다. 심볼릭 링크는 별도의 inode를 가지며, 그 내용은 대상 파일의 경로 문자열이다. 커널이 심볼릭 링크를 만나면 저장된 경로를 따라가서 실제 파일을 찾는다. 대상 파일이 삭제되면 심볼릭 링크는 끊어진 링크(dangling link)가 되는데, 하드 링크에서는 이런 일이 발생하지 않는다.</p>
+<h2 id="ext4-">ext4 파일 시스템의 내부</h2>
+<p>ext4는 현재 리눅스에서 가장 널리 사용되는 파일 시스템이다. ext2에서 시작하여 ext3에서 저널링이 추가되고, ext4에서 대용량 파일과 대용량 파티션 지원이 강화된 진화의 산물이다.</p>
+<p>ext4는 디스크를 블록 그룹이라는 단위로 나누어 관리한다. 각 블록 그룹에는 해당 그룹의 inode 테이블, 데이터 블록 비트맵, inode 비트맵이 포함된다. 이렇게 지역성을 유지하는 이유는 관련된 파일의 inode와 데이터를 물리적으로 가까운 위치에 배치하여 디스크 탐색 시간을 줄이기 위함이다.</p>
+<pre><code>┌──────────────────────────────────────────┐
+│              ext4 디스크 레이아웃           │
+├──────┬──────────────────────────────────┤
+│ 슈퍼 │         블록 그룹 0               │
+│ 블록 │ GDT│비트맵│inode 테이블│데이터 블록 │
+├──────┼──────────────────────────────────┤
+│      │         블록 그룹 1               │
+│      │ GDT│비트맵│inode 테이블│데이터 블록 │
+├──────┼──────────────────────────────────┤
+│      │         블록 그룹 N               │
+│      │ GDT│비트맵│inode 테이블│데이터 블록 │
+└──────┴──────────────────────────────────┘</code></pre>
+<p>ext4의 중요한 혁신 중 하나는 extent 기반의 블록 매핑이다. 이전 세대인 ext2/ext3는 간접 블록 포인터를 사용하여 파일의 각 블록을 개별적으로 추적했다. 큰 파일의 경우 이중, 삼중 간접 포인터를 거쳐야 해서 성능이 저하되었다. ext4의 extent는 연속된 블록의 시작 위치와 길이만 기록하면 되므로, 대용량 파일의 메타데이터 오버헤드가 크게 줄어든 것이다.</p>
+<h2 id="-">저널링과 크래시 복구</h2>
+<p>파일 시스템에 데이터를 기록하는 것은 여러 단계의 디스크 쓰기를 수반한다. inode를 갱신하고, 데이터 블록을 쓰고, 비트맵을 업데이트해야 한다. 과연 이 과정 중간에 정전이 발생하면 어떻게 되는가? 저널링이 없다면 파일 시스템이 불일치 상태에 빠질 수 있다. inode는 데이터 블록을 가리키고 있지만 실제 데이터는 쓰여지지 않은 상태, 혹은 그 반대의 상태가 될 수 있는 것이다.</p>
+<p>저널링은 이 문제를 해결한다. 실제 데이터를 기록하기 전에 &quot;이런 변경을 할 것이다&quot;라는 기록을 별도의 저널 영역에 먼저 쓰는 것이다. 변경이 완료되면 저널 항목을 커밋으로 표시하고, 크래시가 발생하면 저널을 재생하여 완료되지 않은 변경을 롤백하거나 재적용한다. 이를 write-ahead logging이라고 하며, 데이터베이스에서 오래전부터 사용해 온 기법과 동일한 원리이다.</p>
+<p>ext4는 세 가지 저널링 모드를 제공한다. journal 모드는 메타데이터와 데이터 모두를 저널에 기록하여 가장 안전하지만 성능이 가장 낮다. ordered 모드는 메타데이터만 저널에 기록하되, 메타데이터 커밋 전에 데이터 블록이 먼저 디스크에 쓰여지도록 순서를 보장한다. writeback 모드는 메타데이터만 저널에 기록하고 데이터의 쓰기 순서는 보장하지 않아 가장 빠르지만 크래시 후 파일 내용이 훼손될 수 있다. 기본값은 ordered 모드로, 안전성과 성능의 균형을 잡은 선택인 것이다.</p>
+<h2 id="-">파일 디스크립터</h2>
+<p>프로세스가 파일을 열면 커널은 파일 디스크립터라는 정수값을 반환한다. 이 정수는 프로세스별 파일 디스크립터 테이블의 인덱스이며, 이 테이블의 각 항목은 커널의 파일 테이블 엔트리를 가리키고, 파일 테이블 엔트리는 다시 inode를 가리킨다.</p>
+<p>모든 프로세스는 생성될 때 세 개의 파일 디스크립터를 기본으로 갖는다. 0번은 표준 입력(stdin), 1번은 표준 출력(stdout), 2번은 표준 에러(stderr)이다. 셸에서 <code class="inline-code">&gt;</code> 리다이렉션이 동작하는 원리도 바로 이 파일 디스크립터에 기반한다. <code class="inline-code">command &gt; output.txt</code>는 1번 파일 디스크립터가 output.txt 파일을 가리키도록 변경하는 것에 불과한 것이다.</p>
+<pre><code class="language-bash">$ ls -l /proc/self/fd
+lrwx------ 1 user user 64 Jan 28 10:00 0 -&gt; /dev/pts/0
+lrwx------ 1 user user 64 Jan 28 10:00 1 -&gt; /dev/pts/0
+lrwx------ 1 user user 64 Jan 28 10:00 2 -&gt; /dev/pts/0</code></pre>
+<p>파일 디스크립터는 단순한 정수이지만, 이 추상화가 유닉스 파이프라인의 근간이 된다. <code class="inline-code">ls | grep txt</code>에서 ls의 stdout(fd 1)이 파이프의 쓰기 끝에 연결되고, grep의 stdin(fd 0)이 파이프의 읽기 끝에 연결되는 방식으로 프로세스 간 데이터가 흐르는 것이다.</p>
+<h2 id="-">마운트 포인트</h2>
+<p>리눅스에서 파일 시스템을 사용하려면 먼저 디렉터리 트리의 특정 지점에 마운트해야 한다. 이 지점이 마운트 포인트이다. 윈도우에서 C:, D: 같은 드라이브 문자를 사용하는 것과 달리, 리눅스는 모든 파일 시스템을 단일 디렉터리 트리에 통합한다.</p>
+<p>루트 파일 시스템(/)이 트리의 기반이 되고, 다른 파일 시스템들은 이 트리의 하위 디렉터리에 마운트된다. <code class="inline-code">/home</code>이 별도의 파티션일 수도 있고, <code class="inline-code">/tmp</code>가 메모리 기반의 tmpfs일 수도 있지만, 사용자에게는 하나의 연속된 디렉터리 트리로 보인다. 이것이 VFS의 마운트 추상화가 제공하는 투명성인 것이다.</p>
+<pre><code class="language-bash">$ mount
+/dev/sda1 on / type ext4 (rw,relatime)
+/dev/sda2 on /home type ext4 (rw,relatime)
+tmpfs on /tmp type tmpfs (rw,nosuid,nodev)
+proc on /proc type proc (rw,nosuid,nodev,noexec)
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec)</code></pre>
+<p><code class="inline-code">/proc</code>이나 <code class="inline-code">/sys</code>처럼 실제 디스크가 아닌 가상 파일 시스템도 동일한 방식으로 마운트된다. 이들은 디스크에 데이터를 저장하지 않지만, 커널이 파일 시스템 인터페이스를 통해 정보를 노출하는 수단인 것이다. 프로세스 정보, 하드웨어 파라미터, 커널 통계 등이 파일처럼 읽을 수 있는 이유가 바로 여기에 있다.</p>
+<p>다음 포스트에서는 시스템 콜과 커널의 내부 동작을 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/compiler-07.html" class="nav-prev">← 오토마타와 컴파일러 07 - 하향식 파싱</a>
+        
+        
+        <a href="/tech/ko/posts/mlops-05.html" class="nav-next">MLOps 05 - 모델 서빙과 배포 전략 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

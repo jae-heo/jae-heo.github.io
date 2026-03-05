@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Internals 07 - I/O and Devices - Jae's Tech Blog</title>
+    <meta name="description" content="From block and character devices to I/O schedulers, DMA, and the page cache">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/linux-07.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/linux-07.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/linux-07.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/linux-07.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/linux-07.html">
+    <meta property="og:title" content="Linux Internals 07 - I/O and Devices">
+    <meta property="og:description" content="From block and character devices to I/O schedulers, DMA, and the page cache">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-12T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="io">
+    
+    <meta property="article:tag" content="device-driver">
+    
+    <meta property="article:tag" content="dma">
+    
+    <meta property="article:tag" content="block-device">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/linux-07.html">
+    <meta name="twitter:title" content="Linux Internals 07 - I/O and Devices">
+    <meta name="twitter:description" content="From block and character devices to I/O schedulers, DMA, and the page cache">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Linux Internals 07 - I/O and Devices",
+  "description": [
+    "From block and character devices to I/O schedulers",
+    "DMA",
+    "and the page cache"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-12T00:00:00.000Z",
+  "dateModified": "2026-02-12T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/linux-07.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "linux, io, device-driver, dma, block-device"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Linux Internals 07 - I/O and Devices">Linux Internals 07 - I/O and Devices</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Linux Internals 07 - I/O and Devices</h1>
+        <time datetime=""2026-02-12T00:00:00.000Z"">February 12, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Linux Internals (7/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/linux.html" class="tag">linux</a>
+                    
+                    <a href="/tech/en/tags/io.html" class="tag">io</a>
+                    
+                    <a href="/tech/en/tags/device-driver.html" class="tag">device-driver</a>
+                    
+                    <a href="/tech/en/tags/dma.html" class="tag">dma</a>
+                    
+                    <a href="/tech/en/tags/block-device.html" class="tag">block-device</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Linux Internals</h3>
+        <p class="post-series-description">Understanding the Linux kernel from processes and memory to containers</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-01.html" class="post-series-link">Linux Internals 01 - Operating System Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-02.html" class="post-series-link">Linux Internals 02 - Processes and Threads</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-03.html" class="post-series-link">Linux Internals 03 - Process Scheduling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-04.html" class="post-series-link">Linux Internals 04 - Memory Management</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-05.html" class="post-series-link">Linux Internals 05 - File Systems</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-06.html" class="post-series-link">Linux Internals 06 - System Calls and the Kernel</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Linux Internals 07 - I/O and Devices
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-08.html" class="post-series-link">Linux Internals 08 - Synchronization and Concurrency</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-09.html" class="post-series-link">Linux Internals 09 - Networking</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/linux-10.html" class="post-series-link">Linux Internals 10 - Containers and Virtualization</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="block-devices-and-character-devices">Block Devices and Character Devices</h2>
+<p>Devices in Linux fall into two broad categories. Block devices read and write data in fixed-size blocks. Hard disks, SSDs, and USB drives belong here. Character devices process data sequentially as a byte stream. Keyboards, mice, serial ports, and terminals are character devices.</p>
+<p>Why does this distinction matter? Block devices support random access — you can read any block at any position on the disk. Character devices, on the other hand, can only be accessed sequentially, and data that has already passed cannot be re-read. Because of this fundamental difference, the kernel handles the two types through entirely separate paths. Block devices require complex infrastructure like I/O schedulers, the page cache, and buffer caches, while character devices can get by with a relatively simple driver interface.</p>
+<p>Running <code class="inline-code">ls -l</code> in the <code class="inline-code">/dev</code> directory shows the first character of each device file as either b (block) or c (character).</p>
+<pre><code class="language-bash">$ ls -l /dev/sda /dev/tty0
+brw-rw---- 1 root disk 8, 0  Feb 12 10:00 /dev/sda
+crw--w---- 1 root tty  4, 0  Feb 12 10:00 /dev/tty0</code></pre>
+<h2 id="major-and-minor-numbers">Major and Minor Numbers</h2>
+<p>The number pairs shown in place of the file size in the output above — <code class="inline-code">8, 0</code> and <code class="inline-code">4, 0</code> — are the major and minor numbers. The major number identifies the driver responsible for the device, and the minor number identifies a specific device among the multiple devices managed by that driver.</p>
+<p>For example, major number 8 represents the SCSI disk driver. The minor number 0 for /dev/sda refers to the entire first disk, while minor number 1 for /dev/sda1 refers to the first partition. When a process accesses a device file, the kernel uses this number pair to route the request to the appropriate driver.</p>
+<p>Is this number-based scheme still adequate for modern systems? In truth, the explosive growth in device counts has exposed the limitations of static number allocation. To address this, Linux introduced dynamic major number allocation and a device management system called udev, which we will cover later in this post.</p>
+<h2 id="io-schedulers">I/O Schedulers</h2>
+<p>For block devices — especially HDDs with spinning platters — the physical movement of the disk head becomes a performance bottleneck. The I/O scheduler reorders I/O requests from multiple processes to minimize the distance the disk head must travel.</p>
+<p>Looking at the major I/O schedulers that have been used in Linux reveals the design philosophy behind each one.</p>
+<p>The noop scheduler (now called none) does exactly what its name suggests — no reordering at all. Requests are forwarded to the device in the order they arrive. For devices like SSDs that have no seek time, reordering is unnecessary overhead, making noop the appropriate choice.</p>
+<p>CFQ (Completely Fair Queuing) maintains a separate queue for each process and allocates fair I/O bandwidth to each. It was effective at preventing any single program from monopolizing I/O on desktop systems where multiple applications accessed the disk simultaneously.</p>
+<p>The deadline scheduler assigns an expiration time to each I/O request. Read requests have a default deadline of 500ms and write requests 5 seconds, with requests nearing their deadline processed first. This approach prevents starvation caused by I/O reordering while still performing a reasonable level of optimization.</p>
+<p>BFQ (Budget Fair Queuing) is the successor to CFQ. It allocates an I/O budget to each process and ensures fair disk usage within that budget. It delivers particularly good responsiveness on slow devices and interactive workloads.</p>
+<pre><code class="language-bash">$ cat /sys/block/sda/queue/scheduler
+[mq-deadline] kyber bfq none</code></pre>
+<p>Modern Linux kernels use the multi-queue block layer (blk-mq), and you can choose among mq-deadline, kyber, bfq, and none as shown in the output above. The advent of NVMe SSDs gave storage devices their own multiple hardware queues, and the legacy single-queue scheduler could not exploit this parallelism — which is why the entire block layer was redesigned.</p>
+<h2 id="dma-data-transfer-without-the-cpu">DMA: Data Transfer Without the CPU</h2>
+<p>What would happen if the CPU had to copy each byte one by one when transferring large amounts of data from disk to memory? The CPU would be unable to perform any other work until the transfer completed. DMA (Direct Memory Access) is the hardware mechanism that solves this problem.</p>
+<p>With DMA, the CPU merely instructs the DMA controller — &quot;move this much data from here to there&quot; — and the DMA controller performs the actual transfer. When the transfer is complete, the DMA controller raises an interrupt to notify the CPU. In the meantime, the CPU is free to execute other processes or perform other computations.</p>
+<pre><code>Without DMA (PIO mode)           With DMA
+┌─────┐    ┌──────┐             ┌─────┐    ┌──────┐
+│ CPU │◄──►│ Disk │             │ CPU │    │ Disk │
+│     │    │      │             │     │    │      │
+│Byte │    │      │             │Cmd  │    │      │
+│copy │    │      │             │only │    │      │
+└─────┘    └──────┘             └──┬──┘    └──┬───┘
+                                   │          │
+                                   ▼          ▼
+                                ┌────────────────┐
+                                │ DMA Controller  │
+                                │(direct transfer)│
+                                └───────┬────────┘
+                                        │
+                                        ▼
+                                    ┌──────┐
+                                    │Memory│
+                                    └──────┘</code></pre>
+<p>Virtually all modern block device drivers use DMA. DMA is also essential for network cards — at high speeds, having the CPU copy each packet is practically impossible.</p>
+<h2 id="buffered-io-and-direct-io">Buffered I/O and Direct I/O</h2>
+<p>When a process reads a file with the read system call, does the data go straight from disk to the user buffer? In general, no. Linux uses buffered I/O by default: data read from disk is first stored in the kernel&#39;s page cache and then copied to the user buffer.</p>
+<p>Why is this extra copy beneficial? When multiple processes read the same data, or when the same process reads it repeatedly, the data can be served directly from the page cache without any disk access. For most workloads, this caching effect far outweighs the cost of the additional copy.</p>
+<p>However, applications like databases have their own caching strategies, and the kernel&#39;s page cache becomes unnecessary memory consumption and extra copying. In such cases, the O_DIRECT flag can be used to perform direct I/O. Direct I/O bypasses the page cache and transfers data directly between the disk and the user buffer.</p>
+<pre><code class="language-c">// Buffered I/O (default)
+int fd = open(&quot;/data/file&quot;, O_RDONLY);
+
+// Direct I/O
+int fd = open(&quot;/data/file&quot;, O_RDONLY | O_DIRECT);</code></pre>
+<p>Using direct I/O requires the user buffer to satisfy memory alignment requirements, and the read/write sizes must be multiples of the block size. Despite these constraints, database systems prefer direct I/O because their own cache management is better optimized for their specific workloads than the general-purpose page cache.</p>
+<h2 id="the-page-cache">The Page Cache</h2>
+<p>The page cache is the cornerstone of Linux I/O performance. The kernel uses most of the available memory as a page cache to minimize disk access. The buff/cache column in the output of the <code class="inline-code">free</code> command shows exactly this.</p>
+<pre><code class="language-bash">$ free -h
+              total        used        free      shared  buff/cache   available
+Mem:           16Gi       4.2Gi       1.8Gi       256Mi        10Gi        11Gi
+Swap:          4.0Gi          0B       4.0Gi</code></pre>
+<p>In the output above, 10GB of 16GB is used for buff/cache, yet available shows 11GB. This is because page cache memory can be freed at any time. When a process needs more memory, the kernel shrinks the page cache to make room. A large page cache does not mean the system is running low on memory — it means available memory is being used efficiently for caching.</p>
+<p>The page cache is equally important for write operations. When data is written via the write system call, it is not immediately committed to disk. Instead, the corresponding page in the page cache is marked dirty. The kernel&#39;s writeback threads (historically pdflush, now the bdi flusher) asynchronously write dirty pages to disk after a certain time elapses or when the ratio of dirty pages exceeds a threshold. The fsync system call can be used to force a specific file&#39;s dirty pages to be written to disk immediately.</p>
+<h2 id="polling-and-interrupts">Polling and Interrupts</h2>
+<p>There are two ways to determine whether a device has completed its work. Polling has the CPU periodically check the device&#39;s status register. Interrupts have the device send a signal to the CPU when the work is done.</p>
+<p>Are interrupts always superior to polling? In most cases, yes. Polling wastes CPU cycles while waiting for the device to become ready. But with ultra-fast devices, the situation reverses. In environments where I/O completions are extremely frequent — NVMe SSDs or high-speed network cards — the overhead of processing interrupts itself becomes the bottleneck. Each interrupt triggers a context switch, runs the interrupt handler, and pollutes the cache.</p>
+<p>For this reason, modern high-performance drivers use a hybrid approach. They normally operate in interrupt mode but switch to polling mode when I/O surges, eliminating interrupt overhead. NAPI (New API) in the Linux network stack is the canonical implementation of this hybrid approach.</p>
+<h2 id="udev-and-device-management">udev and Device Management</h2>
+<p>In the past, device files in the /dev directory had to be created manually by the administrator. Hundreds of device files were pre-created regardless of whether the actual hardware existed, and when new hardware was added, the administrator had to use the mknod command to create device files by hand.</p>
+<p>udev solves this problem fundamentally. When the kernel detects hardware, it generates a uevent. The udev daemon receives this event and automatically creates or removes device files according to its rules. The fact that /dev/sdb appears automatically when you plug in a USB drive and disappears when you unplug it is thanks to udev.</p>
+<p>udev rule files are located in the /etc/udev/rules.d/ directory, where you can specify names, permissions, and owners based on device attributes, or configure scripts to run when a device is connected.</p>
+<pre><code class="language-bash"># /etc/udev/rules.d/99-usb-storage.rules
+# Example rule assigning a fixed name to a specific USB device
+SUBSYSTEM==&quot;block&quot;, ATTRS{idVendor}==&quot;0781&quot;, ATTRS{idProduct}==&quot;5567&quot;, SYMLINK+=&quot;myusb&quot;</code></pre>
+<p>This rule automatically creates a symbolic link at /dev/myusb when a USB device with the specified vendor/product ID is connected. It solves the problem of device names changing — /dev/sdb, /dev/sdc — each time a device is plugged in.</p>
+<p>udev does more than simply manage device files. It serves as a bridge connecting the kernel&#39;s device model with the /sys file system and forms the foundation for automation that reacts to hardware events. Since the advent of systemd, udev has been integrated as systemd-udevd and become part of the broader system management framework.</p>
+<p>In the next post, we&#39;ll look at the internals of the networking stack.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/compiler-09.html" class="nav-prev">← Automata and Compilers 09 - Abstract Syntax Trees</a>
+        
+        
+        <a href="/tech/en/posts/platform-engineering-08.html" class="nav-next">Platform Engineering 08 - CI/CD at Scale →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>
