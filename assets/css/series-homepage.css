@@ -7,8 +7,9 @@
 .home-series-list {
     padding: 1rem 0;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
     gap: 2rem;
+    align-items: stretch;
 }
 
 /* Individual Series Group */
@@ -47,6 +48,7 @@
     color: var(--text-secondary);
     margin-bottom: 0.75rem;
     line-height: 1.6;
+    min-height: 3.2em;
 }
 
 /* Series Post Count Badge */
@@ -67,6 +69,8 @@
     padding: 0 !important;
     margin: 0 !important;
     counter-reset: home-series-counter;
+    max-height: 13.75rem;
+    overflow-y: auto;
 }
 
 /* Individual series post item */
@@ -79,7 +83,7 @@
     border-radius: 4px;
     transition: background 0.2s ease;
     background: transparent;
-    height: 2.75rem;
+    min-height: 2.75rem;
 }
 
 /* Numbered circle indicator */
@@ -110,6 +114,9 @@
     text-decoration: none;
     transition: color 0.2s ease;
     font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .home-series-post-item:hover {

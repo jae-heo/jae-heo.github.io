@@ -303,13 +303,13 @@
 
     <div class="post-content">
         <h2 id="what-is-lexical-structure">What is Lexical Structure?</h2>
-<p>When we write Python code, how does Python understand it?</p>
+<p>When you write Python code, how does Python understand it?</p>
 <pre><code class="language-python">x = 42 + y</code></pre>
-<p>To us, this means &quot;assign the sum of 42 and y to variable x,&quot; but to Python, it&#39;s just a sequence of characters.</p>
+<p>To us, this means &quot;assign the sum of 42 and y to variable x.&quot; But to Python, it&#39;s just a sequence of characters.</p>
 <pre><code>&#39;x&#39;, &#39; &#39;, &#39;=&#39;, &#39; &#39;, &#39;4&#39;, &#39;2&#39;, &#39; &#39;, &#39;+&#39;, &#39; &#39;, &#39;y&#39;</code></pre>
-<p>Before Python can execute code, it must break these characters into <strong>meaningful units</strong>, just like we recognize letters as words when reading.</p>
+<p>Before Python can do anything, it has to break these characters into <strong>meaningful units</strong>. Just like how we recognize letters as words when reading a sentence.</p>
 <h3 id="tokens-the-smallest-units-of-meaning">Tokens: The Smallest Units of Meaning</h3>
-<p>The meaningful pieces extracted from code are called <strong>tokens</strong>.</p>
+<p>These meaningful pieces are called <strong>tokens</strong>.</p>
 <pre><code class="language-python">x = 42 + y
 
 # Tokens Python sees:
@@ -318,14 +318,14 @@
 # NUMBER: 42
 # OP: &#39;+&#39;
 # NAME: &#39;y&#39;</code></pre>
-<p>Comparing with natural language makes this clearer.</p>
+<p>Comparing with natural language makes this click.</p>
 <pre><code>Sentence: &quot;I eat rice&quot;
 Words: [&quot;I&quot;, &quot;eat&quot;, &quot;rice&quot;]
 
 Code: &quot;x = 42&quot;
 Tokens: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
 <h3 id="lexical-analysis-breaking-into-tokens">Lexical Analysis: Breaking into Tokens</h3>
-<p><strong>Lexical Analysis</strong> is the process of reading code and breaking it into tokens.<br />This is the first step the Python interpreter performs.</p>
+<p><strong>Lexical Analysis</strong> is the process of reading code and breaking it into tokens.<br />This is the very first thing the Python interpreter does.</p>
 <pre><code>[Source Code]
     ↓
 [Lexical Analysis] ← Today&#39;s topic
@@ -335,43 +335,39 @@ Tokens: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
 [Syntax Analysis]
     ↓
 ...</code></pre>
-<p>Why is this process necessary?</p>
-<p>Understanding code all at once is too complex. Python processes it step by step, with lexical analysis as the first stage.</p>
+<p>Why bother with this step? Because understanding code all at once is too complex. Python processes it in stages, and lexical analysis is stage one.</p>
 <h2 id="how-lexical-analyzers-work">How Lexical Analyzers Work</h2>
-<p>Lexical analyzers operate using a <strong>State Machine</strong>.<br />Though this might sound complex, it&#39;s a concept we encounter everywhere in daily life.</p>
+<p>Lexical analyzers use a <strong>State Machine</strong>.<br />Sounds complicated, but you already know this concept from everyday life.</p>
 <h3 id="state-machine-examples">State Machine Examples</h3>
-<h4 id="1-human-hunger-states">1. Human Hunger States</h4>
-<p>Consider our hunger states.</p>
+<h4 id="1-hunger-states">1. Hunger States</h4>
+<p>Think about your own hunger.</p>
 <pre class="mermaid">stateDiagram-v2
     Hungry --> Full: Eat
     Full --> Hungry: Exercise</pre>
-<ul class="ul-list">
-<li><strong>States</strong>: Hungry, Full</li><li><strong>Transition</strong>: From hungry to full when eating</li><li><strong>Reverse transition</strong>: From full to hungry when exercising</li></ul>
-<p>This is a state machine! A system in a specific <strong>state</strong> that changes to another <strong>state</strong> when it receives <strong>input</strong>.</p>
+<p>You&#39;re in a specific <strong>state</strong> (hungry or full), and when you receive <strong>input</strong> (eating or exercising), you switch to a different <strong>state</strong>. That&#39;s a state machine.</p>
 <h4 id="2-traffic-lights">2. Traffic Lights</h4>
-<p>Traffic lights are also state machines.</p>
+<p>Traffic lights work the same way.</p>
 <pre class="mermaid">stateDiagram-v2
     Red --> Green: 30 seconds
     Green --> Yellow: 30 seconds
     Yellow --> Red: 3 seconds</pre>
-<ul class="ul-list">
-<li><strong>States</strong>: Red, Yellow, Green</li><li><strong>Transition</strong>: States change as time passes</li><li><strong>Pattern</strong>: Red → Green → Yellow → Red (repeats)</li></ul>
-<h4 id="3-calculator-input-states">3. Calculator Input States</h4>
+<p>Three states. Time passes, states change. Red, green, yellow, red -- on repeat.</p>
+<h4 id="3-calculator-input">3. Calculator Input</h4>
 <p>Think about using a calculator.</p>
 <pre class="mermaid">stateDiagram-v2
     Start --> WaitingNumber
     WaitingNumber --> WaitingOperator: Number input (5, 3)
     WaitingOperator --> WaitingNumber: Operator input (+)
     WaitingOperator --> End: (=) input</pre>
-<p>A calculator is always in one of two states:<br />- <strong>Waiting for number</strong> (WaitingNumber)<br />- <strong>Waiting for operator</strong> (WaitingOperator)</p>
-<p>Processing &quot;5 + 3 =&quot;.</p>
+<p>A calculator is always in one of two states -- waiting for a number or waiting for an operator.</p>
+<p>Processing &quot;5 + 3 =&quot; goes like this:</p>
 <ol class="ol-list">
-<li>Start → WaitingNumber → &#39;5&#39; input → WaitingOperator</li><li>WaitingOperator → &#39;+&#39; input → WaitingNumber</li><li>WaitingNumber → &#39;3&#39; input → WaitingOperator</li><li>WaitingOperator → &#39;=&#39; input → Complete</li></ol>
-<p>This is how <strong>state machines</strong> process input by changing states.</p>
+<li>Start -&gt; WaitingNumber -&gt; &#39;5&#39; input -&gt; WaitingOperator</li><li>WaitingOperator -&gt; &#39;+&#39; input -&gt; WaitingNumber</li><li>WaitingNumber -&gt; &#39;3&#39; input -&gt; WaitingOperator</li><li>WaitingOperator -&gt; &#39;=&#39; input -&gt; Complete</li></ol>
+<p>That&#39;s how state machines process input -- by changing states.</p>
 <h3 id="lexical-analysis-state-machine">Lexical Analysis State Machine</h3>
-<p>Now let&#39;s see how Python&#39;s lexical analysis works.</p>
+<p>Now let&#39;s see how Python&#39;s lexical analysis actually works.</p>
 <h4 id="recognizing-integers">Recognizing Integers</h4>
-<p>State transitions when reading the string <code class="inline-code">123</code>.</p>
+<p>Here&#39;s what happens when reading the string <code class="inline-code">123</code>.</p>
 <pre class="mermaid">stateDiagram-v2
     [*] --> Start
     Start --> ReadingNumber: Digit ('1')
@@ -382,10 +378,10 @@ Tokens: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
         Collecting digits
         Example: "123"
     end note</pre>
-<p>Reading character by character, maintaining the &quot;I&#39;m reading a number&quot; state, then completing the token when encountering a non-digit character.</p>
+<p>It reads character by character, stays in the &quot;I&#39;m reading a number&quot; state, then completes the token when it hits a non-digit character.</p>
 <p>Result: <code class="inline-code">NUMBER token: 123</code></p>
 <h4 id="recognizing-floats">Recognizing Floats</h4>
-<p>What happens with <code class="inline-code">3.14</code> that has a decimal point?</p>
+<p>What about <code class="inline-code">3.14</code> with a decimal point?</p>
 <pre class="mermaid">stateDiagram-v2
     [*] --> Start
     Start --> ReadingInteger: Digit ('3')
@@ -399,10 +395,10 @@ Tokens: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
         Collecting decimal digits
         Example: "3.14"
     end note</pre>
-<p>When reading an integer and encountering <code class="inline-code">.</code>, it thinks &quot;Ah, a float!&quot; and changes state to continue reading decimal digits.</p>
+<p>While reading an integer, it encounters <code class="inline-code">.</code> and thinks &quot;ah, a float!&quot; It switches state and keeps reading decimal digits.</p>
 <p>Result: <code class="inline-code">NUMBER token: 3.14</code></p>
 <h4 id="recognizing-multiple-token-types">Recognizing Multiple Token Types</h4>
-<p>How does Python read the code <code class="inline-code">x = 42 + y</code>?</p>
+<p>How does Python read <code class="inline-code">x = 42 + y</code>?</p>
 <pre class="mermaid">stateDiagram-v2
     [*] --> Start
     Start --> ReadingIdentifier: Letter ('x')
@@ -418,20 +414,20 @@ Tokens: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
     Operator --> Start: (create OP token)
 
     Start --> [*]: End of string</pre>
-<p>Processing code <code class="inline-code">x = 42 + y</code>.</p>
+<p>Processing <code class="inline-code">x = 42 + y</code>:</p>
 <ol class="ol-list">
-<li><code class="inline-code">x</code> → letter → reading identifier → space → <strong>NAME: &#39;x&#39;</strong></li><li><code class="inline-code">=</code> → operator → <strong>OP: &#39;=&#39;</strong></li><li><code class="inline-code">42</code> → digits → space → <strong>NUMBER: 42</strong></li><li><code class="inline-code">+</code> → operator → <strong>OP: &#39;+&#39;</strong></li><li><code class="inline-code">y</code> → letter → end → <strong>NAME: &#39;y&#39;</strong></li></ol>
+<li><code class="inline-code">x</code> -&gt; letter -&gt; reading identifier -&gt; space -&gt; <strong>NAME: &#39;x&#39;</strong></li><li><code class="inline-code">=</code> -&gt; operator -&gt; <strong>OP: &#39;=&#39;</strong></li><li><code class="inline-code">42</code> -&gt; digits -&gt; space -&gt; <strong>NUMBER: 42</strong></li><li><code class="inline-code">+</code> -&gt; operator -&gt; <strong>OP: &#39;+&#39;</strong></li><li><code class="inline-code">y</code> -&gt; letter -&gt; end -&gt; <strong>NAME: &#39;y&#39;</strong></li></ol>
 <p><strong>Final result</strong>: <code class="inline-code">[NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42, OP:&#39;+&#39;, NAME:&#39;y&#39;]</code></p>
-<p>Using state machines allows systematic breaking of complex code into tokens!</p>
-<h2 id="python39s-lexical-structure">Python&#39;s Lexical Structure</h2>
-<p>Let&#39;s explore Python&#39;s unique lexical rules.</p>
+<p>State machines let you systematically break complex code into tokens.</p>
+<h2 id="python39s-lexical-rules">Python&#39;s Lexical Rules</h2>
+<p>Let&#39;s look at what makes Python&#39;s lexical structure unique.</p>
 <h3 id="1-indentation-is-a-token">1. Indentation is a Token</h3>
-<p>Python&#39;s most distinctive feature is that <strong>indentation is syntax</strong>.</p>
+<p>Python&#39;s most distinctive feature -- <strong>indentation is syntax</strong>.</p>
 <pre><code class="language-python">def greet():
     print(&quot;hello&quot;)  # Indentation level 1
     if True:
         print(&quot;world&quot;)  # Indentation level 2</code></pre>
-<p>While other languages use curly braces <code class="inline-code">{}</code>, Python creates tokens from indentation.</p>
+<p>Other languages use curly braces <code class="inline-code">{}</code>. Python turns indentation into actual tokens.</p>
 <pre><code class="language-python"># Tokens Python sees:
 [
     NAME: &#39;def&#39;,
@@ -446,8 +442,8 @@ Tokens: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
     NEWLINE,
     DEDENT,        # Indentation ends!
 ]</code></pre>
-<h3 id="2-various-string-representations">2. Various String Representations</h3>
-<p>Python can represent strings in many ways.</p>
+<h3 id="2-many-ways-to-write-strings">2. Many Ways to Write Strings</h3>
+<p>Python gives you multiple string representations.</p>
 <pre><code class="language-python"># Basic strings
 s1 = &#39;hello&#39;
 s2 = &quot;world&quot;
@@ -464,7 +460,7 @@ s4 = r&#39;\n is not a newline, just \n&#39;
 # f-strings (variable interpolation)
 name = &quot;Python&quot;
 s5 = f&quot;Hello, {name}!&quot;  # &quot;Hello, Python!&quot;</code></pre>
-<h3 id="3-various-number-representations">3. Various Number Representations</h3>
+<h3 id="3-many-ways-to-write-numbers">3. Many Ways to Write Numbers</h3>
 <p>Python supports numbers in multiple formats.</p>
 <pre><code class="language-python"># Regular number
 a = 42
@@ -487,25 +483,15 @@ f = 1_000_000  # 1000000
 # Complex numbers
 g = 3 + 4j</code></pre>
 <h3 id="4-python39s-built-in-tokenizer">4. Python&#39;s Built-in Tokenizer</h3>
-<p>Python has a <code class="inline-code">tokenize</code> module to view token analysis directly.</p>
-<p>Tokenizing <code class="inline-code">x = 42</code> gives.</p>
+<p>Python has a <code class="inline-code">tokenize</code> module that lets you see token analysis directly.</p>
+<p>Tokenizing <code class="inline-code">x = 42</code> gives you:</p>
 <pre><code>NAME       : &#39;x&#39;
 OP         : &#39;=&#39;
 NUMBER     : &#39;42&#39;
 NEWLINE    : &#39;\n&#39;
 ENDMARKER  : &#39;&#39;</code></pre>
-<p>We can confirm it breaks into NAME, OP, NUMBER tokens as expected!</p>
-<h2 id="summary">Summary</h2>
-<h3 id="what-we-learned">What We Learned</h3>
-<ol class="ol-list">
-<li><strong>Lexical Analysis</strong>: The first step of breaking code into tokens</li><li><strong>Tokens</strong>: Smallest meaningful units (variable names, numbers, operators, etc.)</li><li><strong>State Machine</strong>: A method of processing input by changing states</li></ol>
-<ul class="ul-list">
-<li>Hunger/Full (humans)</li><li>Traffic lights (red/yellow/green)</li><li>Calculator (waiting for number/operator)</li></ul>
-<h3 id="python39s-unique-features">Python&#39;s Unique Features</h3>
-<ul class="ul-list">
-<li>Indentation as tokens (<code class="inline-code">INDENT</code>, <code class="inline-code">DEDENT</code>)</li><li>Various string representations (quotes, f-strings, raw strings)</li><li>Multiple number bases (binary, octal, hexadecimal)</li><li>Direct token viewing with <code class="inline-code">tokenize</code> module</li></ul>
-<h3 id="why-this-matters">Why This Matters</h3>
-<p>Understanding lexical analysis helps you:<br />- Know how Python reads code<br />- Better understand syntax errors<br />- Even create your own programming language!</p>
+<p>It breaks into NAME, OP, NUMBER tokens exactly as we&#39;d expect.</p>
+<p>Understanding lexical analysis helps you see how Python reads code from the ground up. It also makes syntax errors much less mysterious. And if you ever want to build your own programming language, this is where you&#39;d start.</p>
 
     </div>
 

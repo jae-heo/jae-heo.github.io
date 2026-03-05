@@ -323,22 +323,21 @@ my_tuple = (1, 2, 3)                # Tuple
 my_set = {1, 2, 3}                  # Set
 my_dict = {&quot;name&quot;: &quot;Python&quot;}        # Dictionary
 my_string = &quot;hello&quot;                 # String is also a container!</code></pre>
-<p>They all share the common trait of <strong>holding multiple pieces of data</strong>.</p>
-<h3 id="container-characteristics">Container Characteristics</h3>
-<p>Containers have two important characteristics.</p>
-<h4 id="1-membership-test">1. Membership Test</h4>
+<p>They all share one thing in common -- they <strong>hold multiple pieces of data</strong>.</p>
+<h3 id="what-makes-a-container">What Makes a Container</h3>
+<p>Containers have two important traits.</p>
+<p>First, you can test membership.</p>
 <pre><code class="language-python">numbers = [1, 2, 3, 4, 5]
 
-# Check &quot;is this value in the container?&quot;
+# &quot;Is this value in the container?&quot;
 print(3 in numbers)      # True
 print(10 in numbers)     # False
 print(10 not in numbers) # True</code></pre>
-<p>Being able to use the <code class="inline-code">in</code> operator is the first characteristic of containers.</p>
-<h4 id="2-iterable">2. Iterable</h4>
-<pre><code class="language-python"># Can be accessed one by one with a for loop
+<p>If you can use the <code class="inline-code">in</code> operator on it, that&#39;s a container.</p>
+<p>Second, you can iterate over it.</p>
+<pre><code class="language-python"># Walk through elements one by one with a for loop
 for num in numbers:
     print(num)</code></pre>
-<p>You can traverse container elements one by one.</p>
 <h3 id="python39s-main-containers">Python&#39;s Main Containers</h3>
 <table>
 <thead>
@@ -352,17 +351,16 @@ for num in numbers:
 <tr><td><strong>str</strong></td><td>Yes</td><td>Yes</td><td>No</td><td>Character sequence</td></tr>
 </tbody>
 </table>
-<p>Among these, the most commonly used and important is <strong>List</strong>!</p>
-<h2 id="list-the-representative-container">List - The Representative Container</h2>
-<p>Lists are the most frequently used container in Python.</p>
+<p>Among these, the one you&#39;ll use most is <strong>List</strong>.</p>
+<h2 id="list-the-go-to-container">List - The Go-To Container</h2>
+<p>Lists are the most commonly used container in Python.</p>
 <pre><code class="language-python">numbers = [1, 2, 3, 4, 5]
 fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;orange&quot;]
 mixed = [1, &quot;hello&quot;, 3.14, True]  # Can hold different types!</code></pre>
-<h3 id="list-internal-structure">List Internal Structure</h3>
-<h4 id="how-lists-look-in-memory">How Lists Look in Memory</h4>
-<p>How does Python store a list in memory?</p>
+<h3 id="how-lists-work-in-memory">How Lists Work in Memory</h3>
+<p>How does Python actually store a list?</p>
 <pre><code class="language-python">my_list = [10, 20, 30]</code></pre>
-<p>Lists are actually implemented as <strong>arrays</strong>, but slightly different from typical arrays.</p>
+<p>Lists are implemented as <strong>arrays</strong>, but with a twist.</p>
 <pre><code>Memory structure:
 
 List object:
@@ -380,19 +378,19 @@ Element array:
   │    │    │
   ▼    ▼    ▼
   10   20   30</code></pre>
-<p>Lists maintain two pieces of information.<br />- <strong>size</strong>: Actual number of elements<br />- <strong>capacity</strong>: Allocated memory space size</p>
-<h4 id="why-is-capacity-larger-than-size">Why is Capacity Larger Than Size?</h4>
-<p>Reallocating memory every time an element is added would be too slow.<br />So Python pre-allocates extra space.</p>
+<p>A list keeps two pieces of info: <strong>size</strong> (how many elements are actually in it) and <strong>capacity</strong> (how much space is allocated).</p>
+<h3 id="why-is-capacity-bigger-than-size">Why is Capacity Bigger Than Size?</h3>
+<p>Reallocating memory every time you add an element would be painfully slow. So Python pre-allocates extra space.</p>
 <pre><code class="language-python">my_list = []  # capacity: 0
 my_list.append(1)  # capacity: 4 (allocates 4 slots at once)
 my_list.append(2)  # capacity: 4 (still has room)
 my_list.append(3)  # capacity: 4
 my_list.append(4)  # capacity: 4
 my_list.append(5)  # capacity: 8 (out of space, doubles capacity)</code></pre>
-<p>This approach is called a <strong>Dynamic Array</strong>.</p>
-<h3 id="time-complexity-of-list-operations">Time Complexity of List Operations</h3>
-<p>Let&#39;s see how fast each list operation is.</p>
-<h4 id="fast-operations-o1-constant-time">Fast Operations (O(1) - constant time)</h4>
+<p>This is called a <strong>Dynamic Array</strong>.</p>
+<h3 id="how-fast-are-list-operations">How Fast Are List Operations?</h3>
+<p>Some operations are fast, some are slow. It&#39;s worth knowing which is which.</p>
+<p><strong>Fast operations (O(1) -- constant time):</strong></p>
 <pre><code class="language-python"># Index access
 value = my_list[2]  # Very fast
 
@@ -401,7 +399,7 @@ my_list.append(10)  # Fast on average
 
 # Remove from end
 my_list.pop()  # Fast</code></pre>
-<h4 id="slow-operations-on-proportional-to-list-size">Slow Operations (O(n) - proportional to list size)</h4>
+<p><strong>Slow operations (O(n) -- proportional to list size):</strong></p>
 <pre><code class="language-python"># Insert in middle
 my_list.insert(0, 5)  # Slow (must shift all elements)
 
@@ -411,20 +409,20 @@ my_list.pop(0)  # Slow (must shift all elements forward)
 # Search for element
 if 10 in my_list:  # Slow (searches from start to end)
     pass</code></pre>
-<h3 id="the-secret-of-list-copying">The Secret of List Copying</h3>
-<p>Be careful when copying lists.</p>
-<pre><code class="language-python"># Shallow copy
+<h3 id="copying-lists-be-careful">Copying Lists -- Be Careful</h3>
+<p>This trips people up all the time.</p>
+<pre><code class="language-python"># This is NOT a copy
 original = [1, 2, 3]
 copy1 = original  # Points to same list!
 
 copy1.append(4)
 print(original)  # [1, 2, 3, 4] - original changed too!
 
-# Real copy
+# This is a real copy
 copy2 = original.copy()  # or original[:]
 copy2.append(5)
 print(original)  # [1, 2, 3, 4] - original unchanged</code></pre>
-<p>Be extra careful with nested lists.</p>
+<p>With nested lists, it gets trickier.</p>
 <pre><code class="language-python"># 2D list
 matrix = [[1, 2], [3, 4]]
 shallow = matrix.copy()
@@ -438,9 +436,9 @@ deep = copy.deepcopy(matrix)
 deep[0].append(100)
 print(matrix)  # [[1, 2, 99], [3, 4]] - original is safe</code></pre>
 <h2 id="iterator-and-iterable">Iterator and Iterable</h2>
-<p>To traverse containers, you need to understand <strong>Iterator</strong> and <strong>Iterable</strong>.</p>
+<p>To really understand how containers are traversed, you need to know about <strong>Iterator</strong> and <strong>Iterable</strong>.</p>
 <h3 id="what-is-an-iterable">What is an Iterable?</h3>
-<p>An <strong>Iterable</strong> is an object that can be iterated. Simply put, anything you can put in a <code class="inline-code">for</code> loop.</p>
+<p>An <strong>Iterable</strong> is anything you can put in a <code class="inline-code">for</code> loop.</p>
 <pre><code class="language-python"># These are all Iterable
 for x in [1, 2, 3]:        # List
     print(x)
@@ -454,7 +452,7 @@ for x in &quot;hello&quot;:          # String
 for x in {1, 2, 3}:        # Set
     print(x)</code></pre>
 <h3 id="what-is-an-iterator">What is an Iterator?</h3>
-<p>An <strong>Iterator</strong> is an object that actually retrieves values one by one.</p>
+<p>An <strong>Iterator</strong> is the object that actually retrieves values one by one.</p>
 <pre><code class="language-python">numbers = [1, 2, 3]
 
 # Create Iterator with iter()
@@ -466,8 +464,8 @@ print(next(iterator))  # 2
 print(next(iterator))  # 3
 print(next(iterator))  # StopIteration error!</code></pre>
 <h3 id="the-secret-of-for-loops">The Secret of for Loops</h3>
-<p>The <code class="inline-code">for</code> loops we write actually work like this.</p>
-<pre><code class="language-python"># Code we write
+<p>The <code class="inline-code">for</code> loop you write every day actually works like this under the hood.</p>
+<pre><code class="language-python"># Code you write
 for num in [1, 2, 3]:
     print(num)
 
@@ -491,8 +489,8 @@ while True:
        │ next()
        ▼
     Returns value</code></pre>
-<p>Key points:<br />- <strong>Iterable</strong>: Calling <code class="inline-code">iter()</code> returns an Iterator<br />- <strong>Iterator</strong>: Calling <code class="inline-code">next()</code> returns the next value</p>
-<h3 id="creating-your-own">Creating Your Own</h3>
+<p>The key: <strong>Iterable</strong> gives you an Iterator when you call <code class="inline-code">iter()</code>. <strong>Iterator</strong> gives you the next value when you call <code class="inline-code">next()</code>.</p>
+<h3 id="building-your-own">Building Your Own</h3>
 <pre><code class="language-python">class CountUp:
     &quot;&quot;&quot;Iterable that counts from 1 to n&quot;&quot;&quot;
     def __init__(self, max):
@@ -520,18 +518,18 @@ counter = CountUp(5)
 for num in counter:
     print(num)
 # 1, 2, 3, 4, 5</code></pre>
-<p>Looks complex? There&#39;s a simpler way: <strong>Generators</strong>!</p>
-<h2 id="generator-a-smart-iterator">Generator - A Smart Iterator</h2>
-<h3 id="problem-memory-waste">Problem: Memory Waste</h3>
-<p>We want to process a million numbers.</p>
-<pre><code class="language-python"># Creating as a list (Container)
+<p>That&#39;s a lot of code for something simple. There&#39;s a much easier way -- <strong>Generators</strong>.</p>
+<h2 id="generator-the-smart-iterator">Generator - The Smart Iterator</h2>
+<h3 id="the-problem-memory-waste">The Problem: Memory Waste</h3>
+<p>Say you want to process a million numbers.</p>
+<pre><code class="language-python"># Creating as a list
 numbers = [i for i in range(1000000)]  # All million in memory!
 
 for num in numbers:
     print(num)</code></pre>
-<p>Problems:<br />- Stores <strong>all million numbers in memory</strong><br />- Only <strong>needs one at a time</strong> - inefficient</p>
+<p>This stores <strong>all million numbers in memory</strong> even though you only <strong>need one at a time</strong>. That&#39;s wasteful.</p>
 <h3 id="enter-generators">Enter Generators</h3>
-<p>A <strong>Generator</strong> is a smart Iterator that creates values one at a time as needed.</p>
+<p>A <strong>Generator</strong> creates values one at a time, only when you need them.</p>
 <pre><code class="language-python"># Generator version
 def number_generator():
     for i in range(1000000):
@@ -539,7 +537,7 @@ def number_generator():
 
 for num in number_generator():
     print(num)</code></pre>
-<p>Differences:</p>
+<p>The difference is dramatic:</p>
 <table>
 <thead>
 <tr><th></th><th>List (Container)</th><th>Generator (Iterator)</th></tr>
@@ -550,9 +548,9 @@ for num in number_generator():
 <tr><td>Reuse</td><td>Can iterate multiple times</td><td>Can iterate once</td></tr>
 </tbody>
 </table>
-<p>Generators are <strong>an easy way to create Iterators</strong>!</p>
+<p>Generators are just <strong>an easy way to create Iterators</strong>.</p>
 <h3 id="the-yield-keyword">The yield Keyword</h3>
-<p><code class="inline-code">yield</code> is similar to <code class="inline-code">return</code>, but remembers the function&#39;s state.</p>
+<p><code class="inline-code">yield</code> is like <code class="inline-code">return</code>, but it remembers where the function was.</p>
 <pre><code class="language-python">def simple_generator():
     print(&quot;Creating first value&quot;)
     yield 1
@@ -565,10 +563,9 @@ gen = simple_generator()
 print(next(gen))  # &quot;Creating first value&quot; → 1
 print(next(gen))  # &quot;Creating second value&quot; → 2
 print(next(gen))  # &quot;Creating third value&quot; → 3</code></pre>
-<p>When encountering <code class="inline-code">yield</code>:<br />1. Returns a value<br />2. <strong>Pauses</strong> the function<br />3. <strong>Resumes</strong> from where it left off on next call</p>
-<h3 id="generator-advantages">Generator Advantages</h3>
-<pre><code class="language-python"># Can even create infinite sequences!
-def infinite_numbers():
+<p>When Python hits <code class="inline-code">yield</code>, it returns the value, <strong>pauses</strong> the function, and <strong>resumes</strong> from exactly that spot on the next call.</p>
+<h3 id="you-can-even-do-infinite-sequences">You Can Even Do Infinite Sequences</h3>
+<pre><code class="language-python">def infinite_numbers():
     num = 0
     while True:
         yield num
@@ -579,39 +576,10 @@ print(next(gen))  # 0
 print(next(gen))  # 1
 print(next(gen))  # 2
 # Can continue indefinitely...</code></pre>
-<p>Impossible with lists - would require infinite memory!</p>
-<h2 id="for-loops-and-generators">for Loops and Generators</h2>
-<h3 id="the-principle-of-for-loops">The Principle of for Loops</h3>
-<p><code class="inline-code">for</code> loops actually use generators.</p>
-<pre><code class="language-python"># Code we write
-for num in [1, 2, 3]:
-    print(num)
-
-# What actually happens
-iterator = iter([1, 2, 3])
-while True:
-    try:
-        num = next(iterator)
-        print(num)
-    except StopIteration:
-        break</code></pre>
-<h3 id="creating-generators-with-for-loops">Creating Generators with for Loops</h3>
-<pre><code class="language-python">def count_up_to(max):
-    count = 1
-    while count &lt;= max:
-        yield count
-        count += 1
-
-for num in count_up_to(5):
-    print(num)
-# 1
-# 2
-# 3
-# 4
-# 5</code></pre>
-<p>Using <code class="inline-code">yield</code> inside a <code class="inline-code">while</code> loop lets you keep generating values.</p>
-<h3 id="real-example-1-reading-files">Real Example 1: Reading Files</h3>
-<p>Generators are useful for reading large files.</p>
+<p>Try doing that with a list. You&#39;d need infinite memory.</p>
+<h2 id="practical-generator-examples">Practical Generator Examples</h2>
+<h3 id="reading-large-files">Reading Large Files</h3>
+<p>Generators shine when reading big files.</p>
 <pre><code class="language-python">def read_large_file(file_path):
     &quot;&quot;&quot;Generator that reads file line by line&quot;&quot;&quot;
     with open(file_path) as file:
@@ -621,7 +589,7 @@ for num in count_up_to(5):
 # Process 100GB file without memory burden
 for line in read_large_file(&quot;huge_file.txt&quot;):
     process(line)</code></pre>
-<h3 id="real-example-2-fibonacci-sequence">Real Example 2: Fibonacci Sequence</h3>
+<h3 id="fibonacci-sequence">Fibonacci Sequence</h3>
 <pre><code class="language-python">def fibonacci():
     &quot;&quot;&quot;Infinite Fibonacci sequence generator&quot;&quot;&quot;
     a, b = 0, 1
@@ -634,19 +602,18 @@ fib = fibonacci()
 for _ in range(10):
     print(next(fib))
 # 0, 1, 1, 2, 3, 5, 8, 13, 21, 34</code></pre>
-<h3 id="real-example-3-data-filtering">Real Example 3: Data Filtering</h3>
+<h3 id="data-filtering">Data Filtering</h3>
 <pre><code class="language-python">def even_numbers(numbers):
     &quot;&quot;&quot;Generator that returns only even numbers&quot;&quot;&quot;
     for num in numbers:
         if num % 2 == 0:
             yield num
 
-# Usage
 for num in even_numbers(range(10)):
     print(num)
 # 0, 2, 4, 6, 8</code></pre>
 <h3 id="generator-expressions">Generator Expressions</h3>
-<p>Similar to list comprehensions but uses <code class="inline-code">()</code> instead of <code class="inline-code">[]</code>.</p>
+<p>These look like list comprehensions but use <code class="inline-code">()</code> instead of <code class="inline-code">[]</code>.</p>
 <pre><code class="language-python"># List comprehension (uses lots of memory)
 squares_list = [x**2 for x in range(1000000)]
 
@@ -657,8 +624,7 @@ squares_gen = (x**2 for x in range(1000000))
 print(next(squares_gen))  # 0
 print(next(squares_gen))  # 1
 print(next(squares_gen))  # 4</code></pre>
-<h2 id="while-loops-and-generators">while Loops and Generators</h2>
-<p>You can create more complex generators with <code class="inline-code">while</code> loops.</p>
+<h2 id="more-generator-patterns">More Generator Patterns</h2>
 <h3 id="conditional-generation">Conditional Generation</h3>
 <pre><code class="language-python">def numbers_until_condition(limit):
     &quot;&quot;&quot;Generate numbers until sum exceeds limit&quot;&quot;&quot;
@@ -701,48 +667,27 @@ def all_numbers():
 
 limited = first_n(all_numbers(), 5)
 print(list(limited))  # [0, 1, 2, 3, 4]</code></pre>
-<h2 id="containers-vs-generators">Containers vs Generators</h2>
-<p>When should you use what?</p>
-<h3 id="use-containers-lists">Use Containers (Lists)</h3>
-<pre><code class="language-python"># 1. Need multiple accesses
-data = [1, 2, 3, 4, 5]
+<h2 id="when-to-use-what">When to Use What?</h2>
+<p>Use <strong>lists</strong> when you need multiple accesses, have small data, need sorting, or need to iterate more than once.</p>
+<pre><code class="language-python">data = [1, 2, 3, 4, 5]
 print(data[2])  # Index access
 print(len(data))  # Length check
 print(data[:3])  # Slicing
 
-# 2. Small data size
-small_list = [x for x in range(100)]  # OK
-
-# 3. Need all data
-sorted_data = sorted([3, 1, 2])  # Sorting needs all data
-
-# 4. Need multiple iterations
 for x in data:
     print(x)
 for x in data:  # Can iterate again!
     print(x * 2)</code></pre>
-<h3 id="use-generators-iterators">Use Generators (Iterators)</h3>
-<pre><code class="language-python"># 1. Large data
+<p>Use <strong>generators</strong> when dealing with large data, iterating only once, working with infinite sequences, or building processing pipelines.</p>
+<pre><code class="language-python"># Large data
 huge_data = (x for x in range(10000000))  # Saves memory
 
-# 2. Single iteration
-for item in huge_data:
-    process(item)
-
-# 3. Infinite sequences
-def infinite():
-    while True:
-        yield get_next_value()
-
-# 4. Pipeline processing (chaining)
+# Pipeline processing
 data = (x for x in range(100))
 filtered = (x for x in data if x % 2 == 0)
-squared = (x**2 for x in filtered)
-
-# 5. Need lazy evaluation
-# Defers computation until the moment it&#39;s needed</code></pre>
-<h2 id="summary">Summary</h2>
-<h3 id="concept-hierarchy">Concept Hierarchy</h3>
+squared = (x**2 for x in filtered)</code></pre>
+<h2 id="the-big-picture">The Big Picture</h2>
+<p>Here&#39;s how all these concepts relate to each other.</p>
 <pre class="mermaid">graph TD
     A["Container<br/>Most general concept<br/>Data structures<br/>list, tuple, set, dict, str"]
     B["Iterable<br/>Iterable objects<br/>Can use in for loop<br/>Calling iter() returns Iterator"]
@@ -757,43 +702,7 @@ squared = (x**2 for x in filtered)
     style B fill:#fff3e0
     style C fill:#f3e5f5
     style D fill:#e8f5e9</pre>
-<h3 id="container">Container</h3>
-<ol class="ol-list">
-<li><strong>Definition</strong>: Data structure that can hold multiple objects</li><li><strong>Features</strong>:</li></ol>
-<ul class="ul-list">
-<li>Membership test (<code class="inline-code">in</code> operator)</li><li>Iterable</li></ul>
-<ol class="ol-list">
-<li><strong>Types</strong>: list, tuple, set, dict, str</li></ol>
-<h3 id="list">List</h3>
-<ol class="ol-list">
-<li><strong>Internal structure</strong>: Implemented as dynamic array</li><li><strong>capacity</strong>: Pre-allocates space for efficiency</li><li><strong>Time complexity</strong>:</li></ol>
-<ul class="ul-list">
-<li>Fast: index access, append/remove from end</li><li>Slow: insert/remove from middle, search</li></ul>
-<ol class="ol-list">
-<li><strong>Copy caution</strong>: shallow copy vs deep copy</li></ol>
-<h3 id="iterator-and-iterable">Iterator and Iterable</h3>
-<ol class="ol-list">
-<li><strong>Iterable</strong>: Calling <code class="inline-code">iter()</code> returns an Iterator</li><li><strong>Iterator</strong>: Calling <code class="inline-code">next()</code> returns the next value</li><li><strong>for loops</strong>: Internally use <code class="inline-code">iter()</code> and <code class="inline-code">next()</code></li><li><strong>Difference</strong>: Iterable can iterate multiple times, Iterator only once</li></ol>
-<h3 id="generator">Generator</h3>
-<ol class="ol-list">
-<li><strong>Definition</strong>: Easy way to create Iterators</li><li><strong>yield</strong>: Returns values one by one and maintains state</li><li><strong>Advantages</strong>: Memory efficient, infinite sequences possible</li><li><strong>Usage</strong>:</li></ol>
-<ul class="ul-list">
-<li><code class="inline-code">for</code> loop with <code class="inline-code">yield</code></li><li><code class="inline-code">while</code> loop with <code class="inline-code">yield</code> (conditional generation)</li><li>Generator expressions <code class="inline-code">(x for x in ...)</code></li></ul>
-<h3 id="when-to-use-what">When to Use What?</h3>
-<table>
-<thead>
-<tr><th>Situation</th><th>Use</th><th>Reason</th></tr>
-</thead>
-<tbody>
-<tr><td>Small data</td><td>Container (List)</td><td>Fast and convenient</td></tr>
-<tr><td>Multiple iterations</td><td>Container (List)</td><td>Reusable</td></tr>
-<tr><td>Index access</td><td>Container (List)</td><td>Random access</td></tr>
-<tr><td>Large data</td><td>Generator</td><td>Memory savings</td></tr>
-<tr><td>Single iteration</td><td>Generator</td><td>Efficient</td></tr>
-<tr><td>Infinite sequences</td><td>Generator</td><td>Required</td></tr>
-<tr><td>Pipelines</td><td>Generator</td><td>Chain composition</td></tr>
-</tbody>
-</table>
+<p>Every Container is Iterable. Calling <code class="inline-code">iter()</code> on an Iterable gives you an Iterator. And Generators are just the easy way to make Iterators. That&#39;s the whole hierarchy.</p>
 
     </div>
 

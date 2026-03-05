@@ -315,9 +315,9 @@
 
     <div class="post-content">
         <h2 id="-">클래스의 내부 구조</h2>
-<p>파이썬에서 &quot;모든 것은 객체&quot;라고 하죠. 그렇다면 클래스 내부는 어떻게 생겼을까요?</p>
-<h3 id="__dict__-"><code class="inline-code">__dict__</code>: 속성 저장소</h3>
-<p>파이썬에서 객체의 속성들은 <strong>딕셔너리</strong>로 저장됩니다.</p>
+<p>파이썬에서 &quot;모든 것은 객체&quot;라고 한다. 그렇다면 클래스 내부는 어떻게 생겼을까?</p>
+<h3 id="__dict__-"><code class="inline-code">__dict__</code>: 속성이 사는 곳</h3>
+<p>파이썬에서 객체의 속성들은 <strong>딕셔너리</strong>로 저장된다.</p>
 <pre><code class="language-python">class Person:
     def __init__(self, name, age):
         self.name = name
@@ -333,7 +333,7 @@ print(person.__dict__)
 person.city = &quot;서울&quot;
 print(person.__dict__)
 # {&#39;name&#39;: &#39;영희&#39;, &#39;age&#39;: 25, &#39;city&#39;: &#39;서울&#39;}</code></pre>
-<p><strong>실제로 속성에 접근할 때 일어나는 일:</strong></p>
+<p>속성에 접근할 때 실제로 일어나는 일은 이렇다.</p>
 <pre><code class="language-python"># 우리가 쓰는 코드
 print(person.name)
 
@@ -362,7 +362,7 @@ print(dog2.legs)     # 4
 Dog.species = &quot;Canis lupus&quot;
 print(dog1.species)  # &quot;Canis lupus&quot; (모두 변경됨!)
 print(dog2.species)  # &quot;Canis lupus&quot;</code></pre>
-<p><strong>메모리 구조:</strong></p>
+<p>메모리에서 보면 이런 구조다.</p>
 <pre class="mermaid">graph BT
     A["dog1<br/>name: 멍멍이"] -->|__class__| C
     B["dog2<br/>name: 바둑이"] -->|__class__| C
@@ -371,8 +371,8 @@ print(dog2.species)  # &quot;Canis lupus&quot;</code></pre>
     style C fill:#e8f5e9
     style A fill:#e3f2fd
     style B fill:#e3f2fd</pre>
-<h3 id="__class__-"><code class="inline-code">__class__</code>: 클래스 참조</h3>
-<p>모든 객체는 자신이 어떤 클래스로부터 만들어졌는지 알고 있습니다.</p>
+<h3 id="__class__-"><code class="inline-code">__class__</code>: 자기가 어디서 왔는지 아는 법</h3>
+<p>모든 객체는 자신이 어떤 클래스에서 만들어졌는지 알고 있다.</p>
 <pre><code class="language-python">print(dog1.__class__)              # &lt;class &#39;__main__.Dog&#39;&gt;
 print(dog1.__class__.__name__)     # &quot;Dog&quot;
 
@@ -382,7 +382,7 @@ print(dog1.__class__ is dog2.__class__)  # True
 # 클래스 변수 접근
 print(dog1.__class__.species)      # &quot;Canis familiaris&quot;</code></pre>
 <h3 id="-">속성 찾기 순서</h3>
-<p>파이썬이 속성을 어떻게 찾는지 알아봅시다.</p>
+<p>파이썬이 속성을 어떻게 찾는지 보자.</p>
 <pre><code class="language-python">class Animal:
     species = &quot;Unknown&quot;
 
@@ -395,7 +395,7 @@ class Cat(Animal):
 cat = Cat()
 print(cat.species)   # &quot;Felis catus&quot;
 print(cat.speak())   # &quot;...&quot;</code></pre>
-<p><strong>속성 찾기 과정:</strong></p>
+<p><code class="inline-code">cat.species</code>를 찾을 때, 파이썬은 먼저 <code class="inline-code">cat.__dict__</code>를 확인한다. 없다. 그다음 <code class="inline-code">Cat</code> 클래스를 확인한다. 있다.</p>
 <pre class="mermaid">flowchart TD
     S1["cat.species 접근"] --> A1{"cat.__dict__에<br/>species 있는가?"}
     A1 -->|없음| B1{"Cat 클래스에<br/>species 있는가?"}
@@ -403,6 +403,7 @@ print(cat.speak())   # &quot;...&quot;</code></pre>
 
     style S1 fill:#e3f2fd
     style C1 fill:#e8f5e9</pre>
+<p><code class="inline-code">cat.speak()</code>의 경우, 인스턴스에도 없고 <code class="inline-code">Cat</code>에도 없어서 <code class="inline-code">Animal</code>까지 올라가야 찾을 수 있다.</p>
 <pre class="mermaid">flowchart TD
     S2["cat.speak&#40;&#41; 호출"] --> A2{"cat.__dict__에<br/>speak 있는가?"}
     A2 -->|없음| B2{"Cat 클래스에<br/>speak 있는가?"}
@@ -411,14 +412,14 @@ print(cat.speak())   # &quot;...&quot;</code></pre>
 
     style S2 fill:#e3f2fd
     style D2 fill:#e8f5e9</pre>
-<p>이 순서를 <strong>MRO (Method Resolution Order)</strong>라고 합니다.</p>
+<p>이 순서를 <strong>MRO (Method Resolution Order)</strong>라고 한다.</p>
 <pre><code class="language-python"># MRO 확인하기
 print(Cat.__mro__)
 # (&lt;class &#39;Cat&#39;&gt;, &lt;class &#39;Animal&#39;&gt;, &lt;class &#39;object&#39;&gt;)</code></pre>
-<h2 id="-bound-method">바운드 메서드(Bound Method)</h2>
-<p><code class="inline-code">__dict__</code>와 <code class="inline-code">__class__</code>를 통해 클래스의 내부 구조를 살펴봤습니다. 이제 메서드가 내부적으로 어떻게 작동하는지 알아봅시다.</p>
+<h2 id="-">바운드 메서드</h2>
+<p><code class="inline-code">__dict__</code>와 <code class="inline-code">__class__</code>로 클래스의 내부 구조를 봤다. 이제 메서드가 내부적으로 어떻게 작동하는지 알아보자.</p>
 <h3 id="-">메서드의 두 얼굴</h3>
-<p>사실, 클래스의 메서드는 <strong>두 가지 형태</strong>를 가지고 있습니다.</p>
+<p>놀라운 사실이 하나 있다. 클래스의 메서드는 <strong>두 가지 형태</strong>를 갖고 있다.</p>
 <pre><code class="language-python">class Calculator:
     def __init__(self, value):
         self.value = value
@@ -432,40 +433,39 @@ calc = Calculator(10)
 # 메서드의 두 얼굴
 print(type(Calculator.add))  # &lt;class &#39;function&#39;&gt;
 print(type(calc.add))         # &lt;class &#39;method&#39;&gt;</code></pre>
-<p>클래스에서 보면 <strong>함수(function)</strong>지만, 인스턴스에서 보면 <strong>메서드(method)</strong>입니다.</p>
+<p>클래스에서 보면 <strong>함수</strong>고, 인스턴스에서 보면 <strong>메서드</strong>다. 같은 건데 관점이 다르다.</p>
 <h3 id="-">바운드 메서드란?</h3>
-<p><strong>바운드 메서드(Bound Method)</strong>는 특정 인스턴스에 &quot;묶인(bound)&quot; 메서드를 말합니다.</p>
+<p><strong>바운드 메서드</strong>는 특정 인스턴스에 &quot;묶인&quot; 메서드다.</p>
 <pre><code class="language-python">calc = Calculator(10)
 
-# calc.add는 calc 인스턴스에 묶여있음
+# calc.add는 calc 인스턴스에 묶여있다
 print(calc.add)
 # &lt;bound method Calculator.add of &lt;__main__.Calculator object at 0x...&gt;&gt;
 
-# 메서드를 변수에 저장 가능
+# 메서드를 변수에 저장할 수도 있다
 add_method = calc.add
 add_method(5)  # calc.value가 15가 됨
 print(calc.value)  # 15</code></pre>
-<h3 id="-">바운드 메서드의 비밀</h3>
-<p>파이썬이 메서드를 어떻게 바인딩하는지 봅시다:</p>
+<h3 id="-">바인딩의 비밀</h3>
 <pre><code class="language-python">class MyClass:
     def method(self, x):
         return f&quot;값: {x}&quot;
 
 obj = MyClass()
 
-# 이 두 줄은 완전히 같은 일을 합니다!
+# 이 두 줄은 완전히 같은 일을 한다!
 obj.method(42)              # 일반적인 방법
 MyClass.method(obj, 42)     # 직접 호출</code></pre>
-<p><strong>메서드 호출의 비밀:</strong></p>
+<p>비밀은 이거다.</p>
 <pre><code class="language-python"># 우리가 쓰는 코드
 result = obj.method(42)
 
 # 실제로 파이썬이 하는 일:
 method_func = MyClass.method    # 1. 함수를 가져옴
 result = method_func(obj, 42)   # 2. obj를 첫 번째 인자로 전달</code></pre>
-<p>이것이 <code class="inline-code">self</code> 파라미터의 정체입니다!</p>
-<h3 id="-">바운드 메서드의 내부</h3>
-<p>더 깊이 들어가봅시다:</p>
+<p>이것이 <code class="inline-code">self</code>의 정체다. 파이썬이 자동으로 인스턴스를 첫 번째 인자로 넘겨준다.</p>
+<h3 id="-">바운드 메서드 내부</h3>
+<p>더 깊이 들어가보자.</p>
 <pre><code class="language-python">class Counter:
     def __init__(self):
         self.count = 0
@@ -482,8 +482,8 @@ print(bound.__func__)    # Counter.increment 함수를 가리킴
 
 # 바운드 메서드는 내부적으로 이렇게 작동:
 # bound() → bound.__func__(bound.__self__)</code></pre>
-<h3 id="-">실전 예제: 콜백 함수</h3>
-<p>바운드 메서드는 콜백 함수로 자주 사용됩니다:</p>
+<h3 id="-">실전 예제: 콜백</h3>
+<p>바운드 메서드는 콜백으로 자주 쓰인다.</p>
 <pre><code class="language-python">class Button:
     def __init__(self, label):
         self.label = label
@@ -504,10 +504,11 @@ callbacks = [save_button.on_click, cancel_button.on_click]
 callbacks[0]()  # &quot;저장 버튼 클릭됨 (1번)&quot;
 callbacks[0]()  # &quot;저장 버튼 클릭됨 (2번)&quot;
 callbacks[1]()  # &quot;취소 버튼 클릭됨 (1번)&quot;</code></pre>
-<h2 id="descriptor">디스크립터(Descriptor)</h2>
-<p>바운드 메서드의 동작 원리를 이해했으니, 이제 그 뒤에 있는 더 근본적인 메커니즘을 살펴볼 차례입니다. 디스크립터는 잘 알려지지 않았지만 파이썬에서 가장 강력한 기능 중 하나입니다.</p>
+<p>각 바운드 메서드가 자기 인스턴스를 기억하고 있기 때문에 콜백이 그냥 작동한다.</p>
+<h2>디스크립터</h2>
+<p>바운드 메서드의 원리를 이해했으니, 이제 그 뒤에 있는 더 근본적인 메커니즘을 보자. 디스크립터는 잘 알려지지 않았지만 엄청나게 강력하다.</p>
 <h3>디스크립터란?</h3>
-<p><strong>디스크립터(Descriptor)</strong>는 속성 접근을 제어하는 객체입니다.</p>
+<p><strong>디스크립터</strong>는 속성 접근을 제어하는 객체다.</p>
 <pre><code class="language-python">class Descriptor:
     def __get__(self, obj, objtype=None):
         print(&quot;__get__ 호출됨&quot;)
@@ -532,7 +533,7 @@ obj.attr = 10      # &quot;__set__ 호출됨: 10&quot;
 print(obj.attr)    # &quot;__get__ 호출됨&quot; → 10
 del obj.attr       # &quot;__delete__ 호출됨&quot;</code></pre>
 <h3 id="-">디스크립터 프로토콜</h3>
-<p>디스크립터는 세 가지 특수 메서드를 구현합니다:</p>
+<p>디스크립터는 세 가지 특수 메서드를 구현한다.</p>
 <pre><code class="language-python">class Descriptor:
     def __get__(self, instance, owner):
         &quot;&quot;&quot;
@@ -554,6 +555,7 @@ del obj.attr       # &quot;__delete__ 호출됨&quot;</code></pre>
         &quot;&quot;&quot;
         pass</code></pre>
 <h3 id="-vs-">데이터 디스크립터 vs 비데이터 디스크립터</h3>
+<p>이 구분이 우선순위에 영향을 준다.</p>
 <pre><code class="language-python"># 데이터 디스크립터: __set__ 또는 __delete__가 있음
 class DataDescriptor:
     def __get__(self, obj, objtype=None):
@@ -575,10 +577,11 @@ obj = MyClass()
 
 # 인스턴스 속성 vs 디스크립터 우선순위
 obj.__dict__[&#39;non_data_desc&#39;] = &quot;instance attr&quot;
-print(obj.non_data_desc)  # &quot;instance attr&quot; (인스턴스 속성이 우선)
+print(obj.non_data_desc)  # &quot;instance attr&quot; (인스턴스가 이김)
 
 obj.__dict__[&#39;data_desc&#39;] = &quot;instance attr&quot;
-print(obj.data_desc)  # &quot;data descriptor&quot; (데이터 디스크립터가 우선)</code></pre>
+print(obj.data_desc)  # &quot;data descriptor&quot; (데이터 디스크립터가 이김)</code></pre>
+<p>데이터 디스크립터는 인스턴스 속성을 이기고, 비데이터 디스크립터는 인스턴스 속성에 진다. 이 우선순위가 파이썬 속성 시스템의 핵심이다.</p>
 <h3 id="-1-">실전 예제 1: 타입 검증</h3>
 <pre><code class="language-python">class TypedProperty:
     &quot;&quot;&quot;타입을 강제하는 디스크립터&quot;&quot;&quot;
@@ -699,9 +702,9 @@ print(account.balance)
 account.deposit(500)
 # [GET] balance = 1000
 # [SET] balance = 1500</code></pre>
-<h2 id="property-">프로퍼티(Property): 디스크립터의 간편한 버전</h2>
+<h2 id="-">프로퍼티: 간편한 디스크립터</h2>
 <h3 id="property-"><code class="inline-code">@property</code> 데코레이터</h3>
-<p>디스크립터를 매번 클래스로 만들기는 번거롭습니다. <code class="inline-code">@property</code>는 디스크립터를 쉽게 사용하는 방법입니다:</p>
+<p>디스크립터를 매번 클래스로 만들기는 귀찮다. <code class="inline-code">@property</code>는 같은 기능을 적은 코드로 제공한다.</p>
 <pre><code class="language-python">class Circle:
     def __init__(self, radius):
         self._radius = radius
@@ -740,11 +743,11 @@ print(circle.area)     # 78.53975
 circle.radius = 10
 print(circle.area)     # 314.159
 
-# diameter를 설정하면 radius가 자동 계산됨
+# diameter를 설정하면 radius가 자동 계산
 circle.diameter = 20
 print(circle.radius)   # 10.0</code></pre>
 <h3 id="property-">property의 정체</h3>
-<p><code class="inline-code">@property</code>는 사실 디스크립터입니다!</p>
+<p><code class="inline-code">@property</code>는 사실 디스크립터다.</p>
 <pre><code class="language-python">class MyProperty:
     &quot;&quot;&quot;property의 간단한 구현&quot;&quot;&quot;
     def __init__(self, fget=None, fset=None):
@@ -784,7 +787,7 @@ class Temperature:
 temp = Temperature(25)
 print(temp.celsius)  # 25</code></pre>
 <h3 id="-">계산된 속성</h3>
-<p>프로퍼티의 강력한 기능은 <strong>계산된 속성</strong>입니다:</p>
+<p>프로퍼티의 강력한 활용법은 <strong>계산된 속성</strong>이다.</p>
 <pre><code class="language-python">class Rectangle:
     def __init__(self, width, height):
         self.width = width
@@ -807,8 +810,9 @@ print(rect.perimeter) # 60
 # width를 바꾸면 area도 자동으로 바뀜
 rect.width = 15
 print(rect.area)      # 300</code></pre>
+<p><code class="inline-code">area</code>를 일반 속성처럼 접근하지만, 매번 새로 계산된다. 따로 업데이트할 필요가 없다.</p>
 <h2 id="-">메서드도 디스크립터다</h2>
-<p>디스크립터와 프로퍼티를 배웠으니, 이제 퍼즐의 마지막 조각입니다. 앞에서 배운 바운드 메서드가 어떻게 만들어지는지, 디스크립터를 통해 설명할 수 있습니다.</p>
+<p>퍼즐의 마지막 조각이다. 앞에서 배운 바운드 메서드가 어떻게 만들어지는지, 디스크립터로 완전히 설명할 수 있다.</p>
 <h3 id="-">함수는 디스크립터</h3>
 <pre><code class="language-python">class Function:
     &quot;&quot;&quot;메서드의 간단한 구현&quot;&quot;&quot;
@@ -835,13 +839,14 @@ print(type(MyClass.method))  # function
 # 인스턴스에서 접근
 print(type(obj.method))      # function (간단 구현이라 method는 아님)
 print(obj.method(42))        # 작동함!</code></pre>
-<p>실제 파이썬의 함수 객체는 <code class="inline-code">__get__</code> 메서드를 가지고 있습니다:</p>
+<p>실제 파이썬의 함수 객체는 <code class="inline-code">__get__</code> 메서드를 내장하고 있다.</p>
 <pre><code class="language-python">def my_function(self, x):
     return x
 
 # 함수는 디스크립터!
 print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
-<h2>정리</h2>
+<p><code class="inline-code">obj.method(x)</code>를 호출하면, 파이썬이 클래스에서 함수를 찾고, <code class="inline-code">__get__</code>을 호출해 바운드 메서드를 만들고, 그걸 실행한다. 밑바닥까지 전부 디스크립터다.</p>
+<h2 id="-">전체 그림</h2>
 <h3 id="-">클래스 내부 구조</h3>
 <pre class="mermaid">graph TD
     A["인스턴스<br/>obj"]
@@ -862,15 +867,8 @@ print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
 <h3 id="-">속성 찾기 우선순위</h3>
 <ol class="ol-list">
 <li><strong>데이터 디스크립터</strong> (클래스/부모 클래스에서 <code class="inline-code">__set__</code>이 있는 디스크립터)</li><li><strong>인스턴스 `__dict__`</strong> (인스턴스 변수)</li><li><strong>비데이터 디스크립터 및 일반 클래스 변수</strong> (클래스/부모 클래스에서 <code class="inline-code">__get__</code>만 있거나 디스크립터가 아닌 변수)</li></ol>
-<blockquote><p>각 단계에서 현재 클래스 → 부모 클래스 순서(MRO)로 탐색합니다.</p>
+<blockquote><p>각 단계에서 현재 클래스, 그다음 부모 클래스 순서(MRO)로 탐색한다.</p>
 </blockquote>
-<h3 id="-">바운드 메서드</h3>
-<pre><code class="language-python"># 메서드 호출
-obj.method(x)
-
-# 실제 내부 동작
-method = obj.__class__.method  # 함수 가져오기
-method.__get__(obj, type(obj))(x)  # 디스크립터 프로토콜</code></pre>
 <h3 id="-">디스크립터 프로토콜</h3>
 <table>
 <thead>
@@ -882,24 +880,10 @@ method.__get__(obj, type(obj))(x)  # 디스크립터 프로토콜</code></pre>
 <tr><td><code class="inline-code"><strong>delete</strong>(self, instance)</code></td><td><code class="inline-code">del obj.attr</code></td><td>속성 삭제</td></tr>
 </tbody>
 </table>
-<h3 id="-">언제 무엇을 사용할까?</h3>
-<table>
-<thead>
-<tr><th>상황</th><th>사용</th><th>이유</th></tr>
-</thead>
-<tbody>
-<tr><td>간단한 getter/setter</td><td><code class="inline-code">@property</code></td><td>편리하고 깔끔</td></tr>
-<tr><td>여러 클래스에서 재사용</td><td>디스크립터 클래스</td><td>DRY 원칙</td></tr>
-<tr><td>타입/범위 검증</td><td>디스크립터</td><td>재사용 가능</td></tr>
-<tr><td>계산된 속성</td><td><code class="inline-code">@property</code></td><td>자동 계산</td></tr>
-<tr><td>로깅/캐싱</td><td>디스크립터</td><td>투명한 추가 기능</td></tr>
-</tbody>
-</table>
-<h3 id="-">배운 내용</h3>
-<ol class="ol-list">
-<li><strong>모든 것은 객체</strong>: 클래스도, 함수도, 메서드도 객체</li><li><strong>디스크립터</strong>: 속성 접근을 제어하는 프로토콜</li><li><strong>바운드 메서드</strong>: 디스크립터로 구현된 메서드 바인딩</li><li><strong>프로퍼티</strong>: 디스크립터의 편리한 래퍼</li></ol>
-<h3 id="-">왜 중요한가?</h3>
-<p>디스크립터를 이해하면:<br />- <code class="inline-code">@property</code>, <code class="inline-code">@staticmethod</code>, <code class="inline-code">@classmethod</code>가 내부적으로 어떻게 작동하는지 알 수 있습니다<br />- 커스텀 검증 로직을 재사용 가능한 형태로 만들 수 있습니다<br />- 파이썬의 &quot;마법&quot;처럼 보이는 동작들이 실제로는 일관된 프로토콜 위에 구축되어 있다는 것을 알게 됩니다</p>
+<h3 id="-">언제 뭘 쓸까</h3>
+<p>간단한 getter/setter가 필요하면 <code class="inline-code">@property</code>를 쓴다. 깔끔하고 간편하다.<br />같은 검증 로직을 여러 클래스에서 재사용하려면 디스크립터 클래스를 만든다. DRY 원칙이다.<br />계산된 속성이 일반 속성처럼 보여야 하면 <code class="inline-code">@property</code>가 딱이다.<br />로깅이나 캐싱 같은 횡단 관심사에는 디스크립터가 행동을 투명하게 추가해준다.</p>
+<p>파이썬에서 클래스도, 함수도, 메서드도 전부 객체다. 디스크립터는 속성 접근을 제어하는 프로토콜이다. 바운드 메서드는 디스크립터로 구현된다. 그리고 <code class="inline-code">@property</code>는 같은 메커니즘을 편리하게 감싼 것일 뿐이다.</p>
+<p>이걸 이해하고 나면 <code class="inline-code">@staticmethod</code>나 <code class="inline-code">@classmethod</code>도 더 이상 마법이 아니다. 전부 같은 일관된 프로토콜 위에 만들어져 있다.</p>
 
     </div>
 
@@ -907,6 +891,8 @@ method.__get__(obj, type(obj))(x)  # 디스크립터 프로토콜</code></pre>
         
         <a href="/tech/ko/posts/python-lecture-03.html" class="nav-prev">← Python 강좌 3편 - 컨테이너와 제너레이터</a>
         
+        
+        <a href="/tech/ko/posts/platform-engineering-01.html" class="nav-next">플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란? →</a>
         
     </nav>
 </article>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성 - 재영의 기술 블로그</title>
+    <meta name="description" content="플랫폼 팀이 관측 가능성을 서비스로 제공해야 하는 이유와 그 방법">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/platform-engineering-09.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/platform-engineering-09.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/platform-engineering-09.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/platform-engineering-09.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/platform-engineering-09.html">
+    <meta property="og:title" content="플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성">
+    <meta property="og:description" content="플랫폼 팀이 관측 가능성을 서비스로 제공해야 하는 이유와 그 방법">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-18T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="platform-engineering">
+    
+    <meta property="article:tag" content="observability">
+    
+    <meta property="article:tag" content="monitoring">
+    
+    <meta property="article:tag" content="opentelemetry">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/platform-engineering-09.html">
+    <meta name="twitter:title" content="플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성">
+    <meta name="twitter:description" content="플랫폼 팀이 관측 가능성을 서비스로 제공해야 하는 이유와 그 방법">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성",
+  "description": "플랫폼 팀이 관측 가능성을 서비스로 제공해야 하는 이유와 그 방법",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-18T00:00:00.000Z",
+  "dateModified": "2026-02-18T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/platform-engineering-09.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "platform-engineering, observability, monitoring, opentelemetry"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성">플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성</h1>
+        <time datetime=""2026-02-18T00:00:00.000Z"">February 18, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 플랫폼 엔지니어링 기초 (9/11)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/platform-engineering.html" class="tag">platform-engineering</a>
+                    
+                    <a href="/tech/ko/tags/observability.html" class="tag">observability</a>
+                    
+                    <a href="/tech/ko/tags/monitoring.html" class="tag">monitoring</a>
+                    
+                    <a href="/tech/ko/tags/opentelemetry.html" class="tag">opentelemetry</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 플랫폼 엔지니어링 기초</h3>
+        <p class="post-series-description">내부 개발자 플랫폼, 골든 패스, 개발자 셀프서비스의 원리를 이해하기</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-01.html" class="post-series-link">플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-02.html" class="post-series-link">플랫폼 엔지니어링 02 - 내부 개발자 플랫폼의 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-03.html" class="post-series-link">플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-04.html" class="post-series-link">플랫폼 엔지니어링 04 - 골든 패스 설계하기</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-05.html" class="post-series-link">플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-06.html" class="post-series-link">플랫폼 엔지니어링 06 - 개발자 포털과 서비스 카탈로그</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-07.html" class="post-series-link">플랫폼 엔지니어링 07 - 제품으로서의 플랫폼</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-08.html" class="post-series-link">플랫폼 엔지니어링 08 - 대규모 CI/CD</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-10.html" class="post-series-link">플랫폼 엔지니어링 10 - 보안과 거버넌스</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-11.html" class="post-series-link">플랫폼 엔지니어링 11 - 플랫폼 팀 만들기</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">모니터링과 관측 가능성의 차이</h2>
+<p>모니터링과 관측 가능성은 비슷해 보이지만 근본적으로 다른 질문에 답하는 것이다. 모니터링은 &quot;시스템이 살아 있는가?&quot;를 확인하는 데 초점을 맞추고, 관측 가능성은 &quot;시스템이 왜 이렇게 동작하는가?&quot;를 파악하는 데 초점을 맞춘다.</p>
+<table>
+<thead>
+<tr><th></th><th>모니터링</th><th>관측 가능성</th></tr>
+</thead>
+<tbody>
+<tr><td>질문</td><td>&quot;살아 있나?&quot;</td><td>&quot;왜 이러지?&quot;</td></tr>
+<tr><td>접근법</td><td>사전 정의된 체크</td><td>임의의 질문 탐색</td></tr>
+<tr><td>적합한 상황</td><td>알려진 장애 패턴</td><td>미지의 장애 패턴</td></tr>
+</tbody>
+</table>
+<p>모니터링은 무언가 잘못되었다는 사실을 알려주는 역할을 한다. 반면 관측 가능성은 구체적으로 무엇이 왜 잘못되었는지를 추적하고 이해할 수 있게 해주는 것이다. 장애 패턴이 예측 가능한 단순한 시스템에서는 모니터링만으로 충분할 수 있지만, 마이크로서비스 환경처럼 예상치 못한 방식으로 장애가 발생하는 시스템에서는 관측 가능성이 필수적인 셈이다.</p>
+<h2 id="-">세 가지 기둥</h2>
+<p>관측 가능성은 세 가지 신호를 기반으로 한다.</p>
+<p>로그는 개별 이벤트를 기록하는 역할을 한다. &quot;사용자 123이 14:32:01에 토큰 만료로 인증에 실패했다&quot;와 같은 정보가 이에 해당한다. 메트릭은 시간에 따른 수치 데이터를 집계하여 보여주는 것이다. &quot;p99 지연이 450ms이다&quot;, &quot;에러율이 2.3%이다&quot;와 같은 형태로 시스템의 전반적인 상태를 파악하는 데 유용하다. 트레이스는 하나의 요청이 여러 서비스를 거치는 여정을 추적한다. &quot;서비스 A를 거쳐 서비스 B로 전달되었고, 데이터베이스에서 800ms를 대기했다&quot;와 같은 흐름을 보여주는 것이다.</p>
+<p>이 세 가지를 조합하면 &quot;뭔가 느리다&quot;라는 막연한 증상에서 &quot;서비스 B의 특정 쿼리가 X 리전 사용자에게 느리다&quot;라는 구체적인 원인으로 좁혀갈 수 있다. 각각의 신호만으로는 부분적인 그림밖에 보이지 않지만, 세 가지가 결합되면 시스템의 동작을 입체적으로 이해할 수 있게 되는 것이다.</p>
+<h2 id="opentelemetry">OpenTelemetry</h2>
+<p>OpenTelemetry(OTel) 이전에는 벤더마다 자체 SDK, 에이전트, 데이터 포맷을 사용했다. 이러한 환경에서 벤더를 교체하려면 모든 서비스의 계측 코드를 전부 다시 작성해야 했다. 통합이 깊어질수록 벤더 종속이 심해지는 구조였던 것이다.</p>
+<p>OTel은 이 문제를 해결하는 벤더 중립 표준이다. 한 번 계측하면 원하는 백엔드로 데이터를 보낼 수 있다.</p>
+<pre><code>앱 (OTel SDK) --&gt; OTel Collector --&gt; 백엔드 (Grafana/Datadog 등)</code></pre>
+<p>플랫폼 팀이 Collector를 인프라로 제공하고, 골든 패스 템플릿에 SDK를 미리 설정해두면 개발 팀이 별도의 작업을 하지 않아도 모든 서비스가 기본적으로 관측 가능성을 갖추게 되는 것이다.</p>
+<h2 id="-">관측 가능성을 서비스로 제공</h2>
+<p>각 팀에게 로깅, 메트릭, 트레이싱을 알아서 구축하라고 맡기면 어떻게 되는가? 6개월이 지나면 절반은 트레이스가 아예 없고, 나머지 절반은 의미 없는 데이터를 보내는 상황이 발생한다. 팀마다 기술 수준과 우선순위가 다르기 때문에 당연한 결과이다.</p>
+<p>플랫폼 접근 방식은 이와 근본적으로 다르다. 중앙화된 컬렉터, 저장소, 대시보드를 플랫폼 팀이 운영하고, 베이스 이미지나 사이드카를 통해 자동으로 계측이 이루어지도록 구성한다. 즉시 동작하는 기본 대시보드도 함께 제공하여, 각 팀은 이 기반 위에서 자신의 서비스에 맞는 커스터마이징만 추가하면 되는 것이다.</p>
+<p>새로운 서비스가 배포되면 아무런 설정 없이도 첫날부터 로그, 메트릭, 트레이스를 갖추고 있어야 한다. 이것이 관측 가능성을 서비스로 제공한다는 것의 의미이다.</p>
+<h2 id="sli-slo-">SLI, SLO, 그리고 알림</h2>
+<p>관측 데이터가 아무리 풍부해도 맥락이 없으면 소음에 불과하다. 데이터에 의미를 부여하는 것이 SLI와 SLO의 역할이다.</p>
+<p>SLI(Service Level Indicator)는 서비스의 건강 상태를 측정하는 구체적인 메트릭이다. &quot;200ms 이내에 응답한 요청의 비율&quot;과 같은 형태로 정의한다. SLO(Service Level Objective)는 해당 SLI의 목표값을 정의하는 것이다. &quot;30일 기준으로 99.5%가 200ms 이내에 응답해야 한다&quot;와 같이 설정한다. 플랫폼 팀은 이러한 도구를 제공하고, 각 팀은 자신의 서비스에 맞는 SLI를 정의하고 목표를 설정하면 자동으로 알림을 받는 구조이다.</p>
+<p>알림을 설정할 때 중요한 원칙이 있다. 원인이 아닌 증상에 알림을 걸어야 한다는 것이다. &quot;CPU 사용률이 80%를 초과했다&quot;가 아니라 &quot;에러율이 1%를 초과했다&quot;에 알림을 거는 것이 올바른 접근이다. CPU 사용률이 높더라도 사용자에게 영향이 없다면 긴급하게 대응할 필요가 없기 때문이다. 그리고 모든 알림은 수신자가 취할 수 있는 구체적인 조치가 있어야 한다. 취할 조치가 없는 알림은 알림이 아니라 소음인 것이다.</p>
+<p>모든 서비스에는 요청률, 에러율, 지연 시간을 보여주는 기본 대시보드가 제공되어야 하며, 각 팀이 전체를 포크하지 않고도 커스텀 패널을 추가할 수 있어야 한다.</p>
+<h2 id="-">다음 내용</h2>
+<p>보이지 않는 것은 고칠 수 없다. 관측 가능성이 옵트인 방식이 아닌 기본값으로 제공되면, 장애 대응과 디버깅의 양상이 근본적으로 달라지는 것이다.</p>
+<p>다음 포스트에서는 골든 패스에 녹여내는 보안과 거버넌스를 다룬다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/platform-engineering-08.html" class="nav-prev">← 플랫폼 엔지니어링 08 - 대규모 CI/CD</a>
+        
+        
+        <a href="/tech/ko/posts/platform-engineering-10.html" class="nav-next">플랫폼 엔지니어링 10 - 보안과 거버넌스 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Engineering 11 - Building a Platform Team - Jae's Tech Blog</title>
+    <meta name="description" content="When to start a platform team, how to staff it, and how to avoid building an ivory tower nobody uses">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/platform-engineering-11.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/platform-engineering-11.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/platform-engineering-11.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/platform-engineering-11.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/platform-engineering-11.html">
+    <meta property="og:title" content="Platform Engineering 11 - Building a Platform Team">
+    <meta property="og:description" content="When to start a platform team, how to staff it, and how to avoid building an ivory tower nobody uses">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-03-04T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="platform-engineering">
+    
+    <meta property="article:tag" content="team-building">
+    
+    <meta property="article:tag" content="adoption">
+    
+    <meta property="article:tag" content="organization">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/platform-engineering-11.html">
+    <meta name="twitter:title" content="Platform Engineering 11 - Building a Platform Team">
+    <meta name="twitter:description" content="When to start a platform team, how to staff it, and how to avoid building an ivory tower nobody uses">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Platform Engineering 11 - Building a Platform Team",
+  "description": [
+    "When to start a platform team",
+    "how to staff it",
+    "and how to avoid building an ivory tower nobody uses"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-03-04T00:00:00.000Z",
+  "dateModified": "2026-03-04T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/platform-engineering-11.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "platform-engineering, team-building, adoption, organization"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Platform Engineering 11 - Building a Platform Team">Platform Engineering 11 - Building a Platform Team</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Platform Engineering 11 - Building a Platform Team</h1>
+        <time datetime=""2026-03-04T00:00:00.000Z"">March 4, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Platform Engineering Fundamentals (11/11)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/platform-engineering.html" class="tag">platform-engineering</a>
+                    
+                    <a href="/tech/en/tags/team-building.html" class="tag">team-building</a>
+                    
+                    <a href="/tech/en/tags/adoption.html" class="tag">adoption</a>
+                    
+                    <a href="/tech/en/tags/organization.html" class="tag">organization</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Platform Engineering Fundamentals</h3>
+        <p class="post-series-description">Understanding the principles behind Internal Developer Platforms, golden paths, and developer self-service</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-01.html" class="post-series-link">Platform Engineering 01 - What Is Platform Engineering?</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-02.html" class="post-series-link">Platform Engineering 02 - Anatomy of an Internal Developer Platform</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-03.html" class="post-series-link">Platform Engineering 03 - Developer Experience as a North Star</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-04.html" class="post-series-link">Platform Engineering 04 - Designing Golden Paths</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-05.html" class="post-series-link">Platform Engineering 05 - Infrastructure as Code for Platforms</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-06.html" class="post-series-link">Platform Engineering 06 - Developer Portals and Service Catalogs</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-07.html" class="post-series-link">Platform Engineering 07 - Platform as a Product</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-08.html" class="post-series-link">Platform Engineering 08 - CI/CD at Scale</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-09.html" class="post-series-link">Platform Engineering 09 - Observability for Platform Engineers</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/platform-engineering-10.html" class="post-series-link">Platform Engineering 10 - Security and Governance</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Platform Engineering 11 - Building a Platform Team
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="when-to-start">When to Start</h2>
+<p>Not every organization needs a dedicated platform team. But the signals that indicate one is needed are unmistakable.</p>
+<p>When multiple teams are independently solving the same infrastructure problems, when developers spend more time on tooling than on product features, or when onboarding a new service takes weeks instead of hours, it is time to consider forming a platform team. As a general rule, once an organization has five or more product teams, the cost of duplicated effort begins to outweigh the cost of building a dedicated team.</p>
+<h2 id="team-composition">Team Composition</h2>
+<p>Building a platform team should not mean simply renaming the existing infrastructure team. A platform team requires people with distinctly different skill sets.</p>
+<p>SRE and infrastructure engineers who deeply understand the systems form the foundation, while software engineers who design self-service tooling and developer experience build the interface layer. A product manager must also be part of the team, because a platform is fundamentally a product. Without product thinking, the team ends up building what it finds technically interesting rather than what developers actually need. Three to four people can deliver meaningful value, and starting small is the right approach.</p>
+<h2 id="team-topologies">Team Topologies</h2>
+<p>Within the Team Topologies framework, the role of a platform team is clear: reducing cognitive load for product teams through self-service capabilities.</p>
+<pre><code>Product teams
+    | use self-service capabilities from
+Platform team
+    | gets expertise from
+Enabling teams (security, data, etc.)</code></pre>
+<p>Product teams consume capabilities through well-defined interfaces, without needing to file tickets and wait for routine operations. For this structure to work properly, the interface between the platform and product teams must be clearly defined, and the platform team must continuously receive domain expertise from enabling teams in areas such as security and data.</p>
+<h2 id="the-thin-viable-platform">The Thin Viable Platform</h2>
+<p>Trying to build everything at once is a mistake. Starting with the minimum viable set of capabilities is essential.</p>
+<p>A single CI/CD template, a way to provision a database, and a shared logging pipeline are enough for version one. Ship it, gather feedback, and iterate. When adding features, base them on what developers actually request rather than what you imagine they might need. A platform built in isolation for too long is likely to end up disconnected from real-world requirements.</p>
+<h2 id="adoption">Adoption</h2>
+<p>You cannot mandate adoption and expect good outcomes. If the platform provides genuine value, developers will choose to use it voluntarily.</p>
+<p>The most effective approach is to find the one team feeling the most infrastructure-related pain and partner with them. When that team&#39;s deployment time drops from two hours to five minutes, the success naturally spreads to other teams. Is a platform that requires coercion a good platform? Not at all. If you have to force people onto your platform, that is a signal that the platform itself has a problem.</p>
+<h2 id="common-pitfalls">Common Pitfalls</h2>
+<p>There are pitfalls that platform teams easily fall into. The most common is building without users -- spending six months constructing a platform before talking to a single developer inevitably produces something disconnected from actual needs. Lack of product thinking is another frequent issue; treating the platform as an infrastructure project rather than a product pushes user experience to the back of the priority list.</p>
+<p>Premature abstraction is also worth guarding against. Building a generic solution before sufficiently understanding the specific problems it should solve results in something that fits nowhere. Collecting feedback but never acting on it is equally damaging. And then there is the temptation of over-engineering -- applying a design meant for 10,000 services to an organization running 10 only adds unnecessary complexity.</p>
+<p>The way to avoid all of these pitfalls is straightforward: talk to users early and often, ship small, and iterate fast.</p>
+<h2 id="measuring-success">Measuring Success</h2>
+<p>The success of a platform team should be measured not by its own output, but by its impact on product teams.</p>
+<p>Change lead time -- the duration from commit to production -- should decrease. Onboarding time -- how long it takes a new service to reach its first deployment -- should also decrease. Developer satisfaction measures whether teams actually find the platform pleasant to use. Vanity metrics like &quot;number of features shipped&quot; are meaningless. No matter how many features the platform team delivers, if product team productivity has not improved, the platform has not achieved its purpose.</p>
+<h2 id="end-of-the-series">End of the Series</h2>
+<p>Across eleven posts, we have covered what platform engineering is, IDP architecture, developer portals, IaC, Kubernetes, networking, GitOps, CI/CD, observability, security, and team composition.</p>
+<p>One principle runs through all of it: make the right thing the easy thing. Reducing cognitive load, providing self-service, and treating the platform as a product are at the core. Starting small, iterating fast, and listening to users is how a platform team succeeds.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-10.html" class="nav-prev">← Platform Engineering 10 - Security and Governance</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

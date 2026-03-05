@@ -315,9 +315,9 @@
 
     <div class="post-content">
         <h2 id="class-internals">Class Internals</h2>
-<p>In Python, &quot;everything is an object.&quot; So what does the inside of a class look like?</p>
-<h3 id="__dict__-attribute-storage"><code class="inline-code">__dict__</code>: Attribute Storage</h3>
-<p>In Python, object attributes are stored as a <strong>dictionary</strong>.</p>
+<p>In Python, &quot;everything is an object.&quot; So what does the inside of a class actually look like?</p>
+<h3 id="__dict__-where-attributes-live"><code class="inline-code">__dict__</code>: Where Attributes Live</h3>
+<p>Object attributes in Python are stored as a <strong>dictionary</strong>.</p>
 <pre><code class="language-python">class Person:
     def __init__(self, name, age):
         self.name = name
@@ -333,8 +333,8 @@ print(person.__dict__)
 person.city = &quot;Seoul&quot;
 print(person.__dict__)
 # {&#39;name&#39;: &#39;Alice&#39;, &#39;age&#39;: 25, &#39;city&#39;: &#39;Seoul&#39;}</code></pre>
-<p><strong>What actually happens when accessing attributes:</strong></p>
-<pre><code class="language-python"># Code we write
+<p>When you access an attribute, here&#39;s what&#39;s really happening:</p>
+<pre><code class="language-python"># Code you write
 print(person.name)
 
 # What Python actually does
@@ -362,7 +362,7 @@ print(dog2.legs)     # 4
 Dog.species = &quot;Canis lupus&quot;
 print(dog1.species)  # &quot;Canis lupus&quot; (all changed!)
 print(dog2.species)  # &quot;Canis lupus&quot;</code></pre>
-<p><strong>Memory Structure:</strong></p>
+<p>Here&#39;s how it looks in memory:</p>
 <pre class="mermaid">graph BT
     A["dog1<br/>name: Buddy"] -->|__class__| C
     B["dog2<br/>name: Max"] -->|__class__| C
@@ -371,8 +371,8 @@ print(dog2.species)  # &quot;Canis lupus&quot;</code></pre>
     style C fill:#e8f5e9
     style A fill:#e3f2fd
     style B fill:#e3f2fd</pre>
-<h3 id="__class__-class-reference"><code class="inline-code">__class__</code>: Class Reference</h3>
-<p>Every object knows which class it was created from.</p>
+<h3 id="__class__-knowing-your-origin"><code class="inline-code">__class__</code>: Knowing Your Origin</h3>
+<p>Every object knows which class created it.</p>
 <pre><code class="language-python">print(dog1.__class__)              # &lt;class &#39;__main__.Dog&#39;&gt;
 print(dog1.__class__.__name__)     # &quot;Dog&quot;
 
@@ -381,8 +381,8 @@ print(dog1.__class__ is dog2.__class__)  # True
 
 # Access class variables
 print(dog1.__class__.species)      # &quot;Canis familiaris&quot;</code></pre>
-<h3 id="attribute-lookup-order">Attribute Lookup Order</h3>
-<p>Let&#39;s see how Python finds attributes.</p>
+<h3 id="how-python-finds-attributes">How Python Finds Attributes</h3>
+<p>When you access an attribute, Python searches in a specific order.</p>
 <pre><code class="language-python">class Animal:
     species = &quot;Unknown&quot;
 
@@ -395,7 +395,7 @@ class Cat(Animal):
 cat = Cat()
 print(cat.species)   # &quot;Felis catus&quot;
 print(cat.speak())   # &quot;...&quot;</code></pre>
-<p><strong>Attribute lookup process:</strong></p>
+<p>For <code class="inline-code">cat.species</code>, Python first checks <code class="inline-code">cat.__dict__</code>. Not there. Then checks the <code class="inline-code">Cat</code> class. Found it.</p>
 <pre class="mermaid">flowchart TD
     S1["cat.species access"] --> A1{"'species' in<br/>cat.__dict__?"}
     A1 -->|Not found| B1{"'species' in<br/>Cat class?"}
@@ -403,6 +403,7 @@ print(cat.speak())   # &quot;...&quot;</code></pre>
 
     style S1 fill:#e3f2fd
     style C1 fill:#e8f5e9</pre>
+<p>For <code class="inline-code">cat.speak()</code>, Python checks the instance, then <code class="inline-code">Cat</code>, then goes up to <code class="inline-code">Animal</code> where it finds the method.</p>
 <pre class="mermaid">flowchart TD
     S2["cat.speak&#40;&#41; call"] --> A2{"'speak' in<br/>cat.__dict__?"}
     A2 -->|Not found| B2{"'speak' in<br/>Cat class?"}
@@ -411,14 +412,14 @@ print(cat.speak())   # &quot;...&quot;</code></pre>
 
     style S2 fill:#e3f2fd
     style D2 fill:#e8f5e9</pre>
-<p>This order is called <strong>MRO (Method Resolution Order)</strong>.</p>
+<p>This search order is called <strong>MRO (Method Resolution Order)</strong>.</p>
 <pre><code class="language-python"># Check MRO
 print(Cat.__mro__)
 # (&lt;class &#39;Cat&#39;&gt;, &lt;class &#39;Animal&#39;&gt;, &lt;class &#39;object&#39;&gt;)</code></pre>
 <h2 id="bound-methods">Bound Methods</h2>
-<p>We&#39;ve explored the internal structure of classes through <code class="inline-code">__dict__</code> and <code class="inline-code">__class__</code>. Now let&#39;s see how methods work internally.</p>
-<h3 id="two-faces-of-methods">Two Faces of Methods</h3>
-<p>As it turns out, class methods have <strong>two forms</strong>.</p>
+<p>We&#39;ve looked at the internal structure through <code class="inline-code">__dict__</code> and <code class="inline-code">__class__</code>. Now let&#39;s see how methods actually work.</p>
+<h3 id="two-faces-of-a-method">Two Faces of a Method</h3>
+<p>Here&#39;s something surprising. Class methods have <strong>two forms</strong>.</p>
 <pre><code class="language-python">class Calculator:
     def __init__(self, value):
         self.value = value
@@ -432,21 +433,20 @@ calc = Calculator(10)
 # Two faces of a method
 print(type(Calculator.add))  # &lt;class &#39;function&#39;&gt;
 print(type(calc.add))         # &lt;class &#39;method&#39;&gt;</code></pre>
-<p>From the class perspective it&#39;s a <strong>function</strong>, but from the instance perspective it&#39;s a <strong>method</strong>.</p>
+<p>From the class, it&#39;s a <strong>function</strong>. From the instance, it&#39;s a <strong>method</strong>. Same thing, two perspectives.</p>
 <h3 id="what-is-a-bound-method">What is a Bound Method?</h3>
 <p>A <strong>Bound Method</strong> is a method &quot;bound&quot; to a specific instance.</p>
 <pre><code class="language-python">calc = Calculator(10)
 
-# calc.add is bound to calc instance
+# calc.add is bound to the calc instance
 print(calc.add)
 # &lt;bound method Calculator.add of &lt;__main__.Calculator object at 0x...&gt;&gt;
 
-# You can store the method in a variable
+# You can store it in a variable
 add_method = calc.add
 add_method(5)  # calc.value becomes 15
 print(calc.value)  # 15</code></pre>
-<h3 id="the-secret-of-bound-methods">The Secret of Bound Methods</h3>
-<p>Let&#39;s see how Python binds methods:</p>
+<h3 id="how-binding-actually-works">How Binding Actually Works</h3>
 <pre><code class="language-python">class MyClass:
     def method(self, x):
         return f&quot;Value: {x}&quot;
@@ -456,16 +456,16 @@ obj = MyClass()
 # These two lines do exactly the same thing!
 obj.method(42)              # Normal way
 MyClass.method(obj, 42)     # Direct call</code></pre>
-<p><strong>The secret of method calls:</strong></p>
-<pre><code class="language-python"># Code we write
+<p>Here&#39;s the secret:</p>
+<pre><code class="language-python"># Code you write
 result = obj.method(42)
 
 # What Python actually does:
 method_func = MyClass.method    # 1. Get the function
 result = method_func(obj, 42)   # 2. Pass obj as first argument</code></pre>
-<p>This is the true identity of the <code class="inline-code">self</code> parameter!</p>
-<h3 id="inside-bound-methods">Inside Bound Methods</h3>
-<p>Let&#39;s go deeper:</p>
+<p>That&#39;s the true identity of <code class="inline-code">self</code>. Python automatically passes the instance as the first argument.</p>
+<h3 id="inside-a-bound-method">Inside a Bound Method</h3>
+<p>Let&#39;s go deeper.</p>
 <pre><code class="language-python">class Counter:
     def __init__(self):
         self.count = 0
@@ -482,8 +482,8 @@ print(bound.__func__)    # Points to Counter.increment function
 
 # Bound method works internally like:
 # bound() → bound.__func__(bound.__self__)</code></pre>
-<h3 id="real-example-callback-functions">Real Example: Callback Functions</h3>
-<p>Bound methods are frequently used as callback functions:</p>
+<h3 id="real-example-callbacks">Real Example: Callbacks</h3>
+<p>Bound methods come in handy as callbacks.</p>
 <pre><code class="language-python">class Button:
     def __init__(self, label):
         self.label = label
@@ -504,10 +504,11 @@ callbacks = [save_button.on_click, cancel_button.on_click]
 callbacks[0]()  # &quot;Save button clicked (1 times)&quot;
 callbacks[0]()  # &quot;Save button clicked (2 times)&quot;
 callbacks[1]()  # &quot;Cancel button clicked (1 times)&quot;</code></pre>
+<p>Each bound method remembers which instance it belongs to. That&#39;s why callbacks just work.</p>
 <h2 id="descriptors">Descriptors</h2>
-<p>Now that we understand how bound methods work, let&#39;s look at the more fundamental mechanism behind them. Descriptors are lesser-known but one of Python&#39;s most powerful features.</p>
+<p>Now that we understand bound methods, let&#39;s look at the mechanism behind them. Descriptors are lesser-known but incredibly powerful.</p>
 <h3 id="what-is-a-descriptor">What is a Descriptor?</h3>
-<p>A <strong>Descriptor</strong> is an object that controls attribute access.</p>
+<p>A <strong>Descriptor</strong> is an object that controls how attributes are accessed.</p>
 <pre><code class="language-python">class Descriptor:
     def __get__(self, obj, objtype=None):
         print(&quot;__get__ called&quot;)
@@ -531,7 +532,7 @@ obj = MyClass()
 obj.attr = 10      # &quot;__set__ called: 10&quot;
 print(obj.attr)    # &quot;__get__ called&quot; → 10
 del obj.attr       # &quot;__delete__ called&quot;</code></pre>
-<h3 id="descriptor-protocol">Descriptor Protocol</h3>
+<h3 id="the-descriptor-protocol">The Descriptor Protocol</h3>
 <p>Descriptors implement three special methods:</p>
 <pre><code class="language-python">class Descriptor:
     def __get__(self, instance, owner):
@@ -553,7 +554,8 @@ del obj.attr       # &quot;__delete__ called&quot;</code></pre>
         instance: object deleting the attribute
         &quot;&quot;&quot;
         pass</code></pre>
-<h3 id="data-descriptors-vs-non-data-descriptors">Data Descriptors vs Non-Data Descriptors</h3>
+<h3 id="data-vs-non-data-descriptors">Data vs Non-Data Descriptors</h3>
+<p>This distinction matters for priority.</p>
 <pre><code class="language-python"># Data descriptor: has __set__ or __delete__
 class DataDescriptor:
     def __get__(self, obj, objtype=None):
@@ -579,6 +581,7 @@ print(obj.non_data_desc)  # &quot;instance attr&quot; (instance wins)
 
 obj.__dict__[&#39;data_desc&#39;] = &quot;instance attr&quot;
 print(obj.data_desc)  # &quot;data descriptor&quot; (data descriptor wins)</code></pre>
+<p>Data descriptors beat instance attributes. Non-data descriptors lose to them. This priority order is at the heart of Python&#39;s attribute system.</p>
 <h3 id="real-example-1-type-validation">Real Example 1: Type Validation</h3>
 <pre><code class="language-python">class TypedProperty:
     &quot;&quot;&quot;Descriptor that enforces type&quot;&quot;&quot;
@@ -699,9 +702,9 @@ print(account.balance)
 account.deposit(500)
 # [GET] balance = 1000
 # [SET] balance = 1500</code></pre>
-<h2 id="properties-convenient-descriptors">Properties: Convenient Descriptors</h2>
-<h3 id="property-decorator"><code class="inline-code">@property</code> Decorator</h3>
-<p>Creating descriptor classes every time is cumbersome. <code class="inline-code">@property</code> is an easier way to use descriptors:</p>
+<h2 id="properties-the-easy-way">Properties: The Easy Way</h2>
+<h3 id="the-property-decorator">The <code class="inline-code">@property</code> Decorator</h3>
+<p>Writing descriptor classes every time is tedious. <code class="inline-code">@property</code> gives you the same power with less code.</p>
 <pre><code class="language-python">class Circle:
     def __init__(self, radius):
         self._radius = radius
@@ -743,8 +746,8 @@ print(circle.area)     # 314.159
 # Setting diameter automatically calculates radius
 circle.diameter = 20
 print(circle.radius)   # 10.0</code></pre>
-<h3 id="the-true-nature-of-property">The True Nature of property</h3>
-<p><code class="inline-code">@property</code> is actually a descriptor!</p>
+<h3 id="property-is-a-descriptor">Property IS a Descriptor</h3>
+<p>Here&#39;s the thing -- <code class="inline-code">@property</code> is just a descriptor under the hood.</p>
 <pre><code class="language-python">class MyProperty:
     &quot;&quot;&quot;Simple implementation of property&quot;&quot;&quot;
     def __init__(self, fget=None, fset=None):
@@ -784,7 +787,7 @@ class Temperature:
 temp = Temperature(25)
 print(temp.celsius)  # 25</code></pre>
 <h3 id="computed-attributes">Computed Attributes</h3>
-<p>A powerful feature of properties is <strong>computed attributes</strong>:</p>
+<p>One powerful use of properties is <strong>computed attributes</strong>.</p>
 <pre><code class="language-python">class Rectangle:
     def __init__(self, width, height):
         self.width = width
@@ -807,8 +810,9 @@ print(rect.perimeter) # 60
 # Changing width automatically changes area
 rect.width = 15
 print(rect.area)      # 300</code></pre>
+<p>You access <code class="inline-code">area</code> like a regular attribute, but it&#39;s computed fresh every time. No need to remember to update it.</p>
 <h2 id="methods-are-descriptors-too">Methods Are Descriptors Too</h2>
-<p>Now that we&#39;ve covered descriptors and properties, here&#39;s the final piece of the puzzle. The bound methods we learned about earlier can be fully explained through descriptors.</p>
+<p>Here&#39;s the final piece of the puzzle. Remember bound methods? They&#39;re explained entirely through descriptors.</p>
 <h3 id="functions-are-descriptors">Functions Are Descriptors</h3>
 <pre><code class="language-python">class Function:
     &quot;&quot;&quot;Simple implementation of method&quot;&quot;&quot;
@@ -835,13 +839,14 @@ print(type(MyClass.method))  # function
 # Access from instance
 print(type(obj.method))      # function (not method in simple impl)
 print(obj.method(42))        # Works!</code></pre>
-<p>Actual Python function objects have a <code class="inline-code">__get__</code> method:</p>
+<p>Real Python function objects have a <code class="inline-code">__get__</code> method built in:</p>
 <pre><code class="language-python">def my_function(self, x):
     return x
 
 # Functions are descriptors!
 print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
-<h2 id="summary">Summary</h2>
+<p>When you call <code class="inline-code">obj.method(x)</code>, Python finds the function in the class, calls its <code class="inline-code">__get__</code> to create a bound method, and then calls that. It&#39;s descriptors all the way down.</p>
+<h2 id="the-big-picture">The Big Picture</h2>
 <h3 id="class-internals">Class Internals</h3>
 <pre class="mermaid">graph TD
     A["Instance<br/>obj"]
@@ -862,15 +867,8 @@ print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
 <h3 id="attribute-lookup-priority">Attribute Lookup Priority</h3>
 <ol class="ol-list">
 <li><strong>Data descriptors</strong> (descriptors with <code class="inline-code">__set__</code> from the class/parent chain)</li><li><strong>Instance `__dict__`</strong> (instance variables)</li><li><strong>Non-data descriptors and regular class variables</strong> (descriptors with only <code class="inline-code">__get__</code>, or non-descriptor variables from the class/parent chain)</li></ol>
-<blockquote><p>At each step, Python searches the current class → parent classes in MRO order.</p>
+<blockquote><p>At each step, Python searches the current class, then parent classes in MRO order.</p>
 </blockquote>
-<h3 id="bound-methods">Bound Methods</h3>
-<pre><code class="language-python"># Method call
-obj.method(x)
-
-# Actual internal operation
-method = obj.__class__.method  # Get function
-method.__get__(obj, type(obj))(x)  # Descriptor protocol</code></pre>
 <h3 id="descriptor-protocol">Descriptor Protocol</h3>
 <table>
 <thead>
@@ -882,24 +880,10 @@ method.__get__(obj, type(obj))(x)  # Descriptor protocol</code></pre>
 <tr><td><code class="inline-code"><strong>delete</strong>(self, instance)</code></td><td><code class="inline-code">del obj.attr</code></td><td>Delete attribute</td></tr>
 </tbody>
 </table>
-<h3 id="when-to-use-what">When to Use What?</h3>
-<table>
-<thead>
-<tr><th>Situation</th><th>Use</th><th>Reason</th></tr>
-</thead>
-<tbody>
-<tr><td>Simple getter/setter</td><td><code class="inline-code">@property</code></td><td>Convenient and clean</td></tr>
-<tr><td>Reuse across classes</td><td>Descriptor class</td><td>DRY principle</td></tr>
-<tr><td>Type/range validation</td><td>Descriptor</td><td>Reusable</td></tr>
-<tr><td>Computed attributes</td><td><code class="inline-code">@property</code></td><td>Auto-calculation</td></tr>
-<tr><td>Logging/caching</td><td>Descriptor</td><td>Transparent additions</td></tr>
-</tbody>
-</table>
-<h3 id="what-we-learned">What We Learned</h3>
-<ol class="ol-list">
-<li><strong>Everything is an object</strong>: Classes, functions, methods are all objects</li><li><strong>Descriptors</strong>: Protocol for controlling attribute access</li><li><strong>Bound methods</strong>: Method binding implemented via descriptors</li><li><strong>Properties</strong>: Convenient wrapper around descriptors</li></ol>
-<h3 id="why-does-this-matter">Why Does This Matter?</h3>
-<p>Understanding descriptors lets you:<br />- See how <code class="inline-code">@property</code>, <code class="inline-code">@staticmethod</code>, and <code class="inline-code">@classmethod</code> work internally<br />- Build reusable custom validation logic<br />- Recognize that Python&#39;s &quot;magical&quot; behaviors are built on a consistent protocol</p>
+<h3 id="when-to-use-what">When to Use What</h3>
+<p>For simple getter/setter logic, use <code class="inline-code">@property</code>. It&#39;s clean and easy.<br />When you need the same validation across multiple classes, write a descriptor class. That&#39;s the DRY approach.<br />For computed attributes that should look like regular attributes, <code class="inline-code">@property</code> is perfect.<br />For cross-cutting concerns like logging or caching, descriptors let you add behavior transparently.</p>
+<p>Everything in Python -- classes, functions, methods -- is an object. Descriptors are the protocol that controls attribute access. Bound methods are implemented through descriptors. And <code class="inline-code">@property</code> is just a convenient wrapper around the same mechanism.</p>
+<p>Once you see this, things like <code class="inline-code">@staticmethod</code> and <code class="inline-code">@classmethod</code> stop being magic. They&#39;re all built on the same consistent protocol.</p>
 
     </div>
 
@@ -907,6 +891,8 @@ method.__get__(obj, type(obj))(x)  # Descriptor protocol</code></pre>
         
         <a href="/tech/en/posts/python-lecture-03.html" class="nav-prev">← Python Lecture 3 - Containers and Generators</a>
         
+        
+        <a href="/tech/en/posts/platform-engineering-01.html" class="nav-next">Platform Engineering 01 - What Is Platform Engineering? →</a>
         
     </nav>
 </article>

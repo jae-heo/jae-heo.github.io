@@ -67,6 +67,8 @@
     padding: 0 !important;
     margin: 0 !important;
     counter-reset: post-series-counter;
+    max-height: 13.75rem;
+    overflow-y: auto;
 }
 
 /* Individual Post Series Item */

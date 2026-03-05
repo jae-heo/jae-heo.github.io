@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란? - 재영의 기술 블로그</title>
+    <meta name="description" content="플랫폼 엔지니어링이 실제로 무엇인지, 왜 등장했는지, DevOps와 어떻게 다른지">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/platform-engineering-01.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/platform-engineering-01.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/platform-engineering-01.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/platform-engineering-01.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/platform-engineering-01.html">
+    <meta property="og:title" content="플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?">
+    <meta property="og:description" content="플랫폼 엔지니어링이 실제로 무엇인지, 왜 등장했는지, DevOps와 어떻게 다른지">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2025-12-24T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="platform-engineering">
+    
+    <meta property="article:tag" content="devops">
+    
+    <meta property="article:tag" content="idp">
+    
+    <meta property="article:tag" content="developer-experience">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/platform-engineering-01.html">
+    <meta name="twitter:title" content="플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?">
+    <meta name="twitter:description" content="플랫폼 엔지니어링이 실제로 무엇인지, 왜 등장했는지, DevOps와 어떻게 다른지">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?",
+  "description": [
+    "플랫폼 엔지니어링이 실제로 무엇인지",
+    "왜 등장했는지",
+    "DevOps와 어떻게 다른지"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2025-12-24T00:00:00.000Z",
+  "dateModified": "2025-12-24T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/platform-engineering-01.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "platform-engineering, devops, idp, developer-experience"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?">플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?</h1>
+        <time datetime=""2025-12-24T00:00:00.000Z"">December 24, 2025</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 플랫폼 엔지니어링 기초 (1/11)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/platform-engineering.html" class="tag">platform-engineering</a>
+                    
+                    <a href="/tech/ko/tags/devops.html" class="tag">devops</a>
+                    
+                    <a href="/tech/ko/tags/idp.html" class="tag">idp</a>
+                    
+                    <a href="/tech/ko/tags/developer-experience.html" class="tag">developer-experience</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 플랫폼 엔지니어링 기초</h3>
+        <p class="post-series-description">내부 개발자 플랫폼, 골든 패스, 개발자 셀프서비스의 원리를 이해하기</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-02.html" class="post-series-link">플랫폼 엔지니어링 02 - 내부 개발자 플랫폼의 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-03.html" class="post-series-link">플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-04.html" class="post-series-link">플랫폼 엔지니어링 04 - 골든 패스 설계하기</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-05.html" class="post-series-link">플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-06.html" class="post-series-link">플랫폼 엔지니어링 06 - 개발자 포털과 서비스 카탈로그</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-07.html" class="post-series-link">플랫폼 엔지니어링 07 - 제품으로서의 플랫폼</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-08.html" class="post-series-link">플랫폼 엔지니어링 08 - 대규모 CI/CD</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-09.html" class="post-series-link">플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-10.html" class="post-series-link">플랫폼 엔지니어링 10 - 보안과 거버넌스</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/platform-engineering-11.html" class="post-series-link">플랫폼 엔지니어링 11 - 플랫폼 팀 만들기</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">또 새로운 버즈워드?</h2>
+<p>인프라 쪽에서 오래 일하다보면 직무를 칭하는 용어가 계속 변경되는 것을 경험한다. 시스템 관리자, DevOps, SRE, 이제는 플랫폼 엔지니어링이라는 용어가 생겼다. </p>
+<p>이러한 용어는 과연 단순 리브랜딩일까? </p>
+<p>그렇지 않다. 환경이 변화되며, 역할이 확대 및 축소되고, 변화된 환경에 맞는 이름이 부여되는 것이다. 기존 DevOps가 풀지 못했던 문제를 플랫폼 엔지니어가 풀려고 시도하는 것도 하나의 예시이다.</p>
+<h2 id="devops-">DevOps의 한계</h2>
+<p>DevOps는 &quot;네가 만들면, 네가 운영한다&quot;라는 철학을 가진다. 개발자가 코드 작성에 그치지 않고 운영까지 책임지겠다는 것이다. 이론적으로는 훌륭한 접근이다.</p>
+<p>하지만 현실에서는 문제가 드러난다. 모든 팀이 각자의 Terraform을 작성하고, 각자의 CI/CD 파이프라인을 구축하고, 각자의 Kubernetes 클러스터를 관리한다. 결과적으로 10개 팀이 동일한 문제를 10가지 방식으로 해결하게 되는 것이다. 개발자들은 비즈니스 로직을 작성하는 대신 YAML 파일을 디버깅하는 데 시간을 쓰게 된다.</p>
+<p>이를 인지 부하(Cognitive Load)라고 부른다. 코드를 프로덕션 환경에 배포하기 위해 개발자가 알아야 하는 지식의 총량이 지나치게 커진 것이다. DevOps의 철학 자체는 올바르지만, 그 실행 과정에서 개발자에게 과도한 부담을 전가하게 된 셈이다.</p>
+<h2 id="-">그래서 플랫폼 엔지니어링이란?</h2>
+<p>플랫폼 엔지니어링은 내부 개발자 플랫폼(Internal Developer Platform, IDP)을 구축하는 분야이다. 개발자와 인프라 사이에 셀프서비스 레이어를 두어, 개발자가 인프라의 복잡성을 직접 다루지 않아도 되게 하는 것이 핵심이다.</p>
+<p>예를 들어, 데이터베이스가 필요할 때 티켓을 올리고 기다릴 필요가 없어야 한다. 애플리케이션을 배포하기 위해 Kubernetes의 내부 동작을 이해할 필요도 없어야 한다. 플랫폼이 이러한 복잡성을 추상화하여 개발자에게 간단한 인터페이스만 제공하는 것이다.</p>
+<pre><code>개발자 ──→ 플랫폼 (셀프서비스) ──→ 인프라
+                │
+                ├── &quot;DB 필요해&quot;     → 완료
+                ├── &quot;앱 배포해줘&quot;   → 완료
+                └── &quot;로그 보여줘&quot;   → 여기</code></pre>
+<h2 id="devops-sre-">DevOps, SRE, 플랫폼 엔지니어링의 관계</h2>
+<p>이 세 가지는 경쟁 관계가 아니라 서로 다른 관점에서 같은 문제를 바라보는 것이다.</p>
+<table>
+<thead>
+<tr><th></th><th>초점</th><th>누가</th></tr>
+</thead>
+<tbody>
+<tr><td>DevOps</td><td>개발과 운영의 공유 오너십</td><td>모두</td></tr>
+<tr><td>SRE</td><td>엔지니어링으로 신뢰성 확보</td><td>SRE 팀</td></tr>
+<tr><td>플랫폼 엔지니어링</td><td>셀프서비스로 인지 부하 감소</td><td>플랫폼 팀</td></tr>
+</tbody>
+</table>
+<p>정리하자면, DevOps는 문화이고, SRE는 실천이며, 플랫폼 엔지니어링은 제품이다. 플랫폼 팀은 하나의 제품을 만드는 것이며, 그 제품의 고객은 같은 조직 내의 개발자들이다. 이러한 관점의 차이가 플랫폼 엔지니어링을 기존 접근법들과 구분 짓는 핵심이다.</p>
+<h2 id="-">골든 패스</h2>
+<p>플랫폼 엔지니어링에서 자주 등장하는 개념 중 하나가 골든 패스(Golden Path)이다. 이는 특정 작업을 수행하는 데 있어 플랫폼이 권장하는 표준 경로를 의미한다.</p>
+<p>웹 서비스 배포를 예로 들면, 제공된 템플릿을 사용하고 브랜치에 푸시하면 CI가 자동으로 실행되고, 스테이징 환경에 배포된 후 원클릭으로 프로덕션에 반영되는 흐름이다. 이 경로를 반드시 따라야 하는 것은 아니다. 필요하다면 벗어날 수도 있다. 다만, 기본 경로가 충분히 편리하기 때문에 대부분의 개발자가 굳이 벗어나지 않게 되는 것이 골든 패스의 목표이다.</p>
+<h2 id="-">플랫폼 팀이 하는 일</h2>
+<p>플랫폼 팀의 업무는 다양하지만, 공통된 목적이 있다. 개발자 포털을 구축하여 서비스, 문서, 도구를 한곳에서 접근할 수 있게 한다. 셀프서비스 인프라를 제공하여 데이터베이스, 메시지 큐, 스토리지 등을 개발자가 직접 프로비저닝할 수 있게 한다. CI/CD 템플릿을 만들어 파이프라인을 처음부터 작성하지 않아도 되게 한다. 관측 가능성(Observability) 도구를 통합하여 로깅, 메트릭, 트레이싱을 일관된 방식으로 제공한다.</p>
+<p>이 모든 활동의 공통점은 하나이다. &quot;코드를 작성했다&quot;에서 &quot;프로덕션에서 실행되고 있다&quot;까지의 거리를 줄이는 것이다.</p>
+<p>일정 규모를 넘어선 조직은 결국 같은 벽에 부딪히게 된다. 개발자가 비즈니스 로직보다 인프라 관리에 더 많은 시간을 소비하는 상황이다. 플랫폼 엔지니어링은 이 문제에 대한 체계적인 답이다.</p>
+<p>다음 포스트에서는 IDP의 내부 구성 요소를 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/python-lecture-04.html" class="nav-prev">← Python 강좌 4편 - 클래스의 내부 구조와 디스크립터</a>
+        
+        
+        <a href="/tech/ko/posts/platform-engineering-02.html" class="nav-next">플랫폼 엔지니어링 02 - 내부 개발자 플랫폼의 구조 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>
