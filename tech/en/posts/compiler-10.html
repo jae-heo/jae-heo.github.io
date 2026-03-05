@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automata and Compilers 10 - Semantic Analysis and Type Checking - Jae's Tech Blog</title>
+    <meta name="description" content="How semantic analysis catches the errors that parsers cannot, and how type checking guarantees program safety">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/compiler-10.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/compiler-10.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/compiler-10.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/compiler-10.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/compiler-10.html">
+    <meta property="og:title" content="Automata and Compilers 10 - Semantic Analysis and Type Checking">
+    <meta property="og:description" content="How semantic analysis catches the errors that parsers cannot, and how type checking guarantees program safety">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-19T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="compiler">
+    
+    <meta property="article:tag" content="semantic-analysis">
+    
+    <meta property="article:tag" content="type-checking">
+    
+    <meta property="article:tag" content="symbol-table">
+    
+    <meta property="article:tag" content="scope">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/compiler-10.html">
+    <meta name="twitter:title" content="Automata and Compilers 10 - Semantic Analysis and Type Checking">
+    <meta name="twitter:description" content="How semantic analysis catches the errors that parsers cannot, and how type checking guarantees program safety">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Automata and Compilers 10 - Semantic Analysis and Type Checking",
+  "description": [
+    "How semantic analysis catches the errors that parsers cannot",
+    "and how type checking guarantees program safety"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-19T00:00:00.000Z",
+  "dateModified": "2026-02-19T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/compiler-10.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "compiler, semantic-analysis, type-checking, symbol-table, scope"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Automata and Compilers 10 - Semantic Analysis and Type Checking">Automata and Compilers 10 - Semantic Analysis and Type Checking</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Automata and Compilers 10 - Semantic Analysis and Type Checking</h1>
+        <time datetime=""2026-02-19T00:00:00.000Z"">February 19, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Automata and Compilers (10/12)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/compiler.html" class="tag">compiler</a>
+                    
+                    <a href="/tech/en/tags/semantic-analysis.html" class="tag">semantic-analysis</a>
+                    
+                    <a href="/tech/en/tags/type-checking.html" class="tag">type-checking</a>
+                    
+                    <a href="/tech/en/tags/symbol-table.html" class="tag">symbol-table</a>
+                    
+                    <a href="/tech/en/tags/scope.html" class="tag">scope</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Automata and Compilers</h3>
+        <p class="post-series-description">From finite automata and formal languages to building a compiler from scratch</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-01.html" class="post-series-link">Automata and Compilers 01 - Finite Automata</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-02.html" class="post-series-link">Automata and Compilers 02 - Regular Expressions and Regular Languages</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-03.html" class="post-series-link">Automata and Compilers 03 - Context-Free Grammars</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-04.html" class="post-series-link">Automata and Compilers 04 - Pushdown Automata</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-05.html" class="post-series-link">Automata and Compilers 05 - Compiler Overview — Phases and Architecture</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-06.html" class="post-series-link">Automata and Compilers 06 - Lexical Analysis</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-07.html" class="post-series-link">Automata and Compilers 07 - Top-Down Parsing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-08.html" class="post-series-link">Automata and Compilers 08 - Bottom-Up Parsing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-09.html" class="post-series-link">Automata and Compilers 09 - Abstract Syntax Trees</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Automata and Compilers 10 - Semantic Analysis and Type Checking
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-11.html" class="post-series-link">Automata and Compilers 11 - Intermediate Representations and Optimization</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-12.html" class="post-series-link">Automata and Compilers 12 - Code Generation</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="what-the-parser-cannot-catch">What the Parser Cannot Catch</h2>
+<p>The syntactic analysis we have covered so far determines whether a program is grammatically correct. If the parser successfully produces a syntax tree, the program conforms to the grammar rules. But does a grammatically correct program necessarily make sense? Not at all.</p>
+<p>Consider the code <code class="inline-code">int x = &quot;hello&quot;;</code>. It perfectly follows the syntactic structure of a variable declaration with initialization, so the parser generates a syntax tree without complaint. Yet assigning a string to an integer variable is a semantic contradiction. Using an undeclared variable, passing the wrong number of arguments to a function, or performing operations on incompatible types are all errors of the same nature. These errors lie outside the scope of context-free grammars and must be detected in a separate phase. That phase is semantic analysis.</p>
+<p>The semantic analyzer traverses the syntax tree, verifying the semantic consistency of the program. Specifically, it checks whether variables are declared before use, whether types are compatible, whether function calls match their definitions in argument count and types, and so on.</p>
+<h2 id="symbol-tables-and-scope">Symbol Tables and Scope</h2>
+<p>The core data structure of semantic analysis is the symbol table. A symbol table is a dictionary that stores information about every identifier in the program — variables, functions, types, and more. Each entry contains attributes such as name, type, scope, and memory location.</p>
+<pre><code>Symbol Table Example:
+┌──────────┬──────────┬────────┬──────────┐
+│   Name   │   Type   │ Scope  │   Kind   │
+├──────────┼──────────┼────────┼──────────┤
+│ x        │ int      │ main   │ variable │
+│ y        │ float    │ main   │ variable │
+│ add      │ int→int  │ global │ function │
+│ i        │ int      │ for    │ variable │
+└──────────┴──────────┴────────┴──────────┘</code></pre>
+<p>In programming languages, scope determines the region in which an identifier is valid. Most languages support nested scopes, where inner scopes can access identifiers from outer scopes. To handle this, symbol tables are typically implemented as chained or stacked structures.</p>
+<p>When entering a new block, a new scope is created; when leaving the block, that scope is discarded. When referencing a variable, the current scope is searched first, and if the identifier is not found, outer scopes are searched in order. This process is called scope resolution.</p>
+<pre><code>global scope
+├── int g = 10
+└── function main()
+    ├── int x = 5          ← main scope
+    ├── if (x &gt; 0)
+    │   └── int y = x + g  ← if scope (x resolved from main, g from global)
+    └── print(y)           ← error: y is only valid inside the if block</code></pre>
+<p>In this example, <code class="inline-code">y</code> is declared inside the if block, so referencing <code class="inline-code">y</code> outside that block causes the semantic analyzer to raise an &quot;undeclared variable&quot; error. The parser sees nothing wrong with the syntax of <code class="inline-code">print(y)</code>, but the semantic analyzer detects through the symbol table that <code class="inline-code">y</code> is not visible in the current scope.</p>
+<h2 id="type-checking">Type Checking</h2>
+<p>The most critical task in semantic analysis is type checking. Type checking verifies that types are used consistently throughout every expression and statement in a program.</p>
+<p>Type checking falls into two broad categories: static type checking and dynamic type checking. Static type checking is performed at compile time and is the approach taken by languages like C, Java, and Rust. Dynamic type checking is performed at runtime and is used by languages like Python, JavaScript, and Ruby.</p>
+<p>Is static type checking always superior to dynamic type checking? Not necessarily. Static type checking catches many errors before execution, increasing program safety, but it imposes constraints on expressiveness. Dynamic type checking offers greater flexibility but incurs the cost of discovering errors only at runtime. Each approach involves different tradeoffs, and compiler designers make their choice with these tradeoffs in mind.</p>
+<p>A type checker traverses the syntax tree bottom-up, determining the type of each node. The types of leaf nodes (constants, variables) are known directly, while the types of interior nodes (operators, function calls) are inferred from the types of their children.</p>
+<pre><code>    [+] : int              ← both children are int, so result is int
+   / \
+  /   \
+[x]:int  [3]:int           ← leaf types determined from symbol table and literals
+
+    [+] : error!           ← cannot add int and string
+   / \
+  /   \
+[x]:int  [&quot;hi&quot;]:string</code></pre>
+<h2 id="type-inference">Type Inference</h2>
+<p>Requiring explicit type annotations on every variable is tedious. Modern languages use type inference to let the compiler determine types even when the programmer omits them. Writing <code class="inline-code">auto x = 42;</code> allows the compiler to infer that <code class="inline-code">x</code> is of type <code class="inline-code">int</code> because 42 is an integer literal.</p>
+<p>Simple type inference works by assigning the type of the initializing expression directly to the variable. But when generics or higher-order functions are involved, the problem becomes considerably more complex. The Hindley-Milner type inference algorithm, used in languages like ML and Haskell, resolves relationships among type variables through a technique called unification. The fact that this algorithm can determine the type of every expression without any type annotations from the programmer is a theoretically significant result in its own right.</p>
+<h2 id="attribute-grammars-and-semantic-actions-during-parsing">Attribute Grammars and Semantic Actions During Parsing</h2>
+<p>Semantic analysis can be performed as a completely separate pass after parsing, but in practice, many compilers perform semantic processing alongside syntactic analysis. Attribute grammars provide a formal framework for this approach.</p>
+<p>In an attribute grammar, each grammar symbol is assigned attributes, and semantic rules are attached to production rules. Attributes are divided into synthesized attributes, which propagate from child nodes to parent nodes, and inherited attributes, which propagate from parent nodes to child nodes.</p>
+<pre><code>Production:     E → E₁ + T
+Semantic rule:  E.type = if (E₁.type == int &amp;&amp; T.type == int) then int
+                         else if (E₁.type == float || T.type == float) then float
+                         else error</code></pre>
+<p>This rule determines the type of an addition expression. If both operands are integers, the result is an integer; if either is a float, the result is a float; any other combination produces a type error. In this way, type information can be computed simultaneously with parsing.</p>
+<p>Parser generators like Yacc/Bison implement this by embedding semantic actions within production rules. Code like <code class="inline-code">$$ = check_type($1, $3);</code> is included in the production, and each time the parser applies that rule, the code executes to update the symbol table or check types.</p>
+<h2 id="common-semantic-errors">Common Semantic Errors</h2>
+<p>The following table summarizes the typical errors that a semantic analyzer detects.</p>
+<table>
+<thead>
+<tr><th>Error Type</th><th>Example</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td>Undeclared variable</td><td><code class="inline-code">x = 5;</code> (x not declared)</td><td>Referencing an identifier not in the symbol table</td></tr>
+<tr><td>Duplicate declaration</td><td><code class="inline-code">int x; int x;</code></td><td>Redeclaring the same name in the same scope</td></tr>
+<tr><td>Type mismatch</td><td><code class="inline-code">int x = &quot;hello&quot;;</code></td><td>Incompatible types on both sides of an assignment</td></tr>
+<tr><td>Argument count mismatch</td><td><code class="inline-code">add(1, 2, 3)</code> (add takes 2)</td><td>Difference between defined and actual argument count</td></tr>
+<tr><td>Return type mismatch</td><td><code class="inline-code">int f() { return &quot;hi&quot;; }</code></td><td>Actual return value does not match declared return type</td></tr>
+<tr><td>Invalid operation</td><td><code class="inline-code">&quot;hello&quot; - &quot;world&quot;</code></td><td>Operation not defined for the given types</td></tr>
+</tbody>
+</table>
+<p>All of these errors occur in programs that are syntactically legal but semantically wrong. The parser alone cannot filter them out — the additional information provided by symbol tables and type rules is what makes detection possible.</p>
+<p>Semantic analysis is the final gate of the frontend. A program that passes this phase is deemed both syntactically and semantically correct, and the compiler can now safely transform it. In the next post, we&#39;ll look at the first step of that transformation: intermediate representations and optimization.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-09.html" class="nav-prev">← Platform Engineering 09 - Observability for Platform Engineers</a>
+        
+        
+        <a href="/tech/en/posts/mlops-08.html" class="nav-next">MLOps 08 - Feature Stores →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

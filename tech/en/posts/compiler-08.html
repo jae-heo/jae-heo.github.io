@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automata and Compilers 08 - Bottom-Up Parsing - Jae's Tech Blog</title>
+    <meta name="description" content="Shift-reduce parsing, LR parser mechanics, and how parser generators work under the hood">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/compiler-08.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/compiler-08.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/compiler-08.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/compiler-08.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/compiler-08.html">
+    <meta property="og:title" content="Automata and Compilers 08 - Bottom-Up Parsing">
+    <meta property="og:description" content="Shift-reduce parsing, LR parser mechanics, and how parser generators work under the hood">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-04T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="compiler">
+    
+    <meta property="article:tag" content="parser">
+    
+    <meta property="article:tag" content="bottom-up">
+    
+    <meta property="article:tag" content="lr-parser">
+    
+    <meta property="article:tag" content="shift-reduce">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/compiler-08.html">
+    <meta name="twitter:title" content="Automata and Compilers 08 - Bottom-Up Parsing">
+    <meta name="twitter:description" content="Shift-reduce parsing, LR parser mechanics, and how parser generators work under the hood">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Automata and Compilers 08 - Bottom-Up Parsing",
+  "description": [
+    "Shift-reduce parsing",
+    "LR parser mechanics",
+    "and how parser generators work under the hood"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-04T00:00:00.000Z",
+  "dateModified": "2026-02-04T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/compiler-08.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "compiler, parser, bottom-up, lr-parser, shift-reduce"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Automata and Compilers 08 - Bottom-Up Parsing">Automata and Compilers 08 - Bottom-Up Parsing</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Automata and Compilers 08 - Bottom-Up Parsing</h1>
+        <time datetime=""2026-02-04T00:00:00.000Z"">February 4, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Automata and Compilers (8/12)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/compiler.html" class="tag">compiler</a>
+                    
+                    <a href="/tech/en/tags/parser.html" class="tag">parser</a>
+                    
+                    <a href="/tech/en/tags/bottom-up.html" class="tag">bottom-up</a>
+                    
+                    <a href="/tech/en/tags/lr-parser.html" class="tag">lr-parser</a>
+                    
+                    <a href="/tech/en/tags/shift-reduce.html" class="tag">shift-reduce</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Automata and Compilers</h3>
+        <p class="post-series-description">From finite automata and formal languages to building a compiler from scratch</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-01.html" class="post-series-link">Automata and Compilers 01 - Finite Automata</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-02.html" class="post-series-link">Automata and Compilers 02 - Regular Expressions and Regular Languages</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-03.html" class="post-series-link">Automata and Compilers 03 - Context-Free Grammars</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-04.html" class="post-series-link">Automata and Compilers 04 - Pushdown Automata</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-05.html" class="post-series-link">Automata and Compilers 05 - Compiler Overview — Phases and Architecture</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-06.html" class="post-series-link">Automata and Compilers 06 - Lexical Analysis</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-07.html" class="post-series-link">Automata and Compilers 07 - Top-Down Parsing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Automata and Compilers 08 - Bottom-Up Parsing
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-09.html" class="post-series-link">Automata and Compilers 09 - Abstract Syntax Trees</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-10.html" class="post-series-link">Automata and Compilers 10 - Semantic Analysis and Type Checking</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-11.html" class="post-series-link">Automata and Compilers 11 - Intermediate Representations and Optimization</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-12.html" class="post-series-link">Automata and Compilers 12 - Code Generation</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="from-the-bottom-up">From the Bottom Up</h2>
+<p>The top-down parsing covered in the previous post started from the start symbol and worked downward toward the input string. Bottom-up parsing is the reverse. It starts from the tokens of the input string and applies grammar rules in reverse, working upward until reaching the start symbol. In this process, the parser traces the reverse of a rightmost derivation.</p>
+<p>Does simply reversing the direction make a meaningful difference? It does. Bottom-up parsers can handle a much broader class of grammars than top-down parsers. Many grammars that could not be expressed as LL(1) are handled naturally by LR parsing, and issues like left recursion can be dealt with without any transformation. This is why bottom-up parsing has become the standard method used by parser generators.</p>
+<h2 id="shift-reduce-parsing">Shift-Reduce Parsing</h2>
+<p>The core mechanism of bottom-up parsing is shift-reduce parsing. The parser uses a stack and an input buffer, repeatedly performing two operations.</p>
+<ul class="ul-list">
+<li><strong>Shift</strong>: Read the next token from the input and push it onto the stack.</li><li><strong>Reduce</strong>: When the top symbols on the stack match the right-hand side of a grammar rule, replace them with the left-hand side (a nonterminal).</li></ul>
+<p>Let&#39;s trace the parsing of <code class="inline-code">id + id * id</code> using the following grammar.</p>
+<pre><code>E → E + T | T
+T → T * F | F
+F → id</code></pre>
+<pre><code>Stack           Input              Action
+                id + id * id $
+id              + id * id $        Shift
+F               + id * id $        Reduce (F → id)
+T               + id * id $        Reduce (T → F)
+E               + id * id $        Reduce (E → T)
+E +             id * id $          Shift
+E + id          * id $             Shift
+E + F           * id $             Reduce (F → id)
+E + T           * id $             Reduce (T → F)
+E + T *         id $               Shift
+E + T * id      $                  Shift
+E + T * F       $                  Reduce (F → id)
+E + T           $                  Reduce (T → T * F)
+E               $                  Reduce (E → E + T)</code></pre>
+<p>When only the start symbol E remains on the stack, parsing has succeeded. An important observation is that reversing the order of reductions yields a rightmost derivation.</p>
+<p>The critical question is: when should the parser shift and when should it reduce? Automating this decision is precisely what LR parsing accomplishes.</p>
+<h2 id="the-mechanics-of-lr-parsing">The Mechanics of LR Parsing</h2>
+<p>An LR parser combines a finite automaton with a parsing table to make shift-reduce decisions automatically. The name LR means the input is read left-to-right while producing the reverse of a rightmost derivation.</p>
+<p>The core concepts are items and states. An LR(0) item is a notation that indicates how far parsing has progressed within a grammar rule. A dot (·) marks the current position.</p>
+<pre><code>E → ·E + T    (nothing recognized yet)
+E → E·+ T     (E has been recognized)
+E → E +·T     (+ has been recognized)
+E → E + T·    (entire rule recognized, ready to reduce)</code></pre>
+<p>By collecting all items that are possible at a given point into a single state and defining transitions between these states, an LR automaton is constructed. The shift, reduce, and GOTO actions in the parsing table are derived from this automaton.</p>
+<h2 id="varieties-of-lr-parsers">Varieties of LR Parsers</h2>
+<p>LR parsers come in several variants depending on how the table is constructed, each differing in the range of grammars they can handle and the size of the table.</p>
+<table>
+<thead>
+<tr><th>Variant</th><th>Lookahead</th><th>Table Size</th><th>Grammar Coverage</th></tr>
+</thead>
+<tbody>
+<tr><td>LR(0)</td><td>0</td><td>Small</td><td>Very limited</td></tr>
+<tr><td>SLR(1)</td><td>1 (FOLLOW-based)</td><td>Small</td><td>Limited</td></tr>
+<tr><td>LALR(1)</td><td>1 (precise lookahead)</td><td>Medium</td><td>Most practical grammars</td></tr>
+<tr><td>CLR(1)</td><td>1 (full lookahead)</td><td>Very large</td><td>Broadest</td></tr>
+</tbody>
+</table>
+<p>LR(0) decides based on state alone, without any lookahead, so the grammars it can handle are extremely limited. SLR(1) uses FOLLOW sets to decide when to reduce, but because FOLLOW sets aggregate possibilities across all contexts, they can produce unnecessary conflicts.</p>
+<p>CLR(1) attaches precise lookahead tokens to each item and can handle the broadest range of grammars, but table sizes can grow exponentially. LALR(1) merges states with identical cores from the CLR(1) construction, reducing table size while still handling the vast majority of practical programming language grammars. This is why LALR(1) has been widely adopted as the practical sweet spot.</p>
+<h2 id="conflict-resolution">Conflict Resolution</h2>
+<p>When constructing an LR parsing table, a single cell may contain more than one possible action. This is called a conflict, and there are two kinds.</p>
+<p><strong>Shift-Reduce Conflict</strong>: Both shift and reduce are possible in the same state. The classic example is the dangling else problem. In <code class="inline-code">if E then if E then S · else S</code>, shifting <code class="inline-code">else</code> matches it with the inner <code class="inline-code">if</code>, while reducing matches it with the outer <code class="inline-code">if</code>. Most parser generators default to shifting, which binds <code class="inline-code">else</code> to the nearest <code class="inline-code">if</code>.</p>
+<p><strong>Reduce-Reduce Conflict</strong>: Two different rules could be used to reduce in the same state. This type of conflict generally indicates genuine ambiguity in the grammar, and the recommended solution is to redesign the grammar.</p>
+<p>Practical parser generators provide mechanisms for resolving conflicts through operator precedence and associativity declarations. For instance, declaring that <code class="inline-code">+</code> is left-associative and that <code class="inline-code">*</code> has higher precedence than <code class="inline-code">+</code> is sufficient to automatically resolve the shift-reduce conflicts in an expression grammar.</p>
+<h2 id="parser-generators-yacc-and-bison">Parser Generators: Yacc and Bison</h2>
+<p>Just as Lex and Flex exist for lexers, Yacc and Bison exist for parsers. These tools take a grammar specification as input and automatically generate LALR(1) parser code.</p>
+<p>A Yacc/Bison input file consists of grammar rules paired with actions that execute when each rule is reduced.</p>
+<pre><code class="language-yacc">%token NUMBER IDENTIFIER
+%left &#39;+&#39; &#39;-&#39;
+%left &#39;*&#39; &#39;/&#39;
+
+%%
+expr : expr &#39;+&#39; expr   { $$ = $1 + $3; }
+     | expr &#39;-&#39; expr   { $$ = $1 - $3; }
+     | expr &#39;*&#39; expr   { $$ = $1 * $3; }
+     | expr &#39;/&#39; expr   { $$ = $1 / $3; }
+     | &#39;(&#39; expr &#39;)&#39;    { $$ = $2; }
+     | NUMBER           { $$ = $1; }
+     ;
+%%</code></pre>
+<p>The <code class="inline-code">%left</code> and <code class="inline-code">%right</code> declarations specify associativity, and their order determines precedence — later declarations have higher precedence. These declarations are what resolve shift-reduce conflicts.</p>
+<p>Internally, a parser generator constructs the LR automaton from the grammar, merges states to produce the LALR(1) table, resolves conflicts using precedence rules, and finally outputs table-driven parser code. Automata theory is once again realized as a practical tool.</p>
+<h2 id="comparing-top-down-and-bottom-up">Comparing Top-Down and Bottom-Up</h2>
+<p>The two approaches can be summarized as follows.</p>
+<table>
+<thead>
+<tr><th>Aspect</th><th>Top-Down (LL)</th><th>Bottom-Up (LR)</th></tr>
+</thead>
+<tbody>
+<tr><td>Direction</td><td>Start symbol → input</td><td>Input → start symbol</td></tr>
+<tr><td>Derivation</td><td>Leftmost</td><td>Reverse of rightmost</td></tr>
+<tr><td>Grammar coverage</td><td>LL(1) ⊂ LR(1)</td><td>Broader range</td></tr>
+<tr><td>Left recursion</td><td>Requires transformation</td><td>Handled directly</td></tr>
+<tr><td>Implementation</td><td>Recursive descent (manual)</td><td>Parser generators (automatic)</td></tr>
+<tr><td>Error handling</td><td>Flexible</td><td>Structured</td></tr>
+<tr><td>Representative tools</td><td>ANTLR, hand-written</td><td>Yacc, Bison</td></tr>
+</tbody>
+</table>
+<p>In practice, both approaches are actively used. When manual control and precise error messages are priorities, recursive descent parsers are the typical choice. When automatic handling of complex grammars matters more, LR parser generators are preferred.</p>
+<p>Regardless of the approach chosen, the parser&#39;s final output is a parse tree. But parse trees contain much redundant information for direct use. In the next post, we&#39;ll look at abstract syntax trees (ASTs) — structures that strip away the unnecessary elements from parse trees and retain only the essential structure.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-06.html" class="nav-prev">← Platform Engineering 06 - Developer Portals and Service Catalogs</a>
+        
+        
+        <a href="/tech/en/posts/platform-engineering-07.html" class="nav-next">Platform Engineering 07 - Platform as a Product →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

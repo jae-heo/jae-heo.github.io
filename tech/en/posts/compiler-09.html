@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automata and Compilers 09 - Abstract Syntax Trees - Jae's Tech Blog</title>
+    <meta name="description" content="Parse trees vs ASTs, designing AST nodes, and how ASTs bridge the compiler frontend and backend">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/compiler-09.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/compiler-09.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/compiler-09.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/compiler-09.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/compiler-09.html">
+    <meta property="og:title" content="Automata and Compilers 09 - Abstract Syntax Trees">
+    <meta property="og:description" content="Parse trees vs ASTs, designing AST nodes, and how ASTs bridge the compiler frontend and backend">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-10T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="compiler">
+    
+    <meta property="article:tag" content="ast">
+    
+    <meta property="article:tag" content="syntax-tree">
+    
+    <meta property="article:tag" content="parser">
+    
+    <meta property="article:tag" content="ir">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/compiler-09.html">
+    <meta name="twitter:title" content="Automata and Compilers 09 - Abstract Syntax Trees">
+    <meta name="twitter:description" content="Parse trees vs ASTs, designing AST nodes, and how ASTs bridge the compiler frontend and backend">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Automata and Compilers 09 - Abstract Syntax Trees",
+  "description": [
+    "Parse trees vs ASTs",
+    "designing AST nodes",
+    "and how ASTs bridge the compiler frontend and backend"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-10T00:00:00.000Z",
+  "dateModified": "2026-02-10T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/compiler-09.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "compiler, ast, syntax-tree, parser, ir"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Automata and Compilers 09 - Abstract Syntax Trees">Automata and Compilers 09 - Abstract Syntax Trees</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Automata and Compilers 09 - Abstract Syntax Trees</h1>
+        <time datetime=""2026-02-10T00:00:00.000Z"">February 10, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Automata and Compilers (9/12)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/compiler.html" class="tag">compiler</a>
+                    
+                    <a href="/tech/en/tags/ast.html" class="tag">ast</a>
+                    
+                    <a href="/tech/en/tags/syntax-tree.html" class="tag">syntax-tree</a>
+                    
+                    <a href="/tech/en/tags/parser.html" class="tag">parser</a>
+                    
+                    <a href="/tech/en/tags/ir.html" class="tag">ir</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Automata and Compilers</h3>
+        <p class="post-series-description">From finite automata and formal languages to building a compiler from scratch</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-01.html" class="post-series-link">Automata and Compilers 01 - Finite Automata</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-02.html" class="post-series-link">Automata and Compilers 02 - Regular Expressions and Regular Languages</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-03.html" class="post-series-link">Automata and Compilers 03 - Context-Free Grammars</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-04.html" class="post-series-link">Automata and Compilers 04 - Pushdown Automata</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-05.html" class="post-series-link">Automata and Compilers 05 - Compiler Overview — Phases and Architecture</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-06.html" class="post-series-link">Automata and Compilers 06 - Lexical Analysis</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-07.html" class="post-series-link">Automata and Compilers 07 - Top-Down Parsing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-08.html" class="post-series-link">Automata and Compilers 08 - Bottom-Up Parsing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Automata and Compilers 09 - Abstract Syntax Trees
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-10.html" class="post-series-link">Automata and Compilers 10 - Semantic Analysis and Type Checking</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-11.html" class="post-series-link">Automata and Compilers 11 - Intermediate Representations and Optimization</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-12.html" class="post-series-link">Automata and Compilers 12 - Code Generation</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="the-limitations-of-parse-trees">The Limitations of Parse Trees</h2>
+<p>When a parser analyzes a token stream according to grammar rules, it produces a parse tree (also called a concrete syntax tree). The parse tree faithfully reflects every step of the derivation process, making it useful for verifying grammatical correctness. But for the subsequent phases of a compiler, it contains far too much unnecessary information.</p>
+<p>Consider the parse tree for the expression <code class="inline-code">2 + 3 * 4</code>. Using a grammar with left recursion eliminated, the parse tree includes nonterminal symbols like E, E&#39;, T, T&#39;, and F, along with delimiters like parentheses. But the only information the compiler actually needs is the operational structure: &quot;add 2 to the product of 3 and 4.&quot; Auxiliary nonterminals like E&#39; and T&#39;, introduced solely to make the grammar LL(1)-compatible, are irrelevant to the language&#39;s semantics.</p>
+<p>For this reason, compilers use abstract syntax trees (ASTs) instead of parse trees. An AST is a tree that strips away grammatical details from the parse tree, retaining only the semantic structure of the program.</p>
+<h2 id="parse-tree-vs-ast">Parse Tree vs AST</h2>
+<p>Let&#39;s compare the two trees for the same expression <code class="inline-code">2 + 3 * 4</code>.</p>
+<pre><code>Parse Tree:                   AST:
+      E                       +
+    / | \                    /   \
+   T  +  E                 2     *
+   |     |                      /  \
+   F     T                    3     4
+   |   / | \
+   2  F  *  T&#39;
+      |     |
+      3     F
+            |
+            4</code></pre>
+<p>The parse tree contains every nonterminal from the grammar rules, but the AST retains only operators and operands. Parentheses do not appear in the AST either. In <code class="inline-code">(2 + 3) * 4</code>, the role of the parentheses is captured by the tree structure itself. If the left child of the <code class="inline-code">*</code> node is a <code class="inline-code">+</code> node, that alone conveys that addition is performed first.</p>
+<p>This abstraction simplifies every subsequent phase of the compiler. Semantic analysis, optimization, and code generation all operate on the AST, so the design of the AST has a direct impact on the quality of the entire compiler.</p>
+<h2 id="designing-ast-nodes">Designing AST Nodes</h2>
+<p>Implementing an AST starts with designing the node types. Each node type corresponds to a language construct, including only semantically necessary information while excluding grammatical details.</p>
+<p>AST node types for a simple language might be defined as follows.</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from typing import List, Optional
+
+@dataclass
+class NumberLit:
+    value: int
+
+@dataclass
+class Identifier:
+    name: str
+
+@dataclass
+class BinaryOp:
+    op: str          # &#39;+&#39;, &#39;-&#39;, &#39;*&#39;, &#39;/&#39;
+    left: &#39;Expr&#39;
+    right: &#39;Expr&#39;
+
+@dataclass
+class UnaryOp:
+    op: str          # &#39;-&#39;, &#39;!&#39;
+    operand: &#39;Expr&#39;
+
+@dataclass
+class Assignment:
+    target: Identifier
+    value: &#39;Expr&#39;
+
+@dataclass
+class IfStmt:
+    condition: &#39;Expr&#39;
+    then_body: List[&#39;Stmt&#39;]
+    else_body: Optional[List[&#39;Stmt&#39;]]
+
+@dataclass
+class WhileStmt:
+    condition: &#39;Expr&#39;
+    body: List[&#39;Stmt&#39;]
+
+@dataclass
+class FuncDecl:
+    name: str
+    params: List[str]
+    body: List[&#39;Stmt&#39;]
+
+@dataclass
+class FuncCall:
+    name: str
+    args: List[&#39;Expr&#39;]
+
+@dataclass
+class ReturnStmt:
+    value: Optional[&#39;Expr&#39;]</code></pre>
+<p>Each node type contains only the minimal information needed to represent its language construct. <code class="inline-code">IfStmt</code> has no parentheses or <code class="inline-code">then</code> keyword — just the condition and the bodies. <code class="inline-code">BinaryOp</code> has no precedence information — the tree structure itself determines evaluation order.</p>
+<h2 id="building-the-ast-during-parsing">Building the AST During Parsing</h2>
+<p>The AST is constructed as the parser applies grammar rules. In a recursive descent parser, each parsing function is written to return an AST node.</p>
+<pre><code class="language-python">def parse_expr(self):
+    left = self.parse_term()
+    while self.peek() and self.peek()[0] in (&#39;PLUS&#39;, &#39;MINUS&#39;):
+        op_token = self.consume(self.peek()[0])
+        right = self.parse_term()
+        left = BinaryOp(
+            op=op_token[1],
+            left=left,
+            right=right
+        )
+    return left
+
+def parse_term(self):
+    left = self.parse_factor()
+    while self.peek() and self.peek()[0] in (&#39;STAR&#39;, &#39;SLASH&#39;):
+        op_token = self.consume(self.peek()[0])
+        right = self.parse_factor()
+        left = BinaryOp(
+            op=op_token[1],
+            left=left,
+            right=right
+        )
+    return left
+
+def parse_factor(self):
+    token = self.peek()
+    if token[0] == &#39;NUMBER&#39;:
+        self.consume(&#39;NUMBER&#39;)
+        return NumberLit(value=int(token[1]))
+    elif token[0] == &#39;IDENT&#39;:
+        self.consume(&#39;IDENT&#39;)
+        return Identifier(name=token[1])
+    elif token[0] == &#39;LPAREN&#39;:
+        self.consume(&#39;LPAREN&#39;)
+        node = self.parse_expr()
+        self.consume(&#39;RPAREN&#39;)
+        return node
+    raise SyntaxError(&#39;Unexpected token&#39;)</code></pre>
+<p>Two aspects of this code deserve attention. First, the while loop correctly handles left-associative operations. <code class="inline-code">2 + 3 + 4</code> is constructed as <code class="inline-code">BinaryOp(&#39;+&#39;, BinaryOp(&#39;+&#39;, 2, 3), 4)</code>, producing a structure that evaluates from left to right. Second, when parentheses are encountered, the result of parsing the inner expression is returned directly, so the parentheses themselves never appear in the AST.</p>
+<p>In parser generators, AST node construction code is written as actions for each grammar rule. In Yacc/Bison, expressions like <code class="inline-code">$$ = new BinaryOp(&#39;+&#39;, $1, $3);</code> create AST nodes during reduction.</p>
+<h2 id="ast-examples-by-language-construct">AST Examples by Language Construct</h2>
+<p>Let&#39;s see how major programming language constructs are represented in an AST.</p>
+<p><strong>Expressions</strong>: <code class="inline-code">a + b * c</code></p>
+<pre><code>    BinaryOp(&#39;+&#39;)
+    /            \
+Identifier(&#39;a&#39;)  BinaryOp(&#39;*&#39;)
+                  /            \
+           Identifier(&#39;b&#39;)  Identifier(&#39;c&#39;)</code></pre>
+<p>The tree structure itself indicates that <code class="inline-code">*</code> is evaluated before <code class="inline-code">+</code>.</p>
+<p><strong>Conditionals</strong>: <code class="inline-code">if (x &gt; 0) { return x; } else { return -x; }</code></p>
+<pre><code>IfStmt
+├── condition: BinaryOp(&#39;&gt;&#39;)
+│               ├── Identifier(&#39;x&#39;)
+│               └── NumberLit(0)
+├── then_body: [ReturnStmt(Identifier(&#39;x&#39;))]
+└── else_body: [ReturnStmt(UnaryOp(&#39;-&#39;, Identifier(&#39;x&#39;)))]</code></pre>
+<p><strong>Function declarations</strong>: <code class="inline-code">function add(a, b) { return a + b; }</code></p>
+<pre><code>FuncDecl
+├── name: &quot;add&quot;
+├── params: [&quot;a&quot;, &quot;b&quot;]
+└── body: [ReturnStmt(BinaryOp(&#39;+&#39;,
+                         Identifier(&#39;a&#39;),
+                         Identifier(&#39;b&#39;)))]</code></pre>
+<p>In each case, the AST strips away all syntactic decoration and clearly exposes the logical structure of the program.</p>
+<h2 id="tree-traversal-with-the-visitor-pattern">Tree Traversal with the Visitor Pattern</h2>
+<p>Once the AST is constructed, it must be traversed for various purposes. Each phase — type checking, optimization, code generation — walks the AST to collect information or transform the tree.</p>
+<p>The most widely used design pattern for this is the visitor pattern. By separating the processing logic for each node type from the tree structure itself, new analysis phases can be added without modifying the existing AST node classes.</p>
+<pre><code class="language-python">class ASTVisitor:
+    def visit(self, node):
+        method_name = f&#39;visit_{type(node).__name__}&#39;
+        visitor = getattr(self, method_name, self.generic_visit)
+        return visitor(node)
+
+    def generic_visit(self, node):
+        raise NotImplementedError(f&#39;No visitor for {type(node).__name__}&#39;)
+
+class Evaluator(ASTVisitor):
+    def visit_NumberLit(self, node):
+        return node.value
+
+    def visit_BinaryOp(self, node):
+        left = self.visit(node.left)
+        right = self.visit(node.right)
+        if node.op == &#39;+&#39;: return left + right
+        if node.op == &#39;-&#39;: return left - right
+        if node.op == &#39;*&#39;: return left * right
+        if node.op == &#39;/&#39;: return left // right
+
+class PrettyPrinter(ASTVisitor):
+    def visit_NumberLit(self, node):
+        return str(node.value)
+
+    def visit_BinaryOp(self, node):
+        left = self.visit(node.left)
+        right = self.visit(node.right)
+        return f&#39;({left} {node.op} {right})&#39;</code></pre>
+<p><code class="inline-code">Evaluator</code> and <code class="inline-code">PrettyPrinter</code> traverse the same AST but produce entirely different results. When a new analysis phase is needed, all that is required is a new class inheriting from <code class="inline-code">ASTVisitor</code>. Because the AST node classes remain untouched, each phase of the compiler can be developed and maintained independently.</p>
+<h2 id="the-bridge-between-frontend-and-backend">The Bridge Between Frontend and Backend</h2>
+<p>The AST plays a pivotal role in compiler architecture as the connection point between the frontend and the backend. The frontend (lexer, parser, semantic analysis) transforms source code into an AST, and the backend (optimization, code generation) starts from the AST to produce target code.</p>
+<pre><code>Source Code → [Lexer] → [Parser] → AST → [Semantic Analysis] → Annotated AST → [Optimization] → [Code Generation] → Target Code</code></pre>
+<p>The advantage of this structure is that the frontend and backend can be replaced independently. Connecting a different language&#39;s frontend to the same backend adds support for a new language, and connecting the same frontend to a different backend produces code for a different architecture. This principle is what allows LLVM to support dozens of languages and dozens of target architectures.</p>
+<p>In practice, rather than generating target code directly from the AST, compilers typically lower the AST into a lower-level intermediate representation (IR) before performing optimization and code generation. But the AST remains the most important source-level intermediate representation.</p>
+<p>In the next post, we&#39;ll look at semantic analysis — the checks and annotations performed on the AST.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/mlops-06.html" class="nav-prev">← MLOps 06 - Monitoring and Drift Detection</a>
+        
+        
+        <a href="/tech/en/posts/platform-engineering-08.html" class="nav-next">Platform Engineering 08 - CI/CD at Scale →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

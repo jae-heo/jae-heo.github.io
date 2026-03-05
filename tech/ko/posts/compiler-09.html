@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오토마타와 컴파일러 09 - 추상 구문 트리 - 재영의 기술 블로그</title>
+    <meta name="description" content="파스 트리와 AST의 차이, AST 노드 설계, 그리고 컴파일러 프론트엔드와 백엔드를 잇는 다리">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/compiler-09.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/compiler-09.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/compiler-09.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/compiler-09.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-09.html">
+    <meta property="og:title" content="오토마타와 컴파일러 09 - 추상 구문 트리">
+    <meta property="og:description" content="파스 트리와 AST의 차이, AST 노드 설계, 그리고 컴파일러 프론트엔드와 백엔드를 잇는 다리">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-10T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="compiler">
+    
+    <meta property="article:tag" content="ast">
+    
+    <meta property="article:tag" content="syntax-tree">
+    
+    <meta property="article:tag" content="parser">
+    
+    <meta property="article:tag" content="ir">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-09.html">
+    <meta name="twitter:title" content="오토마타와 컴파일러 09 - 추상 구문 트리">
+    <meta name="twitter:description" content="파스 트리와 AST의 차이, AST 노드 설계, 그리고 컴파일러 프론트엔드와 백엔드를 잇는 다리">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "오토마타와 컴파일러 09 - 추상 구문 트리",
+  "description": [
+    "파스 트리와 AST의 차이",
+    "AST 노드 설계",
+    "그리고 컴파일러 프론트엔드와 백엔드를 잇는 다리"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-10T00:00:00.000Z",
+  "dateModified": "2026-02-10T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/compiler-09.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "compiler, ast, syntax-tree, parser, ir"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="오토마타와 컴파일러 09 - 추상 구문 트리">오토마타와 컴파일러 09 - 추상 구문 트리</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>오토마타와 컴파일러 09 - 추상 구문 트리</h1>
+        <time datetime=""2026-02-10T00:00:00.000Z"">February 10, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 오토마타와 컴파일러 (9/12)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/compiler.html" class="tag">compiler</a>
+                    
+                    <a href="/tech/ko/tags/ast.html" class="tag">ast</a>
+                    
+                    <a href="/tech/ko/tags/syntax-tree.html" class="tag">syntax-tree</a>
+                    
+                    <a href="/tech/ko/tags/parser.html" class="tag">parser</a>
+                    
+                    <a href="/tech/ko/tags/ir.html" class="tag">ir</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 오토마타와 컴파일러</h3>
+        <p class="post-series-description">유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-01.html" class="post-series-link">오토마타와 컴파일러 01 - 유한 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-02.html" class="post-series-link">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-03.html" class="post-series-link">오토마타와 컴파일러 03 - 문맥 자유 문법</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-04.html" class="post-series-link">오토마타와 컴파일러 04 - 푸시다운 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-05.html" class="post-series-link">오토마타와 컴파일러 05 - 컴파일러 개요 — 단계와 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-06.html" class="post-series-link">오토마타와 컴파일러 06 - 어휘 분석</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-07.html" class="post-series-link">오토마타와 컴파일러 07 - 하향식 파싱</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-08.html" class="post-series-link">오토마타와 컴파일러 08 - 상향식 파싱</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                오토마타와 컴파일러 09 - 추상 구문 트리
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-10.html" class="post-series-link">오토마타와 컴파일러 10 - 의미 분석과 타입 검사</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-11.html" class="post-series-link">오토마타와 컴파일러 11 - 중간 표현과 최적화</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-12.html" class="post-series-link">오토마타와 컴파일러 12 - 코드 생성</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">파스 트리의 한계</h2>
+<p>파서가 토큰 스트림을 문법 규칙에 따라 분석하면 파스 트리(Parse Tree, 구문 트리)가 만들어진다. 파스 트리는 문법의 모든 유도 과정을 충실히 반영하므로 문법적 정확성을 검증하는 데는 유용하다. 하지만 컴파일러의 이후 단계에서 직접 사용하기에는 불필요한 정보가 너무 많다.</p>
+<p><code class="inline-code">2 + 3 * 4</code>라는 수식의 파스 트리를 생각해 보자. 좌재귀를 제거한 문법을 사용하면 파스 트리에는 E, E&#39;, T, T&#39;, F 같은 비단말 기호와 괄호 같은 구분 기호가 모두 포함된다. 하지만 컴파일러가 실제로 필요로 하는 정보는 &quot;2와 3*4를 더한다&quot;는 연산 구조뿐이다. 문법을 LL(1)에 맞추기 위해 도입한 E&#39;이나 T&#39; 같은 보조 비단말 기호는 언어의 의미와는 무관한 것이다.</p>
+<p>이러한 이유로 컴파일러는 파스 트리 대신 추상 구문 트리(Abstract Syntax Tree, AST)를 사용한다. AST는 파스 트리에서 문법적 세부사항을 제거하고 프로그램의 의미적 구조만을 남긴 트리이다.</p>
+<h2 id="-ast-">파스 트리와 AST의 차이</h2>
+<p>같은 수식 <code class="inline-code">2 + 3 * 4</code>에 대해 두 트리를 비교해 보자.</p>
+<pre><code>파스 트리:                    AST:
+      E                       +
+    / | \                    /   \
+   T  +  E                 2     *
+   |     |                      /  \
+   F     T                    3     4
+   |   / | \
+   2  F  *  T&#39;
+      |     |
+      3     F
+            |
+            4</code></pre>
+<p>파스 트리에는 문법 규칙의 모든 비단말 기호가 존재하지만, AST에는 연산자와 피연산자만 남아 있다. 괄호도 AST에는 나타나지 않는다. <code class="inline-code">(2 + 3) * 4</code>에서 괄호의 역할은 트리 구조 자체가 대신하기 때문이다. AST에서 <code class="inline-code">*</code>의 왼쪽 자식이 <code class="inline-code">+</code> 노드라면, 그것만으로 덧셈이 먼저 수행된다는 의미가 전달되는 것이다.</p>
+<p>이러한 추상화는 컴파일러의 나머지 단계를 단순하게 만든다. 의미 분석, 최적화, 코드 생성 단계 모두 AST를 기반으로 동작하므로, AST의 설계가 컴파일러 전체의 품질에 직접적인 영향을 미친다.</p>
+<h2 id="ast-">AST 노드 설계</h2>
+<p>AST를 구현하려면 먼저 노드 타입을 설계해야 한다. 각 언어 구성 요소에 대응하는 노드 타입을 정의하되, 문법적 세부사항은 제외하고 의미적으로 필요한 정보만 포함시키는 것이다.</p>
+<p>간단한 언어에 대한 AST 노드 타입을 다음과 같이 정의할 수 있다.</p>
+<pre><code class="language-python">from dataclasses import dataclass
+from typing import List, Optional
+
+@dataclass
+class NumberLit:
+    value: int
+
+@dataclass
+class Identifier:
+    name: str
+
+@dataclass
+class BinaryOp:
+    op: str          # &#39;+&#39;, &#39;-&#39;, &#39;*&#39;, &#39;/&#39;
+    left: &#39;Expr&#39;
+    right: &#39;Expr&#39;
+
+@dataclass
+class UnaryOp:
+    op: str          # &#39;-&#39;, &#39;!&#39;
+    operand: &#39;Expr&#39;
+
+@dataclass
+class Assignment:
+    target: Identifier
+    value: &#39;Expr&#39;
+
+@dataclass
+class IfStmt:
+    condition: &#39;Expr&#39;
+    then_body: List[&#39;Stmt&#39;]
+    else_body: Optional[List[&#39;Stmt&#39;]]
+
+@dataclass
+class WhileStmt:
+    condition: &#39;Expr&#39;
+    body: List[&#39;Stmt&#39;]
+
+@dataclass
+class FuncDecl:
+    name: str
+    params: List[str]
+    body: List[&#39;Stmt&#39;]
+
+@dataclass
+class FuncCall:
+    name: str
+    args: List[&#39;Expr&#39;]
+
+@dataclass
+class ReturnStmt:
+    value: Optional[&#39;Expr&#39;]</code></pre>
+<p>각 노드 타입은 해당 언어 구성 요소를 표현하는 데 필요한 최소한의 정보만 담고 있다. <code class="inline-code">IfStmt</code>에는 괄호나 <code class="inline-code">then</code> 키워드가 없고, 조건과 본문만 있다. <code class="inline-code">BinaryOp</code>에는 우선순위 정보가 없고, 트리의 구조 자체가 연산 순서를 결정한다.</p>
+<h2 id="-ast-">파싱 중 AST 구축</h2>
+<p>AST는 파서가 문법 규칙을 적용하는 과정에서 함께 구축된다. 재귀 하강 파서에서는 각 파싱 함수가 AST 노드를 반환하도록 작성하면 된다.</p>
+<pre><code class="language-python">def parse_expr(self):
+    left = self.parse_term()
+    while self.peek() and self.peek()[0] in (&#39;PLUS&#39;, &#39;MINUS&#39;):
+        op_token = self.consume(self.peek()[0])
+        right = self.parse_term()
+        left = BinaryOp(
+            op=op_token[1],
+            left=left,
+            right=right
+        )
+    return left
+
+def parse_term(self):
+    left = self.parse_factor()
+    while self.peek() and self.peek()[0] in (&#39;STAR&#39;, &#39;SLASH&#39;):
+        op_token = self.consume(self.peek()[0])
+        right = self.parse_factor()
+        left = BinaryOp(
+            op=op_token[1],
+            left=left,
+            right=right
+        )
+    return left
+
+def parse_factor(self):
+    token = self.peek()
+    if token[0] == &#39;NUMBER&#39;:
+        self.consume(&#39;NUMBER&#39;)
+        return NumberLit(value=int(token[1]))
+    elif token[0] == &#39;IDENT&#39;:
+        self.consume(&#39;IDENT&#39;)
+        return Identifier(name=token[1])
+    elif token[0] == &#39;LPAREN&#39;:
+        self.consume(&#39;LPAREN&#39;)
+        node = self.parse_expr()
+        self.consume(&#39;RPAREN&#39;)
+        return node
+    raise SyntaxError(&#39;Unexpected token&#39;)</code></pre>
+<p>이 코드에서 주목할 점이 두 가지이다. 첫째, while 루프를 사용하여 좌결합 연산을 올바르게 처리한다. <code class="inline-code">2 + 3 + 4</code>는 <code class="inline-code">BinaryOp(&#39;+&#39;, BinaryOp(&#39;+&#39;, 2, 3), 4)</code>로 구성되어 왼쪽부터 계산되는 구조를 만드는 것이다. 둘째, 괄호를 만나면 내부 수식을 파싱한 결과를 그대로 반환하므로 괄호 자체는 AST에 나타나지 않는다.</p>
+<p>파서 생성기에서는 각 문법 규칙의 액션으로 AST 노드 생성 코드를 작성한다. Yacc/Bison에서 <code class="inline-code">$$ = new BinaryOp(&#39;+&#39;, $1, $3);</code>와 같은 형태로 리듀스 시 AST 노드를 만드는 것이 이에 해당한다.</p>
+<h2 id="-ast-">구문 단위별 AST 예시</h2>
+<p>프로그래밍 언어의 주요 구성 요소가 AST에서 어떻게 표현되는지 살펴보자.</p>
+<p><strong>수식</strong>: <code class="inline-code">a + b * c</code></p>
+<pre><code>    BinaryOp(&#39;+&#39;)
+    /            \
+Identifier(&#39;a&#39;)  BinaryOp(&#39;*&#39;)
+                  /            \
+           Identifier(&#39;b&#39;)  Identifier(&#39;c&#39;)</code></pre>
+<p>트리 구조 자체가 <code class="inline-code">*</code>가 <code class="inline-code">+</code>보다 먼저 계산됨을 나타낸다.</p>
+<p><strong>조건문</strong>: <code class="inline-code">if (x &gt; 0) { return x; } else { return -x; }</code></p>
+<pre><code>IfStmt
+├── condition: BinaryOp(&#39;&gt;&#39;)
+│               ├── Identifier(&#39;x&#39;)
+│               └── NumberLit(0)
+├── then_body: [ReturnStmt(Identifier(&#39;x&#39;))]
+└── else_body: [ReturnStmt(UnaryOp(&#39;-&#39;, Identifier(&#39;x&#39;)))]</code></pre>
+<p><strong>함수 선언</strong>: <code class="inline-code">function add(a, b) { return a + b; }</code></p>
+<pre><code>FuncDecl
+├── name: &quot;add&quot;
+├── params: [&quot;a&quot;, &quot;b&quot;]
+└── body: [ReturnStmt(BinaryOp(&#39;+&#39;,
+                         Identifier(&#39;a&#39;),
+                         Identifier(&#39;b&#39;)))]</code></pre>
+<p>이처럼 AST는 소스 코드의 구문적 장식을 모두 벗겨내고 프로그램의 논리적 구조를 명확하게 드러낸다.</p>
+<h2 id="-">비지터 패턴을 이용한 트리 순회</h2>
+<p>AST가 구축된 후에는 다양한 목적으로 트리를 순회해야 한다. 타입 검사, 최적화, 코드 생성 등 각 단계가 AST를 순회하면서 정보를 수집하거나 트리를 변환하는 것이다.</p>
+<p>이때 가장 널리 사용되는 설계 패턴이 비지터 패턴(Visitor Pattern)이다. 노드 타입에 대한 처리 로직을 트리 구조 자체와 분리함으로써, 새로운 분석 단계를 추가할 때 기존 AST 노드 클래스를 수정할 필요가 없게 만드는 것이다.</p>
+<pre><code class="language-python">class ASTVisitor:
+    def visit(self, node):
+        method_name = f&#39;visit_{type(node).__name__}&#39;
+        visitor = getattr(self, method_name, self.generic_visit)
+        return visitor(node)
+
+    def generic_visit(self, node):
+        raise NotImplementedError(f&#39;No visitor for {type(node).__name__}&#39;)
+
+class Evaluator(ASTVisitor):
+    def visit_NumberLit(self, node):
+        return node.value
+
+    def visit_BinaryOp(self, node):
+        left = self.visit(node.left)
+        right = self.visit(node.right)
+        if node.op == &#39;+&#39;: return left + right
+        if node.op == &#39;-&#39;: return left - right
+        if node.op == &#39;*&#39;: return left * right
+        if node.op == &#39;/&#39;: return left // right
+
+class PrettyPrinter(ASTVisitor):
+    def visit_NumberLit(self, node):
+        return str(node.value)
+
+    def visit_BinaryOp(self, node):
+        left = self.visit(node.left)
+        right = self.visit(node.right)
+        return f&#39;({left} {node.op} {right})&#39;</code></pre>
+<p><code class="inline-code">Evaluator</code>와 <code class="inline-code">PrettyPrinter</code>는 같은 AST를 순회하지만 완전히 다른 결과를 생성한다. 새로운 분석 단계가 필요하면 <code class="inline-code">ASTVisitor</code>를 상속받는 새 클래스를 작성하기만 하면 된다. AST 노드 클래스를 변경할 필요가 없으므로, 컴파일러의 각 단계가 독립적으로 개발되고 유지될 수 있는 것이다.</p>
+<h2 id="-">프론트엔드와 백엔드의 다리</h2>
+<p>AST는 컴파일러 아키텍처에서 프론트엔드와 백엔드를 연결하는 핵심적인 역할을 한다. 프론트엔드(렉서, 파서, 의미 분석)는 소스 코드를 AST로 변환하고, 백엔드(최적화, 코드 생성)는 AST에서 출발하여 목적 코드를 생성한다.</p>
+<pre><code>소스 코드 → [렉서] → [파서] → AST → [의미 분석] → 수식 AST → [최적화] → [코드 생성] → 목적 코드</code></pre>
+<p>이 구조의 장점은 프론트엔드와 백엔드를 독립적으로 교체할 수 있다는 것이다. 같은 백엔드에 다른 언어의 프론트엔드를 연결하면 새로운 언어를 지원할 수 있고, 같은 프론트엔드에 다른 백엔드를 연결하면 다른 아키텍처용 코드를 생성할 수 있다. LLVM이 수십 개의 언어와 수십 개의 타겟 아키텍처를 지원할 수 있는 것이 바로 이 원리 덕분이다.</p>
+<p>실제로는 AST에서 바로 목적 코드를 생성하기보다, AST를 더 낮은 수준의 중간 표현(Intermediate Representation, IR)으로 변환한 뒤 최적화와 코드 생성을 수행하는 것이 일반적이다. 하지만 AST 자체가 소스 수준의 가장 중요한 중간 표현이라는 점은 변함이 없다.</p>
+<p>다음 포스트에서는 AST에 대해 수행되는 의미 분석(Semantic Analysis)을 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/mlops-06.html" class="nav-prev">← MLOps 06 - 모니터링과 드리프트 감지</a>
+        
+        
+        <a href="/tech/ko/posts/platform-engineering-08.html" class="nav-next">플랫폼 엔지니어링 08 - 대규모 CI/CD →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

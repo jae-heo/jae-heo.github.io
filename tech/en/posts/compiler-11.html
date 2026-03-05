@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automata and Compilers 11 - Intermediate Representations and Optimization - Jae's Tech Blog</title>
+    <meta name="description" content="Why compilers use intermediate representations and how optimization makes programs faster">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/compiler-11.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/compiler-11.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/compiler-11.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/compiler-11.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/compiler-11.html">
+    <meta property="og:title" content="Automata and Compilers 11 - Intermediate Representations and Optimization">
+    <meta property="og:description" content="Why compilers use intermediate representations and how optimization makes programs faster">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-25T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="compiler">
+    
+    <meta property="article:tag" content="ir">
+    
+    <meta property="article:tag" content="optimization">
+    
+    <meta property="article:tag" content="ssa">
+    
+    <meta property="article:tag" content="llvm">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/compiler-11.html">
+    <meta name="twitter:title" content="Automata and Compilers 11 - Intermediate Representations and Optimization">
+    <meta name="twitter:description" content="Why compilers use intermediate representations and how optimization makes programs faster">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Automata and Compilers 11 - Intermediate Representations and Optimization",
+  "description": "Why compilers use intermediate representations and how optimization makes programs faster",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-25T00:00:00.000Z",
+  "dateModified": "2026-02-25T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/compiler-11.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "compiler, ir, optimization, ssa, llvm"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="Automata and Compilers 11 - Intermediate Representations and Optimization">Automata and Compilers 11 - Intermediate Representations and Optimization</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>Automata and Compilers 11 - Intermediate Representations and Optimization</h1>
+        <time datetime=""2026-02-25T00:00:00.000Z"">February 25, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 Automata and Compilers (11/12)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/compiler.html" class="tag">compiler</a>
+                    
+                    <a href="/tech/en/tags/ir.html" class="tag">ir</a>
+                    
+                    <a href="/tech/en/tags/optimization.html" class="tag">optimization</a>
+                    
+                    <a href="/tech/en/tags/ssa.html" class="tag">ssa</a>
+                    
+                    <a href="/tech/en/tags/llvm.html" class="tag">llvm</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Automata and Compilers</h3>
+        <p class="post-series-description">From finite automata and formal languages to building a compiler from scratch</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-01.html" class="post-series-link">Automata and Compilers 01 - Finite Automata</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-02.html" class="post-series-link">Automata and Compilers 02 - Regular Expressions and Regular Languages</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-03.html" class="post-series-link">Automata and Compilers 03 - Context-Free Grammars</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-04.html" class="post-series-link">Automata and Compilers 04 - Pushdown Automata</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-05.html" class="post-series-link">Automata and Compilers 05 - Compiler Overview — Phases and Architecture</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-06.html" class="post-series-link">Automata and Compilers 06 - Lexical Analysis</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-07.html" class="post-series-link">Automata and Compilers 07 - Top-Down Parsing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-08.html" class="post-series-link">Automata and Compilers 08 - Bottom-Up Parsing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-09.html" class="post-series-link">Automata and Compilers 09 - Abstract Syntax Trees</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-10.html" class="post-series-link">Automata and Compilers 10 - Semantic Analysis and Type Checking</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Automata and Compilers 11 - Intermediate Representations and Optimization
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/compiler-12.html" class="post-series-link">Automata and Compilers 12 - Code Generation</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="why-intermediate-representations-exist">Why Intermediate Representations Exist</h2>
+<p>Could we not translate the syntax tree directly to machine code once semantic analysis is complete? In theory, yes, but in practice this creates a serious problem. Suppose the frontend supports three languages — C, Java, and Python — and the backend must target three architectures — x86, ARM, and RISC-V. With direct connections between frontends and backends, 3 x 3 = 9 translation paths are needed. Every additional language or architecture increases the count multiplicatively.</p>
+<p>An intermediate representation (IR) solves this problem. If every frontend translates to a common IR and every backend translates from that IR to machine code, only 3 + 3 = 6 translations are required. Adding a new language means implementing only the translation from that language to the IR, and adding a new architecture means implementing only the translation from the IR to that architecture.</p>
+<pre><code>Direct approach:                  IR approach:
+C ──→ x86                        C ──┐
+C ──→ ARM                       Java ─→ IR ──→ x86
+C ──→ RISC-V                   Python ┘   ├──→ ARM
+Java ──→ x86                              └──→ RISC-V
+Java ──→ ARM
+Java ──→ RISC-V                   Translations: 3 + 3 = 6
+Python ──→ x86
+Python ──→ ARM
+Python ──→ RISC-V
+
+Translations: 3 × 3 = 9</code></pre>
+<p>Another advantage of IR is that optimization can be performed independently of both source language and target architecture. Implementing an optimization once at the IR level benefits every language and every architecture. This is why every modern compiler without exception uses an IR.</p>
+<h2 id="types-of-intermediate-representation">Types of Intermediate Representation</h2>
+<p>IRs are broadly classified into three categories based on their level of abstraction.</p>
+<p>Tree-based IRs closely resemble syntax trees. The abstract syntax tree (AST) is the primary example, and because it preserves source code structure well, it is suited for semantic analysis and high-level optimization. However, its distance from machine code makes it impractical for direct code generation.</p>
+<p>Linear IRs arrange instructions sequentially. Three-address code is the canonical example, where each instruction has at most three operands. Its structure resembles machine code while remaining hardware-independent, making it the bridge between optimization and code generation.</p>
+<pre><code>Source code:       a = b * c + d * e
+
+Three-address code:
+  t1 = b * c
+  t2 = d * e
+  t3 = t1 + t2
+  a  = t3</code></pre>
+<p>Graph-based IRs represent data flow and control flow as graphs. The most important form in this category is Static Single Assignment (SSA) form.</p>
+<h2 id="ssa-form">SSA Form</h2>
+<p>SSA form is the foundation of optimization in modern compilers. Its core rule is simple: every variable is defined exactly once.</p>
+<pre><code>Regular code:           SSA form:
+x = 1                   x₁ = 1
+x = 2                   x₂ = 2
+y = x + 3               y₁ = x₂ + 3</code></pre>
+<p>Because each variable is defined only once, it is always clear where any given value came from at any point of use. This property dramatically simplifies many optimizations. For constant propagation in conventional IR, reaching definition analysis is required because a variable may be redefined multiple times. In SSA, there is only one definition, so the relationship between definitions and uses is self-evident.</p>
+<p>But what happens in conditional branches where a variable receives different values depending on the path taken? This is handled by introducing the phi function.</p>
+<pre><code>if (cond)
+  x₁ = 1
+else
+  x₂ = 2
+x₃ = φ(x₁, x₂)     ← selects x₁ or x₂ depending on which branch was taken
+y₁ = x₃ + 3</code></pre>
+<p>The phi function is not an actual executable instruction but a notational device to maintain the SSA invariant. During code generation, it is replaced with appropriate copy instructions or eliminated during register allocation.</p>
+<h2 id="key-optimization-techniques">Key Optimization Techniques</h2>
+<p>Once the IR is in place, the compiler performs a variety of optimizations to improve execution speed and reduce code size. An optimization is a transformation that improves performance without altering the program&#39;s meaning.</p>
+<p><strong>Constant folding</strong> evaluates expressions that can be computed at compile time. <code class="inline-code">x = 3 + 5</code> becomes <code class="inline-code">x = 8</code>. Simple yet effective, it is particularly powerful when it cascades with other optimizations.</p>
+<p><strong>Dead code elimination</strong> removes code that has no effect on the program&#39;s output. If a variable is defined but never used afterward, its definition contributes nothing to the result and can be safely removed. In SSA, where every definition&#39;s uses are explicit, identifying dead code becomes straightforward.</p>
+<pre><code>Before optimization:        After optimization:
+t1 = a + b                  t1 = a + b
+t2 = c * d                  (removed: t2 is never used)
+t3 = t1 + 1                 t3 = t1 + 1
+return t3                   return t3</code></pre>
+<p><strong>Common subexpression elimination</strong> ensures that identical computations are performed only once. In <code class="inline-code">a = b + c; d = b + c;</code>, the expression <code class="inline-code">b + c</code> does not need to be computed twice, so <code class="inline-code">d = a</code> can replace the second computation.</p>
+<p><strong>Loop optimizations</strong> target loops, which typically account for the majority of a program&#39;s execution time. Loop-invariant code motion moves computations whose values do not change across iterations outside the loop body. Loop unrolling replicates the loop body multiple times to reduce branch overhead. Induction variable optimization simplifies calculations tied to loop counters.</p>
+<pre><code>Loop-invariant code motion example:
+
+Before optimization:                After optimization:
+for (i = 0; i &lt; n; i++)            t = x * y           ← moved outside the loop
+  a[i] = x * y + i                 for (i = 0; i &lt; n; i++)
+                                      a[i] = t + i</code></pre>
+<h2 id="llvm-ir">LLVM IR</h2>
+<p>LLVM is the most successful realization of the IR concept in modern compiler infrastructure. LLVM IR exists in three forms: a human-readable text format (.ll), an in-memory data structure, and a bitcode format (.bc).</p>
+<pre><code class="language-llvm">define i32 @add(i32 %a, i32 %b) {
+entry:
+  %result = add i32 %a, %b
+  ret i32 %result
+}</code></pre>
+<p>The above is the LLVM IR for a function that adds two integers. Type information is explicit, SSA form is enforced, and nothing is hardware-specific. Clang (C/C++), Rustc (Rust), and the Swift compiler all translate to LLVM IR, after which the LLVM backend handles optimization and code generation. The vision of multiple languages sharing a single IR and a single optimization pipeline has been realized.</p>
+<h2 id="optimization-passes">Optimization Passes</h2>
+<p>In real compilers, optimization is not a single monolithic step but a sequence of small passes applied in order. Each pass performs one specific optimization, and the ordering and combination of passes affect the final performance.</p>
+<pre><code>IR → [Constant propagation] → [Dead code elimination] → [Common subexpression elimination]
+  → [Loop-invariant code motion] → [Register promotion] → ... → Optimized IR</code></pre>
+<p>The pass-based design allows each pass to be developed and tested independently. It also enables different sets of passes for different optimization levels (-O0, -O1, -O2, -O3), balancing compile time against code quality. Because one pass&#39;s transformations can create new optimization opportunities for another, it is sometimes effective to apply the same pass multiple times.</p>
+<p>Intermediate representations and optimization form the heart of the compiler. By transforming the program into a more efficient form while preserving its meaning, this stage is what allows the high-level code we write to execute quickly on hardware. In the next post, we&#39;ll look at how the optimized IR is translated into actual machine code: code generation.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/mlops-08.html" class="nav-prev">← MLOps 08 - Feature Stores</a>
+        
+        
+        <a href="/tech/en/posts/platform-engineering-10.html" class="nav-next">Platform Engineering 10 - Security and Governance →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

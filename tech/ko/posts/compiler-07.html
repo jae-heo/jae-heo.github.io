@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오토마타와 컴파일러 07 - 하향식 파싱 - 재영의 기술 블로그</title>
+    <meta name="description" content="재귀 하강 파서와 LL(1) 파싱의 원리, 그리고 하향식 접근법의 강점과 한계">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/compiler-07.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/compiler-07.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/compiler-07.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/compiler-07.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-07.html">
+    <meta property="og:title" content="오토마타와 컴파일러 07 - 하향식 파싱">
+    <meta property="og:description" content="재귀 하강 파서와 LL(1) 파싱의 원리, 그리고 하향식 접근법의 강점과 한계">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-01-27T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="compiler">
+    
+    <meta property="article:tag" content="parser">
+    
+    <meta property="article:tag" content="top-down">
+    
+    <meta property="article:tag" content="ll-parser">
+    
+    <meta property="article:tag" content="recursive-descent">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-07.html">
+    <meta name="twitter:title" content="오토마타와 컴파일러 07 - 하향식 파싱">
+    <meta name="twitter:description" content="재귀 하강 파서와 LL(1) 파싱의 원리, 그리고 하향식 접근법의 강점과 한계">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "오토마타와 컴파일러 07 - 하향식 파싱",
+  "description": [
+    "재귀 하강 파서와 LL(1) 파싱의 원리",
+    "그리고 하향식 접근법의 강점과 한계"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-27T00:00:00.000Z",
+  "dateModified": "2026-01-27T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/compiler-07.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "compiler, parser, top-down, ll-parser, recursive-descent"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="오토마타와 컴파일러 07 - 하향식 파싱">오토마타와 컴파일러 07 - 하향식 파싱</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>오토마타와 컴파일러 07 - 하향식 파싱</h1>
+        <time datetime=""2026-01-27T00:00:00.000Z"">January 27, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 오토마타와 컴파일러 (7/12)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/compiler.html" class="tag">compiler</a>
+                    
+                    <a href="/tech/ko/tags/parser.html" class="tag">parser</a>
+                    
+                    <a href="/tech/ko/tags/top-down.html" class="tag">top-down</a>
+                    
+                    <a href="/tech/ko/tags/ll-parser.html" class="tag">ll-parser</a>
+                    
+                    <a href="/tech/ko/tags/recursive-descent.html" class="tag">recursive-descent</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 오토마타와 컴파일러</h3>
+        <p class="post-series-description">유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-01.html" class="post-series-link">오토마타와 컴파일러 01 - 유한 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-02.html" class="post-series-link">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-03.html" class="post-series-link">오토마타와 컴파일러 03 - 문맥 자유 문법</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-04.html" class="post-series-link">오토마타와 컴파일러 04 - 푸시다운 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-05.html" class="post-series-link">오토마타와 컴파일러 05 - 컴파일러 개요 — 단계와 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-06.html" class="post-series-link">오토마타와 컴파일러 06 - 어휘 분석</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                오토마타와 컴파일러 07 - 하향식 파싱
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-08.html" class="post-series-link">오토마타와 컴파일러 08 - 상향식 파싱</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-09.html" class="post-series-link">오토마타와 컴파일러 09 - 추상 구문 트리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-10.html" class="post-series-link">오토마타와 컴파일러 10 - 의미 분석과 타입 검사</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-11.html" class="post-series-link">오토마타와 컴파일러 11 - 중간 표현과 최적화</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-12.html" class="post-series-link">오토마타와 컴파일러 12 - 코드 생성</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">파싱이란 무엇인가</h2>
+<p>렉서가 소스 코드를 토큰 스트림으로 변환했다면, 이제 그 토큰들이 언어의 문법 규칙에 맞게 배열되어 있는지를 검증하고 구조를 파악해야 한다. 이것이 파싱(Parsing)의 역할이다. 파싱은 본질적으로 유도(Derivation)의 역과정이다. 문법이 시작 기호에서 출발하여 문자열을 생성하는 과정이 유도라면, 파서는 주어진 문자열에서 출발하여 시작 기호에 도달하는 경로를 찾아내는 것이다.</p>
+<p>파싱 방법은 크게 두 가지로 나뉜다. 시작 기호에서 출발하여 입력 문자열을 향해 내려가는 하향식(Top-Down) 방법과, 입력 문자열에서 출발하여 시작 기호를 향해 올라가는 상향식(Bottom-Up) 방법이다. 이번 포스트에서는 하향식 파싱을 다룬다.</p>
+<h2 id="-">재귀 하강 파서</h2>
+<p>하향식 파싱에서 가장 직관적인 구현 방식이 재귀 하강 파서(Recursive Descent Parser)이다. 문법의 각 비단말 기호에 대해 하나의 함수를 작성하고, 이 함수들이 서로를 재귀적으로 호출하면서 입력을 분석하는 것이다.</p>
+<p>다음과 같은 간단한 수식 문법을 생각해 보자.</p>
+<pre><code>E → T + E | T
+T → ( E ) | id | num</code></pre>
+<p>이 문법에 대한 재귀 하강 파서는 다음과 같은 형태가 된다.</p>
+<pre><code class="language-python">class Parser:
+    def __init__(self, tokens):
+        self.tokens = tokens
+        self.pos = 0
+
+    def peek(self):
+        if self.pos &lt; len(self.tokens):
+            return self.tokens[self.pos]
+        return None
+
+    def consume(self, expected_type):
+        token = self.peek()
+        if token and token[0] == expected_type:
+            self.pos += 1
+            return token
+        raise SyntaxError(f&#39;Expected {expected_type}&#39;)
+
+    def parse_E(self):
+        node = self.parse_T()
+        if self.peek() and self.peek()[0] == &#39;PLUS&#39;:
+            self.consume(&#39;PLUS&#39;)
+            right = self.parse_E()
+            return (&#39;ADD&#39;, node, right)
+        return node
+
+    def parse_T(self):
+        token = self.peek()
+        if token[0] == &#39;LPAREN&#39;:
+            self.consume(&#39;LPAREN&#39;)
+            node = self.parse_E()
+            self.consume(&#39;RPAREN&#39;)
+            return node
+        elif token[0] == &#39;IDENT&#39;:
+            return self.consume(&#39;IDENT&#39;)
+        elif token[0] == &#39;NUMBER&#39;:
+            return self.consume(&#39;NUMBER&#39;)
+        raise SyntaxError(&#39;Unexpected token&#39;)</code></pre>
+<p>각 문법 규칙이 하나의 함수로 대응되므로 구조가 명확하고 디버깅이 쉽다. 실제로 GCC, Clang, Go 컴파일러 등 많은 프로덕션 컴파일러가 재귀 하강 방식을 채택하고 있다. 파서 생성기에 의존하지 않고도 유연한 오류 처리와 정교한 제어가 가능하기 때문이다.</p>
+<h2 id="-ll1">예측 파싱과 LL(1)</h2>
+<p>재귀 하강 파서가 올바르게 동작하려면 현재 토큰만 보고 어떤 문법 규칙을 적용할지 결정할 수 있어야 한다. 과연 하나의 토큰만으로 항상 올바른 선택이 가능한 것일까? 모든 문법에 대해서는 그렇지 않다. 하지만 LL(1) 문법이라고 불리는 부류에서는 가능하다.</p>
+<p>LL(1)이라는 이름은 세 가지 의미를 담고 있다. 첫 번째 L은 입력을 왼쪽에서 오른쪽으로(Left-to-right) 읽는 것, 두 번째 L은 최좌단 유도(Leftmost derivation)를 생성하는 것, 그리고 1은 결정에 필요한 선행 토큰이 하나라는 것이다.</p>
+<p>LL(1) 파서가 올바른 규칙을 선택하기 위해서는 두 가지 집합을 미리 계산해야 한다. FIRST 집합과 FOLLOW 집합이다.</p>
+<h2 id="first-follow">FIRST와 FOLLOW</h2>
+<p>FIRST(α)는 문자열 α에서 유도할 수 있는 모든 문자열의 첫 번째 단말 기호의 집합이다. α가 빈 문자열(ε)을 유도할 수 있다면 ε도 FIRST(α)에 포함된다.</p>
+<p>FOLLOW(A)는 비단말 기호 A 바로 뒤에 나올 수 있는 단말 기호의 집합이다. 시작 기호의 FOLLOW에는 입력의 끝을 나타내는 $가 포함된다.</p>
+<p>예를 들어 다음 문법을 보자.</p>
+<pre><code>E  → T E&#39;
+E&#39; → + T E&#39; | ε
+T  → F T&#39;
+T&#39; → * F T&#39; | ε
+F  → ( E ) | id</code></pre>
+<p>이 문법에서 FIRST와 FOLLOW를 계산하면 다음과 같다.</p>
+<table>
+<thead>
+<tr><th>기호</th><th>FIRST</th><th>FOLLOW</th></tr>
+</thead>
+<tbody>
+<tr><td>E</td><td>{ (, id }</td><td>{ $, ) }</td></tr>
+<tr><td>E&#39;</td><td>{ +, ε }</td><td>{ $, ) }</td></tr>
+<tr><td>T</td><td>{ (, id }</td><td>{ +, $, ) }</td></tr>
+<tr><td>T&#39;</td><td>{ *, ε }</td><td>{ +, $, ) }</td></tr>
+<tr><td>F</td><td>{ (, id }</td><td>{ *, +, $, ) }</td></tr>
+</tbody>
+</table>
+<p>이 집합들을 이용하면 예측 파싱 테이블을 구성할 수 있다. 현재 비단말 기호 A와 다음 입력 토큰 a가 주어졌을 때, A의 어떤 생성 규칙 A → α를 적용할지는 다음과 같이 결정된다. a가 FIRST(α)에 속하면 해당 규칙을 선택한다. α가 ε을 유도할 수 있고 a가 FOLLOW(A)에 속하면 A → ε 규칙을 선택한다. 이 방식으로 테이블의 모든 칸이 최대 하나의 규칙만 갖는다면 해당 문법은 LL(1)인 것이다.</p>
+<h2 id="-">좌재귀 제거</h2>
+<p>하향식 파서에서 반드시 해결해야 하는 문제가 좌재귀(Left Recursion)이다. 다음과 같은 문법 규칙을 생각해 보자.</p>
+<pre><code>E → E + T | T</code></pre>
+<p>재귀 하강 파서에서 <code class="inline-code">parse_E</code>를 호출하면 가장 먼저 <code class="inline-code">parse_E</code>를 다시 호출하게 되어 무한 루프에 빠진다. 이 문제를 해결하기 위해 좌재귀를 우재귀로 변환해야 한다.</p>
+<p>변환 방법은 다음과 같다. <code class="inline-code">A → Aα | β</code> 형태의 좌재귀 규칙은 다음과 같이 변환된다.</p>
+<pre><code>A  → β A&#39;
+A&#39; → α A&#39; | ε</code></pre>
+<p>앞의 수식 문법에 적용하면 다음과 같다.</p>
+<pre><code>E  → T E&#39;
+E&#39; → + T E&#39; | ε</code></pre>
+<p>변환 후에는 좌재귀가 제거되어 재귀 하강 파서가 올바르게 동작한다. 다만, 이 변환은 파스 트리의 구조를 변화시킨다. 원래 문법에서 왼쪽 결합이었던 연산이 변환 후에는 오른쪽 결합처럼 보이게 되므로, 추상 구문 트리를 구성할 때 이를 적절히 보정해야 한다.</p>
+<h2>좌인수분해</h2>
+<p>또 다른 문제는 공통 접두사이다. 다음 문법을 보자.</p>
+<pre><code>S → if E then S else S
+S → if E then S</code></pre>
+<p>두 규칙이 <code class="inline-code">if E then S</code>라는 공통 접두사를 가지므로, 첫 번째 토큰 <code class="inline-code">if</code>만 보고는 어떤 규칙을 선택해야 할지 결정할 수 없다. 좌인수분해(Left Factoring)를 적용하면 공통 접두사를 분리할 수 있다.</p>
+<pre><code>S  → if E then S S&#39;
+S&#39; → else S | ε</code></pre>
+<p>이제 <code class="inline-code">if</code>를 보면 S의 유일한 규칙을 선택하고, <code class="inline-code">else</code>가 나타나면 S&#39;에서 else 분기를 선택하면 된다. 하지만 이 변환도 모호함을 완전히 해소하지는 못한다. 이른바 dangling else 문제가 남아 있으며, 보통은 else를 가장 가까운 if에 매칭시키는 규칙을 별도로 적용한다.</p>
+<h2 id="-">예측 파싱 테이블 구동 파서</h2>
+<p>재귀 하강 대신 명시적인 스택과 파싱 테이블을 사용하는 방식도 있다. 이 방식에서는 스택의 최상위와 다음 입력 토큰을 보고 파싱 테이블에서 적용할 규칙을 결정한다.</p>
+<pre><code>스택: [E, $]    입력: id + id $
+
+1. 스택 최상위 E, 입력 id → 테이블에서 E → T E&#39; 선택
+   스택: [T, E&#39;, $]
+
+2. 스택 최상위 T, 입력 id → 테이블에서 T → F T&#39; 선택
+   스택: [F, T&#39;, E&#39;, $]
+
+3. 스택 최상위 F, 입력 id → 테이블에서 F → id 선택
+   스택: [id, T&#39;, E&#39;, $]
+
+4. 스택 최상위 id, 입력 id → 매칭, 팝
+   스택: [T&#39;, E&#39;, $]    입력: + id $
+
+... (계속 진행)</code></pre>
+<p>이 방식은 재귀 함수 호출 대신 명시적인 루프와 스택을 사용하므로 호출 스택 깊이의 제약을 받지 않는다. 다만, 오류 처리의 유연성에서는 재귀 하강 방식이 더 유리하다.</p>
+<h2 id="-">하향식 파싱의 한계</h2>
+<p>하향식 파싱은 직관적이고 구현이 쉽다는 장점이 있지만, 근본적인 한계도 존재한다. LL(1) 문법으로 표현할 수 없는 언어 구조가 상당히 많다는 것이다. 좌재귀 제거와 좌인수분해를 아무리 적용해도 LL(1)으로 변환이 불가능한 문법이 있으며, 이런 경우 더 많은 선행 토큰을 보는 LL(k)나 백트래킹을 도입해야 한다.</p>
+<p>실용적인 관점에서 보면, 재귀 하강 파서는 문법을 코드로 직접 작성하기 때문에 문법 규칙 너머의 문맥 의존적인 처리를 삽입하기 쉽다. C 언어에서 <code class="inline-code">typedef</code> 이름과 변수 이름을 구별하는 것처럼 문법만으로는 표현할 수 없는 규칙을 파서 내부에서 처리할 수 있는 것이다. 이런 유연성이 많은 프로덕션 컴파일러가 재귀 하강 방식을 선택하는 이유이기도 하다.</p>
+<p>반면, 더 넓은 부류의 문법을 자동으로 처리할 수 있는 방법이 필요하다면 상향식 파싱을 고려해야 한다. 다음 포스트에서는 상향식 파싱, 특히 LR 파싱을 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/mlops-04.html" class="nav-prev">← MLOps 04 - 모델 버전 관리와 레지스트리</a>
+        
+        
+        <a href="/tech/ko/posts/mlops-05.html" class="nav-next">MLOps 05 - 모델 서빙과 배포 전략 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

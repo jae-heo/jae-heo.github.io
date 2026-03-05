@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오토마타와 컴파일러 11 - 중간 표현과 최적화 - 재영의 기술 블로그</title>
+    <meta name="description" content="컴파일러가 왜 중간 표현을 거치는지, 그리고 최적화가 어떻게 프로그램을 더 빠르게 만드는지">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/compiler-11.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/compiler-11.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/compiler-11.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/compiler-11.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-11.html">
+    <meta property="og:title" content="오토마타와 컴파일러 11 - 중간 표현과 최적화">
+    <meta property="og:description" content="컴파일러가 왜 중간 표현을 거치는지, 그리고 최적화가 어떻게 프로그램을 더 빠르게 만드는지">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-25T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="compiler">
+    
+    <meta property="article:tag" content="ir">
+    
+    <meta property="article:tag" content="optimization">
+    
+    <meta property="article:tag" content="ssa">
+    
+    <meta property="article:tag" content="llvm">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-11.html">
+    <meta name="twitter:title" content="오토마타와 컴파일러 11 - 중간 표현과 최적화">
+    <meta name="twitter:description" content="컴파일러가 왜 중간 표현을 거치는지, 그리고 최적화가 어떻게 프로그램을 더 빠르게 만드는지">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "오토마타와 컴파일러 11 - 중간 표현과 최적화",
+  "description": [
+    "컴파일러가 왜 중간 표현을 거치는지",
+    "그리고 최적화가 어떻게 프로그램을 더 빠르게 만드는지"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-25T00:00:00.000Z",
+  "dateModified": "2026-02-25T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/compiler-11.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "compiler, ir, optimization, ssa, llvm"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="오토마타와 컴파일러 11 - 중간 표현과 최적화">오토마타와 컴파일러 11 - 중간 표현과 최적화</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>오토마타와 컴파일러 11 - 중간 표현과 최적화</h1>
+        <time datetime=""2026-02-25T00:00:00.000Z"">February 25, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 오토마타와 컴파일러 (11/12)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/compiler.html" class="tag">compiler</a>
+                    
+                    <a href="/tech/ko/tags/ir.html" class="tag">ir</a>
+                    
+                    <a href="/tech/ko/tags/optimization.html" class="tag">optimization</a>
+                    
+                    <a href="/tech/ko/tags/ssa.html" class="tag">ssa</a>
+                    
+                    <a href="/tech/ko/tags/llvm.html" class="tag">llvm</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 오토마타와 컴파일러</h3>
+        <p class="post-series-description">유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-01.html" class="post-series-link">오토마타와 컴파일러 01 - 유한 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-02.html" class="post-series-link">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-03.html" class="post-series-link">오토마타와 컴파일러 03 - 문맥 자유 문법</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-04.html" class="post-series-link">오토마타와 컴파일러 04 - 푸시다운 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-05.html" class="post-series-link">오토마타와 컴파일러 05 - 컴파일러 개요 — 단계와 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-06.html" class="post-series-link">오토마타와 컴파일러 06 - 어휘 분석</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-07.html" class="post-series-link">오토마타와 컴파일러 07 - 하향식 파싱</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-08.html" class="post-series-link">오토마타와 컴파일러 08 - 상향식 파싱</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-09.html" class="post-series-link">오토마타와 컴파일러 09 - 추상 구문 트리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-10.html" class="post-series-link">오토마타와 컴파일러 10 - 의미 분석과 타입 검사</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                오토마타와 컴파일러 11 - 중간 표현과 최적화
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-12.html" class="post-series-link">오토마타와 컴파일러 12 - 코드 생성</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">왜 중간 표현이 필요한가</h2>
+<p>의미 분석까지 마친 구문 트리를 곧바로 기계어로 변환하면 되지 않을까? 이론적으로는 가능하지만, 실제로는 심각한 문제가 발생한다. 프런트엔드가 C, Java, Python 세 가지 언어를 지원하고, 백엔드가 x86, ARM, RISC-V 세 가지 아키텍처를 지원해야 한다고 가정하면, 프런트엔드와 백엔드를 직접 연결하는 방식에서는 3 × 3 = 9개의 변환 경로가 필요하다. 언어와 아키텍처가 하나씩 추가될 때마다 경로는 곱셈으로 증가하게 되는 것이다.</p>
+<p>중간 표현(Intermediate Representation, IR)은 이 문제를 해결한다. 모든 프런트엔드가 하나의 공통 IR로 변환하고, 모든 백엔드가 그 IR에서 기계어로 변환하면, 3 + 3 = 6개의 변환만으로 충분하다. 새로운 언어를 추가할 때는 해당 언어에서 IR로의 변환만 구현하면 되고, 새로운 아키텍처를 추가할 때는 IR에서 해당 아키텍처로의 변환만 구현하면 된다.</p>
+<pre><code>직접 연결 방식:               IR을 통한 방식:
+C ──→ x86                    C ──┐
+C ──→ ARM                   Java ─→ IR ──→ x86
+C ──→ RISC-V               Python ┘   ├──→ ARM
+Java ──→ x86                          └──→ RISC-V
+Java ──→ ARM
+Java ──→ RISC-V              변환 수: 3 + 3 = 6
+Python ──→ x86
+Python ──→ ARM
+Python ──→ RISC-V
+
+변환 수: 3 × 3 = 9</code></pre>
+<p>IR의 또 다른 장점은 최적화가 언어와 아키텍처에 독립적으로 수행될 수 있다는 것이다. IR 수준에서 최적화를 한 번만 구현하면 모든 언어와 아키텍처가 그 혜택을 받는다. 이것이 현대 컴파일러가 예외 없이 IR을 사용하는 이유이다.</p>
+<h2 id="-">중간 표현의 종류</h2>
+<p>IR은 추상화 수준에 따라 크게 세 가지로 분류된다.</p>
+<p>트리 기반 IR은 구문 트리에 가까운 형태이다. 추상 구문 트리(AST)가 대표적이며, 소스 코드의 구조를 잘 보존하기 때문에 의미 분석과 고수준 최적화에 적합하다. 다만 기계어와의 거리가 멀어서 코드 생성에는 직접 쓰기 어렵다.</p>
+<p>선형 IR은 명령어가 순차적으로 나열되는 형태이다. 삼주소 코드(Three-Address Code)가 대표적이며, 각 명령어는 최대 세 개의 피연산자를 가진다. 기계어와 유사한 구조이면서도 특정 하드웨어에 종속되지 않아서 최적화와 코드 생성 사이의 가교 역할을 한다.</p>
+<pre><code>소스 코드:       a = b * c + d * e
+
+삼주소 코드:
+  t1 = b * c
+  t2 = d * e
+  t3 = t1 + t2
+  a  = t3</code></pre>
+<p>그래프 기반 IR은 프로그램의 데이터 흐름과 제어 흐름을 그래프로 표현한다. 이 범주에서 가장 중요한 형태가 정적 단일 배정(Static Single Assignment, SSA) 형식이다.</p>
+<h2 id="ssa-">SSA 형식</h2>
+<p>SSA 형식은 현대 컴파일러 최적화의 근간이 되는 IR 형태이다. SSA의 핵심 규칙은 단 하나이다. 모든 변수는 정확히 한 번만 정의된다.</p>
+<pre><code>일반 코드:           SSA 형식:
+x = 1                x₁ = 1
+x = 2                x₂ = 2
+y = x + 3            y₁ = x₂ + 3</code></pre>
+<p>변수가 한 번만 정의되므로, 어떤 사용 지점에서든 그 값이 어디에서 왔는지가 명확해진다. 이 성질은 많은 최적화를 극적으로 단순화한다. 예를 들어 상수 전파를 수행할 때, 일반적인 IR에서는 변수가 여러 번 재정의될 수 있으므로 도달 정의 분석(Reaching Definition Analysis)이 필요하다. SSA에서는 정의가 하나뿐이므로 정의와 사용의 관계가 자명한 것이다.</p>
+<p>그런데 조건문에서 변수의 값이 분기에 따라 달라지는 경우는 어떻게 처리하는 것일까? 이를 위해 φ 함수(phi function)가 도입된다.</p>
+<pre><code>if (cond)
+  x₁ = 1
+else
+  x₂ = 2
+x₃ = φ(x₁, x₂)     ← 어떤 분기에서 왔는지에 따라 x₁ 또는 x₂ 선택
+y₁ = x₃ + 3</code></pre>
+<p>φ 함수는 실제로 실행되는 명령어가 아니라 SSA 형식을 유지하기 위한 표기법이다. 코드 생성 시에는 적절한 복사 명령어로 치환되거나 레지스터 할당 과정에서 제거된다.</p>
+<h2 id="-">주요 최적화 기법</h2>
+<p>IR이 갖춰지면 컴파일러는 다양한 최적화를 수행하여 프로그램의 실행 속도를 높이고 크기를 줄인다. 최적화는 프로그램의 의미를 변경하지 않으면서 성능을 개선하는 변환이다.</p>
+<p><strong>상수 폴딩(Constant Folding)</strong> 은 컴파일 시점에 계산할 수 있는 식을 미리 계산하는 것이다. <code class="inline-code">x = 3 + 5</code>는 <code class="inline-code">x = 8</code>로 치환된다. 단순하지만 효과적이며, 다른 최적화와 연쇄적으로 결합될 때 큰 효과를 발휘한다.</p>
+<p><strong>죽은 코드 제거(Dead Code Elimination)</strong> 는 실행 결과에 영향을 미치지 않는 코드를 제거하는 것이다. 어떤 변수가 정의된 후 다시 사용되지 않는다면, 그 정의는 프로그램의 결과에 기여하지 않으므로 안전하게 제거할 수 있다. SSA에서는 각 정의의 사용처가 명확하므로 죽은 코드 판별이 간단해진다.</p>
+<pre><code>최적화 전:              최적화 후:
+t1 = a + b             t1 = a + b
+t2 = c * d             (제거: t2는 사용되지 않음)
+t3 = t1 + 1            t3 = t1 + 1
+return t3              return t3</code></pre>
+<p><strong>공통 부분식 제거(Common Subexpression Elimination)</strong> 는 동일한 계산이 반복될 때 한 번만 수행하도록 하는 것이다. <code class="inline-code">a = b + c; d = b + c;</code>에서 <code class="inline-code">b + c</code>는 두 번 계산될 필요가 없으므로 <code class="inline-code">d = a</code>로 대체할 수 있다.</p>
+<p><strong>루프 최적화</strong>는 프로그램의 실행 시간 대부분을 차지하는 루프를 대상으로 한다. 루프 불변 코드 이동(Loop-Invariant Code Motion)은 루프 내에서 값이 변하지 않는 계산을 루프 밖으로 옮기는 것이다. 루프 언롤링(Loop Unrolling)은 루프 본체를 여러 번 복제하여 분기 오버헤드를 줄이는 것이다. 귀납 변수 최적화(Induction Variable Optimization)는 루프 카운터와 연동되는 변수의 계산을 단순화한다.</p>
+<pre><code>루프 불변 코드 이동 예시:
+
+최적화 전:                  최적화 후:
+for (i = 0; i &lt; n; i++)    t = x * y           ← 루프 밖으로 이동
+  a[i] = x * y + i         for (i = 0; i &lt; n; i++)
+                              a[i] = t + i</code></pre>
+<h2 id="llvm-ir">LLVM IR</h2>
+<p>LLVM은 중간 표현 개념을 가장 성공적으로 구현한 현대 컴파일러 기반 구조이다. LLVM IR은 세 가지 형태로 존재한다. 사람이 읽을 수 있는 텍스트 형태(.ll), 메모리 내 자료 구조, 그리고 바이트코드 형태(.bc)이다.</p>
+<pre><code class="language-llvm">define i32 @add(i32 %a, i32 %b) {
+entry:
+  %result = add i32 %a, %b
+  ret i32 %result
+}</code></pre>
+<p>위는 두 정수를 더하는 함수의 LLVM IR이다. 타입 정보가 명시적이고, SSA 형식을 따르며, 특정 하드웨어에 종속되지 않는다. Clang(C/C++), Rustc(Rust), Swift 컴파일러 등이 모두 LLVM IR로 변환한 후 LLVM 백엔드에서 최적화와 코드 생성을 수행한다. 하나의 IR 위에 다양한 언어가 올라가고, 하나의 최적화 파이프라인을 공유하는 구조가 실현된 것이다.</p>
+<h2 id="-">최적화 패스</h2>
+<p>실제 컴파일러에서 최적화는 하나의 거대한 단계가 아니라 여러 개의 작은 패스(Pass)로 나뉘어 순서대로 적용된다. 각 패스는 하나의 특정 최적화만 수행하며, 패스의 순서와 조합이 최종 성능에 영향을 미친다.</p>
+<pre><code>IR → [상수 전파] → [죽은 코드 제거] → [공통 부분식 제거]
+  → [루프 불변 코드 이동] → [레지스터 승격] → ... → 최적화된 IR</code></pre>
+<p>패스 기반 설계의 장점은 각 패스를 독립적으로 개발하고 테스트할 수 있다는 것이다. 또한 최적화 수준(-O0, -O1, -O2, -O3)에 따라 적용하는 패스의 집합을 달리하여 컴파일 시간과 코드 품질 사이의 균형을 조절할 수 있다. 하나의 패스가 수행한 변환이 다른 패스에 새로운 최적화 기회를 만들어 주기 때문에, 동일한 패스를 여러 번 반복 적용하는 것이 효과적인 경우도 있다.</p>
+<p>중간 표현과 최적화는 컴파일러의 심장부이다. 프런트엔드가 만들어 낸 프로그램의 의미를 보존하면서도 더 효율적인 형태로 변환하는 이 과정이 있기에, 우리가 작성하는 고수준 코드가 하드웨어에서 빠르게 실행될 수 있는 것이다. 다음 포스트에서는 최적화된 IR을 실제 기계어로 변환하는 코드 생성을 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/mlops-08.html" class="nav-prev">← MLOps 08 - 피처 스토어</a>
+        
+        
+        <a href="/tech/ko/posts/platform-engineering-10.html" class="nav-next">플랫폼 엔지니어링 10 - 보안과 거버넌스 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

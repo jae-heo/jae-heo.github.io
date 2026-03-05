@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오토마타와 컴파일러 08 - 상향식 파싱 - 재영의 기술 블로그</title>
+    <meta name="description" content="시프트-리듀스 파싱과 LR 파서의 원리, 그리고 파서 생성기가 동작하는 방식">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/compiler-08.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/compiler-08.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/compiler-08.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/compiler-08.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-08.html">
+    <meta property="og:title" content="오토마타와 컴파일러 08 - 상향식 파싱">
+    <meta property="og:description" content="시프트-리듀스 파싱과 LR 파서의 원리, 그리고 파서 생성기가 동작하는 방식">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-04T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="compiler">
+    
+    <meta property="article:tag" content="parser">
+    
+    <meta property="article:tag" content="bottom-up">
+    
+    <meta property="article:tag" content="lr-parser">
+    
+    <meta property="article:tag" content="shift-reduce">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-08.html">
+    <meta name="twitter:title" content="오토마타와 컴파일러 08 - 상향식 파싱">
+    <meta name="twitter:description" content="시프트-리듀스 파싱과 LR 파서의 원리, 그리고 파서 생성기가 동작하는 방식">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "오토마타와 컴파일러 08 - 상향식 파싱",
+  "description": [
+    "시프트-리듀스 파싱과 LR 파서의 원리",
+    "그리고 파서 생성기가 동작하는 방식"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-04T00:00:00.000Z",
+  "dateModified": "2026-02-04T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/compiler-08.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "compiler, parser, bottom-up, lr-parser, shift-reduce"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="오토마타와 컴파일러 08 - 상향식 파싱">오토마타와 컴파일러 08 - 상향식 파싱</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>오토마타와 컴파일러 08 - 상향식 파싱</h1>
+        <time datetime=""2026-02-04T00:00:00.000Z"">February 4, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 오토마타와 컴파일러 (8/12)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/compiler.html" class="tag">compiler</a>
+                    
+                    <a href="/tech/ko/tags/parser.html" class="tag">parser</a>
+                    
+                    <a href="/tech/ko/tags/bottom-up.html" class="tag">bottom-up</a>
+                    
+                    <a href="/tech/ko/tags/lr-parser.html" class="tag">lr-parser</a>
+                    
+                    <a href="/tech/ko/tags/shift-reduce.html" class="tag">shift-reduce</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 오토마타와 컴파일러</h3>
+        <p class="post-series-description">유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-01.html" class="post-series-link">오토마타와 컴파일러 01 - 유한 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-02.html" class="post-series-link">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-03.html" class="post-series-link">오토마타와 컴파일러 03 - 문맥 자유 문법</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-04.html" class="post-series-link">오토마타와 컴파일러 04 - 푸시다운 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-05.html" class="post-series-link">오토마타와 컴파일러 05 - 컴파일러 개요 — 단계와 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-06.html" class="post-series-link">오토마타와 컴파일러 06 - 어휘 분석</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-07.html" class="post-series-link">오토마타와 컴파일러 07 - 하향식 파싱</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                오토마타와 컴파일러 08 - 상향식 파싱
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-09.html" class="post-series-link">오토마타와 컴파일러 09 - 추상 구문 트리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-10.html" class="post-series-link">오토마타와 컴파일러 10 - 의미 분석과 타입 검사</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-11.html" class="post-series-link">오토마타와 컴파일러 11 - 중간 표현과 최적화</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-12.html" class="post-series-link">오토마타와 컴파일러 12 - 코드 생성</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">아래에서 위로</h2>
+<p>이전 포스트에서 다룬 하향식 파싱은 시작 기호에서 출발하여 입력 문자열을 향해 내려가는 방식이었다. 상향식 파싱(Bottom-Up Parsing)은 그 반대이다. 입력 문자열의 토큰들에서 출발하여 문법 규칙을 역으로 적용하면서 시작 기호까지 올라가는 것이다. 이 과정에서 파서는 최우단 유도(Rightmost Derivation)의 역순을 추적한다.</p>
+<p>과연 방향을 뒤집는 것만으로 의미 있는 차이가 생기는 것일까? 그렇다. 상향식 파서는 하향식 파서보다 훨씬 넓은 부류의 문법을 처리할 수 있다. LL(1)으로 표현할 수 없었던 많은 문법이 LR 파싱에서는 자연스럽게 처리되며, 좌재귀 같은 문제도 별도의 변환 없이 다룰 수 있다. 이것이 상향식 파싱이 파서 생성기의 표준 방식으로 자리 잡은 이유이다.</p>
+<h2 id="-">시프트-리듀스 파싱</h2>
+<p>상향식 파싱의 핵심 메커니즘은 시프트-리듀스(Shift-Reduce) 파싱이다. 파서는 스택과 입력 버퍼를 사용하며, 두 가지 동작을 반복한다.</p>
+<ul class="ul-list">
+<li><strong>시프트(Shift)</strong>: 입력에서 다음 토큰을 읽어 스택에 푸시한다.</li><li><strong>리듀스(Reduce)</strong>: 스택 최상위의 기호열이 어떤 문법 규칙의 우변과 일치하면, 그것을 규칙의 좌변(비단말 기호)으로 교체한다.</li></ul>
+<p><code class="inline-code">id + id * id</code>를 파싱하는 과정을 다음 문법으로 추적해 보자.</p>
+<pre><code>E → E + T | T
+T → T * F | F
+F → id</code></pre>
+<pre><code>스택           입력              동작
+                id + id * id $
+id              + id * id $    시프트
+F               + id * id $    리듀스 (F → id)
+T               + id * id $    리듀스 (T → F)
+E               + id * id $    리듀스 (E → T)
+E +             id * id $      시프트
+E + id          * id $         시프트
+E + F           * id $         리듀스 (F → id)
+E + T           * id $         리듀스 (T → F)
+E + T *         id $           시프트
+E + T * id      $              시프트
+E + T * F       $              리듀스 (F → id)
+E + T           $              리듀스 (T → T * F)
+E               $              리듀스 (E → E + T)</code></pre>
+<p>최종적으로 스택에 시작 기호 E만 남으면 파싱이 성공한 것이다. 이 과정에서 리듀스가 적용되는 순서를 뒤집으면 최우단 유도가 된다는 점이 중요하다.</p>
+<p>핵심적인 질문은 언제 시프트하고 언제 리듀스할 것인가이다. 이 결정을 자동화한 것이 LR 파싱이다.</p>
+<h2 id="lr-">LR 파싱의 원리</h2>
+<p>LR 파서는 유한 오토마타와 파싱 테이블을 결합하여 시프트-리듀스 결정을 자동으로 수행한다. LR이라는 이름은 입력을 왼쪽에서 오른쪽으로(Left-to-right) 읽으면서 최우단 유도의 역순(Rightmost derivation in reverse)을 생성한다는 뜻이다.</p>
+<p>LR 파서의 핵심은 아이템(Item)과 상태(State)의 개념이다. LR(0) 아이템은 문법 규칙 내에서 파싱이 어디까지 진행되었는지를 나타내는 표기법이다. 점(·)이 현재 위치를 표시한다.</p>
+<pre><code>E → ·E + T    (아직 아무것도 인식하지 못한 상태)
+E → E·+ T     (E를 인식한 상태)
+E → E +·T     (+를 인식한 상태)
+E → E + T·    (전체를 인식한 상태, 리듀스 가능)</code></pre>
+<p>같은 시점에 가능한 여러 아이템을 모아 하나의 상태를 구성하고, 이 상태들 사이의 전이를 정의하면 LR 오토마톤이 만들어진다. 이 오토마톤으로부터 파싱 테이블의 시프트, 리듀스, GOTO 동작이 결정되는 것이다.</p>
+<h2 id="lr-">LR 파서의 종류</h2>
+<p>LR 파서는 테이블 구성 방식에 따라 여러 변종이 있으며, 각각 처리할 수 있는 문법의 범위와 테이블 크기에서 차이를 보인다.</p>
+<table>
+<thead>
+<tr><th>종류</th><th>선행 토큰</th><th>테이블 크기</th><th>문법 범위</th></tr>
+</thead>
+<tbody>
+<tr><td>LR(0)</td><td>0</td><td>작음</td><td>매우 제한적</td></tr>
+<tr><td>SLR(1)</td><td>1 (FOLLOW 기반)</td><td>작음</td><td>제한적</td></tr>
+<tr><td>LALR(1)</td><td>1 (정밀한 룩어헤드)</td><td>중간</td><td>대부분의 실용 문법</td></tr>
+<tr><td>CLR(1)</td><td>1 (완전한 룩어헤드)</td><td>매우 큼</td><td>가장 넓음</td></tr>
+</tbody>
+</table>
+<p>LR(0)는 선행 토큰 없이 상태만으로 결정하므로 처리할 수 있는 문법이 극히 제한적이다. SLR(1)은 FOLLOW 집합을 이용하여 리듀스 시점을 결정하지만, FOLLOW 집합은 모든 문맥에서의 가능성을 합산한 것이므로 불필요한 충돌이 발생할 수 있다.</p>
+<p>CLR(1)은 각 아이템에 정확한 룩어헤드 토큰을 부착하여 가장 넓은 범위의 문법을 처리할 수 있지만, 테이블 크기가 지수적으로 증가할 수 있다. LALR(1)은 CLR(1)에서 동일한 코어를 가진 상태를 합치는 방식으로 테이블 크기를 줄이면서도 대부분의 실용적인 프로그래밍 언어 문법을 처리할 수 있다. 이것이 LALR(1)이 실용적인 최적점으로 널리 채택되는 이유이다.</p>
+<h2 id="-">충돌 해결</h2>
+<p>LR 파싱 테이블을 구성할 때 하나의 칸에 두 가지 이상의 동작이 들어가는 경우가 있다. 이를 충돌(Conflict)이라 하며, 두 가지 종류가 있다.</p>
+<p><strong>시프트-리듀스 충돌(Shift-Reduce Conflict)</strong>: 같은 상태에서 시프트와 리듀스 모두 가능한 경우이다. 앞서 언급한 dangling else 문제가 대표적이다. <code class="inline-code">if E then if E then S · else S</code>에서 else를 시프트하면 안쪽 if에 매칭되고, 리듀스하면 바깥쪽 if에 매칭된다. 대부분의 파서 생성기는 이 경우 시프트를 기본으로 선택하여 else를 가장 가까운 if에 연결한다.</p>
+<p><strong>리듀스-리듀스 충돌(Reduce-Reduce Conflict)</strong>: 같은 상태에서 두 가지 다른 규칙으로 리듀스가 가능한 경우이다. 이 충돌은 일반적으로 문법 자체의 모호함을 나타내므로, 문법을 재설계하여 해결하는 것이 바람직하다.</p>
+<p>실용적인 파서 생성기에서는 연산자 우선순위와 결합 방향을 별도로 지정하여 충돌을 해결하는 메커니즘을 제공한다. 예를 들어 <code class="inline-code">+</code>가 좌결합이고 <code class="inline-code">*</code>가 <code class="inline-code">+</code>보다 우선순위가 높다는 선언만으로, 수식 문법의 시프트-리듀스 충돌을 자동으로 해결할 수 있는 것이다.</p>
+<h2 id="-yacc-bison">파서 생성기: Yacc과 Bison</h2>
+<p>렉서에 Lex/Flex가 있듯이, 파서에는 Yacc과 Bison이 있다. 이들은 문법 명세를 입력으로 받아 LALR(1) 파서 코드를 자동으로 생성해 주는 도구이다.</p>
+<p>Yacc/Bison의 입력 파일은 문법 규칙과 각 규칙이 리듀스될 때 실행할 액션으로 구성된다.</p>
+<pre><code class="language-yacc">%token NUMBER IDENTIFIER
+%left &#39;+&#39; &#39;-&#39;
+%left &#39;*&#39; &#39;/&#39;
+
+%%
+expr : expr &#39;+&#39; expr   { $$ = $1 + $3; }
+     | expr &#39;-&#39; expr   { $$ = $1 - $3; }
+     | expr &#39;*&#39; expr   { $$ = $1 * $3; }
+     | expr &#39;/&#39; expr   { $$ = $1 / $3; }
+     | &#39;(&#39; expr &#39;)&#39;    { $$ = $2; }
+     | NUMBER           { $$ = $1; }
+     ;
+%%</code></pre>
+<p><code class="inline-code">%left</code>와 <code class="inline-code">%right</code> 선언으로 결합 방향을 지정하고, 선언 순서로 우선순위를 결정한다. 나중에 선언된 것이 더 높은 우선순위를 갖는다. 이 선언들이 시프트-리듀스 충돌을 해결하는 데 사용되는 것이다.</p>
+<p>내부적으로 파서 생성기는 문법에서 LR 오토마톤을 구성하고, 상태를 합병하여 LALR(1) 테이블을 만들고, 충돌을 우선순위 규칙으로 해결하고, 최종적으로 테이블 구동 파서 코드를 출력한다. 오토마타 이론이 다시 한번 실전 도구로 구현되는 셈이다.</p>
+<h2 id="-">하향식과 상향식의 비교</h2>
+<p>두 접근법을 정리하면 다음과 같다.</p>
+<table>
+<thead>
+<tr><th>측면</th><th>하향식 (LL)</th><th>상향식 (LR)</th></tr>
+</thead>
+<tbody>
+<tr><td>방향</td><td>시작 기호 → 입력</td><td>입력 → 시작 기호</td></tr>
+<tr><td>유도 방식</td><td>최좌단 유도</td><td>최우단 유도의 역순</td></tr>
+<tr><td>문법 범위</td><td>LL(1) ⊂ LR(1)</td><td>더 넓은 범위</td></tr>
+<tr><td>좌재귀</td><td>변환 필요</td><td>직접 처리 가능</td></tr>
+<tr><td>구현 방식</td><td>재귀 하강 (수동)</td><td>파서 생성기 (자동)</td></tr>
+<tr><td>오류 처리</td><td>유연함</td><td>구조적</td></tr>
+<tr><td>대표 도구</td><td>ANTLR, 수동 작성</td><td>Yacc, Bison</td></tr>
+</tbody>
+</table>
+<p>실무에서는 양쪽 접근법이 모두 활발하게 사용된다. 수동 제어와 정교한 오류 메시지가 중요하면 재귀 하강 파서를, 복잡한 문법의 자동 처리가 중요하면 LR 파서 생성기를 선택하는 것이 일반적이다.</p>
+<p>어떤 방식을 선택하든 파서의 최종 산출물은 구문 트리(Parse Tree)이다. 하지만 구문 트리를 그대로 사용하기에는 불필요한 정보가 많다. 다음 포스트에서는 구문 트리에서 불필요한 요소를 제거하고 핵심 구조만 남긴 추상 구문 트리(AST)를 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/platform-engineering-06.html" class="nav-prev">← 플랫폼 엔지니어링 06 - 개발자 포털과 서비스 카탈로그</a>
+        
+        
+        <a href="/tech/ko/posts/platform-engineering-07.html" class="nav-next">플랫폼 엔지니어링 07 - 제품으로서의 플랫폼 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

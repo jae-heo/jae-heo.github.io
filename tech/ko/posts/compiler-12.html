@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오토마타와 컴파일러 12 - 코드 생성 - 재영의 기술 블로그</title>
+    <meta name="description" content="최적화된 중간 표현이 실제 기계어로 변환되는 과정과, 오토마타 이론에서 시작하여 컴파일러 구현까지 이어지는 여정의 마무리">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/compiler-12.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/compiler-12.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/compiler-12.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/compiler-12.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-12.html">
+    <meta property="og:title" content="오토마타와 컴파일러 12 - 코드 생성">
+    <meta property="og:description" content="최적화된 중간 표현이 실제 기계어로 변환되는 과정과, 오토마타 이론에서 시작하여 컴파일러 구현까지 이어지는 여정의 마무리">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-03-05T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="compiler">
+    
+    <meta property="article:tag" content="code-generation">
+    
+    <meta property="article:tag" content="register-allocation">
+    
+    <meta property="article:tag" content="instruction-selection">
+    
+    <meta property="article:tag" content="target">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-12.html">
+    <meta name="twitter:title" content="오토마타와 컴파일러 12 - 코드 생성">
+    <meta name="twitter:description" content="최적화된 중간 표현이 실제 기계어로 변환되는 과정과, 오토마타 이론에서 시작하여 컴파일러 구현까지 이어지는 여정의 마무리">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "오토마타와 컴파일러 12 - 코드 생성",
+  "description": [
+    "최적화된 중간 표현이 실제 기계어로 변환되는 과정과",
+    "오토마타 이론에서 시작하여 컴파일러 구현까지 이어지는 여정의 마무리"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-03-05T00:00:00.000Z",
+  "dateModified": "2026-03-05T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/compiler-12.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "compiler, code-generation, register-allocation, instruction-selection, target"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="오토마타와 컴파일러 12 - 코드 생성">오토마타와 컴파일러 12 - 코드 생성</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>오토마타와 컴파일러 12 - 코드 생성</h1>
+        <time datetime=""2026-03-05T00:00:00.000Z"">March 5, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 오토마타와 컴파일러 (12/12)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/compiler.html" class="tag">compiler</a>
+                    
+                    <a href="/tech/ko/tags/code-generation.html" class="tag">code-generation</a>
+                    
+                    <a href="/tech/ko/tags/register-allocation.html" class="tag">register-allocation</a>
+                    
+                    <a href="/tech/ko/tags/instruction-selection.html" class="tag">instruction-selection</a>
+                    
+                    <a href="/tech/ko/tags/target.html" class="tag">target</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 오토마타와 컴파일러</h3>
+        <p class="post-series-description">유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-01.html" class="post-series-link">오토마타와 컴파일러 01 - 유한 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-02.html" class="post-series-link">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-03.html" class="post-series-link">오토마타와 컴파일러 03 - 문맥 자유 문법</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-04.html" class="post-series-link">오토마타와 컴파일러 04 - 푸시다운 오토마타</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-05.html" class="post-series-link">오토마타와 컴파일러 05 - 컴파일러 개요 — 단계와 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-06.html" class="post-series-link">오토마타와 컴파일러 06 - 어휘 분석</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-07.html" class="post-series-link">오토마타와 컴파일러 07 - 하향식 파싱</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-08.html" class="post-series-link">오토마타와 컴파일러 08 - 상향식 파싱</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-09.html" class="post-series-link">오토마타와 컴파일러 09 - 추상 구문 트리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-10.html" class="post-series-link">오토마타와 컴파일러 10 - 의미 분석과 타입 검사</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/compiler-11.html" class="post-series-link">오토마타와 컴파일러 11 - 중간 표현과 최적화</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                오토마타와 컴파일러 12 - 코드 생성
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="ir-">IR에서 기계어로</h2>
+<p>최적화된 중간 표현은 아직 실행 가능한 프로그램이 아니다. 이를 특정 프로세서가 이해할 수 있는 기계어로 변환하는 마지막 단계가 코드 생성(Code Generation)이다. 코드 생성기는 세 가지 핵심 과제를 해결해야 한다. IR의 연산을 적절한 기계 명령어로 대응시키는 명령어 선택, 제한된 수의 레지스터에 변수를 배치하는 레지스터 할당, 그리고 파이프라인 효율을 극대화하기 위한 명령어 스케줄링이다.</p>
+<p>이 세 과제는 서로 밀접하게 얽혀 있다. 명령어 선택이 달라지면 필요한 레지스터 수가 변하고, 레지스터 할당 결과에 따라 스케줄링의 자유도가 달라진다. 각각을 독립적으로 최적화하는 것만으로는 전체 최적해에 도달할 수 없으며, 이들 사이의 균형을 잡는 것이 코드 생성기 설계의 핵심이다.</p>
+<h2 id="-">명령어 선택</h2>
+<p>명령어 선택(Instruction Selection)은 IR의 각 연산을 대상 아키텍처의 기계 명령어로 매핑하는 과정이다. 하나의 IR 연산이 하나의 기계 명령어에 대응되는 경우도 있지만, 현실은 대부분 그렇게 단순하지 않다. 하나의 IR 연산이 여러 기계 명령어의 조합으로 구현되거나, 반대로 여러 IR 연산이 하나의 복합 명령어로 합쳐질 수 있다.</p>
+<p>대표적인 명령어 선택 기법으로 트리 패턴 매칭(Tree Pattern Matching)이 있다. IR을 트리 형태로 표현한 후, 미리 정의된 명령어 패턴들을 트리에 매칭시킨다. 하나의 트리를 커버하는 방법이 여러 가지일 때, 비용이 가장 낮은 조합을 선택한다.</p>
+<pre><code>IR 트리:              패턴 매칭 결과 (x86):
+    [+]
+   /   \
+ [Reg]  [*]           → lea rax, [rbx + rcx*4]
+        / \            (덧셈과 곱셈을 하나의 LEA 명령어로 합침)
+     [Reg] [4]</code></pre>
+<p>위 예시에서 <code class="inline-code">Reg + Reg * 4</code>라는 IR 패턴은 x86의 LEA(Load Effective Address) 명령어 하나로 구현할 수 있다. 이를 두 개의 명령어(곱셈 후 덧셈)로 나누어 생성하는 것보다 효율적이다.</p>
+<p>매크로 확장(Macro Expansion)은 더 단순한 접근법이다. 각 IR 연산에 대해 미리 정해진 명령어 템플릿을 기계적으로 적용한다. 구현이 간단하지만 복합 명령어를 활용하지 못하므로 코드 품질이 낮을 수 있다. 실제 컴파일러에서는 매크로 확장으로 초기 코드를 생성한 후 핍홀 최적화(Peephole Optimization)로 인접한 명령어들을 더 효율적인 조합으로 교체하는 방식이 흔하다.</p>
+<h2 id="-">레지스터 할당</h2>
+<p>프로세서의 레지스터는 메모리보다 수십 배에서 수백 배 빠르지만, 그 수가 극히 제한되어 있다. x86-64에서 범용 레지스터는 16개, ARM에서는 31개이다. 최적화된 IR에는 수백, 수천 개의 가상 레지스터가 사용될 수 있으므로, 이를 물리 레지스터에 매핑하는 레지스터 할당(Register Allocation)은 코드 생성에서 가장 까다로운 문제이다.</p>
+<p>레지스터 할당은 그래프 색칠(Graph Coloring) 문제로 모델링할 수 있다. 먼저 간섭 그래프(Interference Graph)를 구성한다. 각 가상 레지스터가 노드가 되고, 동시에 살아 있는(live) 두 레지스터 사이에 간선을 긋는다. 이 그래프를 물리 레지스터 수만큼의 색으로 색칠할 수 있으면 모든 변수를 레지스터에 배치할 수 있는 것이다.</p>
+<pre><code>간섭 그래프 예시:
+
+가상 레지스터: v1, v2, v3, v4
+물리 레지스터: R1, R2, R3 (3개)
+
+  v1 ── v2
+  |  ×  |          v1 → R1
+  v3 ── v4          v2 → R2
+                    v3 → R2 (v2와 v3은 동시에 살아있지 않음)
+                    v4 → R3</code></pre>
+<p>그래프를 색칠할 수 없는 경우, 즉 물리 레지스터가 부족한 경우에는 일부 변수를 메모리에 저장했다 다시 불러오는 스필(Spill)이 필요하다. 어떤 변수를 스필할지에 따라 성능 영향이 크게 달라지므로, 사용 빈도와 루프 깊이를 고려하여 스필 비용이 가장 낮은 변수를 선택한다.</p>
+<p>그래프 색칠 알고리즘은 최적해를 보장하지만 NP-완전 문제이므로 실행 시간이 길어질 수 있다. 이 때문에 JIT 컴파일러처럼 컴파일 속도가 중요한 환경에서는 선형 스캔(Linear Scan) 알고리즘이 대안으로 사용된다. 선형 스캔은 변수의 수명 구간(Live Range)을 정렬한 후 순서대로 레지스터를 배정하며, O(n log n)의 시간 복잡도로 합리적인 품질의 할당을 수행한다.</p>
+<h2 id="-">명령어 스케줄링</h2>
+<p>현대 프로세서는 파이프라인을 통해 여러 명령어를 동시에 처리한다. 그러나 명령어 사이에 데이터 의존성이 있으면 파이프라인이 멈추는 스톨(Stall)이 발생한다. 명령어 스케줄링(Instruction Scheduling)은 의존성을 위반하지 않는 범위 내에서 명령어 순서를 재배치하여 스톨을 최소화하는 최적화이다.</p>
+<pre><code>스케줄링 전:                      스케줄링 후:
+load  r1, [addr1]    ← 메모리 접근   load  r1, [addr1]
+add   r2, r1, 1      ← r1 대기 스톨   load  r3, [addr2]    ← 독립적 로드를 먼저
+load  r3, [addr2]                     add   r2, r1, 1      ← r1 로드 완료 후 실행
+mul   r4, r3, 2      ← r3 대기 스톨   mul   r4, r3, 2      ← r3 로드 완료 후 실행</code></pre>
+<p>위 예시에서 두 번째 load를 앞으로 이동시켜 첫 번째 load의 지연 시간 동안 유용한 작업을 수행하도록 한 것이다. 결과적으로 동일한 명령어 집합이지만 실행 시간이 줄어든다.</p>
+<h2 id="-">스택 프레임과 호출 규약</h2>
+<p>함수 호출은 코드 생성에서 별도의 관리가 필요한 영역이다. 함수가 호출될 때마다 스택 프레임(Stack Frame)이 생성되며, 여기에 지역 변수, 저장된 레지스터, 반환 주소, 함수 인자 등이 저장된다.</p>
+<pre><code>스택 프레임 구조 (일반적인 레이아웃):
+
+높은 주소 ┌─────────────────┐
+         │   함수 인자들    │  ← 호출자가 전달
+         ├─────────────────┤
+         │   반환 주소      │  ← call 명령어가 저장
+         ├─────────────────┤
+         │ 이전 프레임 포인터│  ← 스택 체인 유지
+         ├─────────────────┤
+         │   저장된 레지스터 │  ← callee-saved 레지스터
+         ├─────────────────┤
+         │   지역 변수      │
+낮은 주소 └─────────────────┘  ← 스택 포인터 (SP)</code></pre>
+<p>호출 규약(Calling Convention)은 함수 호출 시 인자 전달 방법, 반환 값 위치, 레지스터 보존 책임 등을 정의하는 규칙이다. x86-64의 System V ABI에서는 처음 6개의 정수 인자를 RDI, RSI, RDX, RCX, R8, R9 레지스터로 전달하고, 반환 값은 RAX에 저장한다. Windows x64에서는 RCX, RDX, R8, R9를 사용한다. 코드 생성기는 대상 플랫폼의 호출 규약을 정확히 준수해야 하며, 그렇지 않으면 다른 컴파일러가 생성한 코드와 링크할 수 없게 되는 것이다.</p>
+<h2 id="-">다양한 아키텍처 대응</h2>
+<p>하나의 컴파일러가 여러 아키텍처를 지원하려면, 코드 생성기에서 아키텍처별 차이를 체계적으로 관리해야 한다. CISC 아키텍처(x86)는 복잡한 명령어와 다양한 주소 지정 모드를 제공하여 명령어 선택의 폭이 넓다. RISC 아키텍처(ARM, RISC-V)는 단순한 명령어를 빠르게 실행하는 것에 초점을 맞추므로, 하나의 IR 연산이 여러 명령어로 분해되는 경우가 많다.</p>
+<p>LLVM과 같은 컴파일러 기반 구조에서는 타겟 디스크립션(Target Description) 파일을 통해 각 아키텍처의 레지스터 집합, 명령어 정의, 호출 규약 등을 선언적으로 기술한다. 코드 생성기의 핵심 알고리즘은 아키텍처와 무관하게 유지하면서, 아키텍처 고유의 세부 사항은 타겟 디스크립션에서 읽어오는 구조이다. 새로운 아키텍처를 추가할 때 코드 생성기 전체를 다시 작성할 필요 없이 타겟 디스크립션만 추가하면 된다는 점에서 IR 기반 설계의 확장성이 드러나는 셈이다.</p>
+<h2 id="jit-">JIT 컴파일</h2>
+<p>지금까지 다룬 것은 프로그램 실행 전에 기계어를 생성하는 AOT(Ahead-of-Time) 컴파일이었다. 이에 대응하는 개념이 JIT(Just-in-Time) 컴파일이다. JIT 컴파일러는 프로그램이 실행되는 도중에 바이트코드나 IR을 기계어로 변환한다. Java의 HotSpot, JavaScript의 V8, .NET의 RyuJIT이 대표적인 JIT 컴파일러이다.</p>
+<p>JIT 컴파일의 핵심 장점은 실행 시점의 정보를 최적화에 활용할 수 있다는 것이다. AOT 컴파일러는 프로그램이 어떤 입력을 받을지, 어떤 분기를 자주 탈지를 알 수 없다. JIT 컴파일러는 프로파일링을 통해 자주 실행되는 경로(핫 패스)를 식별하고, 해당 경로에 공격적인 최적화를 적용할 수 있다. 과연 JIT이 AOT보다 항상 빠른 코드를 생성할까? 그렇지 않다. JIT 컴파일 자체에 소요되는 시간이 실행 시간에 포함되므로, 짧게 실행되는 프로그램에서는 오히려 불리하다. 오래 실행되는 서버 애플리케이션에서 JIT의 장점이 극대화되는 이유가 여기에 있다.</p>
+<h2 id="-">이론에서 실전까지</h2>
+<p>이 시리즈는 유한 오토마타라는 가장 단순한 계산 모델에서 출발했다. 유한 오토마타는 상태와 전이만으로 패턴을 인식하는 기계였으며, 이것이 컴파일러의 첫 단계인 렉서의 이론적 기반이 되었다. 정규 표현식이 유한 오토마타와 동치라는 사실, NFA를 DFA로 변환할 수 있다는 사실은 단순한 이론적 흥미를 넘어서 실제 렉서 구현의 토대가 되는 것이었다.</p>
+<p>유한 오토마타의 한계를 인식하면서 우리는 스택을 가진 푸시다운 오토마타로 나아갔고, 이것이 파서의 이론적 기반이 되었다. 문맥 자유 문법으로 프로그래밍 언어의 구조를 기술하고, LL 파싱과 LR 파싱이라는 체계적인 구문 분석 방법을 공부했다. 이 파싱 이론이 Yacc나 ANTLR 같은 파서 생성기의 핵심 원리였다.</p>
+<p>그 위에 의미 분석이 타입 안전성과 스코프 규칙을 보장했고, 중간 표현과 최적화가 프로그램의 의미를 보존하면서 성능을 개선했으며, 최종적으로 코드 생성이 추상적인 표현을 실제 하드웨어가 실행할 수 있는 명령어로 변환했다.</p>
+<p>돌아보면, 컴파일러의 각 단계는 이론 위에 세워진 공학이다. 오토마타 이론이 없었다면 렉서와 파서를 체계적으로 설계할 근거가 없었을 것이고, 형식 언어 이론이 없었다면 프로그래밍 언어의 문법을 정확하게 기술할 방법이 없었을 것이다. 우리가 매일 사용하는 컴파일러가 수십 년간의 이론적 연구 위에 서 있다는 사실을 이 시리즈를 통해 조금이나마 전달할 수 있었기를 바란다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/mlops-10.html" class="nav-prev">← MLOps 10 - MLOps 플랫폼 구축</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>
