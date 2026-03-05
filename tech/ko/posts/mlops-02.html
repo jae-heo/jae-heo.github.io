@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps 02 - 데이터 파이프라인과 피처 엔지니어링 - 재영의 기술 블로그</title>
+    <meta name="description" content="원시 데이터가 학습 데이터가 되기까지의 과정과, 데이터 품질이 모델 성능을 결정하는 이유">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/mlops-02.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/mlops-02.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/mlops-02.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/mlops-02.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-02.html">
+    <meta property="og:title" content="MLOps 02 - 데이터 파이프라인과 피처 엔지니어링">
+    <meta property="og:description" content="원시 데이터가 학습 데이터가 되기까지의 과정과, 데이터 품질이 모델 성능을 결정하는 이유">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-01-09T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="mlops">
+    
+    <meta property="article:tag" content="data-pipeline">
+    
+    <meta property="article:tag" content="feature-engineering">
+    
+    <meta property="article:tag" content="etl">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-02.html">
+    <meta name="twitter:title" content="MLOps 02 - 데이터 파이프라인과 피처 엔지니어링">
+    <meta name="twitter:description" content="원시 데이터가 학습 데이터가 되기까지의 과정과, 데이터 품질이 모델 성능을 결정하는 이유">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MLOps 02 - 데이터 파이프라인과 피처 엔지니어링",
+  "description": [
+    "원시 데이터가 학습 데이터가 되기까지의 과정과",
+    "데이터 품질이 모델 성능을 결정하는 이유"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-09T00:00:00.000Z",
+  "dateModified": "2026-01-09T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/mlops-02.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "mlops, data-pipeline, feature-engineering, etl"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="MLOps 02 - 데이터 파이프라인과 피처 엔지니어링">MLOps 02 - 데이터 파이프라인과 피처 엔지니어링</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>MLOps 02 - 데이터 파이프라인과 피처 엔지니어링</h1>
+        <time datetime=""2026-01-09T00:00:00.000Z"">January 9, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 MLOps 기초 (2/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/mlops.html" class="tag">mlops</a>
+                    
+                    <a href="/tech/ko/tags/data-pipeline.html" class="tag">data-pipeline</a>
+                    
+                    <a href="/tech/ko/tags/feature-engineering.html" class="tag">feature-engineering</a>
+                    
+                    <a href="/tech/ko/tags/etl.html" class="tag">etl</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 MLOps 기초</h3>
+        <p class="post-series-description">데이터 파이프라인부터 프로덕션 모니터링까지, ML 시스템 운영의 기초</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-01.html" class="post-series-link">MLOps 01 - MLOps란 무엇인가?</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                MLOps 02 - 데이터 파이프라인과 피처 엔지니어링
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-03.html" class="post-series-link">MLOps 03 - 실험 추적과 모델 학습 관리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-04.html" class="post-series-link">MLOps 04 - 모델 버전 관리와 레지스트리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-05.html" class="post-series-link">MLOps 05 - 모델 서빙과 배포 전략</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-06.html" class="post-series-link">MLOps 06 - 모니터링과 드리프트 감지</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-07.html" class="post-series-link">MLOps 07 - ML을 위한 CI/CD</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-08.html" class="post-series-link">MLOps 08 - 피처 스토어</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-09.html" class="post-series-link">MLOps 09 - GPU 인프라와 스케일링</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-10.html" class="post-series-link">MLOps 10 - MLOps 플랫폼 구축</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">좋은 모델은 좋은 데이터에서 나온다</h2>
+<p>머신러닝 프로젝트에서 가장 흔한 착각은 모델 아키텍처가 성능을 결정한다는 것이다. 더 복잡한 모델을 쓰면 더 좋은 결과가 나올 것이라 기대하지만, 현실은 다르다. 데이터의 품질이 낮으면 아무리 정교한 모델을 사용해도 성능은 올라가지 않는다. 오히려 단순한 모델이라도 잘 정제된 데이터를 사용하면 복잡한 모델보다 나은 결과를 보이는 경우가 많다.</p>
+<p>그렇다면 원시 데이터를 학습에 적합한 형태로 만드는 과정은 어떻게 체계화할 수 있을까? 이것이 데이터 파이프라인의 역할이다.</p>
+<h2 id="-">데이터 파이프라인의 구조</h2>
+<p>데이터 파이프라인은 원시 데이터를 수집하고, 변환하고, 저장하는 일련의 자동화된 과정이다. 데이터가 생성되는 시점부터 모델이 소비하는 시점까지의 흐름을 정의하고 관리하는 것이다.</p>
+<p>이 과정에서 가장 기본적인 패턴이 ETL과 ELT이다.</p>
+<p>ETL(Extract, Transform, Load)은 데이터를 소스에서 추출한 후, 변환을 거쳐 목적지에 적재하는 방식이다. 전통적인 데이터 웨어하우스 환경에서 주로 사용되며, 변환 과정에서 데이터의 품질을 보장할 수 있다는 장점이 있다. 반면 ELT(Extract, Load, Transform)는 원시 데이터를 먼저 목적지에 적재한 후, 필요에 따라 변환하는 방식이다. 클라우드 기반의 데이터 레이크 환경에서 유리한데, 저장 비용이 저렴해지면서 원시 데이터를 보존한 채 다양한 형태로 변환할 수 있기 때문이다.</p>
+<pre><code>ETL: 소스 → 추출 → 변환 → 적재 → 웨어하우스
+ELT: 소스 → 추출 → 적재 → 데이터 레이크 → 변환 → 서빙</code></pre>
+<p>ML 파이프라인에서는 ELT 패턴이 더 자주 선택된다. 원시 데이터를 보존해두면 나중에 새로운 피처를 추가하거나 전처리 방식을 변경할 때 데이터를 다시 수집할 필요가 없기 때문이다.</p>
+<h2 id="-">피처 엔지니어링이 중요한 이유</h2>
+<p>피처 엔지니어링은 원시 데이터에서 모델이 학습할 수 있는 의미 있는 변수를 추출하거나 생성하는 과정이다. 동일한 데이터셋이라도 어떤 피처를 만들어내느냐에 따라 모델 성능이 크게 달라진다.</p>
+<p>예를 들어 전자상거래의 구매 예측 모델을 만든다고 하자. 단순히 사용자의 방문 횟수만 피처로 사용하는 것과, 최근 7일간 방문 횟수, 평균 세션 시간, 장바구니 추가 후 구매까지의 평균 시간 등을 조합하여 피처로 사용하는 것은 결과에 큰 차이를 만든다. 후자의 피처들은 사용자의 구매 의도를 더 정확하게 반영하기 때문이다.</p>
+<p>문제는 이러한 피처 엔지니어링이 일회성 작업이 아니라는 점이다. 데이터가 변하고, 비즈니스 요구사항이 바뀌고, 모델이 개선됨에 따라 피처도 지속적으로 갱신되어야 한다. 이 과정이 수작업으로 이루어지면 재현성이 떨어지고, 학습 환경과 서빙 환경에서 피처가 다르게 계산되는 학습-서빙 스큐(Training-Serving Skew) 문제가 발생하게 된다.</p>
+<h2 id="-">데이터 검증의 필요성</h2>
+<p>파이프라인이 자동화되면 데이터가 문제없이 흐를 것이라 기대하기 쉽다. 하지만 과연 그러한가? 실제로는 상류 시스템의 스키마가 예고 없이 변경되거나, 특정 필드에 null 값이 갑자기 증가하거나, 데이터의 분포가 과거와 완전히 달라지는 상황이 빈번하게 발생한다.</p>
+<p>이러한 문제를 감지하지 못한 채 모델을 학습시키면 성능 저하의 원인을 파악하기 어려워진다. 모델의 문제인지 데이터의 문제인지 구분할 수 없게 되는 것이다. 따라서 파이프라인의 각 단계에서 데이터의 품질을 검증하는 과정이 필수적이다.</p>
+<p>검증 항목은 스키마 검증(예상한 컬럼과 타입이 맞는지), 통계적 검증(값의 범위, 분포, 결측치 비율이 허용 범위 내인지), 비즈니스 규칙 검증(도메인 특화 규칙이 지켜지고 있는지) 등으로 나눌 수 있다.</p>
+<h2 id="-">주요 도구들</h2>
+<p>데이터 파이프라인과 피처 엔지니어링을 지원하는 도구들이 있다.</p>
+<table>
+<thead>
+<tr><th>도구</th><th>역할</th><th>특징</th></tr>
+</thead>
+<tbody>
+<tr><td>Apache Airflow</td><td>워크플로우 오케스트레이션</td><td>DAG 기반 파이프라인 정의, 스케줄링, 모니터링</td></tr>
+<tr><td>dbt</td><td>데이터 변환</td><td>SQL 기반 변환, 버전 관리, 테스트 내장</td></tr>
+<tr><td>Great Expectations</td><td>데이터 검증</td><td>선언적 검증 규칙 정의, 데이터 프로파일링</td></tr>
+<tr><td>Feast</td><td>피처 스토어</td><td>학습/서빙 피처 일관성 보장, 피처 재사용</td></tr>
+</tbody>
+</table>
+<p>Apache Airflow는 파이프라인의 각 단계를 DAG(Directed Acyclic Graph)로 정의하여 실행 순서와 의존성을 관리한다. 특정 태스크가 실패했을 때 해당 단계부터 재실행할 수 있어 장애 복구가 용이하다.</p>
+<p>dbt는 데이터 변환을 SQL로 정의하고, 이를 버전 관리할 수 있게 한다. 변환 로직에 대한 테스트를 작성할 수 있어, 변환 결과의 정확성을 보장하는 데 유용하다.</p>
+<p>Great Expectations는 데이터에 대한 기대값을 선언적으로 정의하고, 파이프라인의 각 단계에서 자동으로 검증을 수행한다. 검증 결과를 문서화하여 데이터 품질의 이력을 추적할 수도 있다.</p>
+<p>피처 스토어는 비교적 최근에 등장한 개념으로, 피처의 정의, 계산, 저장, 서빙을 중앙에서 관리하는 시스템이다. Feast와 같은 도구를 사용하면 학습 시와 서빙 시에 동일한 피처 계산 로직을 사용하게 되어 학습-서빙 스큐 문제를 근본적으로 해결할 수 있다.</p>
+<h2 id="-">데이터 품질이 곧 모델 품질이다</h2>
+<p>결국 MLOps에서 데이터 파이프라인은 단순히 데이터를 옮기는 배관이 아니다. 데이터의 품질을 보장하고, 피처를 체계적으로 관리하며, 문제 발생 시 빠르게 감지하고 대응할 수 있는 시스템을 구축하는 것이 핵심이다. 모델의 성능을 1% 올리기 위해 아키텍처를 변경하는 것보다, 데이터의 품질을 개선하는 것이 더 큰 효과를 가져오는 경우가 대부분이다.</p>
+<p>다음 포스트에서는 모델 학습 과정을 체계적으로 관리하기 위한 실험 추적과 학습 관리를 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/platform-engineering-03.html" class="nav-prev">← 플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유</a>
+        
+        
+        <a href="/tech/ko/posts/mlops-03.html" class="nav-next">MLOps 03 - 실험 추적과 모델 학습 관리 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

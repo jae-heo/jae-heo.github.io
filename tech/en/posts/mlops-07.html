@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps 07 - CI/CD for ML - Jae's Tech Blog</title>
+    <meta name="description" content="How ML CI/CD differs from software CI/CD and what needs to be tested and automated">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/mlops-07.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/mlops-07.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/mlops-07.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/mlops-07.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/mlops-07.html">
+    <meta property="og:title" content="MLOps 07 - CI/CD for ML">
+    <meta property="og:description" content="How ML CI/CD differs from software CI/CD and what needs to be tested and automated">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-13T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="mlops">
+    
+    <meta property="article:tag" content="cicd">
+    
+    <meta property="article:tag" content="testing">
+    
+    <meta property="article:tag" content="automation">
+    
+    <meta property="article:tag" content="github-actions">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/mlops-07.html">
+    <meta name="twitter:title" content="MLOps 07 - CI/CD for ML">
+    <meta name="twitter:description" content="How ML CI/CD differs from software CI/CD and what needs to be tested and automated">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MLOps 07 - CI/CD for ML",
+  "description": "How ML CI/CD differs from software CI/CD and what needs to be tested and automated",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-13T00:00:00.000Z",
+  "dateModified": "2026-02-13T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/mlops-07.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "mlops, cicd, testing, automation, github-actions"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="MLOps 07 - CI/CD for ML">MLOps 07 - CI/CD for ML</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>MLOps 07 - CI/CD for ML</h1>
+        <time datetime=""2026-02-13T00:00:00.000Z"">February 13, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 MLOps Fundamentals (7/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/mlops.html" class="tag">mlops</a>
+                    
+                    <a href="/tech/en/tags/cicd.html" class="tag">cicd</a>
+                    
+                    <a href="/tech/en/tags/testing.html" class="tag">testing</a>
+                    
+                    <a href="/tech/en/tags/automation.html" class="tag">automation</a>
+                    
+                    <a href="/tech/en/tags/github-actions.html" class="tag">github-actions</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 MLOps Fundamentals</h3>
+        <p class="post-series-description">Building reliable ML systems from data pipelines to production monitoring</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-01.html" class="post-series-link">MLOps 01 - What Is MLOps?</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-02.html" class="post-series-link">MLOps 02 - Data Pipelines and Feature Engineering</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-03.html" class="post-series-link">MLOps 03 - Experiment Tracking and Training Management</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-04.html" class="post-series-link">MLOps 04 - Model Versioning and Registry</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-05.html" class="post-series-link">MLOps 05 - Model Serving and Deployment Strategies</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-06.html" class="post-series-link">MLOps 06 - Monitoring and Drift Detection</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                MLOps 07 - CI/CD for ML
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-08.html" class="post-series-link">MLOps 08 - Feature Stores</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-09.html" class="post-series-link">MLOps 09 - GPU Infrastructure and Scaling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-10.html" class="post-series-link">MLOps 10 - Building an MLOps Platform</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="is-testing-code-enough">Is Testing Code Enough?</h2>
+<p>In traditional software, CI/CD is a well-established concept. You commit code, tests run automatically, and if they pass, the build gets deployed. But for ML systems, this approach alone falls short.</p>
+<p>An ML system&#39;s behavior is determined by three axes: code, data, and models. Even if the code is flawless, problematic training data leads to a model that makes wrong predictions. Even if the model&#39;s accuracy is high, a serving pipeline whose preprocessing logic differs from training time will produce errors in production. Ultimately, you need a CI/CD framework that validates all three.</p>
+<p>This post examines how ML CI/CD differs from traditional software CI/CD and covers automation strategies that span data validation, model validation, and pipeline validation.</p>
+<h2 id="how-ml-cicd-differs-from-software-cicd">How ML CI/CD Differs from Software CI/CD</h2>
+<p>In software CI/CD, the test target is code. Unit tests, integration tests, and E2E tests verify code correctness, and if they pass, you deploy. It&#39;s deterministic — the same input guarantees the same output.</p>
+<p>In ML CI/CD, the situation is different. Model training is inherently non-deterministic. Even with the same code and data, random seeds, GPU computation order, and hyperparameter search can produce different results. The pass criteria shift from &quot;pass or fail&quot; to &quot;does the performance metric exceed a certain threshold.&quot;</p>
+<table>
+<thead>
+<tr><th>Aspect</th><th>Software CI/CD</th><th>ML CI/CD</th></tr>
+</thead>
+<tbody>
+<tr><td>Test Target</td><td>Code</td><td>Code + Data + Model</td></tr>
+<tr><td>Result Judgment</td><td>Pass/Fail</td><td>Performance threshold-based</td></tr>
+<tr><td>Reproducibility</td><td>Deterministic</td><td>Non-deterministic elements present</td></tr>
+<tr><td>Artifacts</td><td>Binaries, containers</td><td>Model files, metadata</td></tr>
+<tr><td>Post-deploy Validation</td><td>Functional tests</td><td>Model performance monitoring</td></tr>
+</tbody>
+</table>
+<p>Applying software CI/CD methodology as-is without recognizing these differences leads to situations where the code builds without issues, but the model fails in production.</p>
+<h2 id="data-testing">Data Testing</h2>
+<p>The first thing to validate in an ML pipeline is the data, since model quality directly depends on data quality.</p>
+<p>Data testing can be broken into schema validation, statistical validation, and business rule validation. Schema validation checks whether the data structure matches expectations — column existence, data types, and allowed ranges. Statistical validation checks whether data distributions fall within normal bounds, verifying that statistics like mean, variance, and missing value ratios haven&#39;t shifted significantly from previous datasets. Business rule validation checks domain-specific constraints — age cannot be negative, prices cannot fall outside certain ranges, and so on.</p>
+<pre><code class="language-python">import great_expectations as gx
+
+context = gx.get_context()
+validator = context.sources.pandas_default.read_csv(&quot;training_data.csv&quot;)
+
+# Schema validation
+validator.expect_column_to_exist(&quot;age&quot;)
+validator.expect_column_values_to_be_of_type(&quot;age&quot;, &quot;int64&quot;)
+
+# Range validation
+validator.expect_column_values_to_be_between(&quot;age&quot;, min_value=0, max_value=120)
+
+# Missing value validation
+validator.expect_column_values_to_not_be_null(&quot;target&quot;, mostly=0.99)
+
+# Distribution validation
+validator.expect_column_mean_to_be_between(&quot;income&quot;, min_value=30000, max_value=80000)</code></pre>
+<p>Placing data validation as the first step in the pipeline prevents bad data from flowing into the training process altogether.</p>
+<h2 id="model-testing">Model Testing</h2>
+<p>After data validation passes, the trained model itself must be validated. Model testing operates across three dimensions: performance validation, fairness validation, and robustness validation.</p>
+<p>Performance validation checks whether the model&#39;s key metrics meet predefined thresholds. It&#39;s important not to look at absolute performance alone, but to compare against the model currently deployed in production. If the new model performs worse than the existing one, there&#39;s no reason to deploy it.</p>
+<pre><code class="language-python">def validate_model(new_model, baseline_model, test_data):
+    new_metrics = evaluate(new_model, test_data)
+    baseline_metrics = evaluate(baseline_model, test_data)
+
+    # Absolute threshold validation
+    assert new_metrics[&quot;accuracy&quot;] &gt;= 0.85, &quot;Accuracy below minimum threshold&quot;
+    assert new_metrics[&quot;latency_p99&quot;] &lt;= 100, &quot;Latency exceeds 100ms&quot;
+
+    # Relative comparison validation
+    assert new_metrics[&quot;f1&quot;] &gt;= baseline_metrics[&quot;f1&quot;] * 0.98, \
+        &quot;F1 score dropped more than 2% compared to baseline&quot;</code></pre>
+<p>Fairness validation checks whether the model produces biased predictions for specific groups. Model performance should not vary significantly based on sensitive attributes like gender, age, or ethnicity. Robustness validation checks whether the model behaves stably against edge cases and adversarial inputs.</p>
+<h2 id="pipeline-validation">Pipeline Validation</h2>
+<p>Even when individual components are functioning correctly, the end-to-end pipeline must be validated separately. This means verifying that the flow from data collection through preprocessing, training, evaluation, and serving executes without breaking.</p>
+<p>A particularly critical concern in pipeline validation is training-serving skew. If the preprocessing logic at training time differs from the preprocessing logic at serving time, even a highly accurate model will produce incorrect results in production. Sharing preprocessing code between training and serving, or running tests that compare input-output snapshots, are ways to prevent this.</p>
+<h2 id="automated-retraining-triggers">Automated Retraining Triggers</h2>
+<p>When monitoring systems detect drift or performance drops below a threshold, you can build a system that automatically kicks off the retraining pipeline. These are called automated retraining triggers.</p>
+<p>There are broadly three types of triggers. Time-based triggers retrain on a fixed schedule (daily, weekly). They&#39;re simple to implement but may trigger unnecessary retraining. Performance-based triggers fire when monitoring metrics breach a threshold. Data-based triggers fire when a sufficient volume of new data has accumulated.</p>
+<p>Is fully automated retraining always desirable? Not necessarily. If an automatically retrained model gets deployed to production without validation, it could amplify problems rather than solve them. The safe approach is to automate retraining but always include a validation step before deployment.</p>
+<h2 id="model-validation-gates">Model Validation Gates</h2>
+<p>The mandatory validation steps that a retrained model must pass before reaching production are called model validation gates. These gates serve as automated quality checkpoints, blocking models that fail to meet performance standards from going live.</p>
+<pre><code class="language-yaml"># Model validation gate configuration example
+validation_gates:
+  performance:
+    accuracy_min: 0.85
+    f1_min: 0.80
+    latency_p99_max_ms: 100
+  comparison:
+    metric: f1
+    threshold: 0.98  # At least 98% of current production model
+  data_quality:
+    missing_rate_max: 0.05
+    drift_psi_max: 0.2</code></pre>
+<p>Only models that pass the validation gates are registered in the model registry with an &quot;approved&quot; status. From there, they are gradually rolled into production through canary deployments or A/B testing.</p>
+<h2 id="integration-with-experiment-tracking">Integration with Experiment Tracking</h2>
+<p>CI/CD pipelines need tight integration with experiment tracking systems. Each time automated retraining runs, hyperparameters, training data versions, performance metrics, and model artifacts should be automatically logged in the experiment tracker. Integrating tools like MLflow or Weights &amp; Biases into the pipeline makes it possible to trace which data trained which model configuration and what performance it achieved. Without this traceability, diagnosing problems when they arise becomes extremely difficult.</p>
+<h2 id="github-actions-example">GitHub Actions Example</h2>
+<p>Looking at the structure of an ML CI/CD pipeline built with GitHub Actions makes the differences from a standard CI/CD pipeline concrete.</p>
+<pre><code class="language-yaml">name: ML CI/CD Pipeline
+
+on:
+  push:
+    paths:
+      - &#39;src/**&#39;
+      - &#39;data/**&#39;
+      - &#39;configs/**&#39;
+
+jobs:
+  data-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate training data
+        run: python scripts/validate_data.py --config configs/data_schema.yaml
+      - name: Check for data drift
+        run: python scripts/check_drift.py --reference data/reference.parquet
+
+  model-training:
+    needs: data-validation
+    runs-on: [self-hosted, gpu]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Train model
+        run: python scripts/train.py --config configs/training.yaml
+      - name: Log to experiment tracker
+        run: python scripts/log_experiment.py
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trained-model
+          path: outputs/model/
+
+  model-validation:
+    needs: model-training
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download model artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: trained-model
+      - name: Run validation gates
+        run: python scripts/validate_model.py --baseline models/production/
+      - name: Check fairness metrics
+        run: python scripts/check_fairness.py
+
+  deploy-canary:
+    needs: model-validation
+    if: github.ref == &#39;refs/heads/main&#39;
+    runs-on: ubuntu-latest
+    steps:
+      - name: Register model
+        run: python scripts/register_model.py --status approved
+      - name: Deploy canary (10%)
+        run: python scripts/deploy.py --strategy canary --weight 10</code></pre>
+<p>The key points in this pipeline are that data validation precedes training, model validation gates follow training, and the final step is a safe canary deployment. If any stage fails, subsequent stages don&#39;t execute, structurally preventing problematic models from reaching production.</p>
+<h2 id="summary">Summary</h2>
+<p>ML CI/CD is fundamentally different from software CI/CD in that it must include data and models — not just code — in its validation scope. A layered approach is required: data validation to guarantee input quality, model validation gates to enforce performance standards, and pipeline validation to ensure training-serving consistency. When automated retraining triggers and experiment tracking integration are added, you have a complete framework for automating and tracking the entire model lifecycle.</p>
+<p>In the next post, we&#39;ll look at ML pipeline orchestration and workflow management tools.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-08.html" class="nav-prev">← Platform Engineering 08 - CI/CD at Scale</a>
+        
+        
+        <a href="/tech/en/posts/platform-engineering-09.html" class="nav-next">Platform Engineering 09 - Observability for Platform Engineers →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps 08 - Feature Stores - Jae's Tech Blog</title>
+    <meta name="description" content="Why feature stores exist and how they solve the training-serving skew problem">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/mlops-08.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/mlops-08.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/mlops-08.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/mlops-08.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/mlops-08.html">
+    <meta property="og:title" content="MLOps 08 - Feature Stores">
+    <meta property="og:description" content="Why feature stores exist and how they solve the training-serving skew problem">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-21T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="mlops">
+    
+    <meta property="article:tag" content="feature-store">
+    
+    <meta property="article:tag" content="feast">
+    
+    <meta property="article:tag" content="feature-engineering">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/mlops-08.html">
+    <meta name="twitter:title" content="MLOps 08 - Feature Stores">
+    <meta name="twitter:description" content="Why feature stores exist and how they solve the training-serving skew problem">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MLOps 08 - Feature Stores",
+  "description": "Why feature stores exist and how they solve the training-serving skew problem",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-21T00:00:00.000Z",
+  "dateModified": "2026-02-21T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/mlops-08.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "mlops, feature-store, feast, feature-engineering"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <div class="nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="MLOps 08 - Feature Stores">MLOps 08 - Feature Stores</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>MLOps 08 - Feature Stores</h1>
+        <time datetime=""2026-02-21T00:00:00.000Z"">February 21, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 MLOps Fundamentals (8/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/en/tags/mlops.html" class="tag">mlops</a>
+                    
+                    <a href="/tech/en/tags/feature-store.html" class="tag">feature-store</a>
+                    
+                    <a href="/tech/en/tags/feast.html" class="tag">feast</a>
+                    
+                    <a href="/tech/en/tags/feature-engineering.html" class="tag">feature-engineering</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 MLOps Fundamentals</h3>
+        <p class="post-series-description">Building reliable ML systems from data pipelines to production monitoring</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-01.html" class="post-series-link">MLOps 01 - What Is MLOps?</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-02.html" class="post-series-link">MLOps 02 - Data Pipelines and Feature Engineering</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-03.html" class="post-series-link">MLOps 03 - Experiment Tracking and Training Management</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-04.html" class="post-series-link">MLOps 04 - Model Versioning and Registry</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-05.html" class="post-series-link">MLOps 05 - Model Serving and Deployment Strategies</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-06.html" class="post-series-link">MLOps 06 - Monitoring and Drift Detection</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-07.html" class="post-series-link">MLOps 07 - CI/CD for ML</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                MLOps 08 - Feature Stores
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-09.html" class="post-series-link">MLOps 09 - GPU Infrastructure and Scaling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/mlops-10.html" class="post-series-link">MLOps 10 - Building an MLOps Platform</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="same-feature-different-results">Same Feature, Different Results?</h2>
+<p>Can you be confident that the features used during model training are identical to those used during serving? Most teams cannot answer this question with certainty. It&#39;s common for training code to compute features in pandas while serving code reimplements the same features in Java. When the two implementations diverge in subtle ways, a model that showed 95% accuracy during training exhibits unexpected performance degradation in production.</p>
+<p>This problem is called training-serving skew. The root cause is implementing features twice, and the feature store is the infrastructure component that emerged to solve it.</p>
+<h2 id="the-core-idea-behind-feature-stores">The Core Idea Behind Feature Stores</h2>
+<p>The central concept of a feature store is managing feature definitions in a single place and ensuring that both training and serving retrieve features from the same source. A feature is defined once and delivered in batch for training or in real time for serving, but the computation logic itself remains identical.</p>
+<p>To achieve this, a feature store operates two storage layers. The offline store holds large volumes of historical data for training, typically backed by a data warehouse or file system. The online store provides features with low latency for serving, using key-value stores like Redis or DynamoDB. The feature definition is singular, but the access paths are separated to suit training and serving needs.</p>
+<pre><code>Feature Definition (single source)
+    │
+    ├── Offline Store ──→ Training Pipeline (batch)
+    │   (Parquet, BigQuery)
+    │
+    └── Online Store ──→ Serving API (real-time)
+        (Redis, DynamoDB)</code></pre>
+<h2 id="point-in-time-correctness">Point-in-Time Correctness</h2>
+<p>What distinguishes a feature store from a simple cache is its guarantee of point-in-time correctness. Why does this matter so much?</p>
+<p>Consider training a loan approval model. When a loan application came in during March 2024, the model should use the customer&#39;s credit score as it was at that point in time. Using a credit score updated in June 2024 would introduce future information into training — a phenomenon known as data leakage. A model trained this way looks great in experiments but fails in production.</p>
+<p>A feature store manages timestamps for each feature, ensuring that when generating training data, only features that were actually available at that point in time are joined. Without this capability, constructing a correct training dataset becomes a highly complex engineering task on its own.</p>
+<h2 id="feature-reuse-across-teams">Feature Reuse Across Teams</h2>
+<p>Another significant value of feature stores is enabling feature reuse within an organization. If the recommendation team&#39;s user activity features can be directly consumed by the fraud detection team, duplicate work is eliminated and feature quality improves. When each team independently implements the same feature, subtle differences inevitably creep in, and verifying which implementation is correct becomes difficult.</p>
+<p>A feature store serves as a central registry, making it possible to track which features exist, who created them, and which models consume them. This goes beyond simply reducing code duplication — it enables organizational governance over features.</p>
+<h2 id="key-tools">Key Tools</h2>
+<p>The widely used feature store tools each bring different strengths to the table.</p>
+<table>
+<thead>
+<tr><th>Tool</th><th>Strengths</th><th>Best For</th></tr>
+</thead>
+<tbody>
+<tr><td>Feast</td><td>Open-source, lightweight, multiple backend support</td><td>Teams running their own infrastructure</td></tr>
+<tr><td>Tecton</td><td>Managed service, strong real-time feature transforms</td><td>Organizations where real-time ML is critical</td></tr>
+<tr><td>Hopsworks</td><td>Open-source, integrated ML platform</td><td>Teams needing an end-to-end platform</td></tr>
+<tr><td>Vertex AI Feature Store</td><td>GCP-native, BigQuery integration</td><td>GCP-based infrastructure</td></tr>
+<tr><td>SageMaker Feature Store</td><td>AWS-native, S3/Glue integration</td><td>AWS-based infrastructure</td></tr>
+</tbody>
+</table>
+<p>Feast is the most widely adopted tool, having started as an open-source project. It allows feature definitions to be written in Python code and abstracts offline and online stores behind a unified interface. For teams that need a managed service, Tecton or cloud-native solutions reduce operational overhead.</p>
+<h2 id="where-feature-stores-fit-in-the-mlops-pipeline">Where Feature Stores Fit in the MLOps Pipeline</h2>
+<p>A feature store sits between the data pipeline and model training/serving. Raw data is processed through the data pipeline, and the results are registered in the feature store. The training pipeline queries historical features from the offline store, while the serving infrastructure queries real-time features from the online store.</p>
+<pre><code>Raw Data → Data Pipeline → Feature Store → Training/Serving
+                                │
+                          Feature Registry
+                       (metadata, versions, owners)</code></pre>
+<p>In the early stages without a feature store, feature computation logic is scattered across training and serving code. This is manageable when the number of models is small, but once dozens of models share hundreds of features, maintaining consistency without centralized feature management becomes impractical. The right time to introduce a feature store is when production issues caused by training-serving skew begin to surface, or when feature duplication across teams becomes apparent.</p>
+<p>In the next post, we&#39;ll look at GPU infrastructure and scaling.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-09.html" class="nav-prev">← Platform Engineering 09 - Observability for Platform Engineers</a>
+        
+        
+        <a href="/tech/en/posts/platform-engineering-10.html" class="nav-next">Platform Engineering 10 - Security and Governance →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps 10 - MLOps 플랫폼 구축 - 재영의 기술 블로그</title>
+    <meta name="description" content="모든 구성 요소를 하나로 묶는 MLOps 플랫폼을 어떻게 구축하고 운영하는지">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/mlops-10.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/mlops-10.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/mlops-10.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/mlops-10.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-10.html">
+    <meta property="og:title" content="MLOps 10 - MLOps 플랫폼 구축">
+    <meta property="og:description" content="모든 구성 요소를 하나로 묶는 MLOps 플랫폼을 어떻게 구축하고 운영하는지">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-03-05T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="mlops">
+    
+    <meta property="article:tag" content="platform">
+    
+    <meta property="article:tag" content="kubeflow">
+    
+    <meta property="article:tag" content="architecture">
+    
+    <meta property="article:tag" content="ml-platform">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-10.html">
+    <meta name="twitter:title" content="MLOps 10 - MLOps 플랫폼 구축">
+    <meta name="twitter:description" content="모든 구성 요소를 하나로 묶는 MLOps 플랫폼을 어떻게 구축하고 운영하는지">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MLOps 10 - MLOps 플랫폼 구축",
+  "description": "모든 구성 요소를 하나로 묶는 MLOps 플랫폼을 어떻게 구축하고 운영하는지",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-03-05T00:00:00.000Z",
+  "dateModified": "2026-03-05T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/mlops-10.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "mlops, platform, kubeflow, architecture, ml-platform"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="MLOps 10 - MLOps 플랫폼 구축">MLOps 10 - MLOps 플랫폼 구축</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>MLOps 10 - MLOps 플랫폼 구축</h1>
+        <time datetime=""2026-03-05T00:00:00.000Z"">March 5, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 MLOps 기초 (10/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/mlops.html" class="tag">mlops</a>
+                    
+                    <a href="/tech/ko/tags/platform.html" class="tag">platform</a>
+                    
+                    <a href="/tech/ko/tags/kubeflow.html" class="tag">kubeflow</a>
+                    
+                    <a href="/tech/ko/tags/architecture.html" class="tag">architecture</a>
+                    
+                    <a href="/tech/ko/tags/ml-platform.html" class="tag">ml-platform</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 MLOps 기초</h3>
+        <p class="post-series-description">데이터 파이프라인부터 프로덕션 모니터링까지, ML 시스템 운영의 기초</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-01.html" class="post-series-link">MLOps 01 - MLOps란 무엇인가?</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-02.html" class="post-series-link">MLOps 02 - 데이터 파이프라인과 피처 엔지니어링</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-03.html" class="post-series-link">MLOps 03 - 실험 추적과 모델 학습 관리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-04.html" class="post-series-link">MLOps 04 - 모델 버전 관리와 레지스트리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-05.html" class="post-series-link">MLOps 05 - 모델 서빙과 배포 전략</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-06.html" class="post-series-link">MLOps 06 - 모니터링과 드리프트 감지</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-07.html" class="post-series-link">MLOps 07 - ML을 위한 CI/CD</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-08.html" class="post-series-link">MLOps 08 - 피처 스토어</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-09.html" class="post-series-link">MLOps 09 - GPU 인프라와 스케일링</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                MLOps 10 - MLOps 플랫폼 구축
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">조각들을 하나로 모으면</h2>
+<p>이 시리즈에서 다루어온 구성 요소들 — 데이터 파이프라인, 실험 추적, 모델 레지스트리, 서빙 인프라, 모니터링, 피처 스토어, GPU 인프라 — 은 각각 독립적으로 가치를 제공한다. 그러나 이 구성 요소들이 서로 연결되지 않은 채 개별 도구로만 존재하면, 엔지니어는 도구 사이의 간극을 수작업으로 메워야 한다. 실험에서 배포까지의 경로가 자동화되지 않고, 각 단계의 결과물을 다음 단계에 수동으로 전달하는 상황이 반복되는 것이다.</p>
+<p>MLOps 플랫폼은 이 구성 요소들을 하나의 통합된 시스템으로 엮어, 모델의 전체 라이프사이클이 일관된 워크플로우로 운영되게 하는 것이 목표이다.</p>
+<h2 id="-ml-">엔드투엔드 ML 플랫폼</h2>
+<p>현재 대표적인 ML 플랫폼은 크게 오픈소스와 관리형 서비스로 나뉜다.</p>
+<p>Kubeflow는 Kubernetes 위에 구축된 오픈소스 ML 플랫폼이다. 파이프라인 오케스트레이션(Kubeflow Pipelines), 모델 서빙(KServe), 노트북 환경(Jupyter), 하이퍼파라미터 튜닝(Katib) 등의 구성 요소를 제공한다. Kubernetes에 대한 깊은 이해가 필요하고 운영 부담이 크지만, 커스터마이징의 자유도가 높다는 것이 강점이다.</p>
+<p>Google의 Vertex AI와 AWS의 SageMaker는 관리형 서비스로, 인프라 운영 부담 없이 ML 파이프라인을 구축할 수 있게 한다. 데이터 전처리부터 모델 배포, 모니터링까지 하나의 서비스 안에서 처리할 수 있다. 다만 특정 클라우드에 종속된다는 점과, 세밀한 커스터마이징이 제한될 수 있다는 점은 고려해야 한다.</p>
+<table>
+<thead>
+<tr><th>플랫폼</th><th>유형</th><th>강점</th><th>고려 사항</th></tr>
+</thead>
+<tbody>
+<tr><td>Kubeflow</td><td>오픈소스</td><td>커스터마이징 자유도, 클라우드 중립</td><td>Kubernetes 운영 역량 필요</td></tr>
+<tr><td>Vertex AI</td><td>관리형 (GCP)</td><td>BigQuery/GCS 통합, AutoML</td><td>GCP 종속</td></tr>
+<tr><td>SageMaker</td><td>관리형 (AWS)</td><td>S3/ECR 통합, 광범위한 인스턴스</td><td>AWS 종속</td></tr>
+<tr><td>MLflow + 조합</td><td>오픈소스 조합</td><td>유연한 구성, 낮은 진입 장벽</td><td>통합 부담은 직접 부담</td></tr>
+</tbody>
+</table>
+<h2 id="-">구축인가, 구매인가</h2>
+<p>ML 플랫폼을 자체 구축할 것인지 기존 서비스를 사용할 것인지는 조직마다 다른 답을 가진다. 과연 자체 구축이 항상 우월한 선택인가? 그렇지 않다.</p>
+<p>자체 구축은 조직의 워크플로우에 정확히 맞는 플랫폼을 만들 수 있다는 장점이 있지만, 구축과 유지보수에 상당한 엔지니어링 인력이 필요하다. ML 엔지니어 5명으로 구성된 팀이 플랫폼 구축에 절반의 시간을 쓴다면, 정작 모델 개발에 투입할 수 있는 역량이 줄어드는 셈이다.</p>
+<p>관리형 서비스는 빠르게 시작할 수 있고 운영 부담이 적지만, 서비스가 지원하지 않는 워크플로우를 구현하기 어렵다. 많은 조직이 초기에는 관리형 서비스로 시작하여 빠르게 가치를 검증하고, 규모가 커지면서 특정 구성 요소만 자체 구축으로 전환하는 점진적 접근을 택하는 것이 이러한 이유에서이다.</p>
+<p>핵심은 플랫폼 구축 자체가 목적이 되어서는 안 된다는 것이다. 플랫폼은 ML 엔지니어와 데이터 사이언티스트가 모델을 빠르고 안정적으로 프로덕션에 반영하는 것을 돕기 위한 수단이다.</p>
+<h2 id="-">누가 플랫폼을 소유하는가?</h2>
+<p>기술적인 아키텍처만큼이나 중요한 것이 조직 구조이다. ML 플랫폼을 누가 구축하고, 누가 운영하며, 누가 사용하는지를 명확히 하지 않으면 책임의 공백이 생긴다.</p>
+<p>일반적으로 세 가지 모델이 존재한다. 첫째, 중앙 플랫폼 팀이 플랫폼을 구축하고 운영하며, ML 팀들이 사용자로서 플랫폼을 활용하는 구조이다. 플랫폼의 일관성이 높지만, 중앙 팀이 병목이 될 수 있다. 둘째, 각 ML 팀이 자체 인프라를 관리하는 분산 모델이다. 팀별 자율성이 높지만, 중복 투자와 일관성 부족이라는 대가를 치르게 된다. 셋째, 플랫폼 팀이 공통 기반을 제공하고 각 팀이 그 위에 자신의 워크플로우를 구축하는 하이브리드 모델이다.</p>
+<p>이 구조는 플랫폼 엔지니어링에서 다루었던 내부 개발자 플랫폼(IDP)의 개념과 맞닿아 있다. ML 플랫폼 팀도 결국 하나의 제품을 만드는 것이며, 그 제품의 고객은 같은 조직 내의 ML 엔지니어와 데이터 사이언티스트인 것이다. 셀프서비스, 골든 패스, 인지 부하 감소라는 플랫폼 엔지니어링의 원칙이 ML 플랫폼에도 동일하게 적용된다.</p>
+<h2 id="-">성숙도 로드맵</h2>
+<p>모든 조직이 처음부터 완전한 ML 플랫폼을 필요로 하는 것은 아니다. 성숙도에 따라 단계적으로 구축하는 것이 현실적이다.</p>
+<p>첫 번째 단계에서는 버전 관리와 실험 추적부터 시작한다. Git으로 코드를 관리하고, MLflow나 Weights &amp; Biases로 실험을 기록하는 것만으로도 재현성이 크게 향상된다.</p>
+<p>두 번째 단계에서는 파이프라인 자동화를 도입한다. 데이터 전처리부터 모델 학습까지의 과정을 Airflow나 Kubeflow Pipelines로 자동화하여, 수동 개입 없이 반복 실행할 수 있게 한다.</p>
+<p>세 번째 단계에서는 서빙과 모니터링을 체계화한다. 모델 레지스트리에서 승인된 모델을 자동으로 배포하고, 프로덕션 성능을 실시간으로 모니터링하여 드리프트를 감지하는 구조를 갖춘다.</p>
+<p>네 번째 단계에서는 피처 스토어, GPU 스케줄링 최적화, CI/CD for ML 등 고도화된 구성 요소를 추가하여 완전 자동화된 ML 라이프사이클을 운영하게 된다.</p>
+<pre><code>Level 1: 실험 추적 + 버전 관리
+    ↓
+Level 2: 파이프라인 자동화
+    ↓
+Level 3: 서빙 + 모니터링 체계화
+    ↓
+Level 4: 완전 자동화 ML 라이프사이클</code></pre>
+<p>각 단계는 이전 단계의 기반 위에 쌓이며, 조직의 필요에 따라 속도를 조절하면 된다. 중요한 것은 현재 단계에서 가장 큰 병목이 무엇인지를 파악하고, 그 병목을 해결하는 구성 요소를 우선적으로 도입하는 것이다.</p>
+<h2 id="-">시리즈를 마치며</h2>
+<p>이 시리즈는 MLOps의 전체 지형을 조망하기 위한 것이었다. ML 라이프사이클의 현실에서 출발하여, 데이터 파이프라인, 실험 관리, 모델 서빙, 모니터링, 피처 스토어, GPU 인프라를 거쳐, 이 모든 것을 하나로 엮는 플랫폼 구축까지 다루었다.</p>
+<p>MLOps는 특정 도구나 프레임워크가 아니라, 모델을 프로덕션에서 안정적으로 운영하기 위한 엔지니어링 원칙의 집합이다. 도구는 계속 변하지만, 재현성, 자동화, 모니터링, 협업이라는 근본적인 원칙은 변하지 않는다. 이 시리즈에서 다룬 각 구성 요소를 조직의 상황에 맞게 조합하고 발전시켜 나가는 것이 MLOps 실천의 핵심이다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/platform-engineering-11.html" class="nav-prev">← 플랫폼 엔지니어링 11 - 플랫폼 팀 만들기</a>
+        
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

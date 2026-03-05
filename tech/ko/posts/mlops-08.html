@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLOps 08 - 피처 스토어 - 재영의 기술 블로그</title>
+    <meta name="description" content="피처 스토어가 왜 필요한지, 학습-서빙 간 불일치를 어떻게 해결하는지">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/mlops-08.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/mlops-08.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/mlops-08.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/mlops-08.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-08.html">
+    <meta property="og:title" content="MLOps 08 - 피처 스토어">
+    <meta property="og:description" content="피처 스토어가 왜 필요한지, 학습-서빙 간 불일치를 어떻게 해결하는지">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+    <meta property="article:published_time" content=""2026-02-21T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="mlops">
+    
+    <meta property="article:tag" content="feature-store">
+    
+    <meta property="article:tag" content="feast">
+    
+    <meta property="article:tag" content="feature-engineering">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-08.html">
+    <meta name="twitter:title" content="MLOps 08 - 피처 스토어">
+    <meta name="twitter:description" content="피처 스토어가 왜 필요한지, 학습-서빙 간 불일치를 어떻게 해결하는지">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "MLOps 08 - 피처 스토어",
+  "description": [
+    "피처 스토어가 왜 필요한지",
+    "학습-서빙 간 불일치를 어떻게 해결하는지"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-21T00:00:00.000Z",
+  "dateModified": "2026-02-21T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/mlops-08.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "mlops, feature-store, feast, feature-engineering"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <div class="nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                    <span id="theme-icon">🌙</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
+        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
+                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="MLOps 08 - 피처 스토어">MLOps 08 - 피처 스토어</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <h1>MLOps 08 - 피처 스토어</h1>
+        <time datetime=""2026-02-21T00:00:00.000Z"">February 21, 2026</time>
+        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <span class="series-badge">📚 MLOps 기초 (8/10)</span>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
+                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    
+                    <a href="/tech/ko/tags/mlops.html" class="tag">mlops</a>
+                    
+                    <a href="/tech/ko/tags/feature-store.html" class="tag">feature-store</a>
+                    
+                    <a href="/tech/ko/tags/feast.html" class="tag">feast</a>
+                    
+                    <a href="/tech/ko/tags/feature-engineering.html" class="tag">feature-engineering</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 MLOps 기초</h3>
+        <p class="post-series-description">데이터 파이프라인부터 프로덕션 모니터링까지, ML 시스템 운영의 기초</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-01.html" class="post-series-link">MLOps 01 - MLOps란 무엇인가?</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-02.html" class="post-series-link">MLOps 02 - 데이터 파이프라인과 피처 엔지니어링</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-03.html" class="post-series-link">MLOps 03 - 실험 추적과 모델 학습 관리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-04.html" class="post-series-link">MLOps 04 - 모델 버전 관리와 레지스트리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-05.html" class="post-series-link">MLOps 05 - 모델 서빙과 배포 전략</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-06.html" class="post-series-link">MLOps 06 - 모니터링과 드리프트 감지</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-07.html" class="post-series-link">MLOps 07 - ML을 위한 CI/CD</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                MLOps 08 - 피처 스토어
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-09.html" class="post-series-link">MLOps 09 - GPU 인프라와 스케일링</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/mlops-10.html" class="post-series-link">MLOps 10 - MLOps 플랫폼 구축</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-content">
+        <h2 id="-">같은 피처인데 왜 결과가 다른가?</h2>
+<p>모델을 학습할 때 사용한 피처와 서빙할 때 사용하는 피처가 동일하다고 확신할 수 있는가? 대부분의 팀은 이 질문에 자신 있게 답하지 못한다. 학습 코드에서는 판다스로 피처를 계산하고, 서빙 코드에서는 자바로 같은 피처를 다시 구현하는 경우가 흔하다. 두 구현이 미묘하게 달라지면 학습 시 95%의 정확도를 보였던 모델이 프로덕션에서 예상치 못한 성능 저하를 겪게 된다.</p>
+<p>이 문제를 학습-서빙 스큐(Training-Serving Skew)라고 부른다. 피처를 두 번 구현하는 것이 근본적인 원인이며, 피처 스토어는 이 문제를 해결하기 위해 등장한 인프라이다.</p>
+<h2 id="-">피처 스토어의 핵심 아이디어</h2>
+<p>피처 스토어의 핵심은 피처 정의를 한 곳에서 관리하고, 학습과 서빙 모두 같은 소스에서 피처를 가져오게 하는 것이다. 피처를 한 번 정의하면 학습 시에는 배치로, 서빙 시에는 실시간으로 제공되지만, 계산 로직 자체는 동일하게 유지되는 구조이다.</p>
+<p>이를 위해 피처 스토어는 두 가지 저장소를 운영한다. 오프라인 스토어는 학습용 대량 데이터를 보관하며, 데이터 웨어하우스나 파일 시스템 기반으로 구성된다. 온라인 스토어는 서빙 시 낮은 지연시간으로 피처를 제공하며, Redis나 DynamoDB 같은 키-밸류 스토어를 사용한다. 피처 정의는 하나이지만, 접근 경로가 학습과 서빙에 맞게 분리되어 있는 것이다.</p>
+<pre><code>피처 정의 (단일 소스)
+    │
+    ├── 오프라인 스토어 ──→ 학습 파이프라인 (배치)
+    │   (Parquet, BigQuery)
+    │
+    └── 온라인 스토어 ──→ 서빙 API (실시간)
+        (Redis, DynamoDB)</code></pre>
+<h2 id="-">포인트-인-타임 정확성</h2>
+<p>피처 스토어가 단순한 캐시와 다른 점은 포인트-인-타임 정확성(Point-in-Time Correctness)을 보장한다는 것이다. 과연 이것이 왜 중요한가?</p>
+<p>예를 들어 대출 승인 모델을 학습한다고 가정해보자. 2024년 3월에 대출 신청이 들어왔을 때, 그 시점의 고객 신용 점수를 피처로 사용해야 한다. 2024년 6월에 업데이트된 신용 점수를 사용하면 미래 정보가 학습에 유입되는 데이터 누수(Data Leakage)가 발생하는 것이다. 이렇게 학습된 모델은 실험에서는 좋은 성능을 보이지만 프로덕션에서는 실패하게 된다.</p>
+<p>피처 스토어는 각 피처의 타임스탬프를 관리하여, 학습 데이터를 생성할 때 해당 시점에 실제로 사용 가능했던 피처만 조인한다. 이 기능이 없으면 올바른 학습 데이터셋을 만드는 것 자체가 매우 복잡한 엔지니어링 작업이 된다.</p>
+<h2 id="-">팀 간 피처 재사용</h2>
+<p>피처 스토어의 또 다른 가치는 조직 내에서 피처를 재사용할 수 있게 한다는 점이다. 추천 팀에서 계산한 사용자 활동 피처를 사기 탐지 팀이 그대로 가져다 쓸 수 있다면, 중복 작업이 줄어들고 피처의 품질도 높아진다. 각 팀이 독립적으로 같은 피처를 구현하면 미묘한 차이가 생기기 마련이고, 어떤 팀의 구현이 맞는지 검증하기도 어렵다.</p>
+<p>피처 스토어는 중앙 레지스트리 역할을 하여, 어떤 피처가 존재하고, 누가 만들었으며, 어떤 모델에서 사용되는지 추적할 수 있게 한다. 이는 단순히 코드 중복을 줄이는 것을 넘어, 피처에 대한 조직 차원의 거버넌스를 가능하게 하는 것이다.</p>
+<h2 id="-">주요 도구</h2>
+<p>현재 널리 사용되는 피처 스토어 도구들은 각각 다른 강점을 가진다.</p>
+<table>
+<thead>
+<tr><th>도구</th><th>특징</th><th>적합한 환경</th></tr>
+</thead>
+<tbody>
+<tr><td>Feast</td><td>오픈소스, 경량, 다양한 백엔드 지원</td><td>자체 인프라 운영 팀</td></tr>
+<tr><td>Tecton</td><td>관리형 서비스, 실시간 피처 변환 강점</td><td>실시간 ML이 핵심인 조직</td></tr>
+<tr><td>Hopsworks</td><td>오픈소스, 통합 ML 플랫폼 제공</td><td>엔드투엔드 플랫폼이 필요한 팀</td></tr>
+<tr><td>Vertex AI Feature Store</td><td>GCP 네이티브, BigQuery 통합</td><td>GCP 기반 인프라</td></tr>
+<tr><td>SageMaker Feature Store</td><td>AWS 네이티브, S3/Glue 통합</td><td>AWS 기반 인프라</td></tr>
+</tbody>
+</table>
+<p>Feast는 오픈소스로 시작하여 가장 널리 채택된 도구이다. 피처 정의를 파이썬 코드로 작성하고, 오프라인 스토어와 온라인 스토어를 추상화하여 동일한 인터페이스로 접근할 수 있게 한다. 관리형 서비스가 필요한 경우에는 Tecton이나 클라우드 네이티브 솔루션이 운영 부담을 줄여준다.</p>
+<h2 id="mlops-">MLOps 파이프라인에서의 위치</h2>
+<p>피처 스토어는 데이터 파이프라인과 모델 학습/서빙 사이에 위치한다. 원시 데이터가 데이터 파이프라인을 통해 가공되면, 그 결과가 피처 스토어에 등록된다. 학습 파이프라인은 오프라인 스토어에서 과거 피처를 조회하고, 서빙 인프라는 온라인 스토어에서 실시간 피처를 조회하는 구조이다.</p>
+<pre><code>원시 데이터 → 데이터 파이프라인 → 피처 스토어 → 학습/서빙
+                                    │
+                              피처 레지스트리
+                           (메타데이터, 버전, 소유자)</code></pre>
+<p>피처 스토어가 없는 초기 단계에서는 피처 계산 로직이 학습 코드와 서빙 코드에 산재하게 된다. 모델 수가 적을 때는 관리가 가능하지만, 수십 개의 모델이 수백 개의 피처를 공유하는 규모에 이르면 중앙화된 피처 관리 없이는 일관성을 유지하기 어려워진다. 피처 스토어 도입 시점은 학습-서빙 스큐로 인한 프로덕션 문제를 경험하거나, 팀 간 피처 중복이 눈에 띄기 시작할 때가 적절하다.</p>
+<p>다음 포스트에서는 GPU 인프라와 스케일링을 살펴본다.</p>
+
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/platform-engineering-09.html" class="nav-prev">← 플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성</a>
+        
+        
+        <a href="/tech/ko/posts/platform-engineering-10.html" class="nav-next">플랫폼 엔지니어링 10 - 보안과 거버넌스 →</a>
+        
+    </nav>
+</article>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Theme toggle functionality
+        const toggleBtn = document.getElementById('theme-toggle');
+        const icon = document.getElementById('theme-icon');
+
+        function updateThemeIcon(theme) {
+            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeIcon(localStorage.getItem('theme') || 'light');
+
+        toggleBtn?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>
