@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컴퓨터 구조 05 - CPU 권한 수준과 보호 - 재영의 기술 블로그</title>
+    <meta name="description" content="CPU가 왜 권한 수준을 구분하는지, x86 보호 링과 ARM 예외 수준이 어떻게 시스템을 보호하는지">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/comparch-05.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-05.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-05.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-05.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/comparch-05.html" />
+    <meta property="og:title" content="컴퓨터 구조 05 - CPU 권한 수준과 보호">
+    <meta property="og:description" content="CPU가 왜 권한 수준을 구분하는지, x86 보호 링과 ARM 예외 수준이 어떻게 시스템을 보호하는지">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-25T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="cpu-privilege">
+    
+    <meta property="article:tag" content="protection-ring">
+    
+    <meta property="article:tag" content="kernel-mode">
+    
+    <meta property="article:tag" content="protected-mode">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/comparch-05.html">
+    <meta name="twitter:title" content="컴퓨터 구조 05 - CPU 권한 수준과 보호">
+    <meta name="twitter:description" content="CPU가 왜 권한 수준을 구분하는지, x86 보호 링과 ARM 예외 수준이 어떻게 시스템을 보호하는지">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "컴퓨터 구조 05 - CPU 권한 수준과 보호",
+  "description": [
+    "CPU가 왜 권한 수준을 구분하는지",
+    "x86 보호 링과 ARM 예외 수준이 어떻게 시스템을 보호하는지"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-25T00:00:00.000Z",
+  "dateModified": "2026-01-25T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/comparch-05.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "computer-architecture, cpu-privilege, protection-ring, kernel-mode, protected-mode"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="컴퓨터 구조 05 - CPU 권한 수준과 보호">컴퓨터 구조 05 - CPU 권한 수준과 보호</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-25T00:00:00.000Z"" class="post-kicker">January 25, 2026</time>
+            <h1 class="post-title">컴퓨터 구조 05 - CPU 권한 수준과 보호</h1>
+            <p class="post-deck">CPU가 왜 권한 수준을 구분하는지, x86 보호 링과 ARM 예외 수준이 어떻게 시스템을 보호하는지</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">5분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/computer-architecture.html" class="series-badge">📚 컴퓨터 구조 (5/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/ko/tags/cpu-privilege.html" class="tag">cpu-privilege</a>
+                    
+                    <a href="/tech/ko/tags/protection-ring.html" class="tag">protection-ring</a>
+                    
+                    <a href="/tech/ko/tags/kernel-mode.html" class="tag">kernel-mode</a>
+                    
+                    <a href="/tech/ko/tags/protected-mode.html" class="tag">protected-mode</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 컴퓨터 구조</h3>
+        <p class="post-series-description">CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-01.html" class="post-series-link">컴퓨터 구조 01 - 컴퓨터 구조 개요</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-02.html" class="post-series-link">컴퓨터 구조 02 - CPU 내부 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-03.html" class="post-series-link">컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-04.html" class="post-series-link">컴퓨터 구조 04 - 파이프라인과 병렬 처리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                컴퓨터 구조 05 - CPU 권한 수준과 보호
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-06.html" class="post-series-link">컴퓨터 구조 06 - 인터럽트와 예외</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-07.html" class="post-series-link">컴퓨터 구조 07 - 메모리 계층 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-08.html" class="post-series-link">컴퓨터 구조 08 - 가상 메모리와 MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-09.html" class="post-series-link">컴퓨터 구조 09 - I/O와 DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-10.html" class="post-series-link">컴퓨터 구조 10 - 멀티코어와 현대 프로세서</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="cpu-">CPU는 왜 권한을 나누는가?</h2>
+<p>초기의 컴퓨터에는 권한이라는 개념이 없었다. 프로그램이 메모리의 어느 주소든 자유롭게 읽고 쓸 수 있었고, 하드웨어의 어떤 포트에든 직접 접근할 수 있었다. 단일 프로그램만 실행되는 환경에서는 이것이 문제가 되지 않았지만, 여러 프로그램이 동시에 실행되는 다중 프로그래밍 환경이 등장하면서 상황이 달라졌다.</p>
+<p>과연 모든 프로그램이 동등한 권한을 가져도 안전한가? 그렇지 않다. 하나의 사용자 프로그램이 다른 프로그램의 메모리를 덮어쓰거나, 디스크의 파일 시스템을 직접 조작하거나, 시스템 전체를 멈추는 명령어를 실행할 수 있다면, 안정적인 운영은 불가능하다. 운영체제가 자원을 관리하고 프로그램 간 격리를 보장하려면, 하드웨어 수준에서 &quot;이 코드는 무엇을 할 수 있고, 무엇을 할 수 없는가&quot;를 강제할 수 있어야 한다.</p>
+<p>이것이 CPU 권한 수준이 존재하는 이유이다. 권한 수준은 소프트웨어적인 규약이 아니라 하드웨어가 강제하는 제약이다. 권한이 없는 코드가 금지된 동작을 시도하면 CPU가 예외(exception)를 발생시키고, 해당 동작은 실행되지 않는다.</p>
+<h2 id="-">리얼 모드에서 보호 모드로</h2>
+<p>x86 프로세서의 역사를 살펴보면 권한의 필요성이 어떻게 인식되었는지 알 수 있다. 1978년에 출시된 8086 프로세서는 리얼 모드(Real Mode)에서만 동작했다. 리얼 모드에서는 모든 코드가 물리 메모리에 직접 접근할 수 있었고, 어떤 명령어든 제한 없이 실행할 수 있었다. 메모리 보호도, 권한 분리도 없었다.</p>
+<p>1982년에 등장한 80286 프로세서에서 보호 모드(Protected Mode)가 도입되었다. 보호 모드에서는 메모리 접근이 세그먼트 디스크립터를 통해 제어되며, 각 세그먼트에는 접근 권한이 부여된다. CPU는 매 메모리 접근마다 현재 코드의 권한이 해당 세그먼트에 접근할 자격이 있는지를 검사한다.</p>
+<p>현대의 x86 프로세서도 전원이 켜지면 리얼 모드에서 시작한다. 이는 하위 호환성을 유지하기 위한 것이다. 부트로더가 초기 설정을 마친 뒤 보호 모드(혹은 64비트 롱 모드)로 전환하면, 그때부터 하드웨어 수준의 권한 보호가 활성화된다.</p>
+<h2 id="x86-">x86 보호 링</h2>
+<p>x86 아키텍처는 4개의 권한 수준을 정의한다. 이를 보호 링(Protection Ring)이라고 부르며, Ring 0에서 Ring 3까지 존재한다.</p>
+<pre><code>┌──────────────────────────────────────┐
+│            Ring 3                     │
+│    사용자 애플리케이션                  │
+│  ┌──────────────────────────────┐    │
+│  │         Ring 2               │    │
+│  │    장치 드라이버 (거의 미사용)  │    │
+│  │  ┌──────────────────────┐    │    │
+│  │  │      Ring 1          │    │    │
+│  │  │  OS 서비스 (거의 미사용)│    │    │
+│  │  │  ┌──────────────┐    │    │    │
+│  │  │  │   Ring 0     │    │    │    │
+│  │  │  │   커널       │    │    │    │
+│  │  │  └──────────────┘    │    │    │
+│  │  └──────────────────────┘    │    │
+│  └──────────────────────────────┘    │
+└──────────────────────────────────────┘</code></pre>
+<p>Ring 0은 가장 높은 권한을 가진다. 모든 메모리에 접근할 수 있고, 모든 CPU 명령어를 실행할 수 있으며, 하드웨어 설정을 변경할 수 있다. 운영체제의 커널이 Ring 0에서 실행된다. Ring 3은 가장 낮은 권한이며, 일반 사용자 프로그램이 이 수준에서 실행된다. Ring 3의 코드는 자신에게 할당된 메모리에만 접근할 수 있고, 특권 명령어를 실행할 수 없다.</p>
+<p>Ring 1과 Ring 2는 원래 운영체제 서비스와 장치 드라이버를 위해 설계되었지만, 현실에서는 거의 사용되지 않는다. 대부분의 운영체제가 Ring 0과 Ring 3만을 사용하는 2단계 모델을 채택했기 때문이다. 다만 일부 하이퍼바이저 환경에서는 이 중간 링이 활용되기도 한다.</p>
+<p>현재 권한 수준(CPL, Current Privilege Level)은 코드 세그먼트 셀렉터의 하위 2비트에 저장된다. CPU는 명령어를 실행할 때마다 이 CPL을 확인하여 해당 동작이 허용되는지 검사한다.</p>
+<h2 id="-">특권 명령어</h2>
+<p>Ring 0에서만 실행 가능한 명령어를 특권 명령어(Privileged Instruction)라고 한다. Ring 3에서 이러한 명령어를 실행하려 하면 CPU는 일반 보호 예외(General Protection Fault, #GP)를 발생시킨다.</p>
+<table>
+<thead>
+<tr><th>명령어</th><th>동작</th><th>특권 이유</th></tr>
+</thead>
+<tbody>
+<tr><td><code class="inline-code">HLT</code></td><td>CPU 정지</td><td>시스템 전체에 영향</td></tr>
+<tr><td><code class="inline-code">LGDT</code> / <code class="inline-code">LIDT</code></td><td>GDT/IDT 레지스터 로드</td><td>메모리 보호 체계 변경</td></tr>
+<tr><td><code class="inline-code">MOV CR0, ...</code></td><td>제어 레지스터 수정</td><td>보호 모드/페이징 설정 변경</td></tr>
+<tr><td><code class="inline-code">IN</code> / <code class="inline-code">OUT</code></td><td>I/O 포트 접근</td><td>하드웨어 직접 제어</td></tr>
+<tr><td><code class="inline-code">WRMSR</code></td><td>모델 고유 레지스터 쓰기</td><td>CPU 동작 방식 변경</td></tr>
+</tbody>
+</table>
+<p>이러한 구분은 단순한 규약이 아니라 실리콘 수준에서 구현된 것이다. CPU의 디코드 단계에서 현재 CPL을 확인하고, 권한이 부족하면 명령어 실행 전에 예외를 발생시킨다. 소프트웨어가 이 검사를 우회할 방법은 없는 것이다.</p>
+<h2 id="-">권한 수준 전환: 게이트 디스크립터</h2>
+<p>Ring 3의 사용자 프로그램이 파일을 읽거나 네트워크 패킷을 보내려면 커널의 도움이 필요하다. 그런데 커널 코드는 Ring 0에서 실행되어야 한다. 그렇다면 Ring 3에서 Ring 0으로의 전환은 어떻게 이루어지는가?</p>
+<p>아무 코드로나 점프할 수 있게 허용하면 보호의 의미가 없어진다. Ring 3 코드가 커널의 임의 주소로 점프할 수 있다면, 보안 검사를 우회하는 코드 경로로 진입하는 것이 가능해지기 때문이다. 따라서 x86은 게이트 디스크립터(Gate Descriptor)라는 메커니즘을 통해 정확히 허용된 진입점으로만 전환이 가능하도록 제한한다.</p>
+<p>게이트 디스크립터에는 세 가지 주요 유형이 있다. 콜 게이트(Call Gate)는 <code class="inline-code">CALL FAR</code> 명령어를 통해 상위 권한 코드로 진입하는 경로를 제공한다. 인터럽트 게이트(Interrupt Gate)는 하드웨어 인터럽트나 <code class="inline-code">INT</code> 명령어가 발생했을 때 인터럽트 처리 루틴으로 전환하며, 전환 시 인터럽트를 자동으로 비활성화한다. 트랩 게이트(Trap Gate)는 인터럽트 게이트와 유사하지만 인터럽트를 비활성화하지 않는다는 차이가 있다.</p>
+<p>각 게이트에는 대상 세그먼트, 오프셋, 그리고 해당 게이트를 사용할 수 있는 최소 권한 수준이 기록되어 있다. CPU는 게이트를 통과할 때 스택 전환도 함께 수행한다. Ring 3의 스택을 그대로 사용하면 커널 코드가 사용자 스택에 의존하게 되어 보안 취약점이 발생하기 때문이다. TSS(Task State Segment)에 각 링별 스택 포인터가 저장되어 있으며, 권한 전환 시 CPU가 자동으로 해당 링의 스택으로 교체한다.</p>
+<h2 id="-">시스템 콜: 현대적 링 전환</h2>
+<p>현대 운영체제에서 가장 빈번한 Ring 3 → Ring 0 전환은 시스템 콜이다. 초기에는 <code class="inline-code">INT 0x80</code> 같은 소프트웨어 인터럽트를 사용했지만, 인터럽트 기반 전환은 IDT 조회, 스택 전환, 파이프라인 플러시 등의 오버헤드가 상당했다.</p>
+<p>이 문제를 해결하기 위해 x86에서는 <code class="inline-code">SYSENTER</code>/<code class="inline-code">SYSEXIT</code>(인텔)과 <code class="inline-code">SYSCALL</code>/<code class="inline-code">SYSRET</code>(AMD, 이후 공통 표준) 명령어를 도입했다. 이 명령어들은 게이트 디스크립터를 거치지 않고 MSR(Model Specific Register)에 미리 설정된 커널 진입점으로 직접 전환한다. 세그먼트 셀렉터와 스택을 하드와이어된 규칙에 따라 교체하므로, 메모리 조회가 최소화되어 전환 비용이 크게 줄어드는 것이다.</p>
+<pre><code>사용자 프로그램 (Ring 3)
+    │
+    │ SYSCALL
+    ▼
+┌─────────────────────────────┐
+│  MSR에서 커널 진입점 로드      │
+│  CPL을 0으로 변경             │
+│  커널 스택으로 전환            │
+└──────────────┬──────────────┘
+               ▼
+커널 시스템 콜 핸들러 (Ring 0)
+    │
+    │ 요청 처리
+    │
+    │ SYSRET
+    ▼
+사용자 프로그램 (Ring 3)</code></pre>
+<p>리눅스에서는 이 전환 비용을 더욱 줄이기 위해 vDSO(virtual Dynamic Shared Object)라는 기법을 사용한다. 시간 조회(<code class="inline-code">gettimeofday</code>)처럼 커널 데이터를 읽기만 하면 되는 시스템 콜은 커널이 사용자 공간에 매핑한 읽기 전용 페이지에서 직접 수행하여, Ring 전환 자체를 생략한다.</p>
+<h2 id="-">세그먼트 보호와 페이지 수준 보호</h2>
+<p>x86의 보호 메커니즘은 두 계층으로 작동한다. 세그먼트 수준 보호와 페이지 수준 보호이다.</p>
+<p>세그먼트 디스크립터에는 해당 세그먼트의 DPL(Descriptor Privilege Level)이 지정된다. CPU는 세그먼트에 접근할 때 현재 CPL과 DPL을 비교하여, CPL의 숫자가 DPL보다 크면(즉, 권한이 낮으면) 접근을 거부한다. 그러나 현대 64비트 운영체제에서는 세그먼트를 평탄(flat) 모델로 설정하여 세그먼트 보호의 역할이 크게 축소되었다. 실질적인 메모리 보호는 페이지 테이블이 담당한다.</p>
+<p>페이지 테이블의 각 엔트리에는 User/Supervisor 비트가 존재한다. 이 비트가 Supervisor로 설정된 페이지는 Ring 0에서만 접근 가능하다. 추가로 읽기/쓰기 비트, 실행 불가(NX) 비트 등이 페이지별로 세밀한 접근 제어를 제공한다. 커널 메모리를 사용자 공간에서 읽을 수 없는 것은 바로 이 비트 덕분인 것이다.</p>
+<p>최근에는 Meltdown 취약점 이후 KPTI(Kernel Page Table Isolation)가 도입되어, 사용자 모드에서 실행될 때는 커널 페이지 테이블 대부분을 아예 매핑하지 않는 방식으로 보호를 한층 강화했다.</p>
+<h2 id="arm-">ARM 예외 수준</h2>
+<p>ARM 아키텍처는 x86의 보호 링과는 다른 방식으로 권한을 구분한다. ARM(AArch64)에서는 예외 수준(Exception Level)이라는 개념을 사용하며, EL0에서 EL3까지 4단계가 있다.</p>
+<table>
+<thead>
+<tr><th>수준</th><th>용도</th><th>x86 대응</th></tr>
+</thead>
+<tbody>
+<tr><td>EL0</td><td>사용자 애플리케이션</td><td>Ring 3</td></tr>
+<tr><td>EL1</td><td>운영체제 커널</td><td>Ring 0</td></tr>
+<tr><td>EL2</td><td>하이퍼바이저</td><td>-</td></tr>
+<tr><td>EL3</td><td>보안 모니터 (TrustZone)</td><td>-</td></tr>
+</tbody>
+</table>
+<p>x86과의 가장 큰 차이는 EL2와 EL3이 아키텍처 수준에서 공식적으로 정의되어 있다는 것이다. x86에서 하이퍼바이저는 VT-x 같은 확장을 통해 별도의 루트/비루트 모드로 동작하지만, ARM에서는 예외 수준의 일부로 자연스럽게 통합되어 있다. EL3는 ARM TrustZone의 보안 모니터가 실행되는 수준으로, 보안 세계(Secure World)와 비보안 세계(Non-secure World) 사이의 전환을 관리한다.</p>
+<p>ARM에서의 권한 전환은 예외를 통해 이루어진다. 하위 수준에서 상위 수준으로의 전환은 반드시 예외(인터럽트, 시스템 콜 등)를 통해서만 가능하며, 상위 수준에서 하위 수준으로의 복귀는 <code class="inline-code">ERET</code> 명령어를 사용한다. 이 구조는 x86의 게이트 디스크립터와 동일한 목적을 달성하되, 보다 간결한 모델을 제공하는 셈이다.</p>
+<h2 id="-">하드웨어 강제의 의미</h2>
+<p>권한 수준을 소프트웨어가 아닌 하드웨어가 강제한다는 것은 결정적인 의미를 갖는다. 운영체제 커널 자체에 버그가 있어도, 하드웨어 수준의 보호가 기본적인 격리를 보장한다. 사용자 프로그램이 아무리 악의적이라 해도, Ring 3에서 실행되는 한 직접적으로 다른 프로세스의 메모리를 읽거나 하드웨어를 조작할 수 없는 것이다.</p>
+<p>물론 완벽한 보호는 존재하지 않는다. Spectre, Meltdown 같은 마이크로아키텍처 수준의 취약점이 보여주듯이, 하드웨어 보호도 구현의 세부사항에서 허점이 발견될 수 있다. 그러나 이러한 취약점이 큰 뉴스가 되었다는 사실 자체가, 하드웨어 수준 보호가 얼마나 기본적이고 중요한 보안 경계인지를 반증한다.</p>
+<p>다음 글에서는 인터럽트와 예외를 다룬다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/mlops-04.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>MLOps 04 - 모델 버전 관리와 레지스트리</strong>
+            <p>모델 버전 관리가 코드 버전 관리와 다른 이유, 그리고 모델 레지스트리의 역할</p>
+            <span class="post-nav-card-meta">
+                <span>January 24, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/compiler-07.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>오토마타와 컴파일러 07 - 하향식 파싱</strong>
+            <p>재귀 하강 파서와 LL(1) 파싱의 원리, 그리고 하향식 접근법의 강점과 한계</p>
+            <span class="post-nav-card-meta">
+                <span>January 27, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-06.html">컴퓨터 구조 06 - 인터럽트와 예외</a></h3>
+                <p>인터럽트가 존재하는 이유와 IDT, ISR, PIC/APIC의 동작 원리</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">5분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-07.html">컴퓨터 구조 07 - 메모리 계층 구조</a></h3>
+                <p>레지스터에서 HDD까지 이어지는 메모리 계층과 캐시의 동작 원리</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-08.html">컴퓨터 구조 08 - 가상 메모리와 MMU</a></h3>
+                <p>가상 메모리가 프로세스 격리를 가능하게 하는 원리와 MMU, 페이지 테이블, TLB의 동작</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

@@ -23,9 +23,8 @@ class PostFilter {
     }
 
     setup() {
-        // Get all post elements from both grid and list views
+        // Get all post elements from the grid view
         const gridPosts = document.querySelectorAll('.post-grid-view .post-preview');
-        const listPosts = document.querySelectorAll('.post-list-view .post-item');
 
         if (gridPosts.length === 0) {
             return; // Not on a post list page
@@ -39,10 +38,8 @@ class PostFilter {
             tags.forEach(tag => this.allTags.add(tag));
             if (category) this.allCategories.add(category);
 
-            // Store both grid and list elements
             this.posts.push({
                 gridElement: post,
-                listElement: listPosts[index] || null,
                 tags,
                 category,
                 title: post.querySelector('h2')?.textContent.toLowerCase() || '',
@@ -205,11 +202,8 @@ class PostFilter {
 
             const isVisible = matchesSearch && matchesCategory && matchesTags;
 
-            // Update both grid and list view elements
+            // Update grid view elements
             post.gridElement.style.display = isVisible ? '' : 'none';
-            if (post.listElement) {
-                post.listElement.style.display = isVisible ? '' : 'none';
-            }
             if (isVisible) visibleCount++;
         });
 

@@ -15,13 +15,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jae-heo.github.io">
+    <meta property="og:url" content="https://jae-heo.github.io" />
     <meta property="og:title" content="재영의 기술 블로그">
     <meta property="og:description" content="처음부터 만든 기술 블로그">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
 
@@ -37,8 +37,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -96,20 +98,28 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -118,7 +128,7 @@
         <div class="tags-index">
     <div class="page-header">
         <h1>모든 태그</h1>
-        <p class="subtitle">총 개의 태그</p>
+        <p class="subtitle">총 185개의 태그</p>
     </div>
 
     <div class="tags-cloud">
@@ -131,6 +141,11 @@
         <a href="/tech/ko/tags/platform-engineering.html" class="tag-item">
             <span class="tag-name">platform-engineering</span>
             <span class="tag-count">11</span>
+        </a>
+        
+        <a href="/tech/ko/tags/computer-architecture.html" class="tag-item">
+            <span class="tag-name">computer-architecture</span>
+            <span class="tag-count">10</span>
         </a>
         
         <a href="/tech/ko/tags/linux.html" class="tag-item">
@@ -161,6 +176,11 @@
         <a href="/tech/ko/tags/developer-experience.html" class="tag-item">
             <span class="tag-name">developer-experience</span>
             <span class="tag-count">4</span>
+        </a>
+        
+        <a href="/tech/ko/tags/cpu.html" class="tag-item">
+            <span class="tag-name">cpu</span>
+            <span class="tag-count">3</span>
         </a>
         
         <a href="/tech/ko/tags/architecture.html" class="tag-item">
@@ -208,6 +228,11 @@
             <span class="tag-count">2</span>
         </a>
         
+        <a href="/tech/ko/tags/memory.html" class="tag-item">
+            <span class="tag-name">memory</span>
+            <span class="tag-count">2</span>
+        </a>
+        
         <a href="/tech/ko/tags/kernel.html" class="tag-item">
             <span class="tag-name">kernel</span>
             <span class="tag-count">2</span>
@@ -228,6 +253,16 @@
             <span class="tag-count">2</span>
         </a>
         
+        <a href="/tech/ko/tags/virtual-memory.html" class="tag-item">
+            <span class="tag-name">virtual-memory</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/tech/ko/tags/mmu.html" class="tag-item">
+            <span class="tag-name">mmu</span>
+            <span class="tag-count">2</span>
+        </a>
+        
         <a href="/tech/ko/tags/adoption.html" class="tag-item">
             <span class="tag-name">adoption</span>
             <span class="tag-count">2</span>
@@ -245,6 +280,16 @@
         
         <a href="/tech/ko/tags/ir.html" class="tag-item">
             <span class="tag-name">ir</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/tech/ko/tags/io.html" class="tag-item">
+            <span class="tag-name">io</span>
+            <span class="tag-count">2</span>
+        </a>
+        
+        <a href="/tech/ko/tags/dma.html" class="tag-item">
+            <span class="tag-name">dma</span>
             <span class="tag-count">2</span>
         </a>
         
@@ -323,6 +368,11 @@
             <span class="tag-count">1</span>
         </a>
         
+        <a href="/tech/ko/tags/von-neumann.html" class="tag-item">
+            <span class="tag-name">von-neumann</span>
+            <span class="tag-count">1</span>
+        </a>
+        
         <a href="/tech/ko/tags/os.html" class="tag-item">
             <span class="tag-name">os</span>
             <span class="tag-count">1</span>
@@ -355,6 +405,21 @@
         
         <a href="/tech/ko/tags/ml-lifecycle.html" class="tag-item">
             <span class="tag-name">ml-lifecycle</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/alu.html" class="tag-item">
+            <span class="tag-name">alu</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/control-unit.html" class="tag-item">
+            <span class="tag-name">control-unit</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/registers.html" class="tag-item">
+            <span class="tag-name">registers</span>
             <span class="tag-count">1</span>
         </a>
         
@@ -413,6 +478,31 @@
             <span class="tag-count">1</span>
         </a>
         
+        <a href="/tech/ko/tags/isa.html" class="tag-item">
+            <span class="tag-name">isa</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/cisc.html" class="tag-item">
+            <span class="tag-name">cisc</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/risc.html" class="tag-item">
+            <span class="tag-name">risc</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/x86.html" class="tag-item">
+            <span class="tag-name">x86</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/arm.html" class="tag-item">
+            <span class="tag-name">arm</span>
+            <span class="tag-count">1</span>
+        </a>
+        
         <a href="/tech/ko/tags/scheduler.html" class="tag-item">
             <span class="tag-name">scheduler</span>
             <span class="tag-count">1</span>
@@ -425,11 +515,6 @@
         
         <a href="/tech/ko/tags/scheduling.html" class="tag-item">
             <span class="tag-name">scheduling</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/tech/ko/tags/cpu.html" class="tag-item">
-            <span class="tag-name">cpu</span>
             <span class="tag-count">1</span>
         </a>
         
@@ -473,23 +558,28 @@
             <span class="tag-count">1</span>
         </a>
         
-        <a href="/tech/ko/tags/memory.html" class="tag-item">
-            <span class="tag-name">memory</span>
+        <a href="/tech/ko/tags/pipeline.html" class="tag-item">
+            <span class="tag-name">pipeline</span>
             <span class="tag-count">1</span>
         </a>
         
-        <a href="/tech/ko/tags/virtual-memory.html" class="tag-item">
-            <span class="tag-name">virtual-memory</span>
+        <a href="/tech/ko/tags/branch-prediction.html" class="tag-item">
+            <span class="tag-name">branch-prediction</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/superscalar.html" class="tag-item">
+            <span class="tag-name">superscalar</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/ilp.html" class="tag-item">
+            <span class="tag-name">ilp</span>
             <span class="tag-count">1</span>
         </a>
         
         <a href="/tech/ko/tags/paging.html" class="tag-item">
             <span class="tag-name">paging</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/tech/ko/tags/mmu.html" class="tag-item">
-            <span class="tag-name">mmu</span>
             <span class="tag-count">1</span>
         </a>
         
@@ -530,6 +620,26 @@
         
         <a href="/tech/ko/tags/dvc.html" class="tag-item">
             <span class="tag-name">dvc</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/cpu-privilege.html" class="tag-item">
+            <span class="tag-name">cpu-privilege</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/protection-ring.html" class="tag-item">
+            <span class="tag-name">protection-ring</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/kernel-mode.html" class="tag-item">
+            <span class="tag-name">kernel-mode</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/protected-mode.html" class="tag-item">
+            <span class="tag-name">protected-mode</span>
             <span class="tag-count">1</span>
         </a>
         
@@ -603,6 +713,26 @@
             <span class="tag-count">1</span>
         </a>
         
+        <a href="/tech/ko/tags/interrupt.html" class="tag-item">
+            <span class="tag-name">interrupt</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/exception.html" class="tag-item">
+            <span class="tag-name">exception</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/idt.html" class="tag-item">
+            <span class="tag-name">idt</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/isr.html" class="tag-item">
+            <span class="tag-name">isr</span>
+            <span class="tag-count">1</span>
+        </a>
+        
         <a href="/tech/ko/tags/syscall.html" class="tag-item">
             <span class="tag-name">syscall</span>
             <span class="tag-count">1</span>
@@ -648,6 +778,26 @@
             <span class="tag-count">1</span>
         </a>
         
+        <a href="/tech/ko/tags/cache.html" class="tag-item">
+            <span class="tag-name">cache</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/memory-hierarchy.html" class="tag-item">
+            <span class="tag-name">memory-hierarchy</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/dram.html" class="tag-item">
+            <span class="tag-name">dram</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/sram.html" class="tag-item">
+            <span class="tag-name">sram</span>
+            <span class="tag-count">1</span>
+        </a>
+        
         <a href="/tech/ko/tags/ast.html" class="tag-item">
             <span class="tag-name">ast</span>
             <span class="tag-count">1</span>
@@ -658,18 +808,8 @@
             <span class="tag-count">1</span>
         </a>
         
-        <a href="/tech/ko/tags/io.html" class="tag-item">
-            <span class="tag-name">io</span>
-            <span class="tag-count">1</span>
-        </a>
-        
         <a href="/tech/ko/tags/device-driver.html" class="tag-item">
             <span class="tag-name">device-driver</span>
-            <span class="tag-count">1</span>
-        </a>
-        
-        <a href="/tech/ko/tags/dma.html" class="tag-item">
-            <span class="tag-name">dma</span>
             <span class="tag-count">1</span>
         </a>
         
@@ -690,6 +830,16 @@
         
         <a href="/tech/ko/tags/pipelines.html" class="tag-item">
             <span class="tag-name">pipelines</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/page-table.html" class="tag-item">
+            <span class="tag-name">page-table</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/tlb.html" class="tag-item">
+            <span class="tag-name">tlb</span>
             <span class="tag-count">1</span>
         </a>
         
@@ -745,6 +895,16 @@
         
         <a href="/tech/ko/tags/feast.html" class="tag-item">
             <span class="tag-name">feast</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/bus.html" class="tag-item">
+            <span class="tag-name">bus</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/pcie.html" class="tag-item">
+            <span class="tag-name">pcie</span>
             <span class="tag-count">1</span>
         </a>
         
@@ -828,6 +988,26 @@
             <span class="tag-count">1</span>
         </a>
         
+        <a href="/tech/ko/tags/multicore.html" class="tag-item">
+            <span class="tag-name">multicore</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/numa.html" class="tag-item">
+            <span class="tag-name">numa</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/smp.html" class="tag-item">
+            <span class="tag-name">smp</span>
+            <span class="tag-count">1</span>
+        </a>
+        
+        <a href="/tech/ko/tags/cache-coherence.html" class="tag-item">
+            <span class="tag-name">cache-coherence</span>
+            <span class="tag-count">1</span>
+        </a>
+        
         <a href="/tech/ko/tags/code-generation.html" class="tag-item">
             <span class="tag-name">code-generation</span>
             <span class="tag-count">1</span>
@@ -884,7 +1064,7 @@
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -906,24 +1086,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -944,6 +1106,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

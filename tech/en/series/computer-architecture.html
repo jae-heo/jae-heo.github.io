@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Architecture - Jae's Tech Blog</title>
+    <meta name="description" content="From CPU internals and privilege levels to memory hierarchy and modern multicore processors">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/series/computer-architecture.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/series/computer-architecture.html" />
+    <meta property="og:title" content="Computer Architecture">
+    <meta property="og:description" content="From CPU internals and privilege levels to memory hierarchy and modern multicore processors">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/series/computer-architecture.html">
+    <meta name="twitter:title" content="Computer Architecture">
+    <meta name="twitter:description" content="From CPU internals and privilege levels to memory hierarchy and modern multicore processors">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="series-page">
+    <div class="page-header">
+        <h1>Computer Architecture</h1>
+        <p class="subtitle">From CPU internals and privilege levels to memory hierarchy and modern multicore processors</p>
+    </div>
+
+    <section class="series-overview-card">
+        <div class="series-overview-grid">
+            <div class="series-overview-main">
+                
+                <div class="series-copy-block">
+                    <h2>Who This Is For</h2>
+                    <p>Software engineers who want stronger performance intuition and a better sense of what hardware constraints shape software behavior.</p>
+                </div>
+                
+
+                
+                <div class="series-copy-block">
+                    <h2>Prerequisites</h2>
+                    <p>General programming experience and comfort reading basic low-level concepts.</p>
+                </div>
+                
+
+                
+                
+                <div class="series-copy-block">
+                    <h2>What You'll Get</h2>
+                    <ul class="series-outcomes">
+                        
+                        <li>Understand the big pieces of modern processor and memory-system design</li>
+                        
+                        <li>Connect caches, pipelines, interrupts, virtual memory, and multicore behavior back to software performance</li>
+                        
+                        <li>Make lower-level design and debugging decisions with better intuition</li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+
+            <aside class="series-sidebar">
+                <div class="series-stat-card">
+                    <span class="series-stat-label">10 posts</span>
+                    <span class="series-stat-value">10</span>
+                </div>
+                <div class="series-stat-card">
+                    <span class="series-stat-label">65 min total</span>
+                    <span class="series-stat-value">65</span>
+                </div>
+                
+                <div class="series-stat-card">
+                    <span class="series-stat-label">Updated</span>
+                    <span class="series-stat-value">March 5, 2026</span>
+                </div>
+                
+                
+                <a class="series-start-link" href="/tech/en/posts/comparch-01.html">
+                    Recommended Start: Computer Architecture 01 - Overview
+                </a>
+                
+            </aside>
+        </div>
+    </section>
+
+    <section class="series-posts-section">
+        <div class="series-section-header">
+            <h2>All Posts</h2>
+        </div>
+        <ol class="series-posts-listing">
+            
+            <li class="series-post-row">
+                <div class="series-post-number">1</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>December 27, 2025</span>
+                        <span>4 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-01.html">Computer Architecture 01 - Overview</a></h3>
+                    <p>Core concepts of Von Neumann architecture and how CPU, memory, and buses work together</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">2</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 4, 2026</span>
+                        <span>6 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-02.html">Computer Architecture 02 - CPU Internals</a></h3>
+                    <p>How the ALU, control unit, and datapath work together to execute instructions</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">3</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 10, 2026</span>
+                        <span>6 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-03.html">Computer Architecture 03 - Instruction Set Architecture (ISA)</a></h3>
+                    <p>The role of ISAs, CISC vs RISC philosophy, and x86 versus ARM design differences</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">4</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 18, 2026</span>
+                        <span>7 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-04.html">Computer Architecture 04 - Pipelining and Parallel Processing</a></h3>
+                    <p>Instruction pipelining, hazard handling, branch prediction, superscalar and out-of-order execution</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">5</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 25, 2026</span>
+                        <span>7 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-05.html">Computer Architecture 05 - CPU Privilege Levels and Protection</a></h3>
+                    <p>Why CPUs distinguish privilege levels, and how x86 protection rings and ARM exception levels protect the system</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">6</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 2, 2026</span>
+                        <span>7 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-06.html">Computer Architecture 06 - Interrupts and Exceptions</a></h3>
+                    <p>Why interrupts exist and how IDT, ISR, PIC/APIC work</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">7</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 8, 2026</span>
+                        <span>8 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-07.html">Computer Architecture 07 - Memory Hierarchy</a></h3>
+                    <p>The memory hierarchy from registers to HDD and how caches work</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">8</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 17, 2026</span>
+                        <span>6 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-08.html">Computer Architecture 08 - Virtual Memory and MMU</a></h3>
+                    <p>How virtual memory enables process isolation through the MMU, page tables, and TLB</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">9</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 24, 2026</span>
+                        <span>6 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-09.html">Computer Architecture 09 - I/O and DMA</a></h3>
+                    <p>How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">10</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>March 5, 2026</span>
+                        <span>8 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/comparch-10.html">Computer Architecture 10 - Multicore and Modern Processors</a></h3>
+                    <p>Why clock speeds stopped increasing and the core concepts of modern multicore processor architecture</p>
+                </div>
+            </li>
+            
+        </ol>
+    </section>
+</div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

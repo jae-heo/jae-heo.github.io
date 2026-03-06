@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/linux-01.html">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/linux-01.html" />
     <meta property="og:title" content="리눅스 내부 구조 01 - 운영체제 개요">
     <meta property="og:description" content="운영체제가 하는 일과 리눅스 커널이 어떤 역할을 담당하는지">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2025-12-28T00:00:00.000Z"">
@@ -61,8 +61,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -87,7 +89,7 @@
     "name": "Jae's Tech Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
     }
   },
   "inLanguage": "ko-KR",
@@ -149,20 +151,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -170,59 +184,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Lectures</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="리눅스 내부 구조 01 - 운영체제 개요">리눅스 내부 구조 01 - 운영체제 개요</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="리눅스 내부 구조 01 - 운영체제 개요">리눅스 내부 구조 01 - 운영체제 개요</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>리눅스 내부 구조 01 - 운영체제 개요</h1>
-        <time datetime=""2025-12-28T00:00:00.000Z"">December 28, 2025</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2025-12-28T00:00:00.000Z"" class="post-kicker">December 28, 2025</time>
+            <h1 class="post-title">리눅스 내부 구조 01 - 운영체제 개요</h1>
+            <p class="post-deck">운영체제가 하는 일과 리눅스 커널이 어떤 역할을 담당하는지</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">3분 읽기</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 리눅스 내부 구조 (1/10)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/linux.html" class="series-badge">📚 리눅스 내부 구조 (1/10)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/tech/ko/tags/linux.html" class="tag">linux</a>
                     
@@ -256,7 +279,7 @@
             <!-- Current Post (Not Clickable) -->
             <span class="post-series-title">
                 리눅스 내부 구조 01 - 운영체제 개요
-                <span class="current-indicator">← You are here</span>
+                <span class="current-indicator">← 현재 글</span>
             </span>
             
         </li>
@@ -338,11 +361,15 @@
 
     
 
-    <div class="post-content">
-        <h2 id="-">운영체제는 무엇을 하는가?</h2>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">운영체제는 무엇을 하는가?</h2>
 <p>컴퓨터를 사용할 때 우리는 브라우저를 열고, 터미널에서 명령을 실행하고, 파일을 저장한다. 이러한 행위가 자연스럽게 느껴지는 이유는 운영체제가 하드웨어의 복잡성을 숨기고 있기 때문이다.</p>
-<p>운영체제의 역할은 크게 두 가지로 요약할 수 있다. 첫째, 하드웨어를 추상화하여 응용 프로그램이 하드웨어의 세부 사항을 몰라도 동작할 수 있게 하는 것이다. 둘째, 여러 프로그램이 동시에 실행될 때 CPU, 메모리, 디스크 같은 자원을 공정하게 분배하는 것이다. 이 두 가지를 수행하지 못하면 모든 프로그램이 하드웨어를 직접 제어해야 하며, 프로그램 간의 충돌을 피할 방법이 없어지는 것이다.</p>
-<h2>커널이란?</h2>
+<p>운영체제의 역할은 크게 두 가지로 요약할 수 있다. 첫째, 하드웨어를 추상화하여 응용 프로그램이 하드웨어의 세부 사항을 몰라도 동작할 수 있게 한다. 둘째, 여러 프로그램이 동시에 실행될 때 CPU, 메모리, 디스크 같은 자원을 공정하게 분배한다. 이 두 가지를 수행하지 못하면 모든 프로그램이 하드웨어를 직접 제어해야 하며, 프로그램 간의 충돌을 피할 방법이 없어지는 것이다.</p>
+<p>예를 들어 텍스트 편집기가 파일 하나를 저장하는 순간에도 운영체제는 여러 일을 대신한다. 사용자 입력을 처리하고, 해당 프로세스에 CPU 시간을 배분하고, 페이지 캐시에 데이터를 쓰고, 파일 시스템 메타데이터를 갱신하고, 필요하면 디스크 드라이버까지 호출한다. 겉보기에는 단순한 저장 버튼 하나지만, 그 뒤에는 운영체제의 거의 모든 핵심 기능이 관여한다.</p>
+<h2 id="커널이란">커널이란?</h2>
 <p>운영체제의 핵심 구성 요소가 커널이다. 커널은 하드웨어와 직접 소통하는 유일한 소프트웨어이며, 모든 응용 프로그램은 커널을 통해서만 하드웨어에 접근할 수 있다.</p>
 <p>그렇다면 커널과 운영체제는 같은 것인가? 엄밀히 말하면 다르다. 운영체제는 커널에 더해 시스템 라이브러리, 셸, 유틸리티 등을 포함하는 더 넓은 개념이다. 리눅스라는 이름은 공식적으로 커널만을 가리킨다. 우리가 흔히 리눅스라고 부르는 것은 이 커널 위에 GNU 도구와 각종 소프트웨어를 올린 배포판인 것이다.</p>
 <h2 id="-">유저 공간과 커널 공간</h2>
@@ -362,7 +389,8 @@
 ├────────────────────────────────────┤
 │              하드웨어                │
 └────────────────────────────────────┘</code></pre>
-<p>CPU 자체가 이 분리를 하드웨어 수준에서 지원한다. x86 아키텍처에서는 Ring 0(커널 모드)과 Ring 3(유저 모드)라는 권한 수준이 존재하며, 유저 모드에서 커널 모드의 명령을 실행하려 하면 CPU가 예외를 발생시킨다. 이러한 하드웨어 보호 메커니즘이 운영체제의 안정성을 보장하는 기반이 되는 것이다.</p>
+<p>CPU 자체가 이 분리를 하드웨어 수준에서 지원한다. x86 아키텍처에서는 Ring 0(커널 모드)과 Ring 3(유저 모드)라는 권한 수준이 존재하며, 유저 모드에서 커널 모드의 명령을 실행하려 하면 CPU가 예외를 발생시킨다. 이러한 하드웨어 보호 메커니즘이 운영체제의 안정성을 보장하는 기반이 된다.</p>
+<p>이 구조 덕분에 애플리케이션이 실수로 잘못된 포인터를 역참조하더라도 보통은 해당 프로세스만 죽고 시스템 전체가 무너지지는 않는다. 물론 커널 버그는 여전히 치명적이지만, 최소한 모든 프로그램이 같은 특권을 갖는 혼란스러운 환경은 피할 수 있게 된 것이다.</p>
 <h2 id="-">리눅스 커널의 주요 서브시스템</h2>
 <p>리눅스 커널은 여러 서브시스템으로 구성되어 있으며, 각각이 특정 영역의 자원 관리를 담당한다.</p>
 <table>
@@ -378,31 +406,93 @@
 <tr><td>IPC</td><td>프로세스 간 통신 (파이프, 시그널, 공유 메모리)</td></tr>
 </tbody>
 </table>
-<p>이 서브시스템들이 서로 협력하여 하나의 통합된 환경을 제공하는 것이다. 예를 들어, 웹 서버가 클라이언트의 요청을 처리하려면 네트워킹 서브시스템이 패킷을 수신하고, 프로세스 관리가 워커 프로세스를 스케줄링하고, 파일 시스템이 정적 파일을 읽어 메모리에 올리는 과정이 동시에 일어난다.</p>
+<p>이 서브시스템들이 서로 협력하여 하나의 통합된 환경을 제공한다. 예를 들어, 웹 서버가 클라이언트의 요청을 처리하려면 네트워킹 서브시스템이 패킷을 수신하고, 프로세스 관리가 워커 프로세스를 스케줄링하고, 파일 시스템이 정적 파일을 읽어 메모리에 올리는 과정이 동시에 일어난다.</p>
+<p>리눅스 내부를 공부할 때 중요한 태도도 여기에 있다. 프로세스, 메모리, 파일 시스템, 네트워킹을 각각 따로 배우더라도 실제 시스템에서는 늘 함께 움직인다. 어느 한 부분만 이해해서는 실제 성능 문제나 장애 원인을 끝까지 추적하기 어렵다.</p>
 <h2 id="-vs-">모놀리식 커널 vs 마이크로커널</h2>
 <p>커널 설계에는 크게 두 가지 접근법이 있다. 모놀리식 커널은 모든 서브시스템이 하나의 큰 바이너리로 컴파일되어 같은 주소 공간에서 실행되는 구조이다. 마이크로커널은 최소한의 기능만 커널에 두고 나머지를 유저 공간의 서버 프로세스로 분리하는 구조이다.</p>
 <p>과연 마이크로커널이 더 우수한 설계인가? 이론적으로는 그렇다. 모듈 간의 격리가 더 강하고, 하나의 서브시스템이 죽어도 전체 시스템이 멈추지 않는다. 하지만 현실에서는 유저 공간과 커널 공간 사이의 빈번한 컨텍스트 스위칭으로 인한 성능 저하가 문제가 된다.</p>
-<p>리눅스는 모놀리식 커널을 채택하고 있다. 다만, 커널 모듈이라는 메커니즘을 통해 기능을 동적으로 로드하고 언로드할 수 있어 순수한 모놀리식의 경직성을 보완하고 있다. 디바이스 드라이버가 대표적인 예로, 필요할 때만 메모리에 올리고 사용하지 않을 때는 해제할 수 있는 것이다.</p>
+<p>리눅스는 모놀리식 커널을 채택하고 있다. 다만, 커널 모듈이라는 메커니즘을 통해 기능을 동적으로 로드하고 언로드할 수 있어 순수한 모놀리식의 경직성을 보완하고 있다. 디바이스 드라이버가 대표적인 예로, 필요할 때만 메모리에 올리고 사용하지 않을 때는 해제할 수 있다.</p>
 <h2 id="-">이 시리즈에서 다루는 것</h2>
-<p>이 시리즈는 리눅스 커널의 내부 동작을 하나씩 살펴본다. 프로세스가 어떻게 생성되고 스케줄링되는지, 가상 메모리가 어떻게 동작하는지, 파일 시스템이 데이터를 어떻게 관리하는지, 그리고 최종적으로 컨테이너가 이 모든 커널 기능을 어떻게 활용하는지까지를 다룰 것이다.</p>
-<p>다음 포스트에서는 리눅스의 프로세스와 스레드를 살펴본다.</p>
+<p>이 시리즈에서는 리눅스 커널의 내부 동작을 하나씩 짚어 간다. 프로세스가 어떻게 생성되고 스케줄링되는지, 가상 메모리가 어떻게 동작하는지, 파일 시스템이 데이터를 어떻게 관리하는지, 그리고 최종적으로 컨테이너가 이 모든 커널 기능을 어떻게 활용하는지까지를 다룬다.</p>
+<p>다음 글에서는 리눅스의 프로세스와 스레드를 다룬다.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/platform-engineering-01.html" class="nav-prev">← 플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?</a>
+        <a href="/tech/ko/posts/comparch-01.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>컴퓨터 구조 01 - 컴퓨터 구조 개요</strong>
+            <p>폰 노이만 아키텍처의 핵심 개념과 CPU, 메모리, 버스가 어떻게 협력하는지</p>
+            <span class="post-nav-card-meta">
+                <span>December 27, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
         
-        <a href="/tech/ko/posts/compiler-03.html" class="nav-next">오토마타와 컴파일러 03 - 문맥 자유 문법 →</a>
+        <a href="/tech/ko/posts/compiler-03.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>오토마타와 컴파일러 03 - 문맥 자유 문법</strong>
+            <p>정규 언어의 한계를 넘어서는 문맥 자유 문법의 구조와 역할</p>
+            <span class="post-nav-card-meta">
+                <span>December 29, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/linux-02.html">리눅스 내부 구조 02 - 프로세스와 스레드</a></h3>
+                <p>리눅스에서 프로세스가 어떻게 생성되고 관리되며, 스레드와 어떤 관계를 갖는지</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/linux-03.html">리눅스 내부 구조 03 - 프로세스 스케줄링</a></h3>
+                <p>리눅스 커널이 여러 프로세스에게 CPU를 분배하는 방법과 CFS의 동작 원리</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/linux-04.html">리눅스 내부 구조 04 - 메모리 관리</a></h3>
+                <p>가상 메모리의 개념과 리눅스 커널이 메모리를 관리하는 방법</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -424,24 +514,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -462,6 +534,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

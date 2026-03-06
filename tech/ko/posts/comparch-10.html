@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컴퓨터 구조 10 - 멀티코어와 현대 프로세서 - 재영의 기술 블로그</title>
+    <meta name="description" content="클럭 속도의 한계를 넘어 멀티코어로 전환된 이유와 현대 프로세서 아키텍처의 핵심 개념">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/comparch-10.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-10.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-10.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-10.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/comparch-10.html" />
+    <meta property="og:title" content="컴퓨터 구조 10 - 멀티코어와 현대 프로세서">
+    <meta property="og:description" content="클럭 속도의 한계를 넘어 멀티코어로 전환된 이유와 현대 프로세서 아키텍처의 핵심 개념">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-03-05T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="multicore">
+    
+    <meta property="article:tag" content="numa">
+    
+    <meta property="article:tag" content="smp">
+    
+    <meta property="article:tag" content="cache-coherence">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/comparch-10.html">
+    <meta name="twitter:title" content="컴퓨터 구조 10 - 멀티코어와 현대 프로세서">
+    <meta name="twitter:description" content="클럭 속도의 한계를 넘어 멀티코어로 전환된 이유와 현대 프로세서 아키텍처의 핵심 개념">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "컴퓨터 구조 10 - 멀티코어와 현대 프로세서",
+  "description": "클럭 속도의 한계를 넘어 멀티코어로 전환된 이유와 현대 프로세서 아키텍처의 핵심 개념",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-03-05T00:00:00.000Z",
+  "dateModified": "2026-03-05T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/comparch-10.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "computer-architecture, multicore, numa, smp, cache-coherence"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="컴퓨터 구조 10 - 멀티코어와 현대 프로세서">컴퓨터 구조 10 - 멀티코어와 현대 프로세서</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-03-05T00:00:00.000Z"" class="post-kicker">March 5, 2026</time>
+            <h1 class="post-title">컴퓨터 구조 10 - 멀티코어와 현대 프로세서</h1>
+            <p class="post-deck">클럭 속도의 한계를 넘어 멀티코어로 전환된 이유와 현대 프로세서 아키텍처의 핵심 개념</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">5분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/computer-architecture.html" class="series-badge">📚 컴퓨터 구조 (10/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/ko/tags/multicore.html" class="tag">multicore</a>
+                    
+                    <a href="/tech/ko/tags/numa.html" class="tag">numa</a>
+                    
+                    <a href="/tech/ko/tags/smp.html" class="tag">smp</a>
+                    
+                    <a href="/tech/ko/tags/cache-coherence.html" class="tag">cache-coherence</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 컴퓨터 구조</h3>
+        <p class="post-series-description">CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-01.html" class="post-series-link">컴퓨터 구조 01 - 컴퓨터 구조 개요</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-02.html" class="post-series-link">컴퓨터 구조 02 - CPU 내부 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-03.html" class="post-series-link">컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-04.html" class="post-series-link">컴퓨터 구조 04 - 파이프라인과 병렬 처리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-05.html" class="post-series-link">컴퓨터 구조 05 - CPU 권한 수준과 보호</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-06.html" class="post-series-link">컴퓨터 구조 06 - 인터럽트와 예외</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-07.html" class="post-series-link">컴퓨터 구조 07 - 메모리 계층 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-08.html" class="post-series-link">컴퓨터 구조 08 - 가상 메모리와 MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-09.html" class="post-series-link">컴퓨터 구조 09 - I/O와 DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                컴퓨터 구조 10 - 멀티코어와 현대 프로세서
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">클럭 속도는 왜 멈추었는가</h2>
+<p>2000년대 초반까지 프로세서 성능 향상의 공식은 단순했다. 클럭 속도를 높이면 되는 것이었다. 100MHz에서 1GHz, 그리고 3GHz까지 매년 클럭 속도가 가파르게 상승했다. 그런데 2004년을 전후하여 이 상승세가 갑자기 멈추었다. 20여 년이 지난 지금도 데스크탑 프로세서의 기본 클럭은 3~5GHz 수준에 머물러 있다. 무엇이 이 벽을 만든 것인가?</p>
+<p>세 가지 벽이 동시에 드러났다. 첫째는 전력 벽(power wall)이다. 프로세서의 동적 전력 소비는 클럭 주파수에 비례하고 전압의 제곱에 비례한다. 클럭을 높이려면 전압도 함께 올려야 하고, 그 결과 전력 소모와 발열이 감당하기 어려운 수준까지 치솟았다.</p>
+<p>둘째는 ILP 벽(Instruction-Level Parallelism wall)이다. 슈퍼스칼라 실행과 비순차 실행으로 끌어낼 수 있는 명령어 수준 병렬성에는 분명한 한계가 있다. 프로그램의 데이터 의존성과 제어 의존성이 그 상한을 정하기 때문에, 하드웨어를 아무리 복잡하게 만들어도 무한정 늘릴 수는 없다.</p>
+<p>셋째는 메모리 벽(memory wall)이다. CPU 성능은 매년 수십 퍼센트씩 향상됐지만, 메모리 지연 시간은 그만큼 빨라지지 않았다. 결국 CPU가 빨라질수록 메모리에서 데이터를 기다리는 시간이 더 두드러진 병목이 됐다.</p>
+<h2 id="-">멀티코어라는 해법</h2>
+<p>단일 코어의 성능 향상이 한계에 도달하자, 프로세서 설계자들은 방향을 전환했다. 하나의 코어를 더 빠르게 만드는 대신, 여러 개의 코어를 하나의 칩에 집적한다. 2005년 인텔의 Pentium D와 AMD의 Athlon 64 X2가 소비자 시장에 듀얼 코어를 도입한 이래, 코어 수는 꾸준히 증가하여 현재는 데스크탑에서도 16~24코어가 일반화되었다.</p>
+<p>멀티코어의 성능 이점은 병렬화 가능한 워크로드에서 나타난다. 독립적인 작업을 여러 코어에 분배하면 처리량이 코어 수에 비례하여 증가할 수 있다. 그러나 암달의 법칙(Amdahl&#39;s Law)이 보여주듯, 프로그램의 순차적 부분이 전체 성능 향상의 상한을 결정한다. 프로그램의 10%가 순차적이라면, 코어를 아무리 늘려도 최대 10배의 속도 향상밖에 달성할 수 없는 것이다.</p>
+<h2 id="smp-">SMP 아키텍처</h2>
+<p>대칭형 다중 처리(SMP, Symmetric Multi-Processing)는 모든 프로세서가 동일한 공유 메모리에 동등하게 접근하는 구조이다. 어떤 코어가 어떤 메모리 주소에 접근하든 동일한 지연 시간이 소요된다. 운영체제 입장에서는 모든 코어가 동등하므로 프로세스를 어느 코어에 배치해도 성능 차이가 없어 스케줄링이 비교적 단순해진다.</p>
+<p>그러나 SMP는 확장성에 한계가 있다. 코어 수가 증가하면 공유 메모리 버스의 대역폭이 병목이 되며, 캐시 일관성 유지를 위한 트래픽도 급증한다. 일반적으로 SMP는 8~16코어 수준에서 효율적으로 동작하며, 그 이상에서는 다른 접근이 필요해진다.</p>
+<h2 id="numa-">NUMA: 비균일 메모리 접근</h2>
+<p>NUMA(Non-Uniform Memory Access)는 SMP의 확장성 한계를 극복하기 위한 아키텍처이다. 각 프로세서(또는 프로세서 그룹)가 자신에게 가까운 로컬 메모리를 가지며, 다른 프로세서의 메모리에도 접근할 수 있지만 지연 시간이 더 길다.</p>
+<pre><code>┌─────────────────────┐     ┌─────────────────────┐
+│     NUMA Node 0     │     │     NUMA Node 1     │
+│  ┌──────┐ ┌──────┐  │     │  ┌──────┐ ┌──────┐  │
+│  │Core 0│ │Core 1│  │     │  │Core 4│ │Core 5│  │
+│  │Core 2│ │Core 3│  │     │  │Core 6│ │Core 7│  │
+│  └──────┘ └──────┘  │     │  └──────┘ └──────┘  │
+│    로컬 메모리 32GB   │◀──▶│    로컬 메모리 32GB   │
+│  (접근 지연: ~80ns)  │인터 │  (접근 지연: ~80ns)  │
+│                     │커넥트│                     │
+│ 원격 접근: ~130ns    │     │ 원격 접근: ~130ns    │
+└─────────────────────┘     └─────────────────────┘</code></pre>
+<p>NUMA 환경에서는 데이터를 실제로 그 데이터를 쓰는 코어와 같은 노드의 메모리에 두는 것이 성능에 결정적이다. 데이터베이스나 가상화 워크로드에서 NUMA 인식(NUMA-aware) 메모리 할당을 사용하지 않으면 원격 메모리 접근이 잦아져 성능이 크게 떨어질 수 있다. 서버 시스템에서 NUMA 토폴로지를 무시하는 것은 꽤 흔한 성능 실수다.</p>
+<h2 id="-mesi-">캐시 일관성: MESI 프로토콜</h2>
+<p>멀티코어 프로세서에서 각 코어는 자신만의 캐시를 가진다. 여러 코어가 동일한 메모리 주소의 데이터를 각자의 캐시에 보유하고 있을 때, 한 코어가 해당 데이터를 수정하면 다른 코어의 캐시에 있는 복사본은 유효하지 않게 된다. 이 문제를 해결하는 것이 캐시 일관성 프로토콜이다.</p>
+<p>가장 널리 사용되는 MESI 프로토콜에서 각 캐시 라인은 네 가지 상태 중 하나를 가진다.</p>
+<table>
+<thead>
+<tr><th>상태</th><th>의미</th></tr>
+</thead>
+<tbody>
+<tr><td>Modified (M)</td><td>이 캐시만 보유하며, 메모리와 다른 값 (수정됨)</td></tr>
+<tr><td>Exclusive (E)</td><td>이 캐시만 보유하며, 메모리와 동일한 값</td></tr>
+<tr><td>Shared (S)</td><td>여러 캐시가 보유하며, 메모리와 동일한 값</td></tr>
+<tr><td>Invalid (I)</td><td>유효하지 않은 캐시 라인</td></tr>
+</tbody>
+</table>
+<p>코어 A가 Shared 상태의 데이터를 수정하려면, 먼저 다른 모든 코어에 무효화(invalidate) 메시지를 보내 해당 캐시 라인을 Invalid로 변경한 후 자신의 캐시 라인을 Modified 상태로 전환한다. 이 과정은 하드웨어가 자동으로 수행하므로 프로그래머에게는 투명하지만, 무효화 메시지의 전파와 확인에는 시간이 소요된다.</p>
+<p>이것이 멀티스레드 프로그래밍에서 거짓 공유(false sharing) 문제의 원인이 된다. 서로 다른 코어가 논리적으로 독립적인 변수를 수정하더라도, 두 변수가 같은 캐시 라인에 존재하면 캐시 라인 전체가 반복적으로 무효화되어 성능이 크게 저하된다.</p>
+<h2 id="-">메모리 순서와 메모리 배리어</h2>
+<p>현대 프로세서는 성능을 위해 메모리 접근 순서를 재배열할 수 있다. 프로그램 코드에서 A를 먼저 쓰고 B를 나중에 썼더라도, 다른 코어에서 관찰할 때는 B가 먼저 변경된 것처럼 보일 수 있다. 단일 스레드 프로그램에서는 프로세서가 프로그램 순서대로 실행된 것처럼 결과를 보장하므로 문제가 되지 않지만, 멀티스레드 환경에서는 이 재배열이 미묘하고 재현하기 어려운 버그를 유발할 수 있다.</p>
+<p>메모리 배리어(memory barrier 또는 fence)는 이러한 재배열을 방지하는 명령어이다. 배리어 이전의 메모리 접근이 배리어 이후의 접근보다 반드시 먼저 완료되도록 보장한다. 잠금(lock), 원자적 연산(atomic operation), volatile 변수 등의 동기화 메커니즘은 내부적으로 적절한 메모리 배리어를 사용하여 메모리 가시성을 보장한다.</p>
+<p>x86은 비교적 강한 메모리 순서 모델(TSO, Total Store Order)을 채택하여 대부분의 경우 직관적으로 동작하지만, ARM과 같은 아키텍처는 약한 메모리 순서 모델을 사용하므로 더 많은 메모리 배리어가 필요하다. 동일한 멀티스레드 코드가 x86에서는 정상 동작하지만 ARM으로 포팅하면 버그가 발생하는 사례가 있는 이유가 바로 이것이다.</p>
+<h2 id="-smt-">동시 멀티스레딩: SMT와 하이퍼스레딩</h2>
+<p>동시 멀티스레딩(SMT, Simultaneous Multi-Threading)은 하나의 물리 코어가 여러 개의 하드웨어 스레드를 동시에 실행하는 기술이다. 인텔에서는 이를 하이퍼스레딩(Hyper-Threading)이라는 이름으로 제공한다.</p>
+<p>과연 하나의 코어가 어떻게 두 개의 스레드를 동시에 실행할 수 있는가? 핵심은 코어 내부의 실행 자원이 항상 100% 활용되지는 않는다는 점이다. 한 스레드가 캐시 미스로 메모리를 기다리는 동안, 실행 유닛은 유휴 상태에 놓인다. SMT는 여러 스레드의 명령어를 하나의 코어에서 번갈아 실행하여 이 유휴 시간을 채우는 것이다. 각 하드웨어 스레드는 자신만의 레지스터 세트와 프로그램 카운터를 가지지만, ALU, 캐시, 분기 예측기 등의 실행 자원은 공유한다.</p>
+<p>SMT는 일반적으로 10~30% 정도의 성능 향상을 제공하지만, 이미 실행 유닛을 충분히 활용하는 연산 집약적 워크로드에서는 효과가 미미하거나 오히려 캐시 경합으로 인해 성능이 저하될 수도 있다.</p>
+<h2 id="gpu-">GPU 아키텍처의 개요</h2>
+<p>GPU(Graphics Processing Unit)는 CPU와는 근본적으로 다른 설계 철학을 가진다. CPU가 소수의 복잡한 코어로 단일 스레드 성능을 극대화하는 반면, GPU는 수천 개의 단순한 코어로 대규모 병렬 처리에 최적화되어 있다.</p>
+<p>GPU의 기본 실행 모델은 SIMD(Single Instruction, Multiple Data)의 확장인 SIMT(Single Instruction, Multiple Threads)이다. 하나의 명령어가 수십에서 수백 개의 스레드에 동시에 적용된다. 행렬 연산, 이미지 처리, 물리 시뮬레이션처럼 동일한 연산을 대량의 데이터에 독립적으로 적용하는 워크로드에서 GPU가 CPU보다 수십 배 높은 처리량을 달성할 수 있는 이유가 이 구조에 있다.</p>
+<p>최근 딥러닝의 폭발적 성장으로 GPU의 역할이 그래픽 렌더링을 넘어 범용 병렬 컴퓨팅(GPGPU)으로 크게 확장되었다. 신경망의 학습과 추론은 본질적으로 대규모 행렬 곱셈이며, 이는 GPU의 아키텍처와 완벽하게 부합한다.</p>
+<h2 id="-">이기종 컴퓨팅</h2>
+<p>현대 프로세서 설계에서 두드러지는 추세 중 하나는 이기종(heterogeneous) 컴퓨팅이다. 모든 코어를 동일하게 설계하는 대신, 용도에 따라 서로 다른 특성을 가진 코어를 조합하는 접근이다.</p>
+<p>ARM의 big.LITTLE 아키텍처는 고성능 빅 코어와 저전력 리틀 코어를 함께 배치한다. 이메일 확인처럼 가벼운 작업에는 리틀 코어가 처리하여 배터리를 절약하고, 게임이나 영상 편집 같은 무거운 작업에는 빅 코어가 투입된다. 인텔의 최근 프로세서에도 P-코어(Performance)와 E-코어(Efficiency)의 조합으로 유사한 이기종 구조가 도입되었다.</p>
+<p>더 넓게 보면 CPU와 GPU의 협업 자체가 이기종 컴퓨팅이다. Apple의 M 시리즈 칩은 CPU, GPU, Neural Engine, 미디어 엔진을 하나의 SoC에 통합해 워크로드마다 가장 적합한 처리 유닛을 쓰도록 설계됐다. 범용 처리는 CPU가, 병렬 연산은 GPU가, 머신러닝 추론은 NPU가 맡는 식이다.</p>
+<h2 id="-cpu-">현대 CPU의 진화</h2>
+<p>현대 CPU는 지난 수십 년간의 아키텍처 혁신이 축적된 결과물이다. 분기 예측기는 TAGE(Tagged Geometric History Length)와 같은 고도화된 알고리즘을 사용하여 99% 이상의 예측 정확도를 달성한다. 비순차 실행 윈도우는 수백 개의 명령어를 동시에 추적하며 의존성이 해소되는 즉시 실행한다. 프리페처는 메모리 접근 패턴을 학습하여 필요한 데이터를 미리 캐시에 적재한다.</p>
+<p>추측 실행(speculative execution)은 분기 결과가 확정되기 전에 예측된 경로의 명령어를 미리 실행하여 파이프라인의 유휴 시간을 최소화한다. 2018년 발견된 Spectre와 Meltdown 취약점은 이 추측 실행이 보안적 관점에서 부작용을 가질 수 있음을 보여주었지만, 추측 실행 자체를 포기하기에는 성능 이점이 너무 크다. 대신 현대 프로세서는 추측 실행의 부채널을 완화하는 하드웨어 수준의 방어 기법을 도입하여 성능과 보안의 균형을 추구하고 있다.</p>
+<h2 id="-">시리즈를 마무리하며</h2>
+<p>이 시리즈는 폰 노이만 아키텍처의 기본 구조에서 출발하여 CPU 내부의 동작 원리, 명령어 집합 아키텍처, 파이프라이닝과 해저드, 권한 수준과 인터럽트, 메모리 계층 구조, 가상 메모리, I/O와 DMA, 그리고 멀티코어와 현대 프로세서까지를 살펴보았다.</p>
+<p>이 모든 개념은 서로 독립적인 것이 아니라 긴밀하게 연결되어 있다. 가상 메모리의 페이지 테이블 워크는 캐시 계층 구조의 성능에 의존하고, TLB 미스는 파이프라인 스톨을 유발한다. 멀티코어의 캐시 일관성 프로토콜은 메모리 계층의 동작 방식에 직접적인 영향을 미치며, DMA는 가상 메모리와 결합하여 IOMMU라는 새로운 보호 메커니즘을 필요로 한다. 인터럽트와 권한 수준은 I/O 처리와 가상 메모리의 페이지 폴트 핸들링의 기반이 된다.</p>
+<p>결국 컴퓨터 구조를 이해한다는 것은 개별 구성 요소를 아는 것이 아니라, 이 구성 요소들이 어떻게 상호작용하여 하나의 시스템으로 동작하는지를 이해한다. 소프트웨어 개발자가 성능 문제를 진단하고, 시스템의 동작을 예측하며, 올바른 설계 결정을 내리기 위해서는 이 상호작용에 대한 직관이 필요하다. 이 시리즈가 그 직관을 형성하는 출발점이 되었기를 바란다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/compiler-12.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>오토마타와 컴파일러 12 - 코드 생성</strong>
+            <p>최적화된 중간 표현이 실제 기계어로 변환되는 과정과, 오토마타 이론에서 시작하여 컴파일러 구현까지 이어지는 여정의 마무리</p>
+            <span class="post-nav-card-meta">
+                <span>March 5, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4분 읽기</span>
+            </span>
+        </a>
+        
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-09.html">컴퓨터 구조 09 - I/O와 DMA</a></h3>
+                <p>CPU가 외부 장치와 데이터를 주고받는 방식과 DMA를 통한 효율적 데이터 전송의 원리</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-08.html">컴퓨터 구조 08 - 가상 메모리와 MMU</a></h3>
+                <p>가상 메모리가 프로세스 격리를 가능하게 하는 원리와 MMU, 페이지 테이블, TLB의 동작</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">5분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-07.html">컴퓨터 구조 07 - 메모리 계층 구조</a></h3>
+                <p>레지스터에서 HDD까지 이어지는 메모리 계층과 캐시의 동작 원리</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

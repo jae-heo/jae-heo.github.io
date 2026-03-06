@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Architecture 01 - Overview - Jae's Tech Blog</title>
+    <meta name="description" content="Core concepts of Von Neumann architecture and how CPU, memory, and buses work together">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/comparch-01.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-01.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-01.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-01.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/comparch-01.html" />
+    <meta property="og:title" content="Computer Architecture 01 - Overview">
+    <meta property="og:description" content="Core concepts of Von Neumann architecture and how CPU, memory, and buses work together">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2025-12-27T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="cpu">
+    
+    <meta property="article:tag" content="memory">
+    
+    <meta property="article:tag" content="von-neumann">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/comparch-01.html">
+    <meta name="twitter:title" content="Computer Architecture 01 - Overview">
+    <meta name="twitter:description" content="Core concepts of Von Neumann architecture and how CPU, memory, and buses work together">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Computer Architecture 01 - Overview",
+  "description": [
+    "Core concepts of Von Neumann architecture and how CPU",
+    "memory",
+    "and buses work together"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2025-12-27T00:00:00.000Z",
+  "dateModified": "2025-12-27T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/comparch-01.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "computer-architecture, cpu, memory, von-neumann"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="Computer Architecture 01 - Overview">Computer Architecture 01 - Overview</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2025-12-27T00:00:00.000Z"" class="post-kicker">December 27, 2025</time>
+            <h1 class="post-title">Computer Architecture 01 - Overview</h1>
+            <p class="post-deck">Core concepts of Von Neumann architecture and how CPU, memory, and buses work together</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">4 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/computer-architecture.html" class="series-badge">📚 Computer Architecture (1/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/en/tags/cpu.html" class="tag">cpu</a>
+                    
+                    <a href="/tech/en/tags/memory.html" class="tag">memory</a>
+                    
+                    <a href="/tech/en/tags/von-neumann.html" class="tag">von-neumann</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Computer Architecture</h3>
+        <p class="post-series-description">From CPU internals and privilege levels to memory hierarchy and modern multicore processors</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Computer Architecture 01 - Overview
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-02.html" class="post-series-link">Computer Architecture 02 - CPU Internals</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-03.html" class="post-series-link">Computer Architecture 03 - Instruction Set Architecture (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-04.html" class="post-series-link">Computer Architecture 04 - Pipelining and Parallel Processing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-05.html" class="post-series-link">Computer Architecture 05 - CPU Privilege Levels and Protection</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-06.html" class="post-series-link">Computer Architecture 06 - Interrupts and Exceptions</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-07.html" class="post-series-link">Computer Architecture 07 - Memory Hierarchy</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-08.html" class="post-series-link">Computer Architecture 08 - Virtual Memory and MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-09.html" class="post-series-link">Computer Architecture 09 - I/O and DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-10.html" class="post-series-link">Computer Architecture 10 - Multicore and Modern Processors</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="why-learn-computer-architecture">Why Learn Computer Architecture?</h2>
+<p>In software development, you rarely interact with hardware directly. You write code in high-level languages, the operating system manages hardware, and the compiler translates everything to machine code. So is there really a need to understand the physical structure of a computer?</p>
+<p>There is. To understand why cache misses become performance bottlenecks, why branch mispredictions stall the pipeline, and why memory visibility issues arise in multithreaded programs, hardware-level knowledge is essential. Software ultimately runs on hardware, and without understanding hardware characteristics, identifying the root cause of performance problems becomes very difficult.</p>
+<h2 id="von-neumann-architecture">Von Neumann Architecture</h2>
+<p>Most modern computers are based on the Von Neumann architecture. Proposed by John von Neumann in 1945, the core idea of this architecture is that programs and data are stored in the same memory.</p>
+<p>Why was this revolutionary? Earlier computers had programs hardwired into the hardware. Performing a different computation required physically changing the wiring. In the Von Neumann architecture, simply replacing the program stored in memory allows the machine to perform entirely different tasks. The general-purpose computer became possible.</p>
+<pre><code>┌──────────────────────────────────────┐
+│               CPU                     │
+│  ┌───────────┐  ┌─────────────────┐  │
+│  │ Control   │  │      ALU        │  │
+│  │ Unit (CU) │  │                 │  │
+│  └───────────┘  └─────────────────┘  │
+│  ┌──────────────────────────────┐    │
+│  │       Register File           │    │
+│  └──────────────────────────────┘    │
+└────────────┬─────────────────────────┘
+             │ System Bus
+┌────────────┴─────────────────────────┐
+│           Memory (RAM)                │
+│   ┌────────────┐ ┌────────────────┐  │
+│   │  Program   │ │     Data       │  │
+│   │(instructions)│ │               │  │
+│   └────────────┘ └────────────────┘  │
+└──────────────────────────────────────┘
+             │
+┌────────────┴─────────────────────────┐
+│         I/O Devices                   │
+└──────────────────────────────────────┘</code></pre>
+<p>The Von Neumann architecture consists of three core components. The CPU interprets and executes instructions, memory stores programs and data, and buses handle data movement between them.</p>
+<h2 id="basic-cpu-operation">Basic CPU Operation</h2>
+<p>The CPU operates by repeating a remarkably simple cycle. This is called the instruction cycle, consisting of three stages: fetch, decode, and execute.</p>
+<p>During the fetch stage, the CPU retrieves the next instruction from the memory address pointed to by the program counter (PC). During the decode stage, the control unit determines what operation the instruction specifies. During the execute stage, the ALU or other functional units perform the actual operation and store the result.</p>
+<p>This cycle repeating billions of times per second is the operating principle of modern CPUs. A processor with a 3GHz clock speed can perform this cycle approximately 3 billion times per second. In practice, techniques like pipelining and superscalar execution allow multiple instructions to be processed simultaneously within a single cycle, making actual throughput considerably higher.</p>
+<h2 id="registers">Registers</h2>
+<p>Registers are the fastest storage located inside the CPU. Accessing memory takes tens to hundreds of clock cycles, but accessing a register typically requires just one clock cycle.</p>
+<p>The types of registers vary by architecture, but some are universally present.</p>
+<table>
+<thead>
+<tr><th>Register</th><th>Role</th></tr>
+</thead>
+<tbody>
+<tr><td>Program Counter (PC)</td><td>Address of the next instruction to execute</td></tr>
+<tr><td>Stack Pointer (SP)</td><td>Address of the current top of the stack</td></tr>
+<tr><td>Instruction Register (IR)</td><td>The currently executing instruction</td></tr>
+<tr><td>General Purpose Registers</td><td>Used for data storage and computation</td></tr>
+<tr><td>Status Register (FLAGS)</td><td>Status of operation results (zero, carry, overflow, etc.)</td></tr>
+</tbody>
+</table>
+<p>The number of registers is limited. The x86-64 architecture has 16 general-purpose registers, while ARM has 31. One of the compiler&#39;s important tasks is efficiently allocating these limited registers. Keeping values in registers reduces memory accesses, significantly improving performance.</p>
+<h2 id="memory-and-buses">Memory and Buses</h2>
+<p>Memory is essentially a large array with byte-level addressing. For the CPU to access memory, it places the target address on the address bus, exchanges data through the data bus, and the control bus specifies whether the operation is a read or write.</p>
+<p>This is where a fundamental limitation of the Von Neumann architecture becomes apparent. Since instructions and data reside in the same memory, fetching instructions and reading or writing data share the same bus. This is called the Von Neumann bottleneck. The CPU processes data very quickly, but the data transfer speed between CPU and memory cannot keep up.</p>
+<p>To mitigate this bottleneck, modern processors introduce cache memory, separate instruction and data caches (a partial application of Harvard architecture), and use prefetching techniques. These optimization techniques will be examined one by one in subsequent posts.</p>
+<h2 id="byte-order">Byte Order</h2>
+<p>Storing multi-byte data in memory also requires a choice. When storing the 4-byte integer 0x12345678, placing the most significant byte (0x12) at the lowest address is called big-endian, while placing the least significant byte (0x78) at the lowest address is called little-endian.</p>
+<p>Is one approach superior? Technically, neither is absolutely better. In practice, however, most modern processors (x86, ARM) use little-endian, while network protocols adopt big-endian as their standard. This is precisely why byte order conversion is necessary in network programming.</p>
+<h2 id="what-this-series-covers">What This Series Covers</h2>
+<p>This series starts from CPU internals and progresses through instruction set architectures, pipelining, privilege levels, interrupts, memory hierarchy, virtual memory, I/O, and modern multicore processors. We&#39;ll examine how each topic impacts software performance and system design.</p>
+<p>In the next post, we&#39;ll look deeper into the internal structure of the CPU.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-01.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>Platform Engineering 01 - What Is Platform Engineering?</strong>
+            <p>What platform engineering actually is, why it emerged, and how it differs from DevOps</p>
+            <span class="post-nav-card-meta">
+                <span>December 24, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>3 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/linux-01.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Linux Internals 01 - Operating System Overview</strong>
+            <p>What an operating system does and the role of the Linux kernel</p>
+            <span class="post-nav-card-meta">
+                <span>December 28, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>3 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-02.html">Computer Architecture 02 - CPU Internals</a></h3>
+                <p>How the ALU, control unit, and datapath work together to execute instructions</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-03.html">Computer Architecture 03 - Instruction Set Architecture (ISA)</a></h3>
+                <p>The role of ISAs, CISC vs RISC philosophy, and x86 versus ARM design differences</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">7 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-04.html">Computer Architecture 04 - Pipelining and Parallel Processing</a></h3>
+                <p>Instruction pipelining, hazard handling, branch prediction, superscalar and out-of-order execution</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

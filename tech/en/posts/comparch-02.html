@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Architecture 02 - CPU Internals - Jae's Tech Blog</title>
+    <meta name="description" content="How the ALU, control unit, and datapath work together to execute instructions">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/comparch-02.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-02.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-02.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-02.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/comparch-02.html" />
+    <meta property="og:title" content="Computer Architecture 02 - CPU Internals">
+    <meta property="og:description" content="How the ALU, control unit, and datapath work together to execute instructions">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-04T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="cpu">
+    
+    <meta property="article:tag" content="alu">
+    
+    <meta property="article:tag" content="control-unit">
+    
+    <meta property="article:tag" content="registers">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/comparch-02.html">
+    <meta name="twitter:title" content="Computer Architecture 02 - CPU Internals">
+    <meta name="twitter:description" content="How the ALU, control unit, and datapath work together to execute instructions">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Computer Architecture 02 - CPU Internals",
+  "description": [
+    "How the ALU",
+    "control unit",
+    "and datapath work together to execute instructions"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-04T00:00:00.000Z",
+  "dateModified": "2026-01-04T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/comparch-02.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "computer-architecture, cpu, alu, control-unit, registers"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="Computer Architecture 02 - CPU Internals">Computer Architecture 02 - CPU Internals</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-04T00:00:00.000Z"" class="post-kicker">January 4, 2026</time>
+            <h1 class="post-title">Computer Architecture 02 - CPU Internals</h1>
+            <p class="post-deck">How the ALU, control unit, and datapath work together to execute instructions</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">6 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/computer-architecture.html" class="series-badge">📚 Computer Architecture (2/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/en/tags/cpu.html" class="tag">cpu</a>
+                    
+                    <a href="/tech/en/tags/alu.html" class="tag">alu</a>
+                    
+                    <a href="/tech/en/tags/control-unit.html" class="tag">control-unit</a>
+                    
+                    <a href="/tech/en/tags/registers.html" class="tag">registers</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Computer Architecture</h3>
+        <p class="post-series-description">From CPU internals and privilege levels to memory hierarchy and modern multicore processors</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-01.html" class="post-series-link">Computer Architecture 01 - Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Computer Architecture 02 - CPU Internals
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-03.html" class="post-series-link">Computer Architecture 03 - Instruction Set Architecture (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-04.html" class="post-series-link">Computer Architecture 04 - Pipelining and Parallel Processing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-05.html" class="post-series-link">Computer Architecture 05 - CPU Privilege Levels and Protection</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-06.html" class="post-series-link">Computer Architecture 06 - Interrupts and Exceptions</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-07.html" class="post-series-link">Computer Architecture 07 - Memory Hierarchy</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-08.html" class="post-series-link">Computer Architecture 08 - Virtual Memory and MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-09.html" class="post-series-link">Computer Architecture 09 - I/O and DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-10.html" class="post-series-link">Computer Architecture 10 - Multicore and Modern Processors</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="opening-up-the-cpu">Opening Up the CPU</h2>
+<p>In the previous post, we saw that the CPU repeats the fetch-decode-execute cycle. But what actually happens during each of these stages? What components exist inside the CPU, and how do they cooperate to process a single instruction?</p>
+<p>The internals of a CPU divide into three major components. The ALU performs computations, the control unit decodes instructions and sends control signals to each component, and the datapath is the route along which data flows between them. The interplay of these three elements produces every operation the CPU performs.</p>
+<h2 id="alu-arithmetic-logic-unit">ALU: Arithmetic Logic Unit</h2>
+<p>The ALU is the part of the CPU that actually carries out calculations. As its name suggests, it handles arithmetic operations (addition, subtraction, multiplication, division) and logical operations (AND, OR, NOT, XOR).</p>
+<p>One of the ALU&#39;s most critical building blocks is the adder. Why is the adder so important? Subtraction is addition after taking the two&#39;s complement, multiplication is a combination of repeated additions and shifts, and division is a combination of repeated subtractions and shifts. In the end, most arithmetic operations are built on top of the adder.</p>
+<p>The simplest adder is the Ripple Carry Adder. It propagates the carry generated by each bit&#39;s addition to the next bit. The design is straightforward, but to obtain the result at the most significant bit, the carry must propagate sequentially from the least significant bit, making it slower in proportion to the number of bits.</p>
+<pre><code>Ripple Carry Adder (4-bit)
+
+  A3 B3    A2 B2    A1 B1    A0 B0
+  |  |     |  |     |  |     |  |
++-+--+-+ +-+--+-+ +-+--+-+ +-+--+-+
+|  FA  |&lt;|  FA  |&lt;|  FA  |&lt;|  FA  |&lt; C_in
++--+---+ +--+---+ +--+---+ +--+---+
+C_out S3     S2       S1       S0
+
+&lt; : carry propagation direction</code></pre>
+<p>To solve this problem, the Carry Lookahead Adder is used. This approach precomputes the conditions under which a carry will be generated at each bit position, producing results simultaneously without waiting for the carry from the previous bit. The circuit is more complex, but the speed improvement is substantial. The ALUs in modern processors almost universally use this approach or a variant of it.</p>
+<p>Multipliers are far more complex circuits than adders. Early processors performed multiplication over multiple cycles using the shift-and-add method, but modern processors use techniques like Wallace Trees and Booth Encoding to execute multiplication much faster. Even so, multiplication remains more expensive than addition, which is why compilers replace multiplication by powers of two with shift operations.</p>
+<p>Logical operations are simpler compared to arithmetic. Operations like AND, OR, and XOR can process each bit independently, so there is no carry propagation concern. But simplicity does not mean unimportance. Bit masking, flag checking, conditional branching, and many other core CPU behaviors depend on logical operations.</p>
+<h2 id="the-control-unit">The Control Unit</h2>
+<p>If the ALU is the muscle of the CPU, the control unit is the brain. Its role is to decode instructions and send appropriate control signals to each component of the CPU. Deciding which operation the ALU should perform, which register to read data from, and where to store the result are all responsibilities of the control unit.</p>
+<p>There are two main approaches to implementing a control unit.</p>
+<p><strong>Hardwired control</strong> takes the bit pattern of an instruction as input and uses combinational logic circuits to generate control signals directly. At its core is a state machine that receives the opcode and current state as inputs. This approach is fast but complex to design, and changing the instruction set requires redesigning the circuit itself. RISC processors typically adopt this approach because their regular and simple instruction formats are well suited to combinational logic implementation.</p>
+<p><strong>Microprogrammed control</strong> stores a sequence of micro-instructions corresponding to each instruction in a control store. When a machine instruction executes, the control unit sequentially reads the corresponding micro-instructions from the control store, generating control signals along the way. This approach is slower but flexible. Modifying the instruction set requires only updating the microcode rather than changing hardware. CISC architectures like x86, with their complex and varied instruction formats, favor this approach.</p>
+<p>So which approach do modern processors actually use? In practice, a hybrid is the norm. In x86 processors, simple instructions are handled quickly via hardwired logic, while only complex instructions go through microcode. This maximizes performance for frequently used simple instructions while maintaining compatibility with complex ones.</p>
+<h2 id="the-datapath">The Datapath</h2>
+<p>The datapath refers to the entire set of paths along which data moves inside the CPU. Registers, the ALU, internal buses, and multiplexers all form the datapath, and the control signals generated by the control unit manipulate each element to perform the desired operation.</p>
+<p>Let&#39;s trace how the instruction <code class="inline-code">ADD R1, R2, R3</code> (R1 = R2 + R3) executes through a simple datapath.</p>
+<pre><code>Instruction: ADD R1, R2, R3
+
+1. Fetch
+   PC -&gt; memory address -&gt; read instruction from memory -&gt; store in IR
+   PC = PC + 4 (update to next instruction address)
+
+2. Decode
+   IR opcode -&gt; control unit -&gt; generate control signals
+   IR register fields -&gt; read R2, R3 values from register file
+
+3. Execute
+   R2 value, R3 value -&gt; ALU (addition)
+   ALU result -&gt; store in R1
+   Update status register (overflow, zero flags, etc.)</code></pre>
+<p>At each step, control signals activate the appropriate paths in the datapath. Selecting the read ports of the register file, choosing the ALU operation type, and enabling the write port of the register file are all determined by control signals.</p>
+<pre><code>+------+     +--------------+     +-----+
+|  PC  |----&gt;|   Memory     |----&gt;| IR  |
++--+---+     +--------------+     +--+--+
+   |                                 |
+   | +4                   opcode     | register numbers
+   |                     +------+   |
+   |                     |Control|&lt;--+
+   |                     | Unit  |
+   |                     +--+---+
+   |                        | control signals
+   |         +--------------+-------------+
+   |         v              v             v
+   |    +---------+    +----------+   +------+
+   |    |Register |---&gt;|   ALU    |--&gt;|Result|
+   |    |  File   |---&gt;|          |   |Store |
+   |    +---------+    +----------+   +------+</code></pre>
+<p>Datapath design directly impacts CPU performance. Longer paths mean greater signal propagation delay, which sets the upper bound on clock speed. Processor designers therefore invest considerable effort into minimizing the critical path, the longest signal propagation route through the datapath.</p>
+<h2 id="clock-signal-and-timing">Clock Signal and Timing</h2>
+<p>Every CPU operation is synchronized by the clock signal. The clock is a signal that alternates periodically between 0 and 1, and register values are updated at the rising edge (the moment the signal transitions from 0 to 1) or falling edge. The clock period is the time taken for one cycle of the clock, and the clock frequency is its reciprocal.</p>
+<p>Increasing the clock speed allows more instructions to be processed per unit time. So why not raise the clock speed indefinitely? Because signal propagation through the longest path in the datapath must complete within one clock period. If the clock is too fast, the next operation begins before signals have stabilized, producing incorrect results.</p>
+<p>Furthermore, higher clock speeds cause power consumption to increase dramatically. Dynamic power consumption is proportional to clock frequency, and more power means more heat. This power-thermal wall is precisely why the clock speed race stalled around 4GHz in the early 2000s. Since then, processor performance improvements have shifted toward deeper pipelining, multicore designs, and microarchitectural refinements rather than raw clock speed.</p>
+<h2 id="cpu-design-trade-offs">CPU Design Trade-offs</h2>
+<p>CPU design involves numerous trade-offs. The hardwired versus microprogrammed control distinction we already examined is one example, and there are many more crossroads.</p>
+<p>Increasing the number of registers reduces memory accesses, but requires more bits to specify registers in instructions, enlarging instruction size. Making the ALU wider (say, from 32-bit to 64-bit) increases the data size processable in one operation, but increases circuit complexity and area. Adding more pipeline stages to reduce the critical path enables higher clock speeds, but increases the number of instructions discarded on a branch misprediction.</p>
+<p>Understanding these trade-offs matters because the direction of software performance optimization is ultimately determined by hardware design choices. Knowing which operations the CPU handles quickly and which are expensive enables writing more efficient code.</p>
+<p>In the next post, we&#39;ll look at Instruction Set Architecture (ISA).</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-02.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>Platform Engineering 02 - Anatomy of an Internal Developer Platform</strong>
+            <p>What actually goes inside an Internal Developer Platform — the five planes, how they connect, and the build vs buy decision</p>
+            <span class="post-nav-card-meta">
+                <span>January 2, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/linux-02.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Linux Internals 02 - Processes and Threads</strong>
+            <p>How processes are created and managed in Linux, and how threads relate to them</p>
+            <span class="post-nav-card-meta">
+                <span>January 5, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>6 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-03.html">Computer Architecture 03 - Instruction Set Architecture (ISA)</a></h3>
+                <p>The role of ISAs, CISC vs RISC philosophy, and x86 versus ARM design differences</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">7 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-04.html">Computer Architecture 04 - Pipelining and Parallel Processing</a></h3>
+                <p>Instruction pipelining, hazard handling, branch prediction, superscalar and out-of-order execution</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">7 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-05.html">Computer Architecture 05 - CPU Privilege Levels and Protection</a></h3>
+                <p>Why CPUs distinguish privilege levels, and how x86 protection rings and ARM exception levels protect the system</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

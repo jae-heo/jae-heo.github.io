@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재영의 테크 블로그 소개 - 재영의 기술 블로그</title>
-    <meta name="description" content="처음부터 만든 기술 블로그">
+    <title>이 기술 블로그에 대해 - 재영의 기술 블로그</title>
+    <meta name="description" content="시스템, 플랫폼, 성능, 그리고 그 뒤에 있는 엔지니어링 판단을 더 정리된 형태로 남기기 위해 만든 공간입니다.">
     <meta name="author" content="Jae">
 
     <!-- Canonical URL -->
@@ -15,21 +15,21 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jae-heo.github.io">
-    <meta property="og:title" content="재영의 테크 블로그 소개">
-    <meta property="og:description" content="처음부터 만든 기술 블로그">
+    <meta property="og:url" content="https://jae-heo.github.io" />
+    <meta property="og:title" content="이 기술 블로그에 대해">
+    <meta property="og:description" content="시스템, 플랫폼, 성능, 그리고 그 뒤에 있는 엔지니어링 판단을 더 정리된 형태로 남기기 위해 만든 공간입니다.">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://jae-heo.github.io">
-    <meta name="twitter:title" content="재영의 테크 블로그 소개">
-    <meta name="twitter:description" content="처음부터 만든 기술 블로그">
+    <meta name="twitter:title" content="이 기술 블로그에 대해">
+    <meta name="twitter:description" content="시스템, 플랫폼, 성능, 그리고 그 뒤에 있는 엔지니어링 판단을 더 정리된 형태로 남기기 위해 만든 공간입니다.">
     
     <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
     
@@ -37,8 +37,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -96,20 +98,28 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -117,27 +127,65 @@
     <main>
         <div class="page-wrapper">
     <div class="page-header">
-        <h1>재영의 테크 블로그 소개</h1>
+        <h1>이 기술 블로그에 대해</h1>
+        <p class="subtitle">시스템, 플랫폼, 성능, 그리고 그 뒤에 있는 엔지니어링 판단을 더 정리된 형태로 남기기 위해 만든 공간입니다.</p>
     </div>
     <article class="page">
         <div class="page-content">
-            <h1 id="-">테크 블로그에 오신 것을 환영합니다</h1>
-<p>프로그래밍, 소프트웨어 개발, 기술 트렌드에 대한 인사이트, 튜토리얼, 생각을 공유하는 기술 블로그입니다.</p>
-<h2 id="-">다루는 주제들</h2>
+            <h1 id="-">이 기술 블로그에 대해</h1>
+<p>이 블로그는 제가 더 나은 시스템 지향 엔지니어가 되기 위해 공부하고 정리하는 작업 노트에 가깝습니다.</p>
+<p>유행하는 기술 이야기를 짧게 요약해서 올리는 공간으로 쓰고 싶지는 않았습니다. 오히려 한 주제를 충분히 붙잡고, 시간이 지나도 다시 읽을 가치가 있는 형태로 설명하는 공간으로 만들고 싶었습니다.</p>
+<p>그래서 여기 있는 글들은 가벼운 튜토리얼보다는 공부 노트와 엔지니어링 에세이의 중간쯤에 있습니다. 용어를 정의하는 데서 끝나지 않고, 실제로 기술적인 판단을 내릴 때 도움이 되는 감각을 만드는 쪽에 더 가깝습니다.</p>
+<h2 id="-">주로 다루는 내용</h2>
+<p>이 블로그의 중심 주제는 대체로 다음과 같습니다.</p>
 <ul class="ul-list">
-<li><strong>웹 개발</strong>: 모던 프레임워크, 베스트 프랙티스, 도구들</li><li><strong>프로그래밍 언어</strong>: JavaScript, Python, Go 등에 대한 심층 분석</li><li><strong>소프트웨어 아키텍처</strong>: 디자인 패턴, 시스템 설계, 확장성</li><li><strong>DevOps &amp; 클라우드</strong>: CI/CD, 컨테이너화, 클라우드 플랫폼</li><li><strong>오픈소스</strong>: 오픈소스 프로젝트 기여 및 유지보수</li></ul>
-<h2>배경</h2>
-<p>저는 견고하고 확장 가능한 소프트웨어 솔루션을 구축하고 개발자 커뮤니티와 지식을 공유하는 것에 열정을 가지고 있습니다. 이 블로그를 통해 제 학습 여정을 기록하고 비슷한 과제를 가진 다른 사람들을 돕고자 합니다.</p>
-<p>포스트를 자유롭게 탐색하시고 질문이나 제안이 있으시면 언제든지 연락주세요!</p>
+<li><strong>플랫폼 엔지니어링</strong>: 내부 플랫폼, 개발자 경험, 골든 패스, 서비스 소유권, 운영상의 트레이드오프</li><li><strong>MLOps</strong>: 모델 라이프사이클, 재현성, 데이터 품질, 피처 인프라, 서빙 시스템</li><li><strong>리눅스와 시스템 내부 구조</strong>: 프로세스, 메모리, 파일시스템, 네트워킹, 동기화, 컨테이너</li><li><strong>컴파일러와 컴퓨터 구조</strong>: 소프트웨어가 더 낮은 계층과 어떻게 맞물리는지, 그리고 그게 왜 중요한지</li><li><strong>파이썬 기초와 내부 동작</strong>: 문법 설명이 아니라 언어를 어떻게 이해해야 하는지에 대한 이야기</li></ul>
+<p>특히 저는 추상화와 현실이 만나는 지점에 관심이 많습니다. 편리한 인터페이스 뒤에 어떤 제약이 숨어 있는지, 그리고 그 제약이 언제 중요한지에 자주 시선이 갑니다.</p>
+<h2 id="-">왜 이 블로그를 만들었나</h2>
+<p>공부한 내용을 한곳에 구조적으로 쌓아두고 싶어서 시작했습니다.</p>
+<p>온라인에는 기술 글이 많지만, 막상 깊게 이해하는 데 도움이 되는 글은 생각보다 많지 않습니다. 너무 얕거나, 너무 조각나 있어서, 단편적인 정의는 알게 되는데 서로 어떻게 연결되는지는 잘 안 보일 때가 많습니다. 저에게 글쓰기는 그 문제를 줄이는 방법입니다. 어렴풋이 아는 것을 더 분명한 모델로 바꾸게 만들기 때문입니다.</p>
+<p>그래서 이 블로그는 몇 가지 목적을 함께 갖고 있습니다.</p>
+<ul class="ul-list">
+<li>공부를 대충 넘기지 않게 만드는 장치</li><li>흩어진 개념들을 서로 연결해보는 공간</li><li>비슷한 고민을 하는 다른 엔지니어에게도 도움이 될 수 있는 설명의 저장소</li></ul>
+<h2 id="-">글을 쓸 때 중요하게 생각하는 것</h2>
+<p>이 블로그에서는 몇 가지 기준을 꽤 의식합니다.</p>
+<ul class="ul-list">
+<li><strong>기초를 먼저 설명할 것</strong>: 복잡한 용어를 쓰기 전에 핵심 원리를 분명하게 설명하고 싶습니다</li><li><strong>실무와 연결할 것</strong>: &quot;이게 무엇인가&quot;에서 멈추지 않고 &quot;언제 중요해지는가&quot;까지 다루고 싶습니다</li><li><strong>시스템 관점으로 볼 것</strong>: 요소를 따로따로 설명하기보다, 서로의 관계와 제약, 실패 지점을 함께 보려고 합니다</li><li><strong>천천히 축적할 것</strong>: 새로움을 쫓아 글을 쏟아내기보다, 시간이 지나도 연결해서 읽을 수 있는 글을 쌓고 싶습니다</li></ul>
+<p>그래서 한 편으로 끝내기 아쉬운 주제들은 자연스럽게 시리즈가 됩니다.</p>
+<h2 id="-">이런 분들에게 맞을 것 같습니다</h2>
+<p>아마 이런 독자에게 더 잘 맞을 것 같습니다.</p>
+<ul class="ul-list">
+<li>도구 사용법보다 기술적인 깊이를 더 키우고 싶은 엔지니어</li><li>애플리케이션 개발에서 인프라나 플랫폼 쪽으로 시야를 넓히고 싶은 사람</li><li>소프트웨어 시스템을 더 연결된 그림으로 이해하고 싶은 학생이나 독학하는 개발자</li><li>설명이 길어도 구조가 분명하고 맥락이 있으면 끝까지 읽는 편인 사람</li></ul>
+<p>반대로 빠르게 복붙해서 해결할 답이나 최신 프레임워크 소식만 원하는 분에게는 잘 맞지 않을 수 있습니다.</p>
+<h2 id="-">이 블로그에서 기대할 수 있는 것</h2>
+<p>여기서는 대체로 이런 글을 보게 됩니다.</p>
+<ul class="ul-list">
+<li>짧은 단발성 글보다 긴 시리즈</li><li>이론을 실무 판단과 연결하려는 설명</li><li>한 주제를 여러 각도에서 다시 다루며 정리하는 글</li><li>기술적인 주장에 근거를 붙이려는 글쓰기</li></ul>
+<p>반대로 이런 것은 많지 않습니다.</p>
+<ul class="ul-list">
+<li>매일 올라오는 빠른 업데이트</li><li>홍보성 제품 소개</li><li>어디서나 볼 수 있는 일반적인 커리어 조언</li></ul>
+<h2 id="-">관점에 대한 짧은 메모</h2>
+<p>저는 여전히 배우는 중이고, 이 블로그도 그 사실을 숨기지 않습니다.</p>
+<p>어떤 글은 직접 겪은 엔지니어링 경험에서 나오고, 어떤 글은 공부하고 비교하고 다시 정리하는 과정을 통해 나옵니다. 여기서 중요한 것은 완성된 권위를 보여주는 것이 아니라, 생각을 더 정확하게 만드는 것입니다.</p>
+<p>이 사이트는 그런 의미에서 제 사고를 공개적으로 더 엄격하게 다듬는 공간이기도 합니다.</p>
+<h2 id="-">처음 오셨다면</h2>
+<p>아무 글이나 하나 고르기보다 시리즈 단위로 들어오시는 편이 더 좋습니다.</p>
+<p>인프라와 개발자 경험에 관심이 있다면 <strong>플랫폼 엔지니어링</strong> 시리즈부터, 시스템 감각을 더 키우고 싶다면 <strong>리눅스</strong>, <strong>컴파일러</strong>, <strong>컴퓨터 구조</strong> 시리즈부터, 모델 개발과 운영 사이의 간극이 궁금하다면 <strong>MLOps</strong> 시리즈부터 보셔도 좋습니다.</p>
+<p>읽고 나서 생각이 조금 더 또렷해졌다면, 이 블로그는 제 역할을 한 셈입니다.</p>
+<h2 id="-">여기서 시작해보세요</h2>
+<p>처음 들어온 분이 막막하지 않도록, 시작점이 될 만한 링크를 몇 개 남겨둡니다.</p>
+<ul class="ul-list">
+<li><a href="/tech/ko/series/platform-engineering.html">플랫폼 엔지니어링 시리즈</a>: 내부 플랫폼, 개발자 경험, 운영 트레이드오프에 관심이 있다면</li><li><a href="/tech/ko/series/linux.html">리눅스 시리즈</a>: 시스템 감각을 더 단단하게 만들고 싶다면</li><li><a href="/tech/ko/series/mlops.html">MLOps 시리즈</a>: 모델 개발과 운영 사이의 간극이 궁금하다면</li><li><a href="/tech/ko/archive.html">전체 기술 글 보기</a>: 날짜 순으로 전체 글을 훑고 싶다면</li></ul>
 
         </div>
     </article>
 </div>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -159,24 +207,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -197,6 +227,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

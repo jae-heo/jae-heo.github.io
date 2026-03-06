@@ -15,13 +15,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jae-heo.github.io">
+    <meta property="og:url" content="https://jae-heo.github.io" />
     <meta property="og:title" content="Jae's Tech Blog">
     <meta property="og:description" content="Deep dives into programming, technology trends, and development insights">
     <meta property="og:site_name" content="Jae's Tech Blog">
     <meta property="og:locale" content="en_US">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
 
@@ -37,8 +37,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -96,20 +98,28 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -124,26 +134,6 @@
         <div class="filter-section">
             <!-- Filters button will be inserted here by JS -->
         </div>
-        <div class="view-toggle">
-            <button class="view-toggle-btn active" data-view="grid" title="Grid view">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
-            </button>
-            <button class="view-toggle-btn" data-view="list" title="List view">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="8" y1="6" x2="21" y2="6"></line>
-                    <line x1="8" y1="12" x2="21" y2="12"></line>
-                    <line x1="8" y1="18" x2="21" y2="18"></line>
-                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                </svg>
-            </button>
-        </div>
         <!-- Filter panel will be inserted here by JS -->
     </div>
 
@@ -154,19 +144,26 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-02-07T00:00:00.000Z"">February 7, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
                 <a href="/tech/en/posts/mlops-06.html">MLOps 06 - Monitoring and Drift Detection</a>
             </h2>
-            <time datetime=""2026-02-07T00:00:00.000Z"">February 7, 2026</time>
             
             <p class="post-excerpt">Why production models degrade over time and how to detect it</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
+                
+                </div>
                 <a href="/tech/en/posts/mlops-06.html" class="read-more">Read more</a>
             </div>
         </div>
@@ -176,19 +173,26 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-02-19T00:00:00.000Z"">February 19, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
                 <a href="/tech/en/posts/platform-engineering-09.html">Platform Engineering 09 - Observability for Platform Engineers</a>
             </h2>
-            <time datetime=""2026-02-19T00:00:00.000Z"">February 19, 2026</time>
             
             <p class="post-excerpt">How platform teams provide observability as a service instead of making every team build it from scratch</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
+                
+                </div>
                 <a href="/tech/en/posts/platform-engineering-09.html" class="read-more">Read more</a>
             </div>
         </div>
@@ -196,68 +200,17 @@
     
 </div>
 
-    <!-- List View -->
-<div class="post-list post-list-view" style="display: none;">
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/mlops-06.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        MLOps 06 - Monitoring and Drift Detection
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">Why production models degrade over time and how to detect it</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2026-02-07T00:00:00.000Z"">February 7, 2026</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/platform-engineering-09.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Platform Engineering 09 - Observability for Platform Engineers
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">How platform teams provide observability as a service instead of making every team build it from scratch</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2026-02-19T00:00:00.000Z"">February 19, 2026</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-</div>
 
-
-    <script src="/assets/js/view-toggle.js"></script>
     <script src="/assets/js/post-filter.js"></script>
 
     
 </div>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 
@@ -279,24 +232,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -317,6 +252,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

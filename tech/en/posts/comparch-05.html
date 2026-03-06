@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Architecture 05 - CPU Privilege Levels and Protection - Jae's Tech Blog</title>
+    <meta name="description" content="Why CPUs distinguish privilege levels, and how x86 protection rings and ARM exception levels protect the system">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/comparch-05.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-05.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-05.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-05.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/comparch-05.html" />
+    <meta property="og:title" content="Computer Architecture 05 - CPU Privilege Levels and Protection">
+    <meta property="og:description" content="Why CPUs distinguish privilege levels, and how x86 protection rings and ARM exception levels protect the system">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-25T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="cpu-privilege">
+    
+    <meta property="article:tag" content="protection-ring">
+    
+    <meta property="article:tag" content="kernel-mode">
+    
+    <meta property="article:tag" content="protected-mode">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/comparch-05.html">
+    <meta name="twitter:title" content="Computer Architecture 05 - CPU Privilege Levels and Protection">
+    <meta name="twitter:description" content="Why CPUs distinguish privilege levels, and how x86 protection rings and ARM exception levels protect the system">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Computer Architecture 05 - CPU Privilege Levels and Protection",
+  "description": [
+    "Why CPUs distinguish privilege levels",
+    "and how x86 protection rings and ARM exception levels protect the system"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-25T00:00:00.000Z",
+  "dateModified": "2026-01-25T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/comparch-05.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "computer-architecture, cpu-privilege, protection-ring, kernel-mode, protected-mode"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="Computer Architecture 05 - CPU Privilege Levels and Protection">Computer Architecture 05 - CPU Privilege Levels and Protection</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-25T00:00:00.000Z"" class="post-kicker">January 25, 2026</time>
+            <h1 class="post-title">Computer Architecture 05 - CPU Privilege Levels and Protection</h1>
+            <p class="post-deck">Why CPUs distinguish privilege levels, and how x86 protection rings and ARM exception levels protect the system</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">7 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/computer-architecture.html" class="series-badge">📚 Computer Architecture (5/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/en/tags/cpu-privilege.html" class="tag">cpu-privilege</a>
+                    
+                    <a href="/tech/en/tags/protection-ring.html" class="tag">protection-ring</a>
+                    
+                    <a href="/tech/en/tags/kernel-mode.html" class="tag">kernel-mode</a>
+                    
+                    <a href="/tech/en/tags/protected-mode.html" class="tag">protected-mode</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Computer Architecture</h3>
+        <p class="post-series-description">From CPU internals and privilege levels to memory hierarchy and modern multicore processors</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-01.html" class="post-series-link">Computer Architecture 01 - Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-02.html" class="post-series-link">Computer Architecture 02 - CPU Internals</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-03.html" class="post-series-link">Computer Architecture 03 - Instruction Set Architecture (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-04.html" class="post-series-link">Computer Architecture 04 - Pipelining and Parallel Processing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Computer Architecture 05 - CPU Privilege Levels and Protection
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-06.html" class="post-series-link">Computer Architecture 06 - Interrupts and Exceptions</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-07.html" class="post-series-link">Computer Architecture 07 - Memory Hierarchy</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-08.html" class="post-series-link">Computer Architecture 08 - Virtual Memory and MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-09.html" class="post-series-link">Computer Architecture 09 - I/O and DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-10.html" class="post-series-link">Computer Architecture 10 - Multicore and Modern Processors</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="why-does-a-cpu-need-privilege-levels">Why Does a CPU Need Privilege Levels?</h2>
+<p>Early computers had no concept of privilege. Programs could freely read and write any memory address and directly access any hardware port. This was not a problem when only a single program ran at a time, but the situation changed fundamentally with the advent of multiprogramming, where several programs execute concurrently.</p>
+<p>Is it safe for every program to have equal privileges? It is not. If a user program could overwrite another program&#39;s memory, directly manipulate the disk&#39;s file system, or execute instructions that halt the entire system, stable operation would be impossible. For the operating system to manage resources and guarantee isolation between programs, the hardware must be able to enforce what each piece of code can and cannot do.</p>
+<p>This is why CPU privilege levels exist. Privilege levels are not a software convention but a constraint enforced by hardware. When unprivileged code attempts a forbidden operation, the CPU raises an exception, and the operation is not executed.</p>
+<h2 id="from-real-mode-to-protected-mode">From Real Mode to Protected Mode</h2>
+<p>The history of the x86 processor illustrates how the need for privilege was recognized. The 8086 processor, released in 1978, operated exclusively in Real Mode. In Real Mode, all code could directly access physical memory and execute any instruction without restriction. There was no memory protection, no privilege separation.</p>
+<p>The 80286 processor, introduced in 1982, brought Protected Mode. In Protected Mode, memory access is controlled through segment descriptors, and each segment is assigned access permissions. On every memory access, the CPU checks whether the current code&#39;s privilege level qualifies it to access that segment.</p>
+<p>Modern x86 processors still start in Real Mode when powered on, maintaining backward compatibility. After the bootloader completes initial setup and switches to Protected Mode (or 64-bit Long Mode), hardware-level privilege protection becomes active.</p>
+<h2 id="x86-protection-rings">x86 Protection Rings</h2>
+<p>The x86 architecture defines four privilege levels, called protection rings, numbered Ring 0 through Ring 3.</p>
+<pre><code>┌──────────────────────────────────────┐
+│            Ring 3                     │
+│    User Applications                 │
+│  ┌──────────────────────────────┐    │
+│  │         Ring 2               │    │
+│  │  Device Drivers (rarely used)│    │
+│  │  ┌──────────────────────┐    │    │
+│  │  │      Ring 1          │    │    │
+│  │  │ OS Services (rarely  │    │    │
+│  │  │           used)      │    │    │
+│  │  │  ┌──────────────┐    │    │    │
+│  │  │  │   Ring 0     │    │    │    │
+│  │  │  │   Kernel     │    │    │    │
+│  │  │  └──────────────┘    │    │    │
+│  │  └──────────────────────┘    │    │
+│  └──────────────────────────────┘    │
+└──────────────────────────────────────┘</code></pre>
+<p>Ring 0 holds the highest privilege. It can access all memory, execute any CPU instruction, and modify hardware settings. The operating system kernel runs at Ring 0. Ring 3 is the lowest privilege level, where ordinary user programs execute. Code at Ring 3 can only access memory allocated to it and cannot execute privileged instructions.</p>
+<p>Ring 1 and Ring 2 were originally designed for OS services and device drivers, but in practice they are rarely used. Most operating systems adopted a two-level model using only Ring 0 and Ring 3. Some hypervisor environments do make use of these intermediate rings, however.</p>
+<p>The Current Privilege Level (CPL) is stored in the lower two bits of the code segment selector. Every time the CPU executes an instruction, it checks the CPL to determine whether the operation is permitted.</p>
+<h2 id="privileged-instructions">Privileged Instructions</h2>
+<p>Instructions that can only execute at Ring 0 are called privileged instructions. If Ring 3 code attempts to execute one, the CPU raises a General Protection Fault (#GP).</p>
+<table>
+<thead>
+<tr><th>Instruction</th><th>Operation</th><th>Why Privileged</th></tr>
+</thead>
+<tbody>
+<tr><td><code class="inline-code">HLT</code></td><td>Halt CPU</td><td>Affects entire system</td></tr>
+<tr><td><code class="inline-code">LGDT</code> / <code class="inline-code">LIDT</code></td><td>Load GDT/IDT register</td><td>Modifies memory protection scheme</td></tr>
+<tr><td><code class="inline-code">MOV CR0, ...</code></td><td>Modify control register</td><td>Changes protected mode/paging settings</td></tr>
+<tr><td><code class="inline-code">IN</code> / <code class="inline-code">OUT</code></td><td>I/O port access</td><td>Direct hardware control</td></tr>
+<tr><td><code class="inline-code">WRMSR</code></td><td>Write model-specific register</td><td>Alters CPU behavior</td></tr>
+</tbody>
+</table>
+<p>This distinction is not a mere convention but is implemented at the silicon level. During the decode stage, the CPU checks the current CPL, and if privilege is insufficient, an exception is raised before the instruction executes. There is no way for software to bypass this check.</p>
+<h2 id="privilege-level-transitions-gate-descriptors">Privilege Level Transitions: Gate Descriptors</h2>
+<p>When a Ring 3 user program needs to read a file or send a network packet, it requires the kernel&#39;s assistance. But kernel code must execute at Ring 0. So how does the transition from Ring 3 to Ring 0 occur?</p>
+<p>Allowing jumps to arbitrary code would render protection meaningless. If Ring 3 code could jump to any kernel address, it would be possible to enter code paths that bypass security checks. Therefore, x86 uses gate descriptors to restrict transitions to precisely the permitted entry points.</p>
+<p>There are three main types of gate descriptors. Call gates provide an entry path to higher-privilege code via the <code class="inline-code">CALL FAR</code> instruction. Interrupt gates transfer control to an interrupt handler when a hardware interrupt or <code class="inline-code">INT</code> instruction occurs, automatically disabling interrupts during the transition. Trap gates are similar to interrupt gates but differ in that they do not disable interrupts.</p>
+<p>Each gate records a target segment, an offset, and the minimum privilege level required to use that gate. When the CPU passes through a gate, it also performs a stack switch. Using the Ring 3 stack would cause kernel code to depend on the user stack, creating security vulnerabilities. The TSS (Task State Segment) stores stack pointers for each ring, and during a privilege transition the CPU automatically switches to the appropriate ring&#39;s stack.</p>
+<h2 id="system-calls-modern-ring-transitions">System Calls: Modern Ring Transitions</h2>
+<p>In modern operating systems, the most frequent Ring 3 to Ring 0 transition is the system call. Early implementations used software interrupts like <code class="inline-code">INT 0x80</code>, but interrupt-based transitions incurred significant overhead from IDT lookups, stack switches, and pipeline flushes.</p>
+<p>To address this, x86 introduced the <code class="inline-code">SYSENTER</code>/<code class="inline-code">SYSEXIT</code> (Intel) and <code class="inline-code">SYSCALL</code>/<code class="inline-code">SYSRET</code> (AMD, later a common standard) instructions. These bypass gate descriptors and transition directly to a kernel entry point pre-configured in MSRs (Model Specific Registers). Segment selectors and stacks are replaced according to hardwired rules, minimizing memory lookups and greatly reducing transition cost.</p>
+<pre><code>User Program (Ring 3)
+    │
+    │ SYSCALL
+    ▼
+┌─────────────────────────────────┐
+│  Load kernel entry from MSR     │
+│  Change CPL to 0                │
+│  Switch to kernel stack         │
+└───────────────┬─────────────────┘
+                ▼
+Kernel Syscall Handler (Ring 0)
+    │
+    │ Process request
+    │
+    │ SYSRET
+    ▼
+User Program (Ring 3)</code></pre>
+<p>Linux further reduces this cost with the vDSO (virtual Dynamic Shared Object). System calls that only need to read kernel data, such as <code class="inline-code">gettimeofday</code>, execute directly from a read-only page that the kernel maps into user space, eliminating the ring transition entirely.</p>
+<h2 id="segment-protection-and-page-level-protection">Segment Protection and Page-Level Protection</h2>
+<p>x86 protection operates at two layers: segment-level protection and page-level protection.</p>
+<p>Each segment descriptor specifies a DPL (Descriptor Privilege Level). When the CPU accesses a segment, it compares the current CPL with the DPL. If the CPL number is greater than the DPL (meaning lower privilege), access is denied. However, modern 64-bit operating systems configure segments in a flat model, greatly reducing the role of segment protection. Practical memory protection is handled by page tables.</p>
+<p>Each page table entry contains a User/Supervisor bit. Pages marked as Supervisor are accessible only from Ring 0. Additionally, read/write bits and the No-Execute (NX) bit provide fine-grained per-page access control. The reason kernel memory is unreadable from user space is precisely because of these bits.</p>
+<p>Following the Meltdown vulnerability, KPTI (Kernel Page Table Isolation) was introduced, which unmaps most kernel page table entries when executing in user mode, further strengthening protection.</p>
+<h2 id="arm-exception-levels">ARM Exception Levels</h2>
+<p>The ARM architecture separates privilege differently from x86&#39;s protection rings. ARM (AArch64) uses the concept of exception levels, with four stages from EL0 to EL3.</p>
+<table>
+<thead>
+<tr><th>Level</th><th>Purpose</th><th>x86 Equivalent</th></tr>
+</thead>
+<tbody>
+<tr><td>EL0</td><td>User applications</td><td>Ring 3</td></tr>
+<tr><td>EL1</td><td>OS kernel</td><td>Ring 0</td></tr>
+<tr><td>EL2</td><td>Hypervisor</td><td>-</td></tr>
+<tr><td>EL3</td><td>Secure monitor (TrustZone)</td><td>-</td></tr>
+</tbody>
+</table>
+<p>The most significant difference from x86 is that EL2 and EL3 are officially defined at the architecture level. In x86, hypervisors operate in a separate root/non-root mode through extensions like VT-x, whereas in ARM they are naturally integrated as part of the exception level hierarchy. EL3 is where the ARM TrustZone secure monitor executes, managing transitions between the Secure World and the Non-secure World.</p>
+<p>Privilege transitions in ARM occur through exceptions. Transitions from a lower level to a higher level can only happen through exceptions (interrupts, system calls, etc.), and return from a higher level to a lower level uses the <code class="inline-code">ERET</code> instruction. This structure achieves the same purpose as x86&#39;s gate descriptors while providing a more streamlined model.</p>
+<h2 id="the-significance-of-hardware-enforcement">The Significance of Hardware Enforcement</h2>
+<p>The fact that privilege levels are enforced by hardware rather than software carries decisive significance. Even if the operating system kernel itself contains bugs, hardware-level protection guarantees basic isolation. No matter how malicious a user program may be, as long as it runs at Ring 3, it cannot directly read another process&#39;s memory or manipulate hardware.</p>
+<p>Of course, perfect protection does not exist. As microarchitectural vulnerabilities like Spectre and Meltdown have shown, hardware protection can have gaps in its implementation details. But the very fact that these vulnerabilities made major headlines demonstrates how fundamental and important hardware-level protection is as a security boundary.</p>
+<p>In the next post, we&#39;ll look at interrupts and exceptions.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/mlops-04.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>MLOps 04 - Model Versioning and Registry</strong>
+            <p>Why model versioning differs from code versioning, and the role of a model registry</p>
+            <span class="post-nav-card-meta">
+                <span>January 24, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/compiler-07.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Automata and Compilers 07 - Top-Down Parsing</strong>
+            <p>The principles behind recursive descent parsers, LL(1) grammars, and the strengths and limitations of top-down parsing</p>
+            <span class="post-nav-card-meta">
+                <span>January 27, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>5 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">7 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-06.html">Computer Architecture 06 - Interrupts and Exceptions</a></h3>
+                <p>Why interrupts exist and how IDT, ISR, PIC/APIC work</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">8 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-07.html">Computer Architecture 07 - Memory Hierarchy</a></h3>
+                <p>The memory hierarchy from registers to HDD and how caches work</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-08.html">Computer Architecture 08 - Virtual Memory and MMU</a></h3>
+                <p>How virtual memory enables process isolation through the MMU, page tables, and TLB</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

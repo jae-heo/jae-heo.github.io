@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/life/ko/posts/setting-a-routine.html">
+    <meta property="og:url" content="https://jae-heo.github.io/life/ko/posts/setting-a-routine.html" />
     <meta property="og:title" content="루틴을 정하다">
     <meta property="og:description" content="새로운 하루를 만들어가는 나의 일과">
     <meta property="og:site_name" content="재영의 일상 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2025-10-11T00:00:00.000Z"">
@@ -59,8 +59,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 일상 블로그 RSS" href="/life/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 일상 블로그 RSS" href="/life/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -85,7 +87,7 @@
     "name": "Jae's Life Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/life/assets/favicon.ico"
     }
   },
   "inLanguage": "ko-KR",
@@ -147,20 +149,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/life/ko/" class="site-title" data-nav-link>재영의 일상 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/life/ko/" data-nav-link>홈</a>
                 <a href="/life/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/life/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -168,59 +182,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/life/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/life/ko/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/life/ko/categories/routine.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/life/ko/categories/routine.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">routine</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="루틴을 정하다">루틴을 정하다</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="루틴을 정하다">루틴을 정하다</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>루틴을 정하다</h1>
-        <time datetime=""2025-10-11T00:00:00.000Z"">October 11, 2025</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2025-10-11T00:00:00.000Z"" class="post-kicker">October 11, 2025</time>
+            <h1 class="post-title">루틴을 정하다</h1>
+            <p class="post-deck">새로운 하루를 만들어가는 나의 일과</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">1분 읽기</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 열심히 사는 사람 구경하기 (1/2)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/life/ko/series/daily-struggle.html" class="series-badge">📚 열심히 사는 사람 구경하기 (1/2)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
                     <a href="/life/ko/categories/routine.html" class="category-badge">routine</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/life/ko/tags/routine.html" class="tag">routine</a>
                     
@@ -252,7 +275,7 @@
             <!-- Current Post (Not Clickable) -->
             <span class="post-series-title">
                 루틴을 정하다
-                <span class="current-indicator">← You are here</span>
+                <span class="current-indicator">← 현재 글</span>
             </span>
             
         </li>
@@ -270,8 +293,11 @@
 
     
 
-    <div class="post-content">
-        <h2 id="-">시간이 부족한 하루</h2>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">시간이 부족한 하루</h2>
 <p>하루에 시간이 너무 부족하다고 느꼈다. 그럴 때마다 조금 더 늦게 자게 되었다. 더 많은 것을 하기 위해서.<br />하지만 결과적으로는 오히려 비효율적이었다. 육체적, 정신적 부담이 점점 커졌다.</p>
 <h2 id="-">욕심과 능력 사이</h2>
 <p>고민을 했다. 나는 내 능력보다 욕심이 더 큰 것 같았다. <br />하고 싶은 것은 많은데, 시간과 에너지는 한정되어 있었다.</p>
@@ -279,6 +305,7 @@
 <p>시간의 효율을 올리려면 어떻게 해야 할까? <br />고민 끝에 작은 변화부터 만들어 보기로 했다.</p>
 <p><strong>기상/수면 시간을 고정하기로 결심했다.</strong><br />- 아침 6시에 일어난다<br />- 저녁 10시에 잔다<br />규칙적인 생활 패턴이 더 많은 것을 가능하게 해줄 거라 믿는다.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
@@ -286,15 +313,66 @@
         <span></span>
         
         
-        <a href="/life/ko/posts/routine-and-heart.html" class="nav-next">루틴과 마음 사이 →</a>
+        <a href="/life/ko/posts/routine-and-heart.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>루틴과 마음 사이</strong>
+            <p>늦잠을 자게 된 이유와 루틴 속에서 찾는 균형</p>
+            <span class="post-nav-card-meta">
+                <span>October 16, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>1분 읽기</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">social</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/life/ko/posts/running-in-the-morning.html">동료들과의 아침 러닝</a></h3>
+                <p>동료들과 함께하는 러닝. 2주가 지나며 느낀 변화.</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">routine</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/life/ko/posts/temptation-of-bed-and-sofa.html">침대와 소파의 유혹</a></h3>
+                <p>주말을 효율적으로 보내기 위해 밖으로 나가야겠다는 다짐</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">routine</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/life/ko/posts/morning-as-rest.html">아침이 주는 휴식</a></h3>
+                <p>바쁜 삶 속에서 아침 루틴이 만들어준 여유</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/life/ko/feed.xml">RSS</a>
                 
@@ -316,24 +394,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -354,6 +414,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

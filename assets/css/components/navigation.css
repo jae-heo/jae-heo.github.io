@@ -1,5 +1,20 @@
 /* Navigation Component */
 
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    backdrop-filter: blur(16px);
+    background: color-mix(in srgb, var(--bg-primary) 88%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+[data-theme="dark"] .site-header {
+    background: linear-gradient(180deg, rgba(9, 17, 31, 0.92), rgba(9, 17, 31, 0.76));
+    border-bottom-color: rgba(36, 54, 79, 0.8);
+    box-shadow: 0 10px 30px -24px rgba(0, 0, 0, 0.9);
+}
+
 /* Main Navigation Container */
 nav {
     max-width: var(--max-width);
@@ -34,6 +49,94 @@ nav {
     display: flex;
     align-items: center;
     gap: 2rem;
+}
+
+.mobile-menu-toggle {
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-primary) 75%, var(--bg-secondary) 25%);
+    color: var(--text-primary);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.24rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.mobile-menu-toggle span {
+    width: 1rem;
+    height: 2px;
+    background: currentColor;
+    border-radius: 999px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nav-select,
+.nav-theme-toggle,
+.theme-switcher #theme-toggle {
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-primary) 75%, var(--bg-secondary) 25%);
+    color: var(--text-primary);
+    border-radius: 999px;
+    height: 2.5rem;
+    transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-select {
+    padding: 0 0.9rem;
+    cursor: pointer;
+    font: inherit;
+}
+
+.nav-theme-toggle,
+.theme-switcher #theme-toggle {
+    width: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.nav-select:hover,
+.nav-theme-toggle:hover,
+.theme-switcher #theme-toggle:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+[data-theme="dark"] .nav-select,
+[data-theme="dark"] .nav-theme-toggle,
+[data-theme="dark"] .theme-switcher #theme-toggle,
+[data-theme="dark"] .mobile-menu-toggle {
+    background: linear-gradient(180deg, rgba(24, 38, 59, 0.95), rgba(16, 27, 45, 0.95));
+    border-color: rgba(42, 60, 89, 0.95);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="dark"] .nav-links a {
+    color: #cfdbef;
 }
 
 .nav-links a {
@@ -73,39 +176,30 @@ nav {
     width: 100%;
 }
 
-/* Mobile Menu Toggle */
-.mobile-menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-}
-
-.mobile-menu-toggle svg {
-    width: 24px;
-    height: 24px;
-    color: var(--text-primary);
-}
-
 /* Responsive Navigation */
 @media (max-width: 768px) {
     .mobile-menu-toggle {
-        display: block;
+        display: inline-flex;
     }
 
     .nav-links {
         position: absolute;
         top: 100%;
-        left: 0;
-        right: 0;
-        background: var(--bg-primary);
+        left: 1rem;
+        right: 1rem;
+        background: color-mix(in srgb, var(--bg-primary) 94%, var(--bg-secondary) 6%);
         flex-direction: column;
+        align-items: stretch;
         padding: 1rem;
         border: 1px solid var(--border);
-        border-top: none;
+        border-radius: 1rem;
         display: none;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-lg);
+        gap: 0.5rem;
+    }
+
+    [data-theme="dark"] .nav-links {
+        background: linear-gradient(180deg, rgba(14, 24, 40, 0.98), rgba(9, 17, 31, 0.98));
     }
 
     .nav-links.active {
@@ -114,11 +208,18 @@ nav {
 
     .nav-links a {
         width: 100%;
-        padding: 0.75rem 1rem;
-        border-radius: 4px;
+        padding: 0.85rem 1rem;
+        border-radius: 0.75rem;
     }
 
     .nav-links a:hover {
         background: var(--bg-secondary);
+    }
+
+    .nav-actions {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--border);
     }
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About This Blog - Jae's Life Blog</title>
-    <meta name="description" content="Personal stories, travel adventures, and life experiences beyond the code">
+    <meta name="description" content="This is the quieter side of the site: personal notes, travel reflections, and the kinds of thoughts that do not belong in a technical post.">
     <meta name="author" content="Jae">
 
     <!-- Canonical URL -->
@@ -15,13 +15,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jae-heo.github.io">
+    <meta property="og:url" content="https://jae-heo.github.io" />
     <meta property="og:title" content="About This Blog">
-    <meta property="og:description" content="Personal stories, travel adventures, and life experiences beyond the code">
+    <meta property="og:description" content="This is the quieter side of the site: personal notes, travel reflections, and the kinds of thoughts that do not belong in a technical post.">
     <meta property="og:site_name" content="Jae's Life Blog">
     <meta property="og:locale" content="en_US">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
 
@@ -29,7 +29,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://jae-heo.github.io">
     <meta name="twitter:title" content="About This Blog">
-    <meta name="twitter:description" content="Personal stories, travel adventures, and life experiences beyond the code">
+    <meta name="twitter:description" content="This is the quieter side of the site: personal notes, travel reflections, and the kinds of thoughts that do not belong in a technical post.">
     
     <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
     
@@ -37,8 +37,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="Jae's Life Blog RSS" href="/life/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Life Blog RSS" href="/life/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -96,20 +98,28 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/life/en/" class="site-title" data-nav-link>Jae's Life Blog</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/life/en/" data-nav-link>Home</a>
                 <a href="/life/en/archive.html" data-nav-link>Archive</a>
                 <a href="/life/en/about.html" data-nav-link>About</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -118,36 +128,49 @@
         <div class="page-wrapper">
     <div class="page-header">
         <h1>About This Blog</h1>
+        <p class="subtitle">This is the quieter side of the site: personal notes, travel reflections, and the kinds of thoughts that do not belong in a technical post.</p>
     </div>
     <article class="page">
         <div class="page-content">
-            <h1 id="about-jae39s-life-blog">About Jae&#39;s Life Blog</h1>
-<p>Welcome to my personal corner of the internet, where code takes a backseat and life takes the wheel.</p>
-<h2 id="who-am-i">Who Am I?</h2>
-<p>Beyond being a developer, I&#39;m someone who believes that the best algorithms can&#39;t capture the beauty of a sunset, and no amount of optimization can replace genuine human connection.</p>
-<p>I&#39;m a curious soul who finds joy in:<br />- <strong>Exploring new places</strong> and getting wonderfully lost<br />- <strong>Meeting interesting people</strong> with stories to tell<br />- <strong>Learning new skills</strong> that have nothing to do with computers<br />- <strong>Finding beauty</strong> in everyday moments</p>
-<h2 id="why-this-blog">Why This Blog?</h2>
-<p>While I spend my days optimizing simulation engines and writing efficient code, life is happening all around us. This blog is my attempt to document the non-binary parts of existence - the messy, beautiful, unpredictable journey we&#39;re all on.</p>
-<h2 id="what-to-expect">What to Expect</h2>
-<p>Stories and reflections about:<br />- <strong>Travel Adventures</strong>: From planned trips to spontaneous detours<br />- <strong>Cultural Experiences</strong>: Learning from different perspectives<br />- <strong>Personal Growth</strong>: Lessons learned the hard way (and the easy way)<br />- <strong>Random Musings</strong>: Thoughts that don&#39;t fit in a git commit<br />- <strong>Life Balance</strong>: Finding harmony between pixels and people</p>
-<h2 id="my-philosophy">My Philosophy</h2>
+            <h1 id="about-this-blog">About This Blog</h1>
+<p>This is the more personal side of my writing.</p>
+<p>If the tech blog is where I try to make systems clearer, this space is where I try to pay better attention to life outside work. Travel, routines, moods, relationships, hesitation, small realizations, and the strange ways ordinary days stay with us longer than expected.</p>
+<p>I did not want everything I write to sound like engineering documentation. Some thoughts need a slower and looser form.</p>
+<h2 id="why-i-keep-a-life-blog">Why I Keep A Life Blog</h2>
+<p>A lot of adult life gets flattened into productivity, output, and progress. I wanted a place that pushes back against that a little.</p>
+<p>This blog helps me notice things that are easy to skip over when life gets too optimized: a shift in mood, a small habit that changes the day, a trip that leaves a stronger impression than expected, or a sentence I do not want to lose.</p>
+<p>Writing here is less about arriving at a conclusion and more about preserving texture.</p>
+<h2 id="what-you-will-find-here">What You Will Find Here</h2>
+<p>Most of the writing here falls into a few categories:</p>
 <ul class="ul-list">
-<li><strong>Be present</strong>: The best moments happen when we&#39;re not looking at screens</li><li><strong>Stay curious</strong>: Every person has something to teach us</li><li><strong>Embrace imperfection</strong>: Life&#39;s bugs are features, not flaws</li><li><strong>Share stories</strong>: Our experiences connect us</li></ul>
-<h2 id="a-note-to-fellow-developers">A Note to Fellow Developers</h2>
-<p>Yes, there&#39;s life after <code class="inline-code">git push</code>. Sometimes the best solutions come when we step away from the keyboard and into the world.</p>
-<h2 id="connect">Connect</h2>
-<p>I&#39;d love to hear your stories too. Life is more interesting when shared.</p>
-<hr />
-<p><em>&quot;Life is what happens while you&#39;re busy debugging.&quot;</em></p>
+<li><strong>travel notes</strong>: not guides, but impressions, scenes, and thoughts that come from being somewhere else</li><li><strong>personal reflections</strong>: moments that changed how I saw myself, even slightly</li><li><strong>everyday observations</strong>: ordinary situations that turned out to contain something worth remembering</li><li><strong>life rhythm</strong>: routines, balance, rest, motivation, and the difficulty of living well without turning life into another optimization problem</li></ul>
+<p>These posts are usually quieter than the technical ones. They are less interested in proving something and more interested in staying honest.</p>
+<h2 id="how-this-differs-from-the-tech-blog">How This Differs From The Tech Blog</h2>
+<p>The technical side of the site is structured, concept-driven, and argument-heavy.</p>
+<p>This side is more open-ended. The writing can be softer, more uncertain, and more personal. That difference matters to me. I do not want every sentence to sound like it has to justify itself in the same way.</p>
+<p>Still, there is one thing both sides share: I want the writing to feel considered. Even when a post is simple, I want it to feel intentional.</p>
+<h2 id="what-i-am-trying-to-keep">What I Am Trying To Keep</h2>
+<p>With this blog, I want to keep a record of things that are easy to lose:</p>
+<ul class="ul-list">
+<li>what I was paying attention to</li><li>what kind of questions I was living with</li><li>what felt beautiful, difficult, funny, or quietly important at the time</li></ul>
+<p>Memory edits life too aggressively. Writing slows that process down.</p>
+<h2 id="if-you-read-this-side-of-the-site">If You Read This Side Of The Site</h2>
+<p>I hope it feels less like advice and more like company.</p>
+<p>Some posts may resonate directly. Others may simply remind you to look at your own days a little more closely. Either outcome is enough for me.</p>
+<h2 id="a-few-places-to-start">A Few Places To Start</h2>
+<p>If you want a first read instead of a full archive:</p>
+<ul class="ul-list">
+<li><a href="/life/en/posts/2025-10-11-setting-a-routine.html">Setting A Routine</a>: a good entry point into the quieter everyday side of this blog</li><li><a href="/life/en/posts/2025-10-17-moment-of-not-knowing-myself.html">Moment Of Not Knowing Myself</a>: for the more reflective side</li><li><a href="/life/en/posts/2025-10-26-instant-action-builds-trust.html">Instant Action Builds Trust</a>: for a shorter, sharper personal observation</li><li><a href="/life/en/archive.html">All Life Posts</a>: if you want to browse everything by date</li></ul>
 
         </div>
     </article>
 </div>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/life/en/feed.xml">RSS</a>
                 
@@ -169,24 +192,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -207,6 +212,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Architecture 09 - I/O and DMA - Jae's Tech Blog</title>
+    <meta name="description" content="How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/comparch-09.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-09.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-09.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-09.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/comparch-09.html" />
+    <meta property="og:title" content="Computer Architecture 09 - I/O and DMA">
+    <meta property="og:description" content="How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-02-24T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="io">
+    
+    <meta property="article:tag" content="dma">
+    
+    <meta property="article:tag" content="bus">
+    
+    <meta property="article:tag" content="pcie">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/comparch-09.html">
+    <meta name="twitter:title" content="Computer Architecture 09 - I/O and DMA">
+    <meta name="twitter:description" content="How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Computer Architecture 09 - I/O and DMA",
+  "description": "How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-24T00:00:00.000Z",
+  "dateModified": "2026-02-24T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/comparch-09.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "computer-architecture, io, dma, bus, pcie"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="Computer Architecture 09 - I/O and DMA">Computer Architecture 09 - I/O and DMA</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-02-24T00:00:00.000Z"" class="post-kicker">February 24, 2026</time>
+            <h1 class="post-title">Computer Architecture 09 - I/O and DMA</h1>
+            <p class="post-deck">How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">6 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/computer-architecture.html" class="series-badge">📚 Computer Architecture (9/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/en/tags/io.html" class="tag">io</a>
+                    
+                    <a href="/tech/en/tags/dma.html" class="tag">dma</a>
+                    
+                    <a href="/tech/en/tags/bus.html" class="tag">bus</a>
+                    
+                    <a href="/tech/en/tags/pcie.html" class="tag">pcie</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Computer Architecture</h3>
+        <p class="post-series-description">From CPU internals and privilege levels to memory hierarchy and modern multicore processors</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-01.html" class="post-series-link">Computer Architecture 01 - Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-02.html" class="post-series-link">Computer Architecture 02 - CPU Internals</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-03.html" class="post-series-link">Computer Architecture 03 - Instruction Set Architecture (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-04.html" class="post-series-link">Computer Architecture 04 - Pipelining and Parallel Processing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-05.html" class="post-series-link">Computer Architecture 05 - CPU Privilege Levels and Protection</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-06.html" class="post-series-link">Computer Architecture 06 - Interrupts and Exceptions</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-07.html" class="post-series-link">Computer Architecture 07 - Memory Hierarchy</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-08.html" class="post-series-link">Computer Architecture 08 - Virtual Memory and MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Computer Architecture 09 - I/O and DMA
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-10.html" class="post-series-link">Computer Architecture 10 - Multicore and Modern Processors</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="where-the-cpu-meets-the-outside-world">Where the CPU Meets the Outside World</h2>
+<p>A computer is not composed solely of a CPU and memory. It needs to read data from disks, send packets over the network, and render images on the screen. The data exchange between the CPU and these external devices is I/O (Input/Output), and how efficiently I/O is handled determines the performance of the entire system.</p>
+<p>Is I/O really such a significant bottleneck? Modern CPUs can process billions of instructions per second, but disk access is measured in milliseconds and network round-trips take hundreds of microseconds to tens of milliseconds. In terms of CPU cycles, millions of instructions could execute during the time spent waiting for a single disk I/O operation. Managing this gap is a central challenge in system design.</p>
+<h2 id="programmed-io">Programmed I/O</h2>
+<p>The simplest I/O approach is for the CPU to repeatedly check the status of a device. This is called programmed I/O or polling. The CPU reads a device register to check whether data is ready, and if not, loops back to check again.</p>
+<pre><code>; Programmed I/O (polling) pseudocode
+loop:
+    status = read(device_status_register)
+    if status != READY:
+        goto loop
+    data = read(device_data_register)</code></pre>
+<p>The problem with this approach is that the CPU cannot perform any other useful work while waiting for data. Polling can actually be efficient when reading small amounts of data from a fast device, but with slow devices it results in severe waste of CPU resources.</p>
+<h2 id="interrupt-driven-io">Interrupt-Driven I/O</h2>
+<p>Interrupt-driven I/O addresses the inefficiency of polling. After the CPU sends an I/O request to a device, it continues performing other work. When the device completes the data transfer, it raises an interrupt to notify the CPU. The CPU then suspends its current task and executes the interrupt handler to process the data.</p>
+<p>This approach prevents the CPU from sitting idle while waiting for I/O. However, one problem remains. The actual work of moving data between the device and memory still requires the CPU to perform byte-by-byte or word-by-word transfers. When transferring large amounts of data, the CPU being tied up copying data consumes computational capacity that could be used elsewhere.</p>
+<h2 id="dma-freeing-the-cpu-from-data-transfer">DMA: Freeing the CPU from Data Transfer</h2>
+<p>DMA (Direct Memory Access) is a mechanism that allows devices to exchange data directly with memory without CPU involvement. The CPU only needs to tell the DMA controller the memory address, size, and direction (read/write) of the data to transfer. The actual data transfer is then performed independently by the DMA controller, which notifies the CPU via an interrupt when the transfer is complete.</p>
+<pre><code>CPU                     DMA Controller            Device       Memory
+ │                          │                     │            │
+ │ ── Setup Transfer ─────▶ │                     │            │
+ │   (address, size, dir)   │                     │            │
+ │                          │                     │            │
+ │   (performs other work)  │ ◀── data ──────────│            │
+ │                          │ ─── data ───────────────────────▶│
+ │                          │ ◀── data ──────────│            │
+ │                          │ ─── data ───────────────────────▶│
+ │                          │                     │            │
+ │ ◀── Completion IRQ ──── │                     │            │</code></pre>
+<p>With DMA, the CPU can freely perform other computations even during large data transfers. While megabytes of data are being read from disk, the CPU can continue executing instructions for other processes. However, since DMA transfers and the CPU share the memory bus, the CPU&#39;s memory access speed may decrease somewhat during heavy DMA transfers. This is known as cycle stealing.</p>
+<h2 id="memory-mapped-io-vs-port-io">Memory-Mapped I/O vs Port I/O</h2>
+<p>There are two approaches for the CPU to communicate with devices. Port-mapped I/O uses a separate I/O address space and dedicated instructions (IN/OUT on x86) to access devices. Memory-mapped I/O maps device registers into a portion of the memory address space, allowing devices to be accessed using standard memory read/write instructions.</p>
+<p>Memory-mapped I/O dominates in modern systems. It simplifies programming since no separate I/O instructions are needed, and existing memory protection mechanisms can be leveraged for device access control. The configuration space of PCIe devices and GPU framebuffer access are both performed through memory-mapped I/O.</p>
+<h2 id="evolution-of-bus-architecture">Evolution of Bus Architecture</h2>
+<p>The ISA bus in early PCs operated at 8MHz with a 16-bit width, providing a maximum bandwidth of 8MB/s. As increasingly faster devices — graphics cards, network cards, disk controllers — emerged, this bandwidth quickly proved insufficient.</p>
+<p>The PCI bus operated at 33MHz with a 32-bit or 64-bit width, providing up to 533MB/s of bandwidth. However, PCI was a shared bus, meaning multiple devices had to share the same bus bandwidth.</p>
+<p>PCIe (PCI Express) fundamentally changed this limitation. By adopting point-to-point serial links instead of a shared bus, each device could secure its own dedicated bandwidth. PCIe bandwidth is determined by the number of lanes and the generation.</p>
+<table>
+<thead>
+<tr><th>Generation</th><th>Per-Lane Bandwidth</th><th>x16 Bandwidth</th></tr>
+</thead>
+<tbody>
+<tr><td>PCIe 3.0</td><td>~1 GB/s</td><td>~16 GB/s</td></tr>
+<tr><td>PCIe 4.0</td><td>~2 GB/s</td><td>~32 GB/s</td></tr>
+<tr><td>PCIe 5.0</td><td>~4 GB/s</td><td>~64 GB/s</td></tr>
+<tr><td>PCIe 6.0</td><td>~8 GB/s</td><td>~128 GB/s</td></tr>
+</tbody>
+</table>
+<p>This is why high-performance GPUs use PCIe x16 slots. Devices that require large-scale data transfers secure more lanes to increase their available bandwidth.</p>
+<h2 id="io-scheduling">I/O Scheduling</h2>
+<p>When multiple processes simultaneously request disk I/O, the operating system&#39;s I/O scheduler determines the processing order of these requests. For traditional rotational hard drives, minimizing disk head movement was important, making scheduling algorithms like the elevator algorithm effective.</p>
+<p>The proliferation of SSDs changed this situation. SSDs have no physically moving heads, so the concept of seek time disappears entirely. Consequently, simple FIFO or basic priority-based schedulers became more appropriate than complex schedulers optimizing request order. The evolution of Linux&#39;s default I/O scheduler from CFQ to mq-deadline and then to none reflects precisely this hardware shift.</p>
+<h2 id="iommu-and-device-isolation">IOMMU and Device Isolation</h2>
+<p>DMA allows devices to access memory directly, but this carries security risks. A malicious or malfunctioning device could read or overwrite arbitrary memory regions.</p>
+<p>The IOMMU (I/O Memory Management Unit) solves this problem. Just as the CPU&#39;s MMU controls process memory access, the IOMMU controls device memory access. By restricting the memory regions accessible to each device, it prevents devices from accessing unauthorized memory. This is also why the IOMMU is essential when directly assigning physical devices to guest operating systems (passthrough) in virtualization environments.</p>
+<h2 id="modern-storage-interfaces-nvme">Modern Storage Interfaces: NVMe</h2>
+<p>The SATA interface was designed for rotational hard drives, with a command queue depth of only 32 and support for just a single queue. This interface becomes a bottleneck when trying to fully exploit the potential performance of SSDs.</p>
+<p>NVMe (Non-Volatile Memory Express) is a protocol designed from the ground up for SSDs. It operates directly over the PCIe bus, supports up to 65,535 queues, and each queue can have a depth of up to 65,536 entries. This design allows each core in a multicore environment to have its own I/O queue, avoiding lock contention on queue access. This is why NVMe SSDs achieve overwhelmingly higher IOPS (I/O Operations Per Second) compared to SATA SSDs.</p>
+<h2 id="io-virtualization-sr-iov">I/O Virtualization: SR-IOV</h2>
+<p>In virtualization environments where multiple virtual machines share a single physical network card, the hypervisor must mediate I/O requests. This software mediation layer increases latency and CPU overhead.</p>
+<p>SR-IOV (Single Root I/O Virtualization) divides a single physical device into multiple Virtual Functions, allowing each virtual machine to access the device directly as if it had a dedicated physical device. Since devices are accessed directly without hypervisor mediation, latency is significantly reduced and CPU overhead is minimized. The widespread adoption of SR-IOV in cloud environments requiring high-performance networking is due to these advantages.</p>
+<p>In the next post, we&#39;ll look at multicore and modern processors.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/mlops-08.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>MLOps 08 - Feature Stores</strong>
+            <p>Why feature stores exist and how they solve the training-serving skew problem</p>
+            <span class="post-nav-card-meta">
+                <span>February 21, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/compiler-11.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Automata and Compilers 11 - Intermediate Representations and Optimization</strong>
+            <p>Why compilers use intermediate representations and how optimization makes programs faster</p>
+            <span class="post-nav-card-meta">
+                <span>February 25, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>5 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">8 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-10.html">Computer Architecture 10 - Multicore and Modern Processors</a></h3>
+                <p>Why clock speeds stopped increasing and the core concepts of modern multicore processor architecture</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">8 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/linux-07.html">Linux Internals 07 - I/O and Devices</a></h3>
+                <p>From block and character devices to I/O schedulers, DMA, and the page cache</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-08.html">Computer Architecture 08 - Virtual Memory and MMU</a></h3>
+                <p>How virtual memory enables process isolation through the MMU, page tables, and TLB</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

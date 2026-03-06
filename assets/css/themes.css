@@ -32,19 +32,24 @@
 
 /* Dark Theme */
 [data-theme="dark"] {
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-tertiary: #334155;
-    --text-primary: #f1f5f9;
-    --text-secondary: #cbd5e1;
-    --text-tertiary: #94a3b8;
-    --accent: #60a5fa;
-    --accent-hover: #3b82f6;
-    --accent-light: #1e3a8a;
-    --border: #334155;
-    --border-light: #1e293b;
-    --code-bg: #1e293b;
-    --code-border: #334155;
+    --bg-primary: #09111f;
+    --bg-secondary: #101b2d;
+    --bg-tertiary: #18263b;
+    --text-primary: #f4f8ff;
+    --text-secondary: #c4d0e4;
+    --text-tertiary: #8ea1bf;
+    --accent: #7cc4ff;
+    --accent-hover: #99d3ff;
+    --accent-light: #17365f;
+    --border: #24364f;
+    --border-light: #18263b;
+    --code-bg: #0f1a2b;
+    --code-border: #2a3c59;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.32);
+    --shadow: 0 10px 30px -18px rgb(0 0 0 / 0.45);
+    --shadow-md: 0 18px 40px -20px rgb(0 0 0 / 0.55);
+    --shadow-lg: 0 30px 60px -24px rgb(0 0 0 / 0.65);
+    --gradient: linear-gradient(135deg, #8bc8ff 0%, #7b8cff 55%, #5eead4 100%);
 }
 
 /* Ocean Theme */

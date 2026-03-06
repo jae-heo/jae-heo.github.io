@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About This Tech Blog - Jae's Tech Blog</title>
-    <meta name="description" content="Deep dives into programming, technology trends, and development insights">
+    <meta name="description" content="This is where I organize what I am learning about systems, platforms, performance, and the engineering tradeoffs behind them.">
     <meta name="author" content="Jae">
 
     <!-- Canonical URL -->
@@ -15,13 +15,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jae-heo.github.io">
+    <meta property="og:url" content="https://jae-heo.github.io" />
     <meta property="og:title" content="About This Tech Blog">
-    <meta property="og:description" content="Deep dives into programming, technology trends, and development insights">
+    <meta property="og:description" content="This is where I organize what I am learning about systems, platforms, performance, and the engineering tradeoffs behind them.">
     <meta property="og:site_name" content="Jae's Tech Blog">
     <meta property="og:locale" content="en_US">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
 
@@ -29,7 +29,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://jae-heo.github.io">
     <meta name="twitter:title" content="About This Tech Blog">
-    <meta name="twitter:description" content="Deep dives into programming, technology trends, and development insights">
+    <meta name="twitter:description" content="This is where I organize what I am learning about systems, platforms, performance, and the engineering tradeoffs behind them.">
     
     <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
     
@@ -37,8 +37,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -96,20 +98,28 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -118,36 +128,64 @@
         <div class="page-wrapper">
     <div class="page-header">
         <h1>About This Tech Blog</h1>
+        <p class="subtitle">This is where I organize what I am learning about systems, platforms, performance, and the engineering tradeoffs behind them.</p>
     </div>
     <article class="page">
         <div class="page-content">
-            <h1 id="about-jae39s-tech-blog">About Jae&#39;s Tech Blog</h1>
-<p>Welcome to my technical blog where I dive deep into the world of software engineering, with a special focus on high-performance computing and simulation systems.</p>
-<h2 id="my-expertise">My Expertise</h2>
-<p>I&#39;m a <strong>Python Discrete Event Simulation (DES) Core Engine Developer</strong> with extensive experience in building large-scale simulation systems. My work involves:</p>
+            <h1 id="about-this-tech-blog">About This Tech Blog</h1>
+<p>This blog is my working notebook for becoming a better systems-minded engineer.</p>
+<p>I do not use it as a place to post quick opinions or shallow summaries of trending topics. I use it to slow down, study a subject properly, and explain it in a way that would still make sense a year from now.</p>
+<p>Most of the writing here sits somewhere between study notes and engineering essays. The goal is not just to define terms, but to build the kind of intuition that helps when you have to make an actual technical decision.</p>
+<h2 id="what-i-write-about">What I Write About</h2>
+<p>The core themes of this blog are:</p>
 <ul class="ul-list">
-<li><strong>Performance Optimization</strong>: Creating simulation engines that handle millions of entities with sub-millisecond latency</li><li><strong>Distributed Systems</strong>: Building cloud-scale simulations using MPI, Ray, and ZeroMQ</li><li><strong>Low-Level Optimization</strong>: Developing CPython extensions and leveraging JIT compilers for critical performance paths</li><li><strong>Algorithm Design</strong>: Implementing advanced scheduling algorithms like Calendar Queue and Splay Trees</li></ul>
-<h2 id="what-you39ll-find-here">What You&#39;ll Find Here</h2>
-<p>This blog features deep technical content including:</p>
+<li><strong>Platform engineering</strong>: internal platforms, developer experience, golden paths, service ownership, and operational tradeoffs</li><li><strong>MLOps</strong>: model lifecycle management, reproducibility, data quality, feature infrastructure, and serving systems</li><li><strong>Linux and systems internals</strong>: processes, memory, filesystems, networking, synchronization, and containers</li><li><strong>Compilers and computer architecture</strong>: how software maps to lower layers, and why that matters in practice</li><li><strong>Python fundamentals</strong>: not just syntax, but the runtime behavior and mental model behind the language</li></ul>
+<p>I am especially interested in the boundary between abstraction and reality: the point where a convenient interface meets the underlying system constraints.</p>
+<h2 id="why-this-blog-exists">Why This Blog Exists</h2>
+<p>I started this blog because I wanted one place where my learning could become structured instead of scattered.</p>
+<p>A lot of technical content online is either too shallow to be useful or too fragmented to build real understanding. You can collect definitions forever and still not know how the pieces connect. Writing helps me fight that. It forces me to turn vague familiarity into a clearer model.</p>
+<p>So this blog serves a few purposes at once:</p>
 <ul class="ul-list">
-<li><strong>Simulation Engineering</strong>: Advanced techniques for discrete event simulation</li><li><strong>Python Internals</strong>: Deep dives into CPython, asyncio, and memory management</li><li><strong>Performance Analysis</strong>: Profiling, benchmarking, and optimization strategies</li><li><strong>Distributed Computing</strong>: Scaling simulations across multiple nodes and clusters</li><li><strong>Systems Programming</strong>: Low-level optimizations and C extensions</li></ul>
-<h2 id="technical-philosophy">Technical Philosophy</h2>
-<p>I believe in:<br />- <strong>Data-driven optimization</strong>: Never optimize without measuring<br />- <strong>Understanding fundamentals</strong>: Knowing how things work under the hood<br />- <strong>Practical engineering</strong>: Building systems that solve real problems<br />- <strong>Knowledge sharing</strong>: Contributing back to the community</p>
-<h2 id="technologies">Technologies</h2>
-<p>My primary stack includes:<br />- <strong>Languages</strong>: Python, C/C++, Cython<br />- <strong>Frameworks</strong>: NumPy, Ray, MPI, JAX, Numba<br />- <strong>Tools</strong>: Linux, Git, Docker, Kubernetes<br />- <strong>Specialties</strong>: Event-driven architectures, parallel computing, memory optimization</p>
-<h2 id="connect">Connect</h2>
-<p>Feel free to reach out for collaborations on simulation projects or performance optimization challenges.</p>
-<hr />
-<p><em>&quot;Performance is not about doing things fast, it&#39;s about doing the right things efficiently.&quot;</em></p>
+<li>it helps me study carefully</li><li>it gives me a place to connect ideas across topics</li><li>it leaves behind explanations that are useful to other engineers who are trying to go deeper</li></ul>
+<h2 id="how-i-try-to-write">How I Try to Write</h2>
+<p>I care about a few things when I write here:</p>
+<ul class="ul-list">
+<li><strong>fundamentals before jargon</strong>: if a concept cannot be explained clearly, I probably do not understand it well enough yet</li><li><strong>practical relevance</strong>: I want each post to answer not only &quot;what is this?&quot; but also &quot;when does this matter?&quot;</li><li><strong>systems thinking</strong>: I prefer explanations that connect components, tradeoffs, and failure modes instead of describing topics in isolation</li><li><strong>steady accumulation</strong>: I would rather build a coherent body of writing over time than chase novelty every week</li></ul>
+<p>That is also why many posts appear as series. Some topics are not worth compressing into one article.</p>
+<h2 id="who-this-is-for">Who This Is For</h2>
+<p>This blog will probably be useful if you are:</p>
+<ul class="ul-list">
+<li>an engineer who wants stronger technical depth, not just tool familiarity</li><li>someone moving from application development toward infrastructure or platform work</li><li>a student or self-learner trying to build a more connected mental model of software systems</li><li>the kind of reader who enjoys long explanations when they are concrete and well organized</li></ul>
+<p>It is probably less useful if you only want quick copy-paste answers or framework news.</p>
+<h2 id="what-you-should-expect">What You Should Expect</h2>
+<p>You should expect:</p>
+<ul class="ul-list">
+<li>long-form series instead of isolated hot takes</li><li>explanations that try to connect theory to engineering decisions</li><li>posts that revisit the same topic from multiple angles when needed</li><li>occasional opinion, but usually in service of a technical argument</li></ul>
+<p>You should not expect:</p>
+<ul class="ul-list">
+<li>daily updates</li><li>product announcements disguised as writing</li><li>generic career advice</li></ul>
+<h2 id="a-note-on-perspective">A Note On Perspective</h2>
+<p>I am still learning, and this blog reflects that honestly.</p>
+<p>Some posts are written from direct engineering experience. Others are written from careful study, synthesis, and reconstruction. When I explain something, I am trying to make the model clearer, not pretend to be finished.</p>
+<p>That is part of the point of this site: to make my thinking more rigorous in public.</p>
+<h2 id="if-you-are-new-here">If You Are New Here</h2>
+<p>The easiest way to start is to pick a series rather than a random post.</p>
+<p>If you care about infrastructure and developer experience, start with the <strong>platform engineering</strong> series. If you want stronger systems intuition, try <strong>Linux</strong>, <strong>compiler</strong>, or <strong>computer architecture</strong>. If you are interested in the gap between research notebooks and production systems, start with <strong>MLOps</strong>.</p>
+<p>If a post helps you think more clearly, then the blog is doing its job.</p>
+<h2 id="start-here">Start Here</h2>
+<p>If you want a concrete entry point instead of browsing blindly, these are good places to begin:</p>
+<ul class="ul-list">
+<li><a href="/tech/en/series/platform-engineering.html">Platform Engineering Series</a>: for internal platforms, developer experience, and operating tradeoffs</li><li><a href="/tech/en/series/linux.html">Linux Series</a>: for stronger systems intuition from the OS side</li><li><a href="/tech/en/series/mlops.html">MLOps Series</a>: for the gap between model building and model operations</li><li><a href="/tech/en/archive.html">All Tech Posts</a>: if you prefer to scan everything by date</li></ul>
 
         </div>
     </article>
 </div>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 
@@ -169,24 +207,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -207,6 +227,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

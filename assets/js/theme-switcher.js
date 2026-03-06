@@ -52,9 +52,9 @@ class ThemeSwitcher {
         // Create toggle button
         const toggleBtn = document.createElement('button');
         toggleBtn.id = 'theme-toggle';
+        toggleBtn.className = 'nav-theme-toggle';
         toggleBtn.setAttribute('aria-label', 'Change theme');
         toggleBtn.setAttribute('aria-expanded', 'false');
-        toggleBtn.style.cssText = 'background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem; padding: 0.5rem; position: relative;';
 
         const currentThemeObj = themes.find(t => t.id === this.currentTheme);
         toggleBtn.innerHTML = `<span id="theme-icon">${currentThemeObj ? currentThemeObj.icon : '☀️'}</span>`;

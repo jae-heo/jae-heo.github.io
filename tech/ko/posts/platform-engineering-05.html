@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/platform-engineering-05.html">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/platform-engineering-05.html" />
     <meta property="og:title" content="플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code">
     <meta property="og:description" content="IaC가 플랫폼의 근간인 이유, 그리고 Terraform, Pulumi, Crossplane을 셀프서비스 인프라 관점에서 비교">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2026-01-22T00:00:00.000Z"">
@@ -61,8 +61,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -92,7 +94,7 @@
     "name": "Jae's Tech Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
     }
   },
   "inLanguage": "ko-KR",
@@ -154,20 +156,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -175,59 +189,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Lectures</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code">플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code">플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code</h1>
-        <time datetime=""2026-01-22T00:00:00.000Z"">January 22, 2026</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2026-01-22T00:00:00.000Z"" class="post-kicker">January 22, 2026</time>
+            <h1 class="post-title">플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code</h1>
+            <p class="post-deck">IaC가 플랫폼의 근간인 이유, 그리고 Terraform, Pulumi, Crossplane을 셀프서비스 인프라 관점에서 비교</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">2분 읽기</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 플랫폼 엔지니어링 기초 (5/11)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/platform-engineering.html" class="series-badge">📚 플랫폼 엔지니어링 기초 (5/11)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/tech/ko/tags/platform-engineering.html" class="tag">platform-engineering</a>
                     
@@ -293,7 +316,7 @@
             <!-- Current Post (Not Clickable) -->
             <span class="post-series-title">
                 플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code
-                <span class="current-indicator">← You are here</span>
+                <span class="current-indicator">← 현재 글</span>
             </span>
             
         </li>
@@ -351,12 +374,15 @@
 
     
 
-    <div class="post-content">
-        <h2 id="iac-">IaC 없는 인프라는 부채다</h2>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="iac-">IaC 없는 인프라는 부채다</h2>
 <p>개발자가 PostgreSQL 데이터베이스를 요청하면, 운영팀 누군가가 클라우드 콘솔에 접속하여 위저드를 클릭하고 설정 몇 개를 고른 뒤 커넥션 스트링을 보내주는 방식으로 처리하는 경우가 많다. 당장은 동작한다. 하지만 다음 사람이 같은 것을 요청했을 때 미묘하게 다른 설정을 받게 되거나, 원본 데이터베이스를 재생성해야 하는데 어떻게 구성했는지 아무도 기억하지 못하는 상황이 발생하면 문제가 드러나는 것이다.</p>
 <p>IaC는 인프라를 선언적이고, 버전 관리되고, 반복 가능하게 만들어준다. 플랫폼 팀에게 이것은 선택의 영역이 아니다. 셀프서비스를 가능하게 하는 토대이기 때문이다.</p>
 <h2 id="-">추상화 레이어</h2>
-<p>그렇다면 개발자가 IaC를 직접 작성하면 되는 것인가? 그렇지 않다. 개발자가 Terraform이나 Crossplane을 직접 다루게 되면 플랫폼을 만든 의미가 사라지게 된다. 플랫폼 팀이 해야 할 일은 추상화 레이어를 구축하는 것이다. 개발자는 무엇이 필요한지만 선언하고, 그것을 어떻게 구현할지는 플랫폼이 처리하는 구조를 만드는 것이다.</p>
+<p>그렇다면 개발자가 IaC를 직접 작성하면 되는 것인가? 그렇지 않다. 개발자가 Terraform이나 Crossplane을 직접 다루게 되면 플랫폼을 만든 의미가 사라진다. 플랫폼 팀은 그 위에 추상화 레이어를 만들어야 한다. 개발자는 무엇이 필요한지만 선언하고, 그것을 어떻게 구현할지는 플랫폼이 처리하는 구조가 되어야 한다.</p>
 <pre><code>개발자 요청:                 플랫폼이 변환:
 ┌─────────────────┐        ┌──────────────────────────────┐
 │ &quot;PostgreSQL DB  │  ──→   │ - RDS 인스턴스 (db.t3.medium) │
@@ -380,7 +406,7 @@
 <tr><td>학습 곡선</td><td>낮음-중간</td><td>언어에 따라 다름</td><td>중간-높음</td></tr>
 </tbody>
 </table>
-<p>세 가지 도구 중 어느 것이 정답이라고 단정할 수는 없다. Terraform은 가장 널리 사용되는 출발점이며 생태계가 가장 넓다. Crossplane은 이미 Kubernetes 중심으로 운영하는 환경에서 강점을 발휘한다. Pulumi는 별도의 도메인 특화 언어를 배우고 싶지 않은 팀에게 매력적인 선택지가 되는 것이다.</p>
+<p>세 가지 도구 중 어느 것이 정답이라고 단정할 수는 없다. Terraform은 가장 널리 사용되는 출발점이며 생태계가 가장 넓다. Crossplane은 이미 Kubernetes 중심으로 운영하는 환경에서 강점을 발휘한다. Pulumi는 별도의 도메인 특화 언어를 배우고 싶지 않은 팀에게 매력적인 선택지가 된다.</p>
 <h2 id="crossplane-kubernetes-iac">Crossplane: Kubernetes 네이티브 IaC</h2>
 <p>Crossplane이 주목받는 이유는 인프라 프로비저닝을 Kubernetes 리소스와 동일한 방식으로 다룰 수 있게 해주기 때문이다. 개발자가 이미 <code class="inline-code">kubectl apply</code>를 알고 있다면, 같은 워크플로로 클라우드 리소스까지 프로비저닝할 수 있게 되는 셈이다.</p>
 <pre><code class="language-yaml"># 개발자가 제출하는 내용
@@ -392,31 +418,92 @@ spec:
   size: medium
   storage: 50Gi
   environment: staging</code></pre>
-<p>이 간단한 매니페스트 뒤에서 Crossplane Composition이 실제 클라우드 리소스로 확장하는 작업을 수행한다. RDS 인스턴스, 보안 그룹, 파라미터 그룹이 자동으로 생성되지만, 개발자는 그러한 복잡성을 직접 다룰 필요 없이 데이터베이스를 받게 되는 것이다.</p>
+<p>이 간단한 매니페스트 뒤에서 Crossplane Composition이 실제 클라우드 리소스로 확장하는 작업을 수행한다. RDS 인스턴스, 보안 그룹, 파라미터 그룹이 자동으로 생성되지만, 개발자는 그러한 복잡성을 직접 다룰 필요 없이 데이터베이스를 받게 된다.</p>
 <h2 id="-">셀프서비스 흐름</h2>
 <p>실제 셀프서비스가 동작하는 과정을 살펴보면 다음과 같다. 먼저 개발자가 카탈로그에서 필요한 리소스를 선택한다. UI, CLI, YAML 파일 등 여러 인터페이스가 제공될 수 있다. 이후 요청은 플랫폼의 정책에 따라 검증되는데, 크기 제한이나 네이밍 규칙, 허용 리전 등이 이 단계에서 확인된다. 검증을 통과하면 IaC 엔진이 리소스를 프로비저닝하고, 연결 정보가 시크릿과 엔드포인트 형태로 개발자에게 전달된다. 프로비저닝된 리소스는 개발자 포털에서 추적할 수 있게 된다.</p>
-<p>이 과정을 통해 개발자는 몇 분 만에 데이터베이스를 받게 되고, 플랫폼 팀은 일관성과 컴플라이언스, 감사 추적을 별도의 수동 작업 없이 확보하게 되는 것이다.</p>
+<p>이 과정을 통해 개발자는 몇 분 만에 데이터베이스를 받게 되고, 플랫폼 팀은 일관성과 컴플라이언스, 감사 추적을 별도의 수동 작업 없이 확보하게 된다.</p>
 <h2 id="-">진짜 차이</h2>
-<p>IaC가 없는 플랫폼은 결국 단계만 하나 추가된 티켓 시스템에 불과하다. 반면 IaC가 있으면 진정한 셀프서비스가 가능해진다. 개발자는 몇 분 만에 필요한 것을 받고, 모든 리소스는 일관되고 감사 가능하며 재현할 수 있는 상태가 유지되는 것이다.</p>
+<p>IaC가 없는 플랫폼은 결국 단계만 하나 추가된 티켓 시스템에 불과하다. 반면 IaC가 있으면 진정한 셀프서비스가 가능해진다. 개발자는 몇 분 만에 필요한 것을 받고, 모든 리소스는 일관되고 감사 가능하며 재현할 수 있는 상태가 유지된다.</p>
 <p>결국 추상화 레이어의 존재 여부가 &quot;우리는 Terraform을 씁니다&quot;와 &quot;우리는 플랫폼이 있습니다&quot;를 가르는 차이인 셈이다.</p>
-<p>다음 포스트에서는 개발자 포털을 다룬다. 서비스, 문서, 도구를 한 곳에서 찾을 수 있는 플랫폼의 정문에 해당하는 구성 요소이다.</p>
+<p>다음 글에서는 개발자 포털을 다룬다. 서비스, 문서, 도구를 한 곳에서 찾을 수 있는 플랫폼의 정문에 해당하는 구성 요소이다.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/compiler-06.html" class="nav-prev">← 오토마타와 컴파일러 06 - 어휘 분석</a>
+        <a href="/tech/ko/posts/compiler-06.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>오토마타와 컴파일러 06 - 어휘 분석</strong>
+            <p>소스 코드를 토큰으로 쪼개는 어휘 분석기의 원리와 오토마타 이론이 실제로 적용되는 지점</p>
+            <span class="post-nav-card-meta">
+                <span>January 21, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
         
-        <a href="/tech/ko/posts/mlops-04.html" class="nav-next">MLOps 04 - 모델 버전 관리와 레지스트리 →</a>
+        <a href="/tech/ko/posts/mlops-04.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>MLOps 04 - 모델 버전 관리와 레지스트리</strong>
+            <p>모델 버전 관리가 코드 버전 관리와 다른 이유, 그리고 모델 레지스트리의 역할</p>
+            <span class="post-nav-card-meta">
+                <span>January 24, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/platform-engineering-06.html">플랫폼 엔지니어링 06 - 개발자 포털과 서비스 카탈로그</a></h3>
+                <p>Backstage 같은 개발자 포털이 흩어진 문서, 도구, 암묵지의 혼란을 어떻게 정리하는지</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/platform-engineering-07.html">플랫폼 엔지니어링 07 - 제품으로서의 플랫폼</a></h3>
+                <p>내부 플랫폼에 제품 관리가 필요한 이유, 사용자 리서치, 그리고 자발적 채택 테스트</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/platform-engineering-08.html">플랫폼 엔지니어링 08 - 대규모 CI/CD</a></h3>
+                <p>팀마다 파이프라인을 따로 만들면 왜 문제가 되는지, 그리고 표준화된 템플릿으로 어떻게 해결하는지</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -438,24 +525,6 @@ spec:
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -476,6 +545,8 @@ spec:
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

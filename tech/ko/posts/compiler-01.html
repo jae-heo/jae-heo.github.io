@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-01.html">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-01.html" />
     <meta property="og:title" content="오토마타와 컴파일러 01 - 유한 오토마타">
     <meta property="og:description" content="유한 오토마타가 무엇이고, 왜 컴파일러를 이해하기 위해 여기서부터 시작해야 하는지">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2025-12-15T00:00:00.000Z"">
@@ -63,8 +63,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -92,7 +94,7 @@
     "name": "Jae's Tech Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
     }
   },
   "inLanguage": "ko-KR",
@@ -154,20 +156,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -175,59 +189,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Lectures</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="오토마타와 컴파일러 01 - 유한 오토마타">오토마타와 컴파일러 01 - 유한 오토마타</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="오토마타와 컴파일러 01 - 유한 오토마타">오토마타와 컴파일러 01 - 유한 오토마타</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>오토마타와 컴파일러 01 - 유한 오토마타</h1>
-        <time datetime=""2025-12-15T00:00:00.000Z"">December 15, 2025</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2025-12-15T00:00:00.000Z"" class="post-kicker">December 15, 2025</time>
+            <h1 class="post-title">오토마타와 컴파일러 01 - 유한 오토마타</h1>
+            <p class="post-deck">유한 오토마타가 무엇이고, 왜 컴파일러를 이해하기 위해 여기서부터 시작해야 하는지</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">3분 읽기</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 오토마타와 컴파일러 (1/12)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/compiler.html" class="series-badge">📚 오토마타와 컴파일러 (1/12)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/tech/ko/tags/compiler.html" class="tag">compiler</a>
                     
@@ -263,7 +286,7 @@
             <!-- Current Post (Not Clickable) -->
             <span class="post-series-title">
                 오토마타와 컴파일러 01 - 유한 오토마타
-                <span class="current-indicator">← You are here</span>
+                <span class="current-indicator">← 현재 글</span>
             </span>
             
         </li>
@@ -361,13 +384,16 @@
 
     
 
-    <div class="post-content">
-        <h2 id="-">왜 오토마타부터 시작하는가?</h2>
-<p>컴파일러를 공부하겠다고 마음먹으면 대부분 바로 파서나 코드 생성부터 보고 싶어한다. 그런데 실제로 컴파일러의 각 단계를 깊이 이해하려면 그 밑바닥에 있는 이론을 피할 수 없다. 렉서는 유한 오토마타로 동작하고, 파서는 푸시다운 오토마타로 동작한다. 이 이론을 모르고 컴파일러를 만들면 왜 그렇게 설계되었는지를 이해하지 못하는 것이다.</p>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">왜 오토마타부터 시작하는가?</h2>
+<p>컴파일러를 공부하겠다고 마음먹으면 대부분 바로 파서나 코드 생성부터 보고 싶어한다. 그런데 실제로 컴파일러의 각 단계를 깊이 이해하려면 그 밑바닥에 있는 이론을 피할 수 없다. 렉서는 유한 오토마타로 동작하고, 파서는 푸시다운 오토마타로 동작한다. 이 이론을 모르고 컴파일러를 만들면 왜 그렇게 설계되었는지를 이해하지 못한다.</p>
 <p>이 시리즈는 오토마타 이론에서 출발하여 실제 컴파일러를 구현하는 것까지를 다룬다. 첫 번째 주제는 가장 기초적인 계산 모델인 유한 오토마타이다.</p>
 <h2 id="-">유한 오토마타의 개념</h2>
 <p>유한 오토마타(Finite Automaton)는 유한한 수의 상태를 가지며, 입력을 한 글자씩 읽으면서 상태를 전이하는 추상적인 기계이다. 입력을 모두 읽은 후 현재 상태가 수락 상태이면 해당 입력을 수락하고, 그렇지 않으면 거부한다.</p>
-<p>일상에서도 유한 오토마타와 유사한 구조를 접할 수 있다. 자판기를 생각해 보면, 동전을 넣을 때마다 상태가 바뀌고, 충분한 금액이 되면 음료를 배출하는 상태로 전이된다. 신호등도 마찬가지이다. 빨강, 노랑, 초록이라는 유한한 상태를 시간에 따라 순환하는 것이다.</p>
+<p>일상에서도 유한 오토마타와 유사한 구조를 접할 수 있다. 자판기를 생각해 보면, 동전을 넣을 때마다 상태가 바뀌고, 충분한 금액이 되면 음료를 배출하는 상태로 전이된다. 신호등도 마찬가지이다. 빨강, 노랑, 초록이라는 유한한 상태를 시간에 따라 순환한다.</p>
 <p>형식적으로 유한 오토마타는 다섯 가지 요소로 정의된다.</p>
 <table>
 <thead>
@@ -384,7 +410,7 @@
 <p>이 다섯 요소가 주어지면 하나의 유한 오토마타가 완전히 결정된다. 중요한 점은 메모리가 없다는 것이다. 유한 오토마타는 현재 상태만 기억할 수 있으며, 이전에 어떤 입력을 읽었는지는 상태를 통해 간접적으로만 반영된다.</p>
 <h2 id="dfa-nfa">DFA와 NFA</h2>
 <p>유한 오토마타는 결정적 유한 오토마타(DFA)와 비결정적 유한 오토마타(NFA)로 나뉜다.</p>
-<p>DFA에서는 각 상태에서 주어진 입력에 대해 전이할 수 있는 다음 상태가 정확히 하나이다. 모호함이 없기 때문에 구현이 직관적이다. 현재 상태와 입력 글자만 보면 다음 상태가 결정되는 것이다.</p>
+<p>DFA에서는 각 상태에서 주어진 입력에 대해 전이할 수 있는 다음 상태가 정확히 하나이다. 모호함이 없기 때문에 구현이 직관적이다. 현재 상태와 입력 글자만 보면 다음 상태가 결정된다.</p>
 <p>NFA에서는 하나의 입력에 대해 여러 상태로 동시에 전이할 수 있으며, 입력을 읽지 않고도 전이하는 ε-전이(엡실론 전이)가 허용된다. 과연 이런 비결정성이 DFA보다 더 강력한 계산 능력을 부여하는 것일까? 그렇지 않다. NFA가 인식할 수 있는 언어의 집합은 DFA가 인식할 수 있는 언어의 집합과 정확히 동일하다. 이것이 오토마타 이론에서 가장 중요한 결과 중 하나이다.</p>
 <p>다만, 표현의 편의성에서는 차이가 있다. NFA는 동일한 언어를 훨씬 적은 상태로 표현할 수 있는 경우가 많다. 이 때문에 정규 표현식을 오토마타로 변환할 때 먼저 NFA를 구성하고, 이를 DFA로 변환하는 과정을 거치는 것이 일반적이다.</p>
 <h2 id="dfa-">DFA의 예시</h2>
@@ -401,7 +427,7 @@
   S1 --1--&gt; S2
   S2 --0--&gt; S2
   S2 --1--&gt; S2</code></pre>
-<p>S0은 아직 &quot;0&quot;을 보지 못한 상태이다. &quot;0&quot;을 읽으면 S1으로 전이하여 &quot;0&quot;을 본 상태가 된다. S1에서 &quot;1&quot;을 읽으면 &quot;01&quot; 패턴을 완성하여 S2로 전이하고, S2는 수락 상태이므로 이후 어떤 입력이 와도 수락 상태를 유지한다. 이 과정에서 오토마타는 별도의 메모리 없이 상태 전이만으로 패턴 매칭을 수행하는 것이다.</p>
+<p>S0은 아직 &quot;0&quot;을 보지 못한 상태이다. &quot;0&quot;을 읽으면 S1으로 전이하여 &quot;0&quot;을 본 상태가 된다. S1에서 &quot;1&quot;을 읽으면 &quot;01&quot; 패턴을 완성하여 S2로 전이하고, S2는 수락 상태이므로 이후 어떤 입력이 와도 수락 상태를 유지한다. 이 과정에서 오토마타는 별도의 메모리 없이 상태 전이만으로 패턴 매칭을 수행한다.</p>
 <h2 id="nfa-dfa-">NFA에서 DFA로의 변환</h2>
 <p>모든 NFA는 동등한 DFA로 변환할 수 있다. 이 변환을 부분집합 구성법(Subset Construction)이라고 부른다.</p>
 <p>핵심 아이디어는 NFA에서 동시에 존재할 수 있는 상태들의 집합을 DFA의 하나의 상태로 대응시키는 것이다. NFA의 상태가 n개이면, DFA의 상태는 최대 2ⁿ개가 될 수 있다. 실제로는 도달 가능한 상태만 생성하므로 이보다 훨씬 적은 경우가 대부분이지만, 최악의 경우 상태가 지수적으로 증가할 수 있다는 점은 중요한 고려사항이다.</p>
@@ -409,24 +435,85 @@
 <h2 id="-">유한 오토마타의 한계</h2>
 <p>유한 오토마타가 인식할 수 없는 언어도 존재한다. 대표적인 예가 괄호 매칭이다. &quot;((()))&quot;처럼 열린 괄호와 닫힌 괄호의 수가 같은지를 확인하려면 열린 괄호의 수를 세어야 한다. 그런데 유한 오토마타는 유한한 상태만 가지므로 임의의 깊이의 괄호를 추적할 수 없다.</p>
 <p>이러한 한계는 프로그래밍 언어의 문법을 처리할 때 직접적으로 드러난다. 중첩된 블록, 재귀적 함수 호출, 괄호 매칭 같은 구조는 유한 오토마타만으로는 다룰 수 없는 것이다. 이를 해결하기 위해 스택이라는 무한한 메모리를 추가한 모델이 필요하며, 이것이 나중에 다룰 푸시다운 오토마타이다.</p>
-<p>다음 포스트에서는 유한 오토마타가 인식하는 언어를 기술하는 방법인 정규 표현식과 정규 언어를 살펴본다.</p>
+<p>다음 글에서는 유한 오토마타가 인식하는 언어를 기술하는 방법인 정규 표현식과 정규 언어를 다룬다.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/python-lecture-04.html" class="nav-prev">← Python 강좌 4편 - 클래스의 내부 구조와 디스크립터</a>
+        <a href="/tech/ko/posts/python-lecture-04.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>Python 강좌 4편 - 클래스의 내부 구조와 디스크립터</strong>
+            <p>파이썬 클래스가 내부적으로 어떻게 작동하는지, 바운드 메서드와 디스크립터의 비밀을 파헤쳐봅니다</p>
+            <span class="post-nav-card-meta">
+                <span>October 30, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>2분 읽기</span>
+            </span>
+        </a>
         
         
-        <a href="/tech/ko/posts/compiler-02.html" class="nav-next">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어 →</a>
+        <a href="/tech/ko/posts/compiler-02.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</strong>
+            <p>정규 표현식이 유한 오토마타와 어떻게 동치이며, 정규 언어의 경계는 어디인가</p>
+            <span class="post-nav-card-meta">
+                <span>December 23, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/compiler-02.html">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</a></h3>
+                <p>정규 표현식이 유한 오토마타와 어떻게 동치이며, 정규 언어의 경계는 어디인가</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/compiler-03.html">오토마타와 컴파일러 03 - 문맥 자유 문법</a></h3>
+                <p>정규 언어의 한계를 넘어서는 문맥 자유 문법의 구조와 역할</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/compiler-04.html">오토마타와 컴파일러 04 - 푸시다운 오토마타</a></h3>
+                <p>유한 오토마타에 스택을 추가하면 어떤 계산 능력을 얻게 되는가</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -448,24 +535,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -486,6 +555,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

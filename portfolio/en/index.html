@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jae's Portfolio</title>
-    <meta name="description" content="Simulation engine performance engineering and architecture design">
+    <meta name="description" content="Software Engineer specializing in performance optimization and system architecture">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
     <link rel="stylesheet" href="/assets/portfolio.css">
@@ -28,7 +28,8 @@
                 <a href="#experience" data-nav-link>Experience</a>
                 <a href="#contact" data-nav-link>Contact</a>
                 <select id="lang-select" aria-label="Select language">
-                    <option value="en" selected>English</option><option value="ko" >한국어</option>
+                    <option value="en" {{#if (eq lang 'en')}}selected{{/if}}>English</option>
+                    <option value="ko" {{#if (eq lang 'ko')}}selected{{/if}}>한국어</option>
                 </select>
                 <button id="theme-toggle" aria-label="Toggle dark mode">
                     <span id="theme-icon">🌙</span>
@@ -56,51 +57,6 @@
                 <h2 class="section-title">Featured Projects</h2>
                 <div class="projects-grid">
                     
-            <article class="project-card">
-                
-                <div class="project-content">
-                    <h3 class="project-title">95% DB Write Time Reduction</h3>
-                    <p class="project-description">Cut database saving time from 168s to 8s in a ~10min simulation (50K+ entities). Built a lock-free SPSC ring buffer over 2GB shared memory to hand off writes to a separate process, with PostgreSQL COPY bulk inserts at 10K records per batch. Profiled hot paths with cProfile, replacing DataFrame scans with O(1) lookups and caching 136M repeated attribute accesses.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Python</span><span class="tech-tag">Shared Memory</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">cProfile</span>
-                    </div>
-                    <div class="project-links">
-                        
-                        
-                        
-                    </div>
-                </div>
-            </article>
-            <article class="project-card">
-                
-                <div class="project-content">
-                    <h3 class="project-title">ECS Architecture for Simulation Engines</h3>
-                    <p class="project-description">Redesigned monolithic machine centers into an Entity Component System with 7 data-only components and 3 behavior systems. Struct-of-Arrays layout keeps data cache-friendly and vectorization-ready.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Python</span><span class="tech-tag">ECS</span><span class="tech-tag">Adapter Pattern</span><span class="tech-tag">Struct-of-Arrays</span>
-                    </div>
-                    <div class="project-links">
-                        
-                        
-                        
-                    </div>
-                </div>
-            </article>
-            <article class="project-card">
-                
-                <div class="project-content">
-                    <h3 class="project-title">Event-Driven Decoupling</h3>
-                    <p class="project-description">Introduced Pub/Sub to separate core simulation logic from I/O side effects across 24 data tables. An event bridge converts low-level signals into domain events without touching the core engine code.</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Python</span><span class="tech-tag">Pub/Sub</span><span class="tech-tag">Event-Driven Architecture</span>
-                    </div>
-                    <div class="project-links">
-                        
-                        
-                        
-                    </div>
-                </div>
-            </article>
                 </div>
             </div>
         </section>
@@ -111,24 +67,6 @@
                 <h2 class="section-title">Technical Skills</h2>
                 <div class="skills-grid">
                     
-            <div class="skill-category">
-                <h3 class="skill-category-title">Core</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">Python (Expert)</span><span class="skill-tag">SQL</span><span class="skill-tag">NumPy</span><span class="skill-tag">Pandas</span><span class="skill-tag">multiprocessing</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3 class="skill-category-title">Architecture & Systems</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">Entity Component System</span><span class="skill-tag">Pub/Sub</span><span class="skill-tag">Discrete Event Simulation</span><span class="skill-tag">Lock-free Structures</span><span class="skill-tag">Shared Memory IPC</span>
-                </div>
-            </div>
-            <div class="skill-category">
-                <h3 class="skill-category-title">Performance & Infrastructure</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">Profiling & Optimization</span><span class="skill-tag">Caching Strategies</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">GitHub Actions CI/CD</span>
-                </div>
-            </div>
                 </div>
             </div>
         </section>
@@ -139,42 +77,6 @@
                 <h2 class="section-title">Experience</h2>
                 <div class="timeline">
                     
-            <div class="timeline-item">
-                <div class="timeline-date">Phase 3</div>
-                <div class="timeline-content">
-                    <h3>Performance Optimization</h3>
-                    <h4>Simulation Engine</h4>
-                    <p>Systematic profiling and optimization of DB write operations in a ~10min simulation</p>
-                    
-                    <ul class="achievements">
-                        <li>168s to 8s DB write time via shared memory ring buffer and cProfile-driven optimization</li><li>O(1) lookups replacing DataFrame scans across hot paths</li><li>Module-level caching eliminating 136M redundant attribute accesses</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">Phase 2</div>
-                <div class="timeline-content">
-                    <h3>Architecture Redesign</h3>
-                    <h4>Simulation Engine</h4>
-                    <p>Restructured the engine core for maintainability and future scalability</p>
-                    
-                    <ul class="achievements">
-                        <li>ECS decomposition of monolithic machine center classes</li><li>Pub/Sub layer isolating I/O from core simulation logic</li><li>Event bridge enabling domain events without modifying the engine</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">Phase 1</div>
-                <div class="timeline-content">
-                    <h3>Infrastructure</h3>
-                    <h4>Simulation Engine</h4>
-                    <p>Built the foundational systems the engine runs on</p>
-                    
-                    <ul class="achievements">
-                        <li>CI/CD benchmarking pipeline with automated regression detection</li><li>Technical documentation covering 16 system concepts and 90 data references</li>
-                    </ul>
-                </div>
-            </div>
                 </div>
             </div>
         </section>
@@ -188,9 +90,10 @@
                     <div class="contact-links">
                         
                         
-            <a href="https://github.com/jae-heo" class="contact-link" target="_blank">
-                <span>🐙</span> GitHub
-            </a>
+                        <a href="https://github.com/jae-heo" class="contact-link" target="_blank">
+                            <span>🐙</span> GitHub
+                        </a>
+                        
                         
                         
                     </div>

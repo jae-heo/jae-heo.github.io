@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-02.html">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/compiler-02.html" />
     <meta property="og:title" content="오토마타와 컴파일러 02 - 정규 표현식과 정규 언어">
     <meta property="og:description" content="정규 표현식이 유한 오토마타와 어떻게 동치이며, 정규 언어의 경계는 어디인가">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2025-12-23T00:00:00.000Z"">
@@ -63,8 +63,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -92,7 +94,7 @@
     "name": "Jae's Tech Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
     }
   },
   "inLanguage": "ko-KR",
@@ -154,20 +156,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -175,59 +189,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Lectures</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="오토마타와 컴파일러 02 - 정규 표현식과 정규 언어">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="오토마타와 컴파일러 02 - 정규 표현식과 정규 언어">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</h1>
-        <time datetime=""2025-12-23T00:00:00.000Z"">December 23, 2025</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2025-12-23T00:00:00.000Z"" class="post-kicker">December 23, 2025</time>
+            <h1 class="post-title">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</h1>
+            <p class="post-deck">정규 표현식이 유한 오토마타와 어떻게 동치이며, 정규 언어의 경계는 어디인가</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">3분 읽기</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 오토마타와 컴파일러 (2/12)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/compiler.html" class="series-badge">📚 오토마타와 컴파일러 (2/12)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/tech/ko/tags/compiler.html" class="tag">compiler</a>
                     
@@ -271,7 +294,7 @@
             <!-- Current Post (Not Clickable) -->
             <span class="post-series-title">
                 오토마타와 컴파일러 02 - 정규 표현식과 정규 언어
-                <span class="current-indicator">← You are here</span>
+                <span class="current-indicator">← 현재 글</span>
             </span>
             
         </li>
@@ -361,8 +384,11 @@
 
     
 
-    <div class="post-content">
-        <h2 id="-">유한 오토마타가 인식하는 언어를 기술하는 방법</h2>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">유한 오토마타가 인식하는 언어를 기술하는 방법</h2>
 <p>이전 포스트에서 유한 오토마타가 입력을 상태 전이만으로 처리하는 모델임을 보았다. 그렇다면 유한 오토마타가 인식할 수 있는 언어의 범위는 어디까지이며, 그 범위를 어떻게 간결하게 기술할 수 있을까? 이 질문에 답하는 것이 바로 정규 표현식(Regular Expression)이다.</p>
 <p>프로그래머라면 grep이나 텍스트 에디터에서 정규 표현식을 써 본 경험이 있을 것이다. 그런데 이 도구가 왜 &quot;정규(regular)&quot;라는 이름을 달고 있는지 생각해 본 적이 있는가? 이 이름은 수학적 의미에서의 정규 언어(Regular Language)에서 온 것이며, 정규 표현식이 기술할 수 있는 언어의 집합이 정확히 유한 오토마타가 인식할 수 있는 언어의 집합과 일치하기 때문이다.</p>
 <h2 id="-">정규 표현식의 세 가지 연산</h2>
@@ -377,7 +403,7 @@
 <tr><td>클리니 스타(Kleene Star)</td><td>R*</td><td>R을 0번 이상 반복한 문자열</td></tr>
 </tbody>
 </table>
-<p>이 세 가지 연산만으로도 놀라울 정도로 다양한 패턴을 표현할 수 있다. 예를 들어 알파벳 {0, 1} 위에서 <code class="inline-code">(0 ∪ 1)*01</code>이라는 정규 표현식은 &quot;01&quot;로 끝나는 모든 이진 문자열의 집합을 나타낸다. <code class="inline-code">(0 ∪ 1)*</code>이 임의의 이진 문자열을 의미하고, 그 뒤에 &quot;01&quot;이 와야 하므로 결과적으로 &quot;01&quot;로 끝나는 문자열만 수락되는 것이다.</p>
+<p>이 세 가지 연산만으로도 놀라울 정도로 다양한 패턴을 표현할 수 있다. 예를 들어 알파벳 {0, 1} 위에서 <code class="inline-code">(0 ∪ 1)*01</code>이라는 정규 표현식은 &quot;01&quot;로 끝나는 모든 이진 문자열의 집합을 나타낸다. <code class="inline-code">(0 ∪ 1)*</code>이 임의의 이진 문자열을 의미하고, 그 뒤에 &quot;01&quot;이 와야 하므로 결과적으로 &quot;01&quot;로 끝나는 문자열만 수락된다.</p>
 <p>실용적인 정규 표현식 엔진에서는 <code class="inline-code">+</code>(1회 이상 반복), <code class="inline-code">?</code>(0회 또는 1회), 문자 클래스 같은 편의 연산이 추가되지만, 이들은 모두 세 가지 기본 연산의 축약에 불과하다. <code class="inline-code">R+</code>는 <code class="inline-code">RR*</code>이고, <code class="inline-code">R?</code>는 <code class="inline-code">R ∪ ε</code>이다. 표현력의 관점에서 보면 기본 연산 세 가지로 충분한 셈이다.</p>
 <h2 id="-">클리니의 정리 — 정규 표현식과 유한 오토마타의 동치</h2>
 <p>정규 표현식과 유한 오토마타 사이에는 깊은 연결이 존재한다. 스티븐 클리니(Stephen Kleene)가 증명한 정리에 따르면, 어떤 언어가 정규 표현식으로 기술될 수 있는 것과 유한 오토마타가 인식할 수 있는 것은 동치이다. 즉, 모든 정규 표현식에 대응하는 유한 오토마타가 존재하고, 모든 유한 오토마타에 대응하는 정규 표현식이 존재한다.</p>
@@ -396,27 +422,88 @@
 3. 모든 i ≥ 0에 대해, xy^i z ∈ L</code></pre>
 <p>이를 이용하여 <code class="inline-code">{aⁿbⁿ | n ≥ 0}</code>이 정규 언어가 아님을 증명할 수 있다. 이 언어가 정규 언어라고 가정하면 펌핑 길이 p가 존재한다. 문자열 <code class="inline-code">aᵖbᵖ</code>를 선택하면, 조건 1에 의해 y는 a로만 구성된다. 그런데 y를 반복하면 a의 개수만 늘어나고 b의 개수는 그대로이므로 <code class="inline-code">xy²z</code>는 a의 개수가 b보다 많아서 언어에 속하지 않는다. 이는 모순이므로 이 언어는 정규 언어가 아닌 것이다.</p>
 <h2 id="-">렉서와의 연결</h2>
-<p>정규 표현식과 정규 언어가 컴파일러에서 활용되는 가장 직접적인 지점은 렉서(Lexical Analyzer)이다. 렉서의 역할은 소스 코드의 문자 스트림을 의미 있는 토큰(키워드, 식별자, 연산자, 리터럴 등)으로 분리하는 것이다.</p>
+<p>정규 표현식과 정규 언어가 컴파일러에서 활용되는 가장 직접적인 지점은 렉서(Lexical Analyzer)이다. 렉서의 역할은 소스 코드의 문자 스트림을 의미 있는 토큰(키워드, 식별자, 연산자, 리터럴 등)으로 분리한다.</p>
 <p>각 토큰 종류는 정규 표현식으로 기술된다. 예를 들어 C 언어에서 식별자는 <code class="inline-code">[a-zA-Z_][a-zA-Z0-9_]*</code>, 정수 리터럴은 <code class="inline-code">[0-9]+</code>, 부동소수점 리터럴은 <code class="inline-code">[0-9]+\.[0-9]+([eE][+-]?[0-9]+)?</code> 같은 패턴으로 표현할 수 있다. 이 정규 표현식들을 합쳐서 하나의 DFA로 변환하면, 입력 문자열을 한 번의 스캔으로 토큰화할 수 있는 효율적인 렉서가 만들어진다.</p>
 <p>정규 언어의 한계가 곧 렉서의 한계이기도 하다. 중첩된 주석(<code class="inline-code">/* /* */ */</code>)이나 괄호 매칭 같은 구조는 정규 표현식만으로 처리할 수 없으며, 이런 구조를 다루려면 다음 단계인 파서의 영역으로 넘어가야 한다. 이것이 컴파일러가 렉서와 파서를 별도의 단계로 분리하는 근본적인 이유인 것이다.</p>
-<p>다음 포스트에서는 정규 언어를 넘어서는 문법 체계인 문맥 자유 문법을 살펴본다.</p>
+<p>다음 글에서는 정규 언어를 넘어서는 문법 체계인 문맥 자유 문법을 다룬다.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/compiler-01.html" class="nav-prev">← 오토마타와 컴파일러 01 - 유한 오토마타</a>
+        <a href="/tech/ko/posts/compiler-01.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>오토마타와 컴파일러 01 - 유한 오토마타</strong>
+            <p>유한 오토마타가 무엇이고, 왜 컴파일러를 이해하기 위해 여기서부터 시작해야 하는지</p>
+            <span class="post-nav-card-meta">
+                <span>December 15, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
         
-        <a href="/tech/ko/posts/platform-engineering-01.html" class="nav-next">플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란? →</a>
+        <a href="/tech/ko/posts/platform-engineering-01.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?</strong>
+            <p>플랫폼 엔지니어링이 실제로 무엇인지, 왜 등장했는지, DevOps와 어떻게 다른지</p>
+            <span class="post-nav-card-meta">
+                <span>December 24, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/compiler-03.html">오토마타와 컴파일러 03 - 문맥 자유 문법</a></h3>
+                <p>정규 언어의 한계를 넘어서는 문맥 자유 문법의 구조와 역할</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/compiler-04.html">오토마타와 컴파일러 04 - 푸시다운 오토마타</a></h3>
+                <p>유한 오토마타에 스택을 추가하면 어떤 계산 능력을 얻게 되는가</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/compiler-05.html">오토마타와 컴파일러 05 - 컴파일러 개요 — 단계와 구조</a></h3>
+                <p>컴파일러가 왜 여러 단계로 나뉘며, 각 단계는 어떤 역할을 하는가</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -438,24 +525,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -476,6 +545,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

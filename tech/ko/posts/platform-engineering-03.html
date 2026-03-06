@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/platform-engineering-03.html">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/platform-engineering-03.html" />
     <meta property="og:title" content="플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유">
     <meta property="og:description" content="개발자 경험이 모든 플랫폼 의사결정을 이끌어야 하는 이유, 측정 방법, 그리고 이를 망치는 안티패턴들">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2026-01-08T00:00:00.000Z"">
@@ -61,8 +61,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -91,7 +93,7 @@
     "name": "Jae's Tech Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
     }
   },
   "inLanguage": "ko-KR",
@@ -153,20 +155,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -174,59 +188,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Lectures</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유">플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유">플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유</h1>
-        <time datetime=""2026-01-08T00:00:00.000Z"">January 8, 2026</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2026-01-08T00:00:00.000Z"" class="post-kicker">January 8, 2026</time>
+            <h1 class="post-title">플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유</h1>
+            <p class="post-deck">개발자 경험이 모든 플랫폼 의사결정을 이끌어야 하는 이유, 측정 방법, 그리고 이를 망치는 안티패턴들</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">3분 읽기</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 플랫폼 엔지니어링 기초 (3/11)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/platform-engineering.html" class="series-badge">📚 플랫폼 엔지니어링 기초 (3/11)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/tech/ko/tags/platform-engineering.html" class="tag">platform-engineering</a>
                     
@@ -276,7 +299,7 @@
             <!-- Current Post (Not Clickable) -->
             <span class="post-series-title">
                 플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유
-                <span class="current-indicator">← You are here</span>
+                <span class="current-indicator">← 현재 글</span>
             </span>
             
         </li>
@@ -350,15 +373,19 @@
 
     
 
-    <div class="post-content">
-        <h2 id="-">아무도 안 쓰는 플랫폼</h2>
-<p>세상에서 가장 멋진 플랫폼을 만들 수 있다. 하지만 개발자들이 쓰기 싫어하면 그 플랫폼은 실패한 것이다. 개발자 경험(DevEx)은 있으면 좋은 부가 요소가 아니라, 플랫폼이 살아남을 수 있는지를 결정하는 핵심 지표이다.</p>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">아무도 안 쓰는 플랫폼</h2>
+<p>세상에서 가장 멋진 플랫폼도 개발자들이 쓰기 싫어하면 실패다. 개발자 경험(DevEx)은 있으면 좋은 부가 요소가 아니라, 플랫폼이 실제로 정착할 수 있는지를 가르는 기준에 가깝다.</p>
 <h2 id="devex-">DevEx가 실제로 어떻게 보이는가</h2>
 <p>좋은 DevEx의 경우를 생각해 보자. 코드를 푸시하면 CI가 자동으로 실행되고, 5분 안에 배포가 완료되며, 로그와 메트릭이 즉시 확인된다.</p>
 <p>나쁜 DevEx의 경우는 이와 대조적이다. 코드를 푸시한 뒤 CI가 40분 동안 돌아가는 것을 기다리고, 설정 파일을 수동으로 수정하고, 슬랙에서 누군가에게 배포 승인을 요청하고, 서버에 SSH로 접속해서 서비스가 정상적으로 동작하는지 직접 확인해야 한다.</p>
 <p>두 경우 모두 최종 결과는 같다. 하지만 그 과정에서의 경험은 완전히 다르며, 이 차이가 개발자의 생산성과 만족도를 결정짓는 것이다.</p>
+<p>이 차이는 기분 문제에 그치지 않는다. 나쁜 DevEx는 우회로를 낳는다. CI가 너무 느리면 개발자는 테스트를 건너뛰고, 배포 절차가 복잡하면 수동 스크립트를 만들고, 문서가 부실하면 옆 사람에게 계속 물어보게 된다. 결국 플랫폼이 있어도 플랫폼 밖의 비공식 경로가 더 강해진다.</p>
 <h2 id="space-">SPACE 프레임워크</h2>
-<p>마이크로소프트 리서치가 개발자 생산성을 체계적으로 이해하기 위해 SPACE 프레임워크를 제안했다. 플랫폼 팀이 자신들의 성과를 평가할 때 유용한 렌즈가 되는 프레임워크이다.</p>
+<p>마이크로소프트 리서치는 개발자 생산성을 한 가지 숫자로 환원하지 않기 위해 SPACE 프레임워크를 제안했다. 플랫폼 팀 입장에서도 어떤 경험을 개선하고 있는지 점검할 때 꽤 유용한 틀이다.</p>
 <table>
 <thead>
 <tr><th>차원</th><th>측정 대상</th><th>플랫폼 예시</th></tr>
@@ -371,11 +398,12 @@
 <tr><td>Efficiency (효율)</td><td>작업 완료까지의 마찰</td><td>커밋에서 프로덕션까지 소요 시간</td></tr>
 </tbody>
 </table>
-<p>여기서 주의할 점은 한 가지 차원만 최적화하는 함정에 빠지지 않는 것이다. 빠르지만 사용할 때마다 짜증이 나는 플랫폼은 좋은 DevEx가 아니다. 쉽지만 불안정한 플랫폼도 마찬가지이다. 여러 차원을 균형 있게 고려해야 비로소 의미 있는 개발자 경험을 제공할 수 있는 것이다.</p>
+<p>여기서 주의할 점은 한 가지 차원만 최적화하는 함정에 빠지지 않는 것이다. 빠르지만 사용할 때마다 짜증이 나는 플랫폼은 좋은 DevEx가 아니다. 쉽지만 불안정한 플랫폼도 마찬가지이다. 여러 차원을 균형 있게 고려해야 비로소 의미 있는 개발자 경험을 제공할 수 있다.</p>
 <h2 id="-">무엇을 측정할 것인가</h2>
 <p>시간 기반 메트릭은 직접 측정이 가능하다. 커밋에서 프로덕션까지 걸리는 시간, 새 환경을 프로비저닝하는 속도, 신규 개발자가 첫 배포까지 도달하는 시간, CI 소요 시간 등이 여기에 해당한다. 숫자로 명확하게 나오기 때문에 추적하기 가장 용이한 지표이다.</p>
-<p>채택 메트릭은 개발자들이 실제로 플랫폼을 사용하고 있는지를 보여준다. 골든 패스를 따르는 팀의 비율, 셀프서비스 대비 티켓 요청의 비율, 첫 사용 이후 반복적으로 돌아오는지 여부를 추적하는 것이다. 다만 채택률이 높은데 만족도가 낮다면, 그것은 자발적 선택이 아니라 강제의 결과일 가능성이 높다.</p>
+<p>채택 메트릭은 개발자들이 실제로 플랫폼을 사용하고 있는지를 보여준다. 골든 패스를 따르는 팀의 비율, 셀프서비스 대비 티켓 요청의 비율, 첫 사용 이후 반복적으로 돌아오는지 여부를 추적한다. 다만 채택률이 높은데 만족도가 낮다면, 그것은 자발적 선택이 아니라 강제의 결과일 가능성이 높다.</p>
 <p>만족도 메트릭은 개발자들의 주관적인 느낌을 포착한다. 분기별로 짧은 개발자 설문을 실시하고, 내부 도구에 대한 NPS를 추적하고, 지원 티켓에서 반복적으로 등장하는 주제를 분석하는 방식이다.</p>
+<p>실제로는 이 세 부류를 함께 봐야 한다. 예를 들어 첫 배포까지 시간은 줄었는데 지원 티켓이 급증했다면, 자동화는 늘었지만 인터페이스가 이해하기 어려워졌을 수 있다. 반대로 만족도는 높은데 채택률이 낮다면, 일부 팀만 혜택을 보고 있을 가능성이 있다. DevEx는 단일 숫자로 요약하기 어렵고, 그래서 오히려 여러 신호를 함께 보는 쪽이 정확하다.</p>
 <h2 id="-">피드백 루프</h2>
 <p>짧은 루프와 긴 루프를 모두 갖추는 것이 중요하다. 짧은 루프에서는 개발자가 마찰을 보고하면 며칠 안에 수정을 배포한다. 이를 통해 신뢰가 쌓인다. 긴 루프에서는 분기별 설문을 통해 트렌드를 파악하고 로드맵을 조정한다. 이를 통해 전략이 만들어진다.</p>
 <p>가장 나쁜 것은 피드백을 요청해 놓고 아무런 조치를 취하지 않는 것이다. 이런 상황이 반복되면 개발자들은 무엇이 고장났는지 알려주는 것을 포기하고 자체적으로 우회 방법을 만들기 시작한다. 그 시점이 되면 이미 플랫폼에 대한 신뢰를 잃은 것이다.</p>
@@ -384,28 +412,90 @@
 <p>반대로 준비가 덜 된 플랫폼에 팀을 강제로 이주시키는 것도 위험하다. 채택을 강제하는 것은 플랫폼에 대한 신뢰를 가장 빠르게 소진시키는 방법이다.</p>
 <p>&quot;이번 달 배포 1000회&quot;를 축하하면서 그중 절반이 실패한 사실을 간과하는 경우도 있다. 활동 지표만 추적하고 결과를 무시하면 숫자가 실상을 가리는 것이다.</p>
 <p>골든 패스가 정상적으로 작동하는 상황에서는 문제가 드러나지 않는다. 진짜 시험은 에러가 발생했을 때이다. 안내 없이 알 수 없는 메시지만 표시되면 개발자는 플랫폼을 우회하는 쪽을 선택하게 된다.</p>
-<p>추상화에도 같은 원리가 적용된다. 복잡성을 지나치게 숨기면 문제가 발생했을 때 아무도 디버깅할 수 없게 된다. 추상화는 유용하지만, 벽이 되는 순간 오히려 장애물이 되는 것이다.</p>
+<p>추상화에도 같은 원리가 적용된다. 복잡성을 지나치게 숨기면 문제가 발생했을 때 아무도 디버깅할 수 없게 된다. 추상화는 유용하지만, 벽이 되는 순간 오히려 장애물이 된다.</p>
 <h2 id="-">간단한 테스트</h2>
 <p>플랫폼은 제품이고, 개발자는 그 제품의 사용자이다. 고객 대상 제품을 UX에 신경 쓰지 않고 출시하는 일은 없다. 내부 플랫폼도 이와 다르지 않다.</p>
-<p>모든 플랫폼 의사결정은 하나의 테스트를 통과해야 한다. 이 결정이 개발자의 일상을 더 쉽게 만드는가, 아니면 더 어렵게 만드는가 하는 것이다.</p>
-<p>다음 포스트에서는 골든 패스를 실전에서 다룬다. 올바른 일을 쉬운 일로 만드는 기본 경로의 설계 방법이다.</p>
+<p>모든 플랫폼 의사결정은 하나의 테스트를 통과해야 한다. 이 결정이 개발자의 일상을 더 쉽게 만드는가, 아니면 더 어렵게 만드는가를 기준으로 봐야 한다.</p>
+<p>간단한 체크리스트로 바꾸면 더 명확해진다. 새 기능을 넣기 전에 &quot;반복 작업이 줄어드는가?&quot;, &quot;실패했을 때 다음 행동이 명확한가?&quot;, &quot;새 팀원이 문서만 보고 따라갈 수 있는가?&quot;를 물어보면 된다. 세 질문에 자신 있게 답하지 못한다면, 그 기능은 아직 DevEx 관점에서 덜 다듬어진 것이다.</p>
+<p>다음 글에서는 골든 패스를 실전에서 다룬다. 올바른 일을 쉬운 일로 만드는 기본 경로의 설계 방법이다.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/compiler-04.html" class="nav-prev">← 오토마타와 컴파일러 04 - 푸시다운 오토마타</a>
+        <a href="/tech/ko/posts/compiler-04.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>오토마타와 컴파일러 04 - 푸시다운 오토마타</strong>
+            <p>유한 오토마타에 스택을 추가하면 어떤 계산 능력을 얻게 되는가</p>
+            <span class="post-nav-card-meta">
+                <span>January 7, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
         
-        <a href="/tech/ko/posts/mlops-02.html" class="nav-next">MLOps 02 - 데이터 파이프라인과 피처 엔지니어링 →</a>
+        <a href="/tech/ko/posts/mlops-02.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>MLOps 02 - 데이터 파이프라인과 피처 엔지니어링</strong>
+            <p>원시 데이터가 학습 데이터가 되기까지의 과정과, 데이터 품질이 모델 성능을 결정하는 이유</p>
+            <span class="post-nav-card-meta">
+                <span>January 9, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/platform-engineering-04.html">플랫폼 엔지니어링 04 - 골든 패스 설계하기</a></h3>
+                <p>개발자가 실제로 따르고 싶은 골든 패스를 설계하는 방법 — 원칙, 단계별 프로세스, 이탈 팀 대응법</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/platform-engineering-05.html">플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code</a></h3>
+                <p>IaC가 플랫폼의 근간인 이유, 그리고 Terraform, Pulumi, Crossplane을 셀프서비스 인프라 관점에서 비교</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/platform-engineering-06.html">플랫폼 엔지니어링 06 - 개발자 포털과 서비스 카탈로그</a></h3>
+                <p>Backstage 같은 개발자 포털이 흩어진 문서, 도구, 암묵지의 혼란을 어떻게 정리하는지</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -427,24 +517,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -465,6 +537,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

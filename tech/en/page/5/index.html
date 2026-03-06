@@ -15,13 +15,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jae-heo.github.io">
+    <meta property="og:url" content="https://jae-heo.github.io" />
     <meta property="og:title" content="Jae's Tech Blog">
     <meta property="og:description" content="Deep dives into programming, technology trends, and development insights">
     <meta property="og:site_name" content="Jae's Tech Blog">
     <meta property="og:locale" content="en_US">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
 
@@ -37,8 +37,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -96,20 +98,28 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -120,6 +130,74 @@
         <h1>Jae's Tech Blog</h1>
         <p class="subtitle">Thoughts on code, technology, and everything in between</p>
     </div>
+
+    <section class="home-intro">
+        <div class="home-intro-copy">
+            <span class="home-intro-eyebrow">Technical notes by Jae</span>
+            <h2>Systems writing for engineers who want the deeper model.</h2>
+            <p>Long-form posts on platform engineering, Linux, compilers, MLOps, and computer architecture, written to help you build stronger intuition instead of just memorize terms.</p>
+        </div>
+        <div class="home-intro-panel">
+            <div class="home-intro-card">
+                <span class="home-intro-card-label">Start here</span>
+                <strong>Featured series</strong>
+                <p>A few strong entry points if you are new here.</p>
+            </div>
+            <div class="home-intro-card">
+                <span class="home-intro-card-label">Browse recent posts</span>
+                <strong>58 posts</strong>
+                <p>Fresh writing, updates, and ongoing series entries.</p>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="featured-series-strip">
+        
+        <article class="featured-series-card">
+            <div class="featured-series-meta">
+                <span>10 posts</span>
+                <span class="post-card-dot"></span>
+                <span>43 min total</span>
+            </div>
+            <h3><a href="/tech/en/series/mlops.html">MLOps Fundamentals</a></h3>
+            <p>Building reliable ML systems from data pipelines to production monitoring</p>
+            <p class="featured-series-audience">ML engineers, data scientists, and backend engineers moving from model experiments to production operations.</p>
+            <div class="featured-series-actions">
+                <a href="/tech/en/posts/mlops-01.html" class="read-more">Recommended Start</a>
+            </div>
+        </article>
+        
+        <article class="featured-series-card">
+            <div class="featured-series-meta">
+                <span>12 posts</span>
+                <span class="post-card-dot"></span>
+                <span>60 min total</span>
+            </div>
+            <h3><a href="/tech/en/series/compiler.html">Automata and Compilers</a></h3>
+            <p>From finite automata and formal languages to building a compiler from scratch</p>
+            <p class="featured-series-audience">Readers who want both the theory behind language processing and the bridge to real compiler construction.</p>
+            <div class="featured-series-actions">
+                <a href="/tech/en/posts/compiler-01.html" class="read-more">Recommended Start</a>
+            </div>
+        </article>
+        
+        <article class="featured-series-card">
+            <div class="featured-series-meta">
+                <span>10 posts</span>
+                <span class="post-card-dot"></span>
+                <span>64 min total</span>
+            </div>
+            <h3><a href="/tech/en/series/linux.html">Linux Internals</a></h3>
+            <p>Understanding the Linux kernel from processes and memory to containers</p>
+            <p class="featured-series-audience">Engineers who use Linux daily and want to understand what the kernel is doing underneath familiar commands and APIs.</p>
+            <div class="featured-series-actions">
+                <a href="/tech/en/posts/linux-01.html" class="read-more">Recommended Start</a>
+            </div>
+        </article>
+        
+    </section>
+    
 
     <!-- Tab Navigation -->
     <div class="home-tabs">
@@ -145,18 +223,21 @@
                 <span class="updated-badge">UPDATED</span>
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        MLOps Fundamentals
-                    </h2>
-                    <p class="home-series-description">Building reliable ML systems from data pipelines to production monitoring</p>
-                    <div class="home-series-count">
-                        10
-                        
-                            
-                                 posts
-                            
-                        
-                    </div>
+                    <a href="/tech/en/series/mlops.html" class="home-series-header-link" aria-label="MLOps Fundamentals">
+                        <h2 class="home-series-title">
+                            MLOps Fundamentals
+                        </h2>
+                        <p class="home-series-description">Building reliable ML systems from data pipelines to production monitoring</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                10
+                                
+                                    posts
+                                
+                            </div>
+                            <span class="home-series-cta">Open series guide →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -329,18 +410,21 @@
                 <span class="updated-badge">UPDATED</span>
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        Automata and Compilers
-                    </h2>
-                    <p class="home-series-description">From finite automata and formal languages to building a compiler from scratch</p>
-                    <div class="home-series-count">
-                        12
-                        
-                            
-                                 posts
-                            
-                        
-                    </div>
+                    <a href="/tech/en/series/compiler.html" class="home-series-header-link" aria-label="Automata and Compilers">
+                        <h2 class="home-series-title">
+                            Automata and Compilers
+                        </h2>
+                        <p class="home-series-description">From finite automata and formal languages to building a compiler from scratch</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                12
+                                
+                                    posts
+                                
+                            </div>
+                            <span class="home-series-cta">Open series guide →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -545,18 +629,21 @@
                 <span class="updated-badge">UPDATED</span>
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        Linux Internals
-                    </h2>
-                    <p class="home-series-description">Understanding the Linux kernel from processes and memory to containers</p>
-                    <div class="home-series-count">
-                        10
-                        
-                            
-                                 posts
-                            
-                        
-                    </div>
+                    <a href="/tech/en/series/linux.html" class="home-series-header-link" aria-label="Linux Internals">
+                        <h2 class="home-series-title">
+                            Linux Internals
+                        </h2>
+                        <p class="home-series-description">Understanding the Linux kernel from processes and memory to containers</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                10
+                                
+                                    posts
+                                
+                            </div>
+                            <span class="home-series-cta">Open series guide →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -729,18 +816,208 @@
                 <span class="updated-badge">UPDATED</span>
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        Platform Engineering Fundamentals
-                    </h2>
-                    <p class="home-series-description">Understanding the principles behind Internal Developer Platforms, golden paths, and developer self-service</p>
-                    <div class="home-series-count">
-                        11
-                        
+                    <a href="/tech/en/series/computer-architecture.html" class="home-series-header-link" aria-label="Computer Architecture">
+                        <h2 class="home-series-title">
+                            Computer Architecture
+                        </h2>
+                        <p class="home-series-description">From CPU internals and privilege levels to memory hierarchy and modern multicore processors</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                10
+                                
+                                    posts
+                                
+                            </div>
+                            <span class="home-series-cta">Open series guide →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 11">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-10.html" class="home-series-post-link">
+                            Computer Architecture 10 - Multicore and Modern Processors
+                            <span class="new-badge">NEW</span>
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-09.html" class="home-series-post-link">
+                            Computer Architecture 09 - I/O and DMA
                             
-                                 posts
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-08.html" class="home-series-post-link">
+                            Computer Architecture 08 - Virtual Memory and MMU
                             
-                        
-                    </div>
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-07.html" class="home-series-post-link">
+                            Computer Architecture 07 - Memory Hierarchy
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-06.html" class="home-series-post-link">
+                            Computer Architecture 06 - Interrupts and Exceptions
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-05.html" class="home-series-post-link">
+                            Computer Architecture 05 - CPU Privilege Levels and Protection
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-04.html" class="home-series-post-link">
+                            Computer Architecture 04 - Pipelining and Parallel Processing
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-03.html" class="home-series-post-link">
+                            Computer Architecture 03 - Instruction Set Architecture (ISA)
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-02.html" class="home-series-post-link">
+                            Computer Architecture 02 - CPU Internals
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/en/posts/comparch-01.html" class="home-series-post-link">
+                            Computer Architecture 01 - Overview
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                <span class="updated-badge">UPDATED</span>
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/en/series/platform-engineering.html" class="home-series-header-link" aria-label="Platform Engineering Fundamentals">
+                        <h2 class="home-series-title">
+                            Platform Engineering Fundamentals
+                        </h2>
+                        <p class="home-series-description">Understanding the principles behind Internal Developer Platforms, golden paths, and developer self-service</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                11
+                                
+                                    posts
+                                
+                            </div>
+                            <span class="home-series-cta">Open series guide →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -929,18 +1206,21 @@
                 
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        Python Lecture Series
-                    </h2>
-                    <p class="home-series-description">Comprehensive Python programming course from basics to advanced topics</p>
-                    <div class="home-series-count">
-                        5
-                        
-                            
-                                 posts
-                            
-                        
-                    </div>
+                    <a href="/tech/en/series/python-lecture.html" class="home-series-header-link" aria-label="Python Lecture Series">
+                        <h2 class="home-series-title">
+                            Python Lecture Series
+                        </h2>
+                        <p class="home-series-description">Comprehensive Python programming course from basics to advanced topics</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                5
+                                
+                                    posts
+                                
+                            </div>
+                            <span class="home-series-cta">Open series guide →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -1038,26 +1318,6 @@
         <div class="filter-section">
             <!-- Filters button will be inserted here by JS -->
         </div>
-        <div class="view-toggle">
-            <button class="view-toggle-btn active" data-view="grid" title="Grid view">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
-            </button>
-            <button class="view-toggle-btn" data-view="list" title="List view">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="8" y1="6" x2="21" y2="6"></line>
-                    <line x1="8" y1="12" x2="21" y2="12"></line>
-                    <line x1="8" y1="18" x2="21" y2="18"></line>
-                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                </svg>
-            </button>
-        </div>
         <!-- Filter panel will be inserted here by JS -->
     </div>
 
@@ -1068,20 +1328,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-14T00:00:00.000Z"">January 14, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
-                <a href="/tech/en/posts/platform-engineering-02.html">Platform Engineering 02 - Anatomy of an Internal Developer Platform</a>
+                <a href="/tech/en/posts/mlops-03.html">MLOps 03 - Experiment Tracking and Training Management</a>
             </h2>
-            <time datetime=""2026-01-02T00:00:00.000Z"">January 2, 2026</time>
             
-            <p class="post-excerpt">What actually goes inside an Internal Developer Platform — the five planes, how they connect, and the build vs buy decision</p>
+            <p class="post-excerpt">What goes wrong when experiments aren't tracked, and the tools that solve it</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/platform-engineering-02.html" class="read-more">Read more</a>
+                
+                </div>
+                <a href="/tech/en/posts/mlops-03.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -1090,20 +1357,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-13T00:00:00.000Z"">January 13, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
-                <a href="/tech/en/posts/mlops-01.html">MLOps 01 - What Is MLOps?</a>
+                <a href="/tech/en/posts/compiler-05.html">Automata and Compilers 05 - Compiler Overview — Phases and Architecture</a>
             </h2>
-            <time datetime=""2026-01-01T00:00:00.000Z"">January 1, 2026</time>
             
-            <p class="post-excerpt">Why MLOps is necessary and what the real challenges of the ML lifecycle are</p>
+            <p class="post-excerpt">Why compilers are divided into multiple phases and what each phase does</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/mlops-01.html" class="read-more">Read more</a>
+                
+                </div>
+                <a href="/tech/en/posts/compiler-05.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -1112,20 +1386,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-12T00:00:00.000Z"">January 12, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
-                <a href="/tech/en/posts/compiler-03.html">Automata and Compilers 03 - Context-Free Grammars</a>
+                <a href="/tech/en/posts/linux-03.html">Linux Internals 03 - Process Scheduling</a>
             </h2>
-            <time datetime=""2025-12-29T00:00:00.000Z"">December 29, 2025</time>
             
-            <p class="post-excerpt">Moving beyond regular languages with the structure and role of context-free grammars</p>
+            <p class="post-excerpt">How the Linux kernel distributes CPU time among processes and how CFS works</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/compiler-03.html" class="read-more">Read more</a>
+                
+                </div>
+                <a href="/tech/en/posts/linux-03.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -1134,20 +1415,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-10T00:00:00.000Z"">January 10, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
-                <a href="/tech/en/posts/linux-01.html">Linux Internals 01 - Operating System Overview</a>
+                <a href="/tech/en/posts/comparch-03.html">Computer Architecture 03 - Instruction Set Architecture (ISA)</a>
             </h2>
-            <time datetime=""2025-12-28T00:00:00.000Z"">December 28, 2025</time>
             
-            <p class="post-excerpt">What an operating system does and the role of the Linux kernel</p>
+            <p class="post-excerpt">The role of ISAs, CISC vs RISC philosophy, and x86 versus ARM design differences</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/linux-01.html" class="read-more">Read more</a>
+                
+                </div>
+                <a href="/tech/en/posts/comparch-03.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -1156,20 +1444,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-09T00:00:00.000Z"">January 9, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
-                <a href="/tech/en/posts/platform-engineering-01.html">Platform Engineering 01 - What Is Platform Engineering?</a>
+                <a href="/tech/en/posts/mlops-02.html">MLOps 02 - Data Pipelines and Feature Engineering</a>
             </h2>
-            <time datetime=""2025-12-24T00:00:00.000Z"">December 24, 2025</time>
             
-            <p class="post-excerpt">What platform engineering actually is, why it emerged, and how it differs from DevOps</p>
+            <p class="post-excerpt">How raw data becomes training data, and why data quality matters more than model complexity</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/platform-engineering-01.html" class="read-more">Read more</a>
+                
+                </div>
+                <a href="/tech/en/posts/mlops-02.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -1178,20 +1473,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-08T00:00:00.000Z"">January 8, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
-                <a href="/tech/en/posts/compiler-02.html">Automata and Compilers 02 - Regular Expressions and Regular Languages</a>
+                <a href="/tech/en/posts/platform-engineering-03.html">Platform Engineering 03 - Developer Experience as a North Star</a>
             </h2>
-            <time datetime=""2025-12-23T00:00:00.000Z"">December 23, 2025</time>
             
-            <p class="post-excerpt">How regular expressions are equivalent to finite automata, and where the boundary of regular languages lies</p>
+            <p class="post-excerpt">Why developer experience should guide every platform decision, how to measure it, and the anti-patterns that kill it</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/compiler-02.html" class="read-more">Read more</a>
+                
+                </div>
+                <a href="/tech/en/posts/platform-engineering-03.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -1200,20 +1502,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-07T00:00:00.000Z"">January 7, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
-                <a href="/tech/en/posts/compiler-01.html">Automata and Compilers 01 - Finite Automata</a>
+                <a href="/tech/en/posts/compiler-04.html">Automata and Compilers 04 - Pushdown Automata</a>
             </h2>
-            <time datetime=""2025-12-15T00:00:00.000Z"">December 15, 2025</time>
             
-            <p class="post-excerpt">What finite automata are and why understanding compilers starts here</p>
+            <p class="post-excerpt">What computational power a stack adds to finite automata</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/compiler-01.html" class="read-more">Read more</a>
+                
+                </div>
+                <a href="/tech/en/posts/compiler-04.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -1222,20 +1531,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-05T00:00:00.000Z"">January 5, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
-                <a href="/tech/en/posts/python-lecture-04.html">Python Lecture 04 - Class Internals and Descriptors</a>
+                <a href="/tech/en/posts/linux-02.html">Linux Internals 02 - Processes and Threads</a>
             </h2>
-            <time datetime=""2025-10-30T00:00:00.000Z"">October 30, 2025</time>
             
-            <p class="post-excerpt">Deep dive into how Python classes work internally, uncovering the secrets of bound methods and descriptors</p>
+            <p class="post-excerpt">How processes are created and managed in Linux, and how threads relate to them</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/python-lecture-04.html" class="read-more">Read more</a>
+                
+                </div>
+                <a href="/tech/en/posts/linux-02.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -1244,240 +1560,34 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-04T00:00:00.000Z"">January 4, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
             <h2>
-                <a href="/tech/en/posts/python-lecture-03.html">Python Lecture 3 - Containers and Generators</a>
+                <a href="/tech/en/posts/comparch-02.html">Computer Architecture 02 - CPU Internals</a>
             </h2>
-            <time datetime=""2025-10-27T00:00:00.000Z"">October 27, 2025</time>
             
-            <p class="post-excerpt">Learn about Python's container concept, list internals, and efficient iteration with generators</p>
+            <p class="post-excerpt">How the ALU, control unit, and datapath work together to execute instructions</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/en/posts/python-lecture-03.html" class="read-more">Read more</a>
+                
+                </div>
+                <a href="/tech/en/posts/comparch-02.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
     
 </div>
 
-        <!-- List View -->
-<div class="post-list post-list-view" style="display: none;">
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/platform-engineering-02.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Platform Engineering 02 - Anatomy of an Internal Developer Platform
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">What actually goes inside an Internal Developer Platform — the five planes, how they connect, and the build vs buy decision</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2026-01-02T00:00:00.000Z"">January 2, 2026</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/mlops-01.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        MLOps 01 - What Is MLOps?
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">Why MLOps is necessary and what the real challenges of the ML lifecycle are</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2026-01-01T00:00:00.000Z"">January 1, 2026</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/compiler-03.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Automata and Compilers 03 - Context-Free Grammars
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">Moving beyond regular languages with the structure and role of context-free grammars</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-29T00:00:00.000Z"">December 29, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/linux-01.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Linux Internals 01 - Operating System Overview
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">What an operating system does and the role of the Linux kernel</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-28T00:00:00.000Z"">December 28, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/platform-engineering-01.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Platform Engineering 01 - What Is Platform Engineering?
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">What platform engineering actually is, why it emerged, and how it differs from DevOps</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-24T00:00:00.000Z"">December 24, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/compiler-02.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Automata and Compilers 02 - Regular Expressions and Regular Languages
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">How regular expressions are equivalent to finite automata, and where the boundary of regular languages lies</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-23T00:00:00.000Z"">December 23, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/compiler-01.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Automata and Compilers 01 - Finite Automata
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">What finite automata are and why understanding compilers starts here</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-15T00:00:00.000Z"">December 15, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/python-lecture-04.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Python Lecture 04 - Class Internals and Descriptors
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">Deep dive into how Python classes work internally, uncovering the secrets of bound methods and descriptors</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-10-30T00:00:00.000Z"">October 30, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/en/posts/python-lecture-03.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Python Lecture 3 - Containers and Generators
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">Learn about Python's container concept, list internals, and efficient iteration with generators</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-10-27T00:00:00.000Z"">October 27, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-</div>
 
-
-        <script src="/assets/js/view-toggle.js"></script>
         <script src="/assets/js/post-filter.js"></script>
 
         
@@ -1517,6 +1627,10 @@
             <a href="/tech/en/page/6/" class="pagination-page">6</a>
             
             
+            
+            <a href="/tech/en/page/7/" class="pagination-page">7</a>
+            
+            
         </div>
 
         
@@ -1533,11 +1647,12 @@
 
     <script src="/assets/js/home-tabs.js"></script>
 </div>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 
@@ -1559,24 +1674,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -1597,6 +1694,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

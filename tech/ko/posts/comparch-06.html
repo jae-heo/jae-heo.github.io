@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컴퓨터 구조 06 - 인터럽트와 예외 - 재영의 기술 블로그</title>
+    <meta name="description" content="인터럽트가 존재하는 이유와 IDT, ISR, PIC/APIC의 동작 원리">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/comparch-06.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-06.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-06.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-06.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/comparch-06.html" />
+    <meta property="og:title" content="컴퓨터 구조 06 - 인터럽트와 예외">
+    <meta property="og:description" content="인터럽트가 존재하는 이유와 IDT, ISR, PIC/APIC의 동작 원리">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-02-02T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="interrupt">
+    
+    <meta property="article:tag" content="exception">
+    
+    <meta property="article:tag" content="idt">
+    
+    <meta property="article:tag" content="isr">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/comparch-06.html">
+    <meta name="twitter:title" content="컴퓨터 구조 06 - 인터럽트와 예외">
+    <meta name="twitter:description" content="인터럽트가 존재하는 이유와 IDT, ISR, PIC/APIC의 동작 원리">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "컴퓨터 구조 06 - 인터럽트와 예외",
+  "description": [
+    "인터럽트가 존재하는 이유와 IDT",
+    "ISR",
+    "PIC/APIC의 동작 원리"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-02T00:00:00.000Z",
+  "dateModified": "2026-02-02T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/comparch-06.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "computer-architecture, interrupt, exception, idt, isr"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="컴퓨터 구조 06 - 인터럽트와 예외">컴퓨터 구조 06 - 인터럽트와 예외</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-02-02T00:00:00.000Z"" class="post-kicker">February 2, 2026</time>
+            <h1 class="post-title">컴퓨터 구조 06 - 인터럽트와 예외</h1>
+            <p class="post-deck">인터럽트가 존재하는 이유와 IDT, ISR, PIC/APIC의 동작 원리</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">4분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/computer-architecture.html" class="series-badge">📚 컴퓨터 구조 (6/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/ko/tags/interrupt.html" class="tag">interrupt</a>
+                    
+                    <a href="/tech/ko/tags/exception.html" class="tag">exception</a>
+                    
+                    <a href="/tech/ko/tags/idt.html" class="tag">idt</a>
+                    
+                    <a href="/tech/ko/tags/isr.html" class="tag">isr</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 컴퓨터 구조</h3>
+        <p class="post-series-description">CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-01.html" class="post-series-link">컴퓨터 구조 01 - 컴퓨터 구조 개요</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-02.html" class="post-series-link">컴퓨터 구조 02 - CPU 내부 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-03.html" class="post-series-link">컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-04.html" class="post-series-link">컴퓨터 구조 04 - 파이프라인과 병렬 처리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-05.html" class="post-series-link">컴퓨터 구조 05 - CPU 권한 수준과 보호</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                컴퓨터 구조 06 - 인터럽트와 예외
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-07.html" class="post-series-link">컴퓨터 구조 07 - 메모리 계층 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-08.html" class="post-series-link">컴퓨터 구조 08 - 가상 메모리와 MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-09.html" class="post-series-link">컴퓨터 구조 09 - I/O와 DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-10.html" class="post-series-link">컴퓨터 구조 10 - 멀티코어와 현대 프로세서</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">인터럽트가 없다면 어떻게 되는가?</h2>
+<p>CPU가 키보드 입력을 받으려면 어떻게 해야 하는가? 가장 단순한 방법은 CPU가 주기적으로 키보드 컨트롤러의 상태 레지스터를 확인한다. 이를 폴링(polling)이라 한다. CPU는 루프를 돌며 &quot;입력이 있는가?&quot;를 반복해서 묻는다.</p>
+<p>과연 이 방식이 효율적인가? 전혀 그렇지 않다. 사용자가 키를 누르는 간격은 수십 밀리초에서 수 초에 이르지만, CPU는 나노초 단위로 동작한다. 키 입력 하나를 기다리는 동안 CPU가 수백만 번의 무의미한 확인을 반복하게 되는 셈이다. 키보드뿐만 아니라 디스크, 네트워크, 타이머 등 모든 장치를 폴링한다면 CPU의 대부분의 시간이 상태 확인에 소비되어 실제 연산에는 거의 쓰이지 못하게 된다.</p>
+<p>인터럽트는 이 문제를 근본적으로 해결한다. 장치가 CPU에게 능동적으로 신호를 보내는 것이다. CPU는 장치를 확인하러 갈 필요 없이 자신의 작업을 계속 수행하다가, 장치가 &quot;처리할 일이 있다&quot;는 신호를 보내면 그때 현재 작업을 잠시 중단하고 해당 이벤트를 처리한다. 전화기에 비유하자면, 폴링은 수화기를 들어 &quot;여보세요?&quot; 하고 반복하는 것이고, 인터럽트는 전화벨이 울릴 때만 받는 것이다.</p>
+<h2 id="-">인터럽트의 세 가지 유형</h2>
+<p>CPU의 정상 실행 흐름을 중단시키는 이벤트는 크게 세 가지로 분류된다.</p>
+<p>하드웨어 인터럽트는 외부 장치가 물리적 신호선을 통해 CPU에 알림을 보내는 것이다. 키보드 입력, 타이머 만료, 디스크 I/O 완료, 네트워크 패킷 도착 등이 여기에 해당한다. CPU 외부에서 비동기적으로 발생하므로, 명령어 실행 중 어느 시점에서든 도착할 수 있다.</p>
+<p>소프트웨어 인터럽트는 프로그램이 의도적으로 발생시키는 인터럽트이다. x86에서는 <code class="inline-code">INT</code> 명령어를 통해 트리거하며, 이전 포스트에서 살펴본 시스템 콜(<code class="inline-code">INT 0x80</code>)이 대표적인 예이다. 하드웨어 인터럽트와 달리 동기적으로, 즉 프로그램의 실행 흐름 안에서 예측 가능한 시점에 발생한다.</p>
+<p>예외(exception)는 명령어 실행 도중 CPU 내부에서 발생하는 이벤트이다. 0으로 나누기, 존재하지 않는 메모리 주소 접근, 특권 명령어의 무단 실행 등이 예외를 발생시킨다. 예외는 다시 세 가지로 세분화된다. 폴트(fault)는 문제가 된 명령어를 재실행할 수 있는 예외이다. 페이지 폴트가 대표적으로, 운영체제가 페이지를 로드한 뒤 해당 명령어를 다시 실행한다. 트랩(trap)은 예외를 발생시킨 명령어의 다음 명령어부터 재개하는 예외이다. 어보트(abort)는 복구 불가능한 심각한 오류로, 보통 해당 프로세스나 시스템 전체를 중단시킨다.</p>
+<h2 id="-">인터럽트 디스크립터 테이블</h2>
+<p>CPU가 인터럽트를 받으면 어떤 코드를 실행해야 하는지 어떻게 알 수 있는가? x86에서는 인터럽트 디스크립터 테이블(IDT, Interrupt Descriptor Table)이 이 매핑을 제공한다.</p>
+<p>IDT는 최대 256개의 엔트리를 가지는 테이블이며, 각 엔트리는 하나의 인터럽트 벡터(번호)에 대응하는 게이트 디스크립터를 포함한다. CPU의 IDTR 레지스터가 이 테이블의 시작 주소와 크기를 가리킨다.</p>
+<pre><code>IDTR ──▶ ┌───────────────────────────┐
+         │ 벡터 0: #DE (Divide Error) │ ──▶ 예외 핸들러
+         │ 벡터 1: #DB (Debug)        │ ──▶ 디버그 핸들러
+         │ 벡터 2: NMI               │ ──▶ NMI 핸들러
+         │ ...                        │
+         │ 벡터 13: #GP (General      │ ──▶ 일반 보호 핸들러
+         │          Protection Fault)  │
+         │ 벡터 14: #PF (Page Fault)  │ ──▶ 페이지 폴트 핸들러
+         │ ...                        │
+         │ 벡터 32: 타이머 인터럽트     │ ──▶ 타이머 ISR
+         │ 벡터 33: 키보드 인터럽트     │ ──▶ 키보드 ISR
+         │ ...                        │
+         │ 벡터 255                    │
+         └───────────────────────────┘</code></pre>
+<p>벡터 0~31은 CPU가 정의한 예외용으로 예약되어 있다. 벡터 32~255는 운영체제와 장치가 사용할 수 있는 영역이다. 인터럽트가 발생하면 CPU는 해당 벡터 번호로 IDT를 인덱싱하고, 게이트 디스크립터에 기록된 세그먼트와 오프셋으로 실행을 전환한다. 이전 포스트에서 설명한 것처럼, 이 과정에서 권한 수준 전환과 스택 전환이 함께 일어나는 것이다.</p>
+<h2 id="-">인터럽트 서비스 루틴의 동작</h2>
+<p>인터럽트 서비스 루틴(ISR, Interrupt Service Routine)은 특정 인터럽트를 처리하는 코드이다. ISR이 실행될 때 CPU는 이미 중요한 작업들을 자동으로 수행한 상태이다. 현재 명령어 포인터(RIP), 코드 세그먼트(CS), 플래그 레지스터(RFLAGS), 스택 포인터(RSP), 스택 세그먼트(SS)가 커널 스택에 자동으로 저장된다.</p>
+<p>ISR은 추가로 범용 레지스터를 보존해야 한다. 인터럽트는 어느 시점에서든 발생할 수 있으므로, ISR이 레지스터를 수정하면 중단되었던 코드가 재개될 때 예상치 못한 값을 만나게 되기 때문이다. 이 때문에 ISR의 시작 부분에서 레지스터를 스택에 푸시하고, 종료 전에 복원하는 프롤로그/에필로그 코드가 필수적이다.</p>
+<p>ISR은 가능한 한 빠르게 실행되어야 한다. 인터럽트 게이트를 통해 진입하면 해당 인터럽트(혹은 모든 인터럽트)가 비활성화된 상태이므로, ISR이 오래 실행되면 다른 인터럽트의 처리가 지연된다. 리눅스 커널에서는 이 문제를 해결하기 위해 인터럽트 처리를 두 단계로 나눈다. 상반부(top half)에서 하드웨어 레지스터 읽기, 인터럽트 확인 응답 등 즉각적인 처리만 수행하고, 시간이 걸리는 작업은 하반부(bottom half)로 지연시키는 것이다.</p>
+<h2 id="-">인터럽트 우선순위와 중첩</h2>
+<p>모든 인터럽트가 동일한 긴급도를 갖는 것은 아니다. 타이머 인터럽트는 시스템 시간의 정확성을 위해 빠르게 처리해야 하고, 키보드 인터럽트는 약간의 지연이 허용된다. 이러한 차이를 반영하기 위해 인터럽트 컨트롤러는 우선순위 체계를 제공한다.</p>
+<p>높은 우선순위의 인터럽트가 낮은 우선순위의 ISR 실행 중에 발생하면, 현재 ISR을 중단하고 높은 우선순위 인터럽트를 먼저 처리할 수 있다. 이를 인터럽트 중첩(nested interrupt)이라고 한다. 반대로, 같거나 낮은 우선순위의 인터럽트는 현재 ISR이 완료될 때까지 대기한다.</p>
+<p>NMI(Non-Maskable Interrupt)는 가장 높은 우선순위를 가지는 특수한 인터럽트이다. 이름 그대로 마스킹, 즉 소프트웨어적으로 비활성화할 수 없다. 하드웨어 오류, 메모리 패리티 에러 같은 치명적 상황에서 발생하며, 시스템이 어떤 상태에 있든 반드시 처리되어야 하는 이벤트이다. 반면 일반적인 하드웨어 인터럽트는 마스킹 가능(maskable)하여, <code class="inline-code">CLI</code> 명령어로 일시적으로 비활성화하고 <code class="inline-code">STI</code> 명령어로 다시 활성화할 수 있다. 커널이 임계 구역(critical section)에서 인터럽트를 비활성화하는 것은 이 메커니즘을 이용한다.</p>
+<h2 id="pic-apic">PIC에서 APIC으로</h2>
+<p>초기 IBM PC에서는 8259A PIC(Programmable Interrupt Controller)가 인터럽트를 관리했다. PIC 하나가 8개의 IRQ(Interrupt Request) 라인을 제공하고, 두 개를 캐스케이드하여 총 15개의 외부 인터럽트를 처리할 수 있었다.</p>
+<pre><code>              ┌──────────┐
+IRQ 0 (타이머) ─▶│          │
+IRQ 1 (키보드) ─▶│  마스터   │
+IRQ 2 (슬레이브)─▶│  PIC     │──▶ CPU INTR 핀
+IRQ 3         ─▶│          │
+IRQ 4         ─▶│          │
+...            │          │
+              └──────────┘
+                   ▲
+              ┌────┴─────┐
+IRQ 8         ─▶│          │
+IRQ 9         ─▶│  슬레이브 │
+...            │  PIC     │
+IRQ 15        ─▶│          │
+              └──────────┘</code></pre>
+<p>PIC 구조는 단일 프로세서 시스템에서는 충분했지만, 멀티프로세서 환경에서는 한계가 명확했다. 인터럽트를 하나의 CPU에만 전달할 수 있었고, IRQ 라인 수도 부족했기 때문이다.</p>
+<p>이를 대체하기 위해 APIC(Advanced Programmable Interrupt Controller)이 도입되었다. APIC은 각 CPU 코어에 존재하는 로컬 APIC과 시스템 전체에서 외부 인터럽트를 수집하는 I/O APIC으로 구성된다. I/O APIC은 외부 인터럽트를 받아서 특정 CPU, 혹은 우선순위에 따라 가장 적합한 CPU에 라우팅한다. 이 구조 덕분에 멀티코어 환경에서 인터럽트를 여러 코어에 분산시켜 처리할 수 있게 된 것이다.</p>
+<p>현대 시스템에서는 MSI(Message Signaled Interrupt)도 널리 사용된다. 물리적 인터럽트 라인 대신 메모리 쓰기 트랜잭션으로 인터럽트를 전달하는 방식으로, 핀 수의 제약 없이 수백 개의 인터럽트 벡터를 사용할 수 있다.</p>
+<h2 id="-">인터럽트 지연 시간</h2>
+<p>인터럽트 지연 시간(interrupt latency)은 인터럽트 신호가 발생한 시점부터 ISR의 첫 명령어가 실행되기까지의 시간이다. 이 지연은 현재 명령어 완료, CPU 상태 저장, IDT 조회, 스택 전환, 캐시 미스 등 여러 요인의 합으로 결정된다.</p>
+<p>범용 운영체제에서 인터럽트 지연은 수 마이크로초 수준이며, 일반적인 사용에서는 문제가 되지 않는다. 그러나 산업 제어, 오디오 처리, 자율주행 같은 실시간 시스템에서는 보장된 최대 지연 시간이 중요하다. 이 때문에 PREEMPT_RT 패치 같은 실시간 확장이 리눅스 커널에 도입되어, 인터럽트 지연의 상한을 줄이는 최적화를 제공한다.</p>
+<h2 id="-">인터럽트와 멀티태스킹</h2>
+<p>인터럽트는 멀티태스킹의 핵심 기반이기도 하다. 선점형(preemptive) 멀티태스킹이 가능한 이유는 타이머 인터럽트 덕분이다. 운영체제는 하드웨어 타이머를 설정하여 일정 간격(보통 1~10밀리초)마다 인터럽트를 발생시킨다. 타이머 ISR에서 스케줄러가 호출되고, 스케줄러가 다음에 실행할 프로세스를 결정하여 컨텍스트 스위칭을 수행한다.</p>
+<p>이 메커니즘이 없다면 각 프로그램이 자발적으로 CPU를 양보해야만 다른 프로그램이 실행될 수 있을 것이다. 실제로 초기 윈도우(3.1)와 클래식 맥OS는 이러한 협력적(cooperative) 멀티태스킹을 사용했는데, 하나의 프로그램이 CPU를 양보하지 않으면 시스템 전체가 멈추는 문제가 있었다. 타이머 인터럽트에 기반한 선점형 멀티태스킹은 이 문제를 하드웨어 수준에서 해결한 것이다.</p>
+<h2 id="dma-">DMA와 인터럽트의 협력</h2>
+<p>대량의 데이터를 디스크나 네트워크에서 메모리로 전송할 때, CPU가 바이트 단위로 직접 복사하는 것은 극히 비효율적이다. DMA(Direct Memory Access) 컨트롤러는 CPU의 개입 없이 장치와 메모리 사이에서 직접 데이터를 전송한다.</p>
+<p>DMA와 인터럽트는 함께 동작한다. CPU가 DMA 컨트롤러에 전송 명령(소스 주소, 대상 주소, 크기)을 설정하면, DMA 컨트롤러가 독립적으로 데이터를 전송한다. CPU는 그동안 다른 작업을 수행할 수 있다. 전송이 완료되면 DMA 컨트롤러가 인터럽트를 발생시켜 CPU에 완료를 알린다. CPU는 인터럽트를 받고서야 전송 결과를 확인하고 후속 처리를 수행한다.</p>
+<p>이 패턴은 현대 시스템의 I/O 전반에 걸쳐 사용된다. 디스크 읽기, 네트워크 패킷 수신, GPU와의 데이터 교환 모두 DMA 전송과 완료 인터럽트의 조합으로 이루어진다. 인터럽트가 없었다면 CPU는 전송이 끝나기를 폴링으로 기다려야 했을 것이고, 그 시간 동안 다른 어떤 유용한 작업도 수행할 수 없었을 것이다.</p>
+<p>다음 글에서는 메모리 계층 구조를 다룬다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/platform-engineering-06.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>플랫폼 엔지니어링 06 - 개발자 포털과 서비스 카탈로그</strong>
+            <p>Backstage 같은 개발자 포털이 흩어진 문서, 도구, 암묵지의 혼란을 어떻게 정리하는지</p>
+            <span class="post-nav-card-meta">
+                <span>January 31, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/linux-06.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>리눅스 내부 구조 06 - 시스템 콜과 커널</strong>
+            <p>시스템 콜이 유저 공간에서 커널 공간으로 전환되는 과정과 커널 모듈의 동작 원리</p>
+            <span class="post-nav-card-meta">
+                <span>February 3, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">5분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-07.html">컴퓨터 구조 07 - 메모리 계층 구조</a></h3>
+                <p>레지스터에서 HDD까지 이어지는 메모리 계층과 캐시의 동작 원리</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-08.html">컴퓨터 구조 08 - 가상 메모리와 MMU</a></h3>
+                <p>가상 메모리가 프로세스 격리를 가능하게 하는 원리와 MMU, 페이지 테이블, TLB의 동작</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-09.html">컴퓨터 구조 09 - I/O와 DMA</a></h3>
+                <p>CPU가 외부 장치와 데이터를 주고받는 방식과 DMA를 통한 효율적 데이터 전송의 원리</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

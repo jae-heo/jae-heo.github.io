@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Architecture 06 - Interrupts and Exceptions - Jae's Tech Blog</title>
+    <meta name="description" content="Why interrupts exist and how IDT, ISR, PIC/APIC work">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/comparch-06.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-06.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-06.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-06.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/comparch-06.html" />
+    <meta property="og:title" content="Computer Architecture 06 - Interrupts and Exceptions">
+    <meta property="og:description" content="Why interrupts exist and how IDT, ISR, PIC/APIC work">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-02-02T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="interrupt">
+    
+    <meta property="article:tag" content="exception">
+    
+    <meta property="article:tag" content="idt">
+    
+    <meta property="article:tag" content="isr">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/comparch-06.html">
+    <meta name="twitter:title" content="Computer Architecture 06 - Interrupts and Exceptions">
+    <meta name="twitter:description" content="Why interrupts exist and how IDT, ISR, PIC/APIC work">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Computer Architecture 06 - Interrupts and Exceptions",
+  "description": [
+    "Why interrupts exist and how IDT",
+    "ISR",
+    "PIC/APIC work"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-02T00:00:00.000Z",
+  "dateModified": "2026-02-02T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/comparch-06.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "computer-architecture, interrupt, exception, idt, isr"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="Computer Architecture 06 - Interrupts and Exceptions">Computer Architecture 06 - Interrupts and Exceptions</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-02-02T00:00:00.000Z"" class="post-kicker">February 2, 2026</time>
+            <h1 class="post-title">Computer Architecture 06 - Interrupts and Exceptions</h1>
+            <p class="post-deck">Why interrupts exist and how IDT, ISR, PIC/APIC work</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">7 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/computer-architecture.html" class="series-badge">📚 Computer Architecture (6/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/en/tags/interrupt.html" class="tag">interrupt</a>
+                    
+                    <a href="/tech/en/tags/exception.html" class="tag">exception</a>
+                    
+                    <a href="/tech/en/tags/idt.html" class="tag">idt</a>
+                    
+                    <a href="/tech/en/tags/isr.html" class="tag">isr</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Computer Architecture</h3>
+        <p class="post-series-description">From CPU internals and privilege levels to memory hierarchy and modern multicore processors</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-01.html" class="post-series-link">Computer Architecture 01 - Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-02.html" class="post-series-link">Computer Architecture 02 - CPU Internals</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-03.html" class="post-series-link">Computer Architecture 03 - Instruction Set Architecture (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-04.html" class="post-series-link">Computer Architecture 04 - Pipelining and Parallel Processing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-05.html" class="post-series-link">Computer Architecture 05 - CPU Privilege Levels and Protection</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Computer Architecture 06 - Interrupts and Exceptions
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-07.html" class="post-series-link">Computer Architecture 07 - Memory Hierarchy</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-08.html" class="post-series-link">Computer Architecture 08 - Virtual Memory and MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-09.html" class="post-series-link">Computer Architecture 09 - I/O and DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-10.html" class="post-series-link">Computer Architecture 10 - Multicore and Modern Processors</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="what-happens-without-interrupts">What Happens Without Interrupts?</h2>
+<p>How does a CPU receive keyboard input? The simplest approach is for the CPU to periodically check the keyboard controller&#39;s status register. This is called polling. The CPU runs in a loop, repeatedly asking &quot;is there input?&quot;</p>
+<p>Is this approach efficient? Not at all. The interval between keystrokes ranges from tens of milliseconds to several seconds, but the CPU operates on a nanosecond scale. While waiting for a single keystroke, the CPU would perform millions of pointless checks. If the CPU had to poll not just the keyboard but also the disk, network, timer, and every other device, most of its time would be consumed by status checks, leaving almost none for actual computation.</p>
+<p>Interrupts solve this problem at its root. The device actively sends a signal to the CPU. The CPU continues its own work without needing to check the device, and only when a device signals &quot;there is something to process&quot; does it momentarily pause its current task to handle the event. By analogy with a telephone, polling is picking up the receiver and saying &quot;hello?&quot; repeatedly, while interrupts mean answering only when the phone rings.</p>
+<h2 id="three-types-of-interrupts">Three Types of Interrupts</h2>
+<p>Events that disrupt the CPU&#39;s normal execution flow fall into three broad categories.</p>
+<p>Hardware interrupts are notifications sent from external devices to the CPU through physical signal lines. Keyboard input, timer expiration, disk I/O completion, and network packet arrival all fall into this category. Because they originate outside the CPU and occur asynchronously, they can arrive at any point during instruction execution.</p>
+<p>Software interrupts are intentionally triggered by programs. On x86, they are initiated via the <code class="inline-code">INT</code> instruction, with the system call (<code class="inline-code">INT 0x80</code>) discussed in the previous post being a prime example. Unlike hardware interrupts, they occur synchronously, at predictable points within the program&#39;s execution flow.</p>
+<p>Exceptions are events generated inside the CPU during instruction execution. Division by zero, accessing a nonexistent memory address, and unauthorized execution of privileged instructions all cause exceptions. Exceptions are further divided into three subtypes. Faults are exceptions where the faulting instruction can be re-executed. The page fault is the classic example: the operating system loads the page and then re-executes the instruction. Traps resume execution at the instruction following the one that caused the exception. Aborts are unrecoverable severe errors that typically terminate the process or the entire system.</p>
+<h2 id="the-interrupt-descriptor-table">The Interrupt Descriptor Table</h2>
+<p>When the CPU receives an interrupt, how does it know which code to execute? On x86, the Interrupt Descriptor Table (IDT) provides this mapping.</p>
+<p>The IDT is a table with up to 256 entries, each containing a gate descriptor corresponding to one interrupt vector (number). The CPU&#39;s IDTR register points to this table&#39;s base address and size.</p>
+<pre><code>IDTR ──▶ ┌───────────────────────────────┐
+         │ Vector 0: #DE (Divide Error)   │ ──▶ Exception Handler
+         │ Vector 1: #DB (Debug)          │ ──▶ Debug Handler
+         │ Vector 2: NMI                  │ ──▶ NMI Handler
+         │ ...                            │
+         │ Vector 13: #GP (General        │ ──▶ GP Fault Handler
+         │          Protection Fault)      │
+         │ Vector 14: #PF (Page Fault)    │ ──▶ Page Fault Handler
+         │ ...                            │
+         │ Vector 32: Timer Interrupt     │ ──▶ Timer ISR
+         │ Vector 33: Keyboard Interrupt  │ ──▶ Keyboard ISR
+         │ ...                            │
+         │ Vector 255                     │
+         └───────────────────────────────┘</code></pre>
+<p>Vectors 0 through 31 are reserved for CPU-defined exceptions. Vectors 32 through 255 are available for the operating system and devices. When an interrupt occurs, the CPU indexes into the IDT using the vector number and transfers execution to the segment and offset recorded in the gate descriptor. As explained in the previous post, privilege level transitions and stack switches occur as part of this process.</p>
+<h2 id="how-interrupt-service-routines-work">How Interrupt Service Routines Work</h2>
+<p>An Interrupt Service Routine (ISR) is the code that handles a specific interrupt. By the time the ISR begins executing, the CPU has already automatically performed critical operations. The current instruction pointer (RIP), code segment (CS), flags register (RFLAGS), stack pointer (RSP), and stack segment (SS) have been automatically saved to the kernel stack.</p>
+<p>The ISR must additionally preserve general-purpose registers. Since interrupts can occur at any point, if the ISR modifies registers, the interrupted code would encounter unexpected values when it resumes. This is why prologue/epilogue code that pushes registers onto the stack at the start and restores them before returning is essential.</p>
+<p>ISRs must execute as quickly as possible. When entered through an interrupt gate, the corresponding interrupt (or all interrupts) is disabled, so a long-running ISR delays the processing of other interrupts. The Linux kernel addresses this by splitting interrupt handling into two stages. The top half performs only immediate processing such as reading hardware registers and acknowledging the interrupt, while time-consuming work is deferred to the bottom half.</p>
+<h2 id="interrupt-priority-and-nesting">Interrupt Priority and Nesting</h2>
+<p>Not all interrupts carry the same urgency. Timer interrupts must be processed quickly for system time accuracy, while keyboard interrupts can tolerate slight delays. To reflect these differences, interrupt controllers provide a priority scheme.</p>
+<p>When a higher-priority interrupt occurs while a lower-priority ISR is executing, the current ISR can be suspended to handle the higher-priority interrupt first. This is called interrupt nesting. Conversely, interrupts of equal or lower priority wait until the current ISR completes.</p>
+<p>The NMI (Non-Maskable Interrupt) is a special interrupt with the highest priority. As the name implies, it cannot be masked, meaning it cannot be disabled by software. It occurs in critical situations like hardware failures and memory parity errors, and must be handled regardless of the system&#39;s current state. Ordinary hardware interrupts, by contrast, are maskable and can be temporarily disabled with the <code class="inline-code">CLI</code> instruction and re-enabled with <code class="inline-code">STI</code>. When the kernel disables interrupts in a critical section, it uses this mechanism.</p>
+<h2 id="from-pic-to-apic">From PIC to APIC</h2>
+<p>In early IBM PCs, the 8259A PIC (Programmable Interrupt Controller) managed interrupts. A single PIC provided 8 IRQ (Interrupt Request) lines, and cascading two together allowed handling a total of 15 external interrupts.</p>
+<pre><code>                ┌──────────┐
+IRQ 0 (Timer)  ─▶│          │
+IRQ 1 (Keyboard)─▶│  Master  │
+IRQ 2 (Cascade)─▶│  PIC     │──▶ CPU INTR Pin
+IRQ 3          ─▶│          │
+IRQ 4          ─▶│          │
+...              │          │
+                └──────────┘
+                     ▲
+                ┌────┴─────┐
+IRQ 8          ─▶│          │
+IRQ 9          ─▶│  Slave   │
+...              │  PIC     │
+IRQ 15         ─▶│          │
+                └──────────┘</code></pre>
+<p>The PIC architecture was sufficient for single-processor systems, but its limitations became clear in multiprocessor environments. It could only deliver interrupts to a single CPU, and the number of IRQ lines was insufficient.</p>
+<p>The APIC (Advanced Programmable Interrupt Controller) was introduced as a replacement. APIC consists of a local APIC present in each CPU core and an I/O APIC that collects external interrupts system-wide. The I/O APIC receives external interrupts and routes them to a specific CPU or to the most suitable CPU based on priority. This architecture enables distributing interrupt processing across multiple cores in multicore environments.</p>
+<p>Modern systems also widely use MSI (Message Signaled Interrupts). Instead of physical interrupt lines, interrupts are delivered as memory write transactions, allowing hundreds of interrupt vectors without pin count constraints.</p>
+<h2 id="interrupt-latency">Interrupt Latency</h2>
+<p>Interrupt latency is the time from when an interrupt signal is raised to when the ISR&#39;s first instruction executes. This latency is determined by the sum of several factors: completing the current instruction, saving CPU state, IDT lookup, stack switching, and potential cache misses.</p>
+<p>In general-purpose operating systems, interrupt latency is on the order of a few microseconds, which is not an issue for typical use. However, in real-time systems such as industrial control, audio processing, and autonomous driving, guaranteed maximum latency matters. This is why real-time extensions like the PREEMPT_RT patch have been introduced to the Linux kernel, providing optimizations that reduce the upper bound on interrupt latency.</p>
+<h2 id="interrupts-and-multitasking">Interrupts and Multitasking</h2>
+<p>Interrupts are also the fundamental foundation of multitasking. Preemptive multitasking is possible because of timer interrupts. The operating system configures a hardware timer to generate interrupts at regular intervals (typically 1 to 10 milliseconds). The scheduler is invoked in the timer ISR, determines which process to run next, and performs a context switch.</p>
+<p>Without this mechanism, each program would have to voluntarily yield the CPU for other programs to run. Early Windows (3.1) and classic Mac OS actually used this cooperative multitasking model, where a single program refusing to yield would freeze the entire system. Preemptive multitasking based on timer interrupts solves this problem at the hardware level.</p>
+<h2 id="dma-and-interrupts-working-together">DMA and Interrupts Working Together</h2>
+<p>When transferring large volumes of data from disk or network to memory, having the CPU copy data byte by byte is extremely inefficient. A DMA (Direct Memory Access) controller transfers data directly between devices and memory without CPU intervention.</p>
+<p>DMA and interrupts work in concert. The CPU configures the DMA controller with transfer parameters (source address, destination address, size), and the DMA controller transfers data independently. The CPU can perform other work in the meantime. When the transfer completes, the DMA controller raises an interrupt to notify the CPU. Only upon receiving the interrupt does the CPU check the transfer result and perform follow-up processing.</p>
+<p>This pattern is used throughout I/O in modern systems. Disk reads, network packet reception, and data exchange with GPUs all operate through the combination of DMA transfers and completion interrupts. Without interrupts, the CPU would have to poll until the transfer finished, unable to perform any other useful work during that time.</p>
+<p>In the next post, we&#39;ll look at the memory hierarchy.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/platform-engineering-06.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>Platform Engineering 06 - Developer Portals and Service Catalogs</strong>
+            <p>How developer portals like Backstage bring order to the chaos of scattered docs, tools, and tribal knowledge</p>
+            <span class="post-nav-card-meta">
+                <span>January 31, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/linux-06.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Linux Internals 06 - System Calls and the Kernel</strong>
+            <p>How a system call transitions from user space to kernel space, and how kernel modules work</p>
+            <span class="post-nav-card-meta">
+                <span>February 3, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>6 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">8 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-07.html">Computer Architecture 07 - Memory Hierarchy</a></h3>
+                <p>The memory hierarchy from registers to HDD and how caches work</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-08.html">Computer Architecture 08 - Virtual Memory and MMU</a></h3>
+                <p>How virtual memory enables process isolation through the MMU, page tables, and TLB</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-09.html">Computer Architecture 09 - I/O and DMA</a></h3>
+                <p>How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

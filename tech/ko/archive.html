@@ -15,13 +15,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jae-heo.github.io">
+    <meta property="og:url" content="https://jae-heo.github.io" />
     <meta property="og:title" content="재영의 기술 블로그">
     <meta property="og:description" content="처음부터 만든 기술 블로그">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
 
@@ -37,8 +37,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -96,20 +98,28 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -128,6 +138,22 @@
             <h2 class="archive-year">2026 - 3월</h2>
             <div class="archive-posts">
         
+        
+        
+        
+        
+        
+                <article class="archive-entry">
+                    <time class="archive-date">March 5, 2026</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-10.html">컴퓨터 구조 10 - 멀티코어와 현대 프로세서</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
         
         
         
@@ -277,6 +303,22 @@
         
         
                 <article class="archive-entry">
+                    <time class="archive-date">February 24, 2026</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-09.html">컴퓨터 구조 09 - I/O와 DMA</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
+        
+        
+        
+        
+        
+                <article class="archive-entry">
                     <time class="archive-date">February 21, 2026</time>
                     <div class="archive-content">
                         <h3 class="archive-title">
@@ -329,6 +371,22 @@
                     <div class="archive-content">
                         <h3 class="archive-title">
                             <a href="/tech/ko/posts/linux-08.html">리눅스 내부 구조 08 - 동기화와 동시성</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
+        
+        
+        
+        
+        
+                <article class="archive-entry">
+                    <time class="archive-date">February 17, 2026</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-08.html">컴퓨터 구조 08 - 가상 메모리와 MMU</a>
                         </h3>
                         
                         <span class="archive-category">Lectures</span>
@@ -405,6 +463,22 @@
         
         
                 <article class="archive-entry">
+                    <time class="archive-date">February 8, 2026</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-07.html">컴퓨터 구조 07 - 메모리 계층 구조</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
+        
+        
+        
+        
+        
+                <article class="archive-entry">
                     <time class="archive-date">February 7, 2026</time>
                     <div class="archive-content">
                         <h3 class="archive-title">
@@ -457,6 +531,22 @@
                     <div class="archive-content">
                         <h3 class="archive-title">
                             <a href="/tech/ko/posts/linux-06.html">리눅스 내부 구조 06 - 시스템 콜과 커널</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
+        
+        
+        
+        
+        
+                <article class="archive-entry">
+                    <time class="archive-date">February 2, 2026</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-06.html">컴퓨터 구조 06 - 인터럽트와 예외</a>
                         </h3>
                         
                         <span class="archive-category">Lectures</span>
@@ -548,6 +638,22 @@
         
         
                 <article class="archive-entry">
+                    <time class="archive-date">January 25, 2026</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-05.html">컴퓨터 구조 05 - CPU 권한 수준과 보호</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
+        
+        
+        
+        
+        
+                <article class="archive-entry">
                     <time class="archive-date">January 24, 2026</time>
                     <div class="archive-content">
                         <h3 class="archive-title">
@@ -600,6 +706,22 @@
                     <div class="archive-content">
                         <h3 class="archive-title">
                             <a href="/tech/ko/posts/linux-04.html">리눅스 내부 구조 04 - 메모리 관리</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
+        
+        
+        
+        
+        
+                <article class="archive-entry">
+                    <time class="archive-date">January 18, 2026</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-04.html">컴퓨터 구조 04 - 파이프라인과 병렬 처리</a>
                         </h3>
                         
                         <span class="archive-category">Lectures</span>
@@ -676,6 +798,22 @@
         
         
                 <article class="archive-entry">
+                    <time class="archive-date">January 10, 2026</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-03.html">컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
+        
+        
+        
+        
+        
+                <article class="archive-entry">
                     <time class="archive-date">January 9, 2026</time>
                     <div class="archive-content">
                         <h3 class="archive-title">
@@ -728,6 +866,22 @@
                     <div class="archive-content">
                         <h3 class="archive-title">
                             <a href="/tech/ko/posts/linux-02.html">리눅스 내부 구조 02 - 프로세스와 스레드</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
+        
+        
+        
+        
+        
+                <article class="archive-entry">
+                    <time class="archive-date">January 4, 2026</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-02.html">컴퓨터 구조 02 - CPU 내부 구조</a>
                         </h3>
                         
                         <span class="archive-category">Lectures</span>
@@ -807,6 +961,22 @@
                     <div class="archive-content">
                         <h3 class="archive-title">
                             <a href="/tech/ko/posts/linux-01.html">리눅스 내부 구조 01 - 운영체제 개요</a>
+                        </h3>
+                        
+                        <span class="archive-category">Lectures</span>
+                        
+                    </div>
+                </article>
+        
+        
+        
+        
+        
+                <article class="archive-entry">
+                    <time class="archive-date">December 27, 2025</time>
+                    <div class="archive-content">
+                        <h3 class="archive-title">
+                            <a href="/tech/ko/posts/comparch-01.html">컴퓨터 구조 01 - 컴퓨터 구조 개요</a>
                         </h3>
                         
                         <span class="archive-category">Lectures</span>
@@ -972,7 +1142,7 @@
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -994,24 +1164,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -1032,6 +1184,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

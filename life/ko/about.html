@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>블로그 소개 - 재영의 일상 블로그</title>
-    <meta name="description" content="일상 이야기, 여행 모험, 그리고 코드 너머의 삶">
+    <title>이 블로그에 대해 - 재영의 일상 블로그</title>
+    <meta name="description" content="기술 글과는 다른 결의 공간입니다. 여행, 일상, 감정, 그리고 그냥 지나치기 아까운 생각들을 조금 더 천천히 남깁니다.">
     <meta name="author" content="Jae">
 
     <!-- Canonical URL -->
@@ -15,21 +15,21 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jae-heo.github.io">
-    <meta property="og:title" content="블로그 소개">
-    <meta property="og:description" content="일상 이야기, 여행 모험, 그리고 코드 너머의 삶">
+    <meta property="og:url" content="https://jae-heo.github.io" />
+    <meta property="og:title" content="이 블로그에 대해">
+    <meta property="og:description" content="기술 글과는 다른 결의 공간입니다. 여행, 일상, 감정, 그리고 그냥 지나치기 아까운 생각들을 조금 더 천천히 남깁니다.">
     <meta property="og:site_name" content="재영의 일상 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://jae-heo.github.io">
-    <meta name="twitter:title" content="블로그 소개">
-    <meta name="twitter:description" content="일상 이야기, 여행 모험, 그리고 코드 너머의 삶">
+    <meta name="twitter:title" content="이 블로그에 대해">
+    <meta name="twitter:description" content="기술 글과는 다른 결의 공간입니다. 여행, 일상, 감정, 그리고 그냥 지나치기 아까운 생각들을 조금 더 천천히 남깁니다.">
     
     <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
     
@@ -37,8 +37,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 일상 블로그 RSS" href="/life/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 일상 블로그 RSS" href="/life/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -96,20 +98,28 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/life/ko/" class="site-title" data-nav-link>재영의 일상 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/life/ko/" data-nav-link>홈</a>
                 <a href="/life/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/life/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -117,37 +127,50 @@
     <main>
         <div class="page-wrapper">
     <div class="page-header">
-        <h1>블로그 소개</h1>
+        <h1>이 블로그에 대해</h1>
+        <p class="subtitle">기술 글과는 다른 결의 공간입니다. 여행, 일상, 감정, 그리고 그냥 지나치기 아까운 생각들을 조금 더 천천히 남깁니다.</p>
     </div>
     <article class="page">
         <div class="page-content">
-            <h1 id="-">재영의 일상 블로그 소개</h1>
-<p>코드는 잠시 뒤로하고 삶이 주인공이 되는, 제 개인적인 인터넷 공간에 오신 것을 환영합니다.</p>
-<h2 id="-">저는 누구인가요?</h2>
-<p>개발자이기도 하지만, 최고의 알고리즘도 노을의 아름다움을 담아낼 수 없고, 그 어떤 최적화도 진정한 인간관계를 대체할 수 없다고 믿는 사람입니다.</p>
-<p>저는 이런 것들에서 기쁨을 찾는 호기심 많은 영혼입니다:<br />- <strong>새로운 곳 탐험하며</strong> 즐겁게 길을 잃기<br />- <strong>이야기가 있는 흥미로운 사람들</strong> 만나기<br />- <strong>컴퓨터와 무관한 새로운 기술</strong> 배우기<br />- <strong>일상 속에서 아름다움</strong> 발견하기</p>
-<h2 id="-">왜 이 블로그를?</h2>
-<p>시뮬레이션 엔진을 최적화하고 효율적인 코드를 작성하는 나날을 보내지만, 삶은 우리 주변에서 계속 일어나고 있습니다. 이 블로그는 존재의 비이진적인 부분들 - 지저분하고, 아름답고, 예측할 수 없는 우리 모두의 여정을 기록하려는 시도입니다.</p>
-<h2 id="-">블로그 콘텐츠</h2>
-<p>이런 이야기와 성찰들:<br />- <strong>여행 모험</strong>: 계획된 여행부터 즉흥적인 우회까지<br />- <strong>문화 경험</strong>: 다양한 관점에서 배우기<br />- <strong>개인적 성장</strong>: 어렵게 (그리고 쉽게) 배운 교훈들<br />- <strong>자유로운 상상</strong>: git commit에 담기지 않는 생각들<br />- <strong>삶의 균형</strong>: 픽셀과 사람 사이의 조화 찾기</p>
-<h2 id="-">제 철학</h2>
+            <h1 id="-">이 블로그에 대해</h1>
+<p>이곳은 제가 조금 더 개인적인 이야기를 남기는 쪽의 블로그입니다.</p>
+<p>기술 블로그가 시스템을 더 분명하게 이해하려는 글쓰기라면, 이 공간은 일 바깥의 삶을 더 잘 바라보려는 글쓰기에 가깝습니다. 여행, 루틴, 기분의 변화, 관계, 망설임, 그리고 평범한 하루 안에 숨어 있는 작은 장면들 같은 것들 말입니다.</p>
+<p>모든 글이 엔지니어링 문서처럼 들리길 원하지는 않았습니다. 어떤 생각은 조금 느슨하고 느린 형태로 남겨야 더 솔직해지기도 하니까요.</p>
+<h2 id="-">왜 이런 블로그를 따로 두었나</h2>
+<p>어른의 삶은 쉽게 생산성, 결과, 성장 같은 말로만 정리되곤 합니다. 이 블로그는 그 흐름에 조금은 저항하는 공간이었으면 했습니다.</p>
+<p>삶을 너무 효율적으로만 다루다 보면 놓치게 되는 것들이 있습니다. 하루의 분위기를 바꾸는 작은 습관, 예상보다 오래 남는 여행의 장면, 그냥 흘려보내기 싫은 문장 같은 것들입니다.</p>
+<p>여기서의 글쓰기는 결론을 내기 위한 작업이라기보다, 삶의 결을 보존하려는 시도에 더 가깝습니다.</p>
+<h2 id="-">어떤 글들이 올라오나</h2>
+<p>대체로 이런 글들이 많습니다.</p>
 <ul class="ul-list">
-<li><strong>현재에 충실하기</strong>: 최고의 순간은 화면을 보지 않을 때 일어납니다</li><li><strong>호기심 유지하기</strong>: 모든 사람은 우리에게 가르쳐줄 무언가가 있습니다</li><li><strong>불완전함 받아들이기</strong>: 삶의 버그는 결함이 아닌 기능입니다</li><li><strong>이야기 나누기</strong>: 우리의 경험이 우리를 연결합니다</li></ul>
-<h2 id="-">개발자 동료들에게</h2>
-<p>네, <code class="inline-code">git push</code> 이후에도 삶은 있습니다. 때로는 키보드에서 벗어나 세상으로 나갈 때 최고의 해결책이 찾아옵니다.</p>
-<h2>연결</h2>
-<p>여러분의 이야기도 듣고 싶습니다. 삶은 나눌 때 더 흥미롭습니다.</p>
-<hr />
-<p><em>&quot;삶은 디버깅하느라 바쁜 동안 일어나는 일입니다.&quot;</em></p>
+<li><strong>여행 기록</strong>: 정보를 정리한 가이드보다는, 그곳에서 보고 느낀 인상과 생각</li><li><strong>개인적인 성찰</strong>: 나를 조금 다르게 보게 만든 순간들</li><li><strong>일상 관찰</strong>: 평범한 장면 속에서 오래 남은 감정이나 질문</li><li><strong>삶의 리듬</strong>: 루틴, 균형, 휴식, 동기, 그리고 삶을 또 다른 최적화 문제로 만들지 않으려는 고민</li></ul>
+<p>기술 글보다 더 조용하고, 무언가를 증명하기보다 솔직하게 남겨두는 쪽에 가깝습니다.</p>
+<h2 id="-">기술 블로그와 다른 점</h2>
+<p>기술 블로그는 구조가 분명하고, 개념 중심이며, 주장과 설명이 앞에 서는 편입니다.</p>
+<p>반면 이쪽은 조금 더 열려 있습니다. 문장이 더 부드러울 수도 있고, 확신보다 망설임이 먼저 보일 수도 있습니다. 저는 그 차이가 중요하다고 생각합니다. 모든 문장이 같은 방식으로 자신을 증명할 필요는 없으니까요.</p>
+<p>그래도 두 블로그에 공통으로 남기고 싶은 태도는 있습니다. 글이 짧더라도 대충 쓰지 않는 것, 단순하더라도 의도가 느껴지게 쓰는 것입니다.</p>
+<h2 id="-">여기서 붙잡아두고 싶은 것</h2>
+<p>이 블로그를 통해 남기고 싶은 것은 대단한 사건만이 아닙니다.</p>
+<ul class="ul-list">
+<li>그 시기에 제가 무엇을 유심히 보고 있었는지</li><li>어떤 질문과 감정 속에서 살고 있었는지</li><li>무엇이 아름답고, 어렵고, 웃기고, 조용히 중요하게 느껴졌는지</li></ul>
+<p>기억은 생각보다 많은 것을 빠르게 덮어씁니다. 글은 그 속도를 조금 늦춰줍니다.</p>
+<h2 id="-">이곳을 읽는 분들에게</h2>
+<p>이 블로그가 조언처럼 느껴지기보다, 그냥 곁에 놓인 기록처럼 읽히면 좋겠습니다.</p>
+<p>어떤 글은 직접적으로 공감될 수도 있고, 어떤 글은 자기 삶을 조금 더 가까이 들여다보게 만드는 정도일 수도 있습니다. 그 정도면 충분하다고 생각합니다.</p>
+<h2 id="-">처음 읽는다면</h2>
+<p>어디서 시작할지 고민된다면, 아래 글들부터 가볍게 들어와도 좋습니다.</p>
+<ul class="ul-list">
+<li><a href="/life/ko/posts/2025-10-11-setting-a-routine.html">루틴을 만든다는 것</a>: 이 블로그의 일상적인 결을 보여주는 글</li><li><a href="/life/ko/posts/2025-10-17-moment-of-not-knowing-myself.html">나를 잘 모르겠다는 순간</a>: 조금 더 내면적인 쪽으로 들어가는 글</li><li><a href="/life/ko/posts/2025-10-26-instant-action-builds-trust.html">즉시 행동하는 사람은 신뢰를 만든다</a>: 짧지만 선명한 관찰이 있는 글</li><li><a href="/life/ko/archive.html">전체 일상 글 보기</a>: 날짜 순으로 전부 둘러보고 싶다면</li></ul>
 
         </div>
     </article>
 </div>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/life/ko/feed.xml">RSS</a>
                 
@@ -169,24 +192,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -207,6 +212,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

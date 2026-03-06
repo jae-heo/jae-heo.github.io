@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/mlops-10.html">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/mlops-10.html" />
     <meta property="og:title" content="MLOps 10 - Building an MLOps Platform">
     <meta property="og:description" content="How to bring all MLOps components together into a unified platform">
     <meta property="og:site_name" content="Jae's Tech Blog">
     <meta property="og:locale" content="en_US">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2026-03-05T00:00:00.000Z"">
@@ -63,8 +63,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -89,7 +91,7 @@
     "name": "Jae's Tech Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
     }
   },
   "inLanguage": "en-US",
@@ -151,20 +153,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -172,59 +186,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/en/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/en/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Lectures</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="MLOps 10 - Building an MLOps Platform">MLOps 10 - Building an MLOps Platform</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="MLOps 10 - Building an MLOps Platform">MLOps 10 - Building an MLOps Platform</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>MLOps 10 - Building an MLOps Platform</h1>
-        <time datetime=""2026-03-05T00:00:00.000Z"">March 5, 2026</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2026-03-05T00:00:00.000Z"" class="post-kicker">March 5, 2026</time>
+            <h1 class="post-title">MLOps 10 - Building an MLOps Platform</h1>
+            <p class="post-deck">How to bring all MLOps components together into a unified platform</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">5 min read</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Series:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 MLOps Fundamentals (10/10)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/mlops.html" class="series-badge">📚 MLOps Fundamentals (10/10)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Category:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
                     <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">Tags:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/tech/en/tags/mlops.html" class="tag">mlops</a>
                     
@@ -342,8 +365,11 @@
 
     
 
-    <div class="post-content">
-        <h2 id="bringing-the-pieces-together">Bringing the Pieces Together</h2>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="bringing-the-pieces-together">Bringing the Pieces Together</h2>
 <p>The components covered throughout this series — data pipelines, experiment tracking, model registries, serving infrastructure, monitoring, feature stores, GPU infrastructure — each deliver value independently. But when these components exist as disconnected tools, engineers must manually bridge the gaps between them. The path from experiment to deployment is not automated, and the output of each stage is handed off to the next stage manually, over and over again.</p>
 <p>The goal of an MLOps platform is to weave these components into a unified system so that the entire model lifecycle operates as a consistent workflow.</p>
 <h2 id="end-to-end-ml-platforms">End-to-End ML Platforms</h2>
@@ -388,22 +414,83 @@ Level 4: Fully Automated ML Lifecycle</code></pre>
 <p>This series set out to survey the full landscape of MLOps. Starting from the reality of the ML lifecycle, we moved through data pipelines, experiment management, model serving, monitoring, feature stores, and GPU infrastructure, arriving finally at the platform that ties everything together.</p>
 <p>MLOps is not a specific tool or framework — it is a set of engineering principles for operating models reliably in production. Tools will continue to evolve, but the fundamental principles of reproducibility, automation, monitoring, and collaboration remain constant. The essence of practicing MLOps is combining and evolving the components covered in this series in ways that fit your organization&#39;s context.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
         
-        <a href="/tech/en/posts/platform-engineering-11.html" class="nav-prev">← Platform Engineering 11 - Building a Platform Team</a>
+        <a href="/tech/en/posts/platform-engineering-11.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>Platform Engineering 11 - Building a Platform Team</strong>
+            <p>When to start a platform team, how to staff it, and how to avoid building an ivory tower nobody uses</p>
+            <span class="post-nav-card-meta">
+                <span>March 4, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4 min read</span>
+            </span>
+        </a>
         
         
-        <a href="/tech/en/posts/linux-10.html" class="nav-next">Linux Internals 10 - Containers and Virtualization →</a>
+        <a href="/tech/en/posts/linux-10.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Linux Internals 10 - Containers and Virtualization</strong>
+            <p>How namespaces and cgroups create containers, and a wrap-up connecting all kernel concepts</p>
+            <span class="post-nav-card-meta">
+                <span>March 5, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>8 min read</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/mlops-09.html">MLOps 09 - GPU Infrastructure and Scaling</a></h3>
+                <p>Why ML workloads demand specialized infrastructure and how to approach GPU scaling</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/mlops-08.html">MLOps 08 - Feature Stores</a></h3>
+                <p>Why feature stores exist and how they solve the training-serving skew problem</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">5 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/mlops-07.html">MLOps 07 - CI/CD for ML</a></h3>
+                <p>How ML CI/CD differs from software CI/CD and what needs to be tested and automated</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 
@@ -425,24 +512,6 @@ Level 4: Fully Automated ML Lifecycle</code></pre>
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -463,6 +532,8 @@ Level 4: Fully Automated ML Lifecycle</code></pre>
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

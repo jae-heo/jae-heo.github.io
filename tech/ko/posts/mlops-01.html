@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-01.html">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-01.html" />
     <meta property="og:title" content="MLOps 01 - MLOps란 무엇인가?">
     <meta property="og:description" content="MLOps가 왜 필요한지, ML 라이프사이클의 현실적인 문제는 무엇인지">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2026-01-01T00:00:00.000Z"">
@@ -61,8 +61,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -90,7 +92,7 @@
     "name": "Jae's Tech Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
     }
   },
   "inLanguage": "ko-KR",
@@ -152,20 +154,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -173,59 +187,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Lectures</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="MLOps 01 - MLOps란 무엇인가?">MLOps 01 - MLOps란 무엇인가?</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="MLOps 01 - MLOps란 무엇인가?">MLOps 01 - MLOps란 무엇인가?</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>MLOps 01 - MLOps란 무엇인가?</h1>
-        <time datetime=""2026-01-01T00:00:00.000Z"">January 1, 2026</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2026-01-01T00:00:00.000Z"" class="post-kicker">January 1, 2026</time>
+            <h1 class="post-title">MLOps 01 - MLOps란 무엇인가?</h1>
+            <p class="post-deck">MLOps가 왜 필요한지, ML 라이프사이클의 현실적인 문제는 무엇인지</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">3분 읽기</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 MLOps 기초 (1/10)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/mlops.html" class="series-badge">📚 MLOps 기초 (1/10)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/tech/ko/tags/mlops.html" class="tag">mlops</a>
                     
@@ -259,7 +282,7 @@
             <!-- Current Post (Not Clickable) -->
             <span class="post-series-title">
                 MLOps 01 - MLOps란 무엇인가?
-                <span class="current-indicator">← You are here</span>
+                <span class="current-indicator">← 현재 글</span>
             </span>
             
         </li>
@@ -341,20 +364,25 @@
 
     
 
-    <div class="post-content">
-        <h2 id="-">모델을 만들었는데, 그 다음은?</h2>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">모델을 만들었는데, 그 다음은?</h2>
 <p>머신러닝을 처음 접하면 모델 학습에 집중하게 된다. 데이터를 수집하고, 전처리하고, 모델을 훈련시키고, 정확도를 올리는 데 대부분의 시간을 쓴다. 그런데 정작 모델이 완성된 후에 무엇을 해야 하는지는 잘 다루지 않는다.</p>
 <p>현실에서는 모델을 만드는 것보다 운영하는 것이 훨씬 어렵다. 모델을 프로덕션 환경에 배포하고, 성능을 모니터링하고, 데이터가 변할 때 재학습시키는 과정이 필요하다. 이러한 전체 라이프사이클을 체계적으로 관리하는 것이 MLOps이다.</p>
 <h2 id="-devops-">왜 기존 DevOps만으로는 부족한가?</h2>
 <p>DevOps는 소프트웨어의 빌드, 테스트, 배포를 자동화하는 데 성숙한 방법론이다. 그렇다면 ML 시스템에도 동일한 방법론을 적용하면 되지 않을까?</p>
-<p>문제는 ML 시스템이 기존 소프트웨어와 근본적으로 다른 특성을 가진다는 것이다. 일반적인 소프트웨어는 코드가 변경될 때 동작이 변한다. 반면 ML 시스템은 코드가 동일하더라도 데이터가 변하면 동작이 완전히 달라진다. 즉, 코드뿐만 아니라 데이터와 모델이라는 두 가지 추가적인 변수를 관리해야 하는 것이다.</p>
+<p>문제는 ML 시스템이 기존 소프트웨어와 근본적으로 다른 특성을 가진다는 것이다. 일반적인 소프트웨어는 코드가 변경될 때 동작이 변한다. 반면 ML 시스템은 코드가 동일하더라도 데이터가 변하면 동작이 완전히 달라진다. 즉, 코드뿐만 아니라 데이터와 모델이라는 두 가지 추가적인 변수를 관리해야 한다.</p>
 <p>이로 인해 버전 관리의 대상이 확대된다. 코드 버전만 추적하는 것으로는 충분하지 않으며, 어떤 데이터로 어떤 모델이 학습되었는지까지 추적해야 재현 가능한 시스템을 만들 수 있다.</p>
+<p>조금 더 현실적인 예를 들어보자. 추천 모델을 만든 데이터 사이언티스트가 노트북에서 <code class="inline-code">v3</code> 모델을 학습했고, 테스트셋에서는 좋은 점수가 나왔다고 하자. 그런데 일주일 뒤 운영 환경에서 성능이 떨어졌을 때 &quot;정확히 어떤 데이터 스냅샷으로 학습했는지&quot;, &quot;전처리 코드가 당시와 지금 같은지&quot;, &quot;현재 서비스 중인 모델이 정말 그 <code class="inline-code">v3</code>가 맞는지&quot;를 답할 수 없다면 사실상 문제를 디버깅할 방법이 없다. DevOps만으로는 이 질문들에 답하기 어렵다.</p>
 <h2 id="ml-">ML 라이프사이클의 현실</h2>
 <p>ML 프로젝트의 라이프사이클은 크게 네 단계로 나눌 수 있다.</p>
 <p>첫째, 데이터 수집 및 전처리 단계이다. 원시 데이터를 수집하고, 정제하고, 학습에 적합한 형태로 변환하는 과정이다. 이 단계에서 데이터의 품질이 모델의 성능을 결정하기 때문에 가장 많은 시간이 소요되는 것이 일반적이다.</p>
 <p>둘째, 모델 학습 및 실험 단계이다. 다양한 알고리즘과 하이퍼파라미터 조합을 시도하며 최적의 모델을 찾는 과정이다. 수십에서 수백 번의 실험을 수행하게 되므로, 각 실험의 설정과 결과를 체계적으로 기록하지 않으면 어떤 조합이 최선이었는지 파악하기 어려워진다.</p>
 <p>셋째, 모델 배포 단계이다. 학습된 모델을 실제 서비스에 통합하는 과정이다. REST API로 서빙할 것인지, 배치 추론을 사용할 것인지, 엣지 디바이스에 배포할 것인지에 따라 접근 방식이 달라진다.</p>
 <p>넷째, 모니터링 및 재학습 단계이다. 프로덕션 환경에서 모델의 성능을 지속적으로 관찰하고, 성능이 저하되면 새로운 데이터로 재학습시키는 과정이다. 시간이 지남에 따라 데이터의 분포가 변하는 현상을 데이터 드리프트라고 부르며, 이를 감지하고 대응하는 것이 MLOps의 핵심 과제 중 하나이다.</p>
+<p>문제는 이 네 단계가 깔끔하게 한 번씩만 지나가는 선형 과정이 아니라는 점이다. 실제 현장에서는 데이터 문제가 발견되어 다시 전처리 단계로 돌아가고, 배포 후 모니터링 결과 때문에 피처 설계를 수정하고, 다시 실험을 반복하는 일이 계속 발생한다. MLOps가 필요한 이유는 이 반복을 없애기 위해서가 아니라, 반복이 불가피하다는 사실을 전제로 그 과정을 재현 가능하고 운영 가능하게 만들기 위해서다.</p>
 <h2 id="mlops-">MLOps의 성숙도</h2>
 <p>Google에서는 MLOps의 성숙도를 세 단계로 구분한다.</p>
 <table>
@@ -368,27 +396,90 @@
 </tbody>
 </table>
 <p>대부분의 조직은 Level 0에 머물러 있다. 데이터 사이언티스트가 주피터 노트북에서 모델을 학습시키고, 결과를 수동으로 엔지니어링 팀에 전달하며, 엔지니어가 이를 서비스에 통합하는 방식이다. 이 과정에서 커뮤니케이션 오류가 발생하고, 재현이 어렵고, 배포 주기가 길어지는 것이다.</p>
+<p>이 단계에서 자주 보이는 신호도 있다. &quot;최신 모델 파일&quot;이 슬랙이나 드라이브 링크로 전달되고, 운영 중인 모델의 학습 이력이 문서가 아니라 사람 기억에 의존하며, 성능 저하가 발생해도 재학습을 언제 어떤 기준으로 해야 하는지 결정되지 않은 상태다. 이런 징후가 보이면 이미 MLOps 문제가 시작된 것이다.</p>
 <p>MLOps는 이 수동 프로세스를 자동화하고 체계화하여, 모델을 빠르고 안정적으로 프로덕션에 반영할 수 있게 하는 것이 목표이다.</p>
 <h2 id="-">핵심 구성 요소</h2>
 <p>MLOps를 구현하기 위해서는 여러 구성 요소가 필요하다. 데이터 파이프라인, 실험 추적, 모델 레지스트리, 서빙 인프라, 모니터링 시스템 등이 그것이다. 이 시리즈에서는 각 구성 요소를 하나씩 살펴보며, 왜 필요한지와 어떻게 구축하는지를 다룰 것이다.</p>
-<p>다음 포스트에서는 MLOps의 출발점이라 할 수 있는 데이터 파이프라인과 피처 엔지니어링을 살펴본다.</p>
+<p>이 구성 요소들은 따로따로 존재하는 도구 목록이 아니다. 데이터 파이프라인이 학습용 입력을 안정적으로 만들고, 실험 추적이 어떤 설정이 어떤 결과를 냈는지 기록하며, 모델 레지스트리가 배포 가능한 후보를 관리하고, 서빙 인프라와 모니터링이 실제 운영 상태를 다시 다음 실험으로 연결한다. 결국 MLOps는 이 흐름을 끊기지 않게 만드는 작업이라고 보는 편이 더 정확하다.</p>
+<p>다음 글에서는 MLOps의 출발점이라 할 수 있는 데이터 파이프라인과 피처 엔지니어링을 다룬다.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/compiler-03.html" class="nav-prev">← 오토마타와 컴파일러 03 - 문맥 자유 문법</a>
+        <a href="/tech/ko/posts/compiler-03.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>오토마타와 컴파일러 03 - 문맥 자유 문법</strong>
+            <p>정규 언어의 한계를 넘어서는 문맥 자유 문법의 구조와 역할</p>
+            <span class="post-nav-card-meta">
+                <span>December 29, 2025</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
         
-        <a href="/tech/ko/posts/platform-engineering-02.html" class="nav-next">플랫폼 엔지니어링 02 - 내부 개발자 플랫폼의 구조 →</a>
+        <a href="/tech/ko/posts/platform-engineering-02.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>플랫폼 엔지니어링 02 - 내부 개발자 플랫폼의 구조</strong>
+            <p>내부 개발자 플랫폼 안에 실제로 뭐가 들어있는지 — 다섯 개의 플레인, 연결 방식, 그리고 만들기 vs 사기</p>
+            <span class="post-nav-card-meta">
+                <span>January 2, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/mlops-02.html">MLOps 02 - 데이터 파이프라인과 피처 엔지니어링</a></h3>
+                <p>원시 데이터가 학습 데이터가 되기까지의 과정과, 데이터 품질이 모델 성능을 결정하는 이유</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/mlops-03.html">MLOps 03 - 실험 추적과 모델 학습 관리</a></h3>
+                <p>실험을 체계적으로 추적하지 않으면 어떤 문제가 발생하는지, 그리고 이를 해결하는 도구들</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/mlops-04.html">MLOps 04 - 모델 버전 관리와 레지스트리</a></h3>
+                <p>모델 버전 관리가 코드 버전 관리와 다른 이유, 그리고 모델 레지스트리의 역할</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -410,24 +501,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -448,6 +521,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

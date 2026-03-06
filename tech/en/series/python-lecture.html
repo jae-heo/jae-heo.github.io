@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Lecture Series - Jae's Tech Blog</title>
+    <meta name="description" content="Comprehensive Python programming course from basics to advanced topics">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/series/python-lecture.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/series/python-lecture.html" />
+    <meta property="og:title" content="Python Lecture Series">
+    <meta property="og:description" content="Comprehensive Python programming course from basics to advanced topics">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/series/python-lecture.html">
+    <meta name="twitter:title" content="Python Lecture Series">
+    <meta name="twitter:description" content="Comprehensive Python programming course from basics to advanced topics">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="series-page">
+    <div class="page-header">
+        <h1>Python Lecture Series</h1>
+        <p class="subtitle">Comprehensive Python programming course from basics to advanced topics</p>
+    </div>
+
+    <section class="series-overview-card">
+        <div class="series-overview-grid">
+            <div class="series-overview-main">
+                
+                <div class="series-copy-block">
+                    <h2>Who This Is For</h2>
+                    <p>Developers who already know Python syntax but want a stronger mental model for how the language actually works.</p>
+                </div>
+                
+
+                
+                <div class="series-copy-block">
+                    <h2>Prerequisites</h2>
+                    <p>Basic Python syntax, functions, classes, and general CS fundamentals.</p>
+                </div>
+                
+
+                
+                
+                <div class="series-copy-block">
+                    <h2>What You'll Get</h2>
+                    <ul class="series-outcomes">
+                        
+                        <li>Build a clearer mental model of Python's object model and runtime behavior</li>
+                        
+                        <li>Understand why descriptors, iterators, generators, and decorators work the way they do</li>
+                        
+                        <li>Read advanced Python code with less guesswork</li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+
+            <aside class="series-sidebar">
+                <div class="series-stat-card">
+                    <span class="series-stat-label">5 posts</span>
+                    <span class="series-stat-value">5</span>
+                </div>
+                <div class="series-stat-card">
+                    <span class="series-stat-label">14 min total</span>
+                    <span class="series-stat-value">14</span>
+                </div>
+                
+                <div class="series-stat-card">
+                    <span class="series-stat-label">Updated</span>
+                    <span class="series-stat-value">October 30, 2025</span>
+                </div>
+                
+                
+                <a class="series-start-link" href="/tech/en/posts/python-lecture-00.html">
+                    Recommended Start: Introduction to Python Lecture Series
+                </a>
+                
+            </aside>
+        </div>
+    </section>
+
+    <section class="series-posts-section">
+        <div class="series-section-header">
+            <h2>All Posts</h2>
+        </div>
+        <ol class="series-posts-listing">
+            
+            <li class="series-post-row">
+                <div class="series-post-number">1</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>October 18, 2025</span>
+                        <span>1 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/python-lecture-00.html">Introduction to Python Lecture Series</a></h3>
+                    <p>Python lecture series curriculum</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">2</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>October 19, 2025</span>
+                        <span>4 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/python-lecture-01.html">Python Lecture Part 1 - Python's Philosophy and Design Principles</a></h3>
+                    <p>Python's values, design philosophy, and the art of trade-offs</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">3</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>October 26, 2025</span>
+                        <span>3 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/python-lecture-02.html">Python Lecture 2 - Lexical Structure of Python</a></h3>
+                    <p>Learn how Python reads and understands your code, starting from the first step of lexical analysis</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">4</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>October 27, 2025</span>
+                        <span>3 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/python-lecture-03.html">Python Lecture 3 - Containers and Generators</a></h3>
+                    <p>Learn about Python's container concept, list internals, and efficient iteration with generators</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">5</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>October 30, 2025</span>
+                        <span>3 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/python-lecture-04.html">Python Lecture 04 - Class Internals and Descriptors</a></h3>
+                    <p>Deep dive into how Python classes work internally, uncovering the secrets of bound methods and descriptors</p>
+                </div>
+            </li>
+            
+        </ol>
+    </section>
+</div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

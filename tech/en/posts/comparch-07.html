@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Architecture 07 - Memory Hierarchy - Jae's Tech Blog</title>
+    <meta name="description" content="The memory hierarchy from registers to HDD and how caches work">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/comparch-07.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-07.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-07.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-07.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/comparch-07.html" />
+    <meta property="og:title" content="Computer Architecture 07 - Memory Hierarchy">
+    <meta property="og:description" content="The memory hierarchy from registers to HDD and how caches work">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-02-08T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="cache">
+    
+    <meta property="article:tag" content="memory-hierarchy">
+    
+    <meta property="article:tag" content="dram">
+    
+    <meta property="article:tag" content="sram">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/comparch-07.html">
+    <meta name="twitter:title" content="Computer Architecture 07 - Memory Hierarchy">
+    <meta name="twitter:description" content="The memory hierarchy from registers to HDD and how caches work">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Computer Architecture 07 - Memory Hierarchy",
+  "description": "The memory hierarchy from registers to HDD and how caches work",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-08T00:00:00.000Z",
+  "dateModified": "2026-02-08T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/comparch-07.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "computer-architecture, cache, memory-hierarchy, dram, sram"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="Computer Architecture 07 - Memory Hierarchy">Computer Architecture 07 - Memory Hierarchy</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-02-08T00:00:00.000Z"" class="post-kicker">February 8, 2026</time>
+            <h1 class="post-title">Computer Architecture 07 - Memory Hierarchy</h1>
+            <p class="post-deck">The memory hierarchy from registers to HDD and how caches work</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">8 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/computer-architecture.html" class="series-badge">📚 Computer Architecture (7/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/en/tags/cache.html" class="tag">cache</a>
+                    
+                    <a href="/tech/en/tags/memory-hierarchy.html" class="tag">memory-hierarchy</a>
+                    
+                    <a href="/tech/en/tags/dram.html" class="tag">dram</a>
+                    
+                    <a href="/tech/en/tags/sram.html" class="tag">sram</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Computer Architecture</h3>
+        <p class="post-series-description">From CPU internals and privilege levels to memory hierarchy and modern multicore processors</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-01.html" class="post-series-link">Computer Architecture 01 - Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-02.html" class="post-series-link">Computer Architecture 02 - CPU Internals</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-03.html" class="post-series-link">Computer Architecture 03 - Instruction Set Architecture (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-04.html" class="post-series-link">Computer Architecture 04 - Pipelining and Parallel Processing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-05.html" class="post-series-link">Computer Architecture 05 - CPU Privilege Levels and Protection</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-06.html" class="post-series-link">Computer Architecture 06 - Interrupts and Exceptions</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Computer Architecture 07 - Memory Hierarchy
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-08.html" class="post-series-link">Computer Architecture 08 - Virtual Memory and MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-09.html" class="post-series-link">Computer Architecture 09 - I/O and DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-10.html" class="post-series-link">Computer Architecture 10 - Multicore and Modern Processors</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="why-is-fast-memory-expensive">Why Is Fast Memory Expensive?</h2>
+<p>The ideal memory would be as fast as the CPU, unlimited in capacity, and inexpensive. In reality, no memory technology satisfies all three conditions simultaneously. Faster memory costs more per bit, and cheaper memory is slower to access. This is a physical constraint. SRAM requires six transistors to store a single bit, while DRAM needs only one transistor and one capacitor. Fewer transistors mean higher density and lower cost, but correspondingly slower access.</p>
+<p>Is there a way to completely overcome this physical limitation? It cannot be overcome, but it can be circumvented. That strategy is the memory hierarchy.</p>
+<h2 id="the-memory-hierarchy-pyramid">The Memory Hierarchy Pyramid</h2>
+<p>The memory hierarchy is a design strategy that arranges multiple levels of memory with different speeds, capacities, and costs in a layered structure, creating the overall illusion of fast, large memory.</p>
+<pre><code>          ┌──────────┐
+          │Registers  │  ~ 1 ns     tens to hundreds of bytes
+          │           │
+         ┌┴───────────┴┐
+         │   L1 Cache   │  ~ 1 ns     32-64 KB
+         │              │
+        ┌┴──────────────┴┐
+        │    L2 Cache     │  ~ 3-10 ns   256 KB - 1 MB
+        │                 │
+       ┌┴─────────────────┴┐
+       │     L3 Cache       │  ~ 10-30 ns  4-64 MB
+       │                    │
+      ┌┴────────────────────┴┐
+      │       DRAM            │  ~ 50-100 ns  8-128 GB
+      │                      │
+     ┌┴──────────────────────┴┐
+     │        SSD              │  ~ 25-100 μs  256 GB - 4 TB
+     │                        │
+    ┌┴────────────────────────┴┐
+    │         HDD               │  ~ 3-10 ms   1-20 TB
+    └──────────────────────────┘</code></pre>
+<p>Registers at the top of the pyramid operate at CPU clock speed but number only a few dozen. HDDs at the bottom provide terabytes of capacity but have access times measured in milliseconds. Between registers and HDDs, there is roughly a millionfold difference in speed.</p>
+<p>This hierarchy is effective because programs exhibit specific regularities in how they access memory.</p>
+<h2 id="locality-of-reference">Locality of Reference</h2>
+<p>Most programs do not use memory uniformly. At any given moment, the memory addresses being accessed tend to cluster around recently accessed addresses or their neighbors. This is called locality of reference.</p>
+<p>Temporal locality means that recently accessed data is likely to be accessed again in the near future. Repeatedly reading and writing the same variable inside a loop is a typical example. Loop counters, accumulator variables, and condition flags are referenced continuously throughout loop execution.</p>
+<p>Spatial locality means that data near an accessed address is also likely to be accessed soon. Sequentially traversing an array is the classic case. If <code class="inline-code">arr[0]</code> has been accessed, the prediction that <code class="inline-code">arr[1]</code> and <code class="inline-code">arr[2]</code> will follow is correct in most cases.</p>
+<p>Each level of the memory hierarchy exploits precisely this locality. By keeping frequently used data in faster tiers, it minimizes the number of times the CPU must descend to slower memory.</p>
+<h2 id="cache-organization">Cache Organization</h2>
+<p>A cache is a small, high-speed memory located between the CPU and main memory that holds copies of frequently used data. When the CPU requests data, it first checks the cache. If the desired data is present, it is returned quickly as a cache hit. If absent, it is a cache miss, and the data must be fetched from a lower tier.</p>
+<p>Caches manage data not in individual bytes but in units called cache lines. In modern processors, the cache line size is typically 64 bytes. Even if only 1 byte is needed, the entire 64 bytes are fetched, exploiting spatial locality. Nearby data is likely to be needed soon, so fetching it together is efficient.</p>
+<p>How is it determined where in the cache a particular memory address is stored? This is the cache mapping scheme, and there are three fundamental strategies.</p>
+<p>In a direct-mapped cache, each memory address maps to exactly one location in the cache. A portion of the address bits serves as an index to select the cache line. The implementation is simple and lookups are fast, but when different addresses map to the same cache location, they repeatedly evict each other, causing conflict misses.</p>
+<pre><code>Memory address:  [  Tag  |  Index  |  Offset  ]
+                   │         │          │
+                   │         │          └─▶ Byte position within cache line
+                   │         └────────────▶ Cache set selection
+                   └──────────────────────▶ Verifies origin of stored data</code></pre>
+<p>In a fully-associative cache, data can be stored in any location. Conflict misses do not occur, but finding data requires simultaneously comparing all cache line tags, making the hardware cost very high. This scheme is used only for special purposes such as small TLBs (Translation Lookaside Buffers).</p>
+<p>A set-associative cache is a compromise between the two. The cache is divided into multiple sets, and each memory address maps to one set, but within that set it can be stored in any of several positions (ways). In an 8-way set-associative cache, each set contains 8 cache lines, so up to 8 addresses mapping to the same set can coexist without conflict. Modern L1 caches typically use 4-way or 8-way set-associative structures.</p>
+<h2 id="types-of-cache-misses">Types of Cache Misses</h2>
+<p>Cache misses fall into three categories. Cold (compulsory) misses occur on the first access to data and are unavoidable. Capacity misses occur when the total cache size is smaller than the working set. Conflict misses occur when cache capacity is sufficient but mapping collisions cause evictions, and they appear only in direct-mapped or set-associative caches.</p>
+<p>In performance-sensitive code, identifying which type of miss is occurring is the starting point for optimization. For capacity misses, the data structure needs to be compressed or the working set reduced. For conflict misses, data placement must be changed, or data should be promoted to a cache level with higher associativity.</p>
+<h2 id="write-policies">Write Policies</h2>
+<p>When the CPU modifies data, a choice must be made about how to maintain consistency between the cache and main memory.</p>
+<p>The write-through policy writes to main memory simultaneously with every cache write. Memory always holds the latest data, simplifying implementation, but every write incurs a slow memory access, hurting performance. A write buffer is commonly used to prevent the CPU from stalling on memory writes.</p>
+<p>The write-back policy writes only to the cache and reflects changes to main memory only when the cache line is evicted. Modified cache lines have a dirty bit set, indicating they must be written back upon eviction. This greatly reduces the number of memory writes, yielding excellent performance, but data between cache and memory may be temporarily inconsistent. Modern L1 and L2 caches almost universally use the write-back policy.</p>
+<h2 id="the-cache-coherence-problem">The Cache Coherence Problem</h2>
+<p>In a single core, inconsistencies between cache and memory are transparently managed within the hardware. In multicore environments, however, the problem becomes complicated. If Core A modifies variable x in its cache, and Core B reads the same variable x from its own cache, Core B sees a stale value.</p>
+<p>This is called the cache coherence problem, and it must be solved automatically by hardware. The most widely used protocol is the MESI protocol, which manages each cache line in one of four states.</p>
+<table>
+<thead>
+<tr><th>State</th><th>Meaning</th></tr>
+</thead>
+<tbody>
+<tr><td>Modified (M)</td><td>Only this core has it; newer than memory</td></tr>
+<tr><td>Exclusive (E)</td><td>Only this core has it; same as memory</td></tr>
+<tr><td>Shared (S)</td><td>Multiple cores have it; same as memory</td></tr>
+<tr><td>Invalid (I)</td><td>Data is not valid</td></tr>
+</tbody>
+</table>
+<p>When Core A wants to modify a cache line in the Shared state, it first sends an invalidate message to other cores, marking their copies as Invalid. It then changes its own cache line to the Modified state and writes the new value. When Core B subsequently reads the same address, it obtains the latest value from Core A&#39;s Modified cache line.</p>
+<p>This process is performed automatically by hardware, but it is not free. Inter-core message exchanges take tens of clock cycles. When multiple cores in a multithreaded program frequently modify data in the same cache line, a flood of invalidation messages causes performance to degrade sharply. This is called false sharing, and it occurs when different variables happen to reside in the same cache line.</p>
+<h2 id="dram-internals">DRAM Internals</h2>
+<p>DRAM, used as main memory, is internally organized as a two-dimensional array. Each bit is stored as the presence or absence of charge in a capacitor, accessed by row and column coordinates.</p>
+<p>DRAM access occurs in two stages. First, the row address is sent along with the RAS (Row Address Strobe) signal, and the entire row is copied into a row buffer called a sense amplifier. This process is called row activation. Then the column address is sent with the CAS (Column Address Strobe) signal, and the data at that column is output from the row buffer.</p>
+<p>Reading different columns from an already activated row is fast, requiring only the CAS latency. Accessing a different row, however, requires closing the current row and activating a new one, which takes considerably longer. This is why DRAM&#39;s effective performance varies greatly depending on the memory access pattern. Sequential access being faster than random access is precisely due to this characteristic.</p>
+<p>Another property of DRAM is that it requires refresh. Capacitor charge naturally dissipates over time, so typically every 64 milliseconds all rows must be read and rewritten to restore their charge. During refresh, the affected bank cannot be accessed, which also impacts performance.</p>
+<h2 id="memory-latency-by-the-numbers">Memory Latency by the Numbers</h2>
+<p>Comparing access times across memory hierarchy levels makes the importance of caches unmistakable.</p>
+<table>
+<thead>
+<tr><th>Operation</th><th>Approximate Time</th></tr>
+</thead>
+<tbody>
+<tr><td>L1 cache hit</td><td>1 ns</td></tr>
+<tr><td>L2 cache hit</td><td>3-10 ns</td></tr>
+<tr><td>L3 cache hit</td><td>10-30 ns</td></tr>
+<tr><td>DRAM access</td><td>50-100 ns</td></tr>
+<tr><td>NVMe SSD random read</td><td>25-100 μs</td></tr>
+<tr><td>SATA SSD random read</td><td>100-200 μs</td></tr>
+<tr><td>HDD random read</td><td>3-10 ms</td></tr>
+</tbody>
+</table>
+<p>Between an L1 cache hit and a DRAM access, there is roughly a 100x difference. Between DRAM and HDD, the gap is approximately 100,000x. Whether a program&#39;s working set fits in L1, spills to L3, or falls through to DRAM determines performance dramatically.</p>
+<p>These numbers explain why the memory layout of data structures matters as much as an algorithm&#39;s time complexity. An algorithm that is theoretically more efficient but causes many cache misses can perform worse in practice than a simpler, cache-friendly algorithm. The reason arrays outperform linked lists in most cases stems directly from this difference in spatial locality.</p>
+<h2 id="memory-bandwidth">Memory Bandwidth</h2>
+<p>Alongside access latency, memory bandwidth is an equally important metric. Bandwidth refers to the amount of data that can be transferred per unit time. Modern DDR5 memory provides a theoretical bandwidth of roughly 50-60 GB/s per channel. A dual-channel configuration doubles this figure.</p>
+<p>In practice, however, fully utilizing this bandwidth is not straightforward. Random access patterns significantly reduce effective bandwidth due to row activation overhead. To maximize bandwidth utilization, it is necessary to maintain sequential access patterns, leverage prefetching, and issue multiple memory requests in parallel. The CPU&#39;s hardware prefetcher detects access patterns and speculatively fetches data predicted to be needed into the cache, operating most effectively with sequential or regular-stride access patterns.</p>
+<p>In the next post, we&#39;ll look at virtual memory.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/mlops-06.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>MLOps 06 - Monitoring and Drift Detection</strong>
+            <p>Why production models degrade over time and how to detect it</p>
+            <span class="post-nav-card-meta">
+                <span>February 7, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>5 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/compiler-09.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Automata and Compilers 09 - Abstract Syntax Trees</strong>
+            <p>Parse trees vs ASTs, designing AST nodes, and how ASTs bridge the compiler frontend and backend</p>
+            <span class="post-nav-card-meta">
+                <span>February 10, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-08.html">Computer Architecture 08 - Virtual Memory and MMU</a></h3>
+                <p>How virtual memory enables process isolation through the MMU, page tables, and TLB</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-09.html">Computer Architecture 09 - I/O and DMA</a></h3>
+                <p>How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">8 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-10.html">Computer Architecture 10 - Multicore and Modern Processors</a></h3>
+                <p>Why clock speeds stopped increasing and the core concepts of modern multicore processor architecture</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

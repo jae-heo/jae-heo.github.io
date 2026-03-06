@@ -255,7 +255,7 @@
 
 /* Footer */
 footer {
-    background: var(--bg-secondary);
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-secondary) 90%, var(--bg-primary) 10%));
     border-top: 1px solid var(--border);
     margin-top: 4rem;
     padding: 3rem 2rem;
@@ -270,6 +270,9 @@ footer {
 .footer-content p {
     color: var(--text-secondary);
     margin-bottom: 1rem;
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .footer-links {
@@ -286,6 +289,17 @@ footer {
 
 .footer-links a:hover {
     color: var(--accent);
+}
+
+[data-theme="dark"] footer {
+    background: linear-gradient(180deg, rgba(9, 17, 31, 0.15), rgba(12, 20, 35, 0.92));
+    border-top-color: rgba(36, 54, 79, 0.95);
+}
+
+[data-theme="dark"] .tag,
+[data-theme="dark"] .category-badge,
+[data-theme="dark"] .series-badge {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 /* Theme Switcher */

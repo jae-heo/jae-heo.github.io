@@ -35,6 +35,16 @@
     border-color: var(--accent);
 }
 
+[data-theme="dark"] .post-preview {
+    background: linear-gradient(180deg, rgba(16, 27, 45, 0.96), rgba(10, 18, 31, 0.96));
+    border-color: rgba(36, 54, 79, 0.95);
+    box-shadow: 0 18px 40px -30px rgba(0, 0, 0, 0.75);
+}
+
+[data-theme="dark"] .post-preview:hover {
+    box-shadow: 0 28px 56px -28px rgba(0, 0, 0, 0.88);
+}
+
 /* Post Preview Image */
 .post-preview-image {
     width: 100%;
@@ -81,12 +91,61 @@
     gap: 0.75rem;
 }
 
+.post-card-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-tertiary);
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+}
+
+.post-card-dot {
+    width: 0.25rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: var(--text-tertiary);
+    opacity: 0.6;
+}
+
+.post-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.post-status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent-light) 70%, var(--bg-secondary) 30%);
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+[data-theme="dark"] .post-status-pill {
+    background: rgba(23, 54, 95, 0.85);
+    color: #b7deff;
+    border: 1px solid rgba(124, 196, 255, 0.18);
+}
+
 /* Post Card Footer - Contains category badge and read more button */
 .post-card-footer {
     margin-top: auto;
     display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.post-card-footer .read-more {
+    margin-left: auto;
 }
 
 .post-preview h2 {
@@ -125,6 +184,11 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     flex-grow: 1;
+}
+
+.post-preview .post-excerpt,
+.post-item-excerpt {
+    text-wrap: pretty;
 }
 
 /* Post List Item (List View) */
@@ -197,10 +261,21 @@
     align-items: center;
     gap: 1rem;
     font-size: 0.875rem;
+    flex-wrap: wrap;
 }
 
 .post-item-meta time {
     color: var(--text-tertiary);
+}
+
+.post-card-eyebrow-list {
+    margin-bottom: 0.1rem;
+}
+
+.post-item-cta {
+    margin-left: auto;
+    color: var(--accent);
+    font-weight: 600;
 }
 
 /* Category Badge */
@@ -225,6 +300,13 @@
     color: white;
     border-color: var(--accent);
     transform: translateY(-1px);
+}
+
+[data-theme="dark"] .category-badge,
+[data-theme="dark"] .category-badge-small {
+    background: rgba(23, 54, 95, 0.28);
+    border-color: rgba(124, 196, 255, 0.32);
+    color: #b8dcff;
 }
 
 /* Tag List */
@@ -252,11 +334,42 @@
     transform: translateY(-1px);
 }
 
+[data-theme="dark"] .tag {
+    background: rgba(24, 38, 59, 0.9);
+    color: #d6e2f5;
+    border: 1px solid rgba(42, 60, 89, 0.85);
+}
+
 /* Tags in list view - outlined by default, filled on hover */
 .post-item .tag {
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .post-item {
+        height: auto;
+    }
+
+    .post-item-link {
+        flex-direction: column;
+    }
+
+    .post-item-image {
+        width: 100%;
+        height: 180px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .post-item-content {
+        padding: 1.25rem;
+    }
+
+    .post-card-footer .read-more,
+    .post-item-cta {
+        margin-left: 0;
+    }
 }
 
 .post-item .tag:hover {

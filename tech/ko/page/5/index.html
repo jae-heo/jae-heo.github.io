@@ -15,13 +15,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://jae-heo.github.io">
+    <meta property="og:url" content="https://jae-heo.github.io" />
     <meta property="og:title" content="재영의 기술 블로그">
     <meta property="og:description" content="처음부터 만든 기술 블로그">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
 
@@ -37,8 +37,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -96,20 +98,28 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -120,6 +130,74 @@
         <h1>재영의 기술 블로그</h1>
         <p class="subtitle">나사들어간 이야기</p>
     </div>
+
+    <section class="home-intro">
+        <div class="home-intro-copy">
+            <span class="home-intro-eyebrow">Jae의 기술 노트</span>
+            <h2>개념을 깊게 이해하고 싶은 엔지니어를 위한 시스템 중심 글쓰기.</h2>
+            <p>플랫폼 엔지니어링, 리눅스, 컴파일러, MLOps, 컴퓨터 구조를 다루는 긴 글들을 모았습니다. 용어만 훑는 대신, 실제로 판단할 때 필요한 감각을 만드는 데 초점을 둡니다.</p>
+        </div>
+        <div class="home-intro-panel">
+            <div class="home-intro-card">
+                <span class="home-intro-card-label">여기서 시작하기</span>
+                <strong>추천 시리즈</strong>
+                <p>처음 들어온 독자에게 좋은 시작점입니다.</p>
+            </div>
+            <div class="home-intro-card">
+                <span class="home-intro-card-label">최근 글 둘러보기</span>
+                <strong>총 58개 글</strong>
+                <p>새로 올라온 글과 진행 중인 시리즈를 모아봤습니다.</p>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="featured-series-strip">
+        
+        <article class="featured-series-card">
+            <div class="featured-series-meta">
+                <span>총 10개 글</span>
+                <span class="post-card-dot"></span>
+                <span>총 35분</span>
+            </div>
+            <h3><a href="/tech/ko/series/mlops.html">MLOps 기초</a></h3>
+            <p>데이터 파이프라인부터 프로덕션 모니터링까지, ML 시스템 운영의 기초</p>
+            <p class="featured-series-audience">모델 실험에서 프로덕션 운영으로 넘어가려는 ML 엔지니어, 데이터 사이언티스트, 백엔드 엔지니어.</p>
+            <div class="featured-series-actions">
+                <a href="/tech/ko/posts/mlops-01.html" class="read-more">추천 시작 글</a>
+            </div>
+        </article>
+        
+        <article class="featured-series-card">
+            <div class="featured-series-meta">
+                <span>총 12개 글</span>
+                <span class="post-card-dot"></span>
+                <span>총 38분</span>
+            </div>
+            <h3><a href="/tech/ko/series/compiler.html">오토마타와 컴파일러</a></h3>
+            <p>유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
+            <p class="featured-series-audience">언어 처리 이론과 실제 컴파일러 구현 사이의 연결을 함께 보고 싶은 독자.</p>
+            <div class="featured-series-actions">
+                <a href="/tech/ko/posts/compiler-01.html" class="read-more">추천 시작 글</a>
+            </div>
+        </article>
+        
+        <article class="featured-series-card">
+            <div class="featured-series-meta">
+                <span>총 10개 글</span>
+                <span class="post-card-dot"></span>
+                <span>총 42분</span>
+            </div>
+            <h3><a href="/tech/ko/series/linux.html">리눅스 내부 구조</a></h3>
+            <p>프로세스와 메모리부터 컨테이너까지, 리눅스 커널의 내부 동작 이해하기</p>
+            <p class="featured-series-audience">리눅스를 매일 쓰지만 익숙한 명령과 API 아래에서 커널이 실제로 무엇을 하는지 알고 싶은 엔지니어.</p>
+            <div class="featured-series-actions">
+                <a href="/tech/ko/posts/linux-01.html" class="read-more">추천 시작 글</a>
+            </div>
+        </article>
+        
+    </section>
+    
 
     <!-- Tab Navigation -->
     <div class="home-tabs">
@@ -145,18 +223,21 @@
                 <span class="updated-badge">UPDATED</span>
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        MLOps 기초
-                    </h2>
-                    <p class="home-series-description">데이터 파이프라인부터 프로덕션 모니터링까지, ML 시스템 운영의 기초</p>
-                    <div class="home-series-count">
-                        10
-                        
-                            
-                                개 포스트
-                            
-                        
-                    </div>
+                    <a href="/tech/ko/series/mlops.html" class="home-series-header-link" aria-label="MLOps 기초">
+                        <h2 class="home-series-title">
+                            MLOps 기초
+                        </h2>
+                        <p class="home-series-description">데이터 파이프라인부터 프로덕션 모니터링까지, ML 시스템 운영의 기초</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                10
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -329,18 +410,21 @@
                 <span class="updated-badge">UPDATED</span>
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        오토마타와 컴파일러
-                    </h2>
-                    <p class="home-series-description">유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
-                    <div class="home-series-count">
-                        12
-                        
-                            
-                                개 포스트
-                            
-                        
-                    </div>
+                    <a href="/tech/ko/series/compiler.html" class="home-series-header-link" aria-label="오토마타와 컴파일러">
+                        <h2 class="home-series-title">
+                            오토마타와 컴파일러
+                        </h2>
+                        <p class="home-series-description">유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                12
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -545,18 +629,21 @@
                 <span class="updated-badge">UPDATED</span>
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        리눅스 내부 구조
-                    </h2>
-                    <p class="home-series-description">프로세스와 메모리부터 컨테이너까지, 리눅스 커널의 내부 동작 이해하기</p>
-                    <div class="home-series-count">
-                        10
-                        
-                            
-                                개 포스트
-                            
-                        
-                    </div>
+                    <a href="/tech/ko/series/linux.html" class="home-series-header-link" aria-label="리눅스 내부 구조">
+                        <h2 class="home-series-title">
+                            리눅스 내부 구조
+                        </h2>
+                        <p class="home-series-description">프로세스와 메모리부터 컨테이너까지, 리눅스 커널의 내부 동작 이해하기</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                10
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -729,18 +816,208 @@
                 <span class="updated-badge">UPDATED</span>
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        플랫폼 엔지니어링 기초
-                    </h2>
-                    <p class="home-series-description">내부 개발자 플랫폼, 골든 패스, 개발자 셀프서비스의 원리를 이해하기</p>
-                    <div class="home-series-count">
-                        11
-                        
+                    <a href="/tech/ko/series/computer-architecture.html" class="home-series-header-link" aria-label="컴퓨터 구조">
+                        <h2 class="home-series-title">
+                            컴퓨터 구조
+                        </h2>
+                        <p class="home-series-description">CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                10
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 11">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-10.html" class="home-series-post-link">
+                            컴퓨터 구조 10 - 멀티코어와 현대 프로세서
+                            <span class="new-badge">NEW</span>
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-09.html" class="home-series-post-link">
+                            컴퓨터 구조 09 - I/O와 DMA
                             
-                                개 포스트
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-08.html" class="home-series-post-link">
+                            컴퓨터 구조 08 - 가상 메모리와 MMU
                             
-                        
-                    </div>
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-07.html" class="home-series-post-link">
+                            컴퓨터 구조 07 - 메모리 계층 구조
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-06.html" class="home-series-post-link">
+                            컴퓨터 구조 06 - 인터럽트와 예외
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-05.html" class="home-series-post-link">
+                            컴퓨터 구조 05 - CPU 권한 수준과 보호
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-04.html" class="home-series-post-link">
+                            컴퓨터 구조 04 - 파이프라인과 병렬 처리
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-03.html" class="home-series-post-link">
+                            컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-02.html" class="home-series-post-link">
+                            컴퓨터 구조 02 - CPU 내부 구조
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-01.html" class="home-series-post-link">
+                            컴퓨터 구조 01 - 컴퓨터 구조 개요
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                <span class="updated-badge">UPDATED</span>
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/platform-engineering.html" class="home-series-header-link" aria-label="플랫폼 엔지니어링 기초">
+                        <h2 class="home-series-title">
+                            플랫폼 엔지니어링 기초
+                        </h2>
+                        <p class="home-series-description">내부 개발자 플랫폼, 골든 패스, 개발자 셀프서비스의 원리를 이해하기</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                11
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -929,18 +1206,21 @@
                 
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <h2 class="home-series-title">
-                        Python 강좌 시리즈
-                    </h2>
-                    <p class="home-series-description">깊이있게 배우는 Python 프로그래밍 강좌</p>
-                    <div class="home-series-count">
-                        5
-                        
-                            
-                                개 포스트
-                            
-                        
-                    </div>
+                    <a href="/tech/ko/series/python-lecture.html" class="home-series-header-link" aria-label="Python 강좌 시리즈">
+                        <h2 class="home-series-title">
+                            Python 강좌 시리즈
+                        </h2>
+                        <p class="home-series-description">깊이있게 배우는 Python 프로그래밍 강좌</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                5
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
                 </div>
 
                 <!-- Series Posts List -->
@@ -1038,26 +1318,6 @@
         <div class="filter-section">
             <!-- Filters button will be inserted here by JS -->
         </div>
-        <div class="view-toggle">
-            <button class="view-toggle-btn active" data-view="grid" title="Grid view">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
-            </button>
-            <button class="view-toggle-btn" data-view="list" title="List view">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="8" y1="6" x2="21" y2="6"></line>
-                    <line x1="8" y1="12" x2="21" y2="12"></line>
-                    <line x1="8" y1="18" x2="21" y2="18"></line>
-                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                </svg>
-            </button>
-        </div>
         <!-- Filter panel will be inserted here by JS -->
     </div>
 
@@ -1068,20 +1328,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-14T00:00:00.000Z"">January 14, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
             <h2>
-                <a href="/tech/ko/posts/platform-engineering-02.html">플랫폼 엔지니어링 02 - 내부 개발자 플랫폼의 구조</a>
+                <a href="/tech/ko/posts/mlops-03.html">MLOps 03 - 실험 추적과 모델 학습 관리</a>
             </h2>
-            <time datetime=""2026-01-02T00:00:00.000Z"">January 2, 2026</time>
             
-            <p class="post-excerpt">내부 개발자 플랫폼 안에 실제로 뭐가 들어있는지 — 다섯 개의 플레인, 연결 방식, 그리고 만들기 vs 사기</p>
+            <p class="post-excerpt">실험을 체계적으로 추적하지 않으면 어떤 문제가 발생하는지, 그리고 이를 해결하는 도구들</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/platform-engineering-02.html" class="read-more">더 읽기</a>
+                
+                </div>
+                <a href="/tech/ko/posts/mlops-03.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -1090,20 +1357,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-13T00:00:00.000Z"">January 13, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
             <h2>
-                <a href="/tech/ko/posts/mlops-01.html">MLOps 01 - MLOps란 무엇인가?</a>
+                <a href="/tech/ko/posts/compiler-05.html">오토마타와 컴파일러 05 - 컴파일러 개요 — 단계와 구조</a>
             </h2>
-            <time datetime=""2026-01-01T00:00:00.000Z"">January 1, 2026</time>
             
-            <p class="post-excerpt">MLOps가 왜 필요한지, ML 라이프사이클의 현실적인 문제는 무엇인지</p>
+            <p class="post-excerpt">컴파일러가 왜 여러 단계로 나뉘며, 각 단계는 어떤 역할을 하는가</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/mlops-01.html" class="read-more">더 읽기</a>
+                
+                </div>
+                <a href="/tech/ko/posts/compiler-05.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -1112,20 +1386,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-12T00:00:00.000Z"">January 12, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
             <h2>
-                <a href="/tech/ko/posts/compiler-03.html">오토마타와 컴파일러 03 - 문맥 자유 문법</a>
+                <a href="/tech/ko/posts/linux-03.html">리눅스 내부 구조 03 - 프로세스 스케줄링</a>
             </h2>
-            <time datetime=""2025-12-29T00:00:00.000Z"">December 29, 2025</time>
             
-            <p class="post-excerpt">정규 언어의 한계를 넘어서는 문맥 자유 문법의 구조와 역할</p>
+            <p class="post-excerpt">리눅스 커널이 여러 프로세스에게 CPU를 분배하는 방법과 CFS의 동작 원리</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/compiler-03.html" class="read-more">더 읽기</a>
+                
+                </div>
+                <a href="/tech/ko/posts/linux-03.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -1134,20 +1415,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-10T00:00:00.000Z"">January 10, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
             <h2>
-                <a href="/tech/ko/posts/linux-01.html">리눅스 내부 구조 01 - 운영체제 개요</a>
+                <a href="/tech/ko/posts/comparch-03.html">컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)</a>
             </h2>
-            <time datetime=""2025-12-28T00:00:00.000Z"">December 28, 2025</time>
             
-            <p class="post-excerpt">운영체제가 하는 일과 리눅스 커널이 어떤 역할을 담당하는지</p>
+            <p class="post-excerpt">ISA의 역할과 CISC/RISC 철학, x86과 ARM의 설계 차이</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/linux-01.html" class="read-more">더 읽기</a>
+                
+                </div>
+                <a href="/tech/ko/posts/comparch-03.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -1156,20 +1444,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-09T00:00:00.000Z"">January 9, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
             <h2>
-                <a href="/tech/ko/posts/platform-engineering-01.html">플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?</a>
+                <a href="/tech/ko/posts/mlops-02.html">MLOps 02 - 데이터 파이프라인과 피처 엔지니어링</a>
             </h2>
-            <time datetime=""2025-12-24T00:00:00.000Z"">December 24, 2025</time>
             
-            <p class="post-excerpt">플랫폼 엔지니어링이 실제로 무엇인지, 왜 등장했는지, DevOps와 어떻게 다른지</p>
+            <p class="post-excerpt">원시 데이터가 학습 데이터가 되기까지의 과정과, 데이터 품질이 모델 성능을 결정하는 이유</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/platform-engineering-01.html" class="read-more">더 읽기</a>
+                
+                </div>
+                <a href="/tech/ko/posts/mlops-02.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -1178,20 +1473,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-08T00:00:00.000Z"">January 8, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
             <h2>
-                <a href="/tech/ko/posts/compiler-02.html">오토마타와 컴파일러 02 - 정규 표현식과 정규 언어</a>
+                <a href="/tech/ko/posts/platform-engineering-03.html">플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유</a>
             </h2>
-            <time datetime=""2025-12-23T00:00:00.000Z"">December 23, 2025</time>
             
-            <p class="post-excerpt">정규 표현식이 유한 오토마타와 어떻게 동치이며, 정규 언어의 경계는 어디인가</p>
+            <p class="post-excerpt">개발자 경험이 모든 플랫폼 의사결정을 이끌어야 하는 이유, 측정 방법, 그리고 이를 망치는 안티패턴들</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/compiler-02.html" class="read-more">더 읽기</a>
+                
+                </div>
+                <a href="/tech/ko/posts/platform-engineering-03.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -1200,20 +1502,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-07T00:00:00.000Z"">January 7, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
             <h2>
-                <a href="/tech/ko/posts/compiler-01.html">오토마타와 컴파일러 01 - 유한 오토마타</a>
+                <a href="/tech/ko/posts/compiler-04.html">오토마타와 컴파일러 04 - 푸시다운 오토마타</a>
             </h2>
-            <time datetime=""2025-12-15T00:00:00.000Z"">December 15, 2025</time>
             
-            <p class="post-excerpt">유한 오토마타가 무엇이고, 왜 컴파일러를 이해하기 위해 여기서부터 시작해야 하는지</p>
+            <p class="post-excerpt">유한 오토마타에 스택을 추가하면 어떤 계산 능력을 얻게 되는가</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/compiler-01.html" class="read-more">더 읽기</a>
+                
+                </div>
+                <a href="/tech/ko/posts/compiler-04.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -1222,20 +1531,27 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-05T00:00:00.000Z"">January 5, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
             <h2>
-                <a href="/tech/ko/posts/python-lecture-04.html">Python 강좌 4편 - 클래스의 내부 구조와 디스크립터</a>
+                <a href="/tech/ko/posts/linux-02.html">리눅스 내부 구조 02 - 프로세스와 스레드</a>
             </h2>
-            <time datetime=""2025-10-30T00:00:00.000Z"">October 30, 2025</time>
             
-            <p class="post-excerpt">파이썬 클래스가 내부적으로 어떻게 작동하는지, 바운드 메서드와 디스크립터의 비밀을 파헤쳐봅니다</p>
+            <p class="post-excerpt">리눅스에서 프로세스가 어떻게 생성되고 관리되며, 스레드와 어떤 관계를 갖는지</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/python-lecture-04.html" class="read-more">더 읽기</a>
+                
+                </div>
+                <a href="/tech/ko/posts/linux-02.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -1244,240 +1560,34 @@
         
         
         <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-04T00:00:00.000Z"">January 4, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
             <h2>
-                <a href="/tech/ko/posts/python-lecture-03.html">Python 강좌 3편 - 컨테이너와 제너레이터</a>
+                <a href="/tech/ko/posts/comparch-02.html">컴퓨터 구조 02 - CPU 내부 구조</a>
             </h2>
-            <time datetime=""2025-10-27T00:00:00.000Z"">October 27, 2025</time>
             
-            <p class="post-excerpt">파이썬의 컨테이너 개념부터 리스트의 내부 구조, 그리고 제너레이터를 이용한 효율적인 반복 처리까지 배워봅니다</p>
+            <p class="post-excerpt">ALU, 제어 유닛, 데이터패스의 내부 동작과 명령어가 CPU를 통과하는 과정</p>
             
             <div class="post-card-footer">
+                <div class="post-card-tags">
                 
                 <div class="post-meta-bottom">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
                 
-                <a href="/tech/ko/posts/python-lecture-03.html" class="read-more">더 읽기</a>
+                
+                </div>
+                <a href="/tech/ko/posts/comparch-02.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
     
 </div>
 
-        <!-- List View -->
-<div class="post-list post-list-view" style="display: none;">
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/ko/posts/platform-engineering-02.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        플랫폼 엔지니어링 02 - 내부 개발자 플랫폼의 구조
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">내부 개발자 플랫폼 안에 실제로 뭐가 들어있는지 — 다섯 개의 플레인, 연결 방식, 그리고 만들기 vs 사기</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2026-01-02T00:00:00.000Z"">January 2, 2026</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/ko/posts/mlops-01.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        MLOps 01 - MLOps란 무엇인가?
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">MLOps가 왜 필요한지, ML 라이프사이클의 현실적인 문제는 무엇인지</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2026-01-01T00:00:00.000Z"">January 1, 2026</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/ko/posts/compiler-03.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        오토마타와 컴파일러 03 - 문맥 자유 문법
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">정규 언어의 한계를 넘어서는 문맥 자유 문법의 구조와 역할</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-29T00:00:00.000Z"">December 29, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/ko/posts/linux-01.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        리눅스 내부 구조 01 - 운영체제 개요
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">운영체제가 하는 일과 리눅스 커널이 어떤 역할을 담당하는지</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-28T00:00:00.000Z"">December 28, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/ko/posts/platform-engineering-01.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">플랫폼 엔지니어링이 실제로 무엇인지, 왜 등장했는지, DevOps와 어떻게 다른지</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-24T00:00:00.000Z"">December 24, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/ko/posts/compiler-02.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        오토마타와 컴파일러 02 - 정규 표현식과 정규 언어
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">정규 표현식이 유한 오토마타와 어떻게 동치이며, 정규 언어의 경계는 어디인가</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-23T00:00:00.000Z"">December 23, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/ko/posts/compiler-01.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        오토마타와 컴파일러 01 - 유한 오토마타
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">유한 오토마타가 무엇이고, 왜 컴파일러를 이해하기 위해 여기서부터 시작해야 하는지</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-12-15T00:00:00.000Z"">December 15, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/ko/posts/python-lecture-04.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Python 강좌 4편 - 클래스의 내부 구조와 디스크립터
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">파이썬 클래스가 내부적으로 어떻게 작동하는지, 바운드 메서드와 디스크립터의 비밀을 파헤쳐봅니다</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-10-30T00:00:00.000Z"">October 30, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-    <article class="post-item" data-tags="" data-category="Lectures">
-        
-        <a href="/tech/ko/posts/python-lecture-03.html" class="post-item-link">
-            
-            <div class="post-item-content">
-                <div class="post-item-header">
-                    <h2>
-                        Python 강좌 3편 - 컨테이너와 제너레이터
-                    </h2>
-                </div>
-                
-                <p class="post-item-excerpt">파이썬의 컨테이너 개념부터 리스트의 내부 구조, 그리고 제너레이터를 이용한 효율적인 반복 처리까지 배워봅니다</p>
-                
-                <div class="post-item-meta">
-                    <time datetime=""2025-10-27T00:00:00.000Z"">October 27, 2025</time>
-                    
-                    <span class="category-badge-small">Lectures</span>
-                    
-                </div>
-            </div>
-        </a>
-    </article>
-    
-</div>
 
-
-        <script src="/assets/js/view-toggle.js"></script>
         <script src="/assets/js/post-filter.js"></script>
 
         
@@ -1517,6 +1627,10 @@
             <a href="/tech/ko/page/6/" class="pagination-page">6</a>
             
             
+            
+            <a href="/tech/ko/page/7/" class="pagination-page">7</a>
+            
+            
         </div>
 
         
@@ -1533,11 +1647,12 @@
 
     <script src="/assets/js/home-tabs.js"></script>
 </div>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -1559,24 +1674,6 @@
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -1597,6 +1694,8 @@
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

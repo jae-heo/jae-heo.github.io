@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/linux-07.html">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/linux-07.html" />
     <meta property="og:title" content="리눅스 내부 구조 07 - I/O와 디바이스">
     <meta property="og:description" content="블록 디바이스와 캐릭터 디바이스부터 I/O 스케줄러, DMA, 페이지 캐시까지">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2026-02-12T00:00:00.000Z"">
@@ -63,8 +63,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -93,7 +95,7 @@
     "name": "Jae's Tech Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
     }
   },
   "inLanguage": "ko-KR",
@@ -155,20 +157,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -176,59 +190,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Lectures</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="리눅스 내부 구조 07 - I/O와 디바이스">리눅스 내부 구조 07 - I/O와 디바이스</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="리눅스 내부 구조 07 - I/O와 디바이스">리눅스 내부 구조 07 - I/O와 디바이스</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>리눅스 내부 구조 07 - I/O와 디바이스</h1>
-        <time datetime=""2026-02-12T00:00:00.000Z"">February 12, 2026</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2026-02-12T00:00:00.000Z"" class="post-kicker">February 12, 2026</time>
+            <h1 class="post-title">리눅스 내부 구조 07 - I/O와 디바이스</h1>
+            <p class="post-deck">블록 디바이스와 캐릭터 디바이스부터 I/O 스케줄러, DMA, 페이지 캐시까지</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">5분 읽기</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 리눅스 내부 구조 (7/10)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/linux.html" class="series-badge">📚 리눅스 내부 구조 (7/10)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/tech/ko/tags/linux.html" class="tag">linux</a>
                     
@@ -312,7 +335,7 @@
             <!-- Current Post (Not Clickable) -->
             <span class="post-series-title">
                 리눅스 내부 구조 07 - I/O와 디바이스
-                <span class="current-indicator">← You are here</span>
+                <span class="current-indicator">← 현재 글</span>
             </span>
             
         </li>
@@ -346,17 +369,20 @@
 
     
 
-    <div class="post-content">
-        <h2 id="-">블록 디바이스와 캐릭터 디바이스</h2>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">블록 디바이스와 캐릭터 디바이스</h2>
 <p>리눅스에서 디바이스는 크게 두 가지로 분류된다. 블록 디바이스는 데이터를 고정된 크기의 블록 단위로 읽고 쓰는 장치이다. 하드 디스크, SSD, USB 드라이브가 여기에 해당한다. 캐릭터 디바이스는 바이트 스트림으로 데이터를 순차적으로 처리하는 장치이다. 키보드, 마우스, 시리얼 포트, 터미널이 캐릭터 디바이스에 속한다.</p>
-<p>이 구분이 왜 필요한가? 블록 디바이스는 임의 접근이 가능하다. 디스크의 어떤 위치든 원하는 블록을 직접 읽을 수 있다. 반면 캐릭터 디바이스는 순차적으로만 접근할 수 있으며, 이미 지나간 데이터를 되돌려 읽을 수 없다. 이 근본적인 차이 때문에 커널은 두 종류의 디바이스를 완전히 다른 경로로 처리하는 것이다. 블록 디바이스에는 I/O 스케줄러, 페이지 캐시, 버퍼 캐시 같은 복잡한 인프라가 필요하지만, 캐릭터 디바이스는 비교적 단순한 드라이버 인터페이스만으로 충분하다.</p>
+<p>이 구분이 왜 필요한가? 블록 디바이스는 임의 접근이 가능하다. 디스크의 어떤 위치든 원하는 블록을 직접 읽을 수 있다. 반면 캐릭터 디바이스는 순차적으로만 접근할 수 있으며, 이미 지나간 데이터를 되돌려 읽을 수 없다. 이 근본적인 차이 때문에 커널은 두 종류의 디바이스를 완전히 다른 경로로 처리한다. 블록 디바이스에는 I/O 스케줄러, 페이지 캐시, 버퍼 캐시 같은 복잡한 인프라가 필요하지만, 캐릭터 디바이스는 비교적 단순한 드라이버 인터페이스만으로 충분하다.</p>
 <p><code class="inline-code">/dev</code> 디렉터리에서 <code class="inline-code">ls -l</code>을 실행하면 각 디바이스 파일의 첫 글자가 b(블록) 또는 c(캐릭터)로 표시되는 것을 확인할 수 있다.</p>
 <pre><code class="language-bash">$ ls -l /dev/sda /dev/tty0
 brw-rw---- 1 root disk 8, 0  Feb 12 10:00 /dev/sda
 crw--w---- 1 root tty  4, 0  Feb 12 10:00 /dev/tty0</code></pre>
 <h2 id="-">메이저 번호와 마이너 번호</h2>
 <p>위 출력에서 파일 크기 자리에 표시된 <code class="inline-code">8, 0</code>이나 <code class="inline-code">4, 0</code> 같은 숫자 쌍이 메이저 번호와 마이너 번호이다. 메이저 번호는 해당 디바이스를 담당하는 드라이버를 식별하고, 마이너 번호는 같은 드라이버가 관리하는 여러 디바이스 중 특정 디바이스를 식별한다.</p>
-<p>예를 들어, 메이저 번호 8은 SCSI 디스크 드라이버를 나타낸다. /dev/sda의 마이너 번호 0은 첫 번째 디스크 전체를, /dev/sda1의 마이너 번호 1은 첫 번째 파티션을 가리킨다. 커널은 프로세스가 디바이스 파일에 접근할 때 이 번호 쌍을 사용하여 적절한 드라이버로 요청을 전달하는 것이다.</p>
+<p>예를 들어, 메이저 번호 8은 SCSI 디스크 드라이버를 나타낸다. /dev/sda의 마이너 번호 0은 첫 번째 디스크 전체를, /dev/sda1의 마이너 번호 1은 첫 번째 파티션을 가리킨다. 커널은 프로세스가 디바이스 파일에 접근할 때 이 번호 쌍을 사용하여 적절한 드라이버로 요청을 전달한다.</p>
 <p>과연 이러한 번호 기반 체계가 현대 시스템에서도 적절한가? 사실 디바이스 수가 폭발적으로 증가한 현대 환경에서는 정적인 번호 할당에 한계가 있다. 이 문제를 해결하기 위해 리눅스는 동적 메이저 번호 할당과 udev라는 디바이스 관리 시스템을 도입했는데, 이에 대해서는 뒤에서 다루겠다.</p>
 <h2 id="io-">I/O 스케줄러</h2>
 <p>블록 디바이스, 특히 회전하는 플래터를 가진 HDD의 경우 디스크 헤드의 물리적 이동이 성능의 병목이 된다. I/O 스케줄러는 여러 프로세스가 발생시킨 I/O 요청의 순서를 재배치하여 디스크 헤드의 이동 거리를 최소화하는 역할을 한다.</p>
@@ -370,7 +396,7 @@ crw--w---- 1 root tty  4, 0  Feb 12 10:00 /dev/tty0</code></pre>
 <p>최신 리눅스 커널은 멀티큐 블록 레이어(blk-mq)를 사용하며, 위 출력에서 보이는 mq-deadline, kyber, bfq, none 중에서 선택할 수 있다. NVMe SSD의 등장으로 스토리지 디바이스 자체가 여러 하드웨어 큐를 가지게 되었고, 기존의 단일 큐 스케줄러로는 이 병렬성을 활용할 수 없었기 때문에 블록 레이어 전체가 재설계된 것이다.</p>
 <h2 id="dma-cpu-">DMA: CPU를 거치지 않는 데이터 전송</h2>
 <p>대용량 데이터를 디스크에서 메모리로 옮길 때 CPU가 바이트 하나하나를 직접 복사한다면 어떻게 될까? CPU는 데이터 전송이 완료될 때까지 다른 작업을 할 수 없게 된다. DMA(Direct Memory Access)는 이 문제를 해결하는 하드웨어 메커니즘이다.</p>
-<p>DMA를 사용하면 CPU는 DMA 컨트롤러에 &quot;어디서 어디로 얼마만큼의 데이터를 옮겨라&quot;라는 명령만 내리고, 실제 데이터 전송은 DMA 컨트롤러가 수행한다. 전송이 완료되면 DMA 컨트롤러가 인터럽트를 발생시켜 CPU에 통보한다. 그 동안 CPU는 다른 프로세스를 실행하거나 다른 계산을 수행할 수 있는 것이다.</p>
+<p>DMA를 사용하면 CPU는 DMA 컨트롤러에 &quot;어디서 어디로 얼마만큼의 데이터를 옮겨라&quot;라는 명령만 내리고, 실제 데이터 전송은 DMA 컨트롤러가 수행한다. 전송이 완료되면 DMA 컨트롤러가 인터럽트를 발생시켜 CPU에 통보한다. 그 동안 CPU는 다른 프로세스를 실행하거나 다른 계산을 수행할 수 있다.</p>
 <pre><code>DMA 없이 (PIO 모드)              DMA 사용
 ┌─────┐    ┌──────┐             ┌─────┐    ┌──────┐
 │ CPU │◄──►│디스크│             │ CPU │    │디스크│
@@ -393,7 +419,7 @@ crw--w---- 1 root tty  4, 0  Feb 12 10:00 /dev/tty0</code></pre>
 <h2 id="-io-io">버퍼드 I/O와 다이렉트 I/O</h2>
 <p>프로세스가 read 시스템 콜로 파일을 읽으면 데이터가 곧바로 디스크에서 사용자 버퍼로 복사되는 것일까? 일반적으로는 그렇지 않다. 리눅스는 기본적으로 버퍼드 I/O를 사용하며, 디스크에서 읽은 데이터는 먼저 커널의 페이지 캐시에 저장된 후 사용자 버퍼로 복사된다.</p>
 <p>이 추가적인 복사가 왜 유리한가? 같은 데이터를 여러 프로세스가 읽거나, 같은 프로세스가 반복적으로 읽는 경우 디스크 접근 없이 페이지 캐시에서 곧바로 제공할 수 있기 때문이다. 대부분의 워크로드에서 이 캐싱 효과는 추가 복사 비용을 크게 상회한다.</p>
-<p>하지만 데이터베이스 같은 응용 프로그램은 자체적인 캐싱 전략을 가지고 있어 커널의 페이지 캐시가 오히려 불필요한 메모리 소비와 추가 복사를 유발한다. 이런 경우에 O_DIRECT 플래그를 사용하여 다이렉트 I/O를 수행할 수 있다. 다이렉트 I/O는 페이지 캐시를 우회하여 디스크와 사용자 버퍼 사이에서 직접 데이터를 전송하는 것이다.</p>
+<p>하지만 데이터베이스 같은 응용 프로그램은 자체적인 캐싱 전략을 가지고 있어 커널의 페이지 캐시가 오히려 불필요한 메모리 소비와 추가 복사를 유발한다. 이런 경우에 O_DIRECT 플래그를 사용하여 다이렉트 I/O를 수행할 수 있다. 다이렉트 I/O는 페이지 캐시를 우회하여 디스크와 사용자 버퍼 사이에서 직접 데이터를 전송한다.</p>
 <pre><code class="language-c">// 버퍼드 I/O (기본)
 int fd = open(&quot;/data/file&quot;, O_RDONLY);
 
@@ -411,7 +437,7 @@ Swap:          4.0Gi          0B       4.0Gi</code></pre>
 <h2 id="-">폴링과 인터럽트</h2>
 <p>디바이스가 작업을 완료했는지 확인하는 방법은 두 가지이다. 폴링은 CPU가 주기적으로 디바이스의 상태 레지스터를 확인하는 방식이다. 인터럽트는 디바이스가 작업 완료 시 CPU에 신호를 보내는 방식이다.</p>
 <p>과연 인터럽트가 항상 폴링보다 우수한가? 대부분의 경우 그렇다. 폴링은 디바이스가 준비될 때까지 CPU 사이클을 낭비하기 때문이다. 그러나 초고속 디바이스에서는 상황이 역전된다. NVMe SSD나 고속 네트워크 카드처럼 I/O 완료가 매우 빈번한 환경에서는 인터럽트의 처리 비용이 오히려 병목이 된다. 인터럽트마다 컨텍스트 스위칭이 발생하고, 인터럽트 핸들러가 실행되며, 캐시가 오염되기 때문이다.</p>
-<p>이런 이유로 최신 고성능 드라이버에서는 하이브리드 방식을 사용한다. 평소에는 인터럽트 모드로 동작하다가 I/O가 폭증하면 폴링 모드로 전환하여 인터럽트 오버헤드를 제거하는 것이다. 리눅스 네트워크 스택의 NAPI(New API)가 이 하이브리드 접근법의 대표적인 구현이다.</p>
+<p>이런 이유로 최신 고성능 드라이버에서는 하이브리드 방식을 사용한다. 평소에는 인터럽트 모드로 동작하다가 I/O가 폭증하면 폴링 모드로 전환하여 인터럽트 오버헤드를 제거한다. 리눅스 네트워크 스택의 NAPI(New API)가 이 하이브리드 접근법의 대표적인 구현이다.</p>
 <h2 id="udev-">udev와 디바이스 관리</h2>
 <p>과거 리눅스에서는 /dev 디렉터리의 디바이스 파일을 관리자가 수동으로 생성해야 했다. 수백 개의 디바이스 파일이 실제 하드웨어 유무와 관계없이 미리 만들어져 있었고, 새로운 하드웨어가 추가되면 mknod 명령으로 직접 디바이스 파일을 생성해야 했다.</p>
 <p>udev는 이 문제를 근본적으로 해결한다. 커널이 하드웨어를 감지하면 uevent를 발생시키고, udev 데몬이 이 이벤트를 수신하여 규칙에 따라 디바이스 파일을 자동으로 생성하거나 삭제한다. USB 드라이브를 꽂으면 /dev/sdb가 자동으로 나타나고, 뽑으면 사라지는 것이 udev 덕분인 것이다.</p>
@@ -419,26 +445,87 @@ Swap:          4.0Gi          0B       4.0Gi</code></pre>
 <pre><code class="language-bash"># /etc/udev/rules.d/99-usb-storage.rules
 # 특정 USB 장치에 고정된 이름을 부여하는 규칙 예시
 SUBSYSTEM==&quot;block&quot;, ATTRS{idVendor}==&quot;0781&quot;, ATTRS{idProduct}==&quot;5567&quot;, SYMLINK+=&quot;myusb&quot;</code></pre>
-<p>이 규칙은 특정 벤더/제품 ID를 가진 USB 장치가 연결되면 /dev/myusb라는 심볼릭 링크를 자동으로 생성한다. 디바이스가 연결될 때마다 /dev/sdb, /dev/sdc처럼 이름이 바뀌는 문제를 해결할 수 있는 것이다.</p>
-<p>udev는 단순한 디바이스 파일 관리 이상의 역할을 한다. 커널의 장치 모델과 /sys 파일 시스템을 연결하는 다리 역할을 하며, 하드웨어 이벤트에 반응하는 자동화의 기반이 되는 것이다. systemd의 등장 이후 udev는 systemd-udevd로 통합되어 시스템 관리의 일부가 되었다.</p>
-<p>다음 포스트에서는 네트워킹 스택의 내부 구조를 살펴본다.</p>
+<p>이 규칙은 특정 벤더/제품 ID를 가진 USB 장치가 연결되면 /dev/myusb라는 심볼릭 링크를 자동으로 생성한다. 디바이스가 연결될 때마다 /dev/sdb, /dev/sdc처럼 이름이 바뀌는 문제를 해결할 수 있다.</p>
+<p>udev는 단순한 디바이스 파일 관리 이상의 역할을 한다. 커널의 장치 모델과 /sys 파일 시스템을 연결하는 다리 역할을 하며, 하드웨어 이벤트에 반응하는 자동화의 기반이 된다. systemd의 등장 이후 udev는 systemd-udevd로 통합되어 시스템 관리의 일부가 되었다.</p>
+<p>다음 글에서는 네트워킹 스택의 내부 구조를 다룬다.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/compiler-09.html" class="nav-prev">← 오토마타와 컴파일러 09 - 추상 구문 트리</a>
+        <a href="/tech/ko/posts/compiler-09.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>오토마타와 컴파일러 09 - 추상 구문 트리</strong>
+            <p>파스 트리와 AST의 차이, AST 노드 설계, 그리고 컴파일러 프론트엔드와 백엔드를 잇는 다리</p>
+            <span class="post-nav-card-meta">
+                <span>February 10, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
         
-        <a href="/tech/ko/posts/platform-engineering-08.html" class="nav-next">플랫폼 엔지니어링 08 - 대규모 CI/CD →</a>
+        <a href="/tech/ko/posts/platform-engineering-08.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>플랫폼 엔지니어링 08 - 대규모 CI/CD</strong>
+            <p>팀마다 파이프라인을 따로 만들면 왜 문제가 되는지, 그리고 표준화된 템플릿으로 어떻게 해결하는지</p>
+            <span class="post-nav-card-meta">
+                <span>February 13, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">5분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/linux-08.html">리눅스 내부 구조 08 - 동기화와 동시성</a></h3>
+                <p>여러 실행 흐름이 공유 자원에 접근할 때 발생하는 문제와 리눅스 커널의 동기화 메커니즘</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/linux-09.html">리눅스 내부 구조 09 - 네트워킹</a></h3>
+                <p>리눅스 커널의 네트워킹 스택과 패킷이 NIC에서 애플리케이션까지 전달되는 과정</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">5분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/linux-10.html">리눅스 내부 구조 10 - 컨테이너와 가상화</a></h3>
+                <p>네임스페이스와 cgroup이 컨테이너를 만드는 원리, 그리고 커널 개념들의 총정리</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -460,24 +547,6 @@ SUBSYSTEM==&quot;block&quot;, ATTRS{idVendor}==&quot;0781&quot;, ATTRS{idProduct
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -498,6 +567,8 @@ SUBSYSTEM==&quot;block&quot;, ATTRS{idVendor}==&quot;0781&quot;, ATTRS{idProduct
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

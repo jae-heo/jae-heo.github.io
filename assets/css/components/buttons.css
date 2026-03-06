@@ -137,43 +137,6 @@
     border-right: none;
 }
 
-/* View Toggle Buttons */
-.view-toggle {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.view-toggle-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    padding: 0.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    color: var(--text-tertiary);
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.view-toggle-btn:hover {
-    background: transparent;
-    color: var(--text-secondary);
-    border-color: var(--text-secondary);
-}
-
-.view-toggle-btn.active {
-    background: transparent;
-    color: var(--accent);
-    border-color: var(--accent);
-}
-
-.view-toggle-btn svg {
-    display: block;
-    width: 20px;
-    height: 20px;
-}
-
 /* Floating Action Button */
 .fab {
     position: fixed;

@@ -22,13 +22,13 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-04.html">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/mlops-04.html" />
     <meta property="og:title" content="MLOps 04 - 모델 버전 관리와 레지스트리">
     <meta property="og:description" content="모델 버전 관리가 코드 버전 관리와 다른 이유, 그리고 모델 레지스트리의 역할">
     <meta property="og:site_name" content="재영의 기술 블로그">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="ko_KR">
     
-    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     
     
     <meta property="article:published_time" content=""2026-01-24T00:00:00.000Z"">
@@ -63,8 +63,10 @@
 
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -92,7 +94,7 @@
     "name": "Jae's Tech Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://jae-heo.github.io/assets/favicon.ico"
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
     }
   },
   "inLanguage": "ko-KR",
@@ -154,20 +156,32 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
             <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <select id="lang-select" aria-label="Select language" style="background: var(--bg-primary); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; color: var(--text-primary); cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem;">
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
                     <option value="ko">한국어</option>
                 </select>
-                <button id="theme-toggle" aria-label="다크 모드 전환" style="background: none; border: none; cursor: pointer; color: var(--text-secondary); font-size: 1.2rem;">
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
                     <span id="theme-icon">🌙</span>
                 </button>
+                </div>
             </div>
         </nav>
     </header>
@@ -175,59 +189,68 @@
     <main>
         <article class="post">
     <!-- Breadcrumb Navigation -->
-    <nav aria-label="breadcrumb" style="margin: -1.25rem -2rem 0.5rem -2rem; padding: 0 2rem;">
-        <ol style="list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.875rem;" itemscope itemtype="https://schema.org/BreadcrumbList">
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; padding-left: 0; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Home</span>
                 </a>
                 <meta itemprop="position" content="1" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center; gap: 0.5rem;">
-                <a href="/tech/ko/categories/Lectures.html" itemprop="item" style="color: var(--text-secondary); text-decoration: none; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s ease; display: inline-flex; align-items: center;" onmouseover="this.style.color='var(--accent)'; this.style.backgroundColor='var(--bg-secondary)';" onmouseout="this.style.color='var(--text-secondary)'; this.style.backgroundColor='transparent';">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
                     <span itemprop="name">Lectures</span>
                 </a>
                 <meta itemprop="position" content="2" />
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="color: var(--text-secondary); opacity: 0.4;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
                     <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </li>
             
-            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="display: flex; align-items: center;">
-                <span itemprop="name" style="color: var(--text-secondary); opacity: 0.7; padding: 0.25rem 0.5rem; padding-left: 0; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="MLOps 04 - 모델 버전 관리와 레지스트리">MLOps 04 - 모델 버전 관리와 레지스트리</span>
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="MLOps 04 - 모델 버전 관리와 레지스트리">MLOps 04 - 모델 버전 관리와 레지스트리</span>
                 <meta itemprop="position" content="3" />
             </li>
         </ol>
     </nav>
 
     <header class="post-header">
-        <h1>MLOps 04 - 모델 버전 관리와 레지스트리</h1>
-        <time datetime=""2026-01-24T00:00:00.000Z"">January 24, 2026</time>
-        <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="post-title-block">
+            <time datetime=""2026-01-24T00:00:00.000Z"" class="post-kicker">January 24, 2026</time>
+            <h1 class="post-title">MLOps 04 - 모델 버전 관리와 레지스트리</h1>
+            <p class="post-deck">모델 버전 관리가 코드 버전 관리와 다른 이유, 그리고 모델 레지스트리의 역할</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">3분 읽기</span>
+                </div>
+            </div>
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">시리즈:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <span class="series-badge">📚 MLOps 기초 (4/10)</span>
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/mlops.html" class="series-badge">📚 MLOps 기초 (4/10)</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">카테고리:</span>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
                     <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
                 </div>
             </div>
             
             
-            <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
-                <span style="color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; min-width: 70px;">태그:</span>
-                <div class="tags" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
                     
                     <a href="/tech/ko/tags/mlops.html" class="tag">mlops</a>
                     
@@ -287,7 +310,7 @@
             <!-- Current Post (Not Clickable) -->
             <span class="post-series-title">
                 MLOps 04 - 모델 버전 관리와 레지스트리
-                <span class="current-indicator">← You are here</span>
+                <span class="current-indicator">← 현재 글</span>
             </span>
             
         </li>
@@ -345,11 +368,14 @@
 
     
 
-    <div class="post-content">
-        <h2 id="git-">Git만으로는 부족하다</h2>
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="git-">Git만으로는 부족하다</h2>
 <p>소프트웨어 개발에서 버전 관리는 이미 해결된 문제이다. Git을 사용하여 코드의 모든 변경 이력을 추적하고, 브랜치를 나누어 병렬 개발을 수행하며, 필요하면 과거 시점으로 되돌릴 수 있다. 그렇다면 ML 모델도 Git으로 관리하면 되지 않을까?</p>
 <p>문제는 모델이 코드와 근본적으로 다른 성격을 가진다는 것이다. 코드는 텍스트이기 때문에 diff를 통해 변경 내용을 파악할 수 있고, 용량도 크지 않다. 반면 학습된 모델 파일은 수백 MB에서 수 GB에 이르는 바이너리 파일이며, diff가 무의미하다. 더 중요한 것은 모델의 동작을 결정하는 것이 코드만이 아니라는 점이다. 동일한 코드라도 학습 데이터, 하이퍼파라미터, 학습 환경이 달라지면 완전히 다른 모델이 만들어진다.</p>
-<p>따라서 모델의 버전을 관리한다는 것은 코드뿐만 아니라 데이터, 파라미터, 환경, 성능 메트릭까지 함께 추적하는 것을 의미한다. Git이 코드의 계보를 관리한다면, 모델 버전 관리는 모델의 계보를 관리하는 것이다.</p>
+<p>따라서 모델의 버전을 관리한다는 것은 코드뿐만 아니라 데이터, 파라미터, 환경, 성능 메트릭까지 함께 추적하는 것을 의미한다. Git이 코드의 계보를 관리한다면, 모델 버전 관리는 모델의 계보를 관리한다.</p>
 <h2 id="-">모델 레지스트리의 개념</h2>
 <p>모델 레지스트리는 학습된 모델을 중앙에서 저장하고 관리하는 시스템이다. 단순한 파일 저장소가 아니라, 각 모델의 메타데이터와 생명주기를 함께 관리한다는 점에서 차이가 있다.</p>
 <p>모델 레지스트리가 관리하는 정보는 다음과 같다. 모델 자체(학습된 가중치 파일), 모델의 메타데이터(학습에 사용된 데이터셋, 하이퍼파라미터, 성능 메트릭), 모델의 계보(어떤 실험에서 파생되었는지, 이전 버전과의 관계), 그리고 모델의 현재 상태(개발 중인지, 스테이징에 배포되었는지, 프로덕션에서 서빙 중인지)가 그것이다.</p>
@@ -365,10 +391,10 @@
 <p>세 번째 단계는 아카이브이다. 새로운 모델이 프로덕션에 배포되면 이전 모델은 아카이브 상태로 전환된다. 이 모델은 더 이상 서빙에 사용되지 않지만, 롤백이 필요한 경우를 대비하여 삭제하지 않고 보존한다.</p>
 <h2 id="-">승인 워크플로우</h2>
 <p>모델의 상태 전환이 자동으로 이루어지면 위험할 수 있다. 성능 메트릭이 좋다고 해서 바로 프로덕션에 배포하는 것은 적절하지 않다. 공정성, 규제 준수, 비즈니스 영향 등 정량적 메트릭만으로는 판단할 수 없는 요소들이 존재하기 때문이다.</p>
-<p>이를 위해 승인 워크플로우를 도입한다. 스테이징에서 프로덕션으로의 전환에 담당자의 승인이 필요하도록 하는 것이다. 자동화된 검증(성능 임계값 충족 여부, 데이터 품질 검증 등)과 수동 검토(비즈니스 로직 확인, 윤리적 검토 등)를 조합하여, 모델의 프로덕션 배포가 통제된 과정을 거치도록 만드는 것이다.</p>
+<p>이를 위해 승인 워크플로우를 도입한다. 스테이징에서 프로덕션으로의 전환에 담당자의 승인이 필요하도록 한다. 자동화된 검증(성능 임계값 충족 여부, 데이터 품질 검증 등)과 수동 검토(비즈니스 로직 확인, 윤리적 검토 등)를 조합하여, 모델의 프로덕션 배포가 통제된 과정을 거치도록 만드는 것이다.</p>
 <h2 id="dvc-">DVC를 활용한 데이터 버전 관리</h2>
 <p>모델의 버전을 관리하려면 학습 데이터의 버전도 함께 관리해야 한다. DVC(Data Version Control)는 Git과 유사한 인터페이스로 대용량 파일과 데이터셋의 버전을 관리하는 도구이다.</p>
-<p>DVC의 핵심 아이디어는 대용량 파일 자체는 원격 스토리지(S3, GCS 등)에 저장하고, Git에는 해당 파일의 해시값과 메타데이터만 추적하는 것이다. 이를 통해 코드와 데이터의 버전을 동기화할 수 있다. 특정 Git 커밋으로 체크아웃하면 그 시점의 데이터도 함께 복원되므로, 과거 실험의 완전한 재현이 가능해진다.</p>
+<p>DVC의 핵심 아이디어는 대용량 파일 자체는 원격 스토리지(S3, GCS 등)에 저장하고, Git에는 해당 파일의 해시값과 메타데이터만 추적한다. 이를 통해 코드와 데이터의 버전을 동기화할 수 있다. 특정 Git 커밋으로 체크아웃하면 그 시점의 데이터도 함께 복원되므로, 과거 실험의 완전한 재현이 가능해진다.</p>
 <pre><code class="language-bash"># 데이터 파일을 DVC로 추적
 dvc add data/training_dataset.csv
 
@@ -398,24 +424,85 @@ dvc checkout</code></pre>
 <p>MLflow Model Registry의 장점은 실험 추적과의 통합이다. 어떤 실험에서 어떤 파라미터로 학습된 모델이 현재 프로덕션에 서빙되고 있는지를 하나의 시스템에서 추적할 수 있다. 모델을 로드할 때도 버전 번호나 상태(예: &quot;Production&quot;)를 지정하여 가져올 수 있어, 배포 파이프라인과의 연동이 자연스럽다.</p>
 <h2 id="-">버전 관리 없는 모델은 관리 불가능하다</h2>
 <p>모델의 수가 적고 배포 주기가 긴 초기 단계에서는 버전 관리의 필요성을 체감하기 어렵다. 하지만 모델의 수가 늘어나고 배포 주기가 짧아질수록, 어떤 모델이 어떤 상태에 있는지 파악하는 것이 점점 어려워진다. 모델 레지스트리는 이 복잡성을 관리 가능한 수준으로 유지하는 장치이다. 코드에 Git이 필수적인 것처럼, ML 시스템에는 모델 레지스트리가 필수적인 것이다.</p>
-<p>다음 포스트에서는 학습된 모델을 실제 서비스에 배포하는 모델 서빙과 배포 전략을 살펴본다.</p>
+<p>다음 글에서는 학습된 모델을 실제 서비스에 배포하는 모델 서빙과 배포 전략을 다룬다.</p>
 
+        </div>
     </div>
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/platform-engineering-05.html" class="nav-prev">← 플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code</a>
+        <a href="/tech/ko/posts/platform-engineering-05.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code</strong>
+            <p>IaC가 플랫폼의 근간인 이유, 그리고 Terraform, Pulumi, Crossplane을 셀프서비스 인프라 관점에서 비교</p>
+            <span class="post-nav-card-meta">
+                <span>January 22, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>2분 읽기</span>
+            </span>
+        </a>
         
         
-        <a href="/tech/ko/posts/compiler-07.html" class="nav-next">오토마타와 컴파일러 07 - 하향식 파싱 →</a>
+        <a href="/tech/ko/posts/comparch-05.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>컴퓨터 구조 05 - CPU 권한 수준과 보호</strong>
+            <p>CPU가 왜 권한 수준을 구분하는지, x86 보호 링과 ARM 예외 수준이 어떻게 시스템을 보호하는지</p>
+            <span class="post-nav-card-meta">
+                <span>January 25, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>5분 읽기</span>
+            </span>
+        </a>
         
     </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/mlops-05.html">MLOps 05 - 모델 서빙과 배포 전략</a></h3>
+                <p>학습된 모델을 프로덕션에서 서빙하는 방법과 안전한 배포 전략</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/mlops-06.html">MLOps 06 - 모니터링과 드리프트 감지</a></h3>
+                <p>프로덕션 모델이 시간이 지나면서 성능이 저하되는 이유와 이를 감지하는 방법</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/mlops-07.html">MLOps 07 - ML을 위한 CI/CD</a></h3>
+                <p>ML 시스템의 CI/CD가 일반 소프트웨어와 어떻게 다르며, 무엇을 테스트하고 자동화해야 하는지</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
 </article>
+
     </main>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Built with custom static site generator</p>
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 
@@ -437,24 +524,6 @@ dvc checkout</code></pre>
             // Links are already fixed by the server, no client-side processing needed
         }
 
-        // Theme toggle functionality
-        const toggleBtn = document.getElementById('theme-toggle');
-        const icon = document.getElementById('theme-icon');
-
-        function updateThemeIcon(theme) {
-            icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        updateThemeIcon(localStorage.getItem('theme') || 'light');
-
-        toggleBtn?.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            updateThemeIcon(next);
-        });
-
         // Language dropdown functionality
         const langSelect = document.getElementById('lang-select');
         if (langSelect) {
@@ -475,6 +544,8 @@ dvc checkout</code></pre>
             });
         }
     </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

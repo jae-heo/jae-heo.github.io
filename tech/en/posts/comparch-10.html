@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Architecture 10 - Multicore and Modern Processors - Jae's Tech Blog</title>
+    <meta name="description" content="Why clock speeds stopped increasing and the core concepts of modern multicore processor architecture">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/comparch-10.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-10.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-10.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-10.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/comparch-10.html" />
+    <meta property="og:title" content="Computer Architecture 10 - Multicore and Modern Processors">
+    <meta property="og:description" content="Why clock speeds stopped increasing and the core concepts of modern multicore processor architecture">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-03-05T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="multicore">
+    
+    <meta property="article:tag" content="numa">
+    
+    <meta property="article:tag" content="smp">
+    
+    <meta property="article:tag" content="cache-coherence">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/comparch-10.html">
+    <meta name="twitter:title" content="Computer Architecture 10 - Multicore and Modern Processors">
+    <meta name="twitter:description" content="Why clock speeds stopped increasing and the core concepts of modern multicore processor architecture">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Computer Architecture 10 - Multicore and Modern Processors",
+  "description": "Why clock speeds stopped increasing and the core concepts of modern multicore processor architecture",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-03-05T00:00:00.000Z",
+  "dateModified": "2026-03-05T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/comparch-10.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "computer-architecture, multicore, numa, smp, cache-coherence"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="Computer Architecture 10 - Multicore and Modern Processors">Computer Architecture 10 - Multicore and Modern Processors</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-03-05T00:00:00.000Z"" class="post-kicker">March 5, 2026</time>
+            <h1 class="post-title">Computer Architecture 10 - Multicore and Modern Processors</h1>
+            <p class="post-deck">Why clock speeds stopped increasing and the core concepts of modern multicore processor architecture</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">8 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/computer-architecture.html" class="series-badge">📚 Computer Architecture (10/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/en/tags/multicore.html" class="tag">multicore</a>
+                    
+                    <a href="/tech/en/tags/numa.html" class="tag">numa</a>
+                    
+                    <a href="/tech/en/tags/smp.html" class="tag">smp</a>
+                    
+                    <a href="/tech/en/tags/cache-coherence.html" class="tag">cache-coherence</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Computer Architecture</h3>
+        <p class="post-series-description">From CPU internals and privilege levels to memory hierarchy and modern multicore processors</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-01.html" class="post-series-link">Computer Architecture 01 - Overview</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-02.html" class="post-series-link">Computer Architecture 02 - CPU Internals</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-03.html" class="post-series-link">Computer Architecture 03 - Instruction Set Architecture (ISA)</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-04.html" class="post-series-link">Computer Architecture 04 - Pipelining and Parallel Processing</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-05.html" class="post-series-link">Computer Architecture 05 - CPU Privilege Levels and Protection</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-06.html" class="post-series-link">Computer Architecture 06 - Interrupts and Exceptions</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-07.html" class="post-series-link">Computer Architecture 07 - Memory Hierarchy</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-08.html" class="post-series-link">Computer Architecture 08 - Virtual Memory and MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/comparch-09.html" class="post-series-link">Computer Architecture 09 - I/O and DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Computer Architecture 10 - Multicore and Modern Processors
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="why-clock-speeds-stopped-increasing">Why Clock Speeds Stopped Increasing</h2>
+<p>Until the early 2000s, the formula for processor performance improvement was straightforward. Just increase the clock speed. From 100MHz to 1GHz to 3GHz, clock speeds climbed steeply every year. Then, around 2004, this ascent suddenly stopped. More than twenty years later, desktop processor base clocks still hover around 3 to 5GHz. What created this wall?</p>
+<p>Three walls acted simultaneously. The first is the power wall. A processor&#39;s dynamic power consumption is proportional to clock frequency and proportional to the square of voltage. Since increasing the clock requires raising voltage as well, power consumption surges to the point where the chip generates more heat than can be physically dissipated.</p>
+<p>The second is the ILP wall (Instruction-Level Parallelism wall). There is a fundamental limit to the instruction-level parallelism that can be extracted through superscalar and out-of-order execution. Data dependencies and control dependencies in programs determine this limit, and no amount of hardware complexity can break through it.</p>
+<p>The third is the memory wall. CPU performance improved by tens of percent annually, but memory latency improvement was only a few percent per year. No matter how fast the CPU became, the time spent waiting for data from memory increasingly became the bottleneck.</p>
+<h2 id="multicore-as-the-solution">Multicore as the Solution</h2>
+<p>When single-core performance improvement hit its ceiling, processor designers changed direction. Instead of making a single core faster, they integrated multiple cores onto a single chip. Since Intel&#39;s Pentium D and AMD&#39;s Athlon 64 X2 introduced dual cores to the consumer market in 2005, core counts have steadily increased, with 16 to 24 cores now common even on desktops.</p>
+<p>The performance benefit of multicore manifests in parallelizable workloads. Distributing independent tasks across multiple cores allows throughput to scale proportionally with the number of cores. However, as Amdahl&#39;s Law shows, the sequential portion of a program determines the upper bound of overall speedup. If 10% of a program is sequential, no amount of additional cores can achieve more than a 10x speedup.</p>
+<h2 id="smp-architecture">SMP Architecture</h2>
+<p>Symmetric Multi-Processing (SMP) is a structure where all processors have equal access to the same shared memory. Regardless of which core accesses which memory address, the latency is the same. From the operating system&#39;s perspective, all cores are equivalent, so scheduling is relatively straightforward since placing a process on any core yields the same performance.</p>
+<p>However, SMP has scalability limitations. As core counts increase, shared memory bus bandwidth becomes a bottleneck, and traffic for maintaining cache coherence also surges. SMP generally operates efficiently up to 8 to 16 cores; beyond that, a different approach is needed.</p>
+<h2 id="numa-non-uniform-memory-access">NUMA: Non-Uniform Memory Access</h2>
+<p>NUMA (Non-Uniform Memory Access) is an architecture designed to overcome the scalability limitations of SMP. Each processor (or group of processors) has its own local memory nearby, and while it can access other processors&#39; memory, the latency is longer.</p>
+<pre><code>┌─────────────────────┐     ┌─────────────────────┐
+│     NUMA Node 0     │     │     NUMA Node 1     │
+│  ┌──────┐ ┌──────┐  │     │  ┌──────┐ ┌──────┐  │
+│  │Core 0│ │Core 1│  │     │  │Core 4│ │Core 5│  │
+│  │Core 2│ │Core 3│  │     │  │Core 6│ │Core 7│  │
+│  └──────┘ └──────┘  │     │  └──────┘ └──────┘  │
+│   Local Memory 32GB  │◀──▶│   Local Memory 32GB  │
+│  (access: ~80ns)     │Inter│  (access: ~80ns)     │
+│                     │conn.│                     │
+│  Remote: ~130ns      │     │  Remote: ~130ns      │
+└─────────────────────┘     └─────────────────────┘</code></pre>
+<p>In NUMA environments, placing data in the same node&#39;s memory as the cores that use it is critical for performance. In database or virtualization workloads, failing to use NUMA-aware memory allocation leads to frequent remote memory accesses and significant performance degradation. Ignoring NUMA topology on server systems is one of the most common performance mistakes.</p>
+<h2 id="cache-coherence-the-mesi-protocol">Cache Coherence: The MESI Protocol</h2>
+<p>In multicore processors, each core has its own cache. When multiple cores hold data for the same memory address in their respective caches and one core modifies that data, the copies in other cores&#39; caches become stale. Cache coherence protocols solve this problem.</p>
+<p>In the widely used MESI protocol, each cache line has one of four states.</p>
+<table>
+<thead>
+<tr><th>State</th><th>Meaning</th></tr>
+</thead>
+<tbody>
+<tr><td>Modified (M)</td><td>Only this cache holds it; differs from memory (modified)</td></tr>
+<tr><td>Exclusive (E)</td><td>Only this cache holds it; matches memory</td></tr>
+<tr><td>Shared (S)</td><td>Multiple caches hold it; matches memory</td></tr>
+<tr><td>Invalid (I)</td><td>Cache line is not valid</td></tr>
+</tbody>
+</table>
+<p>When core A wants to modify data in Shared state, it must first send an invalidate message to all other cores to change their cache lines to Invalid, then transition its own cache line to Modified state. This process is performed automatically by hardware and is transparent to the programmer, but propagating and acknowledging the invalidation takes time.</p>
+<p>This is the cause of the false sharing problem in multithreaded programming. Even when different cores modify logically independent variables, if those variables reside on the same cache line, the entire cache line is repeatedly invalidated, resulting in significant performance degradation.</p>
+<h2 id="memory-ordering-and-memory-barriers">Memory Ordering and Memory Barriers</h2>
+<p>Modern processors can reorder memory accesses for performance. Even if program code writes A before B, another core may observe B as having changed before A. In single-threaded programs this is not an issue since the processor guarantees results as if instructions executed in program order, but in multithreaded environments this reordering can cause subtle, hard-to-reproduce bugs.</p>
+<p>Memory barriers (or fences) are instructions that prevent such reordering. They guarantee that memory accesses before the barrier complete before any accesses after it. Synchronization mechanisms such as locks, atomic operations, and volatile variables internally use appropriate memory barriers to ensure memory visibility.</p>
+<p>x86 adopts a relatively strong memory ordering model (TSO, Total Store Order) that behaves intuitively in most cases, but architectures like ARM use weak memory ordering models requiring more memory barriers. This is precisely why the same multithreaded code may work correctly on x86 but exhibit bugs when ported to ARM.</p>
+<h2 id="simultaneous-multithreading-smt-and-hyper-threading">Simultaneous Multithreading: SMT and Hyper-Threading</h2>
+<p>Simultaneous Multithreading (SMT) is a technique where a single physical core executes multiple hardware threads concurrently. Intel markets this as Hyper-Threading.</p>
+<p>How can a single core execute two threads simultaneously? The key insight is that a core&#39;s execution resources are not always 100% utilized. While one thread waits for memory due to a cache miss, the execution units sit idle. SMT fills this idle time by interleaving instructions from multiple threads on a single core. Each hardware thread has its own set of registers and program counter, but execution resources such as the ALU, caches, and branch predictor are shared.</p>
+<p>SMT typically provides 10 to 30 percent performance improvement, but for compute-intensive workloads that already fully utilize execution units, the benefit may be negligible or performance may even degrade due to cache contention.</p>
+<h2 id="gpu-architecture-overview">GPU Architecture Overview</h2>
+<p>GPUs (Graphics Processing Units) embody a fundamentally different design philosophy from CPUs. While CPUs maximize single-thread performance with a few complex cores, GPUs optimize for massive parallelism with thousands of simple cores.</p>
+<p>The GPU&#39;s basic execution model is SIMT (Single Instruction, Multiple Threads), an extension of SIMD (Single Instruction, Multiple Data). A single instruction is applied simultaneously to tens or hundreds of threads. This structure is why GPUs can achieve tens of times higher throughput than CPUs for workloads that apply the same operation independently to large amounts of data, such as matrix operations, image processing, and physics simulations.</p>
+<p>The explosive growth of deep learning has recently expanded the GPU&#39;s role far beyond graphics rendering into general-purpose parallel computing (GPGPU). Neural network training and inference are fundamentally large-scale matrix multiplications, which align perfectly with GPU architecture.</p>
+<h2 id="heterogeneous-computing">Heterogeneous Computing</h2>
+<p>One prominent trend in modern processor design is heterogeneous computing. Rather than designing all cores identically, this approach combines cores with different characteristics suited to different purposes.</p>
+<p>ARM&#39;s big.LITTLE architecture places high-performance big cores alongside low-power little cores. Lightweight tasks like checking email are handled by the little cores to conserve battery, while demanding tasks like gaming or video editing engage the big cores. Intel&#39;s recent processors have similarly adopted a heterogeneous structure combining P-cores (Performance) and E-cores (Efficiency).</p>
+<p>More broadly, the collaboration between CPU and GPU is itself heterogeneous computing. Apple&#39;s M-series chips integrate CPU, GPU, Neural Engine, and media engines into a single SoC, leveraging the most suitable processing unit for each workload. The CPU handles general-purpose processing, the GPU handles parallel computation, and the NPU handles machine learning inference.</p>
+<h2 id="the-evolution-of-modern-cpus">The Evolution of Modern CPUs</h2>
+<p>Modern CPUs are the cumulative result of decades of architectural innovation. Branch predictors achieve over 99% prediction accuracy using advanced algorithms like TAGE (Tagged Geometric History Length). Out-of-order execution windows simultaneously track hundreds of instructions and execute them as soon as dependencies are resolved. Prefetchers learn memory access patterns and preload needed data into cache.</p>
+<p>Speculative execution minimizes pipeline idle time by executing instructions along predicted branch paths before the branch outcome is confirmed. The Spectre and Meltdown vulnerabilities discovered in 2018 demonstrated that speculative execution can have security side effects, but the performance benefits are too significant to abandon it. Instead, modern processors have introduced hardware-level mitigations for speculative execution side channels, seeking a balance between performance and security.</p>
+<h2 id="wrapping-up-the-series">Wrapping Up the Series</h2>
+<p>This series started from the basic structure of the Von Neumann architecture and progressed through CPU internals, instruction set architectures, pipelining and hazards, privilege levels and interrupts, memory hierarchy, virtual memory, I/O and DMA, and finally multicore and modern processors.</p>
+<p>All these concepts are not independent but intimately interconnected. Page table walks in virtual memory depend on cache hierarchy performance, and TLB misses cause pipeline stalls. Multicore cache coherence protocols directly affect how the memory hierarchy behaves, and DMA combined with virtual memory necessitates new protection mechanisms like the IOMMU. Interrupts and privilege levels form the foundation of I/O handling and virtual memory page fault processing.</p>
+<p>Understanding computer architecture is ultimately not about knowing individual components in isolation, but understanding how these components interact to function as a unified system. Software developers need this intuition about component interactions to diagnose performance problems, predict system behavior, and make sound design decisions. It is my hope that this series has served as a starting point for developing that intuition.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/compiler-12.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>Automata and Compilers 12 - Code Generation</strong>
+            <p>How optimized intermediate representations become machine code, and a final look back from automata theory to compiler construction</p>
+            <span class="post-nav-card-meta">
+                <span>March 5, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>6 min read</span>
+            </span>
+        </a>
+        
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-09.html">Computer Architecture 09 - I/O and DMA</a></h3>
+                <p>How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">6 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-08.html">Computer Architecture 08 - Virtual Memory and MMU</a></h3>
+                <p>How virtual memory enables process isolation through the MMU, page tables, and TLB</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">8 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/comparch-07.html">Computer Architecture 07 - Memory Hierarchy</a></h3>
+                <p>The memory hierarchy from registers to HDD and how caches work</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA) - 재영의 기술 블로그</title>
+    <meta name="description" content="ISA의 역할과 CISC/RISC 철학, x86과 ARM의 설계 차이">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/comparch-03.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/comparch-03.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/comparch-03.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/comparch-03.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/comparch-03.html" />
+    <meta property="og:title" content="컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)">
+    <meta property="og:description" content="ISA의 역할과 CISC/RISC 철학, x86과 ARM의 설계 차이">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-10T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="computer-architecture">
+    
+    <meta property="article:tag" content="isa">
+    
+    <meta property="article:tag" content="cisc">
+    
+    <meta property="article:tag" content="risc">
+    
+    <meta property="article:tag" content="x86">
+    
+    <meta property="article:tag" content="arm">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/comparch-03.html">
+    <meta name="twitter:title" content="컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)">
+    <meta name="twitter:description" content="ISA의 역할과 CISC/RISC 철학, x86과 ARM의 설계 차이">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)",
+  "description": [
+    "ISA의 역할과 CISC/RISC 철학",
+    "x86과 ARM의 설계 차이"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-10T00:00:00.000Z",
+  "dateModified": "2026-01-10T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/comparch-03.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "computer-architecture, isa, cisc, risc, x86, arm"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)">컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-10T00:00:00.000Z"" class="post-kicker">January 10, 2026</time>
+            <h1 class="post-title">컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)</h1>
+            <p class="post-deck">ISA의 역할과 CISC/RISC 철학, x86과 ARM의 설계 차이</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">4분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/computer-architecture.html" class="series-badge">📚 컴퓨터 구조 (3/10)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/computer-architecture.html" class="tag">computer-architecture</a>
+                    
+                    <a href="/tech/ko/tags/isa.html" class="tag">isa</a>
+                    
+                    <a href="/tech/ko/tags/cisc.html" class="tag">cisc</a>
+                    
+                    <a href="/tech/ko/tags/risc.html" class="tag">risc</a>
+                    
+                    <a href="/tech/ko/tags/x86.html" class="tag">x86</a>
+                    
+                    <a href="/tech/ko/tags/arm.html" class="tag">arm</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 컴퓨터 구조</h3>
+        <p class="post-series-description">CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-01.html" class="post-series-link">컴퓨터 구조 01 - 컴퓨터 구조 개요</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-02.html" class="post-series-link">컴퓨터 구조 02 - CPU 내부 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-04.html" class="post-series-link">컴퓨터 구조 04 - 파이프라인과 병렬 처리</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-05.html" class="post-series-link">컴퓨터 구조 05 - CPU 권한 수준과 보호</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-06.html" class="post-series-link">컴퓨터 구조 06 - 인터럽트와 예외</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-07.html" class="post-series-link">컴퓨터 구조 07 - 메모리 계층 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-08.html" class="post-series-link">컴퓨터 구조 08 - 가상 메모리와 MMU</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-09.html" class="post-series-link">컴퓨터 구조 09 - I/O와 DMA</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/comparch-10.html" class="post-series-link">컴퓨터 구조 10 - 멀티코어와 현대 프로세서</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">하드웨어와 소프트웨어 사이의 계약</h2>
+<p>프로그래머가 작성한 코드는 결국 CPU가 이해하는 명령어로 변환된다. 그런데 CPU마다 이해하는 명령어가 다르다면 어떻게 될까? 컴파일러는 어떤 명령어를 생성해야 할지 알 수 없고, 운영체제는 하드웨어를 제어할 수 없을 것이다.</p>
+<p>이 문제를 해결하는 것이 명령어 집합 아키텍처(Instruction Set Architecture, ISA)이다. ISA는 하드웨어와 소프트웨어 사이의 인터페이스를 정의하는 명세이다. 어떤 명령어가 존재하는지, 각 명령어의 형식은 어떠한지, 레지스터는 몇 개이고 어떤 역할을 하는지, 메모리 주소 지정은 어떤 방식으로 하는지를 규정한다. ISA가 동일하다면, 내부 구현이 완전히 다른 두 프로세서에서도 같은 프로그램이 동일하게 실행된다.</p>
+<p>이것이 왜 중요한가? ISA 덕분에 하드웨어 설계자는 내부 마이크로아키텍처를 자유롭게 개선할 수 있고, 소프트웨어 개발자는 특정 하드웨어 구현에 종속되지 않는 프로그램을 작성할 수 있다. x86 ISA를 지원하는 프로세서라면 인텔이 만들든 AMD가 만들든 같은 바이너리가 실행된다. 이 추상화가 수십 년간 하드웨어와 소프트웨어가 독립적으로 발전할 수 있었던 기반인 셈이다.</p>
+<h2 id="-">명령어 형식</h2>
+<p>ISA에서 각 명령어는 고정된 비트 패턴으로 인코딩된다. 이 비트 패턴에는 어떤 연산을 수행할지(오피코드), 어떤 피연산자를 사용할지(레지스터 번호, 즉시값, 주소 등)가 포함된다.</p>
+<p>MIPS나 RISC-V 같은 RISC 아키텍처에서는 명령어 형식이 몇 가지 유형으로 깔끔하게 정리되어 있다. RISC-V를 예로 들면 다음과 같다.</p>
+<pre><code>RISC-V 기본 명령어 형식 (32비트 고정)
+
+R-type (레지스터 간 연산: add, sub, and, or 등)
+┌─────────┬─────┬─────┬──────┬─────┬─────────┐
+│ funct7  │ rs2 │ rs1 │funct3│ rd  │ opcode  │
+│ 7비트   │5비트│5비트│ 3비트│5비트│  7비트  │
+└─────────┴─────┴─────┴──────┴─────┴─────────┘
+
+I-type (즉시값 연산, 로드: addi, lw 등)
+┌──────────────┬─────┬──────┬─────┬─────────┐
+│   imm[11:0]  │ rs1 │funct3│ rd  │ opcode  │
+│   12비트     │5비트│ 3비트│5비트│  7비트  │
+└──────────────┴─────┴──────┴─────┴─────────┘
+
+S-type (스토어: sw, sb 등)
+┌─────────┬─────┬─────┬──────┬────────┬─────────┐
+│imm[11:5]│ rs2 │ rs1 │funct3│imm[4:0]│ opcode  │
+│ 7비트   │5비트│5비트│ 3비트│ 5비트  │  7비트  │
+└─────────┴─────┴─────┴──────┴────────┴─────────┘
+
+B-type (분기: beq, bne 등)
+┌────┬────────┬─────┬─────┬──────┬────────┬───┬─────────┐
+│[12]│[10:5]  │ rs2 │ rs1 │funct3│ [4:1]  │[11]│ opcode │
+└────┴────────┴─────┴─────┴──────┴────────┴───┴─────────┘</code></pre>
+<p>이 형식들의 공통점을 주목할 필요가 있다. 오피코드의 위치가 항상 하위 7비트에 고정되어 있고, 소스 레지스터(rs1, rs2)와 목적지 레지스터(rd)의 위치도 형식에 관계없이 일정하다. 이런 규칙성 덕분에 하드웨어 디코더가 단순해진다. 명령어를 해석하기 위해 복잡한 분기 로직이 필요 없이, 정해진 비트 위치에서 필요한 필드를 바로 추출할 수 있다.</p>
+<h2 id="-">주소 지정 방식</h2>
+<p>명령어의 피연산자가 어디에 있는지를 지정하는 방식을 주소 지정 방식(addressing mode)이라 한다. ISA마다 지원하는 주소 지정 방식이 다르며, 이 차이가 프로그래밍 모델과 컴파일러 설계에 큰 영향을 미친다.</p>
+<table>
+<thead>
+<tr><th>주소 지정 방식</th><th>설명</th><th>예시</th></tr>
+</thead>
+<tbody>
+<tr><td>즉시(Immediate)</td><td>피연산자가 명령어 자체에 포함</td><td><code class="inline-code">addi r1, r2, 5</code></td></tr>
+<tr><td>레지스터(Register)</td><td>피연산자가 레지스터에 위치</td><td><code class="inline-code">add r1, r2, r3</code></td></tr>
+<tr><td>직접(Direct)</td><td>메모리 주소가 명령어에 명시</td><td><code class="inline-code">load r1, [0x1000]</code></td></tr>
+<tr><td>간접(Indirect)</td><td>레지스터가 메모리 주소를 보유</td><td><code class="inline-code">load r1, [r2]</code></td></tr>
+<tr><td>변위(Displacement)</td><td>레지스터 + 오프셋으로 주소 계산</td><td><code class="inline-code">load r1, [r2 + 16]</code></td></tr>
+<tr><td>인덱스(Indexed)</td><td>베이스 + 인덱스 레지스터로 주소 계산</td><td><code class="inline-code">load r1, [r2 + r3]</code></td></tr>
+</tbody>
+</table>
+<p>RISC 아키텍처는 주소 지정 방식을 최소한으로 제한하는 경향이 있다. RISC-V에서는 메모리 접근이 로드와 스토어 명령어에서만 허용되며, 주소 지정은 변위 방식 하나만 사용한다. 이러한 제약이 오히려 하드웨어를 단순하게 만들고, 파이프라이닝을 용이하게 한다.</p>
+<p>반면 x86은 매우 다양한 주소 지정 방식을 지원한다. 하나의 산술 명령어가 직접 메모리에서 읽어 연산하고 결과를 메모리에 쓸 수도 있다. 프로그래머 입장에서는 편리하지만, 하드웨어 구현은 그만큼 복잡해지는 셈이다.</p>
+<h2 id="cisc-vs-risc">CISC vs RISC</h2>
+<p>ISA 설계 철학에서 가장 근본적인 갈림길은 CISC(Complex Instruction Set Computer)와 RISC(Reduced Instruction Set Computer)의 대립이다.</p>
+<p>CISC의 철학은 하나의 명령어가 복잡한 작업을 수행하도록 한다. 메모리에서 값을 읽어 연산하고 결과를 다시 메모리에 저장하는 것을 한 명령어로 처리할 수 있다. 명령어의 길이가 가변적이고, 종류가 매우 많으며, 하나의 명령어가 여러 클럭 사이클에 걸쳐 실행될 수 있다. x86이 대표적인 CISC 아키텍처이다.</p>
+<p>RISC의 철학은 정반대이다. 각 명령어는 하나의 단순한 연산만 수행하고, 명령어 길이를 고정하며, 대부분의 명령어가 한 클럭 사이클에 실행되도록 설계한다. 메모리 접근은 로드/스토어 명령어로만 가능하고, 산술 연산은 레지스터 사이에서만 이루어진다. ARM, MIPS, RISC-V가 이 범주에 속한다.</p>
+<p>과연 어느 쪽이 더 우수한 접근인가? 1980년대에 RISC가 등장했을 때, CISC 지지자들은 프로그램이 더 많은 명령어를 필요로 하므로 코드 크기가 커지고 메모리 대역폭이 낭비된다고 주장했다. RISC 지지자들은 단순한 명령어가 파이프라이닝에 유리하고, 각 명령어의 실행 시간이 예측 가능하여 하드웨어 최적화가 쉽다고 반박했다.</p>
+<p>역사는 양쪽 모두에게 일부 타당성을 부여했다. 현대 x86 프로세서는 외부적으로는 CISC 명령어 집합을 유지하지만, 내부적으로는 복잡한 명령어를 마이크로옵(micro-op)이라는 RISC 유사 명령어로 분해하여 실행한다. 즉, 소프트웨어 호환성을 위해 CISC 인터페이스를 유지하면서도, 성능을 위해 RISC의 실행 원리를 차용하고 있는 것이다.</p>
+<h2 id="x86-vs-arm">x86 vs ARM</h2>
+<p>CISC와 RISC의 대립은 x86과 ARM이라는 두 거대 ISA의 경쟁으로 구체화된다.</p>
+<p>x86은 1978년 인텔 8086에서 시작하여 거의 50년간 하위 호환성을 유지해 온 아키텍처이다. 가변 길이 명령어(1바이트에서 15바이트까지), 복잡한 주소 지정 방식, 풍부한 명령어 집합이 특징이다. 데스크톱과 서버 시장을 오랫동안 지배해 왔으며, 그 최대 강점은 방대한 소프트웨어 생태계이다.</p>
+<p>ARM은 1985년 Acorn에서 시작된 RISC 아키텍처이다. 32비트 고정 길이 명령어(ARM 모드), 조건부 실행, 로드/스토어 아키텍처가 특징이다. 단순한 명령어 구조 덕분에 전력 효율이 높아, 모바일과 임베디드 시장을 장악하고 있다. 최근에는 Apple Silicon과 AWS Graviton 등을 통해 데스크톱과 서버 영역으로도 진출하고 있다.</p>
+<table>
+<thead>
+<tr><th>특성</th><th>x86-64</th><th>ARMv8 (AArch64)</th></tr>
+</thead>
+<tbody>
+<tr><td>설계 철학</td><td>CISC</td><td>RISC</td></tr>
+<tr><td>명령어 길이</td><td>가변 (1~15바이트)</td><td>고정 (4바이트)</td></tr>
+<tr><td>범용 레지스터</td><td>16개</td><td>31개</td></tr>
+<tr><td>메모리 접근</td><td>대부분의 명령어에서 가능</td><td>로드/스토어만 가능</td></tr>
+<tr><td>명령어 인코딩</td><td>복잡, 프리픽스 다수</td><td>규칙적, 디코딩 용이</td></tr>
+<tr><td>전력 효율</td><td>상대적으로 낮음</td><td>상대적으로 높음</td></tr>
+<tr><td>소프트웨어 생태계</td><td>데스크톱/서버에서 압도적</td><td>모바일에서 압도적</td></tr>
+</tbody>
+</table>
+<p>과거에는 x86이 성능에서, ARM이 전력 효율에서 각각 우위를 점했지만, 이 구도는 변화하고 있다. Apple M 시리즈 프로세서는 ARM 기반이면서도 데스크톱급 성능을 보여주었고, 인텔과 AMD도 전력 효율 개선에 많은 투자를 하고 있다. ISA 자체보다는 마이크로아키텍처와 제조 공정이 성능과 효율을 좌우하는 시대가 된 셈이다.</p>
+<h2 id="risc-v-">RISC-V가 주목받는 이유</h2>
+<p>x86과 ARM은 모두 상용 ISA이다. 이 ISA를 사용하여 프로세서를 설계하려면 인텔이나 ARM Holdings에 라이선스 비용을 지불해야 한다. RISC-V는 이 구도에 도전하는 오픈소스 ISA이다.</p>
+<p>2010년 UC 버클리에서 시작된 RISC-V는 누구나 자유롭게 구현할 수 있는 ISA를 목표로 설계되었다. 기본 명령어 집합은 극도로 간결하며(47개의 기본 명령어), 필요에 따라 확장을 추가하는 모듈식 구조를 채택하고 있다.</p>
+<p>RISC-V가 주목받는 이유는 단순히 무료라서만은 아니다. ISA 설계의 교훈을 반영하여, x86이나 ARM이 역사적 이유로 안고 있는 설계상의 비효율을 피한 깔끔한 설계가 특징이다. 또한 모듈식 구조 덕분에 IoT 장치용 최소 구성부터 고성능 서버용 풀 구성까지 동일한 ISA 기반으로 구현할 수 있다.</p>
+<p>현재 RISC-V는 임베디드와 IoT 분야에서 빠르게 채택되고 있으며, 장기적으로는 ARM의 영역을 일부 대체할 것으로 전망된다. 물론 소프트웨어 생태계라는 거대한 장벽이 남아 있지만, 오픈소스의 저력은 Linux가 증명한 바 있다.</p>
+<h2 id="-">명령어 인코딩의 실제</h2>
+<p>구체적인 예를 통해 명령어 인코딩이 어떻게 이루어지는지 확인해 보자. RISC-V에서 <code class="inline-code">add x1, x2, x3</code> 명령어를 인코딩하면 다음과 같다.</p>
+<pre><code>add x1, x2, x3  →  R-type 형식
+
+funct7   rs2    rs1   funct3  rd     opcode
+0000000  00011  00010  000   00001  0110011
+│        │      │      │     │      │
+│        x3     x2     ADD   x1     OP(정수연산)
+│
+ADD를 나타냄
+
+32비트 기계어: 0000000_00011_00010_000_00001_0110011
+16진수:        0x003100B3</code></pre>
+<p>이 인코딩에서 각 필드의 위치가 고정되어 있다는 점이 중요하다. 하드웨어 디코더는 명령어의 종류를 파악하기 전에도 rs1, rs2, rd 필드를 미리 추출하여 레지스터 파일에 접근을 시작할 수 있다. 이것이 파이프라이닝 효율을 높이는 데 기여한다.</p>
+<p>반면 x86에서 같은 의미의 명령어는 상황에 따라 인코딩 길이가 달라질 수 있으며, 프리픽스 바이트에 따라 해석이 바뀌기도 한다. 디코더 설계가 복잡해질 수밖에 없는 이유이다.</p>
+<p>다음 글에서는 파이프라인과 병렬 처리를 다룬다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/mlops-02.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>MLOps 02 - 데이터 파이프라인과 피처 엔지니어링</strong>
+            <p>원시 데이터가 학습 데이터가 되기까지의 과정과, 데이터 품질이 모델 성능을 결정하는 이유</p>
+            <span class="post-nav-card-meta">
+                <span>January 9, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/linux-03.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>리눅스 내부 구조 03 - 프로세스 스케줄링</strong>
+            <p>리눅스 커널이 여러 프로세스에게 CPU를 분배하는 방법과 CFS의 동작 원리</p>
+            <span class="post-nav-card-meta">
+                <span>January 12, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-04.html">컴퓨터 구조 04 - 파이프라인과 병렬 처리</a></h3>
+                <p>명령어 파이프라이닝, 해저드 처리, 분기 예측, 슈퍼스칼라와 비순차 실행</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">5분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-05.html">컴퓨터 구조 05 - CPU 권한 수준과 보호</a></h3>
+                <p>CPU가 왜 권한 수준을 구분하는지, x86 보호 링과 ARM 예외 수준이 어떻게 시스템을 보호하는지</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/comparch-06.html">컴퓨터 구조 06 - 인터럽트와 예외</a></h3>
+                <p>인터럽트가 존재하는 이유와 IDT, ISR, PIC/APIC의 동작 원리</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>
