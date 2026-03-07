@@ -57,6 +57,58 @@
                 <h2 class="section-title">Featured Projects</h2>
                 <div class="projects-grid">
                     
+                    <article class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">95% DB Write Time Reduction</h3>
+                            <p class="project-description">Cut database saving time from 168s to 8s in a ~10min simulation (50K+ entities). Built a lock-free SPSC ring buffer over 2GB shared memory to hand off writes to a separate process, with PostgreSQL COPY bulk inserts at 10K records per batch. Profiled hot paths with cProfile, replacing DataFrame scans with O(1) lookups and caching 136M repeated attribute accesses.</p>
+                            <div class="project-tech">
+                                
+                                <span class="tech-tag">Python</span>
+                                
+                                <span class="tech-tag">Shared Memory</span>
+                                
+                                <span class="tech-tag">PostgreSQL</span>
+                                
+                                <span class="tech-tag">cProfile</span>
+                                
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">ECS Architecture for Simulation Engines</h3>
+                            <p class="project-description">Redesigned monolithic machine centers into an Entity Component System with 7 data-only components and 3 behavior systems. Struct-of-Arrays layout keeps data cache-friendly and vectorization-ready.</p>
+                            <div class="project-tech">
+                                
+                                <span class="tech-tag">Python</span>
+                                
+                                <span class="tech-tag">ECS</span>
+                                
+                                <span class="tech-tag">Adapter Pattern</span>
+                                
+                                <span class="tech-tag">Struct-of-Arrays</span>
+                                
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">Event-Driven Decoupling</h3>
+                            <p class="project-description">Introduced Pub/Sub to separate core simulation logic from I/O side effects across 24 data tables. An event bridge converts low-level signals into domain events without touching the core engine code.</p>
+                            <div class="project-tech">
+                                
+                                <span class="tech-tag">Python</span>
+                                
+                                <span class="tech-tag">Pub/Sub</span>
+                                
+                                <span class="tech-tag">Event-Driven Architecture</span>
+                                
+                            </div>
+                        </div>
+                    </article>
+                    
                 </div>
             </div>
         </section>
@@ -67,6 +119,55 @@
                 <h2 class="section-title">Technical Skills</h2>
                 <div class="skills-grid">
                     
+                    <article class="skill-category">
+                        <h3>Core</h3>
+                        <div class="skill-tags">
+                            
+                            <span class="skill-tag">Python (Expert)</span>
+                            
+                            <span class="skill-tag">SQL</span>
+                            
+                            <span class="skill-tag">NumPy</span>
+                            
+                            <span class="skill-tag">Pandas</span>
+                            
+                            <span class="skill-tag">multiprocessing</span>
+                            
+                        </div>
+                    </article>
+                    
+                    <article class="skill-category">
+                        <h3>Architecture & Systems</h3>
+                        <div class="skill-tags">
+                            
+                            <span class="skill-tag">Entity Component System</span>
+                            
+                            <span class="skill-tag">Pub/Sub</span>
+                            
+                            <span class="skill-tag">Discrete Event Simulation</span>
+                            
+                            <span class="skill-tag">Lock-free Structures</span>
+                            
+                            <span class="skill-tag">Shared Memory IPC</span>
+                            
+                        </div>
+                    </article>
+                    
+                    <article class="skill-category">
+                        <h3>Performance & Infrastructure</h3>
+                        <div class="skill-tags">
+                            
+                            <span class="skill-tag">Profiling & Optimization</span>
+                            
+                            <span class="skill-tag">Caching Strategies</span>
+                            
+                            <span class="skill-tag">PostgreSQL</span>
+                            
+                            <span class="skill-tag">GitHub Actions CI/CD</span>
+                            
+                        </div>
+                    </article>
+                    
                 </div>
             </div>
         </section>
@@ -76,6 +177,67 @@
             <div class="container">
                 <h2 class="section-title">Experience</h2>
                 <div class="timeline">
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="timeline-period">Phase 3</span>
+                                <h3>Performance Optimization</h3>
+                                <p class="timeline-company">Simulation Engine</p>
+                            </div>
+                            <p class="timeline-description">Systematic profiling and optimization of DB write operations in a ~10min simulation</p>
+                            <ul class="timeline-achievements">
+                                
+                                <li>168s to 8s DB write time via shared memory ring buffer and cProfile-driven optimization</li>
+                                
+                                <li>O(1) lookups replacing DataFrame scans across hot paths</li>
+                                
+                                <li>Module-level caching eliminating 136M redundant attribute accesses</li>
+                                
+                            </ul>
+                        </div>
+                    </article>
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="timeline-period">Phase 2</span>
+                                <h3>Architecture Redesign</h3>
+                                <p class="timeline-company">Simulation Engine</p>
+                            </div>
+                            <p class="timeline-description">Restructured the engine core for maintainability and future scalability</p>
+                            <ul class="timeline-achievements">
+                                
+                                <li>ECS decomposition of monolithic machine center classes</li>
+                                
+                                <li>Pub/Sub layer isolating I/O from core simulation logic</li>
+                                
+                                <li>Event bridge enabling domain events without modifying the engine</li>
+                                
+                            </ul>
+                        </div>
+                    </article>
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="timeline-period">Phase 1</span>
+                                <h3>Infrastructure</h3>
+                                <p class="timeline-company">Simulation Engine</p>
+                            </div>
+                            <p class="timeline-description">Built the foundational systems the engine runs on</p>
+                            <ul class="timeline-achievements">
+                                
+                                <li>CI/CD benchmarking pipeline with automated regression detection</li>
+                                
+                                <li>Technical documentation covering 16 system concepts and 90 data references</li>
+                                
+                            </ul>
+                        </div>
+                    </article>
                     
                 </div>
             </div>

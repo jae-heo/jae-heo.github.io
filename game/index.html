@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Touch World</title>
+    <meta name="description" content="A mobile-friendly 2D physics world where the player follows your touch.">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Touch World">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="manifest" href="/game/manifest.webmanifest">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="/game/game.css">
+    <script>
+        const theme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+    </script>
+</head>
+<body class="game-page">
+    <main class="game-shell">
+        <section class="game-layout">
+            <section class="game-stage-panel game-panel">
+                <div class="stage-frame">
+                    <div id="game-root" class="game-root" aria-label="2D world"></div>
+                    <div class="joystick-layer">
+                        <div id="joystick-base" class="joystick-base">
+                            <div id="joystick-knob" class="joystick-knob"></div>
+                        </div>
+                    </div>
+                    <div class="attack-layer">
+                        <button id="attack-button" class="attack-button" type="button">Throw</button>
+                    </div>
+                    <div class="stage-overlay">
+                        <div class="stage-meta">
+                            <div class="stage-chip" id="stage-objective">Use joystick</div>
+                            <div class="stage-chip subtle" id="stage-status">Idle</div>
+                        </div>
+                        <button id="theme-toggle" class="stage-theme-toggle" type="button" aria-label="Toggle theme">
+                            <span id="theme-icon">🌙</span>
+                        </button>
+                    </div>
+                    <div id="end-overlay" class="end-overlay hidden">
+                        <div class="end-card">
+                            <p class="end-eyebrow" id="end-eyebrow">Finished</p>
+                            <h2 class="end-title" id="end-title">All crystals collected</h2>
+                            <p class="end-description" id="end-description"></p>
+                            <button id="play-again-btn" class="end-play-button" type="button">Play again</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-stage-footer">
+                    <p class="game-stage-hint" id="game-stage-hint">Touch anywhere to move. Drag to keep steering.</p>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
+    <script type="module" src="/game/js/main.js"></script>
+</body>
+</html>

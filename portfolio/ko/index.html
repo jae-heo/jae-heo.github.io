@@ -57,6 +57,58 @@
                 <h2 class="section-title">Featured Projects</h2>
                 <div class="projects-grid">
                     
+                    <article class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">DB 저장 시간 95% 단축</h3>
+                            <p class="project-description">전체 약 10분 시뮬레이션(5만 개 이상 엔티티)에서 DB 저장 시간을 168초에서 8초로 단축. 2GB 공유 메모리 위에 Lock-free SPSC 링 버퍼를 구축하여 쓰기를 별도 프로세스에 위임하고, PostgreSQL COPY 벌크 삽입으로 배치당 1만 건을 처리. cProfile로 핫 패스를 분석하여 DataFrame 스캔을 O(1) 조회로 대체하고 1억 3,600만 회 속성 접근을 캐싱.</p>
+                            <div class="project-tech">
+                                
+                                <span class="tech-tag">Python</span>
+                                
+                                <span class="tech-tag">공유 메모리</span>
+                                
+                                <span class="tech-tag">PostgreSQL</span>
+                                
+                                <span class="tech-tag">cProfile</span>
+                                
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">시뮬레이션 엔진용 ECS 아키텍처</h3>
+                            <p class="project-description">모놀리식 머신센터를 7개 데이터 전용 컴포넌트와 3개 행위 시스템으로 구성된 Entity Component System으로 재설계. Struct-of-Arrays 레이아웃으로 캐시 친화적이고 벡터화 가능한 구조를 확보.</p>
+                            <div class="project-tech">
+                                
+                                <span class="tech-tag">Python</span>
+                                
+                                <span class="tech-tag">ECS</span>
+                                
+                                <span class="tech-tag">어댑터 패턴</span>
+                                
+                                <span class="tech-tag">Struct-of-Arrays</span>
+                                
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">이벤트 기반 디커플링</h3>
+                            <p class="project-description">Pub/Sub를 도입하여 핵심 시뮬레이션 로직과 24개 데이터 테이블의 I/O 부수효과를 분리. 이벤트 브릿지가 저수준 시그널을 도메인 이벤트로 변환하되 핵심 엔진 코드는 수정하지 않는 구조.</p>
+                            <div class="project-tech">
+                                
+                                <span class="tech-tag">Python</span>
+                                
+                                <span class="tech-tag">Pub/Sub</span>
+                                
+                                <span class="tech-tag">이벤트 기반 아키텍처</span>
+                                
+                            </div>
+                        </div>
+                    </article>
+                    
                 </div>
             </div>
         </section>
@@ -67,6 +119,55 @@
                 <h2 class="section-title">Technical Skills</h2>
                 <div class="skills-grid">
                     
+                    <article class="skill-category">
+                        <h3>핵심 기술</h3>
+                        <div class="skill-tags">
+                            
+                            <span class="skill-tag">Python (Expert)</span>
+                            
+                            <span class="skill-tag">SQL</span>
+                            
+                            <span class="skill-tag">NumPy</span>
+                            
+                            <span class="skill-tag">Pandas</span>
+                            
+                            <span class="skill-tag">multiprocessing</span>
+                            
+                        </div>
+                    </article>
+                    
+                    <article class="skill-category">
+                        <h3>아키텍처 & 시스템</h3>
+                        <div class="skill-tags">
+                            
+                            <span class="skill-tag">Entity Component System</span>
+                            
+                            <span class="skill-tag">Pub/Sub</span>
+                            
+                            <span class="skill-tag">이산 이벤트 시뮬레이션</span>
+                            
+                            <span class="skill-tag">Lock-free 자료구조</span>
+                            
+                            <span class="skill-tag">공유 메모리 IPC</span>
+                            
+                        </div>
+                    </article>
+                    
+                    <article class="skill-category">
+                        <h3>성능 & 인프라</h3>
+                        <div class="skill-tags">
+                            
+                            <span class="skill-tag">프로파일링 & 최적화</span>
+                            
+                            <span class="skill-tag">캐싱 전략</span>
+                            
+                            <span class="skill-tag">PostgreSQL</span>
+                            
+                            <span class="skill-tag">GitHub Actions CI/CD</span>
+                            
+                        </div>
+                    </article>
+                    
                 </div>
             </div>
         </section>
@@ -76,6 +177,67 @@
             <div class="container">
                 <h2 class="section-title">Experience</h2>
                 <div class="timeline">
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="timeline-period">Phase 3</span>
+                                <h3>성능 최적화</h3>
+                                <p class="timeline-company">시뮬레이션 엔진</p>
+                            </div>
+                            <p class="timeline-description">전체 약 10분 시뮬레이션의 DB 저장 작업 체계적 프로파일링과 최적화</p>
+                            <ul class="timeline-achievements">
+                                
+                                <li>공유 메모리 링 버퍼와 cProfile 기반 최적화로 DB 저장 시간 168초 → 8초 달성</li>
+                                
+                                <li>핫 패스의 DataFrame 스캔을 O(1) 조회로 대체</li>
+                                
+                                <li>1억 3,600만 회 중복 속성 접근을 모듈 레벨 캐싱으로 제거</li>
+                                
+                            </ul>
+                        </div>
+                    </article>
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="timeline-period">Phase 2</span>
+                                <h3>아키텍처 재설계</h3>
+                                <p class="timeline-company">시뮬레이션 엔진</p>
+                            </div>
+                            <p class="timeline-description">유지보수성과 확장성을 위한 엔진 코어 구조 개편</p>
+                            <ul class="timeline-achievements">
+                                
+                                <li>모놀리식 머신센터 클래스를 ECS로 분해</li>
+                                
+                                <li>핵심 시뮬레이션 로직과 I/O를 분리하는 Pub/Sub 레이어 구축</li>
+                                
+                                <li>엔진 수정 없이 도메인 이벤트를 전달하는 이벤트 브릿지 설계</li>
+                                
+                            </ul>
+                        </div>
+                    </article>
+                    
+                    <article class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="timeline-period">Phase 1</span>
+                                <h3>인프라 구축</h3>
+                                <p class="timeline-company">시뮬레이션 엔진</p>
+                            </div>
+                            <p class="timeline-description">엔진이 돌아가는 기반 시스템 구축</p>
+                            <ul class="timeline-achievements">
+                                
+                                <li>자동 회귀 감지를 포함한 CI/CD 벤치마킹 파이프라인 구축</li>
+                                
+                                <li>16개 시스템 개념과 90개 데이터 레퍼런스를 다루는 기술 문서 작성</li>
+                                
+                            </ul>
+                        </div>
+                    </article>
                     
                 </div>
             </div>
