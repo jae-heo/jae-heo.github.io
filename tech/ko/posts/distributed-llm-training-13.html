@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프 - 재영의 기술 블로그</title>
+    <meta name="description" content="메모리를 아끼기 위해 계산을 다시 하는 전략은 단순한 옵션이 아니라 분산 학습 설계의 중심 선택지다">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-13.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-13.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-13.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-13.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-13.html" />
+    <meta property="og:title" content="분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프">
+    <meta property="og:description" content="메모리를 아끼기 위해 계산을 다시 하는 전략은 단순한 옵션이 아니라 분산 학습 설계의 중심 선택지다">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-02-11T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="distributed-training">
+    
+    <meta property="article:tag" content="activation-checkpointing">
+    
+    <meta property="article:tag" content="recomputation">
+    
+    <meta property="article:tag" content="memory">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-13.html">
+    <meta name="twitter:title" content="분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프">
+    <meta name="twitter:description" content="메모리를 아끼기 위해 계산을 다시 하는 전략은 단순한 옵션이 아니라 분산 학습 설계의 중심 선택지다">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프",
+  "description": "메모리를 아끼기 위해 계산을 다시 하는 전략은 단순한 옵션이 아니라 분산 학습 설계의 중심 선택지다",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-11T00:00:00.000Z",
+  "dateModified": "2026-02-11T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-13.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "distributed-training, activation-checkpointing, recomputation, memory"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프">분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-02-11T00:00:00.000Z"" class="post-kicker">February 11, 2026</time>
+            <h1 class="post-title">분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프</h1>
+            <p class="post-deck">메모리를 아끼기 위해 계산을 다시 하는 전략은 단순한 옵션이 아니라 분산 학습 설계의 중심 선택지다</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">1분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/distributed-llm-training.html" class="series-badge">📚 분산 LLM 학습 (13/20)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/distributed-training.html" class="tag">distributed-training</a>
+                    
+                    <a href="/tech/ko/tags/activation-checkpointing.html" class="tag">activation-checkpointing</a>
+                    
+                    <a href="/tech/ko/tags/recomputation.html" class="tag">recomputation</a>
+                    
+                    <a href="/tech/ko/tags/memory.html" class="tag">memory</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 분산 LLM 학습</h3>
+        <p class="post-series-description">data parallel부터 tensor parallel, FSDP, ZeRO, 그리고 현대 LLM 학습 프레임워크까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-01.html" class="post-series-link">분산 LLM 학습 01 - 왜 LLM 학습은 분산 시스템 문제가 되는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-02.html" class="post-series-link">분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-03.html" class="post-series-link">분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-04.html" class="post-series-link">분산 LLM 학습 04 - PyTorch DDP는 내부에서 무엇을 하는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-05.html" class="post-series-link">분산 LLM 학습 05 - Global Batch Size, Gradient Accumulation, Learning Rate Scaling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-06.html" class="post-series-link">분산 LLM 학습 06 - LLM 학습의 메모리는 어디에 쓰이는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-07.html" class="post-series-link">분산 LLM 학습 07 - NCCL과 토폴로지: 왜 같은 GPU 수인데 속도가 다를까</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-08.html" class="post-series-link">분산 LLM 학습 08 - Tensor Parallel의 기본: 모델 내부 연산을 어떻게 나누는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-09.html" class="post-series-link">분산 LLM 학습 09 - Transformer에서 Tensor Parallel이 실제로 들어가는 위치</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-10.html" class="post-series-link">분산 LLM 학습 10 - Sequence Parallel과 긴 컨텍스트의 비용</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-11.html" class="post-series-link">분산 LLM 학습 11 - Pipeline Parallel의 기본과 Stage 분할 감각</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-12.html" class="post-series-link">분산 LLM 학습 12 - GPipe, 1F1B, Interleaving: Pipeline Schedule은 어떻게 고르는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-14.html" class="post-series-link">분산 LLM 학습 14 - ZeRO Stage 1, 2, 3는 각각 무엇을 없애는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-15.html" class="post-series-link">분산 LLM 학습 15 - FSDP는 DDP와 무엇이 다르고 언제 유리한가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-16.html" class="post-series-link">분산 LLM 학습 16 - Communication Overlap은 어떻게 step 시간을 숨기는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-17.html" class="post-series-link">분산 LLM 학습 17 - Checkpoint, Resume, Fault Tolerance는 왜 핵심인가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-18.html" class="post-series-link">분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-19.html" class="post-series-link">분산 LLM 학습 19 - Megatron-LM과 DeepSpeed를 어떻게 읽을 것인가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-20.html" class="post-series-link">분산 LLM 학습 20 - 실제 LLM 학습 스택을 설계하는 순서</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">왜 다시 계산하는가</h2>
+<p>training에서는 backward를 위해 forward 중간 결과를 저장해야 한다. 그런데 activation이 너무 크면 메모리 한계에 먼저 걸린다. activation checkpointing은 일부 중간 결과를 저장하지 않고, backward 시점에 다시 계산해서 메모리를 아끼는 전략이다.</p>
+<p>즉 시간을 더 쓰고 메모리를 덜 쓰는 선택이다.</p>
+<h2 id="-">어떤 감각으로 이해해야 할까</h2>
+<p>checkpointing을 단순히 &quot;메모리 최적화 옵션&quot;으로 보면 얕다. 실제로는 다음 셋 중 무엇이 병목인지 판단하는 문제다.</p>
+<ul class="ul-list">
+<li>memory capacity</li><li>extra compute cost</li><li>schedule complexity</li></ul>
+<p>메모리가 절대적으로 부족하면 recomputation이 거의 필수다. 반대로 compute가 이미 꽉 차 있고 메모리는 여유가 있다면 재계산은 손해일 수 있다.</p>
+<h2 id="transformer-">transformer에서는 어디에 적용하나</h2>
+<p>대개 block 단위 또는 attention/MLP 묶음 단위로 적용한다. 너무 잘게 쪼개면 recomputation 오버헤드와 코드 복잡성이 커지고, 너무 크게 묶으면 메모리 절감이 제한적이다.</p>
+<p>즉 checkpoint granularity가 중요하다.</p>
+<h2 id="-">분산 환경에서 더 까다로운 이유</h2>
+<p>checkpointing은 단일 GPU에서도 중요하지만, 분산 환경에서는 다음 문제가 겹친다.</p>
+<ul class="ul-list">
+<li>pipeline schedule과 activation lifetime이 얽힌다</li><li>tensor parallel로 나뉜 activation을 다시 계산해야 한다</li><li>communication과 recomputation이 함께 들어가면 step time 해석이 어려워진다</li></ul>
+<p>그래서 &quot;메모리를 줄였다&quot;만 보면 안 되고, 전체 throughput과 utilization을 함께 봐야 한다.</p>
+<h2 id="-">좋은 판단 기준</h2>
+<ul class="ul-list">
+<li>OOM을 피하는 최소 수준의 checkpointing부터 시작한다</li><li>recomputation으로 늘어난 시간이 통신 병목에 가려지는지 확인한다</li><li>어느 layer가 activation hotspot인지 profiler로 본다</li></ul>
+<p>특히 긴 context 학습에서는 checkpointing이 사실상 기본 전제가 되는 경우가 많다.</p>
+<p>다음 글에서는 메모리 절감 전략의 대표 주자인 ZeRO를 본다. optimizer state, gradient, parameter를 단계적으로 나누는 방식이 왜 큰 전환점이 되었는지 정리한다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/gpu-systems-07.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>GPU 시스템 07 - Occupancy와 Latency Hiding</strong>
+            <p>occupancy를 숫자로만 외우지 않고 latency hiding과 연결해서 이해하기</p>
+            <span class="post-nav-card-meta">
+                <span>February 11, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/linux-07.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>리눅스 내부 구조 07 - I/O와 디바이스</strong>
+            <p>블록 디바이스와 캐릭터 디바이스부터 I/O 스케줄러, DMA, 페이지 캐시까지</p>
+            <span class="post-nav-card-meta">
+                <span>February 12, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>5분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-14.html">분산 LLM 학습 14 - ZeRO Stage 1, 2, 3는 각각 무엇을 없애는가</a></h3>
+                <p>ZeRO는 하나의 기술이 아니라 어떤 메모리 복제를 줄일 것인지 단계적으로 선택하는 체계다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-15.html">분산 LLM 학습 15 - FSDP는 DDP와 무엇이 다르고 언제 유리한가</a></h3>
+                <p>FSDP는 전체 파라미터를 shard한 채 필요할 때만 모아 쓰는 방식으로 메모리 문제를 직접 겨냥한다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-16.html">분산 LLM 학습 16 - Communication Overlap은 어떻게 step 시간을 숨기는가</a></h3>
+                <p>분산 학습 최적화의 핵심은 통신을 없애는 것이 아니라 계산 뒤에 숨어서 끝나게 만드는 데 있다</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

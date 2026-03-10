@@ -147,15 +147,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-01-24T00:00:00.000Z"">January 24, 2026</time>
+                <time datetime=""2026-01-21T00:00:00.000Z"">January 21, 2026</time>
                 <span class="post-card-dot"></span>
                 <span>undefined min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/mlops-04.html">MLOps 04 - Model Versioning and Registry</a>
+                <a href="/tech/en/posts/distributed-llm-training-06.html">Distributed LLM Training 06 - Where LLM Training Memory Actually Goes</a>
             </h2>
             
-            <p class="post-excerpt">Why model versioning differs from code versioning, and the role of a model registry</p>
+            <p class="post-excerpt">Looking only at parameter size leads to bad decisions; training memory is really a combination of parameters, gradients, optimizer state, and activations</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -166,7 +166,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/mlops-04.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/distributed-llm-training-06.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -176,15 +176,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-01-25T00:00:00.000Z"">January 25, 2026</time>
+                <time datetime=""2026-01-24T00:00:00.000Z"">January 24, 2026</time>
                 <span class="post-card-dot"></span>
                 <span>undefined min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/comparch-05.html">Computer Architecture 05 - CPU Privilege Levels and Protection</a>
+                <a href="/tech/en/posts/distributed-llm-training-07.html">Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently</a>
             </h2>
             
-            <p class="post-excerpt">Why CPUs distinguish privilege levels, and how x86 protection rings and ARM exception levels protect the system</p>
+            <p class="post-excerpt">In distributed training, performance is often shaped more by how GPUs are connected than by the raw number of GPUs</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -195,7 +195,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/comparch-05.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/distributed-llm-training-07.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -210,10 +210,10 @@
                 <span>undefined min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/compiler-07.html">Automata and Compilers 07 - Top-Down Parsing</a>
+                <a href="/tech/en/posts/distributed-llm-training-08.html">Distributed LLM Training 08 - Tensor Parallel Basics: Splitting Computation Inside the Model</a>
             </h2>
             
-            <p class="post-excerpt">The principles behind recursive descent parsers, LL(1) grammars, and the strengths and limitations of top-down parsing</p>
+            <p class="post-excerpt">Once the model itself is too large for one device, data parallelism is no longer enough and layer-internal computation has to be split</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -224,36 +224,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/compiler-07.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-01-28T00:00:00.000Z"">January 28, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/linux-05.html">Linux Internals 05 - File Systems</a>
-            </h2>
-            
-            <p class="post-excerpt">How VFS, inodes, and ext4 work in the world where everything is a file</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/linux-05.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/distributed-llm-training-08.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -268,10 +239,10 @@
                 <span>undefined min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/mlops-05.html">MLOps 05 - Model Serving and Deployment Strategies</a>
+                <a href="/tech/en/posts/distributed-llm-training-09.html">Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer</a>
             </h2>
             
-            <p class="post-excerpt">How to serve trained models in production and deploy them safely</p>
+            <p class="post-excerpt">Tensor parallelism becomes real when you map it onto QKV projections, attention output paths, and the two large MLP projections inside a transformer block</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -282,36 +253,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/mlops-05.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-01-31T00:00:00.000Z"">January 31, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/platform-engineering-06.html">Platform Engineering 06 - Developer Portals and Service Catalogs</a>
-            </h2>
-            
-            <p class="post-excerpt">How developer portals like Backstage bring order to the chaos of scattered docs, tools, and tribal knowledge</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/platform-engineering-06.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/distributed-llm-training-09.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -326,10 +268,10 @@
                 <span>undefined min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/comparch-06.html">Computer Architecture 06 - Interrupts and Exceptions</a>
+                <a href="/tech/en/posts/distributed-llm-training-10.html">Distributed LLM Training 10 - Sequence Parallelism and the Cost of Long Context</a>
             </h2>
             
-            <p class="post-excerpt">Why interrupts exist and how IDT, ISR, PIC/APIC work</p>
+            <p class="post-excerpt">As context length grows, activation memory and communication patterns change again, and sequence-oriented partitioning starts to matter</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -340,7 +282,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/comparch-06.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/distributed-llm-training-10.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -350,15 +292,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-03T00:00:00.000Z"">February 3, 2026</time>
+                <time datetime=""2026-02-05T00:00:00.000Z"">February 5, 2026</time>
                 <span class="post-card-dot"></span>
                 <span>undefined min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/linux-06.html">Linux Internals 06 - System Calls and the Kernel</a>
+                <a href="/tech/en/posts/distributed-llm-training-11.html">Distributed LLM Training 11 - Pipeline Parallel Basics and How to Think About Stage Splits</a>
             </h2>
             
-            <p class="post-excerpt">How a system call transitions from user space to kernel space, and how kernel modules work</p>
+            <p class="post-excerpt">Once the model is split by depth into stages, idle time and stage imbalance become just as important as memory savings</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -369,7 +311,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/linux-06.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/distributed-llm-training-11.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -379,15 +321,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-04T00:00:00.000Z"">February 4, 2026</time>
+                <time datetime=""2026-02-08T00:00:00.000Z"">February 8, 2026</time>
                 <span class="post-card-dot"></span>
                 <span>undefined min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/compiler-08.html">Automata and Compilers 08 - Bottom-Up Parsing</a>
+                <a href="/tech/en/posts/distributed-llm-training-12.html">Distributed LLM Training 12 - GPipe, 1F1B, and Interleaving: Choosing a Pipeline Schedule</a>
             </h2>
             
-            <p class="post-excerpt">Shift-reduce parsing, LR parser mechanics, and how parser generators work under the hood</p>
+            <p class="post-excerpt">Pipeline efficiency is shaped heavily by scheduling, because bubble size, activation memory, and implementation complexity all depend on it</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -398,7 +340,65 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/compiler-08.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/distributed-llm-training-12.html" class="read-more">Read more</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-02-11T00:00:00.000Z"">February 11, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
+            <h2>
+                <a href="/tech/en/posts/distributed-llm-training-13.html">Distributed LLM Training 13 - Activation Checkpointing and the Cost of Recomputation</a>
+            </h2>
+            
+            <p class="post-excerpt">Saving memory by recomputing activations is not a minor option; it is often a central design choice in large-scale training</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/en/posts/distributed-llm-training-13.html" class="read-more">Read more</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-02-14T00:00:00.000Z"">February 14, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined min read</span>
+            </div>
+            <h2>
+                <a href="/tech/en/posts/distributed-llm-training-14.html">Distributed LLM Training 14 - What ZeRO Stage 1, 2, and 3 Each Remove</a>
+            </h2>
+            
+            <p class="post-excerpt">ZeRO is best understood as a staged system for removing different forms of replicated training state</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/en/posts/distributed-llm-training-14.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -447,6 +447,34 @@
             
             
             <a href="/tech/en/categories/Lectures/page/7/" class="pagination-page">7</a>
+            
+            
+            
+            <a href="/tech/en/categories/Lectures/page/8/" class="pagination-page">8</a>
+            
+            
+            
+            <a href="/tech/en/categories/Lectures/page/9/" class="pagination-page">9</a>
+            
+            
+            
+            <a href="/tech/en/categories/Lectures/page/10/" class="pagination-page">10</a>
+            
+            
+            
+            <a href="/tech/en/categories/Lectures/page/11/" class="pagination-page">11</a>
+            
+            
+            
+            <a href="/tech/en/categories/Lectures/page/12/" class="pagination-page">12</a>
+            
+            
+            
+            <a href="/tech/en/categories/Lectures/page/13/" class="pagination-page">13</a>
+            
+            
+            
+            <a href="/tech/en/categories/Lectures/page/14/" class="pagination-page">14</a>
             
             
         </div>

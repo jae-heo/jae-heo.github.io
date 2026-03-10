@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently - Jae's Tech Blog</title>
+    <meta name="description" content="In distributed training, performance is often shaped more by how GPUs are connected than by the raw number of GPUs">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-07.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-07.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-07.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-07.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-07.html" />
+    <meta property="og:title" content="Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently">
+    <meta property="og:description" content="In distributed training, performance is often shaped more by how GPUs are connected than by the raw number of GPUs">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-24T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="distributed-training">
+    
+    <meta property="article:tag" content="nccl">
+    
+    <meta property="article:tag" content="topology">
+    
+    <meta property="article:tag" content="nvlink">
+    
+    <meta property="article:tag" content="infiniband">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-07.html">
+    <meta name="twitter:title" content="Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently">
+    <meta name="twitter:description" content="In distributed training, performance is often shaped more by how GPUs are connected than by the raw number of GPUs">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently",
+  "description": [
+    "In distributed training",
+    "performance is often shaped more by how GPUs are connected than by the raw number of GPUs"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-24T00:00:00.000Z",
+  "dateModified": "2026-01-24T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/distributed-llm-training-07.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "distributed-training, nccl, topology, nvlink, infiniband"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <a href="/tech/en/game/">Game</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently">Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-24T00:00:00.000Z"" class="post-kicker">January 24, 2026</time>
+            <h1 class="post-title">Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently</h1>
+            <p class="post-deck">In distributed training, performance is often shaped more by how GPUs are connected than by the raw number of GPUs</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">2 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/distributed-llm-training.html" class="series-badge">📚 Distributed LLM Training (7/20)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/distributed-training.html" class="tag">distributed-training</a>
+                    
+                    <a href="/tech/en/tags/nccl.html" class="tag">nccl</a>
+                    
+                    <a href="/tech/en/tags/topology.html" class="tag">topology</a>
+                    
+                    <a href="/tech/en/tags/nvlink.html" class="tag">nvlink</a>
+                    
+                    <a href="/tech/en/tags/infiniband.html" class="tag">infiniband</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Distributed LLM Training</h3>
+        <p class="post-series-description">From data parallelism to tensor parallelism, FSDP, ZeRO, and modern LLM training frameworks</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-01.html" class="post-series-link">Distributed LLM Training 01 - Why LLM Training Becomes a Distributed Systems Problem</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-02.html" class="post-series-link">Distributed LLM Training 02 - The Real Cost of Synchronous SGD and Data Parallelism</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-03.html" class="post-series-link">Distributed LLM Training 03 - All-Reduce, Ring, and How to Read Communication Cost</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-04.html" class="post-series-link">Distributed LLM Training 04 - What PyTorch DDP Actually Does Internally</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-05.html" class="post-series-link">Distributed LLM Training 05 - Global Batch Size, Gradient Accumulation, and Learning Rate Scaling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-06.html" class="post-series-link">Distributed LLM Training 06 - Where LLM Training Memory Actually Goes</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-08.html" class="post-series-link">Distributed LLM Training 08 - Tensor Parallel Basics: Splitting Computation Inside the Model</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-09.html" class="post-series-link">Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-10.html" class="post-series-link">Distributed LLM Training 10 - Sequence Parallelism and the Cost of Long Context</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-11.html" class="post-series-link">Distributed LLM Training 11 - Pipeline Parallel Basics and How to Think About Stage Splits</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-12.html" class="post-series-link">Distributed LLM Training 12 - GPipe, 1F1B, and Interleaving: Choosing a Pipeline Schedule</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-13.html" class="post-series-link">Distributed LLM Training 13 - Activation Checkpointing and the Cost of Recomputation</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-14.html" class="post-series-link">Distributed LLM Training 14 - What ZeRO Stage 1, 2, and 3 Each Remove</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-15.html" class="post-series-link">Distributed LLM Training 15 - How FSDP Differs from DDP and When It Helps</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-16.html" class="post-series-link">Distributed LLM Training 16 - How Communication Overlap Hides Step Time</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-17.html" class="post-series-link">Distributed LLM Training 17 - Why Checkpointing, Resume, and Fault Tolerance Matter So Much</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-18.html" class="post-series-link">Distributed LLM Training 18 - Deadlocks, Timeouts, and OOMs: Debugging Distributed Training</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-19.html" class="post-series-link">Distributed LLM Training 19 - How to Read Megatron-LM and DeepSpeed Structurally</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-20.html" class="post-series-link">Distributed LLM Training 20 - A Practical Order for Designing an LLM Training Stack</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="gpu-count-alone-is-not-a-performance-model">GPU count alone is not a performance model</h2>
+<p>Two different 8-GPU setups can have very different scaling behavior. One may scale cleanly, while the other spends much of its time waiting on communication. The reason is usually topology.</p>
+<ul class="ul-list">
+<li>are GPUs connected with NVLink?</li><li>are they relying only on PCIe?</li><li>what is the path between nodes?</li><li>how are GPUs and NICs placed relative to NUMA domains?</li></ul>
+<p>Those details change communication cost dramatically.</p>
+<h2 id="what-nccl-is-doing-for-you">What NCCL is doing for you</h2>
+<p>NCCL is the main NVIDIA library for efficient collective communication. It implements all-reduce, all-gather, reduce-scatter, and related primitives while trying to map them efficiently onto the hardware topology.</p>
+<p>That does not mean topology stops mattering. It means NCCL is working within those physical constraints.</p>
+<h2 id="common-bottlenecks-in-practice">Common bottlenecks in practice</h2>
+<h3 id="1-slow-inter-node-links">1. slow inter-node links</h3>
+<p>Intra-node communication may be fast with NVLink, but scaling can fall apart if inter-node traffic goes over a much slower path.</p>
+<h3 id="2-poor-rank-placement">2. poor rank placement</h3>
+<p>If ranks are mapped inefficiently, communication that could stay local may take a longer path through the system.</p>
+<h3 id="3-communication-is-the-bottleneck-but-compute-gets-blamed">3. communication is the bottleneck, but compute gets blamed</h3>
+<p>If compute kernels are short and step time is still high, NCCL activity or waiting behavior may be the real issue.</p>
+<h2 id="signals-worth-watching">Signals worth watching</h2>
+<ul class="ul-list">
+<li>utilization looks fine, but scaling efficiency drops sharply</li><li>adding nodes hurts more than expected</li><li>one collective pattern dominates the profile</li><li>some ranks are repeatedly slower than others</li></ul>
+<p>Those are often cluster-layout or communication-pattern issues more than model-code issues.</p>
+<p>The next post moves into tensor parallelism, where communication is no longer just a step-boundary issue but part of the layer execution itself.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/mlops-04.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>MLOps 04 - Model Versioning and Registry</strong>
+            <p>Why model versioning differs from code versioning, and the role of a model registry</p>
+            <span class="post-nav-card-meta">
+                <span>January 24, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/comparch-05.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Computer Architecture 05 - CPU Privilege Levels and Protection</strong>
+            <p>Why CPUs distinguish privilege levels, and how x86 protection rings and ARM exception levels protect the system</p>
+            <span class="post-nav-card-meta">
+                <span>January 25, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>7 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/distributed-llm-training-08.html">Distributed LLM Training 08 - Tensor Parallel Basics: Splitting Computation Inside the Model</a></h3>
+                <p>Once the model itself is too large for one device, data parallelism is no longer enough and layer-internal computation has to be split</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/distributed-llm-training-09.html">Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer</a></h3>
+                <p>Tensor parallelism becomes real when you map it onto QKV projections, attention output paths, and the two large MLP projections inside a transformer block</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/distributed-llm-training-10.html">Distributed LLM Training 10 - Sequence Parallelism and the Cost of Long Context</a></h3>
+                <p>As context length grows, activation memory and communication patterns change again, and sequence-oriented partitioning starts to matter</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

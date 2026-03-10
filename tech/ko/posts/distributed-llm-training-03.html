@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법 - 재영의 기술 블로그</title>
+    <meta name="description" content="분산 학습에서 가장 자주 등장하는 collective인 all-reduce를 이해해야 gradient synchronization 비용을 제대로 읽을 수 있다">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-03.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-03.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-03.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-03.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-03.html" />
+    <meta property="og:title" content="분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법">
+    <meta property="og:description" content="분산 학습에서 가장 자주 등장하는 collective인 all-reduce를 이해해야 gradient synchronization 비용을 제대로 읽을 수 있다">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-12T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="distributed-training">
+    
+    <meta property="article:tag" content="all-reduce">
+    
+    <meta property="article:tag" content="ring">
+    
+    <meta property="article:tag" content="nccl">
+    
+    <meta property="article:tag" content="communication">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-03.html">
+    <meta name="twitter:title" content="분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법">
+    <meta name="twitter:description" content="분산 학습에서 가장 자주 등장하는 collective인 all-reduce를 이해해야 gradient synchronization 비용을 제대로 읽을 수 있다">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": [
+    "분산 LLM 학습 03 - All-Reduce",
+    "Ring",
+    "그리고 통신 비용 읽는 법"
+  ],
+  "description": "분산 학습에서 가장 자주 등장하는 collective인 all-reduce를 이해해야 gradient synchronization 비용을 제대로 읽을 수 있다",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-12T00:00:00.000Z",
+  "dateModified": "2026-01-12T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-03.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "distributed-training, all-reduce, ring, nccl, communication"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법">분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-12T00:00:00.000Z"" class="post-kicker">January 12, 2026</time>
+            <h1 class="post-title">분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법</h1>
+            <p class="post-deck">분산 학습에서 가장 자주 등장하는 collective인 all-reduce를 이해해야 gradient synchronization 비용을 제대로 읽을 수 있다</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">2분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/distributed-llm-training.html" class="series-badge">📚 분산 LLM 학습 (3/20)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/distributed-training.html" class="tag">distributed-training</a>
+                    
+                    <a href="/tech/ko/tags/all-reduce.html" class="tag">all-reduce</a>
+                    
+                    <a href="/tech/ko/tags/ring.html" class="tag">ring</a>
+                    
+                    <a href="/tech/ko/tags/nccl.html" class="tag">nccl</a>
+                    
+                    <a href="/tech/ko/tags/communication.html" class="tag">communication</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 분산 LLM 학습</h3>
+        <p class="post-series-description">data parallel부터 tensor parallel, FSDP, ZeRO, 그리고 현대 LLM 학습 프레임워크까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-01.html" class="post-series-link">분산 LLM 학습 01 - 왜 LLM 학습은 분산 시스템 문제가 되는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-02.html" class="post-series-link">분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-04.html" class="post-series-link">분산 LLM 학습 04 - PyTorch DDP는 내부에서 무엇을 하는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-05.html" class="post-series-link">분산 LLM 학습 05 - Global Batch Size, Gradient Accumulation, Learning Rate Scaling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-06.html" class="post-series-link">분산 LLM 학습 06 - LLM 학습의 메모리는 어디에 쓰이는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-07.html" class="post-series-link">분산 LLM 학습 07 - NCCL과 토폴로지: 왜 같은 GPU 수인데 속도가 다를까</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-08.html" class="post-series-link">분산 LLM 학습 08 - Tensor Parallel의 기본: 모델 내부 연산을 어떻게 나누는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-09.html" class="post-series-link">분산 LLM 학습 09 - Transformer에서 Tensor Parallel이 실제로 들어가는 위치</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-10.html" class="post-series-link">분산 LLM 학습 10 - Sequence Parallel과 긴 컨텍스트의 비용</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-11.html" class="post-series-link">분산 LLM 학습 11 - Pipeline Parallel의 기본과 Stage 분할 감각</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-12.html" class="post-series-link">분산 LLM 학습 12 - GPipe, 1F1B, Interleaving: Pipeline Schedule은 어떻게 고르는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-13.html" class="post-series-link">분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-14.html" class="post-series-link">분산 LLM 학습 14 - ZeRO Stage 1, 2, 3는 각각 무엇을 없애는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-15.html" class="post-series-link">분산 LLM 학습 15 - FSDP는 DDP와 무엇이 다르고 언제 유리한가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-16.html" class="post-series-link">분산 LLM 학습 16 - Communication Overlap은 어떻게 step 시간을 숨기는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-17.html" class="post-series-link">분산 LLM 학습 17 - Checkpoint, Resume, Fault Tolerance는 왜 핵심인가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-18.html" class="post-series-link">분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-19.html" class="post-series-link">분산 LLM 학습 19 - Megatron-LM과 DeepSpeed를 어떻게 읽을 것인가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-20.html" class="post-series-link">분산 LLM 학습 20 - 실제 LLM 학습 스택을 설계하는 순서</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-all-reduce-">왜 all-reduce를 먼저 봐야 할까?</h2>
+<p>distributed training에서 가장 자주 듣는 말 중 하나가 all-reduce다. 이유는 간단하다. data parallel에서는 backward로 계산한 gradient를 모든 rank가 같은 값으로 맞춰야 하기 때문이다.</p>
+<p>all-reduce는 두 가지 일을 합친 연산으로 볼 수 있다.</p>
+<ul class="ul-list">
+<li>reduce: 각 rank의 값을 합치거나 평균낸다</li><li>all-gather: 그 결과를 모든 rank에 다시 배포한다</li></ul>
+<p>즉, 각 rank가 전체 결과를 갖게 만드는 collective다.</p>
+<h2 id="ring-all-reduce-">ring all-reduce가 많이 쓰이는 이유</h2>
+<p>직관적으로는 &quot;중앙 서버 하나에 다 보내고 다시 받으면 되지 않나?&quot;라고 생각할 수 있지만, 그런 구조는 쉽게 병목이 된다. 한 지점에 트래픽이 몰리기 때문이다.</p>
+<p>ring all-reduce는 rank들을 고리처럼 연결해서 데이터를 여러 조각으로 나누고, 각 단계마다 이웃 rank와만 통신한다. 이 방식은 모든 링크를 비교적 고르게 사용하므로 대역폭을 잘 활용한다.</p>
+<p>핵심 직관은 이렇다.</p>
+<ul class="ul-list">
+<li>메시지를 chunk로 나눈다</li><li>reduce-scatter 단계에서 부분 합을 만든다</li><li>all-gather 단계에서 결과를 다시 모은다</li></ul>
+<p>결국 전체 gradient를 한 번에 움직이지 않고, 조각내서 파이프라인처럼 흘린다.</p>
+<h2 id="-">실제 비용은 무엇으로 결정될까?</h2>
+<p>통신 시간은 대충 다음 두 항의 합으로 생각하면 된다.</p>
+<ul class="ul-list">
+<li>latency cost: 메시지를 시작하고 단계별 핸드셰이크를 하는 비용</li><li>bandwidth cost: 실제 바이트를 옮기는 비용</li></ul>
+<p>작은 tensor가 많으면 latency가 아프고, 큰 tensor 하나가 크면 bandwidth가 아프다. 그래서 gradient bucket을 어떻게 묶느냐가 성능에 큰 영향을 준다.</p>
+<p>또한 단순히 &quot;GPU가 8장이다&quot;만 봐서는 부족하다.</p>
+<ul class="ul-list">
+<li>같은 node 안의 NVLink인가</li><li>PCIe만 쓰는가</li><li>node 사이 Ethernet/InfiniBand인가</li></ul>
+<p>이 토폴로지 차이가 통신 비용을 크게 바꾼다.</p>
+<h2 id="-">좋은 관찰 포인트</h2>
+<p>프로파일링할 때는 다음을 본다.</p>
+<ul class="ul-list">
+<li>backward kernel이 끝난 뒤 NCCL kernel이 길게 이어지는가</li><li>rank마다 step 시간이 고르게 나오는가</li><li>inter-node 구간에서 시간이 갑자기 튀는가</li><li>작은 all-reduce가 너무 자주 발생하는가</li></ul>
+<p>특히 &quot;GPU utilization은 높은데 step time은 잘 안 줄어든다&quot;면 통신이 숨어 있는지 먼저 의심해야 한다.</p>
+<h2 id="-">왜 이 글이 이후 주제의 기반이 되는가</h2>
+<p>DDP의 bucket, overlap, ZeRO의 sharding, tensor parallel의 collective, pipeline parallel의 stage 간 전달까지 결국은 모두 통신 패턴 문제다. all-reduce를 제대로 이해하면 이후 기법이 왜 그 구조를 택하는지 훨씬 명확해진다.</p>
+<p>다음 글에서는 PyTorch DDP가 실제로 gradient synchronization을 어떻게 스케줄링하는지 본다. 이 시점부터 분산 학습은 프레임워크 내부 동작과 성능 튜닝이 직접 연결되기 시작한다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/linux-03.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>리눅스 내부 구조 03 - 프로세스 스케줄링</strong>
+            <p>리눅스 커널이 여러 프로세스에게 CPU를 분배하는 방법과 CFS의 동작 원리</p>
+            <span class="post-nav-card-meta">
+                <span>January 12, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/compiler-05.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>오토마타와 컴파일러 05 - 컴파일러 개요 — 단계와 구조</strong>
+            <p>컴파일러가 왜 여러 단계로 나뉘며, 각 단계는 어떤 역할을 하는가</p>
+            <span class="post-nav-card-meta">
+                <span>January 13, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-04.html">분산 LLM 학습 04 - PyTorch DDP는 내부에서 무엇을 하는가</a></h3>
+                <p>DDP는 단순 래퍼가 아니라 autograd hook, gradient bucket, process group을 사용해 동기화를 조직하는 런타임이다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-05.html">분산 LLM 학습 05 - Global Batch Size, Gradient Accumulation, Learning Rate Scaling</a></h3>
+                <p>GPU 수를 늘리는 일은 단순한 throughput 증가가 아니라 optimizer가 보는 batch 의미를 바꾸는 일이다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-06.html">분산 LLM 학습 06 - LLM 학습의 메모리는 어디에 쓰이는가</a></h3>
+                <p>파라미터만 보는 순간 분산 학습 판단을 잘못하게 된다. activation, gradient, optimizer state를 함께 봐야 한다</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

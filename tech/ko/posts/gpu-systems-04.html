@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration - 재영의 기술 블로그</title>
+    <meta name="description" content="CUDA kernel을 직접 작성할 때 indexing과 launch configuration을 어떤 기준으로 잡아야 하는지">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/gpu-systems-04.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-04.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/gpu-systems-04.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-04.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/gpu-systems-04.html" />
+    <meta property="og:title" content="GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration">
+    <meta property="og:description" content="CUDA kernel을 직접 작성할 때 indexing과 launch configuration을 어떤 기준으로 잡아야 하는지">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-02-05T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="cuda">
+    
+    <meta property="article:tag" content="kernel">
+    
+    <meta property="article:tag" content="launch-configuration">
+    
+    <meta property="article:tag" content="gpu">
+    
+    <meta property="article:tag" content="indexing">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/gpu-systems-04.html">
+    <meta name="twitter:title" content="GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration">
+    <meta name="twitter:description" content="CUDA kernel을 직접 작성할 때 indexing과 launch configuration을 어떤 기준으로 잡아야 하는지">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration",
+  "description": "CUDA kernel을 직접 작성할 때 indexing과 launch configuration을 어떤 기준으로 잡아야 하는지",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-05T00:00:00.000Z",
+  "dateModified": "2026-02-05T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/gpu-systems-04.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "cuda, kernel, launch-configuration, gpu, indexing"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration">GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-02-05T00:00:00.000Z"" class="post-kicker">February 5, 2026</time>
+            <h1 class="post-title">GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration</h1>
+            <p class="post-deck">CUDA kernel을 직접 작성할 때 indexing과 launch configuration을 어떤 기준으로 잡아야 하는지</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">3분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/gpu-systems.html" class="series-badge">📚 GPU 시스템 (5/21)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/cuda.html" class="tag">cuda</a>
+                    
+                    <a href="/tech/ko/tags/kernel.html" class="tag">kernel</a>
+                    
+                    <a href="/tech/ko/tags/launch-configuration.html" class="tag">launch-configuration</a>
+                    
+                    <a href="/tech/ko/tags/gpu.html" class="tag">gpu</a>
+                    
+                    <a href="/tech/ko/tags/indexing.html" class="tag">indexing</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 GPU 시스템</h3>
+        <p class="post-series-description">GPU 아키텍처, CUDA 커널, Triton, 그리고 실제 커널 최적화까지 이어지는 흐름</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-00.html" class="post-series-link">GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-01.html" class="post-series-link">GPU 시스템 01 - GPU Kernel Engineer 로드맵</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-02.html" class="post-series-link">GPU 시스템 02 - Thread, Warp, Block 실행 모델</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-03.html" class="post-series-link">GPU 시스템 03 - Memory Hierarchy와 Bandwidth</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-05.html" class="post-series-link">GPU 시스템 05 - Coalescing, Shared Memory, Reduction 패턴</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-06.html" class="post-series-link">GPU 시스템 06 - Triton과 Kernel Optimization 실전 감각</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-07.html" class="post-series-link">GPU 시스템 07 - Occupancy와 Latency Hiding</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-08.html" class="post-series-link">GPU 시스템 08 - 프로파일링과 Roofline 관점</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-09.html" class="post-series-link">GPU 시스템 09 - Naive Matrix Multiply가 느린 이유</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-10.html" class="post-series-link">GPU 시스템 10 - Tiled Matrix Multiply와 Shared Memory</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-11.html" class="post-series-link">GPU 시스템 11 - Shared Memory Bank Conflict</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-12.html" class="post-series-link">GPU 시스템 12 - Warp Shuffle과 Warp-Level Primitive</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-13.html" class="post-series-link">GPU 시스템 13 - Reduction Kernel Deep Dive</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-14.html" class="post-series-link">GPU 시스템 14 - Softmax Kernel이 좋은 연습 문제인 이유</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-15.html" class="post-series-link">GPU 시스템 15 - LayerNorm과 RMSNorm Kernel 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-16.html" class="post-series-link">GPU 시스템 16 - Vectorized Load/Store와 Alignment</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-17.html" class="post-series-link">GPU 시스템 17 - Register Pressure와 Spill</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-18.html" class="post-series-link">GPU 시스템 18 - Tensor Core와 Mixed Precision</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-19.html" class="post-series-link">GPU 시스템 19 - Asynchronous Copy와 Pipelining</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-20.html" class="post-series-link">GPU 시스템 20 - Nsight, Triton, FlashAttention까지 이어지는 실전 흐름</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">커널을 직접 쓰기 시작하면 생기는 질문</h2>
+<p>GPU 아키텍처를 어느 정도 이해했다면 이제는 직접 CUDA kernel을 써봐야 한다. 그런데 막상 시작하면 문법보다 더 헷갈리는 부분이 있다. 바로 thread indexing과 launch configuration이다.</p>
+<p>예를 들어 이런 질문이 바로 나온다.</p>
+<ul class="ul-list">
+<li>block을 128로 잡아야 하나, 256으로 잡아야 하나?</li><li>1D grid로 충분한가, 2D가 더 나은가?</li><li>thread 하나가 원소 하나만 처리해야 하나?</li></ul>
+<p>이 질문들은 정답 하나가 있는 문제가 아니라, 문제 구조와 하드웨어 제약을 같이 봐야 하는 문제다.</p>
+<h2 id="-indexing">가장 기본적인 indexing</h2>
+<p>CUDA kernel에서는 보통 <code class="inline-code">blockIdx</code>, <code class="inline-code">blockDim</code>, <code class="inline-code">threadIdx</code>를 조합해 자신의 작업 위치를 계산한다.</p>
+<p>vector add처럼 1차원 데이터라면 다음 mental model이면 충분하다.</p>
+<ul class="ul-list">
+<li>block은 큰 구간을 나눈다</li><li>block 안 thread는 그 구간 안의 세부 원소를 담당한다</li><li>전체 index는 <code class="inline-code">blockIdx.x * blockDim.x + threadIdx.x</code>로 계산한다</li></ul>
+<p>이 자체는 단순하다. 하지만 진짜 중요한 것은 launch configuration을 통해 전체 작업을 어떻게 분배하느냐이다.</p>
+<p>여기서 많은 초심자가 indexing을 단순 boilerplate처럼 본다. 하지만 실제로는 문제를 thread에 어떻게 사상할 것인가를 결정하는 핵심 단계다. 결국 같은 연산도 indexing과 launch shape에 따라 memory pattern과 협업 구조가 크게 달라진다.</p>
+<h2 id="block-size-">block size는 왜 중요한가</h2>
+<p>block size는 단순히 thread 수를 정하는 값이 아니다. 실제로는 다음과 같이 여러 요소에 영향을 준다.</p>
+<ul class="ul-list">
+<li>warp 수</li><li>shared memory 사용 패턴</li><li>register pressure</li><li>occupancy</li></ul>
+<p>예를 들어 block size를 32의 배수로 잡는 것은 거의 기본이다. warp가 32 thread이기 때문이다. 그렇다고 항상 크게 잡는 것이 좋은 것은 아니다. 너무 큰 block은 shared memory와 register를 많이 점유해 동시에 올라가는 block 수를 줄일 수 있다.</p>
+<p>실무에서는 128, 256, 512 같은 값으로 시작해서 프로파일링으로 비교하는 경우가 많다. 중요한 것은 숫자를 외우는 것이 아니라, 왜 그 비교가 필요한지 이해하는 것이다.</p>
+<p>즉, block size는 하드웨어가 좋아하는 숫자를 암기하는 문제가 아니라, 내 커널의 shared memory 사용, register pressure, warp 수와 어떤 균형을 이루는지 보는 문제다.</p>
+<h2 id="grid-gpu-">grid 크기는 GPU를 얼마나 채우는가와 연결된다</h2>
+<p>block size가 block 내부 구조라면, grid size는 전체 GPU를 얼마나 바쁘게 만들 수 있는지와 연결된다.</p>
+<p>문제가 너무 작으면 GPU 전체를 충분히 활용하지 못한다. 반대로 문제가 충분히 크면 GPU가 바쁘게 돌아가지만, 그 안에서도 memory-bound인지 compute-bound인지에 따라 실제 성능은 달라진다.</p>
+<p>즉, grid size는 &quot;모든 데이터 원소를 덮는가&quot; 수준에서 끝나는 것이 아니라, GPU가 놀지 않도록 충분한 병렬성을 제공하는가까지 봐야 한다.</p>
+<h2 id="thread-">thread 하나가 원소 하나만 처리해야 할까?</h2>
+<p>초기 예제에서는 보통 thread 하나가 원소 하나를 맡는다. 하지만 실제 최적화에서는 thread 하나가 여러 원소를 다루는 것이 더 나을 때도 많다.</p>
+<p>이유는 다음과 같다.</p>
+<ul class="ul-list">
+<li>메모리 접근 패턴을 더 잘 맞출 수 있다</li><li>register 재사용이 가능하다</li><li>loop unrolling과 결합하기 좋다</li></ul>
+<p>물론 그만큼 register 사용이 늘고 코드가 복잡해질 수 있다. 그래서 여기서도 핵심은 균형이다.</p>
+<p>실제로는 이 질문이 이후 vectorized load/store, register blocking, tile design 같은 더 고급 최적화 주제로 이어진다. 결국 launch configuration은 초반 설정값이 아니라, 커널 성능 설계 전체의 출발점이다.</p>
+<h2 id="launch-configuration-">launch configuration을 정할 때 보는 기준</h2>
+<p>커널을 작성할 때는 최소한 아래 기준을 함께 보는 편이 좋다.</p>
+<ul class="ul-list">
+<li>warp 단위에 맞는 block size인가?</li><li>shared memory 사용량은 적절한가?</li><li>register 사용이 occupancy를 지나치게 깎지 않는가?</li><li>데이터 모양에 맞는 1D/2D/3D grid인가?</li><li>thread 하나가 처리하는 단위가 너무 작거나 크지 않은가?</li></ul>
+<p>이 기준이 잡혀 있으면 kernel launch는 단순한 boilerplate가 아니라 성능 설계의 일부로 보이기 시작한다.</p>
+<h2 id="-matrix-multiply-">예시로 matrix multiply를 보면</h2>
+<p>matrix multiply는 보통 2D indexing을 쓴다. 이유는 출력 행렬의 <code class="inline-code">(row, col)</code> 위치를 thread에 자연스럽게 매핑할 수 있기 때문이다.</p>
+<p>이때 naive하게는 thread 하나가 출력 원소 하나를 계산하게 할 수 있다. 하지만 조금 더 나아가면 block이 출력 타일 하나를 맡고, thread들이 그 안에서 협업하도록 바뀐다. 결국 launch configuration이 곧 타일 전략과 연결된다.</p>
+<h2 id="정리">정리</h2>
+<p>CUDA kernel 작성에서 중요한 것은 문법보다 매핑이다.</p>
+<ul class="ul-list">
+<li>문제를 thread에 어떻게 나눌 것인가</li><li>thread를 warp와 block으로 어떻게 묶을 것인가</li><li>그 선택이 메모리와 occupancy에 어떤 영향을 주는가</li></ul>
+<p>이 감각이 생기면 kernel launch 설정이 더 이상 외워야 하는 숫자가 아니라, 성능을 설계하는 손잡이처럼 보이게 된다.</p>
+<p>다음 글에서는 memory coalescing, shared memory, reduction 패턴을 중심으로 더 실제적인 커널 최적화 포인트를 본다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/compiler-08.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>오토마타와 컴파일러 08 - 상향식 파싱</strong>
+            <p>시프트-리듀스 파싱과 LR 파서의 원리, 그리고 파서 생성기가 동작하는 방식</p>
+            <span class="post-nav-card-meta">
+                <span>February 4, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/distributed-llm-training-11.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>분산 LLM 학습 11 - Pipeline Parallel의 기본과 Stage 분할 감각</strong>
+            <p>모델을 레이어 단위로 여러 stage에 나누는 순간 계산 분할뿐 아니라 idle time과 stage imbalance가 핵심 문제가 된다</p>
+            <span class="post-nav-card-meta">
+                <span>February 5, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>1분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/gpu-systems-05.html">GPU 시스템 05 - Coalescing, Shared Memory, Reduction 패턴</a></h3>
+                <p>CUDA kernel 최적화에서 가장 자주 마주치는 memory coalescing과 reduction 패턴</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/gpu-systems-06.html">GPU 시스템 06 - Triton과 Kernel Optimization 실전 감각</a></h3>
+                <p>Triton과 실제 커널 최적화를 연결해서 GPU kernel engineer 관점의 감각을 잡기</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/gpu-systems-07.html">GPU 시스템 07 - Occupancy와 Latency Hiding</a></h3>
+                <p>occupancy를 숫자로만 외우지 않고 latency hiding과 연결해서 이해하기</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

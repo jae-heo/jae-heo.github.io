@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distributed LLM Training - Jae's Tech Blog</title>
+    <meta name="description" content="From data parallelism to tensor parallelism, FSDP, ZeRO, and modern LLM training frameworks">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/series/distributed-llm-training.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/series/distributed-llm-training.html" />
+    <meta property="og:title" content="Distributed LLM Training">
+    <meta property="og:description" content="From data parallelism to tensor parallelism, FSDP, ZeRO, and modern LLM training frameworks">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/series/distributed-llm-training.html">
+    <meta name="twitter:title" content="Distributed LLM Training">
+    <meta name="twitter:description" content="From data parallelism to tensor parallelism, FSDP, ZeRO, and modern LLM training frameworks">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <a href="/tech/en/game/">Game</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="series-page">
+    <div class="page-header">
+        <h1>Distributed LLM Training</h1>
+        <p class="subtitle">From data parallelism to tensor parallelism, FSDP, ZeRO, and modern LLM training frameworks</p>
+    </div>
+
+    <section class="series-overview-card">
+        <div class="series-overview-grid">
+            <div class="series-overview-main">
+                
+                <div class="series-copy-block">
+                    <h2>Who This Is For</h2>
+                    <p>Readers who want to move from single-GPU model training to multi-GPU and large-model training systems.</p>
+                </div>
+                
+
+                
+                <div class="series-copy-block">
+                    <h2>Prerequisites</h2>
+                    <p>Basic deep learning training experience, comfort with GPUs, and a general sense of how model training loops work.</p>
+                </div>
+                
+
+                
+                
+                <div class="series-copy-block">
+                    <h2>What You'll Get</h2>
+                    <ul class="series-outcomes">
+                        
+                        <li>Understand the tradeoffs between data, tensor, and pipeline parallel strategies</li>
+                        
+                        <li>See how communication, memory, and framework design interact during large-model training</li>
+                        
+                        <li>Read Megatron-LM, DeepSpeed, and FSDP with a stronger systems perspective</li>
+                        
+                    </ul>
+                </div>
+                
+                
+            </div>
+
+            <aside class="series-sidebar">
+                <div class="series-stat-card">
+                    <span class="series-stat-label">20 posts</span>
+                    <span class="series-stat-value">20</span>
+                </div>
+                <div class="series-stat-card">
+                    <span class="series-stat-label">34 min total</span>
+                    <span class="series-stat-value">34</span>
+                </div>
+                
+                <div class="series-stat-card">
+                    <span class="series-stat-label">Updated</span>
+                    <span class="series-stat-value">March 4, 2026</span>
+                </div>
+                
+                
+                <a class="series-start-link" href="/tech/en/posts/distributed-llm-training-01.html">
+                    Recommended Start: Distributed LLM Training 01 - Why LLM Training Becomes a Distributed Systems Problem
+                </a>
+                
+            </aside>
+        </div>
+    </section>
+
+    <section class="series-posts-section">
+        <div class="series-section-header">
+            <h2>All Posts</h2>
+        </div>
+        <ol class="series-posts-listing">
+            
+            <li class="series-post-row">
+                <div class="series-post-number">1</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 6, 2026</span>
+                        <span>3 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-01.html">Distributed LLM Training 01 - Why LLM Training Becomes a Distributed Systems Problem</a></h3>
+                    <p>Once LLM training leaves a single GPU, it stops being only a modeling problem and becomes a systems problem around memory, communication, and recovery</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">2</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 9, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-02.html">Distributed LLM Training 02 - The Real Cost of Synchronous SGD and Data Parallelism</a></h3>
+                    <p>Data parallelism looks simple, but it carries both gradient synchronization cost and full model-state replication cost</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">3</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 12, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-03.html">Distributed LLM Training 03 - All-Reduce, Ring, and How to Read Communication Cost</a></h3>
+                    <p>To reason about distributed training performance, you need a concrete mental model for all-reduce and collective communication cost</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">4</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 15, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-04.html">Distributed LLM Training 04 - What PyTorch DDP Actually Does Internally</a></h3>
+                    <p>DDP is not just a wrapper around your model; it is a runtime that coordinates autograd hooks, gradient buckets, and synchronization timing</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">5</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 18, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-05.html">Distributed LLM Training 05 - Global Batch Size, Gradient Accumulation, and Learning Rate Scaling</a></h3>
+                    <p>Adding more GPUs changes optimizer semantics as well as throughput, so batch size and learning rate need to be reasoned about together</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">6</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 21, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-06.html">Distributed LLM Training 06 - Where LLM Training Memory Actually Goes</a></h3>
+                    <p>Looking only at parameter size leads to bad decisions; training memory is really a combination of parameters, gradients, optimizer state, and activations</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">7</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 24, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-07.html">Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently</a></h3>
+                    <p>In distributed training, performance is often shaped more by how GPUs are connected than by the raw number of GPUs</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">8</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 27, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-08.html">Distributed LLM Training 08 - Tensor Parallel Basics: Splitting Computation Inside the Model</a></h3>
+                    <p>Once the model itself is too large for one device, data parallelism is no longer enough and layer-internal computation has to be split</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">9</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>January 30, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-09.html">Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer</a></h3>
+                    <p>Tensor parallelism becomes real when you map it onto QKV projections, attention output paths, and the two large MLP projections inside a transformer block</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">10</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 2, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-10.html">Distributed LLM Training 10 - Sequence Parallelism and the Cost of Long Context</a></h3>
+                    <p>As context length grows, activation memory and communication patterns change again, and sequence-oriented partitioning starts to matter</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">11</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 5, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-11.html">Distributed LLM Training 11 - Pipeline Parallel Basics and How to Think About Stage Splits</a></h3>
+                    <p>Once the model is split by depth into stages, idle time and stage imbalance become just as important as memory savings</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">12</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 8, 2026</span>
+                        <span>1 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-12.html">Distributed LLM Training 12 - GPipe, 1F1B, and Interleaving: Choosing a Pipeline Schedule</a></h3>
+                    <p>Pipeline efficiency is shaped heavily by scheduling, because bubble size, activation memory, and implementation complexity all depend on it</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">13</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 11, 2026</span>
+                        <span>1 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-13.html">Distributed LLM Training 13 - Activation Checkpointing and the Cost of Recomputation</a></h3>
+                    <p>Saving memory by recomputing activations is not a minor option; it is often a central design choice in large-scale training</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">14</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 14, 2026</span>
+                        <span>1 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-14.html">Distributed LLM Training 14 - What ZeRO Stage 1, 2, and 3 Each Remove</a></h3>
+                    <p>ZeRO is best understood as a staged system for removing different forms of replicated training state</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">15</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 17, 2026</span>
+                        <span>1 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-15.html">Distributed LLM Training 15 - How FSDP Differs from DDP and When It Helps</a></h3>
+                    <p>FSDP keeps parameters sharded and only gathers them when needed, making it a direct answer to parameter-replication pressure</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">16</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 20, 2026</span>
+                        <span>1 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-16.html">Distributed LLM Training 16 - How Communication Overlap Hides Step Time</a></h3>
+                    <p>The goal of overlap is not to eliminate communication entirely, but to make it finish underneath useful computation</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">17</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 23, 2026</span>
+                        <span>1 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-17.html">Distributed LLM Training 17 - Why Checkpointing, Resume, and Fault Tolerance Matter So Much</a></h3>
+                    <p>In long distributed runs, reliable recovery is as important as raw throughput</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">18</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>February 26, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-18.html">Distributed LLM Training 18 - Deadlocks, Timeouts, and OOMs: Debugging Distributed Training</a></h3>
+                    <p>Debugging distributed training is about narrowing down which rank, which collective, and which state transition went wrong</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">19</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>March 1, 2026</span>
+                        <span>1 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-19.html">Distributed LLM Training 19 - How to Read Megatron-LM and DeepSpeed Structurally</a></h3>
+                    <p>Frameworks are easier to understand when you read them as bundles of parallelization and state-management choices rather than as giant feature lists</p>
+                </div>
+            </li>
+            
+            <li class="series-post-row">
+                <div class="series-post-number">20</div>
+                <div class="series-post-body">
+                    <div class="series-post-meta">
+                        <span>Lectures</span>
+                        <span>March 4, 2026</span>
+                        <span>2 min read</span>
+                    </div>
+                    <h3><a href="/tech/en/posts/distributed-llm-training-20.html">Distributed LLM Training 20 - A Practical Order for Designing an LLM Training Stack</a></h3>
+                    <p>Distributed training architecture is not about collecting fashionable techniques, but about choosing the smallest structure that matches the current bottleneck</p>
+                </div>
+            </li>
+            
+        </ol>
+    </section>
+</div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

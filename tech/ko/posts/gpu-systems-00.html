@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들 - 재영의 기술 블로그</title>
+    <meta name="description" content="GPU 시스템 시리즈를 제대로 따라가기 전에 어떤 배경지식이 필요한지 정리하기">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/gpu-systems-00.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-00.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/gpu-systems-00.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-00.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/gpu-systems-00.html" />
+    <meta property="og:title" content="GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들">
+    <meta property="og:description" content="GPU 시스템 시리즈를 제대로 따라가기 전에 어떤 배경지식이 필요한지 정리하기">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-28T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="gpu">
+    
+    <meta property="article:tag" content="prerequisites">
+    
+    <meta property="article:tag" content="cuda">
+    
+    <meta property="article:tag" content="learning-roadmap">
+    
+    <meta property="article:tag" content="systems">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/gpu-systems-00.html">
+    <meta name="twitter:title" content="GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들">
+    <meta name="twitter:description" content="GPU 시스템 시리즈를 제대로 따라가기 전에 어떤 배경지식이 필요한지 정리하기">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들",
+  "description": "GPU 시스템 시리즈를 제대로 따라가기 전에 어떤 배경지식이 필요한지 정리하기",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-28T00:00:00.000Z",
+  "dateModified": "2026-01-28T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/gpu-systems-00.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "gpu, prerequisites, cuda, learning-roadmap, systems"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들">GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-28T00:00:00.000Z"" class="post-kicker">January 28, 2026</time>
+            <h1 class="post-title">GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들</h1>
+            <p class="post-deck">GPU 시스템 시리즈를 제대로 따라가기 전에 어떤 배경지식이 필요한지 정리하기</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">3분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/gpu-systems.html" class="series-badge">📚 GPU 시스템 (1/21)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/gpu.html" class="tag">gpu</a>
+                    
+                    <a href="/tech/ko/tags/prerequisites.html" class="tag">prerequisites</a>
+                    
+                    <a href="/tech/ko/tags/cuda.html" class="tag">cuda</a>
+                    
+                    <a href="/tech/ko/tags/learning-roadmap.html" class="tag">learning-roadmap</a>
+                    
+                    <a href="/tech/ko/tags/systems.html" class="tag">systems</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 GPU 시스템</h3>
+        <p class="post-series-description">GPU 아키텍처, CUDA 커널, Triton, 그리고 실제 커널 최적화까지 이어지는 흐름</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-01.html" class="post-series-link">GPU 시스템 01 - GPU Kernel Engineer 로드맵</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-02.html" class="post-series-link">GPU 시스템 02 - Thread, Warp, Block 실행 모델</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-03.html" class="post-series-link">GPU 시스템 03 - Memory Hierarchy와 Bandwidth</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-04.html" class="post-series-link">GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-05.html" class="post-series-link">GPU 시스템 05 - Coalescing, Shared Memory, Reduction 패턴</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-06.html" class="post-series-link">GPU 시스템 06 - Triton과 Kernel Optimization 실전 감각</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-07.html" class="post-series-link">GPU 시스템 07 - Occupancy와 Latency Hiding</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-08.html" class="post-series-link">GPU 시스템 08 - 프로파일링과 Roofline 관점</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-09.html" class="post-series-link">GPU 시스템 09 - Naive Matrix Multiply가 느린 이유</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-10.html" class="post-series-link">GPU 시스템 10 - Tiled Matrix Multiply와 Shared Memory</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-11.html" class="post-series-link">GPU 시스템 11 - Shared Memory Bank Conflict</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-12.html" class="post-series-link">GPU 시스템 12 - Warp Shuffle과 Warp-Level Primitive</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-13.html" class="post-series-link">GPU 시스템 13 - Reduction Kernel Deep Dive</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-14.html" class="post-series-link">GPU 시스템 14 - Softmax Kernel이 좋은 연습 문제인 이유</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-15.html" class="post-series-link">GPU 시스템 15 - LayerNorm과 RMSNorm Kernel 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-16.html" class="post-series-link">GPU 시스템 16 - Vectorized Load/Store와 Alignment</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-17.html" class="post-series-link">GPU 시스템 17 - Register Pressure와 Spill</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-18.html" class="post-series-link">GPU 시스템 18 - Tensor Core와 Mixed Precision</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-19.html" class="post-series-link">GPU 시스템 19 - Asynchronous Copy와 Pipelining</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-20.html" class="post-series-link">GPU 시스템 20 - Nsight, Triton, FlashAttention까지 이어지는 실전 흐름</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">이 글이 왜 필요한가</h2>
+<p>GPU 시스템을 공부하고 싶다고 하면 많은 사람이 바로 CUDA 문법이나 Triton 예제부터 찾는다. 물론 그 자체도 중요하다. 하지만 준비가 안 된 상태에서 바로 커널 코드로 들어가면, 문법은 따라가도 왜 그 코드가 빠른지 혹은 왜 느린지는 잘 안 남는다.</p>
+<p>이 시리즈는 단순한 사용법보다 GPU가 실제로 어떻게 계산하고, 병목이 어디에서 생기며, 커널을 어떤 감각으로 봐야 하는지를 다룬다. 그래서 시작 전에 어떤 배경지식이 필요한지 정리해두는 편이 훨씬 낫다.</p>
+<h2 id="-">꼭 필요한 최소 배경지식</h2>
+<h3 id="1-python-pytorch-">1. Python과 PyTorch 기본 사용 경험</h3>
+<p>GPU 시스템을 공부한다고 해서 Python만 알아서는 안 된다는 뜻은 아니다. 오히려 처음에는 Python과 PyTorch 경험이 있는 편이 훨씬 유리하다. 이유는 간단하다. 실제로 GPU 최적화가 필요한 순간은 대개 모델 학습이나 추론 코드에서 병목을 만날 때이기 때문이다.</p>
+<p>즉, 아래 정도는 익숙한 편이 좋다.</p>
+<ul class="ul-list">
+<li>tensor를 만들고 shape를 읽을 수 있다</li><li>간단한 모델 학습 루프를 이해한다</li><li>matmul, softmax, layernorm 같은 연산 이름이 낯설지 않다</li></ul>
+<p>PyTorch를 전혀 모르는 상태에서도 GPU 자체를 공부할 수는 있다. 하지만 실제로 왜 이 커널이 중요한지와 어떤 연산을 최적화하려는지 감이 덜 잡힌다.</p>
+<h3 id="2-">2. 기본적인 선형대수</h3>
+<p>GPU 시스템에서 가장 자주 다시 보게 되는 연산은 결국 벡터와 행렬이다. 특히 matrix multiply에 대한 감각은 거의 필수에 가깝다.</p>
+<p>최소한 아래 정도는 익숙해야 한다.</p>
+<ul class="ul-list">
+<li>벡터와 행렬이 무엇인지</li><li>matrix multiply가 어떤 계산인지</li><li>shape가 어떻게 맞아야 연산이 되는지</li></ul>
+<p>여기서 중요한 것은 수학을 깊게 푸는 능력보다, 연산 구조를 머릿속에 그릴 수 있는지다. matmul이 어떤 차원을 따라 반복되는 계산인지 감이 있어야 thread mapping, tiling, tensor core 같은 이야기가 덜 추상적으로 들린다.</p>
+<h3 id="3-">3. 기본적인 시스템 성능 감각</h3>
+<p>GPU 시스템은 결국 성능 이야기다. 그래서 아래 개념은 최소한 익숙한 편이 좋다.</p>
+<ul class="ul-list">
+<li>latency와 throughput의 차이</li><li>병렬성이라는 개념</li><li>memory hierarchy가 왜 중요한지</li><li>계산보다 데이터 이동이 더 큰 병목이 될 수 있다는 사실</li></ul>
+<p>이 개념을 미리 다 완벽히 알아야 한다는 뜻은 아니다. 다만 이런 단어를 처음 보는 상태라면 시리즈를 따라갈 때 꽤 버거울 수 있다.</p>
+<p>예를 들어 occupancy나 bandwidth를 볼 때도, 그 숫자 자체보다 &quot;왜 이 값이 전체 처리량과 연결되는가&quot;를 이해하려면 기본적인 시스템 감각이 필요하다.</p>
+<h3 id="4-cc-">4. C/C++ 스타일 코드 읽기 능력</h3>
+<p>처음부터 고급 C++을 잘할 필요는 없다. 하지만 최소한 아래 정도는 읽을 수 있으면 훨씬 편하다.</p>
+<ul class="ul-list">
+<li>for loop</li><li>배열 인덱싱</li><li>pointer 비슷한 접근 방식</li><li>함수 호출과 조건문</li></ul>
+<p>CUDA 예제나 low-level extension 코드를 볼 때 결국 C/C++ 스타일 문법을 자주 만나게 된다. 쓰는 능력보다 읽는 능력이 먼저 중요하다.</p>
+<h2 id="-">있으면 좋은 배경지식</h2>
+<h3 id="1-">1. 컴퓨터 구조 기초</h3>
+<p>cache, register, memory hierarchy, SIMD 같은 개념을 어느 정도 알고 있으면 훨씬 빨리 연결된다. GPU는 CPU와 다르지만, 하드웨어 자원과 성능 제약을 생각하는 기본 태도는 비슷한 부분이 있다.</p>
+<h3 id="2-">2. 기본적인 딥러닝 학습 경험</h3>
+<p>forward, backward, optimizer step, mixed precision, activation 같은 개념을 알고 있으면 softmax나 layernorm, attention kernel이 왜 중요한지 더 잘 보인다.</p>
+<h3 id="3-">3. 프로파일링에 대한 태도</h3>
+<p>아직 Nsight를 몰라도 괜찮다. 다만 &quot;코드가 돌아간다&quot;와 &quot;코드가 왜 느린지 안다&quot;는 완전히 다른 문제라는 감각이 있으면 훨씬 좋다.</p>
+<h2 id="-">꼭 필요하지는 않은 것</h2>
+<p>다음은 있으면 좋을 수 있지만, 시작 단계에서는 필수는 아니다.</p>
+<ul class="ul-list">
+<li>고급 컴파일러 이론</li><li>운영체제 내부 구조 지식</li><li>분산 시스템 깊은 이해</li><li>Triton 경험</li><li>실제 CUDA 프로젝트 경험</li></ul>
+<p>이런 것들이 없다고 GPU 시스템을 못 시작하는 것은 아니다. 오히려 시리즈를 따라가면서 점점 연결될 가능성이 더 크다.</p>
+<h2 id="-">어떤 사람이 바로 시작해도 괜찮은가</h2>
+<p>아래에 가깝다면 바로 시작해도 된다.</p>
+<ul class="ul-list">
+<li>Python과 PyTorch는 어느 정도 써봤다</li><li>matrix multiply와 tensor shape가 낯설지 않다</li><li>성능 병목과 메모리 이야기가 완전히 처음은 아니다</li><li>C 스타일 코드를 읽는 데 큰 거부감이 없다</li></ul>
+<p>반대로 아래에 가깝다면 먼저 조금 준비하는 편이 좋다.</p>
+<ul class="ul-list">
+<li>tensor shape가 아직 자주 헷갈린다</li><li>matmul과 softmax가 무엇을 하는지 감이 약하다</li><li>메모리 hierarchy나 throughput 같은 단어가 너무 낯설다</li><li>인덱싱이 많은 코드만 보면 바로 막힌다</li></ul>
+<h2 id="-">시작 전에 추천하는 빠른 준비</h2>
+<p>정말 빠르게 준비한다면 아래 정도면 충분하다.</p>
+<ol class="ol-list">
+<li>PyTorch tensor shape와 matmul 복습</li><li>softmax, layernorm, attention이 대략 무엇인지 확인</li><li>memory hierarchy, latency vs throughput 개념 복습</li><li>간단한 C 스타일 loop/indexing 코드 읽기</li></ol>
+<p>이 정도만 해도 시리즈를 따라갈 때 체감 난도가 꽤 내려간다.</p>
+<h2 id="-">이 시리즈를 읽는 방법</h2>
+<p>이 GPU 시스템 시리즈는 단순히 &quot;CUDA 문법을 외운다&quot;가 목표가 아니다. 중요한 것은:</p>
+<ul class="ul-list">
+<li>커널이 어떤 병목을 가지는지</li><li>memory와 compute 중 무엇이 먼저 막히는지</li><li>왜 특정 최적화가 의미가 있는지</li></ul>
+<p>를 설명할 수 있게 되는 것이다.</p>
+<p>그래서 읽을 때는 예제를 외우기보다, 항상 아래 질문을 같이 들고 가는 편이 좋다.</p>
+<ul class="ul-list">
+<li>이 연산은 무엇을 계산하는가</li><li>데이터는 어디에서 어디로 이동하는가</li><li>thread와 warp는 어떤 식으로 일하는가</li><li>병목은 어디에서 생길 가능성이 큰가</li></ul>
+<p>이 질문이 습관이 되면, 이후 CUDA나 Triton 코드를 봐도 덜 막히고 더 오래 기억에 남는다.</p>
+<p>다음 글부터는 본격적으로 GPU thread model, warp, block, memory hierarchy로 들어간다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/linux-05.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>리눅스 내부 구조 05 - 파일 시스템</strong>
+            <p>모든 것이 파일인 리눅스에서 VFS, inode, ext4가 어떻게 동작하는지</p>
+            <span class="post-nav-card-meta">
+                <span>January 28, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/pytorch-internals-09.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>PyTorch 내부 구조 09 - C++ Extension의 기본 경로</strong>
+            <p>C++ extension은 PyTorch runtime과 사용자 정의 연산을 연결하는 첫 번째 실전 관문이다</p>
+            <span class="post-nav-card-meta">
+                <span>January 29, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>1분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/gpu-systems-01.html">GPU 시스템 01 - GPU Kernel Engineer 로드맵</a></h3>
+                <p>GPU 아키텍처부터 CUDA, Triton, 커널 최적화까지 어떤 순서로 공부하면 되는지</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/gpu-systems-02.html">GPU 시스템 02 - Thread, Warp, Block 실행 모델</a></h3>
+                <p>GPU의 thread, warp, block, grid가 실제 실행에서 어떤 의미를 가지는지</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/gpu-systems-03.html">GPU 시스템 03 - Memory Hierarchy와 Bandwidth</a></h3>
+                <p>GPU 성능을 좌우하는 메모리 계층과 bandwidth 병목을 어떻게 봐야 하는지</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

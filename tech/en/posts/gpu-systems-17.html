@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPU Systems 17 - Register Pressure and Spilling - Jae's Tech Blog</title>
+    <meta name="description" content="Why using more registers can improve local efficiency but still reduce total throughput">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-17.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-17.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/gpu-systems-17.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-17.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/gpu-systems-17.html" />
+    <meta property="og:title" content="GPU Systems 17 - Register Pressure and Spilling">
+    <meta property="og:description" content="Why using more registers can improve local efficiency but still reduce total throughput">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-03-03T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="gpu">
+    
+    <meta property="article:tag" content="register-pressure">
+    
+    <meta property="article:tag" content="spill">
+    
+    <meta property="article:tag" content="occupancy">
+    
+    <meta property="article:tag" content="cuda">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/gpu-systems-17.html">
+    <meta name="twitter:title" content="GPU Systems 17 - Register Pressure and Spilling">
+    <meta name="twitter:description" content="Why using more registers can improve local efficiency but still reduce total throughput">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "GPU Systems 17 - Register Pressure and Spilling",
+  "description": "Why using more registers can improve local efficiency but still reduce total throughput",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-03-03T00:00:00.000Z",
+  "dateModified": "2026-03-03T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/gpu-systems-17.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "gpu, register-pressure, spill, occupancy, cuda"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <a href="/tech/en/game/">Game</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="GPU Systems 17 - Register Pressure and Spilling">GPU Systems 17 - Register Pressure and Spilling</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-03-03T00:00:00.000Z"" class="post-kicker">March 3, 2026</time>
+            <h1 class="post-title">GPU Systems 17 - Register Pressure and Spilling</h1>
+            <p class="post-deck">Why using more registers can improve local efficiency but still reduce total throughput</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">2 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/gpu-systems.html" class="series-badge">📚 GPU Systems (18/21)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/gpu.html" class="tag">gpu</a>
+                    
+                    <a href="/tech/en/tags/register-pressure.html" class="tag">register-pressure</a>
+                    
+                    <a href="/tech/en/tags/spill.html" class="tag">spill</a>
+                    
+                    <a href="/tech/en/tags/occupancy.html" class="tag">occupancy</a>
+                    
+                    <a href="/tech/en/tags/cuda.html" class="tag">cuda</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 GPU Systems</h3>
+        <p class="post-series-description">From GPU architecture and CUDA kernels to Triton and real kernel optimization work</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-00.html" class="post-series-link">GPU Systems 00 - What You Should Know Before Starting This Series</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-01.html" class="post-series-link">GPU Systems 01 - Roadmap to GPU Kernel Engineering</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-02.html" class="post-series-link">GPU Systems 02 - The Thread, Warp, and Block Execution Model</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-03.html" class="post-series-link">GPU Systems 03 - Memory Hierarchy and Bandwidth</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-04.html" class="post-series-link">GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-05.html" class="post-series-link">GPU Systems 05 - Coalescing, Shared Memory, and Reduction Patterns</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-06.html" class="post-series-link">GPU Systems 06 - Triton and the Practical Shape of Kernel Optimization</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-07.html" class="post-series-link">GPU Systems 07 - Occupancy and Latency Hiding</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-08.html" class="post-series-link">GPU Systems 08 - Profiling and the Roofline View</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-09.html" class="post-series-link">GPU Systems 09 - Why Naive Matrix Multiplication Is Slow</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-10.html" class="post-series-link">GPU Systems 10 - Tiled Matrix Multiplication and Shared Memory</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-11.html" class="post-series-link">GPU Systems 11 - Shared Memory Bank Conflicts</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-12.html" class="post-series-link">GPU Systems 12 - Warp Shuffle and Warp-Level Primitives</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-13.html" class="post-series-link">GPU Systems 13 - Reduction Kernels in Depth</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-14.html" class="post-series-link">GPU Systems 14 - Why Softmax Is Such a Good Kernel Exercise</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-15.html" class="post-series-link">GPU Systems 15 - LayerNorm and RMSNorm Kernel Structure</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-16.html" class="post-series-link">GPU Systems 16 - Vectorized Loads, Stores, and Alignment</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                GPU Systems 17 - Register Pressure and Spilling
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-18.html" class="post-series-link">GPU Systems 18 - Tensor Cores and Mixed Precision</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-19.html" class="post-series-link">GPU Systems 19 - Asynchronous Copy and Pipelining</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-20.html" class="post-series-link">GPU Systems 20 - From Nsight to Triton to FlashAttention</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="registers-are-fast-but-limited">Registers Are Fast but Limited</h2>
+<p>Registers are the closest storage available to a thread, so keeping values there is usually desirable. More reuse and fewer memory accesses can make the thread itself more efficient.</p>
+<p>But registers are limited, and that creates one of the most important GPU optimization tradeoffs.</p>
+<h2 id="what-spilling-means">What Spilling Means</h2>
+<p>If a kernel needs more register space than is available, some values get spilled into slower storage. Despite the name, this is not remotely as cheap as staying in registers.</p>
+<p>That means an optimization that appears to reduce work can still hurt because:</p>
+<ul class="ul-list">
+<li>occupancy drops</li><li>extra memory traffic appears through spilling</li><li>the whole SM becomes less efficient</li></ul>
+<p>This is exactly why register-heavy kernels can be misleading. A thread may become locally smarter while the full SM becomes less productive.</p>
+<h2 id="where-register-pressure-usually-comes-from">Where Register Pressure Usually Comes From</h2>
+<p>Register pressure often rises in situations such as:</p>
+<ul class="ul-list">
+<li>aggressive loop unrolling</li><li>giving each thread more output work</li><li>large fused kernels with many intermediates</li><li>vectorized paths that keep unpacked values live for longer</li></ul>
+<p>So many advanced-looking optimizations naturally push in the direction of higher register demand.</p>
+<h2 id="why-this-is-such-a-common-tradeoff">Why This Is Such a Common Tradeoff</h2>
+<p>Loop unrolling, fusion, and more per-thread work can all increase register usage. That may help one thread, but if too many warps disappear as a result, total throughput can suffer.</p>
+<p>This is one of the main reasons GPU tuning is about balance instead of maxing out every local optimization.</p>
+<p>In practice, that means looking at:</p>
+<ul class="ul-list">
+<li>register count before and after a change</li><li>occupancy changes</li><li>spill-related signs in profiling</li><li>whether the final step time actually improved</li></ul>
+<p>This is one of those areas where the profiler is much more trustworthy than intuition.</p>
+<h2 id="what-about-compiler-hints">What About Compiler Hints?</h2>
+<p>CUDA code sometimes uses compiler hints or launch-bound-related constraints to influence register behavior. These can be helpful, but they are not magic.</p>
+<p>Forcing register count down can improve residency while also increasing instruction count or causing other side effects. So even here, the real question is total throughput, not one isolated metric.</p>
+<h2 id="summary">Summary</h2>
+<p>Register pressure is a recurring constraint in real kernel work. Good optimization is not just about making one thread clever. It is about keeping the whole SM productive.</p>
+<p>A good kernel does not minimize register use at all costs. It uses enough registers to stay efficient while avoiding a collapse in residency and throughput.</p>
+<p>The next post will move into tensor cores and mixed precision for compute-heavy workloads.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/pytorch-internals-20.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>PyTorch Internals 20 - A Practical Path from Internals Knowledge to Real Engineering Work</strong>
+            <p>The goal of studying PyTorch internals is not trivia, but the ability to connect custom operators, kernel work, profiling, and distributed runtime behavior</p>
+            <span class="post-nav-card-meta">
+                <span>March 3, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>1 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/platform-engineering-11.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Platform Engineering 11 - Building a Platform Team</strong>
+            <p>When to start a platform team, how to staff it, and how to avoid building an ivory tower nobody uses</p>
+            <span class="post-nav-card-meta">
+                <span>March 4, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/gpu-systems-18.html">GPU Systems 18 - Tensor Cores and Mixed Precision</a></h3>
+                <p>How tensor cores change performance in compute-heavy kernels and why mixed precision matters</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/gpu-systems-19.html">GPU Systems 19 - Asynchronous Copy and Pipelining</a></h3>
+                <p>How asynchronous copy and double buffering help overlap memory movement with computation</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/gpu-systems-20.html">GPU Systems 20 - From Nsight to Triton to FlashAttention</a></h3>
+                <p>Closing the GPU Systems series by connecting profiling, Triton experimentation, and FlashAttention-style thinking</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

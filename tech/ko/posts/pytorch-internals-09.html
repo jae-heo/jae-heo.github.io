@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyTorch 내부 구조 09 - C++ Extension의 기본 경로 - 재영의 기술 블로그</title>
+    <meta name="description" content="C++ extension은 PyTorch runtime과 사용자 정의 연산을 연결하는 첫 번째 실전 관문이다">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/pytorch-internals-09.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/pytorch-internals-09.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/pytorch-internals-09.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/pytorch-internals-09.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/pytorch-internals-09.html" />
+    <meta property="og:title" content="PyTorch 내부 구조 09 - C++ Extension의 기본 경로">
+    <meta property="og:description" content="C++ extension은 PyTorch runtime과 사용자 정의 연산을 연결하는 첫 번째 실전 관문이다">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-29T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="pytorch">
+    
+    <meta property="article:tag" content="cpp-extension">
+    
+    <meta property="article:tag" content="operator">
+    
+    <meta property="article:tag" content="runtime">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/pytorch-internals-09.html">
+    <meta name="twitter:title" content="PyTorch 내부 구조 09 - C++ Extension의 기본 경로">
+    <meta name="twitter:description" content="C++ extension은 PyTorch runtime과 사용자 정의 연산을 연결하는 첫 번째 실전 관문이다">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "PyTorch 내부 구조 09 - C++ Extension의 기본 경로",
+  "description": "C++ extension은 PyTorch runtime과 사용자 정의 연산을 연결하는 첫 번째 실전 관문이다",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-29T00:00:00.000Z",
+  "dateModified": "2026-01-29T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/pytorch-internals-09.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "pytorch, cpp-extension, operator, runtime"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="PyTorch 내부 구조 09 - C++ Extension의 기본 경로">PyTorch 내부 구조 09 - C++ Extension의 기본 경로</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-29T00:00:00.000Z"" class="post-kicker">January 29, 2026</time>
+            <h1 class="post-title">PyTorch 내부 구조 09 - C++ Extension의 기본 경로</h1>
+            <p class="post-deck">C++ extension은 PyTorch runtime과 사용자 정의 연산을 연결하는 첫 번째 실전 관문이다</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">1분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/pytorch-internals.html" class="series-badge">📚 PyTorch 내부 구조 (9/20)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/pytorch.html" class="tag">pytorch</a>
+                    
+                    <a href="/tech/ko/tags/cpp-extension.html" class="tag">cpp-extension</a>
+                    
+                    <a href="/tech/ko/tags/operator.html" class="tag">operator</a>
+                    
+                    <a href="/tech/ko/tags/runtime.html" class="tag">runtime</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 PyTorch 내부 구조</h3>
+        <p class="post-series-description">텐서, autograd, CUDA extension을 이해하고 커스텀 커널을 실제 학습 코드에 연결하기</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-01.html" class="post-series-link">PyTorch 내부 구조 01 - 왜 PyTorch internals를 알아야 하는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-02.html" class="post-series-link">PyTorch 내부 구조 02 - Tensor는 storage, size, stride 위에서 동작한다</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-03.html" class="post-series-link">PyTorch 내부 구조 03 - Contiguous, Memory Format, Hidden Copy</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-04.html" class="post-series-link">PyTorch 내부 구조 04 - Dispatcher와 Operator Registry는 무엇을 하는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-05.html" class="post-series-link">PyTorch 내부 구조 05 - Autograd Graph와 Engine은 어떻게 동작하는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-06.html" class="post-series-link">PyTorch 내부 구조 06 - Custom Autograd Function을 언제 어떻게 써야 하는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-07.html" class="post-series-link">PyTorch 내부 구조 07 - Tensor Lifetime, Caching Allocator, 메모리 재사용</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-08.html" class="post-series-link">PyTorch 내부 구조 08 - CUDA Stream, Event, Asynchronous Execution</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                PyTorch 내부 구조 09 - C++ Extension의 기본 경로
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-10.html" class="post-series-link">PyTorch 내부 구조 10 - CUDA Extension으로 Custom Kernel 연결하기</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-11.html" class="post-series-link">PyTorch 내부 구조 11 - Operator Schema, Dispatch Key, Meta 함수</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-12.html" class="post-series-link">PyTorch 내부 구조 12 - Backward 구현 패턴과 저장 전략</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-13.html" class="post-series-link">PyTorch 내부 구조 13 - Fused Operator는 언제 가치가 있는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-14.html" class="post-series-link">PyTorch 내부 구조 14 - AMP, Autocast, Numerical Stability</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-15.html" class="post-series-link">PyTorch 내부 구조 15 - PyTorch Profiling으로 Operator 병목 읽기</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-16.html" class="post-series-link">PyTorch 내부 구조 16 - FX, torch.compile, Inductor의 큰 그림</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-17.html" class="post-series-link">PyTorch 내부 구조 17 - Triton은 PyTorch 안에서 어떤 역할을 하는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-18.html" class="post-series-link">PyTorch 내부 구조 18 - Autograd와 Distributed Runtime은 어디서 만나는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-19.html" class="post-series-link">PyTorch 내부 구조 19 - Extension Packaging, Testing, ABI 안정성</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/pytorch-internals-20.html" class="post-series-link">PyTorch 내부 구조 20 - 실제로 PyTorch internals를 실력으로 연결하는 순서</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-c-extension-">왜 C++ extension부터 보는가</h2>
+<p>PyTorch internals를 공부하는 많은 이유는 결국 custom operator를 붙이기 위해서다. 이때 가장 자연스러운 첫 단계가 C++ extension이다.</p>
+<p>이 계층에서 해야 하는 일은 대략 이렇다.</p>
+<ul class="ul-list">
+<li>operator schema 결정</li><li>입력 tensor 검증</li><li>backend별 구현 연결</li><li>Python에서 호출 가능한 인터페이스 제공</li></ul>
+<h2 id="-quotquot-">중요한 것은 &quot;경계&quot; 이해다</h2>
+<p>C++ extension은 단순 빌드 작업이 아니다. Python object에서 ATen tensor로, 다시 backend kernel 호출로 넘어가는 경계를 이해해야 한다. 이 경계를 모르면 custom kernel을 붙여도 integration이 깨지기 쉽다.</p>
+<p>다음 글에서는 CUDA extension으로 내려가 실제 device kernel과 PyTorch operator를 연결하는 흐름을 본다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/gpu-systems-00.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들</strong>
+            <p>GPU 시스템 시리즈를 제대로 따라가기 전에 어떤 배경지식이 필요한지 정리하기</p>
+            <span class="post-nav-card-meta">
+                <span>January 28, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/mlops-05.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>MLOps 05 - 모델 서빙과 배포 전략</strong>
+            <p>학습된 모델을 프로덕션에서 서빙하는 방법과 안전한 배포 전략</p>
+            <span class="post-nav-card-meta">
+                <span>January 30, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/pytorch-internals-10.html">PyTorch 내부 구조 10 - CUDA Extension으로 Custom Kernel 연결하기</a></h3>
+                <p>CUDA kernel을 PyTorch operator로 만들려면 kernel 코드뿐 아니라 tensor contract와 runtime semantics를 함께 맞춰야 한다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/pytorch-internals-11.html">PyTorch 내부 구조 11 - Operator Schema, Dispatch Key, Meta 함수</a></h3>
+                <p>custom op를 제대로 등록하려면 구현 이전에 schema와 dispatch 구조를 먼저 분명히 해야 한다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/pytorch-internals-12.html">PyTorch 내부 구조 12 - Backward 구현 패턴과 저장 전략</a></h3>
+                <p>backward는 forward의 덧붙임이 아니라 어떤 중간값을 저장하고 어떤 계산을 다시 할지 결정하는 설계 문제다</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

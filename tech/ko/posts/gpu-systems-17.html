@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPU 시스템 17 - Register Pressure와 Spill - 재영의 기술 블로그</title>
+    <meta name="description" content="register를 많이 쓰는 최적화가 왜 오히려 전체 성능을 떨어뜨릴 수 있는지">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/gpu-systems-17.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-17.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/gpu-systems-17.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-17.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/gpu-systems-17.html" />
+    <meta property="og:title" content="GPU 시스템 17 - Register Pressure와 Spill">
+    <meta property="og:description" content="register를 많이 쓰는 최적화가 왜 오히려 전체 성능을 떨어뜨릴 수 있는지">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-03-03T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="gpu">
+    
+    <meta property="article:tag" content="register-pressure">
+    
+    <meta property="article:tag" content="spill">
+    
+    <meta property="article:tag" content="occupancy">
+    
+    <meta property="article:tag" content="cuda">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/gpu-systems-17.html">
+    <meta name="twitter:title" content="GPU 시스템 17 - Register Pressure와 Spill">
+    <meta name="twitter:description" content="register를 많이 쓰는 최적화가 왜 오히려 전체 성능을 떨어뜨릴 수 있는지">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "GPU 시스템 17 - Register Pressure와 Spill",
+  "description": "register를 많이 쓰는 최적화가 왜 오히려 전체 성능을 떨어뜨릴 수 있는지",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-03-03T00:00:00.000Z",
+  "dateModified": "2026-03-03T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/gpu-systems-17.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "gpu, register-pressure, spill, occupancy, cuda"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="GPU 시스템 17 - Register Pressure와 Spill">GPU 시스템 17 - Register Pressure와 Spill</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-03-03T00:00:00.000Z"" class="post-kicker">March 3, 2026</time>
+            <h1 class="post-title">GPU 시스템 17 - Register Pressure와 Spill</h1>
+            <p class="post-deck">register를 많이 쓰는 최적화가 왜 오히려 전체 성능을 떨어뜨릴 수 있는지</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">2분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/gpu-systems.html" class="series-badge">📚 GPU 시스템 (18/21)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/gpu.html" class="tag">gpu</a>
+                    
+                    <a href="/tech/ko/tags/register-pressure.html" class="tag">register-pressure</a>
+                    
+                    <a href="/tech/ko/tags/spill.html" class="tag">spill</a>
+                    
+                    <a href="/tech/ko/tags/occupancy.html" class="tag">occupancy</a>
+                    
+                    <a href="/tech/ko/tags/cuda.html" class="tag">cuda</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 GPU 시스템</h3>
+        <p class="post-series-description">GPU 아키텍처, CUDA 커널, Triton, 그리고 실제 커널 최적화까지 이어지는 흐름</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-00.html" class="post-series-link">GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-01.html" class="post-series-link">GPU 시스템 01 - GPU Kernel Engineer 로드맵</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-02.html" class="post-series-link">GPU 시스템 02 - Thread, Warp, Block 실행 모델</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-03.html" class="post-series-link">GPU 시스템 03 - Memory Hierarchy와 Bandwidth</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-04.html" class="post-series-link">GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-05.html" class="post-series-link">GPU 시스템 05 - Coalescing, Shared Memory, Reduction 패턴</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-06.html" class="post-series-link">GPU 시스템 06 - Triton과 Kernel Optimization 실전 감각</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-07.html" class="post-series-link">GPU 시스템 07 - Occupancy와 Latency Hiding</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-08.html" class="post-series-link">GPU 시스템 08 - 프로파일링과 Roofline 관점</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-09.html" class="post-series-link">GPU 시스템 09 - Naive Matrix Multiply가 느린 이유</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-10.html" class="post-series-link">GPU 시스템 10 - Tiled Matrix Multiply와 Shared Memory</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-11.html" class="post-series-link">GPU 시스템 11 - Shared Memory Bank Conflict</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-12.html" class="post-series-link">GPU 시스템 12 - Warp Shuffle과 Warp-Level Primitive</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-13.html" class="post-series-link">GPU 시스템 13 - Reduction Kernel Deep Dive</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-14.html" class="post-series-link">GPU 시스템 14 - Softmax Kernel이 좋은 연습 문제인 이유</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-15.html" class="post-series-link">GPU 시스템 15 - LayerNorm과 RMSNorm Kernel 구조</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-16.html" class="post-series-link">GPU 시스템 16 - Vectorized Load/Store와 Alignment</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                GPU 시스템 17 - Register Pressure와 Spill
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-18.html" class="post-series-link">GPU 시스템 18 - Tensor Core와 Mixed Precision</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-19.html" class="post-series-link">GPU 시스템 19 - Asynchronous Copy와 Pipelining</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/gpu-systems-20.html" class="post-series-link">GPU 시스템 20 - Nsight, Triton, FlashAttention까지 이어지는 실전 흐름</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="register-">register는 빠르지만 공짜가 아니다</h2>
+<p>GPU 최적화에서 register는 가장 가까운 저장 공간이기 때문에 매우 중요하다. intermediate를 register에 잘 유지하면 memory access를 줄이고 연산 재사용을 늘릴 수 있다. 문제는 register가 무한하지 않다는 점이다.</p>
+<p>thread당 register 사용량이 늘어나면 resident warp 수가 줄고, 심하면 spill까지 생긴다.</p>
+<h2 id="spill-">spill은 무엇인가</h2>
+<p>필요한 register 수가 너무 많아 하드웨어 register 안에 다 못 담기면 일부 값이 local memory 쪽으로 밀려난다. 이름은 local이지만 실제 성능 관점에서는 훨씬 비싼 접근이 된다.</p>
+<p>즉, register 최적화를 잘못하면:</p>
+<ul class="ul-list">
+<li>occupancy가 떨어지고</li><li>spill로 memory traffic가 늘고</li><li>결국 더 느려질 수 있다</li></ul>
+<p>이 지점이 특히 헷갈리는 이유는, 코드만 보면 intermediate를 많이 들고 있는 쪽이 더 똑똑해 보이기 때문이다. 하지만 GPU에서는 thread 하나의 똑똑함보다, SM 전체가 얼마나 많은 warp를 안정적으로 돌릴 수 있는지가 더 중요할 때가 많다.</p>
+<h2 id="register-pressure-">register pressure는 어디서 커질까</h2>
+<p>register pressure는 보통 아래 같은 상황에서 커진다.</p>
+<ul class="ul-list">
+<li>loop unrolling을 많이 했을 때</li><li>thread 하나가 여러 output을 들고 있을 때</li><li>큰 fused kernel에서 intermediate가 많을 때</li><li>vectorized path에서 unpacked 값을 오래 유지할 때</li></ul>
+<p>즉, 고급 최적화처럼 보이는 기법들이 register pressure를 같이 밀어 올리는 경우가 매우 많다.</p>
+<h2 id="spill-">spill이 왜 특히 위험한가</h2>
+<p>spill은 단순히 조금 느려지는 정도로 끝나지 않을 수 있다. spill이 생기면 local memory access가 늘어나고, 이는 다시 memory traffic와 latency 문제로 연결된다. 결국 compute를 줄이려던 최적화가 다시 memory-bound 성격을 키우는 역효과를 낼 수 있다.</p>
+<p>이 때문에 프로파일러에서 spill 관련 신호가 보이면 꽤 강한 경고로 받아들이는 편이 좋다.</p>
+<h2 id="-gpu-trade-off-">왜 GPU 최적화가 trade-off가 되는가</h2>
+<p>예를 들어 loop unrolling, per-thread work 증가, fusion 같은 기법은 종종 register 사용량을 키운다. 개별 thread 입장에서는 더 효율적일 수 있지만, SM 전체 관점에서는 동시에 돌 수 있는 warp 수가 줄어든다.</p>
+<p>그래서 최적화는 항상 다음 질문과 함께 간다.</p>
+<ul class="ul-list">
+<li>register를 더 써서 재사용을 늘릴 것인가</li><li>register를 덜 써서 occupancy를 확보할 것인가</li></ul>
+<p>이 균형을 잘못 잡으면 local optimum에 빠지기 쉽다.</p>
+<p>실무에서는 이 문제를 대개 다음처럼 본다.</p>
+<ul class="ul-list">
+<li>먼저 baseline kernel의 register usage를 본다</li><li>block size와 occupancy를 함께 본다</li><li>unrolling/fusion 이후 register 증가가 얼마나 큰지 본다</li><li>실제 step time과 stall reason이 개선되는지 확인한다</li></ul>
+<p>즉, register pressure는 이론보다 profiling과 함께 보는 편이 훨씬 현실적이다.</p>
+<h2 id="launch-bounds-compiler-hint-">launch bounds나 compiler hint는 어떻게 보나</h2>
+<p>CUDA 코드에서는 때때로 launch bounds나 compiler option을 통해 register 사용량을 어느 정도 유도하려는 시도를 하기도 한다. 이런 방법은 분명 유용하지만, 마법처럼 생각하면 안 된다.</p>
+<p>register를 억지로 줄이면 occupancy는 좋아질 수 있어도 instruction 증가나 spill로 다시 다른 비용이 생길 수 있기 때문이다. 결국 중요한 것은 숫자 하나가 아니라 전체 균형이다.</p>
+<h2 id="정리">정리</h2>
+<p>register pressure는 GPU 최적화에서 아주 자주 다시 보게 되는 제약이다. 빠른 저장 공간을 더 많이 쓰는 것이 항상 좋은 게 아니라, 전체 SM throughput과 함께 봐야 한다는 사실을 계속 상기시켜준다.</p>
+<p>좋은 kernel은 register를 아끼는 kernel도 아니고, register를 많이 쓰는 kernel도 아니다. 필요한 곳에는 충분히 쓰되, 그 결과로 resident warp와 throughput이 무너지지 않는 kernel에 가깝다.</p>
+<p>다음 글에서는 tensor core와 mixed precision을 보면서, compute-bound 영역에서 성능을 크게 끌어올리는 수단을 본다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/pytorch-internals-20.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>PyTorch 내부 구조 20 - 실제로 PyTorch internals를 실력으로 연결하는 순서</strong>
+            <p>internals 공부의 목적은 trivia 수집이 아니라 custom operator, kernel optimization, distributed runtime으로 자연스럽게 이어지는 감각을 만드는 데 있다</p>
+            <span class="post-nav-card-meta">
+                <span>March 3, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>1분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/platform-engineering-11.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>플랫폼 엔지니어링 11 - 플랫폼 팀 만들기</strong>
+            <p>플랫폼 팀을 언제 시작하고, 어떻게 구성하고, 아무도 안 쓰는 상아탑 플랫폼이 되지 않는 방법</p>
+            <span class="post-nav-card-meta">
+                <span>March 4, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/gpu-systems-18.html">GPU 시스템 18 - Tensor Core와 Mixed Precision</a></h3>
+                <p>tensor core가 어떤 종류의 연산에서 큰 성능 차이를 만들고 mixed precision과 어떻게 연결되는지</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/gpu-systems-19.html">GPU 시스템 19 - Asynchronous Copy와 Pipelining</a></h3>
+                <p>memory load와 compute를 더 겹치게 만드는 asynchronous copy와 double buffering의 감각</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/gpu-systems-20.html">GPU 시스템 20 - Nsight, Triton, FlashAttention까지 이어지는 실전 흐름</a></h3>
+                <p>GPU 시스템 시리즈를 마무리하며 profiling, Triton, FlashAttention 관점까지 연결하기</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

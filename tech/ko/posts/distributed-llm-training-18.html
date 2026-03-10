@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기 - 재영의 기술 블로그</title>
+    <meta name="description" content="분산 학습 디버깅은 에러 메시지 읽기보다 어느 rank가 어떤 collective 앞에서 멈췄는지 구조적으로 좁히는 일이다">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-18.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-18.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-18.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-18.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-18.html" />
+    <meta property="og:title" content="분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기">
+    <meta property="og:description" content="분산 학습 디버깅은 에러 메시지 읽기보다 어느 rank가 어떤 collective 앞에서 멈췄는지 구조적으로 좁히는 일이다">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-02-26T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="distributed-training">
+    
+    <meta property="article:tag" content="debugging">
+    
+    <meta property="article:tag" content="timeout">
+    
+    <meta property="article:tag" content="oom">
+    
+    <meta property="article:tag" content="nccl">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-18.html">
+    <meta name="twitter:title" content="분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기">
+    <meta name="twitter:description" content="분산 학습 디버깅은 에러 메시지 읽기보다 어느 rank가 어떤 collective 앞에서 멈췄는지 구조적으로 좁히는 일이다">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": [
+    "분산 LLM 학습 18 - Deadlock",
+    "Timeout",
+    "OOM: 분산 학습 디버깅의 기본기"
+  ],
+  "description": "분산 학습 디버깅은 에러 메시지 읽기보다 어느 rank가 어떤 collective 앞에서 멈췄는지 구조적으로 좁히는 일이다",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-26T00:00:00.000Z",
+  "dateModified": "2026-02-26T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-18.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "distributed-training, debugging, timeout, oom, nccl"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기">분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-02-26T00:00:00.000Z"" class="post-kicker">February 26, 2026</time>
+            <h1 class="post-title">분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기</h1>
+            <p class="post-deck">분산 학습 디버깅은 에러 메시지 읽기보다 어느 rank가 어떤 collective 앞에서 멈췄는지 구조적으로 좁히는 일이다</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">1분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/distributed-llm-training.html" class="series-badge">📚 분산 LLM 학습 (18/20)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/distributed-training.html" class="tag">distributed-training</a>
+                    
+                    <a href="/tech/ko/tags/debugging.html" class="tag">debugging</a>
+                    
+                    <a href="/tech/ko/tags/timeout.html" class="tag">timeout</a>
+                    
+                    <a href="/tech/ko/tags/oom.html" class="tag">oom</a>
+                    
+                    <a href="/tech/ko/tags/nccl.html" class="tag">nccl</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 분산 LLM 학습</h3>
+        <p class="post-series-description">data parallel부터 tensor parallel, FSDP, ZeRO, 그리고 현대 LLM 학습 프레임워크까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-01.html" class="post-series-link">분산 LLM 학습 01 - 왜 LLM 학습은 분산 시스템 문제가 되는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-02.html" class="post-series-link">분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-03.html" class="post-series-link">분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-04.html" class="post-series-link">분산 LLM 학습 04 - PyTorch DDP는 내부에서 무엇을 하는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-05.html" class="post-series-link">분산 LLM 학습 05 - Global Batch Size, Gradient Accumulation, Learning Rate Scaling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-06.html" class="post-series-link">분산 LLM 학습 06 - LLM 학습의 메모리는 어디에 쓰이는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-07.html" class="post-series-link">분산 LLM 학습 07 - NCCL과 토폴로지: 왜 같은 GPU 수인데 속도가 다를까</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-08.html" class="post-series-link">분산 LLM 학습 08 - Tensor Parallel의 기본: 모델 내부 연산을 어떻게 나누는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-09.html" class="post-series-link">분산 LLM 학습 09 - Transformer에서 Tensor Parallel이 실제로 들어가는 위치</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-10.html" class="post-series-link">분산 LLM 학습 10 - Sequence Parallel과 긴 컨텍스트의 비용</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-11.html" class="post-series-link">분산 LLM 학습 11 - Pipeline Parallel의 기본과 Stage 분할 감각</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-12.html" class="post-series-link">분산 LLM 학습 12 - GPipe, 1F1B, Interleaving: Pipeline Schedule은 어떻게 고르는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-13.html" class="post-series-link">분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-14.html" class="post-series-link">분산 LLM 학습 14 - ZeRO Stage 1, 2, 3는 각각 무엇을 없애는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-15.html" class="post-series-link">분산 LLM 학습 15 - FSDP는 DDP와 무엇이 다르고 언제 유리한가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-16.html" class="post-series-link">분산 LLM 학습 16 - Communication Overlap은 어떻게 step 시간을 숨기는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-17.html" class="post-series-link">분산 LLM 학습 17 - Checkpoint, Resume, Fault Tolerance는 왜 핵심인가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-19.html" class="post-series-link">분산 LLM 학습 19 - Megatron-LM과 DeepSpeed를 어떻게 읽을 것인가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-20.html" class="post-series-link">분산 LLM 학습 20 - 실제 LLM 학습 스택을 설계하는 순서</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">분산 학습 디버깅은 왜 더 어려울까</h2>
+<p>단일 프로세스 디버깅과 달리 분산 환경에서는 한 rank의 문제로 전체가 멈춘다. 그리고 겉으로 보이는 증상은 비슷하다.</p>
+<ul class="ul-list">
+<li>모두 멈춘 것처럼 보인다</li><li>timeout이 발생한다</li><li>어떤 rank만 OOM이 난다</li><li>한 rank가 더 빨리 끝나 collective에서 desync가 난다</li></ul>
+<p>즉 증상보다 구조를 먼저 읽어야 한다.</p>
+<h2 id="-">가장 먼저 분리해야 할 축</h2>
+<ul class="ul-list">
+<li>correctness 문제인가</li><li>performance 문제인가</li><li>시스템 환경 문제인가</li></ul>
+<p>예를 들어 timeout은 모델 코드 bug일 수도 있고, 통신 토폴로지 문제일 수도 있고, dataloader 병목 때문에 한 rank가 늦어진 결과일 수도 있다.</p>
+<h2 id="-">자주 보는 유형</h2>
+<h3 id="1-collective-mismatch">1. collective mismatch</h3>
+<p>어떤 rank는 all-reduce에 들어갔는데 다른 rank는 아직 다른 연산 중이면 deadlock처럼 보이는 상태가 나온다.</p>
+<h3 id="2-uneven-input-straggler">2. uneven input / straggler</h3>
+<p>데이터 길이 분포가 고르지 않거나 I/O가 흔들리면 한 rank만 늦어지고 나머지가 collective에서 기다린다.</p>
+<h3 id="3-memory-fragmentation-rank-local-oom">3. memory fragmentation / rank-local OOM</h3>
+<p>전체 평균 메모리는 괜찮아도 특정 rank에서만 peak가 다르게 나올 수 있다.</p>
+<h2 id="-">디버깅 순서</h2>
+<ol class="ol-list">
+<li>가장 작은 world size에서 재현되는지 본다</li><li>deterministic하게 재현되는지 본다</li><li>어느 rank에서 먼저 멈추는지 로그와 timeline을 본다</li><li>collective 직전/직후에 상태를 좁힌다</li><li>data path와 communication path를 분리해서 본다</li></ol>
+<p>이 순서가 잡혀 있으면 문제를 훨씬 빠르게 줄일 수 있다.</p>
+<p>다음 글에서는 Megatron-LM, DeepSpeed 같은 프레임워크를 구조적으로 읽는 법을 본다. 내부 추상화를 어떻게 나눴는지 알면 코드를 덜 두려워하게 된다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/linux-09.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>리눅스 내부 구조 09 - 네트워킹</strong>
+            <p>리눅스 커널의 네트워킹 스택과 패킷이 NIC에서 애플리케이션까지 전달되는 과정</p>
+            <span class="post-nav-card-meta">
+                <span>February 26, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/platform-engineering-10.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>플랫폼 엔지니어링 10 - 보안과 거버넌스</strong>
+            <p>플랫폼 팀이 보안을 골든 패스에 녹여서 개발자에게 게이트가 아닌 가드레일을 제공하는 방법</p>
+            <span class="post-nav-card-meta">
+                <span>February 27, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>2분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">1분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-19.html">분산 LLM 학습 19 - Megatron-LM과 DeepSpeed를 어떻게 읽을 것인가</a></h3>
+                <p>프레임워크를 이름으로 기억하기보다 어떤 병렬화와 어떤 상태 관리를 추상화하는지로 읽어야 한다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-20.html">분산 LLM 학습 20 - 실제 LLM 학습 스택을 설계하는 순서</a></h3>
+                <p>분산 학습 전략은 멋있는 기법을 조합하는 일이 아니라 현재 병목에 맞는 최소 구조를 선택하고 검증하는 일이다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-07.html">분산 LLM 학습 07 - NCCL과 토폴로지: 왜 같은 GPU 수인데 속도가 다를까</a></h3>
+                <p>분산 학습 성능은 GPU 개수보다 GPU들이 어떤 링크로 연결되어 있는지에 더 크게 흔들릴 때가 많다</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

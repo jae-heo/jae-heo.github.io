@@ -1,0 +1,2789 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>재영의 기술 블로그</title>
+    <meta name="description" content="처음부터 만든 기술 블로그">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jae-heo.github.io" />
+    <meta property="og:title" content="재영의 기술 블로그">
+    <meta property="og:description" content="처음부터 만든 기술 블로그">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io">
+    <meta name="twitter:title" content="재영의 기술 블로그">
+    <meta name="twitter:description" content="처음부터 만든 기술 블로그">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="home">
+    <div class="page-header">
+        <h1>재영의 기술 블로그</h1>
+        <p class="subtitle">나사들어간 이야기</p>
+    </div>
+
+    <section class="home-intro">
+        <div class="home-intro-copy">
+            <span class="home-intro-eyebrow">Jae의 기술 노트</span>
+            <h2>개념을 깊게 이해하고 싶은 엔지니어를 위한 시스템 중심 글쓰기.</h2>
+            <p>플랫폼 엔지니어링, 리눅스, 컴파일러, MLOps, 컴퓨터 구조를 다루는 긴 글들을 모았습니다. 용어만 훑는 대신, 실제로 판단할 때 필요한 감각을 만드는 데 초점을 둡니다.</p>
+        </div>
+        <div class="home-intro-panel">
+            <div class="home-intro-card">
+                <span class="home-intro-card-label">여기서 시작하기</span>
+                <strong>추천 시리즈</strong>
+                <p>처음 들어온 독자에게 좋은 시작점입니다.</p>
+            </div>
+            <div class="home-intro-card">
+                <span class="home-intro-card-label">최근 글 둘러보기</span>
+                <strong>총 119개 글</strong>
+                <p>새로 올라온 글과 진행 중인 시리즈를 모아봤습니다.</p>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="featured-series-strip">
+        
+        <article class="featured-series-card">
+            <div class="featured-series-meta">
+                <span>총 21개 글</span>
+                <span class="post-card-dot"></span>
+                <span>총 49분</span>
+            </div>
+            <h3><a href="/tech/ko/series/gpu-systems.html">GPU 시스템</a></h3>
+            <p>GPU 아키텍처, CUDA 커널, Triton, 그리고 실제 커널 최적화까지 이어지는 흐름</p>
+            <p class="featured-series-audience">GPU가 실제로 어떻게 계산을 수행하는지 이해하고, 나중에는 직접 커널을 작성하고 최적화하고 싶은 엔지니어.</p>
+            <div class="featured-series-actions">
+                <a href="/tech/ko/posts/gpu-systems-00.html" class="read-more">추천 시작 글</a>
+            </div>
+        </article>
+        
+        <article class="featured-series-card">
+            <div class="featured-series-meta">
+                <span>총 10개 글</span>
+                <span class="post-card-dot"></span>
+                <span>총 35분</span>
+            </div>
+            <h3><a href="/tech/ko/series/mlops.html">MLOps 기초</a></h3>
+            <p>데이터 파이프라인부터 프로덕션 모니터링까지, ML 시스템 운영의 기초</p>
+            <p class="featured-series-audience">모델 실험에서 프로덕션 운영으로 넘어가려는 ML 엔지니어, 데이터 사이언티스트, 백엔드 엔지니어.</p>
+            <div class="featured-series-actions">
+                <a href="/tech/ko/posts/mlops-01.html" class="read-more">추천 시작 글</a>
+            </div>
+        </article>
+        
+        <article class="featured-series-card">
+            <div class="featured-series-meta">
+                <span>총 12개 글</span>
+                <span class="post-card-dot"></span>
+                <span>총 43분</span>
+            </div>
+            <h3><a href="/tech/ko/series/compiler.html">오토마타와 컴파일러</a></h3>
+            <p>유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
+            <p class="featured-series-audience">언어 처리 이론과 실제 컴파일러 구현 사이의 연결을 함께 보고 싶은 독자.</p>
+            <div class="featured-series-actions">
+                <a href="/tech/ko/posts/compiler-01.html" class="read-more">추천 시작 글</a>
+            </div>
+        </article>
+        
+    </section>
+    
+
+    <!-- Tab Navigation -->
+    <div class="home-tabs">
+        <button class="home-tab active" data-tab="series">
+            시리즈
+        </button>
+        <button class="home-tab" data-tab="recent">
+            최근 포스트
+        </button>
+    </div>
+
+    <!-- Series Tab Content -->
+    <div class="tab-content active" data-content="series">
+        <!-- Homepage Series View Component - Grid Layout with Numbered Posts -->
+<div class="home-series-list">
+    
+        
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                <span class="updated-badge">UPDATED</span>
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/gpu-systems.html" class="home-series-header-link" aria-label="GPU 시스템">
+                        <h2 class="home-series-title">
+                            GPU 시스템
+                        </h2>
+                        <p class="home-series-description">GPU 아키텍처, CUDA 커널, Triton, 그리고 실제 커널 최적화까지 이어지는 흐름</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                21
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 22">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-20.html" class="home-series-post-link">
+                            GPU 시스템 20 - Nsight, Triton, FlashAttention까지 이어지는 실전 흐름
+                            <span class="new-badge">NEW</span>
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-19.html" class="home-series-post-link">
+                            GPU 시스템 19 - Asynchronous Copy와 Pipelining
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-18.html" class="home-series-post-link">
+                            GPU 시스템 18 - Tensor Core와 Mixed Precision
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-17.html" class="home-series-post-link">
+                            GPU 시스템 17 - Register Pressure와 Spill
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-16.html" class="home-series-post-link">
+                            GPU 시스템 16 - Vectorized Load/Store와 Alignment
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-15.html" class="home-series-post-link">
+                            GPU 시스템 15 - LayerNorm과 RMSNorm Kernel 구조
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-14.html" class="home-series-post-link">
+                            GPU 시스템 14 - Softmax Kernel이 좋은 연습 문제인 이유
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-13.html" class="home-series-post-link">
+                            GPU 시스템 13 - Reduction Kernel Deep Dive
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-12.html" class="home-series-post-link">
+                            GPU 시스템 12 - Warp Shuffle과 Warp-Level Primitive
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-11.html" class="home-series-post-link">
+                            GPU 시스템 11 - Shared Memory Bank Conflict
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-10.html" class="home-series-post-link">
+                            GPU 시스템 10 - Tiled Matrix Multiply와 Shared Memory
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-09.html" class="home-series-post-link">
+                            GPU 시스템 09 - Naive Matrix Multiply가 느린 이유
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-08.html" class="home-series-post-link">
+                            GPU 시스템 08 - 프로파일링과 Roofline 관점
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-07.html" class="home-series-post-link">
+                            GPU 시스템 07 - Occupancy와 Latency Hiding
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-06.html" class="home-series-post-link">
+                            GPU 시스템 06 - Triton과 Kernel Optimization 실전 감각
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-05.html" class="home-series-post-link">
+                            GPU 시스템 05 - Coalescing, Shared Memory, Reduction 패턴
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-04.html" class="home-series-post-link">
+                            GPU 시스템 04 - CUDA Kernel 작성과 Launch Configuration
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-03.html" class="home-series-post-link">
+                            GPU 시스템 03 - Memory Hierarchy와 Bandwidth
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-02.html" class="home-series-post-link">
+                            GPU 시스템 02 - Thread, Warp, Block 실행 모델
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-01.html" class="home-series-post-link">
+                            GPU 시스템 01 - GPU Kernel Engineer 로드맵
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/gpu-systems-00.html" class="home-series-post-link">
+                            GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/mlops.html" class="home-series-header-link" aria-label="MLOps 기초">
+                        <h2 class="home-series-title">
+                            MLOps 기초
+                        </h2>
+                        <p class="home-series-description">데이터 파이프라인부터 프로덕션 모니터링까지, ML 시스템 운영의 기초</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                10
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 11">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-10.html" class="home-series-post-link">
+                            MLOps 10 - MLOps 플랫폼 구축
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-09.html" class="home-series-post-link">
+                            MLOps 09 - GPU 인프라와 스케일링
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-08.html" class="home-series-post-link">
+                            MLOps 08 - 피처 스토어
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-07.html" class="home-series-post-link">
+                            MLOps 07 - ML을 위한 CI/CD
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-06.html" class="home-series-post-link">
+                            MLOps 06 - 모니터링과 드리프트 감지
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-05.html" class="home-series-post-link">
+                            MLOps 05 - 모델 서빙과 배포 전략
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-04.html" class="home-series-post-link">
+                            MLOps 04 - 모델 버전 관리와 레지스트리
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-03.html" class="home-series-post-link">
+                            MLOps 03 - 실험 추적과 모델 학습 관리
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-02.html" class="home-series-post-link">
+                            MLOps 02 - 데이터 파이프라인과 피처 엔지니어링
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/mlops-01.html" class="home-series-post-link">
+                            MLOps 01 - MLOps란 무엇인가?
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/compiler.html" class="home-series-header-link" aria-label="오토마타와 컴파일러">
+                        <h2 class="home-series-title">
+                            오토마타와 컴파일러
+                        </h2>
+                        <p class="home-series-description">유한 오토마타와 형식 언어부터 컴파일러 구현까지</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                12
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 13">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-12.html" class="home-series-post-link">
+                            오토마타와 컴파일러 12 - 코드 생성
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-11.html" class="home-series-post-link">
+                            오토마타와 컴파일러 11 - 중간 표현과 최적화
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-10.html" class="home-series-post-link">
+                            오토마타와 컴파일러 10 - 의미 분석과 타입 검사
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-09.html" class="home-series-post-link">
+                            오토마타와 컴파일러 09 - 추상 구문 트리
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-08.html" class="home-series-post-link">
+                            오토마타와 컴파일러 08 - 상향식 파싱
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-07.html" class="home-series-post-link">
+                            오토마타와 컴파일러 07 - 하향식 파싱
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-06.html" class="home-series-post-link">
+                            오토마타와 컴파일러 06 - 어휘 분석
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-05.html" class="home-series-post-link">
+                            오토마타와 컴파일러 05 - 컴파일러 개요 — 단계와 구조
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-04.html" class="home-series-post-link">
+                            오토마타와 컴파일러 04 - 푸시다운 오토마타
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-03.html" class="home-series-post-link">
+                            오토마타와 컴파일러 03 - 문맥 자유 문법
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-02.html" class="home-series-post-link">
+                            오토마타와 컴파일러 02 - 정규 표현식과 정규 언어
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/compiler-01.html" class="home-series-post-link">
+                            오토마타와 컴파일러 01 - 유한 오토마타
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/linux.html" class="home-series-header-link" aria-label="리눅스 내부 구조">
+                        <h2 class="home-series-title">
+                            리눅스 내부 구조
+                        </h2>
+                        <p class="home-series-description">프로세스와 메모리부터 컨테이너까지, 리눅스 커널의 내부 동작 이해하기</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                10
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 11">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-10.html" class="home-series-post-link">
+                            리눅스 내부 구조 10 - 컨테이너와 가상화
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-09.html" class="home-series-post-link">
+                            리눅스 내부 구조 09 - 네트워킹
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-08.html" class="home-series-post-link">
+                            리눅스 내부 구조 08 - 동기화와 동시성
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-07.html" class="home-series-post-link">
+                            리눅스 내부 구조 07 - I/O와 디바이스
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-06.html" class="home-series-post-link">
+                            리눅스 내부 구조 06 - 시스템 콜과 커널
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-05.html" class="home-series-post-link">
+                            리눅스 내부 구조 05 - 파일 시스템
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-04.html" class="home-series-post-link">
+                            리눅스 내부 구조 04 - 메모리 관리
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-03.html" class="home-series-post-link">
+                            리눅스 내부 구조 03 - 프로세스 스케줄링
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-02.html" class="home-series-post-link">
+                            리눅스 내부 구조 02 - 프로세스와 스레드
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/linux-01.html" class="home-series-post-link">
+                            리눅스 내부 구조 01 - 운영체제 개요
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/computer-architecture.html" class="home-series-header-link" aria-label="컴퓨터 구조">
+                        <h2 class="home-series-title">
+                            컴퓨터 구조
+                        </h2>
+                        <p class="home-series-description">CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                10
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 11">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-10.html" class="home-series-post-link">
+                            컴퓨터 구조 10 - 멀티코어와 현대 프로세서
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-09.html" class="home-series-post-link">
+                            컴퓨터 구조 09 - I/O와 DMA
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-08.html" class="home-series-post-link">
+                            컴퓨터 구조 08 - 가상 메모리와 MMU
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-07.html" class="home-series-post-link">
+                            컴퓨터 구조 07 - 메모리 계층 구조
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-06.html" class="home-series-post-link">
+                            컴퓨터 구조 06 - 인터럽트와 예외
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-05.html" class="home-series-post-link">
+                            컴퓨터 구조 05 - CPU 권한 수준과 보호
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-04.html" class="home-series-post-link">
+                            컴퓨터 구조 04 - 파이프라인과 병렬 처리
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-03.html" class="home-series-post-link">
+                            컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-02.html" class="home-series-post-link">
+                            컴퓨터 구조 02 - CPU 내부 구조
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/comparch-01.html" class="home-series-post-link">
+                            컴퓨터 구조 01 - 컴퓨터 구조 개요
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/platform-engineering.html" class="home-series-header-link" aria-label="플랫폼 엔지니어링 기초">
+                        <h2 class="home-series-title">
+                            플랫폼 엔지니어링 기초
+                        </h2>
+                        <p class="home-series-description">내부 개발자 플랫폼, 골든 패스, 개발자 셀프서비스의 원리를 이해하기</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                11
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 12">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-11.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 11 - 플랫폼 팀 만들기
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-10.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 10 - 보안과 거버넌스
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-09.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 09 - 플랫폼 엔지니어를 위한 관측 가능성
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-08.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 08 - 대규모 CI/CD
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-07.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 07 - 제품으로서의 플랫폼
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-06.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 06 - 개발자 포털과 서비스 카탈로그
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-05.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 05 - 플랫폼을 위한 Infrastructure as Code
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-04.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 04 - 골든 패스 설계하기
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-03.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-02.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 02 - 내부 개발자 플랫폼의 구조
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/platform-engineering-01.html" class="home-series-post-link">
+                            플랫폼 엔지니어링 01 - 플랫폼 엔지니어링이란?
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/distributed-llm-training.html" class="home-series-header-link" aria-label="분산 LLM 학습">
+                        <h2 class="home-series-title">
+                            분산 LLM 학습
+                        </h2>
+                        <p class="home-series-description">data parallel부터 tensor parallel, FSDP, ZeRO, 그리고 현대 LLM 학습 프레임워크까지</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                20
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 21">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-20.html" class="home-series-post-link">
+                            분산 LLM 학습 20 - 실제 LLM 학습 스택을 설계하는 순서
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-19.html" class="home-series-post-link">
+                            분산 LLM 학습 19 - Megatron-LM과 DeepSpeed를 어떻게 읽을 것인가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-18.html" class="home-series-post-link">
+                            분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-17.html" class="home-series-post-link">
+                            분산 LLM 학습 17 - Checkpoint, Resume, Fault Tolerance는 왜 핵심인가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-16.html" class="home-series-post-link">
+                            분산 LLM 학습 16 - Communication Overlap은 어떻게 step 시간을 숨기는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-15.html" class="home-series-post-link">
+                            분산 LLM 학습 15 - FSDP는 DDP와 무엇이 다르고 언제 유리한가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-14.html" class="home-series-post-link">
+                            분산 LLM 학습 14 - ZeRO Stage 1, 2, 3는 각각 무엇을 없애는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-13.html" class="home-series-post-link">
+                            분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-12.html" class="home-series-post-link">
+                            분산 LLM 학습 12 - GPipe, 1F1B, Interleaving: Pipeline Schedule은 어떻게 고르는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-11.html" class="home-series-post-link">
+                            분산 LLM 학습 11 - Pipeline Parallel의 기본과 Stage 분할 감각
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-10.html" class="home-series-post-link">
+                            분산 LLM 학습 10 - Sequence Parallel과 긴 컨텍스트의 비용
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-09.html" class="home-series-post-link">
+                            분산 LLM 학습 09 - Transformer에서 Tensor Parallel이 실제로 들어가는 위치
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-08.html" class="home-series-post-link">
+                            분산 LLM 학습 08 - Tensor Parallel의 기본: 모델 내부 연산을 어떻게 나누는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-07.html" class="home-series-post-link">
+                            분산 LLM 학습 07 - NCCL과 토폴로지: 왜 같은 GPU 수인데 속도가 다를까
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-06.html" class="home-series-post-link">
+                            분산 LLM 학습 06 - LLM 학습의 메모리는 어디에 쓰이는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-05.html" class="home-series-post-link">
+                            분산 LLM 학습 05 - Global Batch Size, Gradient Accumulation, Learning Rate Scaling
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-04.html" class="home-series-post-link">
+                            분산 LLM 학습 04 - PyTorch DDP는 내부에서 무엇을 하는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-03.html" class="home-series-post-link">
+                            분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-02.html" class="home-series-post-link">
+                            분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/distributed-llm-training-01.html" class="home-series-post-link">
+                            분산 LLM 학습 01 - 왜 LLM 학습은 분산 시스템 문제가 되는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/pytorch-internals.html" class="home-series-header-link" aria-label="PyTorch 내부 구조">
+                        <h2 class="home-series-title">
+                            PyTorch 내부 구조
+                        </h2>
+                        <p class="home-series-description">텐서, autograd, CUDA extension을 이해하고 커스텀 커널을 실제 학습 코드에 연결하기</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                20
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 21">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-20.html" class="home-series-post-link">
+                            PyTorch 내부 구조 20 - 실제로 PyTorch internals를 실력으로 연결하는 순서
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-19.html" class="home-series-post-link">
+                            PyTorch 내부 구조 19 - Extension Packaging, Testing, ABI 안정성
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-18.html" class="home-series-post-link">
+                            PyTorch 내부 구조 18 - Autograd와 Distributed Runtime은 어디서 만나는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-17.html" class="home-series-post-link">
+                            PyTorch 내부 구조 17 - Triton은 PyTorch 안에서 어떤 역할을 하는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-16.html" class="home-series-post-link">
+                            PyTorch 내부 구조 16 - FX, torch.compile, Inductor의 큰 그림
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-15.html" class="home-series-post-link">
+                            PyTorch 내부 구조 15 - PyTorch Profiling으로 Operator 병목 읽기
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-14.html" class="home-series-post-link">
+                            PyTorch 내부 구조 14 - AMP, Autocast, Numerical Stability
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-13.html" class="home-series-post-link">
+                            PyTorch 내부 구조 13 - Fused Operator는 언제 가치가 있는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-12.html" class="home-series-post-link">
+                            PyTorch 내부 구조 12 - Backward 구현 패턴과 저장 전략
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-11.html" class="home-series-post-link">
+                            PyTorch 내부 구조 11 - Operator Schema, Dispatch Key, Meta 함수
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-10.html" class="home-series-post-link">
+                            PyTorch 내부 구조 10 - CUDA Extension으로 Custom Kernel 연결하기
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-09.html" class="home-series-post-link">
+                            PyTorch 내부 구조 09 - C++ Extension의 기본 경로
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-08.html" class="home-series-post-link">
+                            PyTorch 내부 구조 08 - CUDA Stream, Event, Asynchronous Execution
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-07.html" class="home-series-post-link">
+                            PyTorch 내부 구조 07 - Tensor Lifetime, Caching Allocator, 메모리 재사용
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-06.html" class="home-series-post-link">
+                            PyTorch 내부 구조 06 - Custom Autograd Function을 언제 어떻게 써야 하는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-05.html" class="home-series-post-link">
+                            PyTorch 내부 구조 05 - Autograd Graph와 Engine은 어떻게 동작하는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-04.html" class="home-series-post-link">
+                            PyTorch 내부 구조 04 - Dispatcher와 Operator Registry는 무엇을 하는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-03.html" class="home-series-post-link">
+                            PyTorch 내부 구조 03 - Contiguous, Memory Format, Hidden Copy
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-02.html" class="home-series-post-link">
+                            PyTorch 내부 구조 02 - Tensor는 storage, size, stride 위에서 동작한다
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/pytorch-internals-01.html" class="home-series-post-link">
+                            PyTorch 내부 구조 01 - 왜 PyTorch internals를 알아야 하는가
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+            <div class="home-series-group">
+                
+                <!-- Series Header -->
+                <div class="home-series-header">
+                    <a href="/tech/ko/series/python-lecture.html" class="home-series-header-link" aria-label="Python 강좌 시리즈">
+                        <h2 class="home-series-title">
+                            Python 강좌 시리즈
+                        </h2>
+                        <p class="home-series-description">깊이있게 배우는 Python 프로그래밍 강좌</p>
+                        <div class="home-series-header-footer">
+                        <div class="home-series-count">
+                                5
+                                
+                                    개 글
+                                
+                            </div>
+                            <span class="home-series-cta">시리즈 소개 보기 →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Series Posts List -->
+                <ol class="home-series-posts" style="counter-reset: home-series-counter 6">
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/python-lecture-04.html" class="home-series-post-link">
+                            Python 강좌 4편 - 클래스의 내부 구조와 디스크립터
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/python-lecture-03.html" class="home-series-post-link">
+                            Python 강좌 3편 - 컨테이너와 제너레이터
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/python-lecture-02.html" class="home-series-post-link">
+                            Python 강좌 2편 - 파이썬의 어휘구조
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/python-lecture-01.html" class="home-series-post-link">
+                            Python 강좌 1편 - 파이썬의 철학과 설계 원칙
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+
+            
+
+            <!-- Series Group Start -->
+            
+
+                    <!-- Series Post Item -->
+                    <li class="home-series-post-item">
+                        <a href="/tech/ko/posts/python-lecture-00.html" class="home-series-post-link">
+                            Python 강좌 시리즈 소개
+                            
+                        </a>
+                    </li>
+
+            <!-- Series Group End -->
+            
+                </ol>
+            </div>
+            
+
+            
+        
+    
+</div>
+
+    </div>
+
+    <!-- Recent Posts Tab Content -->
+    <div class="tab-content" data-content="recent">
+        <div class="posts-controls">
+        <div class="filter-section">
+            <!-- Filters button will be inserted here by JS -->
+        </div>
+        <!-- Filter panel will be inserted here by JS -->
+    </div>
+
+        <!-- Grid View -->
+<div class="post-list post-grid-view">
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-08T00:00:00.000Z"">January 8, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/platform-engineering-03.html">플랫폼 엔지니어링 03 - 개발자 경험이 북극성인 이유</a>
+            </h2>
+            
+            <p class="post-excerpt">개발자 경험이 모든 플랫폼 의사결정을 이끌어야 하는 이유, 측정 방법, 그리고 이를 망치는 안티패턴들</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/platform-engineering-03.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-08T00:00:00.000Z"">January 8, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/pytorch-internals-02.html">PyTorch 내부 구조 02 - Tensor는 storage, size, stride 위에서 동작한다</a>
+            </h2>
+            
+            <p class="post-excerpt">텐서를 다차원 배열로만 보면 view와 layout 문제를 잘못 이해하게 된다</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/pytorch-internals-02.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-07T00:00:00.000Z"">January 7, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/compiler-04.html">오토마타와 컴파일러 04 - 푸시다운 오토마타</a>
+            </h2>
+            
+            <p class="post-excerpt">유한 오토마타에 스택을 추가하면 어떤 계산 능력을 얻게 되는가</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/compiler-04.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-06T00:00:00.000Z"">January 6, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/distributed-llm-training-01.html">분산 LLM 학습 01 - 왜 LLM 학습은 분산 시스템 문제가 되는가</a>
+            </h2>
+            
+            <p class="post-excerpt">여러 GPU를 붙이는 순간 학습 코드는 계산만의 문제가 아니라 메모리와 통신, 장애 복구까지 포함한 시스템 문제가 된다</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/distributed-llm-training-01.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-05T00:00:00.000Z"">January 5, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/linux-02.html">리눅스 내부 구조 02 - 프로세스와 스레드</a>
+            </h2>
+            
+            <p class="post-excerpt">리눅스에서 프로세스가 어떻게 생성되고 관리되며, 스레드와 어떤 관계를 갖는지</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/linux-02.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-05T00:00:00.000Z"">January 5, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/pytorch-internals-01.html">PyTorch 내부 구조 01 - 왜 PyTorch internals를 알아야 하는가</a>
+            </h2>
+            
+            <p class="post-excerpt">PyTorch를 단순한 파이썬 라이브러리가 아니라 런타임으로 이해해야 성능과 확장 문제를 제대로 다룰 수 있다</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/pytorch-internals-01.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-04T00:00:00.000Z"">January 4, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/comparch-02.html">컴퓨터 구조 02 - CPU 내부 구조</a>
+            </h2>
+            
+            <p class="post-excerpt">ALU, 제어 유닛, 데이터패스의 내부 동작과 명령어가 CPU를 통과하는 과정</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/comparch-02.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-02T00:00:00.000Z"">January 2, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/platform-engineering-02.html">플랫폼 엔지니어링 02 - 내부 개발자 플랫폼의 구조</a>
+            </h2>
+            
+            <p class="post-excerpt">내부 개발자 플랫폼 안에 실제로 뭐가 들어있는지 — 다섯 개의 플레인, 연결 방식, 그리고 만들기 vs 사기</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/platform-engineering-02.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-01-01T00:00:00.000Z"">January 1, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/mlops-01.html">MLOps 01 - MLOps란 무엇인가?</a>
+            </h2>
+            
+            <p class="post-excerpt">MLOps가 왜 필요한지, ML 라이프사이클의 현실적인 문제는 무엇인지</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/mlops-01.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+</div>
+
+
+        <script src="/assets/js/post-filter.js"></script>
+
+        
+
+<nav class="pagination" aria-label="Pagination">
+    <div class="pagination-inner">
+        
+        <a href="/tech/ko/page/11/" class="pagination-prev">
+            <span aria-hidden="true">←</span>
+            <span>Previous</span>
+        </a>
+        
+
+        <div class="pagination-pages">
+            
+            
+            <a href="/tech/ko/" class="pagination-page">1</a>
+            
+            
+            
+            <a href="/tech/ko/page/2/" class="pagination-page">2</a>
+            
+            
+            
+            <a href="/tech/ko/page/3/" class="pagination-page">3</a>
+            
+            
+            
+            <a href="/tech/ko/page/4/" class="pagination-page">4</a>
+            
+            
+            
+            <a href="/tech/ko/page/5/" class="pagination-page">5</a>
+            
+            
+            
+            <a href="/tech/ko/page/6/" class="pagination-page">6</a>
+            
+            
+            
+            <a href="/tech/ko/page/7/" class="pagination-page">7</a>
+            
+            
+            
+            <a href="/tech/ko/page/8/" class="pagination-page">8</a>
+            
+            
+            
+            <a href="/tech/ko/page/9/" class="pagination-page">9</a>
+            
+            
+            
+            <a href="/tech/ko/page/10/" class="pagination-page">10</a>
+            
+            
+            
+            <a href="/tech/ko/page/11/" class="pagination-page">11</a>
+            
+            
+            
+            <span class="pagination-page current" aria-current="page">12</span>
+            
+            
+            
+            <a href="/tech/ko/page/13/" class="pagination-page">13</a>
+            
+            
+            
+            <a href="/tech/ko/page/14/" class="pagination-page">14</a>
+            
+            
+        </div>
+
+        
+        <a href="/tech/ko/page/13/" class="pagination-next">
+            <span>Next</span>
+            <span aria-hidden="true">→</span>
+        </a>
+        
+    </div>
+</nav>
+
+
+    </div>
+
+    <script src="/assets/js/home-tabs.js"></script>
+</div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

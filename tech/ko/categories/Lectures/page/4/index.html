@@ -147,15 +147,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-01-24T00:00:00.000Z"">January 24, 2026</time>
+                <time datetime=""2026-01-21T00:00:00.000Z"">January 21, 2026</time>
                 <span class="post-card-dot"></span>
                 <span>undefined분 읽기</span>
             </div>
             <h2>
-                <a href="/tech/ko/posts/mlops-04.html">MLOps 04 - 모델 버전 관리와 레지스트리</a>
+                <a href="/tech/ko/posts/distributed-llm-training-06.html">분산 LLM 학습 06 - LLM 학습의 메모리는 어디에 쓰이는가</a>
             </h2>
             
-            <p class="post-excerpt">모델 버전 관리가 코드 버전 관리와 다른 이유, 그리고 모델 레지스트리의 역할</p>
+            <p class="post-excerpt">파라미터만 보는 순간 분산 학습 판단을 잘못하게 된다. activation, gradient, optimizer state를 함께 봐야 한다</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -166,7 +166,7 @@
                 
                 
                 </div>
-                <a href="/tech/ko/posts/mlops-04.html" class="read-more">더 읽기</a>
+                <a href="/tech/ko/posts/distributed-llm-training-06.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -176,15 +176,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-01-25T00:00:00.000Z"">January 25, 2026</time>
+                <time datetime=""2026-01-24T00:00:00.000Z"">January 24, 2026</time>
                 <span class="post-card-dot"></span>
                 <span>undefined분 읽기</span>
             </div>
             <h2>
-                <a href="/tech/ko/posts/comparch-05.html">컴퓨터 구조 05 - CPU 권한 수준과 보호</a>
+                <a href="/tech/ko/posts/distributed-llm-training-07.html">분산 LLM 학습 07 - NCCL과 토폴로지: 왜 같은 GPU 수인데 속도가 다를까</a>
             </h2>
             
-            <p class="post-excerpt">CPU가 왜 권한 수준을 구분하는지, x86 보호 링과 ARM 예외 수준이 어떻게 시스템을 보호하는지</p>
+            <p class="post-excerpt">분산 학습 성능은 GPU 개수보다 GPU들이 어떤 링크로 연결되어 있는지에 더 크게 흔들릴 때가 많다</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -195,7 +195,7 @@
                 
                 
                 </div>
-                <a href="/tech/ko/posts/comparch-05.html" class="read-more">더 읽기</a>
+                <a href="/tech/ko/posts/distributed-llm-training-07.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -210,10 +210,10 @@
                 <span>undefined분 읽기</span>
             </div>
             <h2>
-                <a href="/tech/ko/posts/compiler-07.html">오토마타와 컴파일러 07 - 하향식 파싱</a>
+                <a href="/tech/ko/posts/distributed-llm-training-08.html">분산 LLM 학습 08 - Tensor Parallel의 기본: 모델 내부 연산을 어떻게 나누는가</a>
             </h2>
             
-            <p class="post-excerpt">재귀 하강 파서와 LL(1) 파싱의 원리, 그리고 하향식 접근법의 강점과 한계</p>
+            <p class="post-excerpt">모델이 한 GPU에 안 들어가기 시작하면 더 이상 데이터만 나누는 것으로는 부족하고 연산 자체를 분할해야 한다</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -224,36 +224,7 @@
                 
                 
                 </div>
-                <a href="/tech/ko/posts/compiler-07.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-01-28T00:00:00.000Z"">January 28, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/linux-05.html">리눅스 내부 구조 05 - 파일 시스템</a>
-            </h2>
-            
-            <p class="post-excerpt">모든 것이 파일인 리눅스에서 VFS, inode, ext4가 어떻게 동작하는지</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/linux-05.html" class="read-more">더 읽기</a>
+                <a href="/tech/ko/posts/distributed-llm-training-08.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -268,10 +239,10 @@
                 <span>undefined분 읽기</span>
             </div>
             <h2>
-                <a href="/tech/ko/posts/mlops-05.html">MLOps 05 - 모델 서빙과 배포 전략</a>
+                <a href="/tech/ko/posts/distributed-llm-training-09.html">분산 LLM 학습 09 - Transformer에서 Tensor Parallel이 실제로 들어가는 위치</a>
             </h2>
             
-            <p class="post-excerpt">학습된 모델을 프로덕션에서 서빙하는 방법과 안전한 배포 전략</p>
+            <p class="post-excerpt">tensor parallel은 추상 개념이 아니라 attention projection, output projection, MLP 같은 구체적인 지점에 들어간다</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -282,36 +253,7 @@
                 
                 
                 </div>
-                <a href="/tech/ko/posts/mlops-05.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-01-31T00:00:00.000Z"">January 31, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/platform-engineering-06.html">플랫폼 엔지니어링 06 - 개발자 포털과 서비스 카탈로그</a>
-            </h2>
-            
-            <p class="post-excerpt">Backstage 같은 개발자 포털이 흩어진 문서, 도구, 암묵지의 혼란을 어떻게 정리하는지</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/platform-engineering-06.html" class="read-more">더 읽기</a>
+                <a href="/tech/ko/posts/distributed-llm-training-09.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -326,10 +268,10 @@
                 <span>undefined분 읽기</span>
             </div>
             <h2>
-                <a href="/tech/ko/posts/comparch-06.html">컴퓨터 구조 06 - 인터럽트와 예외</a>
+                <a href="/tech/ko/posts/distributed-llm-training-10.html">분산 LLM 학습 10 - Sequence Parallel과 긴 컨텍스트의 비용</a>
             </h2>
             
-            <p class="post-excerpt">인터럽트가 존재하는 이유와 IDT, ISR, PIC/APIC의 동작 원리</p>
+            <p class="post-excerpt">모델 크기만 커지는 것이 아니라 컨텍스트 길이도 길어지면 activation 메모리와 통신 패턴이 다시 달라진다</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -340,7 +282,7 @@
                 
                 
                 </div>
-                <a href="/tech/ko/posts/comparch-06.html" class="read-more">더 읽기</a>
+                <a href="/tech/ko/posts/distributed-llm-training-10.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -350,15 +292,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-03T00:00:00.000Z"">February 3, 2026</time>
+                <time datetime=""2026-02-05T00:00:00.000Z"">February 5, 2026</time>
                 <span class="post-card-dot"></span>
                 <span>undefined분 읽기</span>
             </div>
             <h2>
-                <a href="/tech/ko/posts/linux-06.html">리눅스 내부 구조 06 - 시스템 콜과 커널</a>
+                <a href="/tech/ko/posts/distributed-llm-training-11.html">분산 LLM 학습 11 - Pipeline Parallel의 기본과 Stage 분할 감각</a>
             </h2>
             
-            <p class="post-excerpt">시스템 콜이 유저 공간에서 커널 공간으로 전환되는 과정과 커널 모듈의 동작 원리</p>
+            <p class="post-excerpt">모델을 레이어 단위로 여러 stage에 나누는 순간 계산 분할뿐 아니라 idle time과 stage imbalance가 핵심 문제가 된다</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -369,7 +311,7 @@
                 
                 
                 </div>
-                <a href="/tech/ko/posts/linux-06.html" class="read-more">더 읽기</a>
+                <a href="/tech/ko/posts/distributed-llm-training-11.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -379,15 +321,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-04T00:00:00.000Z"">February 4, 2026</time>
+                <time datetime=""2026-02-08T00:00:00.000Z"">February 8, 2026</time>
                 <span class="post-card-dot"></span>
                 <span>undefined분 읽기</span>
             </div>
             <h2>
-                <a href="/tech/ko/posts/compiler-08.html">오토마타와 컴파일러 08 - 상향식 파싱</a>
+                <a href="/tech/ko/posts/distributed-llm-training-12.html">분산 LLM 학습 12 - GPipe, 1F1B, Interleaving: Pipeline Schedule은 어떻게 고르는가</a>
             </h2>
             
-            <p class="post-excerpt">시프트-리듀스 파싱과 LR 파서의 원리, 그리고 파서 생성기가 동작하는 방식</p>
+            <p class="post-excerpt">pipeline parallel의 효율은 레이어 분할보다 schedule 선택에 더 크게 흔들릴 때가 많다</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -398,7 +340,65 @@
                 
                 
                 </div>
-                <a href="/tech/ko/posts/compiler-08.html" class="read-more">더 읽기</a>
+                <a href="/tech/ko/posts/distributed-llm-training-12.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-02-11T00:00:00.000Z"">February 11, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/distributed-llm-training-13.html">분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프</a>
+            </h2>
+            
+            <p class="post-excerpt">메모리를 아끼기 위해 계산을 다시 하는 전략은 단순한 옵션이 아니라 분산 학습 설계의 중심 선택지다</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/distributed-llm-training-13.html" class="read-more">더 읽기</a>
+            </div>
+        </div>
+    </article>
+    
+    <article class="post-preview" data-tags="" data-category="Lectures">
+        
+        
+        <div class="post-preview-content">
+            <div class="post-card-eyebrow">
+                <time datetime=""2026-02-14T00:00:00.000Z"">February 14, 2026</time>
+                <span class="post-card-dot"></span>
+                <span>undefined분 읽기</span>
+            </div>
+            <h2>
+                <a href="/tech/ko/posts/distributed-llm-training-14.html">분산 LLM 학습 14 - ZeRO Stage 1, 2, 3는 각각 무엇을 없애는가</a>
+            </h2>
+            
+            <p class="post-excerpt">ZeRO는 하나의 기술이 아니라 어떤 메모리 복제를 줄일 것인지 단계적으로 선택하는 체계다</p>
+            
+            <div class="post-card-footer">
+                <div class="post-card-tags">
+                
+                <div class="post-meta-bottom">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+                
+                
+                </div>
+                <a href="/tech/ko/posts/distributed-llm-training-14.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -447,6 +447,34 @@
             
             
             <a href="/tech/ko/categories/Lectures/page/7/" class="pagination-page">7</a>
+            
+            
+            
+            <a href="/tech/ko/categories/Lectures/page/8/" class="pagination-page">8</a>
+            
+            
+            
+            <a href="/tech/ko/categories/Lectures/page/9/" class="pagination-page">9</a>
+            
+            
+            
+            <a href="/tech/ko/categories/Lectures/page/10/" class="pagination-page">10</a>
+            
+            
+            
+            <a href="/tech/ko/categories/Lectures/page/11/" class="pagination-page">11</a>
+            
+            
+            
+            <a href="/tech/ko/categories/Lectures/page/12/" class="pagination-page">12</a>
+            
+            
+            
+            <a href="/tech/ko/categories/Lectures/page/13/" class="pagination-page">13</a>
+            
+            
+            
+            <a href="/tech/ko/categories/Lectures/page/14/" class="pagination-page">14</a>
             
             
         </div>

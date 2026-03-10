@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용 - 재영의 기술 블로그</title>
+    <meta name="description" content="가장 기본적인 분산 학습 방식인 data parallel은 단순해 보이지만 gradient 동기화와 메모리 복제 비용을 함께 안고 있다">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-02.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-02.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-02.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-02.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-02.html" />
+    <meta property="og:title" content="분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용">
+    <meta property="og:description" content="가장 기본적인 분산 학습 방식인 data parallel은 단순해 보이지만 gradient 동기화와 메모리 복제 비용을 함께 안고 있다">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-09T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="distributed-training">
+    
+    <meta property="article:tag" content="data-parallel">
+    
+    <meta property="article:tag" content="sgd">
+    
+    <meta property="article:tag" content="all-reduce">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-02.html">
+    <meta name="twitter:title" content="분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용">
+    <meta name="twitter:description" content="가장 기본적인 분산 학습 방식인 data parallel은 단순해 보이지만 gradient 동기화와 메모리 복제 비용을 함께 안고 있다">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용",
+  "description": "가장 기본적인 분산 학습 방식인 data parallel은 단순해 보이지만 gradient 동기화와 메모리 복제 비용을 함께 안고 있다",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-09T00:00:00.000Z",
+  "dateModified": "2026-01-09T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-02.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "ko-KR",
+  "keywords": "distributed-training, data-parallel, sgd, all-reduce"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/ko/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용">분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-09T00:00:00.000Z"" class="post-kicker">January 9, 2026</time>
+            <h1 class="post-title">분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용</h1>
+            <p class="post-deck">가장 기본적인 분산 학습 방식인 data parallel은 단순해 보이지만 gradient 동기화와 메모리 복제 비용을 함께 안고 있다</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">분량:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">2분 읽기</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">시리즈:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/series/distributed-llm-training.html" class="series-badge">📚 분산 LLM 학습 (2/20)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">카테고리:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">태그:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/ko/tags/distributed-training.html" class="tag">distributed-training</a>
+                    
+                    <a href="/tech/ko/tags/data-parallel.html" class="tag">data-parallel</a>
+                    
+                    <a href="/tech/ko/tags/sgd.html" class="tag">sgd</a>
+                    
+                    <a href="/tech/ko/tags/all-reduce.html" class="tag">all-reduce</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 분산 LLM 학습</h3>
+        <p class="post-series-description">data parallel부터 tensor parallel, FSDP, ZeRO, 그리고 현대 LLM 학습 프레임워크까지</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-01.html" class="post-series-link">분산 LLM 학습 01 - 왜 LLM 학습은 분산 시스템 문제가 되는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                분산 LLM 학습 02 - Synchronous SGD와 Data Parallel의 진짜 비용
+                <span class="current-indicator">← 현재 글</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-03.html" class="post-series-link">분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-04.html" class="post-series-link">분산 LLM 학습 04 - PyTorch DDP는 내부에서 무엇을 하는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-05.html" class="post-series-link">분산 LLM 학습 05 - Global Batch Size, Gradient Accumulation, Learning Rate Scaling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-06.html" class="post-series-link">분산 LLM 학습 06 - LLM 학습의 메모리는 어디에 쓰이는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-07.html" class="post-series-link">분산 LLM 학습 07 - NCCL과 토폴로지: 왜 같은 GPU 수인데 속도가 다를까</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-08.html" class="post-series-link">분산 LLM 학습 08 - Tensor Parallel의 기본: 모델 내부 연산을 어떻게 나누는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-09.html" class="post-series-link">분산 LLM 학습 09 - Transformer에서 Tensor Parallel이 실제로 들어가는 위치</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-10.html" class="post-series-link">분산 LLM 학습 10 - Sequence Parallel과 긴 컨텍스트의 비용</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-11.html" class="post-series-link">분산 LLM 학습 11 - Pipeline Parallel의 기본과 Stage 분할 감각</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-12.html" class="post-series-link">분산 LLM 학습 12 - GPipe, 1F1B, Interleaving: Pipeline Schedule은 어떻게 고르는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-13.html" class="post-series-link">분산 LLM 학습 13 - Activation Checkpointing과 Recomputation의 트레이드오프</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-14.html" class="post-series-link">분산 LLM 학습 14 - ZeRO Stage 1, 2, 3는 각각 무엇을 없애는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-15.html" class="post-series-link">분산 LLM 학습 15 - FSDP는 DDP와 무엇이 다르고 언제 유리한가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-16.html" class="post-series-link">분산 LLM 학습 16 - Communication Overlap은 어떻게 step 시간을 숨기는가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-17.html" class="post-series-link">분산 LLM 학습 17 - Checkpoint, Resume, Fault Tolerance는 왜 핵심인가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-18.html" class="post-series-link">분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-19.html" class="post-series-link">분산 LLM 학습 19 - Megatron-LM과 DeepSpeed를 어떻게 읽을 것인가</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/ko/posts/distributed-llm-training-20.html" class="post-series-link">분산 LLM 학습 20 - 실제 LLM 학습 스택을 설계하는 순서</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="-">가장 먼저 이해해야 할 형태</h2>
+<p>분산 학습의 출발점은 data parallel이다. 각 GPU가 같은 모델 복사본을 갖고 서로 다른 mini-batch를 처리한 뒤, backward가 끝나면 gradient를 평균내고 optimizer step을 수행한다.</p>
+<p>겉으로는 간단하다.</p>
+<ol class="ol-list">
+<li>모델을 모든 GPU에 복제한다</li><li>입력 배치를 rank마다 나눈다</li><li>각 rank가 forward/backward를 수행한다</li><li>gradient를 all-reduce로 모은다</li><li>각 rank가 동일한 optimizer step을 수행한다</li></ol>
+<p>이 구조가 중요한 이유는, 이후의 기법들이 거의 다 이 기본형의 약점을 보완하기 위해 등장했기 때문이다.</p>
+<h2 id="-synchronous-sgd-">왜 synchronous SGD를 기본으로 쓰는가?</h2>
+<p>실무에서 대부분의 학습은 비동기보다 동기식 업데이트를 기본으로 한다. 이유는 단순하다. 모든 rank가 같은 step에서 같은 파라미터 상태를 공유하면 디버깅과 재현성이 훨씬 낫다. 반대로 비동기 업데이트는 stale gradient 문제와 수렴 불안정성이 빨리 나타난다.</p>
+<p>특히 LLM처럼 이미 학습 자체가 민감한 경우에는, 통신을 조금 아끼겠다고 optimizer 동작을 더 복잡하게 만드는 쪽이 오히려 손해일 때가 많다.</p>
+<h2 id="data-parallel-">data parallel이 좋은 이유</h2>
+<p>data parallel의 장점은 분명하다.</p>
+<ul class="ul-list">
+<li>구현이 가장 단순하다</li><li>모델 코드를 크게 바꾸지 않아도 된다</li><li>각 GPU가 동일한 계산 그래프를 실행하므로 디버깅이 상대적으로 쉽다</li><li>배치가 충분히 크면 계산량을 비교적 잘 분산할 수 있다</li></ul>
+<p>그래서 모델이 한 GPU에 충분히 들어가고, 네트워크가 너무 느리지 않다면 data parallel은 가장 먼저 시도할 전략이다.</p>
+<h2 id="-">그러나 두 가지 비용이 곧바로 드러난다</h2>
+<h3 id="1-">1. 모델 복제 비용</h3>
+<p>모든 rank가 전체 모델을 들고 있으므로 파라미터, gradient, optimizer state가 그대로 복제된다. Adam 계열 optimizer를 쓰면 파라미터보다 optimizer state가 더 큰 부담이 되기도 한다.</p>
+<p>예를 들어 파라미터가 <code class="inline-code">P</code> byte라면 대략 다음이 함께 따라온다.</p>
+<ul class="ul-list">
+<li>parameters: <code class="inline-code">P</code></li><li>gradients: <code class="inline-code">P</code></li><li>optimizer state: 대개 <code class="inline-code">2P</code> 이상</li></ul>
+<p>즉 data parallel은 계산은 잘 나누지만 메모리는 잘 나누지 못한다.</p>
+<h3 id="2-gradient-synchronization-">2. gradient synchronization 비용</h3>
+<p>각 rank의 backward가 끝난 뒤에는 gradient를 모아야 한다. 이때 발생하는 all-reduce는 모델이 커질수록 비싸진다. 특히 inter-node 구간이 느리면 계산은 빨리 끝났는데 통신 때문에 다음 step으로 못 넘어가는 상황이 쉽게 생긴다.</p>
+<h2 id="global-batch-size-">global batch size는 왜 중요할까?</h2>
+<p>rank 수를 늘리면 global batch size도 커진다.</p>
+<p><code class="inline-code">global_batch = micro_batch_per_rank * num_ranks * grad_accum_steps</code></p>
+<p>이 값이 커지면 throughput은 좋아질 수 있지만, optimizer와 학습률 스케줄은 다시 조정해야 한다. 단순히 GPU를 더 붙였다고 항상 더 잘 학습되는 것은 아니다.</p>
+<h2 id="-">실무에서 보는 첫 번째 판단 기준</h2>
+<p>data parallel을 볼 때는 다음을 먼저 확인하는 편이 좋다.</p>
+<ul class="ul-list">
+<li>모델이 한 GPU 메모리에 충분히 들어가는가</li><li>all-reduce가 backward보다 짧은가</li><li>global batch size를 키워도 학습이 안정적인가</li><li>dataloader와 input pipeline이 rank 수 증가를 따라가는가</li></ul>
+<p>이 질문에서 하나라도 크게 흔들리면 다른 전략이 필요해진다.</p>
+<p>다음 글에서는 data parallel의 핵심 통신인 all-reduce를 더 깊게 본다. ring all-reduce가 왜 많이 쓰이는지, 그리고 통신 비용을 어떻게 읽어야 하는지를 정리한다.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/ko/posts/mlops-02.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">이전 글</span>
+            <strong>MLOps 02 - 데이터 파이프라인과 피처 엔지니어링</strong>
+            <p>원시 데이터가 학습 데이터가 되기까지의 과정과, 데이터 품질이 모델 성능을 결정하는 이유</p>
+            <span class="post-nav-card-meta">
+                <span>January 9, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3분 읽기</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/ko/posts/comparch-03.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">다음 글</span>
+            <strong>컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)</strong>
+            <p>ISA의 역할과 CISC/RISC 철학, x86과 ARM의 설계 차이</p>
+            <span class="post-nav-card-meta">
+                <span>January 10, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4분 읽기</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>이어서 읽기</h2>
+            <p>다음으로 읽기 좋은 관련 글들입니다.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-03.html">분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법</a></h3>
+                <p>분산 학습에서 가장 자주 등장하는 collective인 all-reduce를 이해해야 gradient synchronization 비용을 제대로 읽을 수 있다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-04.html">분산 LLM 학습 04 - PyTorch DDP는 내부에서 무엇을 하는가</a></h3>
+                <p>DDP는 단순 래퍼가 아니라 autograd hook, gradient bucket, process group을 사용해 동기화를 조직하는 런타임이다</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2분 읽기</span>
+                </div>
+                <h3><a href="/tech/ko/posts/distributed-llm-training-05.html">분산 LLM 학습 05 - Global Batch Size, Gradient Accumulation, Learning Rate Scaling</a></h3>
+                <p>GPU 수를 늘리는 일은 단순한 throughput 증가가 아니라 optimizer가 보는 batch 의미를 바꾸는 일이다</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

@@ -226,7 +226,7 @@
             <div class="post-meta-row">
                 <span class="post-meta-label">분량:</span>
                 <div class="post-meta-values">
-                    <span class="series-badge">3분 읽기</span>
+                    <span class="series-badge">4분 읽기</span>
                 </div>
             </div>
             
@@ -407,6 +407,16 @@
 <h2 id="-">유도와 파스 트리</h2>
 <p>문맥 자유 문법에서 문자열을 생성하는 과정을 유도(Derivation)라고 부른다. 시작 기호에서 출발하여 생성 규칙을 반복 적용하면, 결국 단말 기호로만 이루어진 문자열에 도달한다. 이 과정은 두 가지 방식으로 수행할 수 있다. 항상 가장 왼쪽의 비단말을 먼저 대치하는 최좌 유도(Leftmost Derivation)와, 가장 오른쪽의 비단말을 먼저 대치하는 최우 유도(Rightmost Derivation)가 그것이다.</p>
 <p>유도 과정을 트리 구조로 나타낸 것이 파스 트리(Parse Tree)이다. 루트 노드는 시작 기호, 내부 노드는 비단말, 리프 노드는 단말 기호가 된다. 파스 트리는 문자열의 구문 구조를 시각적으로 보여주며, 컴파일러가 소스 코드의 의미를 분석하는 데 핵심적인 역할을 한다.</p>
+<p>처음 CFG를 배울 때 자주 헷갈리는 부분이 있다. &quot;문법이 문자열을 생성한다&quot;는 말이 너무 추상적으로 들린다는 점이다. 실제로는 시작 기호에서 출발해 아직 확장되지 않은 비단말을 하나씩 풀어 나가는 과정이라고 생각하면 된다.</p>
+<p>예를 들어 다음 문법이 있다고 하자.</p>
+<pre><code>S → aSb | ε</code></pre>
+<p>이 문법으로 <code class="inline-code">aabb</code>를 만드는 과정을 한 줄씩 쓰면 다음과 같다.</p>
+<pre><code>S
+→ aSb
+→ aaSbb
+→ aaεbb
+→ aabb</code></pre>
+<p>이 과정을 보면 문법은 &quot;문자열을 한 번에 맞추는 규칙&quot;이 아니라, 점점 더 구체적인 형태로 바꾸는 재작성 시스템이라는 점이 분명해진다.</p>
 <p>간단한 예시로, 다음 문법을 생각해 보자.</p>
 <pre><code>S → aSb | ε</code></pre>
 <p>이 문법은 정확히 <code class="inline-code">{aⁿbⁿ | n ≥ 0}</code>을 생성한다. S에서 <code class="inline-code">aSb</code>를 적용할 때마다 a와 b가 하나씩 추가되고, 최종적으로 ε을 적용하여 유도를 종료한다. 정규 언어로는 기술할 수 없었던 이 언어가 문맥 자유 문법으로는 단 두 줄의 규칙으로 표현된다.</p>
@@ -417,6 +427,14 @@ T → T * F | F
 F → ( E ) | id</code></pre>
 <p>이 문법에서 E는 표현식(Expression), T는 항(Term), F는 인수(Factor)를 나타낸다. 이 문법이 단순해 보이지만, 여기에는 중요한 설계 의도가 담겨 있다. E를 T를 통해 정의하고, T를 F를 통해 정의함으로써 연산자 우선순위가 문법 구조 자체에 반영된다. 곱셈(*)이 덧셈(+)보다 파스 트리에서 더 아래쪽에 위치하게 되어, 곱셈이 먼저 계산되는 것이 자연스럽게 보장된다.</p>
 <p><code class="inline-code">id + id * id</code>라는 입력에 대해 위 문법으로 파스 트리를 구성하면, <code class="inline-code">id * id</code> 부분이 먼저 T 노드 아래에 묶이고, 그 결과가 <code class="inline-code">id +</code>와 결합되어 E 노드를 형성한다. 연산자 우선순위가 문법의 계층 구조에 의해 자동으로 결정된다.</p>
+<p>이 지점은 컴파일러 공부에서 매우 중요하다. 우선순위를 &quot;파서가 따로 외워서&quot; 처리하는 것이 아니라, 문법 구조 자체가 우선순위를 강제한다는 뜻이기 때문이다.</p>
+<p>조금 더 직관적으로 풀어보면 다음과 같다.</p>
+<ul class="ul-list">
+<li><code class="inline-code">E</code>는 덧셈 수준의 표현식이다</li><li><code class="inline-code">T</code>는 곱셈 수준의 표현식이다</li><li><code class="inline-code">F</code>는 더 이상 쪼갤 수 없는 기본 단위다</li></ul>
+<p>그래서 <code class="inline-code">id + id * id</code>를 읽을 때 파서는 먼저 왼쪽의 <code class="inline-code">id</code>를 하나의 <code class="inline-code">T</code>로 보고, 그 뒤 <code class="inline-code">+</code>를 만난 다음 오른쪽을 다시 <code class="inline-code">T</code>로 읽는다. 그런데 오른쪽 <code class="inline-code">T</code> 내부에서는 <code class="inline-code">id * id</code>가 완전한 하나의 항으로 묶인다. 결과적으로 곱셈이 덧셈보다 더 안쪽에서 결합된다.</p>
+<p>문법 계층을 이렇게 나누지 않고 단순히</p>
+<pre><code class="language-text">E → E + E | E * E | (E) | id</code></pre>
+<p>처럼 쓰면 표현은 짧아지지만 곧바로 모호성이 생긴다. <code class="inline-code">id + id * id</code>를 <code class="inline-code">(+ (*))</code>로 읽을 수도 있고 <code class="inline-code">(* (+))</code>로 읽을 수도 있기 때문이다. 즉 &quot;짧은 문법&quot;이 항상 &quot;좋은 문법&quot;은 아니다.</p>
 <h2 id="모호성">모호성</h2>
 <p>하나의 문자열에 대해 서로 다른 파스 트리가 두 개 이상 존재할 수 있는 문법을 모호한 문법(Ambiguous Grammar)이라고 한다. 모호성은 컴파일러 설계에서 심각한 문제를 야기한다. 파스 트리가 다르면 프로그램의 의미가 달라질 수 있기 때문이다.</p>
 <p>대표적인 예가 if-else 모호성이다.</p>
@@ -424,6 +442,14 @@ F → ( E ) | id</code></pre>
    | if E then S else S
    | other</code></pre>
 <p><code class="inline-code">if E₁ then if E₂ then S₁ else S₂</code>라는 문장에서 else가 바깥쪽 if에 속하는지 안쪽 if에 속하는지가 문법만으로는 결정되지 않는다. 대부분의 프로그래밍 언어는 &quot;else는 가장 가까운 if에 매칭된다&quot;는 규칙을 채택하지만, 이 규칙은 문법 자체가 아니라 추가적인 조건에 의해 강제된다.</p>
+<p>이 문제를 더 현실적으로 적어 보면 다음 코드와 같다.</p>
+<pre><code class="language-c">if (a)
+    if (b)
+        x = 1;
+    else
+        x = 2;</code></pre>
+<p>여기서 <code class="inline-code">else</code>는 바깥 <code class="inline-code">if (a)</code>에 붙는가, 안쪽 <code class="inline-code">if (b)</code>에 붙는가? 사람은 보통 &quot;안쪽 if에 붙는다&quot;고 읽지만, 모호한 문법은 둘 다 가능한 해석으로 남겨 둔다. 그래서 파서 입장에서는 어느 트리를 만들어야 할지 결정할 근거가 부족하다.</p>
+<p>이 예시는 모호성이 왜 위험한지 잘 보여 준다. 같은 토큰 스트림인데도 서로 다른 파스 트리가 가능하면, 이후 의미 분석과 코드 생성 결과도 달라질 수 있다.</p>
 <p>모호성을 해결하는 방법은 여러 가지이다. 문법을 재작성하여 모호성을 제거할 수 있고, 파서에 우선순위 규칙이나 결합 방향 규칙을 추가할 수도 있다. 어떤 방법을 선택하든, 모호한 문법을 그대로 사용하면 컴파일러가 동일한 코드에 대해 다른 결과를 낼 수 있다는 점을 인식해야 한다.</p>
 <h2 id="bnf-">BNF 표기법</h2>
 <p>실무에서 문맥 자유 문법을 기술할 때는 BNF(Backus-Naur Form) 표기법이 널리 사용된다. 존 배커스(John Backus)와 페터 나우르(Peter Naur)가 ALGOL 60 언어의 문법을 기술하기 위해 도입한 이 표기법은 생성 규칙의 표준적인 작성 방식이 되었다.</p>
@@ -434,6 +460,10 @@ F → ( E ) | id</code></pre>
 <h2 id="-">문맥 자유 문법의 위치</h2>
 <p>촘스키 계층(Chomsky Hierarchy)에서 문맥 자유 문법은 정규 문법보다 강력하고 문맥 의존 문법보다는 약한, 계층의 두 번째 단계에 위치한다. 모든 정규 언어는 문맥 자유 언어이기도 하지만, 그 역은 성립하지 않는다. <code class="inline-code">{aⁿbⁿ}</code>이 대표적인 반례인 셈이다.</p>
 <p>프로그래밍 언어의 문법은 대부분 문맥 자유 문법으로 기술할 수 있으며, 이 때문에 컴파일러의 파서는 문맥 자유 문법을 기반으로 설계된다. 다만, 변수 선언 전 사용 금지나 타입 일치 같은 규칙은 문맥 자유 문법의 범위를 넘어서며, 이런 규칙은 별도의 의미 분석(Semantic Analysis) 단계에서 처리된다.</p>
+<p>이 문장을 더 실무적으로 바꾸면 이렇다.</p>
+<ul class="ul-list">
+<li>렉서는 &quot;토큰을 어디서 자를지&quot;를 다룬다</li><li>CFG 기반 파서는 &quot;토큰들이 어떤 구조를 이루는지&quot;를 다룬다</li><li>의미 분석은 &quot;그 구조가 실제로 말이 되는지&quot;를 다룬다</li></ul>
+<p>즉 CFG는 컴파일러의 모든 문제를 해결하지는 못하지만, 구문 구조를 설명하는 중심 도구로는 충분히 강력하다. 프로그래밍 언어 문법을 읽을 때도 &quot;이 규칙이 어떤 구조를 만들려고 이렇게 생겼는가&quot;를 보는 습관이 중요하다.</p>
 <p>다음 글에서는 문맥 자유 문법을 인식할 수 있는 계산 모델인 푸시다운 오토마타를 다룬다.</p>
 
         </div>

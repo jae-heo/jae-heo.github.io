@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer - Jae's Tech Blog</title>
+    <meta name="description" content="Tensor parallelism becomes real when you map it onto QKV projections, attention output paths, and the two large MLP projections inside a transformer block">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-09.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-09.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/distributed-llm-training-09.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-09.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-09.html" />
+    <meta property="og:title" content="Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer">
+    <meta property="og:description" content="Tensor parallelism becomes real when you map it onto QKV projections, attention output paths, and the two large MLP projections inside a transformer block">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-01-30T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="distributed-training">
+    
+    <meta property="article:tag" content="tensor-parallel">
+    
+    <meta property="article:tag" content="transformer">
+    
+    <meta property="article:tag" content="attention">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/distributed-llm-training-09.html">
+    <meta name="twitter:title" content="Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer">
+    <meta name="twitter:description" content="Tensor parallelism becomes real when you map it onto QKV projections, attention output paths, and the two large MLP projections inside a transformer block">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer",
+  "description": [
+    "Tensor parallelism becomes real when you map it onto QKV projections",
+    "attention output paths",
+    "and the two large MLP projections inside a transformer block"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-01-30T00:00:00.000Z",
+  "dateModified": "2026-01-30T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/distributed-llm-training-09.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "distributed-training, tensor-parallel, transformer, attention"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <a href="/tech/en/game/">Game</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer">Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-01-30T00:00:00.000Z"" class="post-kicker">January 30, 2026</time>
+            <h1 class="post-title">Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer</h1>
+            <p class="post-deck">Tensor parallelism becomes real when you map it onto QKV projections, attention output paths, and the two large MLP projections inside a transformer block</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">2 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/distributed-llm-training.html" class="series-badge">📚 Distributed LLM Training (9/20)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/distributed-training.html" class="tag">distributed-training</a>
+                    
+                    <a href="/tech/en/tags/tensor-parallel.html" class="tag">tensor-parallel</a>
+                    
+                    <a href="/tech/en/tags/transformer.html" class="tag">transformer</a>
+                    
+                    <a href="/tech/en/tags/attention.html" class="tag">attention</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 Distributed LLM Training</h3>
+        <p class="post-series-description">From data parallelism to tensor parallelism, FSDP, ZeRO, and modern LLM training frameworks</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-01.html" class="post-series-link">Distributed LLM Training 01 - Why LLM Training Becomes a Distributed Systems Problem</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-02.html" class="post-series-link">Distributed LLM Training 02 - The Real Cost of Synchronous SGD and Data Parallelism</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-03.html" class="post-series-link">Distributed LLM Training 03 - All-Reduce, Ring, and How to Read Communication Cost</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-04.html" class="post-series-link">Distributed LLM Training 04 - What PyTorch DDP Actually Does Internally</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-05.html" class="post-series-link">Distributed LLM Training 05 - Global Batch Size, Gradient Accumulation, and Learning Rate Scaling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-06.html" class="post-series-link">Distributed LLM Training 06 - Where LLM Training Memory Actually Goes</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-07.html" class="post-series-link">Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-08.html" class="post-series-link">Distributed LLM Training 08 - Tensor Parallel Basics: Splitting Computation Inside the Model</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-10.html" class="post-series-link">Distributed LLM Training 10 - Sequence Parallelism and the Cost of Long Context</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-11.html" class="post-series-link">Distributed LLM Training 11 - Pipeline Parallel Basics and How to Think About Stage Splits</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-12.html" class="post-series-link">Distributed LLM Training 12 - GPipe, 1F1B, and Interleaving: Choosing a Pipeline Schedule</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-13.html" class="post-series-link">Distributed LLM Training 13 - Activation Checkpointing and the Cost of Recomputation</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-14.html" class="post-series-link">Distributed LLM Training 14 - What ZeRO Stage 1, 2, and 3 Each Remove</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-15.html" class="post-series-link">Distributed LLM Training 15 - How FSDP Differs from DDP and When It Helps</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-16.html" class="post-series-link">Distributed LLM Training 16 - How Communication Overlap Hides Step Time</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-17.html" class="post-series-link">Distributed LLM Training 17 - Why Checkpointing, Resume, and Fault Tolerance Matter So Much</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-18.html" class="post-series-link">Distributed LLM Training 18 - Deadlocks, Timeouts, and OOMs: Debugging Distributed Training</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-19.html" class="post-series-link">Distributed LLM Training 19 - How to Read Megatron-LM and DeepSpeed Structurally</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/distributed-llm-training-20.html" class="post-series-link">Distributed LLM Training 20 - A Practical Order for Designing an LLM Training Stack</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="move-from-abstraction-to-block-structure">Move from abstraction to block structure</h2>
+<p>The best way to understand tensor parallelism is to lay out a transformer block and ask where the largest computations live.</p>
+<p>Usually the heavy pieces are:</p>
+<ul class="ul-list">
+<li>QKV projection</li><li>attention output projection</li><li>MLP up projection</li><li>MLP down projection</li></ul>
+<p>Those are the most natural places to split work across ranks.</p>
+<h2 id="what-happens-in-attention">What happens in attention</h2>
+<p>If QKV projection is partitioned, each rank may handle a subset of heads or hidden slices. That often fits transformer structure well. But downstream, the outputs usually need to be combined or reduced in some form.</p>
+<p>So the important questions become:</p>
+<ul class="ul-list">
+<li>which head or hidden partitioning is being used?</li><li>where does communication happen relative to softmax and projection?</li><li>how does longer sequence length affect activation movement?</li></ul>
+<h2 id="what-happens-in-the-mlp">What happens in the MLP</h2>
+<p>The MLP often expands hidden size and then projects back down. This is a very natural place for tensor parallel layouts such as column-parallel followed by row-parallel projections.</p>
+<p>That pattern often works well because the middle activation structure can flow naturally between the two linear operations without excessive extra synchronization.</p>
+<h2 id="not-every-operation-fits-equally-well">Not every operation fits equally well</h2>
+<p>Large dense matmuls fit tensor parallelism well. But not everything inside a transformer looks like that. Normalization, residual additions, masking, and some indexing operations require more careful handling and can reduce the elegance of a parallel layout.</p>
+<p>The next post extends this line of thought into sequence parallelism and long-context training, where activation size itself becomes a major design pressure.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/gpu-systems-01.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>GPU Systems 01 - Roadmap to GPU Kernel Engineering</strong>
+            <p>A practical study order from GPU architecture to CUDA, Triton, and kernel optimization</p>
+            <span class="post-nav-card-meta">
+                <span>January 30, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>4 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/platform-engineering-06.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Platform Engineering 06 - Developer Portals and Service Catalogs</strong>
+            <p>How developer portals like Backstage bring order to the chaos of scattered docs, tools, and tribal knowledge</p>
+            <span class="post-nav-card-meta">
+                <span>January 31, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>3 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/distributed-llm-training-10.html">Distributed LLM Training 10 - Sequence Parallelism and the Cost of Long Context</a></h3>
+                <p>As context length grows, activation memory and communication patterns change again, and sequence-oriented partitioning starts to matter</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">2 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/distributed-llm-training-11.html">Distributed LLM Training 11 - Pipeline Parallel Basics and How to Think About Stage Splits</a></h3>
+                <p>Once the model is split by depth into stages, idle time and stage imbalance become just as important as memory savings</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">1 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/distributed-llm-training-12.html">Distributed LLM Training 12 - GPipe, 1F1B, and Interleaving: Choosing a Pipeline Schedule</a></h3>
+                <p>Pipeline efficiency is shaped heavily by scheduling, because bubble size, activation memory, and implementation complexity all depend on it</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

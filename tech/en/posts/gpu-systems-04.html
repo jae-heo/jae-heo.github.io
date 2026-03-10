@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration - Jae's Tech Blog</title>
+    <meta name="description" content="How to think about indexing and launch configuration when writing CUDA kernels">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-04.html">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+    
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-04.html">
+    
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/tech/ko/posts/gpu-systems-04.html">
+    
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/tech/en/posts/gpu-systems-04.html">
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jae-heo.github.io/tech/en/posts/gpu-systems-04.html" />
+    <meta property="og:title" content="GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration">
+    <meta property="og:description" content="How to think about indexing and launch configuration when writing CUDA kernels">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+    <meta property="article:published_time" content=""2026-02-05T00:00:00.000Z"">
+    
+    
+    <meta property="article:tag" content="cuda">
+    
+    <meta property="article:tag" content="kernel">
+    
+    <meta property="article:tag" content="launch-configuration">
+    
+    <meta property="article:tag" content="gpu">
+    
+    <meta property="article:tag" content="indexing">
+    
+    
+    
+    <meta property="article:section" content="Lectures">
+    
+    <meta property="article:author" content="Jae">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io/tech/en/posts/gpu-systems-04.html">
+    <meta name="twitter:title" content="GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration">
+    <meta name="twitter:description" content="How to think about indexing and launch configuration when writing CUDA kernels">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+    <script type="application/ld+json">
+    {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration",
+  "description": "How to think about indexing and launch configuration when writing CUDA kernels",
+  "author": {
+    "@type": "Person",
+    "name": "Jae"
+  },
+  "datePublished": "2026-02-05T00:00:00.000Z",
+  "dateModified": "2026-02-05T00:00:00.000Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://jae-heo.github.io/tech/en/posts/gpu-systems-04.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Jae's Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://jae-heo.github.io/tech/assets/favicon.ico"
+    }
+  },
+  "inLanguage": "en-US",
+  "keywords": "cuda, kernel, launch-configuration, gpu, indexing"
+}
+    </script>
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <div class="reading-progress" aria-hidden="true">
+        <div class="reading-progress-bar" id="reading-progress-bar"></div>
+    </div>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <a href="/tech/en/game/">Game</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb-list" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-item">
+                <a href="/tech/en/categories/Lectures.html" itemprop="item" class="breadcrumb-link">
+                    <span itemprop="name">Lectures</span>
+                </a>
+                <meta itemprop="position" content="2" />
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="breadcrumb-separator">
+                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </li>
+            
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="breadcrumb-current">
+                <span itemprop="name" class="breadcrumb-current-title" title="GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration">GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration</span>
+                <meta itemprop="position" content="3" />
+            </li>
+        </ol>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-title-block">
+            <time datetime=""2026-02-05T00:00:00.000Z"" class="post-kicker">February 5, 2026</time>
+            <h1 class="post-title">GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration</h1>
+            <p class="post-deck">How to think about indexing and launch configuration when writing CUDA kernels</p>
+        </div>
+        <div class="post-meta-stack">
+            <div class="post-meta-row">
+                <span class="post-meta-label">Read:</span>
+                <div class="post-meta-values">
+                    <span class="series-badge">3 min read</span>
+                </div>
+            </div>
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Series:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/series/gpu-systems.html" class="series-badge">📚 GPU Systems (5/21)</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Category:</span>
+                <div class="post-meta-values">
+                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
+                </div>
+            </div>
+            
+            
+            <div class="post-meta-row">
+                <span class="post-meta-label">Tags:</span>
+                <div class="tags post-meta-values">
+                    
+                    <a href="/tech/en/tags/cuda.html" class="tag">cuda</a>
+                    
+                    <a href="/tech/en/tags/kernel.html" class="tag">kernel</a>
+                    
+                    <a href="/tech/en/tags/launch-configuration.html" class="tag">launch-configuration</a>
+                    
+                    <a href="/tech/en/tags/gpu.html" class="tag">gpu</a>
+                    
+                    <a href="/tech/en/tags/indexing.html" class="tag">indexing</a>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    
+    <!-- Post Series Navigation Component - For individual post pages -->
+<nav class="post-series-navigation">
+    <!-- Series Header -->
+    <div class="post-series-header">
+        <h3>📚 GPU Systems</h3>
+        <p class="post-series-description">From GPU architecture and CUDA kernels to Triton and real kernel optimization work</p>
+    </div>
+
+    <!-- Series Posts List -->
+    <ol class="post-series-list">
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-00.html" class="post-series-link">GPU Systems 00 - What You Should Know Before Starting This Series</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-01.html" class="post-series-link">GPU Systems 01 - Roadmap to GPU Kernel Engineering</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-02.html" class="post-series-link">GPU Systems 02 - The Thread, Warp, and Block Execution Model</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-03.html" class="post-series-link">GPU Systems 03 - Memory Hierarchy and Bandwidth</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item current">
+            
+            <!-- Current Post (Not Clickable) -->
+            <span class="post-series-title">
+                GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration
+                <span class="current-indicator">← You are here</span>
+            </span>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-05.html" class="post-series-link">GPU Systems 05 - Coalescing, Shared Memory, and Reduction Patterns</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-06.html" class="post-series-link">GPU Systems 06 - Triton and the Practical Shape of Kernel Optimization</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-07.html" class="post-series-link">GPU Systems 07 - Occupancy and Latency Hiding</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-08.html" class="post-series-link">GPU Systems 08 - Profiling and the Roofline View</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-09.html" class="post-series-link">GPU Systems 09 - Why Naive Matrix Multiplication Is Slow</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-10.html" class="post-series-link">GPU Systems 10 - Tiled Matrix Multiplication and Shared Memory</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-11.html" class="post-series-link">GPU Systems 11 - Shared Memory Bank Conflicts</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-12.html" class="post-series-link">GPU Systems 12 - Warp Shuffle and Warp-Level Primitives</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-13.html" class="post-series-link">GPU Systems 13 - Reduction Kernels in Depth</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-14.html" class="post-series-link">GPU Systems 14 - Why Softmax Is Such a Good Kernel Exercise</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-15.html" class="post-series-link">GPU Systems 15 - LayerNorm and RMSNorm Kernel Structure</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-16.html" class="post-series-link">GPU Systems 16 - Vectorized Loads, Stores, and Alignment</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-17.html" class="post-series-link">GPU Systems 17 - Register Pressure and Spilling</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-18.html" class="post-series-link">GPU Systems 18 - Tensor Cores and Mixed Precision</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-19.html" class="post-series-link">GPU Systems 19 - Asynchronous Copy and Pipelining</a>
+            
+        </li>
+        
+        <!-- Series Post Item -->
+        <li class="post-series-item ">
+            
+            <!-- Other Posts (Clickable Links) -->
+            <a href="/tech/en/posts/gpu-systems-20.html" class="post-series-link">GPU Systems 20 - From Nsight to Triton to FlashAttention</a>
+            
+        </li>
+        
+    </ol>
+</nav>
+
+    
+
+    <div class="post-body-layout">
+        
+
+        <div class="post-content">
+            <h2 id="once-you-start-writing-kernels-new-questions-show-up">Once You Start Writing Kernels, New Questions Show Up</h2>
+<p>After you get comfortable with the GPU architecture picture, the next step is to write CUDA kernels directly. At that point, syntax is not the hardest part. The more important questions are about indexing and launch configuration.</p>
+<p>For example:</p>
+<ul class="ul-list">
+<li>should the block size be 128, 256, or 512?</li><li>should the grid be 1D or 2D?</li><li>should one thread handle one element, or more than one?</li></ul>
+<p>These do not have one universal answer. They depend on problem shape and hardware constraints.</p>
+<h2 id="basic-indexing-is-simple-but-not-the-full-story">Basic Indexing Is Simple, but Not the Full Story</h2>
+<p>In many CUDA kernels, the global index is computed from <code class="inline-code">blockIdx</code>, <code class="inline-code">blockDim</code>, and <code class="inline-code">threadIdx</code>.</p>
+<p>For a 1D problem such as vector add, the mental model is straightforward:</p>
+<ul class="ul-list">
+<li>blocks divide the work into large chunks</li><li>threads divide each chunk into smaller pieces</li><li>a thread computes its global position from block and thread indices</li></ul>
+<p>This part is easy. The harder question is whether the launch configuration fits the problem and the hardware well.</p>
+<h2 id="block-size-affects-more-than-just-thread-count">Block Size Affects More Than Just Thread Count</h2>
+<p>Block size is not just a thread count choice. It influences:</p>
+<ul class="ul-list">
+<li>how many warps are in a block</li><li>how shared memory is used</li><li>how much register pressure the kernel creates</li><li>how much occupancy is possible</li></ul>
+<p>Using a multiple of 32 is the natural starting point because of warp size. But larger is not always better. A large block may consume enough registers or shared memory to reduce concurrency.</p>
+<p>That is why practical tuning often starts with values like 128 or 256 and then compares them with profiling.</p>
+<h2 id="grid-size-matters-for-utilization">Grid Size Matters for Utilization</h2>
+<p>If block size shapes local execution, grid size determines whether the GPU is kept busy across the full problem.</p>
+<p>A tiny problem may not provide enough parallel work to keep the GPU occupied. A large enough problem can fill the device, but then other factors such as memory pressure or occupancy become more important.</p>
+<p>So grid size is not just about covering all elements. It is also about exposing enough parallel work.</p>
+<h2 id="should-one-thread-handle-one-element">Should One Thread Handle One Element?</h2>
+<p>In introductory kernels, one thread often handles one element. That is fine as a starting point. But in real optimization work, one thread may handle multiple elements.</p>
+<p>That can help with:</p>
+<ul class="ul-list">
+<li>memory access structure</li><li>register reuse</li><li>loop unrolling opportunities</li></ul>
+<p>Of course, it also makes kernels more complex and may increase register pressure. So once again, the real issue is balance.</p>
+<h2 id="questions-worth-asking-during-launch-design">Questions Worth Asking During Launch Design</h2>
+<p>A useful checklist is:</p>
+<ul class="ul-list">
+<li>is the block size aligned with warp structure?</li><li>is shared memory use reasonable?</li><li>is register pressure acceptable?</li><li>does the grid structure fit the problem shape?</li><li>is each thread doing too little or too much?</li></ul>
+<p>Once you think this way, launch configuration stops looking like boilerplate and starts looking like part of kernel design.</p>
+<h2 id="matrix-multiply-as-an-example">Matrix Multiply as an Example</h2>
+<p>Matrix multiply often uses 2D indexing because that maps naturally onto output coordinates.</p>
+<p>A naive version may assign one output element to one thread. A better version often assigns one output tile to a block, with threads cooperating inside the tile. At that point, launch configuration and tiling strategy become closely connected.</p>
+<h2 id="the-main-point">The Main Point</h2>
+<p>Writing CUDA kernels is largely about mapping:</p>
+<ul class="ul-list">
+<li>mapping the problem onto threads</li><li>mapping threads into warps and blocks</li><li>mapping that structure onto memory and occupancy constraints</li></ul>
+<p>Once that clicks, launch parameters stop feeling like arbitrary numbers and start feeling like design choices.</p>
+<p>The next post will focus on coalescing, shared memory, and reduction patterns as the first serious optimization layer.</p>
+
+        </div>
+    </div>
+
+    <nav class="post-nav">
+        
+        <a href="/tech/en/posts/compiler-08.html" class="post-nav-card nav-prev">
+            <span class="post-nav-card-label">Previous</span>
+            <strong>Automata and Compilers 08 - Bottom-Up Parsing</strong>
+            <p>Shift-reduce parsing, LR parser mechanics, and how parser generators work under the hood</p>
+            <span class="post-nav-card-meta">
+                <span>February 4, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>5 min read</span>
+            </span>
+        </a>
+        
+        
+        <a href="/tech/en/posts/distributed-llm-training-11.html" class="post-nav-card nav-next">
+            <span class="post-nav-card-label">Next</span>
+            <strong>Distributed LLM Training 11 - Pipeline Parallel Basics and How to Think About Stage Splits</strong>
+            <p>Once the model is split by depth into stages, idle time and stage imbalance become just as important as memory savings</p>
+            <span class="post-nav-card-meta">
+                <span>February 5, 2026</span>
+                <span class="post-card-dot"></span>
+                <span>2 min read</span>
+            </span>
+        </a>
+        
+    </nav>
+
+    
+    
+    <section class="related-posts">
+        <div class="related-posts-header">
+            <h2>Continue Reading</h2>
+            <p>A few nearby posts worth reading next.</p>
+        </div>
+        <div class="related-posts-grid">
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/gpu-systems-05.html">GPU Systems 05 - Coalescing, Shared Memory, and Reduction Patterns</a></h3>
+                <p>The optimization patterns that keep showing up in CUDA kernels</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">3 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/gpu-systems-06.html">GPU Systems 06 - Triton and the Practical Shape of Kernel Optimization</a></h3>
+                <p>How Triton fits into real kernel optimization work, especially for LLM-style workloads</p>
+            </article>
+            
+            <article class="related-post-card">
+                <div class="related-post-meta">
+                    <span class="related-post-category">Lectures</span>
+                    <span class="related-post-time">4 min read</span>
+                </div>
+                <h3><a href="/tech/en/posts/gpu-systems-07.html">GPU Systems 07 - Occupancy and Latency Hiding</a></h3>
+                <p>Understanding occupancy as a latency-hiding concept instead of just a percentage</p>
+            </article>
+            
+        </div>
+    </section>
+    
+    
+</article>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

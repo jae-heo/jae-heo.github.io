@@ -230,7 +230,7 @@
             <div class="post-meta-row">
                 <span class="post-meta-label">분량:</span>
                 <div class="post-meta-values">
-                    <span class="series-badge">3분 읽기</span>
+                    <span class="series-badge">4분 읽기</span>
                 </div>
             </div>
             
@@ -410,6 +410,11 @@
             4</code></pre>
 <p>파스 트리에는 문법 규칙의 모든 비단말 기호가 존재하지만, AST에는 연산자와 피연산자만 남아 있다. 괄호도 AST에는 나타나지 않는다. <code class="inline-code">(2 + 3) * 4</code>에서 괄호의 역할은 트리 구조 자체가 대신하기 때문이다. AST에서 <code class="inline-code">*</code>의 왼쪽 자식이 <code class="inline-code">+</code> 노드라면, 그것만으로 덧셈이 먼저 수행된다는 의미가 전달된다.</p>
 <p>이러한 추상화는 컴파일러의 나머지 단계를 단순하게 만든다. 의미 분석, 최적화, 코드 생성 단계 모두 AST를 기반으로 동작하므로, AST의 설계가 컴파일러 전체의 품질에 직접적인 영향을 미친다.</p>
+<p>여기서 핵심은 &quot;정보를 버린다&quot;가 아니라 &quot;나중 단계에 필요 없는 문법적 장식을 제거한다&quot;는 점이다. AST는 파스 트리보다 정보가 적지만, 컴파일러가 이후 단계에서 실제로 써야 하는 정보는 오히려 더 잘 드러낸다.</p>
+<p>예를 들어 의미 분석기는 보통 다음에 관심이 있다.</p>
+<ul class="ul-list">
+<li>이 노드가 변수 참조인가, 함수 호출인가</li><li>이 연산의 피연산자 타입은 무엇인가</li><li>이 if 문이 어떤 조건식과 어떤 본문을 가지는가</li></ul>
+<p>반대로 <code class="inline-code">E</code>, <code class="inline-code">T</code>, <code class="inline-code">F</code> 같은 문법 보조 비단말의 존재 자체는 큰 도움이 되지 않는다. AST는 바로 그 차이를 반영한 결과물이다.</p>
 <h2 id="ast-">AST 노드 설계</h2>
 <p>AST를 구현하려면 먼저 노드 타입을 설계해야 한다. 각 언어 구성 요소에 대응하는 노드 타입을 정의하되, 문법적인 디테일은 덜어내고 의미적으로 필요한 정보만 남기는 식이다.</p>
 <p>간단한 언어에 대한 AST 노드 타입을 다음과 같이 정의할 수 있다.</p>
@@ -466,6 +471,14 @@ class FuncCall:
 class ReturnStmt:
     value: Optional[&#39;Expr&#39;]</code></pre>
 <p>각 노드 타입은 해당 언어 구성 요소를 표현하는 데 필요한 최소한의 정보만 담고 있다. <code class="inline-code">IfStmt</code>에는 괄호나 <code class="inline-code">then</code> 키워드가 없고, 조건과 본문만 있다. <code class="inline-code">BinaryOp</code>에는 우선순위 정보가 없고, 트리의 구조 자체가 연산 순서를 결정한다.</p>
+<p>좋은 AST 설계는 &quot;소스 코드를 그대로 복사하는 것&quot;이 아니다. 오히려 다음 두 가지를 같이 만족해야 한다.</p>
+<ul class="ul-list">
+<li>소스 수준 의미를 충분히 보존할 것</li><li>이후 단계가 다루기 쉬운 구조일 것</li></ul>
+<p>예를 들어 함수 선언을 생각해 보자. 파스 트리에는 <code class="inline-code">function</code>, <code class="inline-code">(</code>, <code class="inline-code">,</code>, <code class="inline-code">)</code> 같은 토큰이 다 남아 있지만, AST에서는 보통 다음만 있으면 충분하다.</p>
+<ul class="ul-list">
+<li>함수 이름</li><li>매개변수 목록</li><li>반환 타입</li><li>본문</li></ul>
+<p>이렇게 해야 의미 분석이 심볼 테이블을 만들기 쉽고, 이후 IR로 내릴 때도 구조가 단순해진다.</p>
+<p>반대로 AST를 지나치게 추상화하면 원래 소스 코드의 의미를 잃어버릴 수도 있다. 예를 들어 <code class="inline-code">for</code> 문을 무조건 <code class="inline-code">while</code>로 낮춰 버리면 초기 단계에서는 편할 수 있지만, 에러 메시지나 source mapping을 다루기 어려워질 수 있다. 즉 AST 설계는 너무 낮지도, 너무 높지도 않은 중간 수준을 잡는 일이기도 하다.</p>
 <h2 id="-ast-">파싱 중 AST 구축</h2>
 <p>AST는 파서가 문법 규칙을 적용하는 과정에서 함께 구축된다. 재귀 하강 파서에서는 각 파싱 함수가 AST 노드를 반환하도록 작성하면 된다.</p>
 <pre><code class="language-python">def parse_expr(self):
@@ -507,6 +520,10 @@ def parse_factor(self):
         return node
     raise SyntaxError(&#39;Unexpected token&#39;)</code></pre>
 <p>이 코드에서 주목할 점이 두 가지이다. 첫째, while 루프를 사용하여 좌결합 연산을 올바르게 처리한다. <code class="inline-code">2 + 3 + 4</code>는 <code class="inline-code">BinaryOp(&#39;+&#39;, BinaryOp(&#39;+&#39;, 2, 3), 4)</code>로 구성되어 왼쪽부터 계산되는 구조를 만드는 것이다. 둘째, 괄호를 만나면 내부 수식을 파싱한 결과를 그대로 반환하므로 괄호 자체는 AST에 나타나지 않는다.</p>
+<p>이 부분을 실제 입력으로 따라가 보면 AST가 어떻게 쌓이는지 더 잘 보인다. <code class="inline-code">2 + 3 * 4</code>를 읽는다고 하자.</p>
+<ol class="ol-list">
+<li><code class="inline-code">parse_expr()</code>는 먼저 <code class="inline-code">parse_term()</code>을 호출한다</li><li><code class="inline-code">parse_term()</code>은 <code class="inline-code">2</code>를 읽어 <code class="inline-code">NumberLit(2)</code>를 만든다</li><li>다시 <code class="inline-code">parse_expr()</code>로 돌아왔을 때 <code class="inline-code">+</code>를 보고 오른쪽 <code class="inline-code">term</code>을 읽는다</li><li>오른쪽 <code class="inline-code">term</code> 안에서는 <code class="inline-code">3 * 4</code>가 하나의 <code class="inline-code">BinaryOp(&#39;*&#39;, 3, 4)</code>로 묶인다</li><li>마지막에 전체가 <code class="inline-code">BinaryOp(&#39;+&#39;, 2, BinaryOp(&#39;*&#39;, 3, 4))</code>가 된다</li></ol>
+<p>즉 파서 함수의 호출 구조가 그대로 AST 구조와 대응된다. 재귀 하강 파서를 이해할 때 &quot;문법 규칙이 함수가 되고, 함수 반환값이 AST 노드가 된다&quot;는 감각을 잡아 두면 훨씬 편하다.</p>
 <p>파서 생성기에서는 각 문법 규칙의 액션으로 AST 노드 생성 코드를 작성한다. Yacc/Bison에서 <code class="inline-code">$$ = new BinaryOp(&#39;+&#39;, $1, $3);</code>와 같은 형태로 리듀스 시 AST 노드를 만드는 것이 이에 해당한다.</p>
 <h2 id="-ast-">구문 단위별 AST 예시</h2>
 <p>프로그래밍 언어의 주요 구성 요소가 AST에서 어떻게 표현되는지 살펴보자.</p>
@@ -570,6 +587,11 @@ class PrettyPrinter(ASTVisitor):
 <pre><code>소스 코드 → [렉서] → [파서] → AST → [의미 분석] → 수식 AST → [최적화] → [코드 생성] → 목적 코드</code></pre>
 <p>이 구조의 장점은 프론트엔드와 백엔드를 독립적으로 교체할 수 있다는 것이다. 같은 백엔드에 다른 언어의 프론트엔드를 연결하면 새로운 언어를 지원할 수 있고, 같은 프론트엔드에 다른 백엔드를 연결하면 다른 아키텍처용 코드를 생성할 수 있다. LLVM이 수십 개의 언어와 수십 개의 타겟 아키텍처를 지원할 수 있는 것이 바로 이 원리 덕분이다.</p>
 <p>실제로는 AST에서 바로 목적 코드를 생성하기보다, AST를 더 낮은 수준의 중간 표현(Intermediate Representation, IR)으로 변환한 뒤 최적화와 코드 생성을 수행하는 것이 일반적이다. 하지만 AST 자체가 소스 수준의 가장 중요한 중간 표현이라는 점은 변함이 없다.</p>
+<p>조금 더 현실적으로 말하면 AST는 &quot;사람이 쓴 프로그램 구조&quot;와 &quot;컴파일러가 다루기 좋은 내부 표현&quot; 사이의 첫 번째 번역 결과다. 여기서 구조를 잘 잡아 놓아야 이후 단계도 덜 꼬인다.</p>
+<p>예를 들어:</p>
+<ul class="ul-list">
+<li>AST가 명확하면 타입 검사기가 단순해진다</li><li>AST가 일관되면 IR 생성기가 쉬워진다</li><li>AST가 source location을 잘 보존하면 에러 메시지가 좋아진다</li></ul>
+<p>그래서 AST는 단순한 중간 산출물이 아니라, 프런트엔드 품질을 좌우하는 핵심 자료 구조라고 보는 편이 맞다.</p>
 <p>다음 글에서는 AST에 대해 수행되는 의미 분석(Semantic Analysis)을 다룬다.</p>
 
         </div>
@@ -577,26 +599,26 @@ class PrettyPrinter(ASTVisitor):
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/comparch-07.html" class="post-nav-card nav-prev">
+        <a href="/tech/ko/posts/pytorch-internals-13.html" class="post-nav-card nav-prev">
             <span class="post-nav-card-label">이전 글</span>
-            <strong>컴퓨터 구조 07 - 메모리 계층 구조</strong>
-            <p>레지스터에서 HDD까지 이어지는 메모리 계층과 캐시의 동작 원리</p>
+            <strong>PyTorch 내부 구조 13 - Fused Operator는 언제 가치가 있는가</strong>
+            <p>fused op는 launch overhead 감소뿐 아니라 메모리 접근과 intermediate materialization을 줄이기 위해 설계된다</p>
             <span class="post-nav-card-meta">
-                <span>February 8, 2026</span>
+                <span>February 10, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>5분 읽기</span>
+                <span>1분 읽기</span>
             </span>
         </a>
         
         
-        <a href="/tech/ko/posts/linux-07.html" class="post-nav-card nav-next">
+        <a href="/tech/ko/posts/gpu-systems-07.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">다음 글</span>
-            <strong>리눅스 내부 구조 07 - I/O와 디바이스</strong>
-            <p>블록 디바이스와 캐릭터 디바이스부터 I/O 스케줄러, DMA, 페이지 캐시까지</p>
+            <strong>GPU 시스템 07 - Occupancy와 Latency Hiding</strong>
+            <p>occupancy를 숫자로만 외우지 않고 latency hiding과 연결해서 이해하기</p>
             <span class="post-nav-card-meta">
-                <span>February 12, 2026</span>
+                <span>February 11, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>5분 읽기</span>
+                <span>3분 읽기</span>
             </span>
         </a>
         
@@ -614,7 +636,7 @@ class PrettyPrinter(ASTVisitor):
             <article class="related-post-card">
                 <div class="related-post-meta">
                     <span class="related-post-category">Lectures</span>
-                    <span class="related-post-time">3분 읽기</span>
+                    <span class="related-post-time">4분 읽기</span>
                 </div>
                 <h3><a href="/tech/ko/posts/compiler-10.html">오토마타와 컴파일러 10 - 의미 분석과 타입 검사</a></h3>
                 <p>파서가 잡지 못하는 오류를 의미 분석이 어떻게 잡아내는지, 그리고 타입 검사가 프로그램의 안전성을 보장하는 원리</p>
@@ -623,7 +645,7 @@ class PrettyPrinter(ASTVisitor):
             <article class="related-post-card">
                 <div class="related-post-meta">
                     <span class="related-post-category">Lectures</span>
-                    <span class="related-post-time">3분 읽기</span>
+                    <span class="related-post-time">4분 읽기</span>
                 </div>
                 <h3><a href="/tech/ko/posts/compiler-11.html">오토마타와 컴파일러 11 - 중간 표현과 최적화</a></h3>
                 <p>컴파일러가 왜 중간 표현을 거치는지, 그리고 최적화가 어떻게 프로그램을 더 빠르게 만드는지</p>
@@ -632,7 +654,7 @@ class PrettyPrinter(ASTVisitor):
             <article class="related-post-card">
                 <div class="related-post-meta">
                     <span class="related-post-category">Lectures</span>
-                    <span class="related-post-time">4분 읽기</span>
+                    <span class="related-post-time">5분 읽기</span>
                 </div>
                 <h3><a href="/tech/ko/posts/compiler-12.html">오토마타와 컴파일러 12 - 코드 생성</a></h3>
                 <p>최적화된 중간 표현이 실제 기계어로 변환되는 과정과, 오토마타 이론에서 시작하여 컴파일러 구현까지 이어지는 여정의 마무리</p>
