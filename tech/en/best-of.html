@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best of the Blog - Jae's Tech Blog</title>
+    <meta name="description" content="A curated set of technical posts that best represent the blog's depth, style, and strongest study paths.">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jae-heo.github.io" />
+    <meta property="og:title" content="Best of the Blog">
+    <meta property="og:description" content="A curated set of technical posts that best represent the blog's depth, style, and strongest study paths.">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io">
+    <meta name="twitter:title" content="Best of the Blog">
+    <meta name="twitter:description" content="A curated set of technical posts that best represent the blog's depth, style, and strongest study paths.">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                
+                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
+                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
+                
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <a href="/tech/en/game/">Game</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-wrapper">
+    <div class="page-header">
+        <h1>Best of the Blog</h1>
+        <p class="subtitle">A curated set of technical posts that best represent the blog's depth, style, and strongest study paths.</p>
+    </div>
+    <article class="page">
+        <div class="page-content">
+            <p>This page is for readers who do not want the full roadmap first.</p>
+<p>If the <a href="/tech/en/start-here.html">Start Here</a> page is the structured entry, this page is the curated one. These are the posts and series that best represent what the blog is trying to do well.</p>
+<h2 id="best-series-to-read-straight-through">Best Series To Read Straight Through</h2>
+<h3 id="gpu-systems"><a href="/tech/en/series/gpu-systems.html">GPU Systems</a></h3>
+<p>One of the strongest long-form tracks on the blog right now. It connects GPU architecture, CUDA thinking, Triton, and optimization work into one technical arc instead of treating them as disconnected topics.</p>
+<p>Best if you want:</p>
+<ul class="ul-list">
+<li>GPU kernel engineering</li><li>better hardware-level performance intuition</li><li>a stronger bridge into large-model training systems</li></ul>
+<h3 id="pytorch-internals"><a href="/tech/en/series/pytorch-internals.html">PyTorch Internals</a></h3>
+<p>A good bridge series between model code and systems work. It is useful if you already use PyTorch but want to understand tensors, autograd, extensions, and how custom kernels fit into real training code.</p>
+<h3 id="distributed-llm-training"><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a></h3>
+<p>This is the systems-heavy LLM training track. It is less about API usage and more about understanding how memory, communication, topology, and framework structure interact.</p>
+<h3 id="compiler"><a href="/tech/en/series/compiler.html">Compiler</a></h3>
+<p>A good theory-to-implementation series. It is strongest when read as a way to connect formal language ideas to ASTs, IR, optimization, and code generation.</p>
+<h2 id="best-individual-starting-points">Best Individual Starting Points</h2>
+<h3 id="gpu-systems-00-what-you-need-before-studying-gpu-systems"><a href="/tech/en/posts/gpu-systems-00.html">GPU Systems 00 - What You Need Before Studying GPU Systems</a></h3>
+<p>This is a strong entry point if you want to study the GPU track seriously instead of sampling random posts.</p>
+<h3 id="distributed-llm-training-01-why-llm-training-becomes-a-distributed-systems-problem"><a href="/tech/en/posts/distributed-llm-training-01.html">Distributed LLM Training 01 - Why LLM Training Becomes a Distributed Systems Problem</a></h3>
+<p>This is one of the better “why this topic matters” posts on the blog. It sets the framing correctly before the framework names start appearing.</p>
+<h3 id="pytorch-internals-01-why-you-need-to-understand-the-internals"><a href="/tech/en/posts/pytorch-internals-01.html">PyTorch Internals 01 - Why You Need to Understand the Internals</a></h3>
+<p>A useful bridge post if you are already working with models and want to move closer to kernels, operators, and runtime behavior.</p>
+<h3 id="automata-and-compilers-01-finite-automata"><a href="/tech/en/posts/compiler-01.html">Automata and Compilers 01 - Finite Automata</a></h3>
+<p>Good if you want to start the compiler track from the actual theoretical base instead of jumping into parser implementation without context.</p>
+<h3 id="linux-01-what-the-kernel-is-actually-doing"><a href="/tech/en/posts/linux-01.html">Linux 01 - What the Kernel Is Actually Doing</a></h3>
+<p>Good if you want stronger systems intuition from the operating-system side first.</p>
+<h2 id="best-paths-by-goal">Best Paths By Goal</h2>
+<h3 id="if-you-want-to-become-stronger-at-systems-work">If you want to become stronger at systems work</h3>
+<p>Read:</p>
+<ol class="ol-list">
+<li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li><li><a href="/tech/en/series/linux.html">Linux</a></li><li><a href="/tech/en/series/compiler.html">Compiler</a></li></ol>
+<h3 id="if-you-want-the-gpu-llm-stack">If you want the GPU / LLM stack</h3>
+<p>Read:</p>
+<ol class="ol-list">
+<li><a href="/tech/en/series/gpu-systems.html">GPU Systems</a></li><li><a href="/tech/en/series/pytorch-internals.html">PyTorch Internals</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a></li></ol>
+<h3 id="if-you-want-production-facing-ml-systems">If you want production-facing ML systems</h3>
+<p>Read:</p>
+<ol class="ol-list">
+<li><a href="/tech/en/series/mlops.html">MLOps</a></li><li><a href="/tech/en/series/platform-engineering.html">Platform Engineering</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a></li></ol>
+<h2 id="if-you-want-one-recommendation">If You Want One Recommendation</h2>
+<p>If you want the most representative current path on the blog, start with <a href="/tech/en/series/gpu-systems.html">GPU Systems</a>, then move to <a href="/tech/en/series/pytorch-internals.html">PyTorch Internals</a>, then <a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a>.</p>
+<p>That path captures the blog at its strongest: systems thinking, runtime detail, and serious technical sequencing.</p>
+
+        </div>
+    </article>
+</div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

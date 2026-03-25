@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여기서 시작하기 - 재영의 기술 블로그</title>
+    <meta name="description" content="무엇을 공부하고 싶은지에 따라 기술 블로그의 시작점을 안내하는 읽기 가이드.">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jae-heo.github.io" />
+    <meta property="og:title" content="여기서 시작하기">
+    <meta property="og:description" content="무엇을 공부하고 싶은지에 따라 기술 블로그의 시작점을 안내하는 읽기 가이드.">
+    <meta property="og:site_name" content="재영의 기술 블로그">
+    <meta property="og:locale" content="ko_KR">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io">
+    <meta name="twitter:title" content="여기서 시작하기">
+    <meta name="twitter:description" content="무엇을 공부하고 싶은지에 따라 기술 블로그의 시작점을 안내하는 읽기 가이드.">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'ko';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/ko/" class="site-title" data-nav-link>재영의 기술 블로그</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/ko/" data-nav-link>홈</a>
+                
+                <a href="/tech/ko/start-here.html" data-nav-link>시작 가이드</a>
+                <a href="/tech/ko/best-of.html" data-nav-link>추천 글</a>
+                
+                <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
+                <a href="/tech/ko/about.html" data-nav-link>소개</a>
+                <a href="/tech/ko/game/">게임</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="다크 모드 전환">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-wrapper">
+    <div class="page-header">
+        <h1>여기서 시작하기</h1>
+        <p class="subtitle">무엇을 공부하고 싶은지에 따라 기술 블로그의 시작점을 안내하는 읽기 가이드.</p>
+    </div>
+    <article class="page">
+        <div class="page-content">
+            <p>이 블로그는 주제가 꽤 넓어서 아무 글이나 랜덤하게 들어가면 오히려 흐름을 놓치기 쉽다.</p>
+<p>조금 더 좋은 방법은 먼저 방향을 정하는 것이다.</p>
+<ul class="ul-list">
+<li>시스템 감각을 키우고 싶은가</li><li>GPU / LLM 인프라를 깊게 공부하고 싶은가</li><li>언어와 컴파일러 기초를 다지고 싶은가</li><li>프로덕션 ML과 플랫폼 운영을 보고 싶은가</li></ul>
+<h2 id="-">시스템 감각을 먼저 키우고 싶다면</h2>
+<p>다음부터 시작하는 편이 좋다.</p>
+<ul class="ul-list">
+<li><a href="/tech/ko/series/computer-architecture.html">컴퓨터 구조</a></li><li><a href="/tech/ko/series/linux.html">리눅스</a></li><li><a href="/tech/ko/series/compiler.html">컴파일러</a></li></ul>
+<p>왜 이 순서가 좋은가:</p>
+<p>이 세 시리즈는 이후의 글들을 읽는 바닥 감각을 만들어 준다. 성능, 메모리, 스케줄링, 런타임 동작, 디버깅을 덜 추상적으로 보게 해 준다.</p>
+<p>추천 순서:</p>
+<ol class="ol-list">
+<li><a href="/tech/ko/series/computer-architecture.html">컴퓨터 구조</a></li><li><a href="/tech/ko/series/linux.html">리눅스</a></li><li><a href="/tech/ko/series/compiler.html">컴파일러</a></li></ol>
+<h2 id="gpu-llm-">GPU / LLM 인프라를 공부하고 싶다면</h2>
+<p>다음 세 시리즈를 하나의 흐름으로 보는 편이 좋다.</p>
+<ul class="ul-list">
+<li><a href="/tech/ko/series/gpu-systems.html">GPU 시스템</a></li><li><a href="/tech/ko/series/pytorch-internals.html">PyTorch 내부 구조</a></li><li><a href="/tech/ko/series/distributed-llm-training.html">분산 LLM 학습</a></li></ul>
+<p>왜 이 흐름이 좋은가:</p>
+<p><code class="inline-code">GPU 시스템</code>은 하드웨어와 커널이 어떻게 동작하는지 설명하고, <code class="inline-code">PyTorch 내부 구조</code>는 그 커널이 실제 학습 코드와 어떻게 연결되는지 설명하며, <code class="inline-code">분산 LLM 학습</code>은 여러 GPU와 노드로 학습이 커졌을 때 어떤 문제가 생기는지를 설명한다.</p>
+<p>추천 순서:</p>
+<ol class="ol-list">
+<li><a href="/tech/ko/series/gpu-systems.html">GPU 시스템</a></li><li><a href="/tech/ko/series/pytorch-internals.html">PyTorch 내부 구조</a></li><li><a href="/tech/ko/series/distributed-llm-training.html">분산 LLM 학습</a></li></ol>
+<h2 id="ml-">ML을 실제 운영 환경에서 보고 싶다면</h2>
+<p>다음부터 시작하면 좋다.</p>
+<ul class="ul-list">
+<li><a href="/tech/ko/series/mlops.html">MLOps</a></li><li><a href="/tech/ko/series/platform-engineering.html">플랫폼 엔지니어링</a></li></ul>
+<p>왜 이 흐름이 좋은가:</p>
+<p>이 두 시리즈는 모델 자체보다 실제 시스템 운영에 가깝다. 파이프라인, 배포, 관측성, 셀프서비스, 운영 제약, 팀 생산성 같은 문제를 더 직접적으로 다룬다.</p>
+<p>추천 순서:</p>
+<ol class="ol-list">
+<li><a href="/tech/ko/series/mlops.html">MLOps</a></li><li><a href="/tech/ko/series/platform-engineering.html">플랫폼 엔지니어링</a></li><li>대규모 학습 시스템까지 가고 싶다면 <a href="/tech/ko/series/distributed-llm-training.html">분산 LLM 학습</a></li></ol>
+<h2 id="-">언어 / 컴파일러 기초를 보고 싶다면</h2>
+<p>다음부터 읽는 편이 좋다.</p>
+<ul class="ul-list">
+<li><a href="/tech/ko/series/compiler.html">컴파일러</a></li><li><a href="/tech/ko/series/computer-architecture.html">컴퓨터 구조</a></li></ul>
+<p>왜 이 조합이 좋은가:</p>
+<p>컴파일러는 형식 언어 이론만으로 이해하면 추상적으로 남기 쉽다. 하드웨어와 런타임 감각을 같이 가져가면 IR, 최적화, 코드 생성이 훨씬 잘 읽힌다.</p>
+<h2 id="-">조금 더 가볍게 들어오고 싶다면</h2>
+<p>다음 시리즈가 비교적 진입 장벽이 낮다.</p>
+<ul class="ul-list">
+<li><a href="/tech/ko/series/python-lecture.html">Python 강좌 시리즈</a></li><li><a href="/tech/ko/series/platform-engineering.html">플랫폼 엔지니어링</a></li></ul>
+<p>이 두 시리즈는 상대적으로 덜 무겁지만, 나중에 더 깊은 시스템 글로 넘어갈 때 연결점이 많다.</p>
+<h2 id="-">블로그 전체를 하나의 긴 학습 경로로 본다면</h2>
+<p>이 순서도 무난하다.</p>
+<ol class="ol-list">
+<li><a href="/tech/ko/series/computer-architecture.html">컴퓨터 구조</a></li><li><a href="/tech/ko/series/linux.html">리눅스</a></li><li><a href="/tech/ko/series/compiler.html">컴파일러</a></li><li><a href="/tech/ko/series/gpu-systems.html">GPU 시스템</a></li><li><a href="/tech/ko/series/pytorch-internals.html">PyTorch 내부 구조</a></li><li><a href="/tech/ko/series/distributed-llm-training.html">분산 LLM 학습</a></li><li><a href="/tech/ko/series/mlops.html">MLOps</a></li><li><a href="/tech/ko/series/platform-engineering.html">플랫폼 엔지니어링</a></li></ol>
+<p>이것이 유일한 정답은 아니지만, 꽤 일관된 읽기 흐름이다.</p>
+
+        </div>
+    </article>
+</div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/ko/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

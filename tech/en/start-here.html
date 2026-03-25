@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Here - Jae's Tech Blog</title>
+    <meta name="description" content="A practical guide to where to begin on the tech blog based on what you want to learn.">
+    <meta name="author" content="Jae">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jae-heo.github.io">
+
+    <!-- Language Alternatives (hreflang) -->
+    
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jae-heo.github.io" />
+    <meta property="og:title" content="Start Here">
+    <meta property="og:description" content="A practical guide to where to begin on the tech blog based on what you want to learn.">
+    <meta property="og:site_name" content="Jae's Tech Blog">
+    <meta property="og:locale" content="en_US">
+    
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://jae-heo.github.io">
+    <meta name="twitter:title" content="Start Here">
+    <meta name="twitter:description" content="A practical guide to where to begin on the tech blog based on what you want to learn.">
+    
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    
+    
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) -->
+    
+
+    <script>
+        // Apply saved theme immediately to prevent flash
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+        // Language preference
+        const lang = localStorage.getItem('lang') || 'en';
+    </script>
+    <script src="/assets/js/theme-switcher.js" defer></script>
+
+    <!-- Mermaid.js for diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+        // Get current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+
+        // Initialize Mermaid with theme support
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: currentTheme === 'dark' ? 'dark' : 'default',
+            themeVariables: {
+                primaryColor: currentTheme === 'dark' ? '#3b82f6' : '#2563eb',
+                primaryTextColor: currentTheme === 'dark' ? '#e5e7eb' : '#1f2937',
+                primaryBorderColor: currentTheme === 'dark' ? '#4b5563' : '#d1d5db',
+                lineColor: currentTheme === 'dark' ? '#6b7280' : '#9ca3af',
+                secondaryColor: currentTheme === 'dark' ? '#1f2937' : '#f3f4f6',
+                tertiaryColor: currentTheme === 'dark' ? '#111827' : '#ffffff'
+            }
+        });
+
+        // Re-render diagrams when theme changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'theme') {
+                location.reload();
+            }
+        });
+
+        // Watch for theme toggle button clicks
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                    location.reload();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme']
+        });
+    </script>
+</head>
+<body>
+    
+    <header class="site-header">
+        <nav class="site-nav">
+            <a href="/tech/en/" class="site-title" data-nav-link>Jae's Tech Blog</a>
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
+                <a href="/tech/en/" data-nav-link>Home</a>
+                
+                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
+                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
+                
+                <a href="/tech/en/archive.html" data-nav-link>Archive</a>
+                <a href="/tech/en/about.html" data-nav-link>About</a>
+                <a href="/tech/en/game/">Game</a>
+                <div class="nav-actions">
+                <select id="lang-select" class="nav-select" aria-label="Select language">
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
+                </select>
+                <button id="theme-toggle" class="nav-theme-toggle" aria-label="Toggle dark mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="page-wrapper">
+    <div class="page-header">
+        <h1>Start Here</h1>
+        <p class="subtitle">A practical guide to where to begin on the tech blog based on what you want to learn.</p>
+    </div>
+    <article class="page">
+        <div class="page-content">
+            <p>This blog is broad enough that jumping in randomly is often the wrong way to read it.</p>
+<p>The easier way is to pick a direction first:</p>
+<ul class="ul-list">
+<li>stronger systems intuition</li><li>ML systems and large-model infrastructure</li><li>language and compiler foundations</li><li>developer platform and production engineering</li></ul>
+<h2 id="if-you-want-stronger-systems-intuition">If You Want Stronger Systems Intuition</h2>
+<p>Start with:</p>
+<ul class="ul-list">
+<li><a href="/tech/en/series/linux.html">Linux</a></li><li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li><li><a href="/tech/en/series/compiler.html">Compiler</a></li></ul>
+<p>Why this path:</p>
+<p>These series make the rest of the blog easier to read. They build the kind of mental model that helps with performance, runtime behavior, memory, scheduling, and lower-level debugging.</p>
+<p>Suggested order:</p>
+<ol class="ol-list">
+<li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li><li><a href="/tech/en/series/linux.html">Linux</a></li><li><a href="/tech/en/series/compiler.html">Compiler</a></li></ol>
+<h2 id="if-you-want-to-study-gpu-llm-infrastructure">If You Want To Study GPU / LLM Infrastructure</h2>
+<p>Start with:</p>
+<ul class="ul-list">
+<li><a href="/tech/en/series/gpu-systems.html">GPU Systems</a></li><li><a href="/tech/en/series/pytorch-internals.html">PyTorch Internals</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a></li></ul>
+<p>Why this path:</p>
+<p>These three series are meant to fit together. <code class="inline-code">GPU Systems</code> explains how the hardware and kernels behave. <code class="inline-code">PyTorch Internals</code> explains how those kernels meet real training code. <code class="inline-code">Distributed LLM Training</code> explains what happens once the training system spreads across many GPUs and nodes.</p>
+<p>Suggested order:</p>
+<ol class="ol-list">
+<li><a href="/tech/en/series/gpu-systems.html">GPU Systems</a></li><li><a href="/tech/en/series/pytorch-internals.html">PyTorch Internals</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a></li></ol>
+<h2 id="if-you-care-about-ml-in-production">If You Care About ML In Production</h2>
+<p>Start with:</p>
+<ul class="ul-list">
+<li><a href="/tech/en/series/mlops.html">MLOps</a></li><li><a href="/tech/en/series/platform-engineering.html">Platform Engineering</a></li></ul>
+<p>Why this path:</p>
+<p>These series are less about model math and more about operating real systems: pipelines, deployment, observability, self-service, platform constraints, and production tradeoffs.</p>
+<p>Suggested order:</p>
+<ol class="ol-list">
+<li><a href="/tech/en/series/mlops.html">MLOps</a></li><li><a href="/tech/en/series/platform-engineering.html">Platform Engineering</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a> if you want to move toward large-scale training systems</li></ol>
+<h2 id="if-you-want-language-compiler-foundations">If You Want Language / Compiler Foundations</h2>
+<p>Start with:</p>
+<ul class="ul-list">
+<li><a href="/tech/en/series/compiler.html">Compiler</a></li><li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li></ul>
+<p>Why this path:</p>
+<p>Compiler work becomes much easier to understand when you can connect formal language ideas to runtime and hardware behavior instead of treating them as separate textbooks.</p>
+<h2 id="if-you-prefer-a-gentler-entry-point">If You Prefer A Gentler Entry Point</h2>
+<p>Start with:</p>
+<ul class="ul-list">
+<li><a href="/tech/en/series/python-lecture.html">Python Lecture Series</a></li><li><a href="/tech/en/series/platform-engineering.html">Platform Engineering</a></li></ul>
+<p>These two are easier entry points than the heavier systems tracks, while still connecting well to the deeper material later.</p>
+<h2 id="a-good-general-reading-order">A Good General Reading Order</h2>
+<p>If you want one reasonable long-term path through the blog:</p>
+<ol class="ol-list">
+<li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li><li><a href="/tech/en/series/linux.html">Linux</a></li><li><a href="/tech/en/series/compiler.html">Compiler</a></li><li><a href="/tech/en/series/gpu-systems.html">GPU Systems</a></li><li><a href="/tech/en/series/pytorch-internals.html">PyTorch Internals</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a></li><li><a href="/tech/en/series/mlops.html">MLOps</a></li><li><a href="/tech/en/series/platform-engineering.html">Platform Engineering</a></li></ol>
+<p>That is not the only order, but it is a coherent one.</p>
+
+        </div>
+    </article>
+</div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <div class="footer-links">
+                <a href="/tech/en/feed.xml">RSS</a>
+                
+                
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Parse current URL to get blog and language
+        const pathParts = window.location.pathname.split('/').filter(p => p);
+        const blogPath = pathParts[0] ? '/' + pathParts[0] : '';
+        const currentLang = pathParts[1] || 'en';
+
+        // Update navigation links - they should already be correct from server
+        // This is just for dynamic client-side updates if needed
+        function updateNavLinks() {
+            const navLinks = document.querySelectorAll('[data-nav-link]');
+            // Links are already fixed by the server, no client-side processing needed
+        }
+
+        // Language dropdown functionality
+        const langSelect = document.getElementById('lang-select');
+        if (langSelect) {
+            // Set current language in dropdown
+            langSelect.value = currentLang;
+
+            langSelect.addEventListener('change', (e) => {
+                const selectedLang = e.target.value;
+                localStorage.setItem('lang', selectedLang);
+
+                // Simply replace the language code in the current path
+                const newPath = window.location.pathname.replace(
+                    /\/[a-z]{2}\//,
+                    '/' + selectedLang + '/'
+                );
+
+                window.location.href = newPath;
+            });
+        }
+    </script>
+    <script src="/assets/js/mobile-nav.js" defer></script>
+    <script src="/assets/js/post-reading-ui.js" defer></script>
+
+    <!-- Series Navigation Enhancement for Long Series -->
+    <script src="/assets/js/series-navigation.js"></script>
+</body>
+</html>

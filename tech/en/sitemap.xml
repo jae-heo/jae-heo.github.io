@@ -733,6 +733,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://jae-heo.github.io/tech/en/best-of.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://jae-heo.github.io/tech/en/start-here.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://jae-heo.github.io/tech/en/categories.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
