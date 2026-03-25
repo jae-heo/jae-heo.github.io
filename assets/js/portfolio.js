@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, observerOptions);
 
     // Observe all project cards and skill categories
-    const animatedElements = document.querySelectorAll('.project-card, .skill-category, .timeline-item');
+    const animatedElements = document.querySelectorAll('.case-study, .stat-item, .writing-content');
     animatedElements.forEach(el => {
         el.classList.add('animate-on-scroll');
         observer.observe(el);

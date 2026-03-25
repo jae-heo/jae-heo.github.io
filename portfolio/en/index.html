@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jae's Portfolio</title>
-    <meta name="description" content="Software Engineer specializing in performance optimization and system architecture">
+    <title>Jaeyoung Heo — Portfolio</title>
+    <meta name="description" content="Showcase of my projects, open source contributions, and professional work">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
     <link rel="stylesheet" href="/assets/portfolio.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <script>
         const theme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', theme);
@@ -18,18 +17,15 @@
 <body class="portfolio-page">
     <header class="portfolio-header">
         <nav>
-            <a href="/portfolio/en/" class="site-title">
-                <span class="portfolio-logo">🚀</span>
-                <span>Jae's Portfolio</span>
-            </a>
+            <a href="/portfolio/en/" class="site-title">Jaeyoung Heo</a>
             <div class="nav-links">
+                <a href="#about" data-nav-link>About</a>
                 <a href="#projects" data-nav-link>Projects</a>
-                <a href="#skills" data-nav-link>Skills</a>
-                <a href="#experience" data-nav-link>Experience</a>
+                <a href="#writing" data-nav-link>Writing</a>
                 <a href="#contact" data-nav-link>Contact</a>
                 <select id="lang-select" aria-label="Select language">
-                    <option value="en" {{#if (eq lang 'en')}}selected{{/if}}>English</option>
-                    <option value="ko" {{#if (eq lang 'ko')}}selected{{/if}}>한국어</option>
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
                 </select>
                 <button id="theme-toggle" aria-label="Toggle dark mode">
                     <span id="theme-icon">🌙</span>
@@ -39,223 +35,220 @@
     </header>
 
     <main class="portfolio-main">
-        <!-- Hero Section -->
+        <!-- Hero -->
         <section class="hero">
             <div class="hero-content">
-                <h1 class="hero-title">Hi, I'm Jae</h1>
-                <p class="hero-subtitle">I make manufacturing simulations run faster through better architecture and relentless profiling</p>
-                <div class="hero-cta">
-                    <a href="#projects" class="cta-button primary">View Projects</a>
-                    <a href="#contact" class="cta-button secondary">Get in Touch</a>
-                </div>
+                <h1 class="hero-title">Jaeyoung Heo</h1>
+                <p class="hero-subtitle">Python Systems Engineer · Architecture · Performance · Observability</p>
             </div>
         </section>
 
-        <!-- Projects Section -->
+        <!-- About -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <p class="about-intro">I build systems that turn complex decision-making into extensible, observable software.</p>
+                <p class="about-detail">Over 18 months as the sole architect and engineer of a Python-based simulation engine, I shipped ~1,300 commits — designing plugin frameworks, decomposing legacy architecture, optimizing million-call hot paths, and building the tools to make it all debuggable. Everything I built was driven by one goal: <strong>Making it easy for other engineers to build on top of the system without understanding its full complexity.</strong> Individual know-how became shared frameworks. Implicit conventions became explicit structure.</p>
+                <p class="tech-stack">Python · pandas/NumPy · SQLAlchemy · ONNX · PostgreSQL · Dash/Streamlit · GitHub Actions/ECR</p>
+            </div>
+        </section>
+
+        <!-- Projects -->
         <section id="projects" class="projects-section">
             <div class="container">
-                <h2 class="section-title">Featured Projects</h2>
-                <div class="projects-grid">
-                    
-                    <article class="project-card">
-                        <div class="project-content">
-                            <h3 class="project-title">95% DB Write Time Reduction</h3>
-                            <p class="project-description">Cut database saving time from 168s to 8s in a ~10min simulation (50K+ entities). Built a lock-free SPSC ring buffer over 2GB shared memory to hand off writes to a separate process, with PostgreSQL COPY bulk inserts at 10K records per batch. Profiled hot paths with cProfile, replacing DataFrame scans with O(1) lookups and caching 136M repeated attribute accesses.</p>
-                            <div class="project-tech">
-                                
-                                <span class="tech-tag">Python</span>
-                                
-                                <span class="tech-tag">Shared Memory</span>
-                                
-                                <span class="tech-tag">PostgreSQL</span>
-                                
-                                <span class="tech-tag">cProfile</span>
-                                
-                            </div>
+                
+                <article class="case-study">
+                    <h2 class="case-study-title">Hardcoded Rules → Plugin Architecture</h2>
+                    <div class="before-after">
+                        <div class="before">
+                            <span class="ba-label">Before</span>
+                            <p>Each type had its own copy-pasted decision logic. Adding a new type meant forking the codebase. Changing a policy meant touching the entire execution flow.</p>
                         </div>
-                    </article>
-                    
-                    <article class="project-card">
-                        <div class="project-content">
-                            <h3 class="project-title">ECS Architecture for Simulation Engines</h3>
-                            <p class="project-description">Redesigned monolithic machine centers into an Entity Component System with 7 data-only components and 3 behavior systems. Struct-of-Arrays layout keeps data cache-friendly and vectorization-ready.</p>
-                            <div class="project-tech">
-                                
-                                <span class="tech-tag">Python</span>
-                                
-                                <span class="tech-tag">ECS</span>
-                                
-                                <span class="tech-tag">Adapter Pattern</span>
-                                
-                                <span class="tech-tag">Struct-of-Arrays</span>
-                                
-                            </div>
+                        <div class="after">
+                            <span class="ba-label">After</span>
+                            <p>A 3-layer plugin architecture that separates state, decision logic, and execution. New types added by composing layers, not by forking code. 10+ types on one framework.</p>
                         </div>
-                    </article>
-                    
-                    <article class="project-card">
-                        <div class="project-content">
-                            <h3 class="project-title">Event-Driven Decoupling</h3>
-                            <p class="project-description">Introduced Pub/Sub to separate core simulation logic from I/O side effects across 24 data tables. An event bridge converts low-level signals into domain events without touching the core engine code.</p>
-                            <div class="project-tech">
-                                
-                                <span class="tech-tag">Python</span>
-                                
-                                <span class="tech-tag">Pub/Sub</span>
-                                
-                                <span class="tech-tag">Event-Driven Architecture</span>
-                                
-                            </div>
+                    </div>
+                    <div class="case-study-body">
+                        <p class="case-study-description">The engine needed to support many heterogeneous processing models, each with different constraints and behaviors. The original approach was to copy-paste and customize per type — which broke down quickly as the number of types grew. I designed a framework that separates three concerns into composable layers:</p>
+                        <ul class="case-study-details">
+                            
+                            <li>State layer — Owns the data needed for decisions. An abstract interface defines shared contracts, while type-specific differences are expressed through composition, not inheritance. 9 concrete variants in production.</li>
+                            
+                            <li>Planning layer — Owns the state layer and manages the decision lifecycle. 7 concrete planners (~3,230 LOC) inherit from a base ABC.</li>
+                            
+                            <li>Execution layer — Template method pattern abstracting execution. Type-specific executors implement concrete behavior and are dynamically registered at runtime.</li>
+                            
+                        </ul>
+                        <p class="case-study-footnote">I didn't generalize upfront. Built 5 type-specific implementations first, then extracted the common lifecycle — removing ~1,442 lines of duplication and replacing them with ~1,404 lines of generalized code. ONNX inference was also integrated within this framework.</p>
+                    </div>
+                </article>
+                
+                <article class="case-study">
+                    <h2 class="case-study-title">Greedy Allocation → Multi-Resource Transactions</h2>
+                    <div class="before-after">
+                        <div class="before">
+                            <span class="ba-label">Before</span>
+                            <p>"Assign work to whatever is free right now." No atomic allocation across multiple resources. Failure midway left state corrupted with no rollback.</p>
                         </div>
-                    </article>
-                    
-                </div>
+                        <div class="after">
+                            <span class="ba-label">After</span>
+                            <p>Entire paths reserved as a single transaction. Failure at any point triggers automatic rollback.</p>
+                        </div>
+                    </div>
+                    <div class="case-study-body">
+                        <p class="case-study-description">When work depends on a chain of resources, grabbing them one at a time doesn't work — a failure halfway through leaves the system in an inconsistent state. I designed a reservation system that separates per-resource-type booking logic and wraps it in one transaction:</p>
+                        <ul class="case-study-details">
+                            
+                            <li>Coordinator — Top-level controller orchestrating the full reservation flow</li>
+                            
+                            <li>Type-specific reservers — 3 dedicated reservers handling each resource type's constraints independently</li>
+                            
+                            <li>Path explorer — Ranks possible routes considering state transition costs</li>
+                            
+                            <li>trial/rollback mechanism — begin_trial() → attempt → apply_trial() on success, automatic rollback on failure</li>
+                            
+                            <li>Failed-attempt dedup cache, success-rate-based adaptive retry frequency</li>
+                            
+                        </ul>
+                        <p class="case-study-footnote">Stabilized over 3 months, resolving 14+ edge cases.</p>
+                    </div>
+                </article>
+                
+                <article class="case-study">
+                    <h2 class="case-study-title">God Object → Explicit Ownership + Event-Driven Architecture</h2>
+                    <div class="before-after">
+                        <div class="before">
+                            <span class="ba-label">Before</span>
+                            <p>3,800 lines, 114 attributes, 6 tangled concerns in one class. State scattered across singleton, instance, and group objects. __getattr__ proxies hiding ownership. Callback chains making side effects untraceable.</p>
+                        </div>
+                        <div class="after">
+                            <span class="ba-label">After</span>
+                            <p>226-line core class + 19 components + 25 facades. Zero proxies. Pub/sub event bus (29 LOC) fully decoupling execution from side effects.</p>
+                        </div>
+                    </div>
+                    <div class="case-study-body">
+                        <p class="case-study-description">Decomposed the God Object over 80+ commits in 9 phases, then converted callback chains to event-driven architecture.</p>
+                        <ul class="case-study-details">
+                            
+                            <li>Reclaimed state from singletons into individual instances</li>
+                            
+                            <li>Extracted mixins → split 114 attributes into 19 component dataclasses (590 LOC)</li>
+                            
+                            <li>Restructured into 6 base facades + 25 type-specific facades</li>
+                            
+                            <li>Migrated 152+ files from __getattr__ proxies to explicit component paths</li>
+                            
+                            <li>Pub/sub event bus (29 LOC) — typed events only, processors attached/detached dynamically</li>
+                            
+                            <li>History logging extracted into dedicated observer — zero side effects inside execution logic</li>
+                            
+                            <li>-752 / +163 lines. New features no longer require touching existing flows</li>
+                            
+                        </ul>
+                        <p class="case-study-footnote">Tried ECS first — too indirect for the domain. Pivoted to facade pattern. Rolled back over-extracted coordinators when granularity didn't pay off.</p>
+                    </div>
+                </article>
+                
+                <article class="case-study">
+                    <h2 class="case-study-title">Slow Hot Paths + Black Box → Optimization + Observability</h2>
+                    <div class="before-after">
+                        <div class="before">
+                            <span class="ba-label">Before</span>
+                            <p>Hot paths called 22M–500M times per run. No way to trace why a decision was made.</p>
+                        </div>
+                        <div class="after">
+                            <span class="ba-label">After</span>
+                            <p>Profiling-driven optimization cutting repeated computation costs. Full decision traceability from outcome back to cause.</p>
+                        </div>
+                    </div>
+                    <div class="case-study-body">
+                        <p class="case-study-description">Targeted measurable bottlenecks instead of redesigning.</p>
+                        <ul class="case-study-details">
+                            
+                            <li>Enum .value lookups cached as module-level constants (22M+ calls)</li>
+                            
+                            <li>DataFrame boolean masks replaced with pre-built dict indexes</li>
+                            
+                            <li>Hot path local caches (22M+, 24M+ calls)</li>
+                            
+                            <li>Custom __deepcopy__ — shallow copy + selective deep copy</li>
+                            
+                            <li>PostgreSQL native COPY ... FROM STDIN WITH CSV</li>
+                            
+                            <li>Gantt chart analyzer — Dash/Streamlit app for visual decision debugging without re-running</li>
+                            
+                            <li>Structured logging with 105-module enum taxonomy</li>
+                            
+                            <li>Event-based timeline tracing — trace any decision back to its root cause</li>
+                            
+                        </ul>
+                        <p class="case-study-footnote">Attempted shared-memory async offloading (1,920 LOC) — removed when coupling proved excessive. Also built GitHub Actions + ECR CI/CD pipeline and removed 1,915 lines of legacy connectors.</p>
+                    </div>
+                </article>
+                
             </div>
         </section>
 
-        <!-- Skills Section -->
-        <section id="skills" class="skills-section">
+        <!-- Writing -->
+        <section id="writing" class="writing-section">
             <div class="container">
-                <h2 class="section-title">Technical Skills</h2>
-                <div class="skills-grid">
-                    
-                    <article class="skill-category">
-                        <h3>Core</h3>
-                        <div class="skill-tags">
-                            
-                            <span class="skill-tag">Python (Expert)</span>
-                            
-                            <span class="skill-tag">SQL</span>
-                            
-                            <span class="skill-tag">NumPy</span>
-                            
-                            <span class="skill-tag">Pandas</span>
-                            
-                            <span class="skill-tag">multiprocessing</span>
-                            
-                        </div>
-                    </article>
-                    
-                    <article class="skill-category">
-                        <h3>Architecture & Systems</h3>
-                        <div class="skill-tags">
-                            
-                            <span class="skill-tag">Entity Component System</span>
-                            
-                            <span class="skill-tag">Pub/Sub</span>
-                            
-                            <span class="skill-tag">Discrete Event Simulation</span>
-                            
-                            <span class="skill-tag">Lock-free Structures</span>
-                            
-                            <span class="skill-tag">Shared Memory IPC</span>
-                            
-                        </div>
-                    </article>
-                    
-                    <article class="skill-category">
-                        <h3>Performance & Infrastructure</h3>
-                        <div class="skill-tags">
-                            
-                            <span class="skill-tag">Profiling & Optimization</span>
-                            
-                            <span class="skill-tag">Caching Strategies</span>
-                            
-                            <span class="skill-tag">PostgreSQL</span>
-                            
-                            <span class="skill-tag">GitHub Actions CI/CD</span>
-                            
-                        </div>
-                    </article>
-                    
+                <h2 class="section-title">Mentoring & Writing</h2>
+                <div class="writing-content">
+                    <p><a href="https://jae-heo.github.io/tech/ko/posts/python-lecture-00.html" class="writing-link" target="_blank">Python Lecture Series</a> — A 5-part deep-dive course I created to onboard junior engineers. Covers Python's design philosophy, lexical structure, containers/generators, and class internals (descriptors, bound methods). Built because our codebase uses metaclasses, context managers, and async heavily — I wanted new engineers to understand why the language works that way, not just how to use it.</p>
+                    <p>I also maintain a technical blog covering 9 series across Python, compiler theory, Linux internals, computer architecture, GPU systems, PyTorch internals, distributed LLM training, MLOps, and platform engineering. <a href="https://jae-heo.github.io" class="writing-link" target="_blank">Visit Blog →</a></p>
                 </div>
             </div>
         </section>
 
-        <!-- Experience Section -->
-        <section id="experience" class="experience-section">
+        <!-- Stats -->
+        <section id="stats" class="stats-section">
             <div class="container">
-                <h2 class="section-title">Experience</h2>
-                <div class="timeline">
+                <h2 class="section-title">At a Glance</h2>
+                <div class="stats-grid">
                     
-                    <article class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <span class="timeline-period">Phase 3</span>
-                                <h3>Performance Optimization</h3>
-                                <p class="timeline-company">Simulation Engine</p>
-                            </div>
-                            <p class="timeline-description">Systematic profiling and optimization of DB write operations in a ~10min simulation</p>
-                            <ul class="timeline-achievements">
-                                
-                                <li>168s to 8s DB write time via shared memory ring buffer and cProfile-driven optimization</li>
-                                
-                                <li>O(1) lookups replacing DataFrame scans across hot paths</li>
-                                
-                                <li>Module-level caching eliminating 136M redundant attribute accesses</li>
-                                
-                            </ul>
-                        </div>
-                    </article>
+                    <div class="stat-item">
+                        <span class="stat-label">Period</span>
+                        <span class="stat-value">2024.10 – 2026.03 (18 months)</span>
+                    </div>
                     
-                    <article class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <span class="timeline-period">Phase 2</span>
-                                <h3>Architecture Redesign</h3>
-                                <p class="timeline-company">Simulation Engine</p>
-                            </div>
-                            <p class="timeline-description">Restructured the engine core for maintainability and future scalability</p>
-                            <ul class="timeline-achievements">
-                                
-                                <li>ECS decomposition of monolithic machine center classes</li>
-                                
-                                <li>Pub/Sub layer isolating I/O from core simulation logic</li>
-                                
-                                <li>Event bridge enabling domain events without modifying the engine</li>
-                                
-                            </ul>
-                        </div>
-                    </article>
+                    <div class="stat-item">
+                        <span class="stat-label">Commits</span>
+                        <span class="stat-value">~1,300 (solo)</span>
+                    </div>
                     
-                    <article class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <span class="timeline-period">Phase 1</span>
-                                <h3>Infrastructure</h3>
-                                <p class="timeline-company">Simulation Engine</p>
-                            </div>
-                            <p class="timeline-description">Built the foundational systems the engine runs on</p>
-                            <ul class="timeline-achievements">
-                                
-                                <li>CI/CD benchmarking pipeline with automated regression detection</li>
-                                
-                                <li>Technical documentation covering 16 system concepts and 90 data references</li>
-                                
-                            </ul>
-                        </div>
-                    </article>
+                    <div class="stat-item">
+                        <span class="stat-label">Processing models</span>
+                        <span class="stat-value">10+ heterogeneous types</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-label">God Class decomposition</span>
+                        <span class="stat-value">3,800 → 226 LOC, 19 components, 25 facades</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-label">Files migrated</span>
+                        <span class="stat-value">152+</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-label">Hot path optimization</span>
+                        <span class="stat-value">22M – 500M calls/run</span>
+                    </div>
                     
                 </div>
             </div>
         </section>
 
-        <!-- Contact Section -->
+        <!-- Contact -->
         <section id="contact" class="contact-section">
             <div class="container">
                 <h2 class="section-title">Get In Touch</h2>
                 <div class="contact-content">
-                    <p>Interested in simulation systems, performance engineering, or architecture design? Let's talk.</p>
+                    <p>Interested in simulation systems, performance engineering, or architecture design? Feel free to reach out.</p>
                     <div class="contact-links">
                         
-                        
-                        <a href="https://github.com/jae-heo" class="contact-link" target="_blank">
-                            <span>🐙</span> GitHub
-                        </a>
-                        
+                        <a href="https://github.com/jae-heo" class="contact-link" target="_blank">GitHub</a>
                         
                         
                     </div>
@@ -266,7 +259,7 @@
 
     <footer class="portfolio-footer">
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Crafted with passion</p>
+            <p>&copy; 2025 Jae</p>
         </div>
     </footer>
 

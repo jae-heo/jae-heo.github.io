@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>재영의 포트폴리오</title>
-    <meta name="description" content="성능 최적화와 시스템 아키텍처를 전문으로 하는 소프트웨어 엔지니어">
+    <title>허재영 — 포트폴리오</title>
+    <meta name="description" content="Showcase of my projects, open source contributions, and professional work">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="stylesheet" href="/assets/style.css">
     <link rel="stylesheet" href="/assets/portfolio.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <script>
         const theme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', theme);
@@ -18,18 +17,15 @@
 <body class="portfolio-page">
     <header class="portfolio-header">
         <nav>
-            <a href="/portfolio/ko/" class="site-title">
-                <span class="portfolio-logo">🚀</span>
-                <span>재영의 포트폴리오</span>
-            </a>
+            <a href="/portfolio/ko/" class="site-title">허재영</a>
             <div class="nav-links">
-                <a href="#projects" data-nav-link>Projects</a>
-                <a href="#skills" data-nav-link>Skills</a>
-                <a href="#experience" data-nav-link>Experience</a>
-                <a href="#contact" data-nav-link>Contact</a>
+                <a href="#about" data-nav-link>소개</a>
+                <a href="#projects" data-nav-link>프로젝트</a>
+                <a href="#writing" data-nav-link>글쓰기</a>
+                <a href="#contact" data-nav-link>연락처</a>
                 <select id="lang-select" aria-label="Select language">
-                    <option value="en" {{#if (eq lang 'en')}}selected{{/if}}>English</option>
-                    <option value="ko" {{#if (eq lang 'ko')}}selected{{/if}}>한국어</option>
+                    <option value="en">English</option>
+                    <option value="ko">한국어</option>
                 </select>
                 <button id="theme-toggle" aria-label="Toggle dark mode">
                     <span id="theme-icon">🌙</span>
@@ -39,223 +35,220 @@
     </header>
 
     <main class="portfolio-main">
-        <!-- Hero Section -->
+        <!-- Hero -->
         <section class="hero">
             <div class="hero-content">
-                <h1 class="hero-title">안녕하세요, 허재영입니다</h1>
-                <p class="hero-subtitle">더 나은 아키텍처와 끈질긴 프로파일링으로 제조 시뮬레이션을 빠르게 만듭니다</p>
-                <div class="hero-cta">
-                    <a href="#projects" class="cta-button primary">View Projects</a>
-                    <a href="#contact" class="cta-button secondary">Get in Touch</a>
-                </div>
+                <h1 class="hero-title">허재영</h1>
+                <p class="hero-subtitle">Python 시스템 엔지니어 · 아키텍처 · 성능 · 관찰 가능성</p>
             </div>
         </section>
 
-        <!-- Projects Section -->
+        <!-- About -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <p class="about-intro">복잡한 의사결정 로직을 확장 가능하고 관찰 가능한 소프트웨어로 만드는 일을 합니다.</p>
+                <p class="about-detail">Python 기반 시뮬레이션 엔진에서 18개월간 약 1,300건의 커밋을 단독 수행하며, 플러그인 프레임워크 설계, 레거시 아키텍처 분해, 수천만 회 호출되는 핫 패스 최적화, 그리고 이 모든 것을 디버깅할 수 있는 도구를 만들었습니다. 모든 작업의 동기는 하나였습니다 — <strong>다른 엔지니어가 시스템의 전체 복잡도를 이해하지 않아도 쉽게 기능을 확장할 수 있는 환경을 만드는 것.</strong> 개인의 노하우를 공통 프레임워크로, 암묵적 관행을 명시적 구조로 바꾸는 일을 해왔습니다.</p>
+                <p class="tech-stack">Python · pandas/NumPy · SQLAlchemy · ONNX · PostgreSQL · Dash/Streamlit · GitHub Actions/ECR</p>
+            </div>
+        </section>
+
+        <!-- Projects -->
         <section id="projects" class="projects-section">
             <div class="container">
-                <h2 class="section-title">Featured Projects</h2>
-                <div class="projects-grid">
-                    
-                    <article class="project-card">
-                        <div class="project-content">
-                            <h3 class="project-title">DB 저장 시간 95% 단축</h3>
-                            <p class="project-description">전체 약 10분 시뮬레이션(5만 개 이상 엔티티)에서 DB 저장 시간을 168초에서 8초로 단축. 2GB 공유 메모리 위에 Lock-free SPSC 링 버퍼를 구축하여 쓰기를 별도 프로세스에 위임하고, PostgreSQL COPY 벌크 삽입으로 배치당 1만 건을 처리. cProfile로 핫 패스를 분석하여 DataFrame 스캔을 O(1) 조회로 대체하고 1억 3,600만 회 속성 접근을 캐싱.</p>
-                            <div class="project-tech">
-                                
-                                <span class="tech-tag">Python</span>
-                                
-                                <span class="tech-tag">공유 메모리</span>
-                                
-                                <span class="tech-tag">PostgreSQL</span>
-                                
-                                <span class="tech-tag">cProfile</span>
-                                
-                            </div>
+                
+                <article class="case-study">
+                    <h2 class="case-study-title">하드코딩된 규칙 → 플러그인 아키텍처</h2>
+                    <div class="before-after">
+                        <div class="before">
+                            <span class="ba-label">Before</span>
+                            <p>새로운 타입을 추가할 때마다 기존 코드를 복제해서 처음부터 작성. 규칙을 바꾸려면 실행 흐름 전체를 건드려야 함.</p>
                         </div>
-                    </article>
-                    
-                    <article class="project-card">
-                        <div class="project-content">
-                            <h3 class="project-title">시뮬레이션 엔진용 ECS 아키텍처</h3>
-                            <p class="project-description">모놀리식 머신센터를 7개 데이터 전용 컴포넌트와 3개 행위 시스템으로 구성된 Entity Component System으로 재설계. Struct-of-Arrays 레이아웃으로 캐시 친화적이고 벡터화 가능한 구조를 확보.</p>
-                            <div class="project-tech">
-                                
-                                <span class="tech-tag">Python</span>
-                                
-                                <span class="tech-tag">ECS</span>
-                                
-                                <span class="tech-tag">어댑터 패턴</span>
-                                
-                                <span class="tech-tag">Struct-of-Arrays</span>
-                                
-                            </div>
+                        <div class="after">
+                            <span class="ba-label">After</span>
+                            <p>상태, 의사결정, 실행을 분리한 3계층 플러그인 아키텍처. 계층을 조합해 새 타입을 추가하는 구조. 10종 이상이 하나의 프레임워크 위에서 동작.</p>
                         </div>
-                    </article>
-                    
-                    <article class="project-card">
-                        <div class="project-content">
-                            <h3 class="project-title">이벤트 기반 디커플링</h3>
-                            <p class="project-description">Pub/Sub를 도입하여 핵심 시뮬레이션 로직과 24개 데이터 테이블의 I/O 부수효과를 분리. 이벤트 브릿지가 저수준 시그널을 도메인 이벤트로 변환하되 핵심 엔진 코드는 수정하지 않는 구조.</p>
-                            <div class="project-tech">
-                                
-                                <span class="tech-tag">Python</span>
-                                
-                                <span class="tech-tag">Pub/Sub</span>
-                                
-                                <span class="tech-tag">이벤트 기반 아키텍처</span>
-                                
-                            </div>
+                    </div>
+                    <div class="case-study-body">
+                        <p class="case-study-description">엔진은 서로 다른 제약과 동작을 가진 다양한 처리 모델을 지원해야 했습니다. 기존 방식은 타입마다 코드를 복제해서 커스터마이징하는 것이었고, 타입이 늘어나면서 금방 한계에 부딪혔습니다. 세 가지 관심사를 조합 가능한 계층으로 분리하는 프레임워크를 설계했습니다.</p>
+                        <ul class="case-study-details">
+                            
+                            <li>상태 계층 — 의사결정에 필요한 데이터를 소유. 추상 인터페이스가 공통 계약을 정의하고, 타입별 차이는 상속이 아닌 조합으로 표현. 9개의 구체 변형이 운영 중.</li>
+                            
+                            <li>계획 계층 — 상태 계층을 소유하고 의사결정 생명주기를 관리하는 ABC. 7개의 구체 플래너(총 ~3,230줄)가 상속.</li>
+                            
+                            <li>실행 계층 — template method 패턴으로 실행을 추상화. 타입별 실행기가 런타임에 동적으로 등록.</li>
+                            
+                        </ul>
+                        <p class="case-study-footnote">처음부터 일반화하지 않았습니다. 5개 타입에 먼저 구현해 제약을 검증한 뒤, 공통 생명주기가 드러난 시점에 ~1,442줄의 중복을 제거하고 ~1,404줄의 일반화 코드로 교체했습니다. ONNX 추론도 이 프레임워크 안에 통합했습니다.</p>
+                    </div>
+                </article>
+                
+                <article class="case-study">
+                    <h2 class="case-study-title">그리디 할당 → 다중 자원 트랜잭션</h2>
+                    <div class="before-after">
+                        <div class="before">
+                            <span class="ba-label">Before</span>
+                            <p>"지금 비어 있는 자원에 작업을 넣는" 그리디 방식. 여러 자원에 걸친 원자적 할당이 불가능하고, 중간에 실패하면 변경된 상태를 되돌릴 수 없음.</p>
                         </div>
-                    </article>
-                    
-                </div>
+                        <div class="after">
+                            <span class="ba-label">After</span>
+                            <p>경로 전체를 하나의 트랜잭션으로 묶어 원자적으로 예약하고, 실패 시 자동 롤백.</p>
+                        </div>
+                    </div>
+                    <div class="case-study-body">
+                        <p class="case-study-description">작업이 여러 자원에 걸쳐 있을 때, 하나씩 잡아가는 방식으로는 중간에 실패하면 시스템이 불일치 상태에 빠집니다. 자원 타입별 예약 책임을 분리한 뒤 하나의 트랜잭션으로 묶는 구조를 설계했습니다.</p>
+                        <ul class="case-study-details">
+                            
+                            <li>조율자 — 전체 예약 흐름을 관리하는 최상위 컨트롤러</li>
+                            
+                            <li>타입별 예약기 — 3종의 자원 타입에 대해 각각 전용 예약기로 제약을 독립 처리</li>
+                            
+                            <li>경로 탐색기 — 상태 전환 비용을 고려해 가능한 경로를 탐색·정렬</li>
+                            
+                            <li>trial/rollback 메커니즘 — begin_trial()로 시도, 성공하면 apply_trial()로 확정, 실패하면 자동 롤백</li>
+                            
+                            <li>실패 시도 중복 방지 캐시, 성공률 기반 적응형 빈도 조절</li>
+                            
+                        </ul>
+                        <p class="case-study-footnote">3개월간 안정화를 거치며 14건 이상의 엣지 케이스를 해결했습니다.</p>
+                    </div>
+                </article>
+                
+                <article class="case-study">
+                    <h2 class="case-study-title">God Object → 명시적 상태 소유 + 이벤트 기반 아키텍처</h2>
+                    <div class="before-after">
+                        <div class="before">
+                            <span class="ba-label">Before</span>
+                            <p>3,800줄, 114개 속성, 6가지 관심사가 뒤섞인 God Class. 상태가 싱글턴·인스턴스·그룹에 흩어져 있고 __getattr__ 프록시가 소유권을 감춤. 콜백 체인으로 부수 효과 추적 불가.</p>
+                        </div>
+                        <div class="after">
+                            <span class="ba-label">After</span>
+                            <p>226줄의 코어 클래스 + 19개 컴포넌트 + 25개 facade. 프록시 0개. pub/sub 이벤트 버스(29줄)로 실행과 후속 처리 완전 분리.</p>
+                        </div>
+                    </div>
+                    <div class="case-study-body">
+                        <p class="case-study-description">80건+ 커밋, 9단계에 걸쳐 God Object를 점진적으로 분해하고, 콜백 체인을 이벤트 기반으로 전환했습니다.</p>
+                        <ul class="case-study-details">
+                            
+                            <li>싱글턴에 흩어진 상태를 개별 인스턴스로 회수</li>
+                            
+                            <li>mixin 추출 → 114개 속성을 19개 컴포넌트 데이터클래스(590줄)로 분리</li>
+                            
+                            <li>6개 기반 facade + 25개 타입별 facade로 실행 로직 재구성</li>
+                            
+                            <li>152개+ 파일에서 __getattr__ 프록시를 모두 제거, 명시적 컴포넌트 경로로 마이그레이션</li>
+                            
+                            <li>pub/sub 이벤트 버스(29줄) — 타입화된 이벤트만 발행, processor를 동적으로 붙이거나 떼는 구조</li>
+                            
+                            <li>이력 로깅을 전용 observer로 분리해 부수 효과 완전 제거</li>
+                            
+                            <li>752줄 삭제, 163줄 추가. 새 기능 추가 시 기존 흐름 수정 불필요</li>
+                            
+                        </ul>
+                        <p class="case-study-footnote">ECS를 먼저 시도했지만 도메인에 비해 조회 경로가 과도하게 간접적이 되어 facade 패턴으로 전환. 과도한 coordinator 분해도 실익 없어 롤백.</p>
+                    </div>
+                </article>
+                
+                <article class="case-study">
+                    <h2 class="case-study-title">느린 핫 패스 + 블랙박스 → 최적화 + 관찰 가능성</h2>
+                    <div class="before-after">
+                        <div class="before">
+                            <span class="ba-label">Before</span>
+                            <p>핫 패스가 1회 실행당 22M~500M회 호출되면서 느려지고, 의사결정 원인을 추적할 수단이 없음.</p>
+                        </div>
+                        <div class="after">
+                            <span class="ba-label">After</span>
+                            <p>프로파일링 기반 집중 최적화로 핫 패스 비용 절감. 의사결정을 원인까지 역추적할 수 있는 분석 도구 구축.</p>
+                        </div>
+                    </div>
+                    <div class="case-study-body">
+                        <p class="case-study-description">전체 재설계 대신 측정 가능한 병목에 집중했습니다.</p>
+                        <ul class="case-study-details">
+                            
+                            <li>Enum .value 조회를 모듈 수준 상수로 캐싱 (22M+회 오버헤드 제거)</li>
+                            
+                            <li>DataFrame boolean mask를 사전 구축 딕셔너리 인덱스로 교체</li>
+                            
+                            <li>핫 패스 로컬 캐시 (22M+회, 24M+회)</li>
+                            
+                            <li>커스텀 __deepcopy__ — shallow copy + 필요한 필드만 deep copy</li>
+                            
+                            <li>PostgreSQL 네이티브 COPY ... FROM STDIN WITH CSV</li>
+                            
+                            <li>Gantt 차트 분석기 — Dash/Streamlit 앱으로 재실행 없이 의사결정 시각적 디버깅</li>
+                            
+                            <li>105개 모듈 구분 enum 기반 구조화된 로깅</li>
+                            
+                            <li>이벤트 기반 타임라인 추적 — 의사결정의 원인을 끝까지 따라갈 수 있는 구조</li>
+                            
+                        </ul>
+                        <p class="case-study-footnote">공유 메모리 비동기 오프로딩(1,920줄)은 커플링 과도로 판단해 제거. GitHub Actions + ECR CI/CD 파이프라인 구축, 레거시 커넥터 1,915줄 제거 등 운영 인프라 정비도 수행.</p>
+                    </div>
+                </article>
+                
             </div>
         </section>
 
-        <!-- Skills Section -->
-        <section id="skills" class="skills-section">
+        <!-- Writing -->
+        <section id="writing" class="writing-section">
             <div class="container">
-                <h2 class="section-title">Technical Skills</h2>
-                <div class="skills-grid">
-                    
-                    <article class="skill-category">
-                        <h3>핵심 기술</h3>
-                        <div class="skill-tags">
-                            
-                            <span class="skill-tag">Python (Expert)</span>
-                            
-                            <span class="skill-tag">SQL</span>
-                            
-                            <span class="skill-tag">NumPy</span>
-                            
-                            <span class="skill-tag">Pandas</span>
-                            
-                            <span class="skill-tag">multiprocessing</span>
-                            
-                        </div>
-                    </article>
-                    
-                    <article class="skill-category">
-                        <h3>아키텍처 & 시스템</h3>
-                        <div class="skill-tags">
-                            
-                            <span class="skill-tag">Entity Component System</span>
-                            
-                            <span class="skill-tag">Pub/Sub</span>
-                            
-                            <span class="skill-tag">이산 이벤트 시뮬레이션</span>
-                            
-                            <span class="skill-tag">Lock-free 자료구조</span>
-                            
-                            <span class="skill-tag">공유 메모리 IPC</span>
-                            
-                        </div>
-                    </article>
-                    
-                    <article class="skill-category">
-                        <h3>성능 & 인프라</h3>
-                        <div class="skill-tags">
-                            
-                            <span class="skill-tag">프로파일링 & 최적화</span>
-                            
-                            <span class="skill-tag">캐싱 전략</span>
-                            
-                            <span class="skill-tag">PostgreSQL</span>
-                            
-                            <span class="skill-tag">GitHub Actions CI/CD</span>
-                            
-                        </div>
-                    </article>
-                    
+                <h2 class="section-title">멘토링 & 글쓰기</h2>
+                <div class="writing-content">
+                    <p><a href="https://jae-heo.github.io/tech/ko/posts/python-lecture-00.html" class="writing-link" target="_blank">Python 강좌 시리즈</a> — 신입 엔지니어 온보딩을 위해 만든 5편짜리 심화 강좌입니다. 파이썬의 설계 철학, 어휘 구조, 컨테이너/제너레이터, 클래스 내부 구조(디스크립터, 바운드 메서드)를 다룹니다. 코드베이스에 메타클래스, 컨텍스트 매니저, async가 많이 쓰이기 때문에, 새로운 엔지니어가 사용법이 아니라 왜 그렇게 동작하는지를 이해할 수 있도록 만들었습니다.</p>
+                    <p>이 외에도 9개 시리즈에 걸쳐 Python, 컴파일러 이론, 리눅스 내부 구조, 컴퓨터 구조, GPU 시스템, PyTorch 내부 구조, 분산 LLM 학습, MLOps, 플랫폼 엔지니어링을 다루는 기술 블로그를 운영하고 있습니다. <a href="https://jae-heo.github.io" class="writing-link" target="_blank">기술 블로그 보기 →</a></p>
                 </div>
             </div>
         </section>
 
-        <!-- Experience Section -->
-        <section id="experience" class="experience-section">
+        <!-- Stats -->
+        <section id="stats" class="stats-section">
             <div class="container">
-                <h2 class="section-title">Experience</h2>
-                <div class="timeline">
+                <h2 class="section-title">한눈에 보기</h2>
+                <div class="stats-grid">
                     
-                    <article class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <span class="timeline-period">Phase 3</span>
-                                <h3>성능 최적화</h3>
-                                <p class="timeline-company">시뮬레이션 엔진</p>
-                            </div>
-                            <p class="timeline-description">전체 약 10분 시뮬레이션의 DB 저장 작업 체계적 프로파일링과 최적화</p>
-                            <ul class="timeline-achievements">
-                                
-                                <li>공유 메모리 링 버퍼와 cProfile 기반 최적화로 DB 저장 시간 168초 → 8초 달성</li>
-                                
-                                <li>핫 패스의 DataFrame 스캔을 O(1) 조회로 대체</li>
-                                
-                                <li>1억 3,600만 회 중복 속성 접근을 모듈 레벨 캐싱으로 제거</li>
-                                
-                            </ul>
-                        </div>
-                    </article>
+                    <div class="stat-item">
+                        <span class="stat-label">기간</span>
+                        <span class="stat-value">2024.10 – 2026.03 (18개월)</span>
+                    </div>
                     
-                    <article class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <span class="timeline-period">Phase 2</span>
-                                <h3>아키텍처 재설계</h3>
-                                <p class="timeline-company">시뮬레이션 엔진</p>
-                            </div>
-                            <p class="timeline-description">유지보수성과 확장성을 위한 엔진 코어 구조 개편</p>
-                            <ul class="timeline-achievements">
-                                
-                                <li>모놀리식 머신센터 클래스를 ECS로 분해</li>
-                                
-                                <li>핵심 시뮬레이션 로직과 I/O를 분리하는 Pub/Sub 레이어 구축</li>
-                                
-                                <li>엔진 수정 없이 도메인 이벤트를 전달하는 이벤트 브릿지 설계</li>
-                                
-                            </ul>
-                        </div>
-                    </article>
+                    <div class="stat-item">
+                        <span class="stat-label">커밋</span>
+                        <span class="stat-value">~1,300건 (단독)</span>
+                    </div>
                     
-                    <article class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <span class="timeline-period">Phase 1</span>
-                                <h3>인프라 구축</h3>
-                                <p class="timeline-company">시뮬레이션 엔진</p>
-                            </div>
-                            <p class="timeline-description">엔진이 돌아가는 기반 시스템 구축</p>
-                            <ul class="timeline-achievements">
-                                
-                                <li>자동 회귀 감지를 포함한 CI/CD 벤치마킹 파이프라인 구축</li>
-                                
-                                <li>16개 시스템 개념과 90개 데이터 레퍼런스를 다루는 기술 문서 작성</li>
-                                
-                            </ul>
-                        </div>
-                    </article>
+                    <div class="stat-item">
+                        <span class="stat-label">지원하는 처리 모델</span>
+                        <span class="stat-value">10종 이상</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-label">God Class 분해</span>
+                        <span class="stat-value">3,800 → 226줄, 19 컴포넌트, 25 facade</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-label">마이그레이션 파일</span>
+                        <span class="stat-value">152개+</span>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-label">핫 패스 최적화 대상</span>
+                        <span class="stat-value">22M – 500M회/실행</span>
+                    </div>
                     
                 </div>
             </div>
         </section>
 
-        <!-- Contact Section -->
+        <!-- Contact -->
         <section id="contact" class="contact-section">
             <div class="container">
-                <h2 class="section-title">Get In Touch</h2>
+                <h2 class="section-title">연락처</h2>
                 <div class="contact-content">
                     <p>시뮬레이션 시스템, 성능 엔지니어링, 아키텍처 설계에 관심이 있으시다면 편하게 연락 주세요.</p>
                     <div class="contact-links">
                         
-                        
-                        <a href="https://github.com/jae-heo" class="contact-link" target="_blank">
-                            <span>🐙</span> GitHub
-                        </a>
-                        
+                        <a href="https://github.com/jae-heo" class="contact-link" target="_blank">GitHub</a>
                         
                         
                     </div>
@@ -266,7 +259,7 @@
 
     <footer class="portfolio-footer">
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Crafted with passion</p>
+            <p>&copy; 2025 Jae</p>
         </div>
     </footer>
 
