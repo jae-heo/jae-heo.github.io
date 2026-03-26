@@ -324,6 +324,76 @@
     animation: fadeInUp 0.6s ease-out;
 }
 
+/* Series meta bar - compact inline stats */
+.series-meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.series-meta-sep {
+    color: var(--text-tertiary, var(--text-secondary));
+}
+
+.series-audience {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+/* Series prereqs & next - simple link lists */
+.series-prereqs,
+.series-next {
+    margin-bottom: 2rem;
+}
+
+.series-prereqs h2,
+.series-next h2 {
+    font-size: 1.1rem;
+    margin: 0 0 0.75rem;
+}
+
+.series-prereq-list,
+.series-next-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.series-prereq-link,
+.series-next-link {
+    display: block;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+}
+
+.series-prereq-link:hover,
+.series-next-link:hover {
+    border-color: var(--accent);
+}
+
+.series-prereq-link strong,
+.series-next-link strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    font-size: 0.95rem;
+}
+
+.series-prereq-link span,
+.series-next-link span {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
 .series-overview-card {
     border: 1px solid var(--border);
     border-radius: 16px;

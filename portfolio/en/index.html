@@ -19,8 +19,8 @@
         <nav>
             <a href="/portfolio/en/" class="site-title">Jaeyoung Heo</a>
             <div class="nav-links">
-                <a href="#about" data-nav-link>About</a>
                 <a href="#projects" data-nav-link>Projects</a>
+                <a href="#ai" data-nav-link>AI</a>
                 <a href="#writing" data-nav-link>Writing</a>
                 <a href="#contact" data-nav-link>Contact</a>
                 <select id="lang-select" aria-label="Select language">
@@ -35,24 +35,15 @@
     </header>
 
     <main class="portfolio-main">
-        <!-- Hero -->
         <section class="hero">
             <div class="hero-content">
                 <h1 class="hero-title">Jaeyoung Heo</h1>
-                <p class="hero-subtitle">Python Systems Engineer · Architecture · Performance · Observability</p>
+                <p class="hero-subtitle">Python Systems Engineer · Architecture · Performance · AI & Agentic Systems</p>
+                <p class="hero-intro">I build systems that turn complex decision-making into extensible, observable software.</p>
+                <p class="hero-tech">Python · pandas/NumPy · SQLAlchemy · ONNX · PostgreSQL · Dash/Streamlit · GitHub Actions/ECR</p>
             </div>
         </section>
 
-        <!-- About -->
-        <section id="about" class="about-section">
-            <div class="container">
-                <p class="about-intro">I build systems that turn complex decision-making into extensible, observable software.</p>
-                <p class="about-detail">Over 18 months as the sole architect and engineer of a Python-based simulation engine, I shipped ~1,300 commits — designing plugin frameworks, decomposing legacy architecture, optimizing million-call hot paths, and building the tools to make it all debuggable. Everything I built was driven by one goal: <strong>Making it easy for other engineers to build on top of the system without understanding its full complexity.</strong> Individual know-how became shared frameworks. Implicit conventions became explicit structure.</p>
-                <p class="tech-stack">Python · pandas/NumPy · SQLAlchemy · ONNX · PostgreSQL · Dash/Streamlit · GitHub Actions/ECR</p>
-            </div>
-        </section>
-
-        <!-- Projects -->
         <section id="projects" class="projects-section">
             <div class="container">
                 
@@ -65,22 +56,18 @@
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>A 3-layer plugin architecture that separates state, decision logic, and execution. New types added by composing layers, not by forking code. 10+ types on one framework.</p>
+                            <p>A 3-layer plugin architecture separating state, decision logic, and execution. New types added by composing layers. 10+ types on one framework.</p>
                         </div>
                     </div>
-                    <div class="case-study-body">
-                        <p class="case-study-description">The engine needed to support many heterogeneous processing models, each with different constraints and behaviors. The original approach was to copy-paste and customize per type — which broke down quickly as the number of types grew. I designed a framework that separates three concerns into composable layers:</p>
-                        <ul class="case-study-details">
-                            
-                            <li>State layer — Owns the data needed for decisions. An abstract interface defines shared contracts, while type-specific differences are expressed through composition, not inheritance. 9 concrete variants in production.</li>
-                            
-                            <li>Planning layer — Owns the state layer and manages the decision lifecycle. 7 concrete planners (~3,230 LOC) inherit from a base ABC.</li>
-                            
-                            <li>Execution layer — Template method pattern abstracting execution. Type-specific executors implement concrete behavior and are dynamically registered at runtime.</li>
-                            
-                        </ul>
-                        <p class="case-study-footnote">I didn't generalize upfront. Built 5 type-specific implementations first, then extracted the common lifecycle — removing ~1,442 lines of duplication and replacing them with ~1,404 lines of generalized code. ONNX inference was also integrated within this framework.</p>
-                    </div>
+                    <ul class="case-study-details">
+                        
+                        <li>State layer — Abstract interface defines shared contracts, type-specific differences via composition. 9 variants in production</li>
+                        
+                        <li>Planning layer — Manages decision lifecycle. 7 concrete planners (~3,230 LOC) inherit from a base ABC</li>
+                        
+                        <li>Execution layer — Template method pattern. Type-specific executors dynamically registered at runtime</li>
+                        
+                    </ul>
                 </article>
                 
                 <article class="case-study">
@@ -88,30 +75,22 @@
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>"Assign work to whatever is free right now." No atomic allocation across multiple resources. Failure midway left state corrupted with no rollback.</p>
+                            <p>"Assign work to whatever is free right now." No atomic allocation across resources. Failure midway left state corrupted with no rollback.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
                             <p>Entire paths reserved as a single transaction. Failure at any point triggers automatic rollback.</p>
                         </div>
                     </div>
-                    <div class="case-study-body">
-                        <p class="case-study-description">When work depends on a chain of resources, grabbing them one at a time doesn't work — a failure halfway through leaves the system in an inconsistent state. I designed a reservation system that separates per-resource-type booking logic and wraps it in one transaction:</p>
-                        <ul class="case-study-details">
-                            
-                            <li>Coordinator — Top-level controller orchestrating the full reservation flow</li>
-                            
-                            <li>Type-specific reservers — 3 dedicated reservers handling each resource type's constraints independently</li>
-                            
-                            <li>Path explorer — Ranks possible routes considering state transition costs</li>
-                            
-                            <li>trial/rollback mechanism — begin_trial() → attempt → apply_trial() on success, automatic rollback on failure</li>
-                            
-                            <li>Failed-attempt dedup cache, success-rate-based adaptive retry frequency</li>
-                            
-                        </ul>
-                        <p class="case-study-footnote">Stabilized over 3 months, resolving 14+ edge cases.</p>
-                    </div>
+                    <ul class="case-study-details">
+                        
+                        <li>Coordinator + 3 type-specific reservers handling constraints independently</li>
+                        
+                        <li>Path explorer ranking routes by state transition costs</li>
+                        
+                        <li>trial/rollback mechanism with automatic rollback on failure + dedup cache</li>
+                        
+                    </ul>
                 </article>
                 
                 <article class="case-study">
@@ -119,34 +98,22 @@
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>3,800 lines, 114 attributes, 6 tangled concerns in one class. State scattered across singleton, instance, and group objects. __getattr__ proxies hiding ownership. Callback chains making side effects untraceable.</p>
+                            <p>3,800 lines, 114 attributes, 6 tangled concerns. __getattr__ proxies hiding ownership. Callback chains making side effects untraceable.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>226-line core class + 19 components + 25 facades. Zero proxies. Pub/sub event bus (29 LOC) fully decoupling execution from side effects.</p>
+                            <p>226-line core + 19 components + 25 facades. Zero proxies. Pub/sub event bus (29 LOC) fully decoupling execution from side effects.</p>
                         </div>
                     </div>
-                    <div class="case-study-body">
-                        <p class="case-study-description">Decomposed the God Object over 80+ commits in 9 phases, then converted callback chains to event-driven architecture.</p>
-                        <ul class="case-study-details">
-                            
-                            <li>Reclaimed state from singletons into individual instances</li>
-                            
-                            <li>Extracted mixins → split 114 attributes into 19 component dataclasses (590 LOC)</li>
-                            
-                            <li>Restructured into 6 base facades + 25 type-specific facades</li>
-                            
-                            <li>Migrated 152+ files from __getattr__ proxies to explicit component paths</li>
-                            
-                            <li>Pub/sub event bus (29 LOC) — typed events only, processors attached/detached dynamically</li>
-                            
-                            <li>History logging extracted into dedicated observer — zero side effects inside execution logic</li>
-                            
-                            <li>-752 / +163 lines. New features no longer require touching existing flows</li>
-                            
-                        </ul>
-                        <p class="case-study-footnote">Tried ECS first — too indirect for the domain. Pivoted to facade pattern. Rolled back over-extracted coordinators when granularity didn't pay off.</p>
-                    </div>
+                    <ul class="case-study-details">
+                        
+                        <li>114 attributes → 19 components + 25 facades. Removed proxies from 152+ files</li>
+                        
+                        <li>Pub/sub event bus (29 LOC) fully decoupling execution from side effects</li>
+                        
+                        <li>-752 / +163 lines. New features no longer require touching existing flows</li>
+                        
+                    </ul>
                 </article>
                 
                 <article class="case-study">
@@ -158,89 +125,92 @@
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>Profiling-driven optimization cutting repeated computation costs. Full decision traceability from outcome back to cause.</p>
+                            <p>Profiling-driven hot path optimization. Full decision traceability from outcome back to cause.</p>
                         </div>
                     </div>
-                    <div class="case-study-body">
-                        <p class="case-study-description">Targeted measurable bottlenecks instead of redesigning.</p>
-                        <ul class="case-study-details">
-                            
-                            <li>Enum .value lookups cached as module-level constants (22M+ calls)</li>
-                            
-                            <li>DataFrame boolean masks replaced with pre-built dict indexes</li>
-                            
-                            <li>Hot path local caches (22M+, 24M+ calls)</li>
-                            
-                            <li>Custom __deepcopy__ — shallow copy + selective deep copy</li>
-                            
-                            <li>PostgreSQL native COPY ... FROM STDIN WITH CSV</li>
-                            
-                            <li>Gantt chart analyzer — Dash/Streamlit app for visual decision debugging without re-running</li>
-                            
-                            <li>Structured logging with 105-module enum taxonomy</li>
-                            
-                            <li>Event-based timeline tracing — trace any decision back to its root cause</li>
-                            
-                        </ul>
-                        <p class="case-study-footnote">Attempted shared-memory async offloading (1,920 LOC) — removed when coupling proved excessive. Also built GitHub Actions + ECR CI/CD pipeline and removed 1,915 lines of legacy connectors.</p>
-                    </div>
+                    <ul class="case-study-details">
+                        
+                        <li>Enum caching (22M+), dict indexes, local caches, custom __deepcopy__ for hot path optimization</li>
+                        
+                        <li>Gantt chart + event timeline tracing decisions back to root cause</li>
+                        
+                        <li>Structured logging with 105-module enum taxonomy</li>
+                        
+                    </ul>
                 </article>
                 
             </div>
         </section>
 
-        <!-- Writing -->
+        <section id="ai" class="ai-section">
+            <div class="container">
+                <h2 class="section-title">AI & Agentic Projects</h2>
+                <div class="ai-grid">
+                    
+                    <article class="ai-card">
+                        <h3 class="ai-card-title">aps-rag <span class="ai-card-loc">1,731 LOC</span></h3>
+                        <p class="ai-card-desc">Hybrid RAG system combining AST-based code analysis with semantic + keyword search. Exposed via 10 MCP tools to Claude Code.</p>
+                        <ul class="ai-card-details">
+                            
+                            <li>AST indexing for classes, functions, inheritance, call graphs — ChromaDB 3 collections</li>
+                            
+                            <li>Semantic 70% + keyword 30% hybrid search</li>
+                            
+                            <li>Knowledge base: 183 docs in 3-tier hierarchy</li>
+                            
+                        </ul>
+                    </article>
+                    
+                    <article class="ai-card">
+                        <h3 class="ai-card-title">dooray-mcp <span class="ai-card-loc">349 LOC</span></h3>
+                        <p class="ai-card-desc">MCP server giving AI agents direct access to project management tools.</p>
+                        <ul class="ai-card-details">
+                            
+                            <li>8 tools + 2 workflow prompts</li>
+                            
+                            <li>Async-first, 2-layer error handling</li>
+                            
+                        </ul>
+                    </article>
+                    
+                    <article class="ai-card">
+                        <h3 class="ai-card-title">auto-issue <span class="ai-card-loc">762 LOC</span></h3>
+                        <p class="ai-card-desc">LLM-powered documentation sync pipeline triggered by git commits.</p>
+                        <ul class="ai-card-details">
+                            
+                            <li>Commit polling → file-doc mapping → OpenAI API update generation</li>
+                            
+                            <li>Dual git + wiki sync, idempotent output</li>
+                            
+                        </ul>
+                    </article>
+                    
+                    <article class="ai-card">
+                        <h3 class="ai-card-title">ALM Agent <span class="ai-card-loc">In Progress</span></h3>
+                        <p class="ai-card-desc">AI agent system for release and process automation.</p>
+                        <ul class="ai-card-details">
+                            
+                            <li>Changelog, release PR, hotfix detection, deploy reports, requirements structuring</li>
+                            
+                            <li>Polling trigger → event router → UC handlers → LLM integration</li>
+                            
+                        </ul>
+                    </article>
+                    
+                </div>
+            </div>
+        </section>
+
         <section id="writing" class="writing-section">
             <div class="container">
                 <h2 class="section-title">Mentoring & Writing</h2>
                 <div class="writing-content">
-                    <p><a href="https://jae-heo.github.io/tech/ko/posts/python-lecture-00.html" class="writing-link" target="_blank">Python Lecture Series</a> — A 5-part deep-dive course I created to onboard junior engineers. Covers Python's design philosophy, lexical structure, containers/generators, and class internals (descriptors, bound methods). Built because our codebase uses metaclasses, context managers, and async heavily — I wanted new engineers to understand why the language works that way, not just how to use it.</p>
-                    <p>I also maintain a technical blog covering 9 series across Python, compiler theory, Linux internals, computer architecture, GPU systems, PyTorch internals, distributed LLM training, MLOps, and platform engineering. <a href="https://jae-heo.github.io" class="writing-link" target="_blank">Visit Blog →</a></p>
+                    <p><a href="https://jae-heo.github.io/tech/ko/posts/python-lecture-00.html" class="writing-link" target="_blank">Python Lecture Series</a> — A 5-part deep-dive Python course for onboarding junior engineers. From design philosophy to descriptors and metaclasses.</p>
+                    <p>A technical blog covering 9 series — Python, compilers, Linux, GPU systems, and more. <a href="https://jae-heo.github.io" class="writing-link" target="_blank">Visit Blog →</a></p>
                 </div>
             </div>
         </section>
 
-        <!-- Stats -->
-        <section id="stats" class="stats-section">
-            <div class="container">
-                <h2 class="section-title">At a Glance</h2>
-                <div class="stats-grid">
-                    
-                    <div class="stat-item">
-                        <span class="stat-label">Period</span>
-                        <span class="stat-value">2024.10 – 2026.03 (18 months)</span>
-                    </div>
-                    
-                    <div class="stat-item">
-                        <span class="stat-label">Commits</span>
-                        <span class="stat-value">~1,300 (solo)</span>
-                    </div>
-                    
-                    <div class="stat-item">
-                        <span class="stat-label">Processing models</span>
-                        <span class="stat-value">10+ heterogeneous types</span>
-                    </div>
-                    
-                    <div class="stat-item">
-                        <span class="stat-label">God Class decomposition</span>
-                        <span class="stat-value">3,800 → 226 LOC, 19 components, 25 facades</span>
-                    </div>
-                    
-                    <div class="stat-item">
-                        <span class="stat-label">Files migrated</span>
-                        <span class="stat-value">152+</span>
-                    </div>
-                    
-                    <div class="stat-item">
-                        <span class="stat-label">Hot path optimization</span>
-                        <span class="stat-value">22M – 500M calls/run</span>
-                    </div>
-                    
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact -->
         <section id="contact" class="contact-section">
             <div class="container">
                 <h2 class="section-title">Get In Touch</h2>

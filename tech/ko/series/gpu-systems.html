@@ -136,131 +136,35 @@
         <p class="subtitle">GPU 아키텍처, CUDA 커널, Triton, 그리고 실제 커널 최적화까지 이어지는 흐름</p>
     </div>
 
-    <section class="series-overview-card">
-        <div class="series-overview-grid">
-            <div class="series-overview-main">
-                
-                <div class="series-copy-block">
-                    <h2>이런 독자에게 맞습니다</h2>
-                    <p>GPU가 실제로 어떻게 계산을 수행하는지 이해하고, 나중에는 직접 커널을 작성하고 최적화하고 싶은 엔지니어.</p>
-                </div>
-                
+    <div class="series-meta-bar">
+        <span>총 21개 글</span>
+        <span class="series-meta-sep">&middot;</span>
+        <span>총 49분</span>
+        
+        <span class="series-meta-sep">&middot;</span>
+        <span>고급</span>
+        
+    </div>
 
-                
-                <div class="series-copy-block">
-                    <h2>선수 지식</h2>
-                    <p>파이썬 사용 경험, 기본적인 선형대수, 그리고 저수준 성능 주제를 읽을 수 있을 정도의 시스템 감각.</p>
-                </div>
-                
-
-                
-                
-                <div class="series-copy-block">
-                    <h2>이 시리즈에서 얻을 수 있는 것</h2>
-                    <ul class="series-outcomes">
-                        
-                        <li>warp, block, 메모리 계층, occupancy에 대한 구체적인 감을 잡게 됩니다</li>
-                        
-                        <li>GPU를 블랙박스로 쓰는 대신 CUDA와 Triton 커널을 직접 작성할 수 있게 됩니다</li>
-                        
-                        <li>실제 워크로드에서 커널 성능이 어디서 갈리는지 이해하게 됩니다</li>
-                        
-                    </ul>
-                </div>
-                
-                
-            </div>
-
-            <aside class="series-sidebar">
-                <div class="series-stat-card">
-                    <span class="series-stat-label">총 21개 글</span>
-                    <span class="series-stat-value">21</span>
-                </div>
-                <div class="series-stat-card">
-                    <span class="series-stat-label">총 49분</span>
-                    <span class="series-stat-value">49</span>
-                </div>
-                
-                <div class="series-stat-card">
-                    <span class="series-stat-label">난이도</span>
-                    <span class="series-stat-value is-difficulty">고급</span>
-                </div>
-                
-                
-                <div class="series-stat-card">
-                    <span class="series-stat-label">추천 독자</span>
-                    <span class="series-stat-value is-difficulty">커널 수준까지 보고 싶은 ML·시스템 엔지니어</span>
-                </div>
-                
-                
-                <div class="series-stat-card">
-                    <span class="series-stat-label">업데이트</span>
-                    <span class="series-stat-value">March 9, 2026</span>
-                </div>
-                
-                
-                <a class="series-start-link" href="/tech/ko/posts/gpu-systems-00.html">
-                    추천 시작 글: GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들
-                </a>
-                
-            </aside>
-        </div>
-    </section>
+    
+    <p class="series-audience">GPU가 실제로 어떻게 계산을 수행하는지 이해하고, 나중에는 직접 커널을 작성하고 최적화하고 싶은 엔지니어.</p>
+    
 
     
     
-    <section class="series-study-path">
-        <div class="series-section-header">
-            <h2>먼저 보면 좋은 시리즈</h2>
-            <p>이 트랙이 아직 버겁게 느껴진다면, 먼저 배경을 만들어 줄 시리즈들입니다.</p>
-        </div>
-        <div class="study-path-grid">
+    <section class="series-prereqs">
+        <h2>먼저 보면 좋은 시리즈</h2>
+        <div class="series-prereq-list">
             
-            <article class="study-path-card">
-                <div class="study-path-meta">
-                    <span>총 10개 글</span>
-                    <span class="post-card-dot"></span>
-                    <span>총 42분</span>
-                </div>
-                
-                <div class="series-difficulty-row">
-                    <span class="series-difficulty-badge">난이도: 중급</span>
-                </div>
-                
-                
-                <p class="series-fit-line"><strong>추천 독자:</strong> 성능 감각을 키우고 싶은 소프트웨어 엔지니어</p>
-                
-                <h3><a href="/tech/ko/series/computer-architecture.html">컴퓨터 구조</a></h3>
-                <p>CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</p>
-                <p class="study-path-audience">성능 감각을 키우고 하드웨어 제약이 소프트웨어 동작에 어떤 영향을 주는지 알고 싶은 소프트웨어 엔지니어.</p>
-                <div class="study-path-actions">
-                    <a href="/tech/ko/posts/comparch-01.html" class="read-more">추천 시작 글</a>
-                    <a href="/tech/ko/series/computer-architecture.html" class="read-more subtle-link">시리즈 가이드</a>
-                </div>
-            </article>
+            <a href="/tech/ko/series/computer-architecture.html" class="series-prereq-link">
+                <strong>컴퓨터 구조</strong>
+                <span>CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</span>
+            </a>
             
-            <article class="study-path-card">
-                <div class="study-path-meta">
-                    <span>총 5개 글</span>
-                    <span class="post-card-dot"></span>
-                    <span>총 11분</span>
-                </div>
-                
-                <div class="series-difficulty-row">
-                    <span class="series-difficulty-badge">난이도: 입문 ~ 중급</span>
-                </div>
-                
-                
-                <p class="series-fit-line"><strong>추천 독자:</strong> 파이썬 기초를 탄탄하게 다지고 싶은 엔지니어</p>
-                
-                <h3><a href="/tech/ko/series/python-lecture.html">Python 강좌 시리즈</a></h3>
-                <p>깊이있게 배우는 Python 프로그래밍 강좌</p>
-                <p class="study-path-audience">파이썬 문법은 알고 있지만, 언어가 실제로 어떻게 동작하는지까지 이해하고 싶은 개발자.</p>
-                <div class="study-path-actions">
-                    <a href="/tech/ko/posts/python-lecture-00.html" class="read-more">추천 시작 글</a>
-                    <a href="/tech/ko/series/python-lecture.html" class="read-more subtle-link">시리즈 가이드</a>
-                </div>
-            </article>
+            <a href="/tech/ko/series/python-lecture.html" class="series-prereq-link">
+                <strong>Python 강좌 시리즈</strong>
+                <span>깊이있게 배우는 Python 프로그래밍 강좌</span>
+            </a>
             
         </div>
     </section>
@@ -551,81 +455,24 @@
 
     
     
-    <section class="series-study-path">
-        <div class="series-section-header">
-            <h2>다음에 이어서 보기 좋은 시리즈</h2>
-            <p>이 시리즈가 도움이 되었다면, 다음으로 자연스럽게 이어지는 트랙들입니다.</p>
-        </div>
-        <div class="study-path-grid">
+    <section class="series-next">
+        <h2>다음에 이어서 보기 좋은 시리즈</h2>
+        <div class="series-next-list">
             
-            <article class="study-path-card">
-                <div class="study-path-meta">
-                    <span>총 20개 글</span>
-                    <span class="post-card-dot"></span>
-                    <span>총 20분</span>
-                </div>
-                
-                <div class="series-difficulty-row">
-                    <span class="series-difficulty-badge">난이도: 고급</span>
-                </div>
-                
-                
-                <p class="series-fit-line"><strong>추천 독자:</strong> PyTorch를 더 시스템적으로 이해하고 싶은 독자</p>
-                
-                <h3><a href="/tech/ko/series/pytorch-internals.html">PyTorch 내부 구조</a></h3>
-                <p>텐서, autograd, CUDA extension을 이해하고 커스텀 커널을 실제 학습 코드에 연결하기</p>
-                <p class="study-path-audience">PyTorch를 이미 사용하고 있지만, 파이썬 API 아래에서 실제로 무슨 일이 일어나는지 알고 싶은 ML 엔지니어와 시스템 지향 개발자.</p>
-                <div class="study-path-actions">
-                    <a href="/tech/ko/posts/pytorch-internals-01.html" class="read-more">추천 시작 글</a>
-                    <a href="/tech/ko/series/pytorch-internals.html" class="read-more subtle-link">시리즈 가이드</a>
-                </div>
-            </article>
+            <a href="/tech/ko/series/pytorch-internals.html" class="series-next-link">
+                <strong>PyTorch 내부 구조</strong>
+                <span>텐서, autograd, CUDA extension을 이해하고 커스텀 커널을 실제 학습 코드에 연결하기</span>
+            </a>
             
-            <article class="study-path-card">
-                <div class="study-path-meta">
-                    <span>총 20개 글</span>
-                    <span class="post-card-dot"></span>
-                    <span>총 30분</span>
-                </div>
-                
-                <div class="series-difficulty-row">
-                    <span class="series-difficulty-badge">난이도: 고급</span>
-                </div>
-                
-                
-                <p class="series-fit-line"><strong>추천 독자:</strong> 대규모 모델 학습 시스템을 목표로 하는 엔지니어</p>
-                
-                <h3><a href="/tech/ko/series/distributed-llm-training.html">분산 LLM 학습</a></h3>
-                <p>data parallel부터 tensor parallel, FSDP, ZeRO, 그리고 현대 LLM 학습 프레임워크까지</p>
-                <p class="study-path-audience">단일 GPU 학습에서 멀티 GPU와 대규모 모델 학습 시스템으로 넘어가고 싶은 독자.</p>
-                <div class="study-path-actions">
-                    <a href="/tech/ko/posts/distributed-llm-training-01.html" class="read-more">추천 시작 글</a>
-                    <a href="/tech/ko/series/distributed-llm-training.html" class="read-more subtle-link">시리즈 가이드</a>
-                </div>
-            </article>
+            <a href="/tech/ko/series/distributed-llm-training.html" class="series-next-link">
+                <strong>분산 LLM 학습</strong>
+                <span>data parallel부터 tensor parallel, FSDP, ZeRO, 그리고 현대 LLM 학습 프레임워크까지</span>
+            </a>
             
-            <article class="study-path-card">
-                <div class="study-path-meta">
-                    <span>총 10개 글</span>
-                    <span class="post-card-dot"></span>
-                    <span>총 42분</span>
-                </div>
-                
-                <div class="series-difficulty-row">
-                    <span class="series-difficulty-badge">난이도: 중급</span>
-                </div>
-                
-                
-                <p class="series-fit-line"><strong>추천 독자:</strong> 성능 감각을 키우고 싶은 소프트웨어 엔지니어</p>
-                
-                <h3><a href="/tech/ko/series/computer-architecture.html">컴퓨터 구조</a></h3>
-                <p>CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</p>
-                <p class="study-path-audience">성능 감각을 키우고 하드웨어 제약이 소프트웨어 동작에 어떤 영향을 주는지 알고 싶은 소프트웨어 엔지니어.</p>
-                <div class="study-path-actions">
-                    <a href="/tech/ko/posts/comparch-01.html" class="read-more">추천 시작 글</a>
-                    <a href="/tech/ko/series/computer-architecture.html" class="read-more subtle-link">시리즈 가이드</a>
-                </div>
-            </article>
+            <a href="/tech/ko/series/computer-architecture.html" class="series-next-link">
+                <strong>컴퓨터 구조</strong>
+                <span>CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</span>
+            </a>
             
         </div>
     </section>
