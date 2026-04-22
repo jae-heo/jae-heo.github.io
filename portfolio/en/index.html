@@ -22,6 +22,7 @@
         <nav>
             <a href="/portfolio/en/" class="site-title">Jaeyoung Heo</a>
             <div class="nav-links">
+                <a href="#principles" data-nav-link>Principles</a>
                 <a href="#projects" data-nav-link>Projects</a>
                 <a href="#ai" data-nav-link>AI</a>
                 <a href="#writing" data-nav-link>Writing</a>
@@ -41,9 +42,37 @@
         <section class="hero">
             <div class="hero-content">
                 <h1 class="hero-title">Jaeyoung Heo</h1>
-                <p class="hero-subtitle">Python Systems Engineer · Architecture · Performance · AI & Agentic Systems</p>
-                <p class="hero-intro">I build systems that turn complex decision-making into extensible, observable software.</p>
-                <p class="hero-tech">Python · pandas/NumPy · SQLAlchemy · ONNX · PostgreSQL · Dash/Streamlit · GitHub Actions/ECR</p>
+                <p class="hero-subtitle">I build simulation engines in Python.</p>
+                <p class="hero-intro">Hi, I'm Jaeyoung. I work on simulation systems that wrap complex decision-making logic — most of what I do is taking the implicit rules in one person's head and turning them into something another engineer can safely change later. I like code that's fixable when it breaks more than code that looks clever. I tend to look at the numbers before deciding, and I'll roll back weeks of work if the added complexity doesn't prove its value.</p>
+                <p class="hero-tech">Python · pandas/NumPy · SQLAlchemy · ONNX · PostgreSQL · Dash/Streamlit · GitHub Actions</p>
+            </div>
+        </section>
+
+        <section id="principles" class="principles-section">
+            <div class="container">
+                <ol class="principles-list">
+                    
+                    <li class="principle">
+                        <span class="principle-title">Extensibility before completeness.</span>
+                        <p class="principle-text">Trying to get it right on the first pass usually costs more than it saves. What matters is whether someone a year later can see where to make a change. I don't abstract until I've seen the same shape at least three times.</p>
+                    </li>
+                    
+                    <li class="principle">
+                        <span class="principle-title">Make hidden connections explicit.</span>
+                        <p class="principle-text">I don't love callback chains or __getattr__ proxies — anything that hides where control actually goes. Code that reads top-to-bottom is easier to debug and easier to extend. The engine's God class decomposition involved removing proxies from 152+ files and replacing them with explicit component paths.</p>
+                    </li>
+                    
+                    <li class="principle">
+                        <span class="principle-title">No optimization without measurement.</span>
+                        <p class="principle-text">I've been wrong about where the hot path is too many times to trust intuition. Profiler first, then decide. When we got a 104× speedup on the warehouse loading logic, the decision of what to touch came from measurements, not from "this feels slow."</p>
+                    </li>
+                    
+                    <li class="principle">
+                        <span class="principle-title">Prefer changes you can take back.</span>
+                        <p class="principle-text">Across 1,600+ commits, 11 of them are reverts. That's not a lot, but weeks of work get rolled back when the added complexity doesn't earn its keep. I tried ECS, didn't like how the lookup paths felt, moved to a facade pattern. Over-decomposed a coordinator, didn't pay off, put it back. What ships is the outcome, not the code.</p>
+                    </li>
+                    
+                </ol>
             </div>
         </section>
 
@@ -51,93 +80,101 @@
             <div class="container">
                 
                 <article class="case-study">
-                    <h2 class="case-study-title">Hardcoded Rules → Plugin Architecture</h2>
+                    <h2 class="case-study-title">Hardcoded rules → plugin architecture</h2>
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>Each type had its own copy-pasted decision logic. Adding a new type meant forking the codebase. Changing a policy meant touching the entire execution flow.</p>
+                            <p>Every time a new type showed up, we forked the existing code and modified it. Changing one policy meant touching the entire execution flow.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>A 3-layer plugin architecture separating state, decision logic, and execution. New types added by composing layers. 10+ types on one framework.</p>
+                            <p>Split into three layers — state, decision-making, execution — and adding a new type became a matter of composing them. There are now 10+ types running on the same framework.</p>
                         </div>
                     </div>
                     <ul class="case-study-details">
                         
-                        <li>State layer — Abstract interface defines shared contracts, type-specific differences via composition. 9 variants in production</li>
+                        <li>State layer: an abstract interface defines the shared contract; type-specific differences live in composition, not inheritance. Nine variants in production</li>
                         
-                        <li>Planning layer — Manages decision lifecycle. 7 concrete planners (~3,230 LOC) inherit from a base ABC</li>
+                        <li>Planning layer: an ABC that owns the decision lifecycle. Seven concrete planners (~3,230 LOC) inherit from it</li>
                         
-                        <li>Execution layer — Template method pattern. Type-specific executors dynamically registered at runtime</li>
+                        <li>Execution layer: template-method pattern. Type-specific executors register dynamically at runtime</li>
+                        
+                        <li>Didn't try to generalize upfront. Built five types concretely first, and only after the shared lifecycle was obvious did I replace ~1,442 LOC of duplication with ~1,404 LOC of shared infrastructure</li>
                         
                     </ul>
                 </article>
                 
                 <article class="case-study">
-                    <h2 class="case-study-title">Greedy Allocation → Multi-Resource Transactions</h2>
+                    <h2 class="case-study-title">Greedy allocation → multi-resource transactions</h2>
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>"Assign work to whatever is free right now." No atomic allocation across resources. Failure midway left state corrupted with no rollback.</p>
+                            <p>The old approach was "assign to whatever's free right now." Nothing atomic — if anything failed mid-way, you were left with inconsistent state and no way to undo.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>Entire paths reserved as a single transaction. Failure at any point triggers automatic rollback.</p>
+                            <p>The whole path is now reserved as a single transaction, and any failure rolls back automatically. Three months of stabilization caught 14+ edge cases along the way.</p>
                         </div>
                     </div>
                     <ul class="case-study-details">
                         
-                        <li>Coordinator + 3 type-specific reservers handling constraints independently</li>
+                        <li>A coordinator plus three type-specific reservers handle each resource's constraints independently</li>
                         
-                        <li>Path explorer ranking routes by state transition costs</li>
+                        <li>A path explorer ranks viable routes by state-transition cost</li>
                         
-                        <li>trial/rollback mechanism with automatic rollback on failure + dedup cache</li>
+                        <li>Consolidated 20+ scattered trial fields into `_real_values` / `_trial_values` dictionaries with a context-manager pattern</li>
+                        
+                        <li>Cache failed attempts to avoid re-running them; adapt frequency based on success rate</li>
                         
                     </ul>
                 </article>
                 
                 <article class="case-study">
-                    <h2 class="case-study-title">God Object → Explicit Ownership + Event-Driven Architecture</h2>
+                    <h2 class="case-study-title">God object → explicit ownership + event-driven architecture</h2>
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>3,800 lines, 114 attributes, 6 tangled concerns. __getattr__ proxies hiding ownership. Callback chains making side effects untraceable.</p>
+                            <p>One class, 3,800 lines, 114 attributes, six concerns mashed together. State was scattered across singletons, instances, and groups; `__getattr__` proxies hid ownership; callback chains made side effects untraceable.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>226-line core + 19 components + 25 facades. Zero proxies. Pub/sub event bus (29 LOC) fully decoupling execution from side effects.</p>
+                            <p>A 226-line core, 19 components, 25 facades. Zero proxies. A 29-line pub/sub event bus fully decouples execution from side effects.</p>
                         </div>
                     </div>
                     <ul class="case-study-details">
                         
-                        <li>114 attributes → 19 components + 25 facades. Removed proxies from 152+ files</li>
+                        <li>Broke it down across nine stages and 80+ commits. Pulled scattered singleton state back into owned instances first</li>
                         
-                        <li>Pub/sub event bus (29 LOC) fully decoupling execution from side effects</li>
+                        <li>Split 114 attributes into 19 component dataclasses (590 LOC); proxies were removed from 152+ files and replaced with explicit component paths</li>
                         
-                        <li>-752 / +163 lines. New features no longer require touching existing flows</li>
+                        <li>Tried ECS first, didn't like how indirect the lookups got, switched to a facade pattern. Also rolled back over-decomposed coordinators (453 LOC, 226 LOC) that weren't earning their complexity</li>
+                        
+                        <li>-752 / +163 lines net. New features no longer require touching existing flows</li>
                         
                     </ul>
                 </article>
                 
                 <article class="case-study">
-                    <h2 class="case-study-title">Slow Hot Paths + Black Box → Optimization + Observability</h2>
+                    <h2 class="case-study-title">Slow hot paths + black box → optimization + observability</h2>
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>Hot paths called 22M–500M times per run. No way to trace why a decision was made.</p>
+                            <p>Hot paths were being called 22M–500M times per run, and when a weird decision came out there was no way to trace why.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>Profiling-driven hot path optimization. Full decision traceability from outcome back to cause.</p>
+                            <p>Profiling-driven hot path optimization, plus tooling to trace decisions back to their cause. I built the observability before the optimization — the whole point was to decide from data, not from gut.</p>
                         </div>
                     </div>
                     <ul class="case-study-details">
                         
-                        <li>Enum caching (22M+), dict indexes, local caches, custom __deepcopy__ for hot path optimization</li>
+                        <li>Enum caching (22M+ calls), dictionary indexes, local caches, a custom `__deepcopy__` — hot path trimmed where the profiler pointed</li>
                         
-                        <li>Gantt chart + event timeline tracing decisions back to root cause</li>
+                        <li>Gantt chart plus event timeline so I can follow a decision back to its root cause</li>
                         
-                        <li>Structured logging with 105-module enum taxonomy</li>
+                        <li>Structured logging with a 105-module enum taxonomy, so slicing logs by subsystem is painless</li>
+                        
+                        <li>Warehouse loading logic ended up 104× faster — that number came from profiling results, not from guessing</li>
                         
                     </ul>
                 </article>
@@ -147,55 +184,55 @@
 
         <section id="ai" class="ai-section">
             <div class="container">
-                <h2 class="section-title">AI & Agentic Projects</h2>
+                <h2 class="section-title">Things I've been building lately</h2>
                 <div class="ai-grid">
                     
                     <article class="ai-card">
                         <h3 class="ai-card-title">aps-rag <span class="ai-card-loc">1,731 LOC</span></h3>
-                        <p class="ai-card-desc">Hybrid RAG system combining AST-based code analysis with semantic + keyword search. Exposed via 10 MCP tools to Claude Code.</p>
+                        <p class="ai-card-desc">AST-based code analysis wired into a hybrid retrieval RAG, exposed to Claude Code through 10 MCP tools.</p>
                         <ul class="ai-card-details">
                             
-                            <li>AST indexing for classes, functions, inheritance, call graphs — ChromaDB 3 collections</li>
+                            <li>Indexes classes, functions, inheritance, and call graphs into three ChromaDB collections</li>
                             
-                            <li>Semantic 70% + keyword 30% hybrid search</li>
+                            <li>70% semantic + 30% keyword hybrid search</li>
                             
-                            <li>Knowledge base: 183 docs in 3-tier hierarchy</li>
+                            <li>A three-tier knowledge base covering 183 internal documents</li>
                             
                         </ul>
                     </article>
                     
                     <article class="ai-card">
                         <h3 class="ai-card-title">dooray-mcp <span class="ai-card-loc">349 LOC</span></h3>
-                        <p class="ai-card-desc">MCP server giving AI agents direct access to project management tools.</p>
+                        <p class="ai-card-desc">An MCP server that lets AI agents talk to a project management tool directly.</p>
                         <ul class="ai-card-details">
                             
-                            <li>8 tools + 2 workflow prompts</li>
+                            <li>Eight tools plus two workflow prompts</li>
                             
-                            <li>Async-first, 2-layer error handling</li>
+                            <li>Async-first, two-layer error handling</li>
                             
                         </ul>
                     </article>
                     
                     <article class="ai-card">
                         <h3 class="ai-card-title">auto-issue <span class="ai-card-loc">762 LOC</span></h3>
-                        <p class="ai-card-desc">LLM-powered documentation sync pipeline triggered by git commits.</p>
+                        <p class="ai-card-desc">Watches git commits and keeps the relevant docs in sync automatically.</p>
                         <ul class="ai-card-details">
                             
-                            <li>Commit polling → file-doc mapping → OpenAI API update generation</li>
+                            <li>Commit polling → file/doc mapping → LLM generates the update</li>
                             
-                            <li>Dual git + wiki sync, idempotent output</li>
+                            <li>Syncs to git and wiki at the same time; output is idempotent</li>
                             
                         </ul>
                     </article>
                     
                     <article class="ai-card">
-                        <h3 class="ai-card-title">ALM Agent <span class="ai-card-loc">In Progress</span></h3>
-                        <p class="ai-card-desc">AI agent system for release and process automation.</p>
+                        <h3 class="ai-card-title">ALM Agent <span class="ai-card-loc">In progress</span></h3>
+                        <p class="ai-card-desc">A release and process automation agent, unifying changelog, CI, and deploy flows into a single event layer. Still being built.</p>
                         <ul class="ai-card-details">
                             
-                            <li>Changelog, release PR, hotfix detection, deploy reports, requirements structuring</li>
+                            <li>Changelog, release PR, hotfix detection, deploy reports, requirement structuring</li>
                             
-                            <li>Polling trigger → event router → UC handlers → LLM integration</li>
+                            <li>Polling trigger → event router → use-case handlers → LLM integration</li>
                             
                         </ul>
                     </article>
@@ -208,17 +245,17 @@
             <div class="container">
                 <h2 class="section-title">Mentoring & Writing</h2>
                 <div class="writing-content">
-                    <p><a href="https://jae-heo.github.io/tech/ko/posts/python-lecture-00.html" class="writing-link" target="_blank">Python Lecture Series</a> — A 5-part deep-dive Python course for onboarding junior engineers. From design philosophy to descriptors and metaclasses.</p>
-                    <p>A technical blog covering 9 series — Python, compilers, Linux, GPU systems, and more. <a href="https://jae-heo.github.io" class="writing-link" target="_blank">Visit Blog →</a></p>
+                    <p><a href="https://jae-heo.github.io/tech/en/posts/python-lecture-00.html" class="writing-link" target="_blank">Python Deep-Dive Series</a> — A Python deep-dive series I wrote for onboarding junior engineers. Less about syntax, more about why the language behaves the way it does — object model, descriptors, iterators, generators, decorators, tied together.</p>
+                    <p>A long-form technical blog on Python internals, compilers, Linux, computer architecture, GPU systems, and MLOps. I tend to sit on one topic for a while. <a href="https://jae-heo.github.io/tech/en/" class="writing-link" target="_blank">Visit the blog →</a></p>
                 </div>
             </div>
         </section>
 
         <section id="contact" class="contact-section">
             <div class="container">
-                <h2 class="section-title">Get In Touch</h2>
+                <h2 class="section-title">Contact</h2>
                 <div class="contact-content">
-                    <p>Interested in simulation systems, performance engineering, or architecture design? Feel free to reach out.</p>
+                    <p>If you work on simulation systems, performance engineering, decision infrastructure, or agentic tooling — I'm happy to chat.</p>
                     <div class="contact-links">
                         
                         <a href="https://github.com/jae-heo" class="contact-link" target="_blank">GitHub</a>
