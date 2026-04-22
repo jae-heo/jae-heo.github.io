@@ -327,6 +327,19 @@
     <script src="/assets/js/mobile-nav.js" defer></script>
     <script src="/assets/js/post-reading-ui.js" defer></script>
     <script src="/assets/js/wood-scrollbar.js" defer></script>
+    <script src="/assets/js/keyboard-shortcuts.js" defer></script>
+    <script src="/assets/js/heading-anchors.js" defer></script>
+    <script src="/assets/js/lightbox.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js" data-manual defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+    <script defer>
+      document.addEventListener('DOMContentLoaded', () => {
+        if (window.Prism) {
+          Prism.plugins.autoloader.languages_path = 'https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/';
+          Prism.highlightAll();
+        }
+      });
+    </script>
 
     <!-- Series Navigation Enhancement for Long Series -->
     <script src="/assets/js/series-navigation.js"></script>

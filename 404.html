@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not Found — §</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Gowun+Batang:wght@400;700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/style.css">
+    <script>
+        const theme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+    </script>
+    <style>
+        .notfound-wrap {
+            max-width: 40rem;
+            margin: 0 auto;
+            padding: clamp(4rem, 12vw, 9rem) 1.5rem 4rem;
+            text-align: left;
+        }
+        .notfound-eyebrow {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--accent, #e5896c);
+            margin: 0 0 1.6rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--rule-2, rgba(236,227,208,0.24));
+        }
+        .notfound-code {
+            font-family: 'Fraunces', 'Gowun Batang', serif;
+            font-weight: 300;
+            font-variation-settings: "opsz" 144;
+            font-size: clamp(5rem, 18vw + 1rem, 12rem);
+            line-height: 0.88;
+            letter-spacing: -0.04em;
+            color: var(--ink, #ece3d0);
+            margin: 0 0 1.5rem;
+        }
+        .notfound-code span { color: var(--accent, #e5896c); }
+        .notfound-msg {
+            font-family: 'Fraunces', 'Gowun Batang', serif;
+            font-style: italic;
+            font-weight: 330;
+            font-size: clamp(1.1rem, 0.5vw + 1rem, 1.35rem);
+            line-height: 1.55;
+            color: var(--ink-muted, #9d9585);
+            margin: 0 0 0.9rem;
+            max-width: 34ch;
+            padding-left: 1.2rem;
+            border-left: 2px solid var(--accent, #e5896c);
+        }
+        .notfound-msg-secondary {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            color: var(--ink-muted, #9d9585);
+            margin: 0 0 2.5rem;
+            max-width: 52ch;
+        }
+        .notfound-links {
+            display: flex;
+            gap: 1.75rem;
+            flex-wrap: wrap;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--rule, rgba(236,227,208,0.12));
+        }
+        .notfound-links a {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent, #e5896c);
+            text-decoration: none;
+            padding-bottom: 0.3rem;
+            border-bottom: 1px solid var(--accent, #e5896c);
+            transition: color 0.18s, border-color 0.18s;
+        }
+        .notfound-links a:hover {
+            color: var(--ink, #ece3d0);
+            border-bottom-color: var(--ink, #ece3d0);
+        }
+    </style>
+</head>
+<body>
+    <main class="notfound-wrap">
+        <p class="notfound-eyebrow">§  ERROR · 404</p>
+        <h1 class="notfound-code">4<span>0</span>4</h1>
+        <p class="notfound-msg">This page could not be found.<br>이 페이지는 존재하지 않습니다.</p>
+        <p class="notfound-msg-secondary">The URL may be mistyped, or the post has moved. Try one of the entry points below.</p>
+        <nav class="notfound-links">
+            <a href="/">Home</a>
+            <a href="/tech/ko/">Tech Blog</a>
+            <a href="/life/ko/">Life Blog</a>
+            <a href="/portfolio/ko/">Portfolio</a>
+        </nav>
+    </main>
+</body>
+</html>
