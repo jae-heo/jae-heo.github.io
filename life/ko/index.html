@@ -40,14 +40,14 @@
     <link rel="alternate" type="application/rss+xml" title="재영의 일상 블로그 RSS" href="/life/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'ko';
@@ -109,10 +109,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/life/ko/" data-nav-link>홈</a>
-                
                 <a href="/life/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/life/ko/about.html" data-nav-link>소개</a>
-                <a href="/life/ko/game/">게임</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -133,86 +131,7 @@
         <p class="subtitle">나사빠진 이야기</p>
     </div>
 
-    <section class="home-intro">
-        <div class="home-intro-copy">
-            <span class="home-intro-eyebrow">Jae의 생활 노트</span>
-            <h2>기술 글과는 다른 결로, 조금 더 개인적인 긴 글들.</h2>
-            <p>여행 기록, 개인적인 생각, 일 밖의 이야기들을 차분하게 정리합니다. 기술 블로그와는 다른 주제지만, 같은 밀도로 읽히도록 구성했습니다.</p>
-        </div>
-        <div class="home-intro-panel">
-            <div class="home-intro-card">
-                <span class="home-intro-card-label">여기서 시작하기</span>
-                <strong>추천 시리즈</strong>
-                <p>처음 읽는 분께 좋은 시작점입니다.</p>
-                
-            </div>
-            <div class="home-intro-card">
-                <span class="home-intro-card-label">추천 글</span>
-                <strong>큐레이션 추천</strong>
-                <p>블로그에서 특히 먼저 읽어 볼 만한 글과 시리즈를 골라 모았습니다.</p>
-                
-            </div>
-            <div class="home-intro-card">
-                <span class="home-intro-card-label">최근 글 둘러보기</span>
-                <strong>총 8개 글</strong>
-                <p>새로 쓴 글과 최근 기록을 모았습니다.</p>
-            </div>
-        </div>
-    </section>
-
-    
-    <section class="featured-series-strip">
-        
-        <article class="featured-series-card">
-            <div class="featured-series-meta">
-                <span>총 6개 글</span>
-                <span class="post-card-dot"></span>
-                <span>총 6분</span>
-            </div>
-            
-            
-            <h3><a href="/life/ko/series/morning-notes.html">아침 기록</a></h3>
-            <p>아침 루틴 속에서 떠오르는 생각과 단상</p>
-            
-            <div class="featured-series-actions">
-                <a href="/life/ko/posts/routine-and-heart.html" class="read-more">추천 시작 글</a>
-                <a href="/life/ko/series/morning-notes.html" class="read-more subtle-link">시리즈 가이드</a>
-            </div>
-        </article>
-        
-        <article class="featured-series-card">
-            <div class="featured-series-meta">
-                <span>총 2개 글</span>
-                <span class="post-card-dot"></span>
-                <span>총 2분</span>
-            </div>
-            
-            
-            <h3><a href="/life/ko/series/daily-struggle.html">열심히 사는 사람 구경하기</a></h3>
-            <p>하루하루 발버둥치는 이야기</p>
-            
-            <div class="featured-series-actions">
-                <a href="/life/ko/posts/setting-a-routine.html" class="read-more">추천 시작 글</a>
-                <a href="/life/ko/series/daily-struggle.html" class="read-more subtle-link">시리즈 가이드</a>
-            </div>
-        </article>
-        
-    </section>
-    
-
-    <!-- Tab Navigation -->
-    <div class="home-tabs">
-        <button class="home-tab active" data-tab="series">
-            시리즈
-        </button>
-        <button class="home-tab" data-tab="recent">
-            최근 포스트
-        </button>
-    </div>
-
-    <!-- Series Tab Content -->
-    <div class="tab-content active" data-content="series">
-        <!-- Homepage Series View Component - Grid Layout with Numbered Posts -->
+    <!-- Homepage Series View Component - Grid Layout with Numbered Posts -->
 <div class="home-series-list">
     
         
@@ -403,16 +322,15 @@
     
 </div>
 
-    </div>
 
-    <!-- Recent Posts Tab Content -->
-    <div class="tab-content" data-content="recent">
+    <section class="home-recent">
+        <h2 class="home-recent-title">최근 포스트</h2>
+
         <div class="posts-controls">
-        <div class="filter-section">
-            <!-- Filters button will be inserted here by JS -->
+            <div class="filter-section">
+                <!-- Filters button will be inserted here by JS -->
+            </div>
         </div>
-        <!-- Filter panel will be inserted here by JS -->
-    </div>
 
         <!-- Grid View -->
 <div class="post-list post-grid-view">
@@ -424,7 +342,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2025-10-26T00:00:00.000Z"">October 26, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
+                <span>1분 읽기</span>
             </div>
             <h2>
                 <a href="/life/ko/posts/instant-action-builds-trust.html">행동하는 사람</a>
@@ -453,7 +371,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2025-10-24T00:00:00.000Z"">October 24, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
+                <span>1분 읽기</span>
             </div>
             <h2>
                 <a href="/life/ko/posts/running-in-the-morning.html">동료들과의 아침 러닝</a>
@@ -482,7 +400,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2025-10-22T00:00:00.000Z"">October 22, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
+                <span>1분 읽기</span>
             </div>
             <h2>
                 <a href="/life/ko/posts/fluctuations-of-the-mind.html">머리의 기복</a>
@@ -511,7 +429,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2025-10-19T00:00:00.000Z"">October 19, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
+                <span>1분 읽기</span>
             </div>
             <h2>
                 <a href="/life/ko/posts/temptation-of-bed-and-sofa.html">침대와 소파의 유혹</a>
@@ -540,7 +458,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
+                <span>1분 읽기</span>
             </div>
             <h2>
                 <a href="/life/ko/posts/morning-as-rest.html">아침이 주는 휴식</a>
@@ -569,7 +487,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2025-10-17T00:00:00.000Z"">October 17, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
+                <span>1분 읽기</span>
             </div>
             <h2>
                 <a href="/life/ko/posts/moment-of-not-knowing-myself.html">나 자신을 모르는 순간</a>
@@ -598,7 +516,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2025-10-16T00:00:00.000Z"">October 16, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
+                <span>1분 읽기</span>
             </div>
             <h2>
                 <a href="/life/ko/posts/routine-and-heart.html">루틴과 마음 사이</a>
@@ -627,7 +545,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2025-10-11T00:00:00.000Z"">October 11, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
+                <span>1분 읽기</span>
             </div>
             <h2>
                 <a href="/life/ko/posts/setting-a-routine.html">루틴을 정하다</a>
@@ -657,9 +575,7 @@
         
 
 
-    </div>
-
-    <script src="/assets/js/home-tabs.js"></script>
+    </section>
 </div>
 
     </main>

@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -105,7 +105,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'en';
@@ -171,13 +171,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
-                
-                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
-                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
-                
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <a href="/tech/en/game/">Game</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -488,26 +483,26 @@ Semantic rule:  E.type = if (E₁.type == int &amp;&amp; T.type == int) then int
 
     <nav class="post-nav">
         
-        <a href="/tech/en/posts/gpu-systems-11.html" class="post-nav-card nav-prev">
+        <a href="/tech/en/posts/linux-08.html" class="post-nav-card nav-prev">
             <span class="post-nav-card-label">Previous</span>
-            <strong>GPU Systems 11 - Shared Memory Bank Conflicts</strong>
-            <p>Why shared memory is not automatically fast and how bank conflicts appear</p>
+            <strong>Linux Internals 08 - Synchronization and Concurrency</strong>
+            <p>The problems that arise when multiple execution flows access shared resources, and the synchronization mechanisms in the Linux kernel</p>
             <span class="post-nav-card-meta">
-                <span>February 19, 2026</span>
+                <span>February 18, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>2 min read</span>
+                <span>8 min read</span>
             </span>
         </a>
         
         
-        <a href="/tech/en/posts/distributed-llm-training-16.html" class="post-nav-card nav-next">
+        <a href="/tech/en/posts/comparch-09.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">Next</span>
-            <strong>Distributed LLM Training 16 - How Communication Overlap Hides Step Time</strong>
-            <p>The goal of overlap is not to eliminate communication entirely, but to make it finish underneath useful computation</p>
+            <strong>Computer Architecture 09 - I/O and DMA</strong>
+            <p>How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA</p>
             <span class="post-nav-card-meta">
-                <span>February 20, 2026</span>
+                <span>February 24, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>1 min read</span>
+                <span>6 min read</span>
             </span>
         </a>
         
@@ -543,10 +538,10 @@ Semantic rule:  E.type = if (E₁.type == int &amp;&amp; T.type == int) then int
             <article class="related-post-card">
                 <div class="related-post-meta">
                     <span class="related-post-category">Lectures</span>
-                    <span class="related-post-time">1 min read</span>
+                    <span class="related-post-time">4 min read</span>
                 </div>
-                <h3><a href="/tech/en/posts/pytorch-internals-17.html">PyTorch Internals 17 - What Role Triton Plays Inside the PyTorch Ecosystem</a></h3>
-                <p>Triton is not just a convenient kernel language; it is part of the modern PyTorch kernel and compilation story</p>
+                <h3><a href="/tech/en/posts/compiler-09.html">Automata and Compilers 09 - Abstract Syntax Trees</a></h3>
+                <p>Parse trees vs ASTs, designing AST nodes, and how ASTs bridge the compiler frontend and backend</p>
             </article>
             
         </div>

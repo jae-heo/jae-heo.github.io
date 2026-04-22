@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -105,7 +105,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'ko';
@@ -171,13 +171,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
-                
-                <a href="/tech/ko/start-here.html" data-nav-link>시작 가이드</a>
-                <a href="/tech/ko/best-of.html" data-nav-link>추천 글</a>
-                
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <a href="/tech/ko/game/">게임</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -384,11 +379,6 @@
                 <span>CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</span>
             </a>
             
-            <a href="/tech/ko/series/platform-engineering.html" class="series-next-link">
-                <strong>플랫폼 엔지니어링 기초</strong>
-                <span>내부 개발자 플랫폼, 골든 패스, 개발자 셀프서비스의 원리를 이해하기</span>
-            </a>
-            
         </div>
     </section>
     
@@ -499,26 +489,26 @@ ip addr                    # 비어 있는 네트워크 인터페이스</code></
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/mlops-10.html" class="post-nav-card nav-prev">
+        <a href="/tech/ko/posts/linux-09.html" class="post-nav-card nav-prev">
             <span class="post-nav-card-label">이전 글</span>
-            <strong>MLOps 10 - MLOps 플랫폼 구축</strong>
-            <p>모든 구성 요소를 하나로 묶는 MLOps 플랫폼을 어떻게 구축하고 운영하는지</p>
+            <strong>리눅스 내부 구조 09 - 네트워킹</strong>
+            <p>리눅스 커널의 네트워킹 스택과 패킷이 NIC에서 애플리케이션까지 전달되는 과정</p>
             <span class="post-nav-card-meta">
-                <span>March 5, 2026</span>
+                <span>February 26, 2026</span>
                 <span class="post-card-dot"></span>
                 <span>4분 읽기</span>
             </span>
         </a>
         
         
-        <a href="/tech/ko/posts/gpu-systems-18.html" class="post-nav-card nav-next">
+        <a href="/tech/ko/posts/comparch-10.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">다음 글</span>
-            <strong>GPU 시스템 18 - Tensor Core와 Mixed Precision</strong>
-            <p>tensor core가 어떤 종류의 연산에서 큰 성능 차이를 만들고 mixed precision과 어떻게 연결되는지</p>
+            <strong>컴퓨터 구조 10 - 멀티코어와 현대 프로세서</strong>
+            <p>클럭 속도의 한계를 넘어 멀티코어로 전환된 이유와 현대 프로세서 아키텍처의 핵심 개념</p>
             <span class="post-nav-card-meta">
                 <span>March 5, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>2분 읽기</span>
+                <span>5분 읽기</span>
             </span>
         </a>
         

@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -102,7 +102,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'ko';
@@ -168,13 +168,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
-                
-                <a href="/tech/ko/start-here.html" data-nav-link>시작 가이드</a>
-                <a href="/tech/ko/best-of.html" data-nav-link>추천 글</a>
-                
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <a href="/tech/ko/game/">게임</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -381,11 +376,6 @@
                 <span>CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</span>
             </a>
             
-            <a href="/tech/ko/series/platform-engineering.html" class="series-next-link">
-                <strong>플랫폼 엔지니어링 기초</strong>
-                <span>내부 개발자 플랫폼, 골든 패스, 개발자 셀프서비스의 원리를 이해하기</span>
-            </a>
-            
         </div>
     </section>
     
@@ -493,14 +483,14 @@
         </a>
         
         
-        <a href="/tech/ko/posts/distributed-llm-training-18.html" class="post-nav-card nav-next">
+        <a href="/tech/ko/posts/linux-10.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">다음 글</span>
-            <strong>분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기</strong>
-            <p>분산 학습 디버깅은 에러 메시지 읽기보다 어느 rank가 어떤 collective 앞에서 멈췄는지 구조적으로 좁히는 일이다</p>
+            <strong>리눅스 내부 구조 10 - 컨테이너와 가상화</strong>
+            <p>네임스페이스와 cgroup이 컨테이너를 만드는 원리, 그리고 커널 개념들의 총정리</p>
             <span class="post-nav-card-meta">
-                <span>February 26, 2026</span>
+                <span>March 5, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>1분 읽기</span>
+                <span>5분 읽기</span>
             </span>
         </a>
         

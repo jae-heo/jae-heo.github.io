@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -102,7 +102,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'en';
@@ -168,13 +168,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
-                
-                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
-                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
-                
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <a href="/tech/en/game/">Game</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -381,11 +376,6 @@
                 <span>Understanding the Linux kernel from processes and memory to containers</span>
             </a>
             
-            <a href="/tech/en/series/gpu-systems.html" class="series-next-link">
-                <strong>GPU Systems</strong>
-                <span>From GPU architecture and CUDA kernels to Triton and real kernel optimization work</span>
-            </a>
-            
             <a href="/tech/en/series/compiler.html" class="series-next-link">
                 <strong>Automata and Compilers</strong>
                 <span>From finite automata and formal languages to building a compiler from scratch</span>
@@ -501,26 +491,26 @@
 
     <nav class="post-nav">
         
-        <a href="/tech/en/posts/distributed-llm-training-12.html" class="post-nav-card nav-prev">
+        <a href="/tech/en/posts/compiler-08.html" class="post-nav-card nav-prev">
             <span class="post-nav-card-label">Previous</span>
-            <strong>Distributed LLM Training 12 - GPipe, 1F1B, and Interleaving: Choosing a Pipeline Schedule</strong>
-            <p>Pipeline efficiency is shaped heavily by scheduling, because bubble size, activation memory, and implementation complexity all depend on it</p>
+            <strong>Automata and Compilers 08 - Bottom-Up Parsing</strong>
+            <p>Shift-reduce parsing, LR parser mechanics, and how parser generators work under the hood</p>
             <span class="post-nav-card-meta">
-                <span>February 8, 2026</span>
+                <span>February 4, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>1 min read</span>
+                <span>5 min read</span>
             </span>
         </a>
         
         
-        <a href="/tech/en/posts/gpu-systems-06.html" class="post-nav-card nav-next">
+        <a href="/tech/en/posts/compiler-09.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">Next</span>
-            <strong>GPU Systems 06 - Triton and the Practical Shape of Kernel Optimization</strong>
-            <p>How Triton fits into real kernel optimization work, especially for LLM-style workloads</p>
+            <strong>Automata and Compilers 09 - Abstract Syntax Trees</strong>
+            <p>Parse trees vs ASTs, designing AST nodes, and how ASTs bridge the compiler frontend and backend</p>
             <span class="post-nav-card-meta">
-                <span>February 9, 2026</span>
+                <span>February 10, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>3 min read</span>
+                <span>4 min read</span>
             </span>
         </a>
         

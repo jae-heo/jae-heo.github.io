@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -102,7 +102,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'ko';
@@ -168,13 +168,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
-                
-                <a href="/tech/ko/start-here.html" data-nav-link>시작 가이드</a>
-                <a href="/tech/ko/best-of.html" data-nav-link>추천 글</a>
-                
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <a href="/tech/ko/game/">게임</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -381,11 +376,6 @@
                 <span>CPU 내부 구조와 권한 수준부터 메모리 계층과 현대 멀티코어 프로세서까지</span>
             </a>
             
-            <a href="/tech/ko/series/platform-engineering.html" class="series-next-link">
-                <strong>플랫폼 엔지니어링 기초</strong>
-                <span>내부 개발자 플랫폼, 골든 패스, 개발자 셀프서비스의 원리를 이해하기</span>
-            </a>
-            
         </div>
     </section>
     
@@ -524,12 +514,12 @@ TracerPid:   0</code></pre>
         </a>
         
         
-        <a href="/tech/ko/posts/gpu-systems-03.html" class="post-nav-card nav-next">
+        <a href="/tech/ko/posts/compiler-08.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">다음 글</span>
-            <strong>GPU 시스템 03 - Memory Hierarchy와 Bandwidth</strong>
-            <p>GPU 성능을 좌우하는 메모리 계층과 bandwidth 병목을 어떻게 봐야 하는지</p>
+            <strong>오토마타와 컴파일러 08 - 상향식 파싱</strong>
+            <p>시프트-리듀스 파싱과 LR 파서의 원리, 그리고 파서 생성기가 동작하는 방식</p>
             <span class="post-nav-card-meta">
-                <span>February 3, 2026</span>
+                <span>February 4, 2026</span>
                 <span class="post-card-dot"></span>
                 <span>3분 읽기</span>
             </span>

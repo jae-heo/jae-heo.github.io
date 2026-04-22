@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -105,7 +105,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'en';
@@ -171,13 +171,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
-                
-                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
-                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
-                
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <a href="/tech/en/game/">Game</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -497,17 +492,6 @@ Low address   └─────────────────┘  ← sta
         </a>
         
         
-        <a href="/tech/en/posts/gpu-systems-19.html" class="post-nav-card nav-next">
-            <span class="post-nav-card-label">Next</span>
-            <strong>GPU Systems 19 - Asynchronous Copy and Pipelining</strong>
-            <p>How asynchronous copy and double buffering help overlap memory movement with computation</p>
-            <span class="post-nav-card-meta">
-                <span>March 7, 2026</span>
-                <span class="post-card-dot"></span>
-                <span>2 min read</span>
-            </span>
-        </a>
-        
     </nav>
 
     
@@ -531,19 +515,19 @@ Low address   └─────────────────┘  ← sta
             <article class="related-post-card">
                 <div class="related-post-meta">
                     <span class="related-post-category">Lectures</span>
-                    <span class="related-post-time">1 min read</span>
+                    <span class="related-post-time">5 min read</span>
                 </div>
-                <h3><a href="/tech/en/posts/pytorch-internals-17.html">PyTorch Internals 17 - What Role Triton Plays Inside the PyTorch Ecosystem</a></h3>
-                <p>Triton is not just a convenient kernel language; it is part of the modern PyTorch kernel and compilation story</p>
+                <h3><a href="/tech/en/posts/compiler-10.html">Automata and Compilers 10 - Semantic Analysis and Type Checking</a></h3>
+                <p>How semantic analysis catches the errors that parsers cannot, and how type checking guarantees program safety</p>
             </article>
             
             <article class="related-post-card">
                 <div class="related-post-meta">
                     <span class="related-post-category">Lectures</span>
-                    <span class="related-post-time">5 min read</span>
+                    <span class="related-post-time">4 min read</span>
                 </div>
-                <h3><a href="/tech/en/posts/compiler-10.html">Automata and Compilers 10 - Semantic Analysis and Type Checking</a></h3>
-                <p>How semantic analysis catches the errors that parsers cannot, and how type checking guarantees program safety</p>
+                <h3><a href="/tech/en/posts/compiler-09.html">Automata and Compilers 09 - Abstract Syntax Trees</a></h3>
+                <p>Parse trees vs ASTs, designing AST nodes, and how ASTs bridge the compiler frontend and backend</p>
             </article>
             
         </div>

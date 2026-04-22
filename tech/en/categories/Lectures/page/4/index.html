@@ -40,14 +40,14 @@
     <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'en';
@@ -109,13 +109,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
-                
-                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
-                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
-                
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <a href="/tech/en/game/">Game</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -151,15 +146,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-01-21T00:00:00.000Z"">January 21, 2026</time>
+                <time datetime=""2026-02-03T00:00:00.000Z"">February 3, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>6 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-06.html">Distributed LLM Training 06 - Where LLM Training Memory Actually Goes</a>
+                <a href="/tech/en/posts/linux-06.html">Linux Internals 06 - System Calls and the Kernel</a>
             </h2>
             
-            <p class="post-excerpt">Looking only at parameter size leads to bad decisions; training memory is really a combination of parameters, gradients, optimizer state, and activations</p>
+            <p class="post-excerpt">How a system call transitions from user space to kernel space, and how kernel modules work</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -170,7 +165,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-06.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/linux-06.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -180,15 +175,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-01-24T00:00:00.000Z"">January 24, 2026</time>
+                <time datetime=""2026-02-12T00:00:00.000Z"">February 12, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>8 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-07.html">Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently</a>
+                <a href="/tech/en/posts/linux-07.html">Linux Internals 07 - I/O and Devices</a>
             </h2>
             
-            <p class="post-excerpt">In distributed training, performance is often shaped more by how GPUs are connected than by the raw number of GPUs</p>
+            <p class="post-excerpt">From block and character devices to I/O schedulers, DMA, and the page cache</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -199,7 +194,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-07.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/linux-07.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -209,15 +204,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-01-27T00:00:00.000Z"">January 27, 2026</time>
+                <time datetime=""2026-02-18T00:00:00.000Z"">February 18, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>8 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-08.html">Distributed LLM Training 08 - Tensor Parallel Basics: Splitting Computation Inside the Model</a>
+                <a href="/tech/en/posts/linux-08.html">Linux Internals 08 - Synchronization and Concurrency</a>
             </h2>
             
-            <p class="post-excerpt">Once the model itself is too large for one device, data parallelism is no longer enough and layer-internal computation has to be split</p>
+            <p class="post-excerpt">The problems that arise when multiple execution flows access shared resources, and the synchronization mechanisms in the Linux kernel</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -228,7 +223,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-08.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/linux-08.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -238,15 +233,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-01-30T00:00:00.000Z"">January 30, 2026</time>
+                <time datetime=""2026-02-26T00:00:00.000Z"">February 26, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>7 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-09.html">Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer</a>
+                <a href="/tech/en/posts/linux-09.html">Linux Internals 09 - Networking</a>
             </h2>
             
-            <p class="post-excerpt">Tensor parallelism becomes real when you map it onto QKV projections, attention output paths, and the two large MLP projections inside a transformer block</p>
+            <p class="post-excerpt">The Linux kernel networking stack and how a packet travels from NIC to application</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -257,7 +252,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-09.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/linux-09.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -267,15 +262,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-02T00:00:00.000Z"">February 2, 2026</time>
+                <time datetime=""2026-03-05T00:00:00.000Z"">March 5, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>8 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-10.html">Distributed LLM Training 10 - Sequence Parallelism and the Cost of Long Context</a>
+                <a href="/tech/en/posts/linux-10.html">Linux Internals 10 - Containers and Virtualization</a>
             </h2>
             
-            <p class="post-excerpt">As context length grows, activation memory and communication patterns change again, and sequence-oriented partitioning starts to matter</p>
+            <p class="post-excerpt">How namespaces and cgroups create containers, and a wrap-up connecting all kernel concepts</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -286,7 +281,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-10.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/linux-10.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -296,15 +291,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-05T00:00:00.000Z"">February 5, 2026</time>
+                <time datetime=""2025-10-18T00:00:00.000Z"">October 18, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>1 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-11.html">Distributed LLM Training 11 - Pipeline Parallel Basics and How to Think About Stage Splits</a>
+                <a href="/tech/en/posts/python-lecture-00.html">Introduction to Python Lecture Series</a>
             </h2>
             
-            <p class="post-excerpt">Once the model is split by depth into stages, idle time and stage imbalance become just as important as memory savings</p>
+            <p class="post-excerpt">Python lecture series curriculum</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -315,7 +310,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-11.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/python-lecture-00.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -325,15 +320,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-08T00:00:00.000Z"">February 8, 2026</time>
+                <time datetime=""2025-10-19T00:00:00.000Z"">October 19, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>4 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-12.html">Distributed LLM Training 12 - GPipe, 1F1B, and Interleaving: Choosing a Pipeline Schedule</a>
+                <a href="/tech/en/posts/python-lecture-01.html">Python Lecture Part 1 - Python's Philosophy and Design Principles</a>
             </h2>
             
-            <p class="post-excerpt">Pipeline efficiency is shaped heavily by scheduling, because bubble size, activation memory, and implementation complexity all depend on it</p>
+            <p class="post-excerpt">Python's values, design philosophy, and the art of trade-offs</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -344,7 +339,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-12.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/python-lecture-01.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -354,15 +349,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-11T00:00:00.000Z"">February 11, 2026</time>
+                <time datetime=""2025-10-26T00:00:00.000Z"">October 26, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>3 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-13.html">Distributed LLM Training 13 - Activation Checkpointing and the Cost of Recomputation</a>
+                <a href="/tech/en/posts/python-lecture-02.html">Python Lecture 2 - Lexical Structure of Python</a>
             </h2>
             
-            <p class="post-excerpt">Saving memory by recomputing activations is not a minor option; it is often a central design choice in large-scale training</p>
+            <p class="post-excerpt">Learn how Python reads and understands your code, starting from the first step of lexical analysis</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -373,7 +368,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-13.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/python-lecture-02.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -383,15 +378,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-14T00:00:00.000Z"">February 14, 2026</time>
+                <time datetime=""2025-10-27T00:00:00.000Z"">October 27, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>3 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-14.html">Distributed LLM Training 14 - What ZeRO Stage 1, 2, and 3 Each Remove</a>
+                <a href="/tech/en/posts/python-lecture-03.html">Python Lecture 3 - Containers and Generators</a>
             </h2>
             
-            <p class="post-excerpt">ZeRO is best understood as a staged system for removing different forms of replicated training state</p>
+            <p class="post-excerpt">Learn about Python's container concept, list internals, and efficient iteration with generators</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -402,7 +397,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-14.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/python-lecture-03.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -443,42 +438,6 @@
             
             
             <a href="/tech/en/categories/Lectures/page/5/" class="pagination-page">5</a>
-            
-            
-            
-            <a href="/tech/en/categories/Lectures/page/6/" class="pagination-page">6</a>
-            
-            
-            
-            <a href="/tech/en/categories/Lectures/page/7/" class="pagination-page">7</a>
-            
-            
-            
-            <a href="/tech/en/categories/Lectures/page/8/" class="pagination-page">8</a>
-            
-            
-            
-            <a href="/tech/en/categories/Lectures/page/9/" class="pagination-page">9</a>
-            
-            
-            
-            <a href="/tech/en/categories/Lectures/page/10/" class="pagination-page">10</a>
-            
-            
-            
-            <a href="/tech/en/categories/Lectures/page/11/" class="pagination-page">11</a>
-            
-            
-            
-            <a href="/tech/en/categories/Lectures/page/12/" class="pagination-page">12</a>
-            
-            
-            
-            <a href="/tech/en/categories/Lectures/page/13/" class="pagination-page">13</a>
-            
-            
-            
-            <a href="/tech/en/categories/Lectures/page/14/" class="pagination-page">14</a>
             
             
         </div>

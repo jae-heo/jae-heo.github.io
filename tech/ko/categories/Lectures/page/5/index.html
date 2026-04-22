@@ -40,14 +40,14 @@
     <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'ko';
@@ -109,13 +109,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
-                
-                <a href="/tech/ko/start-here.html" data-nav-link>시작 가이드</a>
-                <a href="/tech/ko/best-of.html" data-nav-link>추천 글</a>
-                
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <a href="/tech/ko/game/">게임</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -151,15 +146,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-17T00:00:00.000Z"">February 17, 2026</time>
+                <time datetime=""2025-10-30T00:00:00.000Z"">October 30, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
+                <span>2분 읽기</span>
             </div>
             <h2>
-                <a href="/tech/ko/posts/distributed-llm-training-15.html">분산 LLM 학습 15 - FSDP는 DDP와 무엇이 다르고 언제 유리한가</a>
+                <a href="/tech/ko/posts/python-lecture-04.html">Python 강좌 4편 - 클래스의 내부 구조와 디스크립터</a>
             </h2>
             
-            <p class="post-excerpt">FSDP는 전체 파라미터를 shard한 채 필요할 때만 모아 쓰는 방식으로 메모리 문제를 직접 겨냥한다</p>
+            <p class="post-excerpt">파이썬 클래스가 내부적으로 어떻게 작동하는지, 바운드 메서드와 디스크립터의 비밀을 파헤쳐봅니다</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -170,239 +165,7 @@
                 
                 
                 </div>
-                <a href="/tech/ko/posts/distributed-llm-training-15.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-20T00:00:00.000Z"">February 20, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/distributed-llm-training-16.html">분산 LLM 학습 16 - Communication Overlap은 어떻게 step 시간을 숨기는가</a>
-            </h2>
-            
-            <p class="post-excerpt">분산 학습 최적화의 핵심은 통신을 없애는 것이 아니라 계산 뒤에 숨어서 끝나게 만드는 데 있다</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/distributed-llm-training-16.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-23T00:00:00.000Z"">February 23, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/distributed-llm-training-17.html">분산 LLM 학습 17 - Checkpoint, Resume, Fault Tolerance는 왜 핵심인가</a>
-            </h2>
-            
-            <p class="post-excerpt">긴 분산 학습에서는 빠른 step만큼이나 중단 이후 안전하게 이어가는 능력이 중요하다</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/distributed-llm-training-17.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-26T00:00:00.000Z"">February 26, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/distributed-llm-training-18.html">분산 LLM 학습 18 - Deadlock, Timeout, OOM: 분산 학습 디버깅의 기본기</a>
-            </h2>
-            
-            <p class="post-excerpt">분산 학습 디버깅은 에러 메시지 읽기보다 어느 rank가 어떤 collective 앞에서 멈췄는지 구조적으로 좁히는 일이다</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/distributed-llm-training-18.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-03-01T00:00:00.000Z"">March 1, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/distributed-llm-training-19.html">분산 LLM 학습 19 - Megatron-LM과 DeepSpeed를 어떻게 읽을 것인가</a>
-            </h2>
-            
-            <p class="post-excerpt">프레임워크를 이름으로 기억하기보다 어떤 병렬화와 어떤 상태 관리를 추상화하는지로 읽어야 한다</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/distributed-llm-training-19.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-03-04T00:00:00.000Z"">March 4, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/distributed-llm-training-20.html">분산 LLM 학습 20 - 실제 LLM 학습 스택을 설계하는 순서</a>
-            </h2>
-            
-            <p class="post-excerpt">분산 학습 전략은 멋있는 기법을 조합하는 일이 아니라 현재 병목에 맞는 최소 구조를 선택하고 검증하는 일이다</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/distributed-llm-training-20.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-01-28T00:00:00.000Z"">January 28, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/gpu-systems-00.html">GPU 시스템 00 - 이 시리즈를 보기 전에 필요한 것들</a>
-            </h2>
-            
-            <p class="post-excerpt">GPU 시스템 시리즈를 제대로 따라가기 전에 어떤 배경지식이 필요한지 정리하기</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/gpu-systems-00.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-01-30T00:00:00.000Z"">January 30, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/gpu-systems-01.html">GPU 시스템 01 - GPU Kernel Engineer 로드맵</a>
-            </h2>
-            
-            <p class="post-excerpt">GPU 아키텍처부터 CUDA, Triton, 커널 최적화까지 어떤 순서로 공부하면 되는지</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/gpu-systems-01.html" class="read-more">더 읽기</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-01T00:00:00.000Z"">February 1, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined분 읽기</span>
-            </div>
-            <h2>
-                <a href="/tech/ko/posts/gpu-systems-02.html">GPU 시스템 02 - Thread, Warp, Block 실행 모델</a>
-            </h2>
-            
-            <p class="post-excerpt">GPU의 thread, warp, block, grid가 실제 실행에서 어떤 의미를 가지는지</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/ko/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/ko/posts/gpu-systems-02.html" class="read-more">더 읽기</a>
+                <a href="/tech/ko/posts/python-lecture-04.html" class="read-more">더 읽기</a>
             </div>
         </div>
     </article>
@@ -445,49 +208,13 @@
             <span class="pagination-page current" aria-current="page">5</span>
             
             
-            
-            <a href="/tech/ko/categories/Lectures/page/6/" class="pagination-page">6</a>
-            
-            
-            
-            <a href="/tech/ko/categories/Lectures/page/7/" class="pagination-page">7</a>
-            
-            
-            
-            <a href="/tech/ko/categories/Lectures/page/8/" class="pagination-page">8</a>
-            
-            
-            
-            <a href="/tech/ko/categories/Lectures/page/9/" class="pagination-page">9</a>
-            
-            
-            
-            <a href="/tech/ko/categories/Lectures/page/10/" class="pagination-page">10</a>
-            
-            
-            
-            <a href="/tech/ko/categories/Lectures/page/11/" class="pagination-page">11</a>
-            
-            
-            
-            <a href="/tech/ko/categories/Lectures/page/12/" class="pagination-page">12</a>
-            
-            
-            
-            <a href="/tech/ko/categories/Lectures/page/13/" class="pagination-page">13</a>
-            
-            
-            
-            <a href="/tech/ko/categories/Lectures/page/14/" class="pagination-page">14</a>
-            
-            
         </div>
 
         
-        <a href="/tech/ko/categories/Lectures/page/6/" class="pagination-next">
+        <span class="pagination-next disabled">
             <span>Next</span>
             <span aria-hidden="true">→</span>
-        </a>
+        </span>
         
     </div>
 </nav>

@@ -160,16 +160,6 @@
                 </p>
             </a>
             
-            <a href="/game/" id="game-blog-link" class="blog-card">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">🗡️</div>
-                <h3 id="game-title" style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent);">RPG Game</h3>
-                <p id="game-desc" style="color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">A small browser dungeon RPG built with JavaScript</p>
-                <p style="color: var(--accent); font-weight: 600;">
-                    <span id="game-visit">Play Game</span>
-                    <span class="blog-arrow">→</span>
-                </p>
-            </a>
-            
         </div>
     </main>
 
@@ -201,11 +191,7 @@
                 portfolioTitle: "Portfolio",
                 portfolioDesc: "My journey as a developer",
                 portfolioVisit: "Visit Portfolio",
-                portfolioUrl: "/portfolio/en/",
-                gameTitle: "RPG Game",
-                gameDesc: "A small browser dungeon RPG built with JavaScript",
-                gameVisit: "Play Game",
-                gameUrl: "/game/"
+                portfolioUrl: "/portfolio/en/"
             },
             ko: {
                 welcome: "재영의 블로그",
@@ -221,11 +207,7 @@
                 portfolioTitle: "포트폴리오",
                 portfolioDesc: "개발자로서의 여정",
                 portfolioVisit: "포트폴리오 방문",
-                portfolioUrl: "/portfolio/ko/",
-                gameTitle: "RPG 게임",
-                gameDesc: "자바스크립트로 만든 작은 브라우저 던전 RPG",
-                gameVisit: "게임 시작",
-                gameUrl: "/game/"
+                portfolioUrl: "/portfolio/ko/"
             }
         };
 
@@ -275,15 +257,6 @@
                 document.getElementById('portfolio-desc').textContent = translations[lang].portfolioDesc;
                 document.getElementById('portfolio-visit').textContent = translations[lang].portfolioVisit;
                 document.getElementById('portfolio-blog-link').href = translations[lang].portfolioUrl;
-            }
-
-            // Update game
-            const gameTitle = document.getElementById('game-title');
-            if (gameTitle) {
-                gameTitle.textContent = translations[lang].gameTitle;
-                document.getElementById('game-desc').textContent = translations[lang].gameDesc;
-                document.getElementById('game-visit').textContent = translations[lang].gameVisit;
-                document.getElementById('game-blog-link').href = translations[lang].gameUrl;
             }
 
             // Update HTML lang attribute

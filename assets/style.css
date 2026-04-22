@@ -84,6 +84,9 @@
 /* Custom Overrides - Always load last */
 @import 'css/custom-overrides.css';
 
+/* Editorial Redesign - truly last */
+@import 'css/redesign.css';
+
 /* ========================================
    8. GLOBAL - Additional global styles
    ======================================== */

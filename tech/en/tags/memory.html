@@ -40,14 +40,14 @@
     <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'en';
@@ -109,13 +109,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
-                
-                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
-                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
-                
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <a href="/tech/en/game/">Game</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -152,7 +147,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2025-12-27T00:00:00.000Z"">December 27, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>4 min read</span>
             </div>
             <h2>
                 <a href="/tech/en/posts/comparch-01.html">Computer Architecture 01 - Overview</a>
@@ -179,96 +174,9 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-01-21T00:00:00.000Z"">January 21, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/distributed-llm-training-06.html">Distributed LLM Training 06 - Where LLM Training Memory Actually Goes</a>
-            </h2>
-            
-            <p class="post-excerpt">Looking only at parameter size leads to bad decisions; training memory is really a combination of parameters, gradients, optimizer state, and activations</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/distributed-llm-training-06.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-11T00:00:00.000Z"">February 11, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/distributed-llm-training-13.html">Distributed LLM Training 13 - Activation Checkpointing and the Cost of Recomputation</a>
-            </h2>
-            
-            <p class="post-excerpt">Saving memory by recomputing activations is not a minor option; it is often a central design choice in large-scale training</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/distributed-llm-training-13.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-03T00:00:00.000Z"">February 3, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/gpu-systems-03.html">GPU Systems 03 - Memory Hierarchy and Bandwidth</a>
-            </h2>
-            
-            <p class="post-excerpt">How to think about the GPU memory hierarchy and bandwidth bottlenecks</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/gpu-systems-03.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
                 <time datetime=""2026-01-19T00:00:00.000Z"">January 19, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>6 min read</span>
             </div>
             <h2>
                 <a href="/tech/en/posts/linux-04.html">Linux Internals 04 - Memory Management</a>
@@ -286,35 +194,6 @@
                 
                 </div>
                 <a href="/tech/en/posts/linux-04.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-01-23T00:00:00.000Z"">January 23, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/pytorch-internals-07.html">PyTorch Internals 07 - Tensor Lifetime, the CUDA Caching Allocator, and Memory Reuse</a>
-            </h2>
-            
-            <p class="post-excerpt">PyTorch GPU memory behavior is shaped by a caching allocator, so observed memory usage is not just a story about current tensor objects</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/pytorch-internals-07.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>

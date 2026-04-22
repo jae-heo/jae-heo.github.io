@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -105,7 +105,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'en';
@@ -171,13 +171,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
-                
-                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
-                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
-                
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <a href="/tech/en/game/">Game</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -384,11 +379,6 @@
                 <span>From CPU internals and privilege levels to memory hierarchy and modern multicore processors</span>
             </a>
             
-            <a href="/tech/en/series/platform-engineering.html" class="series-next-link">
-                <strong>Platform Engineering Fundamentals</strong>
-                <span>Understanding the principles behind Internal Developer Platforms, golden paths, and developer self-service</span>
-            </a>
-            
         </div>
     </section>
     
@@ -493,26 +483,26 @@ VmRSS:  12340 kB</code></pre>
 
     <nav class="post-nav">
         
-        <a href="/tech/en/posts/pytorch-internals-01.html" class="post-nav-card nav-prev">
+        <a href="/tech/en/posts/comparch-02.html" class="post-nav-card nav-prev">
             <span class="post-nav-card-label">Previous</span>
-            <strong>PyTorch Internals 01 - Why You Need to Understand the Internals</strong>
-            <p>To reason well about performance, custom operators, and distributed runtime behavior, PyTorch has to be understood as a runtime, not just a Python library</p>
+            <strong>Computer Architecture 02 - CPU Internals</strong>
+            <p>How the ALU, control unit, and datapath work together to execute instructions</p>
             <span class="post-nav-card-meta">
-                <span>January 5, 2026</span>
+                <span>January 4, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>2 min read</span>
+                <span>6 min read</span>
             </span>
         </a>
         
         
-        <a href="/tech/en/posts/distributed-llm-training-01.html" class="post-nav-card nav-next">
+        <a href="/tech/en/posts/compiler-04.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">Next</span>
-            <strong>Distributed LLM Training 01 - Why LLM Training Becomes a Distributed Systems Problem</strong>
-            <p>Once LLM training leaves a single GPU, it stops being only a modeling problem and becomes a systems problem around memory, communication, and recovery</p>
+            <strong>Automata and Compilers 04 - Pushdown Automata</strong>
+            <p>What computational power a stack adds to finite automata</p>
             <span class="post-nav-card-meta">
-                <span>January 6, 2026</span>
+                <span>January 7, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>3 min read</span>
+                <span>5 min read</span>
             </span>
         </a>
         

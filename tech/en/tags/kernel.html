@@ -40,14 +40,14 @@
     <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'en';
@@ -109,13 +109,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
-                
-                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
-                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
-                
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <a href="/tech/en/game/">Game</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -150,67 +145,9 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-05T00:00:00.000Z"">February 5, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/gpu-systems-04.html">GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration</a>
-            </h2>
-            
-            <p class="post-excerpt">How to think about indexing and launch configuration when writing CUDA kernels</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/gpu-systems-04.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-27T00:00:00.000Z"">February 27, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/gpu-systems-15.html">GPU Systems 15 - LayerNorm and RMSNorm Kernel Structure</a>
-            </h2>
-            
-            <p class="post-excerpt">Why normalization kernels are often memory-bound and structurally important</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/gpu-systems-15.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
                 <time datetime=""2025-12-28T00:00:00.000Z"">December 28, 2025</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>3 min read</span>
             </div>
             <h2>
                 <a href="/tech/en/posts/linux-01.html">Linux Internals 01 - Operating System Overview</a>
@@ -239,7 +176,7 @@
             <div class="post-card-eyebrow">
                 <time datetime=""2026-02-03T00:00:00.000Z"">February 3, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>6 min read</span>
             </div>
             <h2>
                 <a href="/tech/en/posts/linux-06.html">Linux Internals 06 - System Calls and the Kernel</a>
@@ -257,93 +194,6 @@
                 
                 </div>
                 <a href="/tech/en/posts/linux-06.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-01T00:00:00.000Z"">February 1, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/pytorch-internals-10.html">PyTorch Internals 10 - Connecting a Custom CUDA Kernel Through an Extension</a>
-            </h2>
-            
-            <p class="post-excerpt">A CUDA kernel becomes a real PyTorch operator only when tensor contracts, runtime semantics, and integration details are handled correctly</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/pytorch-internals-10.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-10T00:00:00.000Z"">February 10, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/pytorch-internals-13.html">PyTorch Internals 13 - When a Fused Operator Is Actually Worth It</a>
-            </h2>
-            
-            <p class="post-excerpt">Fusion is valuable when it reduces memory traffic and intermediate materialization, not just when it reduces the number of visible ops</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/pytorch-internals-13.html" class="read-more">Read more</a>
-            </div>
-        </div>
-    </article>
-    
-    <article class="post-preview" data-tags="" data-category="Lectures">
-        
-        
-        <div class="post-preview-content">
-            <div class="post-card-eyebrow">
-                <time datetime=""2026-02-22T00:00:00.000Z"">February 22, 2026</time>
-                <span class="post-card-dot"></span>
-                <span>undefined min read</span>
-            </div>
-            <h2>
-                <a href="/tech/en/posts/pytorch-internals-17.html">PyTorch Internals 17 - What Role Triton Plays Inside the PyTorch Ecosystem</a>
-            </h2>
-            
-            <p class="post-excerpt">Triton is not just a convenient kernel language; it is part of the modern PyTorch kernel and compilation story</p>
-            
-            <div class="post-card-footer">
-                <div class="post-card-tags">
-                
-                <div class="post-meta-bottom">
-                    <a href="/tech/en/categories/Lectures.html" class="category-badge">Lectures</a>
-                </div>
-                
-                
-                </div>
-                <a href="/tech/en/posts/pytorch-internals-17.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>

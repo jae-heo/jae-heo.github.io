@@ -40,14 +40,14 @@
     <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'en';
@@ -109,13 +109,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
-                
-                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
-                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
-                
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <a href="/tech/en/game/">Game</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -136,678 +131,10 @@
         <p class="subtitle">Thoughts on code, technology, and everything in between</p>
     </div>
 
-    <section class="home-intro">
-        <div class="home-intro-copy">
-            <span class="home-intro-eyebrow">Technical notes by Jae</span>
-            <h2>Systems writing for engineers who want the deeper model.</h2>
-            <p>Long-form posts on platform engineering, Linux, compilers, MLOps, and computer architecture, written to help you build stronger intuition instead of just memorize terms.</p>
-        </div>
-        <div class="home-intro-panel">
-            <div class="home-intro-card">
-                <span class="home-intro-card-label">Start here</span>
-                <strong>Featured series</strong>
-                <p>A few strong entry points if you are new here.</p>
-                
-                <a href="/tech/en/start-here.html" class="home-intro-link">Open the reading guide</a>
-                
-            </div>
-            <div class="home-intro-card">
-                <span class="home-intro-card-label">Best of</span>
-                <strong>Curated picks</strong>
-                <p>A shorter hand-picked route through the blog's strongest posts and series.</p>
-                
-                <a href="/tech/en/best-of.html" class="home-intro-link">Open the curated list</a>
-                
-            </div>
-            <div class="home-intro-card">
-                <span class="home-intro-card-label">Browse recent posts</span>
-                <strong>119 posts</strong>
-                <p>Fresh writing, updates, and ongoing series entries.</p>
-            </div>
-        </div>
-    </section>
-
-    
-    <section class="featured-series-strip">
-        
-        <article class="featured-series-card">
-            <div class="featured-series-meta">
-                <span>21 posts</span>
-                <span class="post-card-dot"></span>
-                <span>58 min total</span>
-            </div>
-            
-            <div class="series-difficulty-row">
-                <span class="series-difficulty-badge">Difficulty: Advanced</span>
-            </div>
-            
-            
-            <p class="series-fit-line"><strong>Best for:</strong> Kernel-minded ML and systems engineers</p>
-            
-            <h3><a href="/tech/en/series/gpu-systems.html">GPU Systems</a></h3>
-            <p>From GPU architecture and CUDA kernels to Triton and real kernel optimization work</p>
-            <p class="featured-series-audience">Engineers who want to understand how GPUs actually execute work and eventually write and optimize their own kernels.</p>
-            <div class="featured-series-actions">
-                <a href="/tech/en/posts/gpu-systems-00.html" class="read-more">Recommended Start</a>
-                <a href="/tech/en/series/gpu-systems.html" class="read-more subtle-link">Series guide</a>
-            </div>
-        </article>
-        
-        <article class="featured-series-card">
-            <div class="featured-series-meta">
-                <span>10 posts</span>
-                <span class="post-card-dot"></span>
-                <span>43 min total</span>
-            </div>
-            
-            <div class="series-difficulty-row">
-                <span class="series-difficulty-badge">Difficulty: Intermediate</span>
-            </div>
-            
-            
-            <p class="series-fit-line"><strong>Best for:</strong> ML engineers moving toward production</p>
-            
-            <h3><a href="/tech/en/series/mlops.html">MLOps Fundamentals</a></h3>
-            <p>Building reliable ML systems from data pipelines to production monitoring</p>
-            <p class="featured-series-audience">ML engineers, data scientists, and backend engineers moving from model experiments to production operations.</p>
-            <div class="featured-series-actions">
-                <a href="/tech/en/posts/mlops-01.html" class="read-more">Recommended Start</a>
-                <a href="/tech/en/series/mlops.html" class="read-more subtle-link">Series guide</a>
-            </div>
-        </article>
-        
-        <article class="featured-series-card">
-            <div class="featured-series-meta">
-                <span>12 posts</span>
-                <span class="post-card-dot"></span>
-                <span>60 min total</span>
-            </div>
-            
-            <div class="series-difficulty-row">
-                <span class="series-difficulty-badge">Difficulty: Intermediate</span>
-            </div>
-            
-            
-            <p class="series-fit-line"><strong>Best for:</strong> Readers bridging PL theory and implementation</p>
-            
-            <h3><a href="/tech/en/series/compiler.html">Automata and Compilers</a></h3>
-            <p>From finite automata and formal languages to building a compiler from scratch</p>
-            <p class="featured-series-audience">Readers who want both the theory behind language processing and the bridge to real compiler construction.</p>
-            <div class="featured-series-actions">
-                <a href="/tech/en/posts/compiler-01.html" class="read-more">Recommended Start</a>
-                <a href="/tech/en/series/compiler.html" class="read-more subtle-link">Series guide</a>
-            </div>
-        </article>
-        
-    </section>
-    
-
-    <!-- Tab Navigation -->
-    <div class="home-tabs">
-        <button class="home-tab active" data-tab="series">
-            Series
-        </button>
-        <button class="home-tab" data-tab="recent">
-            Recent Posts
-        </button>
-    </div>
-
-    <!-- Series Tab Content -->
-    <div class="tab-content active" data-content="series">
-        <!-- Homepage Series View Component - Grid Layout with Numbered Posts -->
+    <!-- Homepage Series View Component - Grid Layout with Numbered Posts -->
 <div class="home-series-list">
     
         
-            
-
-            <!-- Series Group Start -->
-            
-            <div class="home-series-group">
-                
-                <!-- Series Header -->
-                <div class="home-series-header">
-                    <a href="/tech/en/series/gpu-systems.html" class="home-series-header-link" aria-label="GPU Systems">
-                        <h2 class="home-series-title">
-                            GPU Systems
-                        </h2>
-                        <p class="home-series-description">From GPU architecture and CUDA kernels to Triton and real kernel optimization work</p>
-                        <div class="home-series-header-footer">
-                            <div class="home-series-count">
-                                21
-                                
-                                    posts
-                                
-                            </div>
-                            <span class="home-series-cta">Open series guide →</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Series Posts List -->
-                <ol class="home-series-posts" style="counter-reset: home-series-counter 22">
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-20.html" class="home-series-post-link">
-                            GPU Systems 20 - From Nsight to Triton to FlashAttention
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-19.html" class="home-series-post-link">
-                            GPU Systems 19 - Asynchronous Copy and Pipelining
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-18.html" class="home-series-post-link">
-                            GPU Systems 18 - Tensor Cores and Mixed Precision
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-17.html" class="home-series-post-link">
-                            GPU Systems 17 - Register Pressure and Spilling
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-16.html" class="home-series-post-link">
-                            GPU Systems 16 - Vectorized Loads, Stores, and Alignment
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-15.html" class="home-series-post-link">
-                            GPU Systems 15 - LayerNorm and RMSNorm Kernel Structure
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-14.html" class="home-series-post-link">
-                            GPU Systems 14 - Why Softmax Is Such a Good Kernel Exercise
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-13.html" class="home-series-post-link">
-                            GPU Systems 13 - Reduction Kernels in Depth
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-12.html" class="home-series-post-link">
-                            GPU Systems 12 - Warp Shuffle and Warp-Level Primitives
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-11.html" class="home-series-post-link">
-                            GPU Systems 11 - Shared Memory Bank Conflicts
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-10.html" class="home-series-post-link">
-                            GPU Systems 10 - Tiled Matrix Multiplication and Shared Memory
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-09.html" class="home-series-post-link">
-                            GPU Systems 09 - Why Naive Matrix Multiplication Is Slow
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-08.html" class="home-series-post-link">
-                            GPU Systems 08 - Profiling and the Roofline View
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-07.html" class="home-series-post-link">
-                            GPU Systems 07 - Occupancy and Latency Hiding
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-06.html" class="home-series-post-link">
-                            GPU Systems 06 - Triton and the Practical Shape of Kernel Optimization
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-05.html" class="home-series-post-link">
-                            GPU Systems 05 - Coalescing, Shared Memory, and Reduction Patterns
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-04.html" class="home-series-post-link">
-                            GPU Systems 04 - Writing CUDA Kernels and Choosing Launch Configuration
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-03.html" class="home-series-post-link">
-                            GPU Systems 03 - Memory Hierarchy and Bandwidth
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-02.html" class="home-series-post-link">
-                            GPU Systems 02 - The Thread, Warp, and Block Execution Model
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-01.html" class="home-series-post-link">
-                            GPU Systems 01 - Roadmap to GPU Kernel Engineering
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/gpu-systems-00.html" class="home-series-post-link">
-                            GPU Systems 00 - What You Should Know Before Starting This Series
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-                </ol>
-            </div>
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-            <div class="home-series-group">
-                
-                <!-- Series Header -->
-                <div class="home-series-header">
-                    <a href="/tech/en/series/mlops.html" class="home-series-header-link" aria-label="MLOps Fundamentals">
-                        <h2 class="home-series-title">
-                            MLOps Fundamentals
-                        </h2>
-                        <p class="home-series-description">Building reliable ML systems from data pipelines to production monitoring</p>
-                        <div class="home-series-header-footer">
-                            <div class="home-series-count">
-                                10
-                                
-                                    posts
-                                
-                            </div>
-                            <span class="home-series-cta">Open series guide →</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Series Posts List -->
-                <ol class="home-series-posts" style="counter-reset: home-series-counter 11">
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-10.html" class="home-series-post-link">
-                            MLOps 10 - Building an MLOps Platform
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-09.html" class="home-series-post-link">
-                            MLOps 09 - GPU Infrastructure and Scaling
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-08.html" class="home-series-post-link">
-                            MLOps 08 - Feature Stores
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-07.html" class="home-series-post-link">
-                            MLOps 07 - CI/CD for ML
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-06.html" class="home-series-post-link">
-                            MLOps 06 - Monitoring and Drift Detection
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-05.html" class="home-series-post-link">
-                            MLOps 05 - Model Serving and Deployment Strategies
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-04.html" class="home-series-post-link">
-                            MLOps 04 - Model Versioning and Registry
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-03.html" class="home-series-post-link">
-                            MLOps 03 - Experiment Tracking and Training Management
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-02.html" class="home-series-post-link">
-                            MLOps 02 - Data Pipelines and Feature Engineering
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/mlops-01.html" class="home-series-post-link">
-                            MLOps 01 - What Is MLOps?
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-                </ol>
-            </div>
-            
-
             
 
             <!-- Series Group Start -->
@@ -1409,903 +736,6 @@
                 
                 <!-- Series Header -->
                 <div class="home-series-header">
-                    <a href="/tech/en/series/platform-engineering.html" class="home-series-header-link" aria-label="Platform Engineering Fundamentals">
-                        <h2 class="home-series-title">
-                            Platform Engineering Fundamentals
-                        </h2>
-                        <p class="home-series-description">Understanding the principles behind Internal Developer Platforms, golden paths, and developer self-service</p>
-                        <div class="home-series-header-footer">
-                            <div class="home-series-count">
-                                11
-                                
-                                    posts
-                                
-                            </div>
-                            <span class="home-series-cta">Open series guide →</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Series Posts List -->
-                <ol class="home-series-posts" style="counter-reset: home-series-counter 12">
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-11.html" class="home-series-post-link">
-                            Platform Engineering 11 - Building a Platform Team
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-10.html" class="home-series-post-link">
-                            Platform Engineering 10 - Security and Governance
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-09.html" class="home-series-post-link">
-                            Platform Engineering 09 - Observability for Platform Engineers
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-08.html" class="home-series-post-link">
-                            Platform Engineering 08 - CI/CD at Scale
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-07.html" class="home-series-post-link">
-                            Platform Engineering 07 - Platform as a Product
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-06.html" class="home-series-post-link">
-                            Platform Engineering 06 - Developer Portals and Service Catalogs
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-05.html" class="home-series-post-link">
-                            Platform Engineering 05 - Infrastructure as Code for Platforms
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-04.html" class="home-series-post-link">
-                            Platform Engineering 04 - Designing Golden Paths
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-03.html" class="home-series-post-link">
-                            Platform Engineering 03 - Developer Experience as a North Star
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-02.html" class="home-series-post-link">
-                            Platform Engineering 02 - Anatomy of an Internal Developer Platform
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/platform-engineering-01.html" class="home-series-post-link">
-                            Platform Engineering 01 - What Is Platform Engineering?
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-                </ol>
-            </div>
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-            <div class="home-series-group">
-                
-                <!-- Series Header -->
-                <div class="home-series-header">
-                    <a href="/tech/en/series/distributed-llm-training.html" class="home-series-header-link" aria-label="Distributed LLM Training">
-                        <h2 class="home-series-title">
-                            Distributed LLM Training
-                        </h2>
-                        <p class="home-series-description">From data parallelism to tensor parallelism, FSDP, ZeRO, and modern LLM training frameworks</p>
-                        <div class="home-series-header-footer">
-                            <div class="home-series-count">
-                                20
-                                
-                                    posts
-                                
-                            </div>
-                            <span class="home-series-cta">Open series guide →</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Series Posts List -->
-                <ol class="home-series-posts" style="counter-reset: home-series-counter 21">
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-20.html" class="home-series-post-link">
-                            Distributed LLM Training 20 - A Practical Order for Designing an LLM Training Stack
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-19.html" class="home-series-post-link">
-                            Distributed LLM Training 19 - How to Read Megatron-LM and DeepSpeed Structurally
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-18.html" class="home-series-post-link">
-                            Distributed LLM Training 18 - Deadlocks, Timeouts, and OOMs: Debugging Distributed Training
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-17.html" class="home-series-post-link">
-                            Distributed LLM Training 17 - Why Checkpointing, Resume, and Fault Tolerance Matter So Much
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-16.html" class="home-series-post-link">
-                            Distributed LLM Training 16 - How Communication Overlap Hides Step Time
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-15.html" class="home-series-post-link">
-                            Distributed LLM Training 15 - How FSDP Differs from DDP and When It Helps
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-14.html" class="home-series-post-link">
-                            Distributed LLM Training 14 - What ZeRO Stage 1, 2, and 3 Each Remove
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-13.html" class="home-series-post-link">
-                            Distributed LLM Training 13 - Activation Checkpointing and the Cost of Recomputation
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-12.html" class="home-series-post-link">
-                            Distributed LLM Training 12 - GPipe, 1F1B, and Interleaving: Choosing a Pipeline Schedule
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-11.html" class="home-series-post-link">
-                            Distributed LLM Training 11 - Pipeline Parallel Basics and How to Think About Stage Splits
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-10.html" class="home-series-post-link">
-                            Distributed LLM Training 10 - Sequence Parallelism and the Cost of Long Context
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-09.html" class="home-series-post-link">
-                            Distributed LLM Training 09 - Where Tensor Parallelism Actually Lives Inside a Transformer
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-08.html" class="home-series-post-link">
-                            Distributed LLM Training 08 - Tensor Parallel Basics: Splitting Computation Inside the Model
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-07.html" class="home-series-post-link">
-                            Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-06.html" class="home-series-post-link">
-                            Distributed LLM Training 06 - Where LLM Training Memory Actually Goes
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-05.html" class="home-series-post-link">
-                            Distributed LLM Training 05 - Global Batch Size, Gradient Accumulation, and Learning Rate Scaling
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-04.html" class="home-series-post-link">
-                            Distributed LLM Training 04 - What PyTorch DDP Actually Does Internally
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-03.html" class="home-series-post-link">
-                            Distributed LLM Training 03 - All-Reduce, Ring, and How to Read Communication Cost
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-02.html" class="home-series-post-link">
-                            Distributed LLM Training 02 - The Real Cost of Synchronous SGD and Data Parallelism
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/distributed-llm-training-01.html" class="home-series-post-link">
-                            Distributed LLM Training 01 - Why LLM Training Becomes a Distributed Systems Problem
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-                </ol>
-            </div>
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-            <div class="home-series-group">
-                
-                <!-- Series Header -->
-                <div class="home-series-header">
-                    <a href="/tech/en/series/pytorch-internals.html" class="home-series-header-link" aria-label="PyTorch Internals">
-                        <h2 class="home-series-title">
-                            PyTorch Internals
-                        </h2>
-                        <p class="home-series-description">Understanding tensors, autograd, and CUDA extensions well enough to connect custom kernels to real training code</p>
-                        <div class="home-series-header-footer">
-                            <div class="home-series-count">
-                                20
-                                
-                                    posts
-                                
-                            </div>
-                            <span class="home-series-cta">Open series guide →</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Series Posts List -->
-                <ol class="home-series-posts" style="counter-reset: home-series-counter 21">
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-20.html" class="home-series-post-link">
-                            PyTorch Internals 20 - A Practical Path from Internals Knowledge to Real Engineering Work
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-19.html" class="home-series-post-link">
-                            PyTorch Internals 19 - Extension Packaging, Testing, and ABI Stability
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-18.html" class="home-series-post-link">
-                            PyTorch Internals 18 - Where Autograd Meets Distributed Runtime
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-17.html" class="home-series-post-link">
-                            PyTorch Internals 17 - What Role Triton Plays Inside the PyTorch Ecosystem
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-16.html" class="home-series-post-link">
-                            PyTorch Internals 16 - The Big Picture of FX, torch.compile, and Inductor
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-15.html" class="home-series-post-link">
-                            PyTorch Internals 15 - Reading Operator Bottlenecks with PyTorch Profiling
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-14.html" class="home-series-post-link">
-                            PyTorch Internals 14 - AMP, Autocast, and Numerical Stability
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-13.html" class="home-series-post-link">
-                            PyTorch Internals 13 - When a Fused Operator Is Actually Worth It
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-12.html" class="home-series-post-link">
-                            PyTorch Internals 12 - Backward Implementation Patterns and Saved-State Strategy
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-11.html" class="home-series-post-link">
-                            PyTorch Internals 11 - Operator Schema, Dispatch Keys, and Meta Functions
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-10.html" class="home-series-post-link">
-                            PyTorch Internals 10 - Connecting a Custom CUDA Kernel Through an Extension
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-09.html" class="home-series-post-link">
-                            PyTorch Internals 09 - The Basic Path of a C++ Extension
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-08.html" class="home-series-post-link">
-                            PyTorch Internals 08 - CUDA Streams, Events, and Asynchronous Execution
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-07.html" class="home-series-post-link">
-                            PyTorch Internals 07 - Tensor Lifetime, the CUDA Caching Allocator, and Memory Reuse
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-06.html" class="home-series-post-link">
-                            PyTorch Internals 06 - When and How to Use a Custom Autograd Function
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-05.html" class="home-series-post-link">
-                            PyTorch Internals 05 - How the Autograd Graph and Engine Work
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-04.html" class="home-series-post-link">
-                            PyTorch Internals 04 - What the Dispatcher and Operator Registry Actually Do
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-03.html" class="home-series-post-link">
-                            PyTorch Internals 03 - Contiguous Layout, Memory Format, and Hidden Copies
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-02.html" class="home-series-post-link">
-                            PyTorch Internals 02 - Tensors Run on Top of Storage, Size, and Stride
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-
-                    <!-- Series Post Item -->
-                    <li class="home-series-post-item">
-                        <a href="/tech/en/posts/pytorch-internals-01.html" class="home-series-post-link">
-                            PyTorch Internals 01 - Why You Need to Understand the Internals
-                            
-                        </a>
-                    </li>
-
-            <!-- Series Group End -->
-            
-                </ol>
-            </div>
-            
-
-            
-
-            <!-- Series Group Start -->
-            
-            <div class="home-series-group">
-                
-                <!-- Series Header -->
-                <div class="home-series-header">
                     <a href="/tech/en/series/python-lecture.html" class="home-series-header-link" aria-label="Python Lecture Series">
                         <h2 class="home-series-title">
                             Python Lecture Series
@@ -2410,16 +840,15 @@
     
 </div>
 
-    </div>
 
-    <!-- Recent Posts Tab Content -->
-    <div class="tab-content" data-content="recent">
+    <section class="home-recent">
+        <h2 class="home-recent-title">Recent Posts</h2>
+
         <div class="posts-controls">
-        <div class="filter-section">
-            <!-- Filters button will be inserted here by JS -->
+            <div class="filter-section">
+                <!-- Filters button will be inserted here by JS -->
+            </div>
         </div>
-        <!-- Filter panel will be inserted here by JS -->
-    </div>
 
         <!-- Grid View -->
 <div class="post-list post-grid-view">
@@ -2429,15 +858,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-26T00:00:00.000Z"">February 26, 2026</time>
+                <time datetime=""2026-01-21T00:00:00.000Z"">January 21, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>5 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/linux-09.html">Linux Internals 09 - Networking</a>
+                <a href="/tech/en/posts/compiler-06.html">Automata and Compilers 06 - Lexical Analysis</a>
             </h2>
             
-            <p class="post-excerpt">The Linux kernel networking stack and how a packet travels from NIC to application</p>
+            <p class="post-excerpt">How a lexer breaks source code into tokens and where automata theory meets real implementation</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -2448,7 +877,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/linux-09.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/compiler-06.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -2458,15 +887,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-25T00:00:00.000Z"">February 25, 2026</time>
+                <time datetime=""2026-01-19T00:00:00.000Z"">January 19, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>6 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/compiler-11.html">Automata and Compilers 11 - Intermediate Representations and Optimization</a>
+                <a href="/tech/en/posts/linux-04.html">Linux Internals 04 - Memory Management</a>
             </h2>
             
-            <p class="post-excerpt">Why compilers use intermediate representations and how optimization makes programs faster</p>
+            <p class="post-excerpt">The concept of virtual memory and how the Linux kernel manages memory</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -2477,7 +906,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/compiler-11.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/linux-04.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -2487,15 +916,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-25T00:00:00.000Z"">February 25, 2026</time>
+                <time datetime=""2026-01-18T00:00:00.000Z"">January 18, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>7 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/gpu-systems-14.html">GPU Systems 14 - Why Softmax Is Such a Good Kernel Exercise</a>
+                <a href="/tech/en/posts/comparch-04.html">Computer Architecture 04 - Pipelining and Parallel Processing</a>
             </h2>
             
-            <p class="post-excerpt">How softmax combines reductions, memory traffic, and numerical stability in one kernel</p>
+            <p class="post-excerpt">Instruction pipelining, hazard handling, branch prediction, superscalar and out-of-order execution</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -2506,7 +935,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/gpu-systems-14.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/comparch-04.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -2516,15 +945,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-25T00:00:00.000Z"">February 25, 2026</time>
+                <time datetime=""2026-01-13T00:00:00.000Z"">January 13, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>6 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/pytorch-internals-18.html">PyTorch Internals 18 - Where Autograd Meets Distributed Runtime</a>
+                <a href="/tech/en/posts/compiler-05.html">Automata and Compilers 05 - Compiler Overview — Phases and Architecture</a>
             </h2>
             
-            <p class="post-excerpt">DDP and FSDP are not external magic; they depend directly on autograd timing and tensor-state management inside the runtime</p>
+            <p class="post-excerpt">Why compilers are divided into multiple phases and what each phase does</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -2535,7 +964,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/pytorch-internals-18.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/compiler-05.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -2545,15 +974,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-24T00:00:00.000Z"">February 24, 2026</time>
+                <time datetime=""2026-01-12T00:00:00.000Z"">January 12, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>6 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/comparch-09.html">Computer Architecture 09 - I/O and DMA</a>
+                <a href="/tech/en/posts/linux-03.html">Linux Internals 03 - Process Scheduling</a>
             </h2>
             
-            <p class="post-excerpt">How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA</p>
+            <p class="post-excerpt">How the Linux kernel distributes CPU time among processes and how CFS works</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -2564,7 +993,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/comparch-09.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/linux-03.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -2574,15 +1003,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-23T00:00:00.000Z"">February 23, 2026</time>
+                <time datetime=""2026-01-10T00:00:00.000Z"">January 10, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>6 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/distributed-llm-training-17.html">Distributed LLM Training 17 - Why Checkpointing, Resume, and Fault Tolerance Matter So Much</a>
+                <a href="/tech/en/posts/comparch-03.html">Computer Architecture 03 - Instruction Set Architecture (ISA)</a>
             </h2>
             
-            <p class="post-excerpt">In long distributed runs, reliable recovery is as important as raw throughput</p>
+            <p class="post-excerpt">The role of ISAs, CISC vs RISC philosophy, and x86 versus ARM design differences</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -2593,7 +1022,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/distributed-llm-training-17.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/comparch-03.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -2603,15 +1032,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-23T00:00:00.000Z"">February 23, 2026</time>
+                <time datetime=""2026-01-07T00:00:00.000Z"">January 7, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>5 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/gpu-systems-13.html">GPU Systems 13 - Reduction Kernels in Depth</a>
+                <a href="/tech/en/posts/compiler-04.html">Automata and Compilers 04 - Pushdown Automata</a>
             </h2>
             
-            <p class="post-excerpt">Using reduction kernels to connect shared memory, warp primitives, and synchronization</p>
+            <p class="post-excerpt">What computational power a stack adds to finite automata</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -2622,7 +1051,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/gpu-systems-13.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/compiler-04.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -2632,15 +1061,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-22T00:00:00.000Z"">February 22, 2026</time>
+                <time datetime=""2026-01-05T00:00:00.000Z"">January 5, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>6 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/pytorch-internals-17.html">PyTorch Internals 17 - What Role Triton Plays Inside the PyTorch Ecosystem</a>
+                <a href="/tech/en/posts/linux-02.html">Linux Internals 02 - Processes and Threads</a>
             </h2>
             
-            <p class="post-excerpt">Triton is not just a convenient kernel language; it is part of the modern PyTorch kernel and compilation story</p>
+            <p class="post-excerpt">How processes are created and managed in Linux, and how threads relate to them</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -2651,7 +1080,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/pytorch-internals-17.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/linux-02.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -2661,15 +1090,15 @@
         
         <div class="post-preview-content">
             <div class="post-card-eyebrow">
-                <time datetime=""2026-02-21T00:00:00.000Z"">February 21, 2026</time>
+                <time datetime=""2026-01-04T00:00:00.000Z"">January 4, 2026</time>
                 <span class="post-card-dot"></span>
-                <span>undefined min read</span>
+                <span>6 min read</span>
             </div>
             <h2>
-                <a href="/tech/en/posts/gpu-systems-12.html">GPU Systems 12 - Warp Shuffle and Warp-Level Primitives</a>
+                <a href="/tech/en/posts/comparch-02.html">Computer Architecture 02 - CPU Internals</a>
             </h2>
             
-            <p class="post-excerpt">Why warp-level primitives matter for reductions and lighter-weight cooperation</p>
+            <p class="post-excerpt">How the ALU, control unit, and datapath work together to execute instructions</p>
             
             <div class="post-card-footer">
                 <div class="post-card-tags">
@@ -2680,7 +1109,7 @@
                 
                 
                 </div>
-                <a href="/tech/en/posts/gpu-systems-12.html" class="read-more">Read more</a>
+                <a href="/tech/en/posts/comparch-02.html" class="read-more">Read more</a>
             </div>
         </div>
     </article>
@@ -2723,42 +1152,6 @@
             <a href="/tech/en/page/5/" class="pagination-page">5</a>
             
             
-            
-            <a href="/tech/en/page/6/" class="pagination-page">6</a>
-            
-            
-            
-            <a href="/tech/en/page/7/" class="pagination-page">7</a>
-            
-            
-            
-            <a href="/tech/en/page/8/" class="pagination-page">8</a>
-            
-            
-            
-            <a href="/tech/en/page/9/" class="pagination-page">9</a>
-            
-            
-            
-            <a href="/tech/en/page/10/" class="pagination-page">10</a>
-            
-            
-            
-            <a href="/tech/en/page/11/" class="pagination-page">11</a>
-            
-            
-            
-            <a href="/tech/en/page/12/" class="pagination-page">12</a>
-            
-            
-            
-            <a href="/tech/en/page/13/" class="pagination-page">13</a>
-            
-            
-            
-            <a href="/tech/en/page/14/" class="pagination-page">14</a>
-            
-            
         </div>
 
         
@@ -2771,9 +1164,7 @@
 </nav>
 
 
-    </div>
-
-    <script src="/assets/js/home-tabs.js"></script>
+    </section>
 </div>
 
     </main>

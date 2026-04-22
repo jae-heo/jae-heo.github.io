@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -102,7 +102,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'ko';
@@ -168,13 +168,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
-                
-                <a href="/tech/ko/start-here.html" data-nav-link>시작 가이드</a>
-                <a href="/tech/ko/best-of.html" data-nav-link>추천 글</a>
-                
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <a href="/tech/ko/game/">게임</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -467,26 +462,26 @@
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/distributed-llm-training-01.html" class="post-nav-card nav-prev">
+        <a href="/tech/ko/posts/linux-02.html" class="post-nav-card nav-prev">
             <span class="post-nav-card-label">이전 글</span>
-            <strong>분산 LLM 학습 01 - 왜 LLM 학습은 분산 시스템 문제가 되는가</strong>
-            <p>여러 GPU를 붙이는 순간 학습 코드는 계산만의 문제가 아니라 메모리와 통신, 장애 복구까지 포함한 시스템 문제가 된다</p>
+            <strong>리눅스 내부 구조 02 - 프로세스와 스레드</strong>
+            <p>리눅스에서 프로세스가 어떻게 생성되고 관리되며, 스레드와 어떤 관계를 갖는지</p>
             <span class="post-nav-card-meta">
-                <span>January 6, 2026</span>
+                <span>January 5, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>2분 읽기</span>
+                <span>4분 읽기</span>
             </span>
         </a>
         
         
-        <a href="/tech/ko/posts/pytorch-internals-02.html" class="post-nav-card nav-next">
+        <a href="/tech/ko/posts/comparch-03.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">다음 글</span>
-            <strong>PyTorch 내부 구조 02 - Tensor는 storage, size, stride 위에서 동작한다</strong>
-            <p>텐서를 다차원 배열로만 보면 view와 layout 문제를 잘못 이해하게 된다</p>
+            <strong>컴퓨터 구조 03 - 명령어 집합 아키텍처 (ISA)</strong>
+            <p>ISA의 역할과 CISC/RISC 철학, x86과 ARM의 설계 차이</p>
             <span class="post-nav-card-meta">
-                <span>January 8, 2026</span>
+                <span>January 10, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>1분 읽기</span>
+                <span>4분 읽기</span>
             </span>
         </a>
         

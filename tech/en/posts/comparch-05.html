@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="Jae's Tech Blog RSS" href="/tech/en/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -105,7 +105,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'en';
@@ -171,13 +171,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/en/" data-nav-link>Home</a>
-                
-                <a href="/tech/en/start-here.html" data-nav-link>Start Here</a>
-                <a href="/tech/en/best-of.html" data-nav-link>Best Of</a>
-                
                 <a href="/tech/en/archive.html" data-nav-link>Archive</a>
                 <a href="/tech/en/about.html" data-nav-link>About</a>
-                <a href="/tech/en/game/">Game</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -384,11 +379,6 @@
                 <span>Understanding the Linux kernel from processes and memory to containers</span>
             </a>
             
-            <a href="/tech/en/series/gpu-systems.html" class="series-next-link">
-                <strong>GPU Systems</strong>
-                <span>From GPU architecture and CUDA kernels to Triton and real kernel optimization work</span>
-            </a>
-            
             <a href="/tech/en/series/compiler.html" class="series-next-link">
                 <strong>Automata and Compilers</strong>
                 <span>From finite automata and formal languages to building a compiler from scratch</span>
@@ -504,26 +494,26 @@ User Program (Ring 3)</code></pre>
 
     <nav class="post-nav">
         
-        <a href="/tech/en/posts/distributed-llm-training-07.html" class="post-nav-card nav-prev">
+        <a href="/tech/en/posts/compiler-06.html" class="post-nav-card nav-prev">
             <span class="post-nav-card-label">Previous</span>
-            <strong>Distributed LLM Training 07 - NCCL and Topology: Why the Same GPU Count Can Behave Very Differently</strong>
-            <p>In distributed training, performance is often shaped more by how GPUs are connected than by the raw number of GPUs</p>
+            <strong>Automata and Compilers 06 - Lexical Analysis</strong>
+            <p>How a lexer breaks source code into tokens and where automata theory meets real implementation</p>
             <span class="post-nav-card-meta">
-                <span>January 24, 2026</span>
+                <span>January 21, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>2 min read</span>
+                <span>5 min read</span>
             </span>
         </a>
         
         
-        <a href="/tech/en/posts/pytorch-internals-08.html" class="post-nav-card nav-next">
+        <a href="/tech/en/posts/compiler-07.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">Next</span>
-            <strong>PyTorch Internals 08 - CUDA Streams, Events, and Asynchronous Execution</strong>
-            <p>Many PyTorch CUDA operations are asynchronous, so timing, synchronization, and dependency need to be reasoned about explicitly</p>
+            <strong>Automata and Compilers 07 - Top-Down Parsing</strong>
+            <p>The principles behind recursive descent parsers, LL(1) grammars, and the strengths and limitations of top-down parsing</p>
             <span class="post-nav-card-meta">
-                <span>January 26, 2026</span>
+                <span>January 27, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>1 min read</span>
+                <span>5 min read</span>
             </span>
         </a>
         

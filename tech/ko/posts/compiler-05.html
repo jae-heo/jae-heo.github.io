@@ -66,7 +66,7 @@
     <link rel="alternate" type="application/rss+xml" title="재영의 기술 블로그 RSS" href="/tech/ko/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+KR:wght@300..700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
 
     <!-- Structured Data (JSON-LD) -->
     
@@ -105,7 +105,7 @@
 
     <script>
         // Apply saved theme immediately to prevent flash
-        const theme = localStorage.getItem('theme') || 'light';
+        const theme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         // Language preference
         const lang = localStorage.getItem('lang') || 'ko';
@@ -171,13 +171,8 @@
             </button>
             <div class="nav-links" id="site-nav-links">
                 <a href="/tech/ko/" data-nav-link>홈</a>
-                
-                <a href="/tech/ko/start-here.html" data-nav-link>시작 가이드</a>
-                <a href="/tech/ko/best-of.html" data-nav-link>추천 글</a>
-                
                 <a href="/tech/ko/archive.html" data-nav-link>아카이브</a>
                 <a href="/tech/ko/about.html" data-nav-link>소개</a>
-                <a href="/tech/ko/game/">게임</a>
                 <div class="nav-actions">
                 <select id="lang-select" class="nav-select" aria-label="Select language">
                     <option value="en">English</option>
@@ -481,26 +476,26 @@
 
     <nav class="post-nav">
         
-        <a href="/tech/ko/posts/distributed-llm-training-03.html" class="post-nav-card nav-prev">
+        <a href="/tech/ko/posts/linux-03.html" class="post-nav-card nav-prev">
             <span class="post-nav-card-label">이전 글</span>
-            <strong>분산 LLM 학습 03 - All-Reduce, Ring, 그리고 통신 비용 읽는 법</strong>
-            <p>분산 학습에서 가장 자주 등장하는 collective인 all-reduce를 이해해야 gradient synchronization 비용을 제대로 읽을 수 있다</p>
+            <strong>리눅스 내부 구조 03 - 프로세스 스케줄링</strong>
+            <p>리눅스 커널이 여러 프로세스에게 CPU를 분배하는 방법과 CFS의 동작 원리</p>
             <span class="post-nav-card-meta">
                 <span>January 12, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>2분 읽기</span>
+                <span>4분 읽기</span>
             </span>
         </a>
         
         
-        <a href="/tech/ko/posts/pytorch-internals-04.html" class="post-nav-card nav-next">
+        <a href="/tech/ko/posts/comparch-04.html" class="post-nav-card nav-next">
             <span class="post-nav-card-label">다음 글</span>
-            <strong>PyTorch 내부 구조 04 - Dispatcher와 Operator Registry는 무엇을 하는가</strong>
-            <p>같은 operator 이름 아래 여러 backend와 여러 역할의 구현을 연결해 주는 중심 계층이 dispatcher다</p>
+            <strong>컴퓨터 구조 04 - 파이프라인과 병렬 처리</strong>
+            <p>명령어 파이프라이닝, 해저드 처리, 분기 예측, 슈퍼스칼라와 비순차 실행</p>
             <span class="post-nav-card-meta">
-                <span>January 14, 2026</span>
+                <span>January 18, 2026</span>
                 <span class="post-card-dot"></span>
-                <span>1분 읽기</span>
+                <span>4분 읽기</span>
             </span>
         </a>
         
