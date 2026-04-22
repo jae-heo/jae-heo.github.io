@@ -4,8 +4,8 @@
    ========================================================= */
 
 :root {
-  --font-display: 'Fraunces', 'Noto Serif KR', 'Apple SD Gothic Neo', 'Nanum Myeongjo', Georgia, serif;
-  --font-body: 'Fraunces', 'Noto Serif KR', 'Apple SD Gothic Neo', 'Nanum Myeongjo', Georgia, serif;
+  --font-display: 'Fraunces', 'Gowun Batang', 'Apple SD Gothic Neo', 'Nanum Myeongjo', Georgia, serif;
+  --font-body: 'Fraunces', 'Gowun Batang', 'Apple SD Gothic Neo', 'Nanum Myeongjo', Georgia, serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --text-xs:   clamp(0.72rem, 0.70rem + 0.10vw, 0.78rem);
