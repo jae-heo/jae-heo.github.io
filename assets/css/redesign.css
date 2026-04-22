@@ -50,8 +50,79 @@
   --highlight:#55482d;
 }
 
-/* ---------- Reset the legacy decorative layers ---------- */
-html { -webkit-text-size-adjust: 100%; }
+/* ---------- Wood scrollbar (DOM-based, JS-driven) ---------- */
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+/* Once JS mounts, hide every native scrollbar — we render our own */
+html.has-wood-scroll,
+html.has-wood-scroll body,
+html.has-wood-scroll .wood-scroll-host {
+  scrollbar-width: none;
+}
+html.has-wood-scroll::-webkit-scrollbar,
+html.has-wood-scroll body::-webkit-scrollbar,
+html.has-wood-scroll .wood-scroll-host::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.wood-scrollbar {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  user-select: none;
+}
+.wood-scrollbar-inner {
+  opacity: 0;
+  transition: opacity 0.2s var(--ease);
+}
+.wood-scrollbar-inner.is-peek,
+.wood-scrollbar-inner.is-dragging {
+  opacity: 1;
+}
+.wood-scroll-host { position: relative; }
+
+.wood-scrollbar-track {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.wood-scrollbar-thumb {
+  position: absolute;
+  top: 0;
+  left: 1px;
+  right: 1px;
+  height: 60px;
+  pointer-events: auto;
+  cursor: grab;
+  border: 1px solid rgba(12, 6, 1, 0.9);
+  border-radius: 5px;
+  background-color: #6b4121;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='80' viewBox='0 0 12 80' preserveAspectRatio='none'><defs><linearGradient id='w' x1='0' x2='1'><stop offset='0' stop-color='%23150a03'/><stop offset='0.18' stop-color='%23381f0c'/><stop offset='0.42' stop-color='%237a4d24'/><stop offset='0.5' stop-color='%23a46c38'/><stop offset='0.58' stop-color='%237a4d24'/><stop offset='0.82' stop-color='%23381f0c'/><stop offset='1' stop-color='%23150a03'/></linearGradient></defs><rect width='12' height='80' fill='url(%23w)'/><path d='M4 0 Q5 20 4 40 Q3 60 4 80' stroke='rgba(0,0,0,0.18)' stroke-width='0.4' fill='none'/><path d='M8 0 Q7 20 8 40 Q9 60 8 80' stroke='rgba(220,180,130,0.09)' stroke-width='0.35' fill='none'/></svg>");
+  background-repeat: repeat-y;
+  background-size: 100% 80px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 186, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.45),
+    inset 1px 0 0 rgba(255, 210, 160, 0.08),
+    inset -1px 0 0 rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+  transition: filter 0.15s var(--ease);
+}
+.wood-scrollbar-thumb:hover { filter: brightness(1.12) saturate(1.1); }
+.wood-scrollbar.is-dragging .wood-scrollbar-thumb { cursor: grabbing; filter: brightness(0.9); }
+
+html.has-wood-scroll body { padding-right: 0 !important; }
 
 body {
   font-family: var(--font-body) !important;
@@ -118,6 +189,9 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: 1.02rem !important;
   letter-spacing: 0.005em;
   color: var(--ink) !important;
+  -webkit-text-fill-color: var(--ink) !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
   text-decoration: none !important;
   background: none !important;
   border: 0 !important;
@@ -432,8 +506,6 @@ html[lang="ko"] .home-recent::before       { content: "§  최근 글"; }
 }
 .home-series-post-link:hover { color: var(--accent) !important; }
 
-/* Show only first 5 posts per series in the home preview */
-.home-series-posts .home-series-post-item:nth-child(n+6) { display: none !important; }
 
 .new-badge, .updated-badge {
   display: inline-block !important;
@@ -677,6 +749,41 @@ html[lang="ko"] .home-recent::before       { content: "§  최근 글"; }
   border: 0 !important;
 }
 
+.post-eyebrow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--rule);
+}
+.post-eyebrow-series {
+  color: var(--accent) !important;
+  text-decoration: none !important;
+  transition: color 0.18s var(--ease);
+}
+.post-eyebrow-series::before {
+  content: "§ ";
+  color: var(--accent);
+}
+.post-eyebrow-series:hover { color: var(--ink) !important; }
+.post-eyebrow-index {
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.15em;
+}
+.post-eyebrow-index::before {
+  content: "·";
+  margin-right: 0.65em;
+  color: var(--ink-faint);
+}
+
 .post-kicker {
   font-family: var(--font-mono) !important;
   font-size: 0.72rem !important;
@@ -688,6 +795,12 @@ html[lang="ko"] .home-recent::before       { content: "§  최근 글"; }
   margin-bottom: 1.4rem;
   background: none !important;
   padding: 0 !important;
+}
+
+/* Lede paragraph — first real paragraph subtly larger */
+.post-content > p:first-of-type {
+  font-size: 1.07em;
+  line-height: 1.72;
 }
 
 .post-title {
@@ -880,6 +993,20 @@ html[lang="ko"] .home-recent::before       { content: "§  최근 글"; }
   font-style: normal;
   opacity: 0.38;
   font-weight: 400;
+}
+.post-content blockquote::after {
+  content: "\201D";
+  position: absolute;
+  right: -0.1rem;
+  bottom: -1.6rem;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--accent);
+  font-style: normal;
+  opacity: 0.28;
+  font-weight: 400;
+  pointer-events: none;
 }
 .post-content blockquote p { margin: 0; }
 .post-content blockquote p + p { margin-top: 0.8rem; }
@@ -1110,28 +1237,29 @@ html[lang="ko"] .post-series-navigation::before { content: "§  이 시리즈"; 
   list-style: none !important;
   counter-reset: post-series-counter !important;
   margin: 0 !important;
-  padding: 0.85rem 0 0 !important;
+  padding: 0.85rem 0.15rem 0.15rem 0 !important;
   border-top: 1px solid var(--rule) !important;
-  display: grid !important;
-  gap: 0 !important;
-  max-height: none !important;
-  overflow: visible !important;
+  display: block !important;
+  max-height: 18rem !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
   background: none !important;
+  position: relative;
 }
 
 .post-series-item {
   counter-increment: post-series-counter;
   margin: 0 !important;
-  padding: 0.35rem 0 !important;
+  padding: 0.45rem 0.75rem 0.45rem 1rem !important;
   background: none !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 2px !important;
   height: auto !important;
   display: flex !important;
   align-items: baseline;
   gap: 0.9rem;
   position: relative !important;
-  transition: color 0.18s var(--ease);
+  transition: background 0.18s var(--ease), color 0.18s var(--ease);
 }
 .post-series-item::before {
   content: counter(post-series-counter, decimal-leading-zero) !important;
@@ -1153,14 +1281,30 @@ html[lang="ko"] .post-series-navigation::before { content: "§  이 시리즈"; 
   text-align: right;
 }
 
-.post-series-item.current {
-  background: none !important;
-  border: 0 !important;
-  border-radius: 0 !important;
+.post-series-item:not(.current):hover {
+  background: color-mix(in srgb, var(--accent) 6%, transparent) !important;
 }
-.post-series-item.current::before { color: var(--accent) !important; }
-.post-series-item:hover { background: none !important; }
-.post-series-item:not(.current):hover { background: none !important; }
+.post-series-item:not(.current):hover::before {
+  color: var(--ink-muted) !important;
+}
+
+.post-series-item.current {
+  background: var(--accent-soft) !important;
+  border: 0 !important;
+  border-radius: 2px !important;
+}
+.post-series-item.current::before { color: var(--accent) !important; font-weight: 500 !important; }
+.post-series-item.current::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  width: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+.current-indicator { display: none !important; }
 
 .post-series-link {
   display: inline !important;
