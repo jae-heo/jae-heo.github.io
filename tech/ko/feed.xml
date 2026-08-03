@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jae's Tech Blog</title>
+    <link>https://jae-heo.github.io/tech/ko/</link>
+    <description>Deep dives into programming, technology trends, and development insights</description>
+    <language>ko</language>
+    <atom:link href="https://jae-heo.github.io/tech/ko/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Aug 2026 06:22:48 GMT</lastBuildDate>
+    
+    <item>
+      <title><![CDATA[오토마타와 컴파일러 12 - 코드 생성]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-12.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-12.html</guid>
+      <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[최적화된 중간 표현이 실제 기계어로 변환되는 과정과,오토마타 이론에서 시작하여 컴파일러 구현까지 이어지는 여정의 마무리]]></description>
+    </item>
+    <item>
+      <title><![CDATA[컴퓨터 구조 10 - 멀티코어와 현대 프로세서]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-10.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-10.html</guid>
+      <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[클럭 속도의 한계를 넘어 멀티코어로 전환된 이유와 현대 프로세서 아키텍처의 핵심 개념]]></description>
+    </item>
+    <item>
+      <title><![CDATA[리눅스 내부 구조 10 - 컨테이너와 가상화]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-10.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-10.html</guid>
+      <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[네임스페이스와 cgroup이 컨테이너를 만드는 원리,그리고 커널 개념들의 총정리]]></description>
+    </item>
+    <item>
+      <title><![CDATA[리눅스 내부 구조 09 - 네트워킹]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-09.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-09.html</guid>
+      <pubDate>Thu, 26 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[리눅스 커널의 네트워킹 스택과 패킷이 NIC에서 애플리케이션까지 전달되는 과정]]></description>
+    </item>
+    <item>
+      <title><![CDATA[오토마타와 컴파일러 11 - 중간 표현과 최적화]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-11.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-11.html</guid>
+      <pubDate>Wed, 25 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[컴파일러가 왜 중간 표현을 거치는지,그리고 최적화가 어떻게 프로그램을 더 빠르게 만드는지]]></description>
+    </item>
+    <item>
+      <title><![CDATA[컴퓨터 구조 09 - I/O와 DMA]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-09.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-09.html</guid>
+      <pubDate>Tue, 24 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[CPU가 외부 장치와 데이터를 주고받는 방식과 DMA를 통한 효율적 데이터 전송의 원리]]></description>
+    </item>
+    <item>
+      <title><![CDATA[오토마타와 컴파일러 10 - 의미 분석과 타입 검사]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-10.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-10.html</guid>
+      <pubDate>Thu, 19 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[파서가 잡지 못하는 오류를 의미 분석이 어떻게 잡아내는지,그리고 타입 검사가 프로그램의 안전성을 보장하는 원리]]></description>
+    </item>
+    <item>
+      <title><![CDATA[리눅스 내부 구조 08 - 동기화와 동시성]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-08.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-08.html</guid>
+      <pubDate>Wed, 18 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[여러 실행 흐름이 공유 자원에 접근할 때 발생하는 문제와 리눅스 커널의 동기화 메커니즘]]></description>
+    </item>
+    <item>
+      <title><![CDATA[컴퓨터 구조 08 - 가상 메모리와 MMU]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-08.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-08.html</guid>
+      <pubDate>Tue, 17 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[가상 메모리가 프로세스 격리를 가능하게 하는 원리와 MMU,페이지 테이블,TLB의 동작]]></description>
+    </item>
+    <item>
+      <title><![CDATA[리눅스 내부 구조 07 - I/O와 디바이스]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-07.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-07.html</guid>
+      <pubDate>Thu, 12 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[블록 디바이스와 캐릭터 디바이스부터 I/O 스케줄러,DMA,페이지 캐시까지]]></description>
+    </item>
+    <item>
+      <title><![CDATA[오토마타와 컴파일러 09 - 추상 구문 트리]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-09.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-09.html</guid>
+      <pubDate>Tue, 10 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[파스 트리와 AST의 차이,AST 노드 설계,그리고 컴파일러 프론트엔드와 백엔드를 잇는 다리]]></description>
+    </item>
+    <item>
+      <title><![CDATA[컴퓨터 구조 07 - 메모리 계층 구조]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-07.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-07.html</guid>
+      <pubDate>Sun, 08 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[레지스터에서 HDD까지 이어지는 메모리 계층과 캐시의 동작 원리]]></description>
+    </item>
+    <item>
+      <title><![CDATA[오토마타와 컴파일러 08 - 상향식 파싱]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-08.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-08.html</guid>
+      <pubDate>Wed, 04 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[시프트-리듀스 파싱과 LR 파서의 원리,그리고 파서 생성기가 동작하는 방식]]></description>
+    </item>
+    <item>
+      <title><![CDATA[리눅스 내부 구조 06 - 시스템 콜과 커널]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-06.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-06.html</guid>
+      <pubDate>Tue, 03 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[시스템 콜이 유저 공간에서 커널 공간으로 전환되는 과정과 커널 모듈의 동작 원리]]></description>
+    </item>
+    <item>
+      <title><![CDATA[컴퓨터 구조 06 - 인터럽트와 예외]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-06.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-06.html</guid>
+      <pubDate>Mon, 02 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[인터럽트가 존재하는 이유와 IDT,ISR,PIC/APIC의 동작 원리]]></description>
+    </item>
+    <item>
+      <title><![CDATA[리눅스 내부 구조 05 - 파일 시스템]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-05.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-05.html</guid>
+      <pubDate>Wed, 28 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[모든 것이 파일인 리눅스에서 VFS,inode,ext4가 어떻게 동작하는지]]></description>
+    </item>
+    <item>
+      <title><![CDATA[오토마타와 컴파일러 07 - 하향식 파싱]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-07.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-07.html</guid>
+      <pubDate>Tue, 27 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[재귀 하강 파서와 LL(1) 파싱의 원리,그리고 하향식 접근법의 강점과 한계]]></description>
+    </item>
+    <item>
+      <title><![CDATA[컴퓨터 구조 05 - CPU 권한 수준과 보호]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-05.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-05.html</guid>
+      <pubDate>Sun, 25 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[CPU가 왜 권한 수준을 구분하는지,x86 보호 링과 ARM 예외 수준이 어떻게 시스템을 보호하는지]]></description>
+    </item>
+    <item>
+      <title><![CDATA[오토마타와 컴파일러 06 - 어휘 분석]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-06.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-06.html</guid>
+      <pubDate>Wed, 21 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[소스 코드를 토큰으로 쪼개는 어휘 분석기의 원리와 오토마타 이론이 실제로 적용되는 지점]]></description>
+    </item>
+    <item>
+      <title><![CDATA[리눅스 내부 구조 04 - 메모리 관리]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-04.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-04.html</guid>
+      <pubDate>Mon, 19 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[가상 메모리의 개념과 리눅스 커널이 메모리를 관리하는 방법]]></description>
+    </item>
+  </channel>
+</rss>

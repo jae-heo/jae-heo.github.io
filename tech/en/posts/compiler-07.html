@@ -406,6 +406,48 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#what-is-parsing">What Is Parsing?</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#recursive-descent-parsers">Recursive Descent Parsers</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#predictive-parsing-and-ll-1">Predictive Parsing and LL(1)</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#first-and-follow">FIRST and FOLLOW</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#eliminating-left-recursion">Eliminating Left Recursion</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#left-factoring">Left Factoring</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#table-driven-predictive-parsing">Table-Driven Predictive Parsing</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#limitations-of-top-down-parsing">Limitations of Top-Down Parsing</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="what-is-parsing">What Is Parsing?</h2>
@@ -455,7 +497,7 @@ T → ( E ) | id | num</code></pre>
             return self.consume(&#39;NUMBER&#39;)
         raise SyntaxError(&#39;Unexpected token&#39;)</code></pre>
 <p>Because each grammar rule maps directly to a function, the structure is clear and debugging is straightforward. In practice, many production compilers — including GCC, Clang, and the Go compiler — use recursive descent parsing. It allows flexible error handling and fine-grained control without depending on a parser generator.</p>
-<h2 id="predictive-parsing-and-ll1">Predictive Parsing and LL(1)</h2>
+<h2 id="predictive-parsing-and-ll-1">Predictive Parsing and LL(1)</h2>
 <p>For a recursive descent parser to work correctly, it must be possible to decide which grammar rule to apply by looking at just the current token. Can a single token always determine the right choice? Not for every grammar. But for a class of grammars known as LL(1), it can.</p>
 <p>The name LL(1) encodes three things. The first L means the input is read left-to-right. The second L means the parser produces a leftmost derivation. The 1 means exactly one token of lookahead is needed to make each decision.</p>
 <p>For an LL(1) parser to choose the correct rule, two sets must be precomputed: the FIRST set and the FOLLOW set.</p>
@@ -605,7 +647,7 @@ S&#39; → else S | ε</code></pre>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

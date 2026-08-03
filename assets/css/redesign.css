@@ -79,6 +79,7 @@ html.has-wood-scroll .wood-scroll-host::-webkit-scrollbar {
 }
 .wood-scrollbar-inner {
   opacity: 0;
+  z-index: 30;
   transition: opacity 0.2s var(--ease);
 }
 .wood-scrollbar-inner.is-peek,
@@ -302,7 +303,12 @@ img { max-width: 100%; height: auto; display: block; }
 .nav-select:hover, #lang-select:hover,
 .nav-theme-toggle:hover, #theme-toggle:hover { color: var(--ink) !important; }
 
-.mobile-menu-toggle { display: none; }
+.mobile-menu-toggle {
+  display: none;
+  color: var(--ink) !important;
+  border-color: var(--rule) !important;
+  background: var(--paper) !important;
+}
 
 /* ---------- Main scaffold ---------- */
 main {
@@ -412,6 +418,7 @@ html[lang="ko"] .home-recent::before       { content: "§  최근 글"; }
   counter-increment: series-counter;
   align-items: start;
   transition: background 0.25s var(--ease);
+  min-width: 0;
 }
 .home-series-group:first-of-type {
   border-top: 0 !important;
@@ -423,10 +430,12 @@ html[lang="ko"] .home-recent::before       { content: "§  최근 글"; }
 }
 .home-series-group > .home-series-header {
   grid-column: 1 !important;
+  min-width: 0;
 }
 .home-series-group > .home-series-posts {
   grid-column: 2 !important;
   align-self: start;
+  min-width: 0;
 }
 
 .home-series-header {
@@ -526,6 +535,7 @@ html[lang="ko"] .home-recent::before       { content: "§  최근 글"; }
   margin: 0 !important;
   border: 0 !important;
   background: none !important;
+  min-width: 0;
 }
 .home-series-post-item::before {
   content: counter(hs-counter, decimal-leading-zero);
@@ -546,6 +556,9 @@ html[lang="ko"] .home-recent::before       { content: "§  최근 글"; }
   text-decoration: none !important;
   background: none !important;
   transition: color 0.18s var(--ease);
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 .home-series-post-link:hover { color: var(--accent) !important; }
 
@@ -616,6 +629,8 @@ html[lang="ko"] .home-recent::before       { content: "§  최근 글"; }
   position: relative;
   transition: background 0.2s var(--ease);
 }
+.post-list .post-preview.is-filtered-out,
+.post-list .post-preview[hidden] { display: none !important; }
 .post-list .post-preview:first-of-type { border-top: 0 !important; }
 .post-list .post-preview:hover { background: var(--accent-soft); }
 
@@ -2085,16 +2100,41 @@ footer {
     gap: 0.75rem;
   }
   .site-nav .site-title { font-size: 0.95rem !important; }
+  .site-nav .mobile-menu-toggle {
+    display: inline-flex !important;
+    margin-left: auto;
+  }
   .site-nav .nav-links {
-    gap: 1.1rem;
-    flex-wrap: wrap;
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 1.1rem;
+    right: 1.1rem;
+    width: auto;
+    display: none !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+    padding: 0.85rem !important;
+    background: var(--paper) !important;
+    border: 1px solid var(--rule) !important;
+    box-shadow: 0 1rem 2.5rem color-mix(in srgb, var(--ink) 14%, transparent);
+    z-index: 50;
+  }
+  .site-nav .nav-links.active {
+    display: flex !important;
+  }
+  .site-nav .nav-links > a {
     width: 100%;
-    justify-content: flex-start;
+    padding: 0.7rem 0.65rem !important;
   }
   .nav-actions {
+    width: 100%;
+    justify-content: space-between;
     padding-left: 0;
-    margin-left: auto;
+    margin-left: 0;
+    padding-top: 0.65rem;
     border-left: 0;
+    border-top: 1px solid var(--rule);
   }
 
   main { padding: 2.25rem 1.2rem !important; }
@@ -2107,6 +2147,7 @@ footer {
     row-gap: 1rem !important;
   }
   .home-series-group > .home-series-posts {
+    grid-column: 1 !important;
     border-top: 1px solid var(--rule) !important;
     padding-top: 0.9rem !important;
   }

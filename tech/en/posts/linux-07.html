@@ -385,6 +385,48 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#block-devices-and-character-devices">Block Devices and Character Devices</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#major-and-minor-numbers">Major and Minor Numbers</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#i-o-schedulers">I/O Schedulers</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#dma-data-transfer-without-the-cpu">DMA: Data Transfer Without the CPU</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#buffered-i-o-and-direct-i-o">Buffered I/O and Direct I/O</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-page-cache">The Page Cache</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#polling-and-interrupts">Polling and Interrupts</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#udev-and-device-management">udev and Device Management</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="block-devices-and-character-devices">Block Devices and Character Devices</h2>
@@ -398,7 +440,7 @@ crw--w---- 1 root tty  4, 0  Feb 12 10:00 /dev/tty0</code></pre>
 <p>The number pairs shown in place of the file size in the output above — <code class="inline-code">8, 0</code> and <code class="inline-code">4, 0</code> — are the major and minor numbers. The major number identifies the driver responsible for the device, and the minor number identifies a specific device among the multiple devices managed by that driver.</p>
 <p>For example, major number 8 represents the SCSI disk driver. The minor number 0 for /dev/sda refers to the entire first disk, while minor number 1 for /dev/sda1 refers to the first partition. When a process accesses a device file, the kernel uses this number pair to route the request to the appropriate driver.</p>
 <p>Is this number-based scheme still adequate for modern systems? In truth, the explosive growth in device counts has exposed the limitations of static number allocation. To address this, Linux introduced dynamic major number allocation and a device management system called udev, which we will cover later in this post.</p>
-<h2 id="io-schedulers">I/O Schedulers</h2>
+<h2 id="i-o-schedulers">I/O Schedulers</h2>
 <p>For block devices — especially HDDs with spinning platters — the physical movement of the disk head becomes a performance bottleneck. The I/O scheduler reorders I/O requests from multiple processes to minimize the distance the disk head must travel.</p>
 <p>Looking at the major I/O schedulers that have been used in Linux reveals the design philosophy behind each one.</p>
 <p>The noop scheduler (now called none) does exactly what its name suggests — no reordering at all. Requests are forwarded to the device in the order they arrive. For devices like SSDs that have no seek time, reordering is unnecessary overhead, making noop the appropriate choice.</p>
@@ -430,7 +472,7 @@ crw--w---- 1 root tty  4, 0  Feb 12 10:00 /dev/tty0</code></pre>
                                     │Memory│
                                     └──────┘</code></pre>
 <p>Virtually all modern block device drivers use DMA. DMA is also essential for network cards — at high speeds, having the CPU copy each packet is practically impossible.</p>
-<h2 id="buffered-io-and-direct-io">Buffered I/O and Direct I/O</h2>
+<h2 id="buffered-i-o-and-direct-i-o">Buffered I/O and Direct I/O</h2>
 <p>When a process reads a file with the read system call, does the data go straight from disk to the user buffer? In general, no. Linux uses buffered I/O by default: data read from disk is first stored in the kernel&#39;s page cache and then copied to the user buffer.</p>
 <p>Why is this extra copy beneficial? When multiple processes read the same data, or when the same process reads it repeatedly, the data can be served directly from the page cache without any disk access. For most workloads, this caching effect far outweighs the cost of the additional copy.</p>
 <p>However, applications like databases have their own caching strategies, and the kernel&#39;s page cache becomes unnecessary memory consumption and extra copying. In such cases, the O_DIRECT flag can be used to perform direct I/O. Direct I/O bypasses the page cache and transfers data directly between the disk and the user buffer.</p>
@@ -544,7 +586,7 @@ SUBSYSTEM==&quot;block&quot;, ATTRS{idVendor}==&quot;0781&quot;, ATTRS{idProduct
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

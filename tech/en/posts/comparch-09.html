@@ -386,12 +386,62 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#where-the-cpu-meets-the-outside-world">Where the CPU Meets the Outside World</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#programmed-i-o">Programmed I/O</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#interrupt-driven-i-o">Interrupt-Driven I/O</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#dma-freeing-the-cpu-from-data-transfer">DMA: Freeing the CPU from Data Transfer</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#memory-mapped-i-o-vs-port-i-o">Memory-Mapped I/O vs Port I/O</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#evolution-of-bus-architecture">Evolution of Bus Architecture</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#i-o-scheduling">I/O Scheduling</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#iommu-and-device-isolation">IOMMU and Device Isolation</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#modern-storage-interfaces-nvme">Modern Storage Interfaces: NVMe</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#i-o-virtualization-sr-iov">I/O Virtualization: SR-IOV</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="where-the-cpu-meets-the-outside-world">Where the CPU Meets the Outside World</h2>
 <p>A computer is not composed solely of a CPU and memory. It needs to read data from disks, send packets over the network, and render images on the screen. The data exchange between the CPU and these external devices is I/O (Input/Output), and how efficiently I/O is handled determines the performance of the entire system.</p>
 <p>Is I/O really such a significant bottleneck? Modern CPUs can process billions of instructions per second, but disk access is measured in milliseconds and network round-trips take hundreds of microseconds to tens of milliseconds. In terms of CPU cycles, millions of instructions could execute during the time spent waiting for a single disk I/O operation. Managing this gap is a central challenge in system design.</p>
-<h2 id="programmed-io">Programmed I/O</h2>
+<h2 id="programmed-i-o">Programmed I/O</h2>
 <p>The simplest I/O approach is for the CPU to repeatedly check the status of a device. This is called programmed I/O or polling. The CPU reads a device register to check whether data is ready, and if not, loops back to check again.</p>
 <pre><code>; Programmed I/O (polling) pseudocode
 loop:
@@ -400,7 +450,7 @@ loop:
         goto loop
     data = read(device_data_register)</code></pre>
 <p>The problem with this approach is that the CPU cannot perform any other useful work while waiting for data. Polling can actually be efficient when reading small amounts of data from a fast device, but with slow devices it results in severe waste of CPU resources.</p>
-<h2 id="interrupt-driven-io">Interrupt-Driven I/O</h2>
+<h2 id="interrupt-driven-i-o">Interrupt-Driven I/O</h2>
 <p>Interrupt-driven I/O addresses the inefficiency of polling. After the CPU sends an I/O request to a device, it continues performing other work. When the device completes the data transfer, it raises an interrupt to notify the CPU. The CPU then suspends its current task and executes the interrupt handler to process the data.</p>
 <p>This approach prevents the CPU from sitting idle while waiting for I/O. However, one problem remains. The actual work of moving data between the device and memory still requires the CPU to perform byte-by-byte or word-by-word transfers. When transferring large amounts of data, the CPU being tied up copying data consumes computational capacity that could be used elsewhere.</p>
 <h2 id="dma-freeing-the-cpu-from-data-transfer">DMA: Freeing the CPU from Data Transfer</h2>
@@ -417,7 +467,7 @@ loop:
  │                          │                     │            │
  │ ◀── Completion IRQ ──── │                     │            │</code></pre>
 <p>With DMA, the CPU can freely perform other computations even during large data transfers. While megabytes of data are being read from disk, the CPU can continue executing instructions for other processes. However, since DMA transfers and the CPU share the memory bus, the CPU&#39;s memory access speed may decrease somewhat during heavy DMA transfers. This is known as cycle stealing.</p>
-<h2 id="memory-mapped-io-vs-port-io">Memory-Mapped I/O vs Port I/O</h2>
+<h2 id="memory-mapped-i-o-vs-port-i-o">Memory-Mapped I/O vs Port I/O</h2>
 <p>There are two approaches for the CPU to communicate with devices. Port-mapped I/O uses a separate I/O address space and dedicated instructions (IN/OUT on x86) to access devices. Memory-mapped I/O maps device registers into a portion of the memory address space, allowing devices to be accessed using standard memory read/write instructions.</p>
 <p>Memory-mapped I/O dominates in modern systems. It simplifies programming since no separate I/O instructions are needed, and existing memory protection mechanisms can be leveraged for device access control. The configuration space of PCIe devices and GPU framebuffer access are both performed through memory-mapped I/O.</p>
 <h2 id="evolution-of-bus-architecture">Evolution of Bus Architecture</h2>
@@ -436,7 +486,7 @@ loop:
 </tbody>
 </table>
 <p>This is why high-performance GPUs use PCIe x16 slots. Devices that require large-scale data transfers secure more lanes to increase their available bandwidth.</p>
-<h2 id="io-scheduling">I/O Scheduling</h2>
+<h2 id="i-o-scheduling">I/O Scheduling</h2>
 <p>When multiple processes simultaneously request disk I/O, the operating system&#39;s I/O scheduler determines the processing order of these requests. For traditional rotational hard drives, minimizing disk head movement was important, making scheduling algorithms like the elevator algorithm effective.</p>
 <p>The proliferation of SSDs changed this situation. SSDs have no physically moving heads, so the concept of seek time disappears entirely. Consequently, simple FIFO or basic priority-based schedulers became more appropriate than complex schedulers optimizing request order. The evolution of Linux&#39;s default I/O scheduler from CFQ to mq-deadline and then to none reflects precisely this hardware shift.</p>
 <h2 id="iommu-and-device-isolation">IOMMU and Device Isolation</h2>
@@ -445,7 +495,7 @@ loop:
 <h2 id="modern-storage-interfaces-nvme">Modern Storage Interfaces: NVMe</h2>
 <p>The SATA interface was designed for rotational hard drives, with a command queue depth of only 32 and support for just a single queue. This interface becomes a bottleneck when trying to fully exploit the potential performance of SSDs.</p>
 <p>NVMe (Non-Volatile Memory Express) is a protocol designed from the ground up for SSDs. It operates directly over the PCIe bus, supports up to 65,535 queues, and each queue can have a depth of up to 65,536 entries. This design allows each core in a multicore environment to have its own I/O queue, avoiding lock contention on queue access. This is why NVMe SSDs achieve overwhelmingly higher IOPS (I/O Operations Per Second) compared to SATA SSDs.</p>
-<h2 id="io-virtualization-sr-iov">I/O Virtualization: SR-IOV</h2>
+<h2 id="i-o-virtualization-sr-iov">I/O Virtualization: SR-IOV</h2>
 <p>In virtualization environments where multiple virtual machines share a single physical network card, the hypervisor must mediate I/O requests. This software mediation layer increases latency and CPU overhead.</p>
 <p>SR-IOV (Single Root I/O Virtualization) divides a single physical device into multiple Virtual Functions, allowing each virtual machine to access the device directly as if it had a dedicated physical device. Since devices are accessed directly without hypervisor mediation, latency is significantly reduced and CPU overhead is minimized. The widespread adoption of SR-IOV in cloud environments requiring high-performance networking is due to these advantages.</p>
 <p>In the next post, we&#39;ll look at multicore and modern processors.</p>
@@ -531,7 +581,7 @@ loop:
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

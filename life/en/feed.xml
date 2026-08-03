@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jae's Life Blog</title>
+    <link>https://jae-heo.github.io/life/en/</link>
+    <description>Personal stories, travel adventures, and life experiences beyond the code</description>
+    <language>en</language>
+    <atom:link href="https://jae-heo.github.io/life/en/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Aug 2026 06:22:39 GMT</lastBuildDate>
+    
+    <item>
+      <title><![CDATA[A Person Who Acts]]></title>
+      <link>https://jae-heo.github.io/life/posts/instant-action-builds-trust.html</link>
+      <guid>https://jae-heo.github.io/life/posts/instant-action-builds-trust.html</guid>
+      <pubDate>Sun, 26 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[A colleague who showed results the next day after receiving feedback. I learned how to build trust through action.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Morning Running with Colleagues]]></title>
+      <link>https://jae-heo.github.io/life/posts/running-in-the-morning.html</link>
+      <guid>https://jae-heo.github.io/life/posts/running-in-the-morning.html</guid>
+      <pubDate>Fri, 24 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[Running with colleagues. Changes felt after two weeks.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Fluctuations of the Mind]]></title>
+      <link>https://jae-heo.github.io/life/posts/fluctuations-of-the-mind.html</link>
+      <guid>https://jae-heo.github.io/life/posts/fluctuations-of-the-mind.html</guid>
+      <pubDate>Wed, 22 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[Why do I have these ups and downs?]]></description>
+    </item>
+    <item>
+      <title><![CDATA[The Temptation of Bed and Sofa]]></title>
+      <link>https://jae-heo.github.io/life/posts/temptation-of-bed-and-sofa.html</link>
+      <guid>https://jae-heo.github.io/life/posts/temptation-of-bed-and-sofa.html</guid>
+      <pubDate>Sun, 19 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[A resolution to go outside to spend weekends efficiently]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Morning as Rest]]></title>
+      <link>https://jae-heo.github.io/life/posts/morning-as-rest.html</link>
+      <guid>https://jae-heo.github.io/life/posts/morning-as-rest.html</guid>
+      <pubDate>Sat, 18 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[The leisure that morning routine creates in a busy life]]></description>
+    </item>
+    <item>
+      <title><![CDATA[The Moment of Not Knowing Myself]]></title>
+      <link>https://jae-heo.github.io/life/posts/moment-of-not-knowing-myself.html</link>
+      <guid>https://jae-heo.github.io/life/posts/moment-of-not-knowing-myself.html</guid>
+      <pubDate>Fri, 17 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[When the feeling of reluctance arises,reflecting on my motivation]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Between Routine and Heart]]></title>
+      <link>https://jae-heo.github.io/life/posts/routine-and-heart.html</link>
+      <guid>https://jae-heo.github.io/life/posts/routine-and-heart.html</guid>
+      <pubDate>Thu, 16 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[The reason for oversleeping and finding balance within routine]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Setting a Routine]]></title>
+      <link>https://jae-heo.github.io/life/posts/setting-a-routine.html</link>
+      <guid>https://jae-heo.github.io/life/posts/setting-a-routine.html</guid>
+      <pubDate>Sat, 11 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[Creating my daily routine for a new day]]></description>
+    </item>
+  </channel>
+</rss>

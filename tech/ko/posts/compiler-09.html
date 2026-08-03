@@ -406,13 +406,51 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">바로 가기</p>
+                <h2>목차</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#파스-트리의-한계">파스 트리의 한계</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#파스-트리와-ast의-차이">파스 트리와 AST의 차이</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#ast-노드-설계">AST 노드 설계</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#파싱-중-ast-구축">파싱 중 AST 구축</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#구문-단위별-ast-예시">구문 단위별 AST 예시</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#비지터-패턴을-이용한-트리-순회">비지터 패턴을 이용한 트리 순회</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#프론트엔드와-백엔드의-다리">프론트엔드와 백엔드의 다리</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
-            <h2 id="-">파스 트리의 한계</h2>
+            <h2 id="파스-트리의-한계">파스 트리의 한계</h2>
 <p>파서가 토큰 스트림을 문법 규칙에 따라 분석하면 파스 트리(Parse Tree, 구문 트리)가 만들어진다. 파스 트리는 문법의 모든 유도 과정을 충실히 반영하므로 문법적 정확성을 검증하는 데는 유용하다. 하지만 컴파일러의 이후 단계에서 직접 사용하기에는 불필요한 정보가 너무 많다.</p>
 <p><code class="inline-code">2 + 3 * 4</code>라는 수식의 파스 트리를 떠올려 보자. 좌재귀를 제거한 문법을 사용하면 파스 트리에는 E, E&#39;, T, T&#39;, F 같은 비단말 기호와 괄호 같은 구분 기호가 모두 들어간다. 하지만 컴파일러가 실제로 알고 싶은 것은 결국 &quot;2에 3*4를 더한다&quot;는 연산 구조다. LL(1) 문법을 만들기 위해 도입한 E&#39;이나 T&#39; 같은 보조 비단말은 그 자체로는 언어의 의미와 직접 관련이 없다.</p>
 <p>이러한 이유로 컴파일러는 파스 트리 대신 추상 구문 트리(Abstract Syntax Tree, AST)를 사용한다. AST는 파스 트리에서 문법적 세부사항을 제거하고 프로그램의 의미적 구조만을 남긴 트리이다.</p>
-<h2 id="-ast-">파스 트리와 AST의 차이</h2>
+<h2 id="파스-트리와-ast의-차이">파스 트리와 AST의 차이</h2>
 <p>같은 수식 <code class="inline-code">2 + 3 * 4</code>에 대해 두 트리를 비교해 보자.</p>
 <pre><code>파스 트리:                    AST:
       E                       +
@@ -433,7 +471,7 @@
 <ul class="ul-list">
 <li>이 노드가 변수 참조인가, 함수 호출인가</li><li>이 연산의 피연산자 타입은 무엇인가</li><li>이 if 문이 어떤 조건식과 어떤 본문을 가지는가</li></ul>
 <p>반대로 <code class="inline-code">E</code>, <code class="inline-code">T</code>, <code class="inline-code">F</code> 같은 문법 보조 비단말의 존재 자체는 큰 도움이 되지 않는다. AST는 바로 그 차이를 반영한 결과물이다.</p>
-<h2 id="ast-">AST 노드 설계</h2>
+<h2 id="ast-노드-설계">AST 노드 설계</h2>
 <p>AST를 구현하려면 먼저 노드 타입을 설계해야 한다. 각 언어 구성 요소에 대응하는 노드 타입을 정의하되, 문법적인 디테일은 덜어내고 의미적으로 필요한 정보만 남기는 식이다.</p>
 <p>간단한 언어에 대한 AST 노드 타입을 다음과 같이 정의할 수 있다.</p>
 <pre><code class="language-python">from dataclasses import dataclass
@@ -497,7 +535,7 @@ class ReturnStmt:
 <li>함수 이름</li><li>매개변수 목록</li><li>반환 타입</li><li>본문</li></ul>
 <p>이렇게 해야 의미 분석이 심볼 테이블을 만들기 쉽고, 이후 IR로 내릴 때도 구조가 단순해진다.</p>
 <p>반대로 AST를 지나치게 추상화하면 원래 소스 코드의 의미를 잃어버릴 수도 있다. 예를 들어 <code class="inline-code">for</code> 문을 무조건 <code class="inline-code">while</code>로 낮춰 버리면 초기 단계에서는 편할 수 있지만, 에러 메시지나 source mapping을 다루기 어려워질 수 있다. 즉 AST 설계는 너무 낮지도, 너무 높지도 않은 중간 수준을 잡는 일이기도 하다.</p>
-<h2 id="-ast-">파싱 중 AST 구축</h2>
+<h2 id="파싱-중-ast-구축">파싱 중 AST 구축</h2>
 <p>AST는 파서가 문법 규칙을 적용하는 과정에서 함께 구축된다. 재귀 하강 파서에서는 각 파싱 함수가 AST 노드를 반환하도록 작성하면 된다.</p>
 <pre><code class="language-python">def parse_expr(self):
     left = self.parse_term()
@@ -543,7 +581,7 @@ def parse_factor(self):
 <li><code class="inline-code">parse_expr()</code>는 먼저 <code class="inline-code">parse_term()</code>을 호출한다</li><li><code class="inline-code">parse_term()</code>은 <code class="inline-code">2</code>를 읽어 <code class="inline-code">NumberLit(2)</code>를 만든다</li><li>다시 <code class="inline-code">parse_expr()</code>로 돌아왔을 때 <code class="inline-code">+</code>를 보고 오른쪽 <code class="inline-code">term</code>을 읽는다</li><li>오른쪽 <code class="inline-code">term</code> 안에서는 <code class="inline-code">3 * 4</code>가 하나의 <code class="inline-code">BinaryOp(&#39;*&#39;, 3, 4)</code>로 묶인다</li><li>마지막에 전체가 <code class="inline-code">BinaryOp(&#39;+&#39;, 2, BinaryOp(&#39;*&#39;, 3, 4))</code>가 된다</li></ol>
 <p>즉 파서 함수의 호출 구조가 그대로 AST 구조와 대응된다. 재귀 하강 파서를 이해할 때 &quot;문법 규칙이 함수가 되고, 함수 반환값이 AST 노드가 된다&quot;는 감각을 잡아 두면 훨씬 편하다.</p>
 <p>파서 생성기에서는 각 문법 규칙의 액션으로 AST 노드 생성 코드를 작성한다. Yacc/Bison에서 <code class="inline-code">$$ = new BinaryOp(&#39;+&#39;, $1, $3);</code>와 같은 형태로 리듀스 시 AST 노드를 만드는 것이 이에 해당한다.</p>
-<h2 id="-ast-">구문 단위별 AST 예시</h2>
+<h2 id="구문-단위별-ast-예시">구문 단위별 AST 예시</h2>
 <p>프로그래밍 언어의 주요 구성 요소가 AST에서 어떻게 표현되는지 살펴보자.</p>
 <p><strong>수식</strong>: <code class="inline-code">a + b * c</code></p>
 <pre><code>    BinaryOp(&#39;+&#39;)
@@ -567,7 +605,7 @@ Identifier(&#39;a&#39;)  BinaryOp(&#39;*&#39;)
                          Identifier(&#39;a&#39;),
                          Identifier(&#39;b&#39;)))]</code></pre>
 <p>이처럼 AST는 소스 코드의 구문적 장식을 모두 벗겨내고 프로그램의 논리적 구조를 명확하게 드러낸다.</p>
-<h2 id="-">비지터 패턴을 이용한 트리 순회</h2>
+<h2 id="비지터-패턴을-이용한-트리-순회">비지터 패턴을 이용한 트리 순회</h2>
 <p>AST가 구축된 후에는 다양한 목적으로 트리를 순회해야 한다. 타입 검사, 최적화, 코드 생성 등 각 단계가 AST를 순회하면서 정보를 수집하거나 트리를 변환한다.</p>
 <p>이때 가장 널리 사용되는 설계 패턴이 비지터 패턴(Visitor Pattern)이다. 노드 타입에 대한 처리 로직을 트리 구조 자체와 분리함으로써, 새로운 분석 단계를 추가할 때 기존 AST 노드 클래스를 수정할 필요가 없게 만드는 것이다.</p>
 <pre><code class="language-python">class ASTVisitor:
@@ -600,7 +638,7 @@ class PrettyPrinter(ASTVisitor):
         right = self.visit(node.right)
         return f&#39;({left} {node.op} {right})&#39;</code></pre>
 <p><code class="inline-code">Evaluator</code>와 <code class="inline-code">PrettyPrinter</code>는 같은 AST를 순회하지만 완전히 다른 결과를 생성한다. 새로운 분석 단계가 필요하면 <code class="inline-code">ASTVisitor</code>를 상속받는 새 클래스를 작성하기만 하면 된다. AST 노드 클래스를 변경할 필요가 없으므로, 컴파일러의 각 단계가 독립적으로 개발되고 유지될 수 있는 것이다.</p>
-<h2 id="-">프론트엔드와 백엔드의 다리</h2>
+<h2 id="프론트엔드와-백엔드의-다리">프론트엔드와 백엔드의 다리</h2>
 <p>AST는 컴파일러 아키텍처에서 프론트엔드와 백엔드를 연결하는 핵심적인 역할을 한다. 프론트엔드(렉서, 파서, 의미 분석)는 소스 코드를 AST로 변환하고, 백엔드(최적화, 코드 생성)는 AST에서 출발하여 목적 코드를 생성한다.</p>
 <pre><code>소스 코드 → [렉서] → [파서] → AST → [의미 분석] → 수식 AST → [최적화] → [코드 생성] → 목적 코드</code></pre>
 <p>이 구조의 장점은 프론트엔드와 백엔드를 독립적으로 교체할 수 있다는 것이다. 같은 백엔드에 다른 언어의 프론트엔드를 연결하면 새로운 언어를 지원할 수 있고, 같은 프론트엔드에 다른 백엔드를 연결하면 다른 아키텍처용 코드를 생성할 수 있다. LLVM이 수십 개의 언어와 수십 개의 타겟 아키텍처를 지원할 수 있는 것이 바로 이 원리 덕분이다.</p>
@@ -693,7 +731,7 @@ class PrettyPrinter(ASTVisitor):
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 

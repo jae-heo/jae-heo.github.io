@@ -405,9 +405,43 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">바로 가기</p>
+                <h2>목차</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#왜-중간-표현이-필요한가">왜 중간 표현이 필요한가</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#중간-표현의-종류">중간 표현의 종류</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#ssa-형식">SSA 형식</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#주요-최적화-기법">주요 최적화 기법</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#llvm-ir">LLVM IR</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#최적화-패스">최적화 패스</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
-            <h2 id="-">왜 중간 표현이 필요한가</h2>
+            <h2 id="왜-중간-표현이-필요한가">왜 중간 표현이 필요한가</h2>
 <p>의미 분석까지 마친 구문 트리를 곧바로 기계어로 변환하면 되지 않을까? 이론적으로는 가능하지만, 실제로는 심각한 문제가 발생한다. 프런트엔드가 C, Java, Python 세 가지 언어를 지원하고, 백엔드가 x86, ARM, RISC-V 세 가지 아키텍처를 지원해야 한다고 가정하면, 프런트엔드와 백엔드를 직접 연결하는 방식에서는 3 × 3 = 9개의 변환 경로가 필요하다. 언어와 아키텍처가 하나씩 추가될 때마다 경로는 곱셈으로 증가하게 된다.</p>
 <p>중간 표현(Intermediate Representation, IR)은 이 문제를 해결한다. 모든 프런트엔드가 하나의 공통 IR로 변환하고, 모든 백엔드가 그 IR에서 기계어로 변환하면, 3 + 3 = 6개의 변환만으로 충분하다. 새로운 언어를 추가할 때는 해당 언어에서 IR로의 변환만 구현하면 되고, 새로운 아키텍처를 추가할 때는 IR에서 해당 아키텍처로의 변환만 구현하면 된다.</p>
 <pre><code>직접 연결 방식:               IR을 통한 방식:
@@ -423,7 +457,7 @@ Python ──→ RISC-V
 
 변환 수: 3 × 3 = 9</code></pre>
 <p>IR의 또 다른 장점은 최적화가 언어와 아키텍처에 독립적으로 수행될 수 있다는 것이다. IR 수준에서 최적화를 한 번만 구현하면 모든 언어와 아키텍처가 그 혜택을 받는다. 이것이 현대 컴파일러가 예외 없이 IR을 사용하는 이유이다.</p>
-<h2 id="-">중간 표현의 종류</h2>
+<h2 id="중간-표현의-종류">중간 표현의 종류</h2>
 <p>IR은 추상화 수준에 따라 크게 세 가지로 분류된다.</p>
 <p>트리 기반 IR은 구문 트리에 가까운 형태이다. 추상 구문 트리(AST)가 대표적이며, 소스 코드의 구조를 잘 보존하기 때문에 의미 분석과 고수준 최적화에 적합하다. 다만 기계어와의 거리가 멀어서 코드 생성에는 직접 쓰기 어렵다.</p>
 <p>선형 IR은 명령어가 순차적으로 나열되는 형태이다. 삼주소 코드(Three-Address Code)가 대표적이며, 각 명령어는 최대 세 개의 피연산자를 가진다. 기계어와 유사한 구조이면서도 특정 하드웨어에 종속되지 않아서 최적화와 코드 생성 사이의 가교 역할을 한다.</p>
@@ -439,7 +473,7 @@ Python ──→ RISC-V
 <ul class="ul-list">
 <li>AST에 가까운 고수준 IR</li><li>제어 흐름이 드러나는 중간 IR</li><li>기계어에 가까운 저수준 IR</li></ul>
 <p>왜 이렇게 나누는가? 각 단계에서 풀어야 하는 문제가 다르기 때문이다. 고수준에서는 언어 의미를 잘 보존하는 것이 중요하고, 저수준에서는 레지스터와 메모리, 분기 구조를 명확하게 표현하는 것이 중요하다.</p>
-<h2 id="ssa-">SSA 형식</h2>
+<h2 id="ssa-형식">SSA 형식</h2>
 <p>SSA 형식은 현대 컴파일러 최적화의 근간이 되는 IR 형태이다. SSA의 핵심 규칙은 단 하나이다. 모든 변수는 정확히 한 번만 정의된다.</p>
 <pre><code>일반 코드:           SSA 형식:
 x = 1                x₁ = 1
@@ -463,7 +497,7 @@ else
 print(x);</code></pre>
 <p>를 SSA로 보면 <code class="inline-code">print(x)</code>에 도달하기 전에는 <code class="inline-code">x</code>가 사실 두 후보를 가진다. then 경로에서 온 <code class="inline-code">x₁</code>, else 경로에서 온 <code class="inline-code">x₂</code>다. φ는 바로 그 둘을 하나의 이름으로 다시 모아 주는 역할을 한다.</p>
 <p>이 성질 덕분에 &quot;어떤 값이 어디서 정의되었는가&quot;가 훨씬 선명해지고, 데이터 흐름 분석이 단순해진다.</p>
-<h2 id="-">주요 최적화 기법</h2>
+<h2 id="주요-최적화-기법">주요 최적화 기법</h2>
 <p>IR이 갖춰지면 컴파일러는 다양한 최적화를 수행하여 프로그램의 실행 속도를 높이고 크기를 줄인다. 최적화는 프로그램의 의미를 변경하지 않으면서 성능을 개선하는 변환이다.</p>
 <p><strong>상수 폴딩(Constant Folding)</strong> 은 컴파일 시점에 계산할 수 있는 식을 미리 계산한다. <code class="inline-code">x = 3 + 5</code>는 <code class="inline-code">x = 8</code>로 치환된다. 단순하지만 효과적이며, 다른 최적화와 연쇄적으로 결합될 때 큰 효과를 발휘한다.</p>
 <p><strong>죽은 코드 제거(Dead Code Elimination)</strong> 는 실행 결과에 영향을 미치지 않는 코드를 제거한다. 어떤 변수가 정의된 후 다시 사용되지 않는다면, 그 정의는 프로그램의 결과에 기여하지 않으므로 안전하게 제거할 수 있다. SSA에서는 각 정의의 사용처가 명확하므로 죽은 코드 판별이 간단해진다.</p>
@@ -493,7 +527,7 @@ entry:
   ret i32 %result
 }</code></pre>
 <p>위는 두 정수를 더하는 함수의 LLVM IR이다. 타입 정보가 명시적이고, SSA 형식을 따르며, 특정 하드웨어에 종속되지 않는다. Clang(C/C++), Rustc(Rust), Swift 컴파일러 등이 모두 LLVM IR로 변환한 후 LLVM 백엔드에서 최적화와 코드 생성을 수행한다. 하나의 IR 위에 다양한 언어가 올라가고, 하나의 최적화 파이프라인을 공유하는 구조가 실현된 것이다.</p>
-<h2 id="-">최적화 패스</h2>
+<h2 id="최적화-패스">최적화 패스</h2>
 <p>실제 컴파일러에서 최적화는 하나의 거대한 단계가 아니라 여러 개의 작은 패스(Pass)로 나뉘어 순서대로 적용된다. 각 패스는 하나의 특정 최적화만 수행하며, 패스의 순서와 조합이 최종 성능에 영향을 미친다.</p>
 <pre><code>IR → [상수 전파] → [죽은 코드 제거] → [공통 부분식 제거]
   → [루프 불변 코드 이동] → [레지스터 승격] → ... → 최적화된 IR</code></pre>
@@ -583,7 +617,7 @@ entry:
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 

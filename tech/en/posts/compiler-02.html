@@ -405,6 +405,40 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#describing-the-languages-that-finite-automata-recognize">Describing the Languages That Finite Automata Recognize</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-three-operations-of-regular-expressions">The Three Operations of Regular Expressions</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#kleene-39-s-theorem-equivalence-of-regular-expressions-and-finite-automata">Kleene&#39;s Theorem — Equivalence of Regular Expressions and Finite Automata</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#examples-of-regular-and-non-regular-languages">Examples of Regular and Non-Regular Languages</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-pumping-lemma-proving-a-language-is-not-regular">The Pumping Lemma — Proving a Language Is Not Regular</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#connection-to-lexical-analysis">Connection to Lexical Analysis</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="describing-the-languages-that-finite-automata-recognize">Describing the Languages That Finite Automata Recognize</h2>
@@ -424,7 +458,7 @@
 </table>
 <p>These three operations alone can express a surprisingly wide range of patterns. For example, over the alphabet {0, 1}, the regular expression <code class="inline-code">(0 ∪ 1)*01</code> denotes the set of all binary strings ending in &quot;01&quot;. The <code class="inline-code">(0 ∪ 1)*</code> part matches any binary string, and the trailing &quot;01&quot; constrains the match to strings that end with that specific suffix.</p>
 <p>Practical regex engines add convenience operators like <code class="inline-code">+</code> (one or more repetitions), <code class="inline-code">?</code> (zero or one occurrence), and character classes, but these are all shorthand for the three basic operations. <code class="inline-code">R+</code> is simply <code class="inline-code">RR*</code>, and <code class="inline-code">R?</code> is <code class="inline-code">R ∪ ε</code>. From an expressiveness standpoint, the three fundamental operations are sufficient.</p>
-<h2 id="kleene39s-theorem-equivalence-of-regular-expressions-and-finite-automata">Kleene&#39;s Theorem — Equivalence of Regular Expressions and Finite Automata</h2>
+<h2 id="kleene-39-s-theorem-equivalence-of-regular-expressions-and-finite-automata">Kleene&#39;s Theorem — Equivalence of Regular Expressions and Finite Automata</h2>
 <p>A deep connection exists between regular expressions and finite automata. Stephen Kleene proved that a language being describable by a regular expression and being recognizable by a finite automaton are equivalent conditions. Every regular expression has a corresponding finite automaton, and every finite automaton has a corresponding regular expression.</p>
 <p>This equivalence is proved in both directions. The conversion from regular expressions to NFAs uses Thompson&#39;s construction: for each basic operation (union, concatenation, Kleene star), a corresponding NFA fragment is created, and these fragments are recursively combined to build an NFA for the entire expression. The reverse direction — from finite automata to regular expressions — can be accomplished through state elimination, where states are removed one by one and transition labels are expanded into regular expressions, ultimately yielding an expression that describes all paths from the start state to an accepting state.</p>
 <p>The significance of this theorem for compilers is clear. When building a lexer, token patterns are described as regular expressions, which can then be mechanically transformed through the NFA → DFA → minimized DFA pipeline to automatically generate an efficient lexer. Tools like lex and flex are built on exactly this principle.</p>
@@ -527,7 +561,7 @@
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

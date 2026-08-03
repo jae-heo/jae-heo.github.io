@@ -402,12 +402,50 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">바로 가기</p>
+                <h2>목차</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#왜-정규-언어만으로는-부족한가">왜 정규 언어만으로는 부족한가?</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#문맥-자유-문법의-정의">문맥 자유 문법의 정의</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#유도와-파스-트리">유도와 파스 트리</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#산술-표현식-문법">산술 표현식 문법</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#모호성">모호성</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#bnf-표기법">BNF 표기법</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#문맥-자유-문법의-위치">문맥 자유 문법의 위치</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
-            <h2 id="-">왜 정규 언어만으로는 부족한가?</h2>
+            <h2 id="왜-정규-언어만으로는-부족한가">왜 정규 언어만으로는 부족한가?</h2>
 <p>이전 포스트에서 정규 표현식과 유한 오토마타가 동치임을 보았고, 펌핑 보조정리를 통해 정규 언어의 한계도 확인했다. 그런데 프로그래밍 언어의 문법을 생각해 보면, 정규 언어가 다룰 수 없는 구조가 핵심적인 위치를 차지하고 있다. 중첩된 괄호, 재귀적 함수 호출, if-else 블록의 중첩 같은 구조는 모두 유한한 상태만으로는 추적할 수 없다.</p>
 <p><code class="inline-code">{aⁿbⁿ | n ≥ 0}</code>이 정규 언어가 아니라는 사실은 곧 &quot;열린 괄호와 닫힌 괄호의 수를 맞추는 것&quot;조차 유한 오토마타로는 불가능하다는 것을 의미한다. 과연 이런 구조를 기술할 수 있는 더 강력한 문법 체계가 존재하는가? 존재한다. 그것이 문맥 자유 문법(Context-Free Grammar, CFG)이다.</p>
-<h2 id="-">문맥 자유 문법의 정의</h2>
+<h2 id="문맥-자유-문법의-정의">문맥 자유 문법의 정의</h2>
 <p>문맥 자유 문법은 네 가지 요소로 정의된다.</p>
 <table>
 <thead>
@@ -422,7 +460,7 @@
 </table>
 <p>생성 규칙은 <code class="inline-code">A → α</code> 형태를 가지며, 여기서 A는 비단말 기호이고 α는 단말과 비단말의 조합으로 이루어진 문자열이다. &quot;문맥 자유&quot;라는 이름은 비단말 A를 대치할 때 A의 주변 문맥에 관계없이 항상 같은 규칙을 적용할 수 있다는 데서 온 것이다. 즉, A가 어디에 등장하든 A → α 규칙을 적용할 수 있으며, 이것이 문맥 의존 문법(Context-Sensitive Grammar)과의 핵심 차이이다.</p>
 <p>비단말 기호는 아직 확장해야 할 구조를 나타내고, 단말 기호는 실제 입력에 나타나는 최종 문자를 나타낸다. 프로그래밍 언어에서 비단말은 &quot;표현식&quot;, &quot;문장&quot;, &quot;블록&quot; 같은 문법적 범주에 해당하고, 단말은 키워드, 식별자, 연산자, 리터럴 같은 개별 토큰에 해당한다.</p>
-<h2 id="-">유도와 파스 트리</h2>
+<h2 id="유도와-파스-트리">유도와 파스 트리</h2>
 <p>문맥 자유 문법에서 문자열을 생성하는 과정을 유도(Derivation)라고 부른다. 시작 기호에서 출발하여 생성 규칙을 반복 적용하면, 결국 단말 기호로만 이루어진 문자열에 도달한다. 이 과정은 두 가지 방식으로 수행할 수 있다. 항상 가장 왼쪽의 비단말을 먼저 대치하는 최좌 유도(Leftmost Derivation)와, 가장 오른쪽의 비단말을 먼저 대치하는 최우 유도(Rightmost Derivation)가 그것이다.</p>
 <p>유도 과정을 트리 구조로 나타낸 것이 파스 트리(Parse Tree)이다. 루트 노드는 시작 기호, 내부 노드는 비단말, 리프 노드는 단말 기호가 된다. 파스 트리는 문자열의 구문 구조를 시각적으로 보여주며, 컴파일러가 소스 코드의 의미를 분석하는 데 핵심적인 역할을 한다.</p>
 <p>처음 CFG를 배울 때 자주 헷갈리는 부분이 있다. &quot;문법이 문자열을 생성한다&quot;는 말이 너무 추상적으로 들린다는 점이다. 실제로는 시작 기호에서 출발해 아직 확장되지 않은 비단말을 하나씩 풀어 나가는 과정이라고 생각하면 된다.</p>
@@ -438,7 +476,7 @@
 <p>간단한 예시로, 다음 문법을 생각해 보자.</p>
 <pre><code>S → aSb | ε</code></pre>
 <p>이 문법은 정확히 <code class="inline-code">{aⁿbⁿ | n ≥ 0}</code>을 생성한다. S에서 <code class="inline-code">aSb</code>를 적용할 때마다 a와 b가 하나씩 추가되고, 최종적으로 ε을 적용하여 유도를 종료한다. 정규 언어로는 기술할 수 없었던 이 언어가 문맥 자유 문법으로는 단 두 줄의 규칙으로 표현된다.</p>
-<h2 id="-">산술 표현식 문법</h2>
+<h2 id="산술-표현식-문법">산술 표현식 문법</h2>
 <p>문맥 자유 문법의 실용적인 예로 산술 표현식을 기술하는 문법을 살펴보자.</p>
 <pre><code>E → E + T | T
 T → T * F | F
@@ -453,7 +491,7 @@ F → ( E ) | id</code></pre>
 <p>문법 계층을 이렇게 나누지 않고 단순히</p>
 <pre><code class="language-text">E → E + E | E * E | (E) | id</code></pre>
 <p>처럼 쓰면 표현은 짧아지지만 곧바로 모호성이 생긴다. <code class="inline-code">id + id * id</code>를 <code class="inline-code">(+ (*))</code>로 읽을 수도 있고 <code class="inline-code">(* (+))</code>로 읽을 수도 있기 때문이다. 즉 &quot;짧은 문법&quot;이 항상 &quot;좋은 문법&quot;은 아니다.</p>
-<h2 id="모호성">모호성</h2>
+<h2 id="모호성">모호성</h2>
 <p>하나의 문자열에 대해 서로 다른 파스 트리가 두 개 이상 존재할 수 있는 문법을 모호한 문법(Ambiguous Grammar)이라고 한다. 모호성은 컴파일러 설계에서 심각한 문제를 야기한다. 파스 트리가 다르면 프로그램의 의미가 달라질 수 있기 때문이다.</p>
 <p>대표적인 예가 if-else 모호성이다.</p>
 <pre><code>S → if E then S
@@ -469,13 +507,13 @@ F → ( E ) | id</code></pre>
 <p>여기서 <code class="inline-code">else</code>는 바깥 <code class="inline-code">if (a)</code>에 붙는가, 안쪽 <code class="inline-code">if (b)</code>에 붙는가? 사람은 보통 &quot;안쪽 if에 붙는다&quot;고 읽지만, 모호한 문법은 둘 다 가능한 해석으로 남겨 둔다. 그래서 파서 입장에서는 어느 트리를 만들어야 할지 결정할 근거가 부족하다.</p>
 <p>이 예시는 모호성이 왜 위험한지 잘 보여 준다. 같은 토큰 스트림인데도 서로 다른 파스 트리가 가능하면, 이후 의미 분석과 코드 생성 결과도 달라질 수 있다.</p>
 <p>모호성을 해결하는 방법은 여러 가지이다. 문법을 재작성하여 모호성을 제거할 수 있고, 파서에 우선순위 규칙이나 결합 방향 규칙을 추가할 수도 있다. 어떤 방법을 선택하든, 모호한 문법을 그대로 사용하면 컴파일러가 동일한 코드에 대해 다른 결과를 낼 수 있다는 점을 인식해야 한다.</p>
-<h2 id="bnf-">BNF 표기법</h2>
+<h2 id="bnf-표기법">BNF 표기법</h2>
 <p>실무에서 문맥 자유 문법을 기술할 때는 BNF(Backus-Naur Form) 표기법이 널리 사용된다. 존 배커스(John Backus)와 페터 나우르(Peter Naur)가 ALGOL 60 언어의 문법을 기술하기 위해 도입한 이 표기법은 생성 규칙의 표준적인 작성 방식이 되었다.</p>
 <pre><code>&lt;expr&gt; ::= &lt;expr&gt; &quot;+&quot; &lt;term&gt; | &lt;term&gt;
 &lt;term&gt; ::= &lt;term&gt; &quot;*&quot; &lt;factor&gt; | &lt;factor&gt;
 &lt;factor&gt; ::= &quot;(&quot; &lt;expr&gt; &quot;)&quot; | id</code></pre>
 <p>비단말은 꺾쇠괄호(<code class="inline-code">&lt; &gt;</code>)로 감싸고, <code class="inline-code">::=</code>는 &quot;다음과 같이 정의된다&quot;를 의미하며, <code class="inline-code">|</code>는 대안을 나타낸다. 이를 확장한 EBNF(Extended BNF)에서는 반복(<code class="inline-code">{ }</code>)과 선택(<code class="inline-code">[ ]</code>) 같은 추가 표기가 제공되어 문법을 더 간결하게 기술할 수 있다. 오늘날 대부분의 프로그래밍 언어 명세서는 BNF 또는 EBNF의 변형을 사용하여 문법을 정의한다.</p>
-<h2 id="-">문맥 자유 문법의 위치</h2>
+<h2 id="문맥-자유-문법의-위치">문맥 자유 문법의 위치</h2>
 <p>촘스키 계층(Chomsky Hierarchy)에서 문맥 자유 문법은 정규 문법보다 강력하고 문맥 의존 문법보다는 약한, 계층의 두 번째 단계에 위치한다. 모든 정규 언어는 문맥 자유 언어이기도 하지만, 그 역은 성립하지 않는다. <code class="inline-code">{aⁿbⁿ}</code>이 대표적인 반례인 셈이다.</p>
 <p>프로그래밍 언어의 문법은 대부분 문맥 자유 문법으로 기술할 수 있으며, 이 때문에 컴파일러의 파서는 문맥 자유 문법을 기반으로 설계된다. 다만, 변수 선언 전 사용 금지나 타입 일치 같은 규칙은 문맥 자유 문법의 범위를 넘어서며, 이런 규칙은 별도의 의미 분석(Semantic Analysis) 단계에서 처리된다.</p>
 <p>이 문장을 더 실무적으로 바꾸면 이렇다.</p>
@@ -565,7 +603,7 @@ F → ( E ) | id</code></pre>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 

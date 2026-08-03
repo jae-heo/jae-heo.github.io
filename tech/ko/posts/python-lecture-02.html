@@ -345,15 +345,69 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">바로 가기</p>
+                <h2>목차</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#어휘구조란">어휘구조란?</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#토큰-의미의-최소-단위">토큰: 의미의 최소 단위</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#어휘-분석-토큰으로-쪼개기">어휘 분석: 토큰으로 쪼개기</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#어휘-분석기의-작동-원리">어휘 분석기의 작동 원리</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#상태-기계-예시">상태 기계 예시</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#어휘-분석-상태-기계">어휘 분석 상태 기계</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#파이썬의-어휘구조">파이썬의 어휘구조</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#1-들여쓰기도-토큰이다">1. 들여쓰기도 토큰이다</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#2-문자열-표현의-다양성">2. 문자열 표현의 다양성</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#3-숫자-표현의-다양성">3. 숫자 표현의 다양성</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#4-파이썬-토크나이저로-직접-확인하기">4. 파이썬 토크나이저로 직접 확인하기</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
-            <h2 id="어휘구조란">어휘구조란?</h2>
+            <h2 id="어휘구조란">어휘구조란?</h2>
 <p>우리가 파이썬 코드를 작성하면, 파이썬은 그것을 어떻게 이해할까?</p>
 <pre><code class="language-python">x = 42 + y</code></pre>
 <p>우리 눈에는 &quot;변수 x에 42와 y를 더한 값을 넣어라&quot;라고 보인다.<br />하지만 파이썬 입장에서는 그냥 문자들의 나열일 뿐이다.</p>
 <pre><code>&#39;x&#39;, &#39; &#39;, &#39;=&#39;, &#39; &#39;, &#39;4&#39;, &#39;2&#39;, &#39; &#39;, &#39;+&#39;, &#39; &#39;, &#39;y&#39;</code></pre>
 <p>파이썬이 코드를 실행하려면 먼저 이 문자들을 <strong>의미 있는 단위</strong>로 쪼개야 한다.<br />우리가 글을 읽을 때 글자들을 단어로 인식하는 것과 같다.</p>
-<h3 id="-">토큰: 의미의 최소 단위</h3>
+<h3 id="토큰-의미의-최소-단위">토큰: 의미의 최소 단위</h3>
 <p>이렇게 쪼갠 의미 있는 조각을 <strong>토큰(Token)</strong>이라 부른다.</p>
 <pre><code class="language-python">x = 42 + y
 
@@ -369,7 +423,7 @@
 
 코드: &quot;x = 42&quot;
 토큰: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
-<h3 id="-">어휘 분석: 토큰으로 쪼개기</h3>
+<h3 id="어휘-분석-토큰으로-쪼개기">어휘 분석: 토큰으로 쪼개기</h3>
 <p><strong>어휘 분석(Lexical Analysis)</strong>은 코드를 읽어서 토큰으로 쪼개는 과정이다.<br />파이썬 인터프리터가 하는 첫 번째 일이다.</p>
 <pre><code>[소스 코드]
     ↓
@@ -381,23 +435,23 @@
     ↓
 ...</code></pre>
 <p>왜 이런 과정이 필요할까? 코드를 한 번에 이해하기엔 너무 복잡하기 때문이다. 파이썬은 단계별로 나눠서 처리하고, 어휘 분석이 그 첫 단계다.</p>
-<h2 id="-">어휘 분석기의 작동 원리</h2>
+<h2 id="어휘-분석기의-작동-원리">어휘 분석기의 작동 원리</h2>
 <p>어휘 분석기는 <strong>상태 기계(State Machine)</strong>라는 방식으로 작동한다.<br />어렵게 들리지만, 우리 주변에서 흔히 볼 수 있는 개념이다.</p>
-<h3 id="-">상태 기계 예시</h3>
-<h4 id="1-">1. 배고픔 상태</h4>
+<h3 id="상태-기계-예시">상태 기계 예시</h3>
+<h4 id="1-배고픔-상태">1. 배고픔 상태</h4>
 <p>우리의 배고픔 상태를 생각해보자.</p>
 <pre class="mermaid">stateDiagram-v2
     배고픔 --> 배부름: 식사
     배부름 --> 배고픔: 운동</pre>
 <p>특정 <strong>상태</strong>에 있다가 <strong>입력</strong>이 들어오면 다른 <strong>상태</strong>로 바뀌는 시스템. 이게 상태 기계다.</p>
-<h4 id="2-">2. 신호등</h4>
+<h4 id="2-신호등">2. 신호등</h4>
 <p>신호등도 상태 기계다.</p>
 <pre class="mermaid">stateDiagram-v2
     빨간불 --> 초록불: 30초 경과
     초록불 --> 노란불: 30초 경과
     노란불 --> 빨간불: 3초 경과</pre>
 <p>세 가지 상태가 있고, 시간이 지나면 상태가 바뀐다. 빨간불, 초록불, 노란불, 빨간불 -- 반복이다.</p>
-<h4 id="3-">3. 계산기</h4>
+<h4 id="3-계산기">3. 계산기</h4>
 <p>계산기를 사용할 때를 생각해보자.</p>
 <pre class="mermaid">stateDiagram-v2
     시작 --> 숫자대기
@@ -409,9 +463,9 @@
 <ol class="ol-list">
 <li>시작 -&gt; 숫자대기 -&gt; &#39;53&#39; 입력 -&gt; 연산자대기</li><li>연산자대기 -&gt; &#39;+&#39; 입력 -&gt; 숫자대기</li><li>숫자대기 -&gt; &#39;10&#39; 입력 -&gt; 연산자대기</li><li>연산자대기 -&gt; &#39;=&#39; 입력 -&gt; 완료</li></ol>
 <p>이렇게 상태를 바꿔가며 입력을 처리하는 것이 상태 기계다.</p>
-<h3 id="-">어휘 분석 상태 기계</h3>
+<h3 id="어휘-분석-상태-기계">어휘 분석 상태 기계</h3>
 <p>이제 파이썬의 어휘 분석이 어떻게 작동하는지 보자.</p>
-<h4 id="-">정수 인식하기</h4>
+<h4 id="정수-인식하기">정수 인식하기</h4>
 <p><code class="inline-code">123</code>이라는 문자열을 읽을 때의 상태 전이다.</p>
 <pre class="mermaid">stateDiagram-v2
     [*] --> 시작
@@ -425,7 +479,7 @@
     end note</pre>
 <p>한 글자씩 읽으면서 &quot;지금 숫자를 읽고 있구나&quot;라는 상태를 유지한다. 숫자가 아닌 문자를 만나면 토큰이 완성된다.</p>
 <p>결과: <code class="inline-code">NUMBER 토큰: 123</code></p>
-<h4 id="-">실수 인식하기</h4>
+<h4 id="실수-인식하기">실수 인식하기</h4>
 <p><code class="inline-code">3.14</code>처럼 소수점이 있으면 어떻게 될까?</p>
 <pre class="mermaid">stateDiagram-v2
     [*] --> 시작
@@ -442,7 +496,7 @@
     end note</pre>
 <p>정수를 읽다가 <code class="inline-code">.</code>을 만나면 &quot;아, 실수구나!&quot; 하고 상태를 바꿔서 소수점 이하 숫자들을 계속 읽는다.</p>
 <p>결과: <code class="inline-code">NUMBER 토큰: 3.14</code></p>
-<h4 id="-">여러 종류 토큰 인식하기</h4>
+<h4 id="여러-종류-토큰-인식하기">여러 종류 토큰 인식하기</h4>
 <p>실제 코드 <code class="inline-code">x = 42 + y</code>를 어떻게 읽을까?</p>
 <pre class="mermaid">stateDiagram-v2
     [*] --> 시작
@@ -464,9 +518,9 @@
 <li><code class="inline-code">x</code> -&gt; 문자 -&gt; 식별자 읽기 -&gt; 공백 -&gt; <strong>NAME: &#39;x&#39;</strong></li><li><code class="inline-code">=</code> -&gt; 연산자 -&gt; <strong>OP: &#39;=&#39;</strong></li><li><code class="inline-code">42</code> -&gt; 숫자들 -&gt; 공백 -&gt; <strong>NUMBER: 42</strong></li><li><code class="inline-code">+</code> -&gt; 연산자 -&gt; <strong>OP: &#39;+&#39;</strong></li><li><code class="inline-code">y</code> -&gt; 문자 -&gt; 끝 -&gt; <strong>NAME: &#39;y&#39;</strong></li></ol>
 <p><strong>최종 결과</strong>: <code class="inline-code">[NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42, OP:&#39;+&#39;, NAME:&#39;y&#39;]</code></p>
 <p>상태 기계를 쓰면 복잡한 코드도 체계적으로 토큰으로 쪼갤 수 있다.</p>
-<h2 id="-">파이썬의 어휘구조</h2>
+<h2 id="파이썬의-어휘구조">파이썬의 어휘구조</h2>
 <p>파이썬만의 특별한 어휘 규칙들을 살펴보자.</p>
-<h3 id="1-">1. 들여쓰기도 토큰이다</h3>
+<h3 id="1-들여쓰기도-토큰이다">1. 들여쓰기도 토큰이다</h3>
 <p>파이썬의 가장 큰 특징은 <strong>들여쓰기가 문법</strong>이라는 것이다.</p>
 <pre><code class="language-python">def greet():
     print(&quot;hello&quot;)  # 들여쓰기 1단계
@@ -487,7 +541,7 @@
     NEWLINE,
     DEDENT,        # 들여쓰기 끝!
 ]</code></pre>
-<h3 id="2-">2. 문자열 표현의 다양성</h3>
+<h3 id="2-문자열-표현의-다양성">2. 문자열 표현의 다양성</h3>
 <p>파이썬은 문자열을 여러 가지 방식으로 쓸 수 있다.</p>
 <pre><code class="language-python"># 기본 문자열
 s1 = &#39;hello&#39;
@@ -505,7 +559,7 @@ s4 = r&#39;\n은 줄바꿈이 아니라 그냥 \n 입니다&#39;
 # 변수를 넣을 수 있는 f-string
 name = &quot;파이썬&quot;
 s5 = f&quot;안녕하세요, {name}!&quot;  # &quot;안녕하세요, 파이썬!&quot;</code></pre>
-<h3 id="3-">3. 숫자 표현의 다양성</h3>
+<h3 id="3-숫자-표현의-다양성">3. 숫자 표현의 다양성</h3>
 <p>파이썬은 숫자도 여러 방식으로 쓸 수 있다.</p>
 <pre><code class="language-python"># 일반 숫자
 a = 42
@@ -527,7 +581,7 @@ f = 1_000_000  # 1000000
 
 # 복소수
 g = 3 + 4j</code></pre>
-<h3 id="4-">4. 파이썬 토크나이저로 직접 확인하기</h3>
+<h3 id="4-파이썬-토크나이저로-직접-확인하기">4. 파이썬 토크나이저로 직접 확인하기</h3>
 <p>파이썬에는 토큰 분석을 직접 볼 수 있는 <code class="inline-code">tokenize</code> 모듈이 있다.</p>
 <p>코드 <code class="inline-code">x = 42</code>를 토큰으로 분석하면 이렇게 나온다.</p>
 <pre><code>NAME       : &#39;x&#39;
@@ -619,7 +673,7 @@ ENDMARKER  : &#39;&#39;</code></pre>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 

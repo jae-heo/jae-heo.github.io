@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jae's Tech Blog</title>
+    <link>https://jae-heo.github.io/tech/en/</link>
+    <description>Deep dives into programming, technology trends, and development insights</description>
+    <language>en</language>
+    <atom:link href="https://jae-heo.github.io/tech/en/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Aug 2026 06:22:43 GMT</lastBuildDate>
+    
+    <item>
+      <title><![CDATA[Automata and Compilers 12 - Code Generation]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-12.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-12.html</guid>
+      <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How optimized intermediate representations become machine code,and a final look back from automata theory to compiler construction]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Computer Architecture 10 - Multicore and Modern Processors]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-10.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-10.html</guid>
+      <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Why clock speeds stopped increasing and the core concepts of modern multicore processor architecture]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Linux Internals 10 - Containers and Virtualization]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-10.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-10.html</guid>
+      <pubDate>Thu, 05 Mar 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How namespaces and cgroups create containers,and a wrap-up connecting all kernel concepts]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Linux Internals 09 - Networking]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-09.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-09.html</guid>
+      <pubDate>Thu, 26 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[The Linux kernel networking stack and how a packet travels from NIC to application]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Automata and Compilers 11 - Intermediate Representations and Optimization]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-11.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-11.html</guid>
+      <pubDate>Wed, 25 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Why compilers use intermediate representations and how optimization makes programs faster]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Computer Architecture 09 - I/O and DMA]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-09.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-09.html</guid>
+      <pubDate>Tue, 24 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How the CPU exchanges data with external devices and the principles behind efficient data transfer via DMA]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Automata and Compilers 10 - Semantic Analysis and Type Checking]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-10.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-10.html</guid>
+      <pubDate>Thu, 19 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How semantic analysis catches the errors that parsers cannot,and how type checking guarantees program safety]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Linux Internals 08 - Synchronization and Concurrency]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-08.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-08.html</guid>
+      <pubDate>Wed, 18 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[The problems that arise when multiple execution flows access shared resources,and the synchronization mechanisms in the Linux kernel]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Computer Architecture 08 - Virtual Memory and MMU]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-08.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-08.html</guid>
+      <pubDate>Tue, 17 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How virtual memory enables process isolation through the MMU,page tables,and TLB]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Linux Internals 07 - I/O and Devices]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-07.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-07.html</guid>
+      <pubDate>Thu, 12 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[From block and character devices to I/O schedulers,DMA,and the page cache]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Automata and Compilers 09 - Abstract Syntax Trees]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-09.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-09.html</guid>
+      <pubDate>Tue, 10 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Parse trees vs ASTs,designing AST nodes,and how ASTs bridge the compiler frontend and backend]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Computer Architecture 07 - Memory Hierarchy]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-07.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-07.html</guid>
+      <pubDate>Sun, 08 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[The memory hierarchy from registers to HDD and how caches work]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Automata and Compilers 08 - Bottom-Up Parsing]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-08.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-08.html</guid>
+      <pubDate>Wed, 04 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Shift-reduce parsing,LR parser mechanics,and how parser generators work under the hood]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Linux Internals 06 - System Calls and the Kernel]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-06.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-06.html</guid>
+      <pubDate>Tue, 03 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How a system call transitions from user space to kernel space,and how kernel modules work]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Computer Architecture 06 - Interrupts and Exceptions]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-06.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-06.html</guid>
+      <pubDate>Mon, 02 Feb 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Why interrupts exist and how IDT,ISR,PIC/APIC work]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Linux Internals 05 - File Systems]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-05.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-05.html</guid>
+      <pubDate>Wed, 28 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How VFS,inodes,and ext4 work in the world where everything is a file]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Automata and Compilers 07 - Top-Down Parsing]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-07.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-07.html</guid>
+      <pubDate>Tue, 27 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[The principles behind recursive descent parsers,LL(1) grammars,and the strengths and limitations of top-down parsing]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Computer Architecture 05 - CPU Privilege Levels and Protection]]></title>
+      <link>https://jae-heo.github.io/tech/posts/comparch-05.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/comparch-05.html</guid>
+      <pubDate>Sun, 25 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Why CPUs distinguish privilege levels,and how x86 protection rings and ARM exception levels protect the system]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Automata and Compilers 06 - Lexical Analysis]]></title>
+      <link>https://jae-heo.github.io/tech/posts/compiler-06.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/compiler-06.html</guid>
+      <pubDate>Wed, 21 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[How a lexer breaks source code into tokens and where automata theory meets real implementation]]></description>
+    </item>
+    <item>
+      <title><![CDATA[Linux Internals 04 - Memory Management]]></title>
+      <link>https://jae-heo.github.io/tech/posts/linux-04.html</link>
+      <guid>https://jae-heo.github.io/tech/posts/linux-04.html</guid>
+      <pubDate>Mon, 19 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[The concept of virtual memory and how the Linux kernel manages memory]]></description>
+    </item>
+  </channel>
+</rss>

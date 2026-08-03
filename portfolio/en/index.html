@@ -3,8 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaeyoung Heo — Portfolio</title>
-    <meta name="description" content="Showcase of my projects, open source contributions, and professional work">
+    <title>Jaeyoung Heo — Backend Systems & Domain Architecture</title>
+    <meta name="description" content="Portfolio of Jaeyoung Heo, a software engineer who turns tangled domains into explicit, verifiable structures.">
+    <meta name="author" content="Jaeyoung Heo">
+    <link rel="canonical" href="https://jae-heo.github.io/portfolio/en/">
+    <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/portfolio/en/">
+    <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/portfolio/ko/">
+    <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/portfolio/en/">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://jae-heo.github.io/portfolio/en/" />
+    <meta property="og:title" content="Jaeyoung Heo — Backend Systems & Domain Architecture">
+    <meta property="og:description" content="Portfolio of Jaeyoung Heo, a software engineer who turns tangled domains into explicit, verifiable structures.">
+    <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jaeyoung Heo — Backend Systems & Domain Architecture">
+    <meta name="twitter:description" content="Portfolio of Jaeyoung Heo, a software engineer who turns tangled domains into explicit, verifiable structures.">
+    <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Jaeyoung Heo",
+      "url": "https://jae-heo.github.io/portfolio/en/",
+      "sameAs": ["https://github.com/jae-heo"],
+      "jobTitle": "Software Engineer — Backend Systems & Domain Architecture"
+    }
+    </script>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,12 +44,15 @@
 </head>
 <body class="portfolio-page">
     <header class="portfolio-header">
-        <nav>
+        <nav class="portfolio-nav">
             <a href="/portfolio/en/" class="site-title">Jaeyoung Heo</a>
-            <div class="nav-links">
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links" id="site-nav-links">
                 <a href="#principles" data-nav-link>Principles</a>
-                <a href="#projects" data-nav-link>Projects</a>
-                <a href="#ai" data-nav-link>AI</a>
+                <a href="#projects" data-nav-link>Cases</a>
+                <a href="#current" data-nav-link>Current work</a>
                 <a href="#writing" data-nav-link>Writing</a>
                 <a href="#contact" data-nav-link>Contact</a>
                 <select id="lang-select" aria-label="Select language">
@@ -42,9 +70,9 @@
         <section class="hero">
             <div class="hero-content">
                 <h1 class="hero-title">Jaeyoung Heo</h1>
-                <p class="hero-subtitle">I build simulation engines in Python.</p>
-                <p class="hero-intro">Hi, I'm Jaeyoung. I work on simulation systems that wrap complex decision-making logic — most of what I do is taking the implicit rules in one person's head and turning them into something another engineer can safely change later. I like code that's fixable when it breaks more than code that looks clever. I tend to look at the numbers before deciding, and I'll roll back weeks of work if the added complexity doesn't prove its value.</p>
-                <p class="hero-tech">Python · pandas/NumPy · SQLAlchemy · ONNX · PostgreSQL · Dash/Streamlit · GitHub Actions</p>
+                <p class="hero-subtitle">Software Engineer — Backend Systems & Domain Architecture</p>
+                <p class="hero-intro">I turn tangled domains into explicit, verifiable structure. My work is about modeling real constraints and decisions as executable systems, then changing those systems without losing their meaning.</p>
+                <p class="hero-tech">Backend systems · Domain architecture · Runtime & orchestration · Performance & observability</p>
             </div>
         </section>
 
@@ -53,23 +81,28 @@
                 <ol class="principles-list">
                     
                     <li class="principle">
-                        <span class="principle-title">Extensibility before completeness.</span>
-                        <p class="principle-text">Trying to get it right on the first pass usually costs more than it saves. What matters is whether someone a year later can see where to make a change. I don't abstract until I've seen the same shape at least three times.</p>
+                        <span class="principle-title">Build structures other engineers can extend.</span>
+                        <p class="principle-text">Complex rules should not live in one person's head. I separate responsibilities and boundaries so new requirements do not destabilize the existing flow.</p>
                     </li>
                     
                     <li class="principle">
-                        <span class="principle-title">Make hidden connections explicit.</span>
-                        <p class="principle-text">I don't love callback chains or __getattr__ proxies — anything that hides where control actually goes. Code that reads top-to-bottom is easier to debug and easier to extend. The engine's God class decomposition involved removing proxies from 152+ files and replacing them with explicit component paths.</p>
+                        <span class="principle-title">Make execution order visible.</span>
+                        <p class="principle-text">I prefer schedulers, DAGs, and queues that can be read and verified over implicit callback chains. The same input should produce the same result.</p>
                     </li>
                     
                     <li class="principle">
-                        <span class="principle-title">No optimization without measurement.</span>
-                        <p class="principle-text">I've been wrong about where the hot path is too many times to trust intuition. Profiler first, then decide. When we got a 104× speedup on the warehouse loading logic, the decision of what to touch came from measurements, not from "this feels slow."</p>
+                        <span class="principle-title">Treat correctness as a design property.</span>
+                        <p class="principle-text">I establish trial, commit, and rollback boundaries early. Failed attempts should be unable to leave partial state behind.</p>
                     </li>
                     
                     <li class="principle">
-                        <span class="principle-title">Prefer changes you can take back.</span>
-                        <p class="principle-text">Across 1,600+ commits, 11 of them are reverts. That's not a lot, but weeks of work get rolled back when the added complexity doesn't earn its keep. I tried ECS, didn't like how the lookup paths felt, moved to a facade pattern. Over-decomposed a coordinator, didn't pay off, put it back. What ships is the outcome, not the code.</p>
+                        <span class="principle-title">Preserve domain meaning in types and models.</span>
+                        <p class="principle-text">I lift hardcoded branches into formal structure. Decision context and lineage should survive all the way down to execution.</p>
+                    </li>
+                    
+                    <li class="principle">
+                        <span class="principle-title">Observe first, measure, then change.</span>
+                        <p class="principle-text">Profiles and traces decide where I optimize. If the evidence cannot justify the complexity, I roll the change back.</p>
                     </li>
                     
                 </ol>
@@ -80,101 +113,116 @@
             <div class="container">
                 
                 <article class="case-study">
-                    <h2 class="case-study-title">Hardcoded rules → plugin architecture</h2>
+                    <h2 class="case-study-title">Procedural calculation flow → 16-stage DAG engine</h2>
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>Every time a new type showed up, we forked the existing code and modified it. Changing one policy meant touching the entire execution flow.</p>
+                            <p>Calculation rules and execution order were tangled across procedures, making individual stages hard to verify or replace safely.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>Split into three layers — state, decision-making, execution — and adding a new type became a matter of composing them. There are now 10+ types running on the same framework.</p>
+                            <p>I built a 16-stage dependency graph and a new execution module, then migrated the full workflow behind continuous result comparison.</p>
                         </div>
                     </div>
                     <ul class="case-study-details">
                         
-                        <li>State layer: an abstract interface defines the shared contract; type-specific differences live in composition, not inheritance. Nine variants in production</li>
+                        <li>Designed and implemented the new 123-file V2 module from the ground up</li>
                         
-                        <li>Planning layer: an ABC that owns the decision lifecycle. Seven concrete planners (~3,230 LOC) inherit from it</li>
+                        <li>Regression-checked 1,092 demands; all 964 comparable results matched the existing engine exactly</li>
                         
-                        <li>Execution layer: template-method pattern. Type-specific executors register dynamically at runtime</li>
-                        
-                        <li>Didn't try to generalize upfront. Built five types concretely first, and only after the shared lifecycle was obvious did I replace ~1,442 LOC of duplication with ~1,404 LOC of shared infrastructure</li>
+                        <li>Combined snapshot restore, stage execution, result comparison, and rollback boundaries so the migration itself stayed verifiable</li>
                         
                     </ul>
                 </article>
                 
                 <article class="case-study">
-                    <h2 class="case-study-title">Greedy allocation → multi-resource transactions</h2>
+                    <h2 class="case-study-title">12 event sources → one deterministic scheduler</h2>
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>The old approach was "assign to whatever's free right now." Nothing atomic — if anything failed mid-way, you were left with inconsistent state and no way to undo.</p>
+                            <p>Each event source calculated its next time independently, while conditionals and side effects obscured the system-wide order.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>The whole path is now reserved as a single transaction, and any failure rolls back automatically. Three months of stabilization caught 14+ edge cases along the way.</p>
+                            <p>I moved scheduling into one heap and channel metadata, then made tie-breaking and time monotonicity explicit contracts.</p>
                         </div>
                     </div>
                     <ul class="case-study-details">
                         
-                        <li>A coordinator plus three type-specific reservers handle each resource's constraints independently</li>
+                        <li>Defined same-time priority, stale-entry cleanup, and rescheduling rules in one place</li>
                         
-                        <li>A path explorer ranks viable routes by state-transition cost</li>
+                        <li>Preserved behavior and test parity while reducing the implementation by roughly 940 net lines</li>
                         
-                        <li>Consolidated 20+ scattered trial fields into `_real_values` / `_trial_values` dictionaries with a context-manager pattern</li>
-                        
-                        <li>Cache failed attempts to avoid re-running them; adapt frequency based on success rate</li>
+                        <li>Separated scheduling from domain behavior so new event sources fit the same boundary</li>
                         
                     </ul>
                 </article>
                 
                 <article class="case-study">
-                    <h2 class="case-study-title">God object → explicit ownership + event-driven architecture</h2>
+                    <h2 class="case-study-title">God object → 15 components and an explicit Facade</h2>
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>One class, 3,800 lines, 114 attributes, six concerns mashed together. State was scattered across singletons, instances, and groups; `__getattr__` proxies hid ownership; callback chains made side effects untraceable.</p>
+                            <p>A 3,800-line class held 114 attributes and several concerns, while proxies hid who actually owned each piece of state.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>A 226-line core, 19 components, 25 facades. Zero proxies. A 29-line pub/sub event bus fully decouples execution from side effects.</p>
+                            <p>I moved state into 15 components and exposed it through an explicit Facade, making ownership and change paths visible.</p>
                         </div>
                     </div>
                     <ul class="case-study-details">
                         
-                        <li>Broke it down across nine stages and 80+ commits. Pulled scattered singleton state back into owned instances first</li>
+                        <li>Migrated in stages: reclaim state ownership, move call sites, then remove the proxies</li>
                         
-                        <li>Split 114 attributes into 19 component dataclasses (590 LOC); proxies were removed from 152+ files and replaced with explicit component paths</li>
+                        <li>Implemented and evaluated ECS, then chose the simpler Facade boundary when ECS made lookups too indirect</li>
                         
-                        <li>Tried ECS first, didn't like how indirect the lookups got, switched to a facade pattern. Also rolled back over-decomposed coordinators (453 LOC, 226 LOC) that weren't earning their complexity</li>
-                        
-                        <li>-752 / +163 lines net. New features no longer require touching existing flows</li>
+                        <li>Separated extension points so new features no longer need direct access to core internals</li>
                         
                     </ul>
                 </article>
                 
                 <article class="case-study">
-                    <h2 class="case-study-title">Slow hot paths + black box → optimization + observability</h2>
+                    <h2 class="case-study-title">Multi-resource reservation → trial, commit, rollback</h2>
                     <div class="before-after">
                         <div class="before">
                             <span class="ba-label">Before</span>
-                            <p>Hot paths were being called 22M–500M times per run, and when a weird decision came out there was no way to trace why.</p>
+                            <p>If one resource failed halfway through a route, earlier mutations could survive and corrupt the next calculation.</p>
                         </div>
                         <div class="after">
                             <span class="ba-label">After</span>
-                            <p>Profiling-driven hot path optimization, plus tooling to trace decisions back to their cause. I built the observability before the optimization — the whole point was to decide from data, not from gut.</p>
+                            <p>I made the whole route provisional, committed it atomically, and restored every related state on failure.</p>
                         </div>
                     </div>
                     <ul class="case-study-details">
                         
-                        <li>Enum caching (22M+ calls), dictionary indexes, local caches, a custom `__deepcopy__` — hot path trimmed where the profiler pointed</li>
+                        <li>Kept resource-specific constraints separate while committing the route through one transaction boundary</li>
                         
-                        <li>Gantt chart plus event timeline so I can follow a decision back to its root cause</li>
+                        <li>Tracked state by chain so rollback order remains correct through nested routes and partial failures</li>
                         
-                        <li>Structured logging with a 105-module enum taxonomy, so slicing logs by subsystem is painless</li>
+                        <li>This contract became part of the foundation for the V2 engine's 964/964 result parity</li>
                         
-                        <li>Warehouse loading logic ended up 104× faster — that number came from profiling results, not from guessing</li>
+                    </ul>
+                </article>
+                
+                <article class="case-study">
+                    <h2 class="case-study-title">A traceable engine and evidence-led performance work</h2>
+                    <div class="before-after">
+                        <div class="before">
+                            <span class="ba-label">Before</span>
+                            <p>Logging was expensive on hot paths, but removing it made unexpected decisions nearly impossible to explain.</p>
+                        </div>
+                        <div class="after">
+                            <span class="ba-label">After</span>
+                            <p>I standardized structured traces across the engine and made them disappear at compile time in optimized production runs.</p>
+                        </div>
+                    </div>
+                    <ul class="case-study-details">
+                        
+                        <li>Used Python's __debug__ gating to separate development traceability from production hot-path cost</li>
+                        
+                        <li>Changed data structures and repeated operations only after profiling showed where time was going</li>
+                        
+                        <li>Rolled back asynchronous logging and database parallelism experiments when their gains did not justify their complexity</li>
                         
                     </ul>
                 </article>
@@ -182,57 +230,49 @@
             </div>
         </section>
 
-        <section id="ai" class="ai-section">
+        <section id="current" class="current-section">
             <div class="container">
-                <h2 class="section-title">Things I've been building lately</h2>
-                <div class="ai-grid">
+                <h2 class="section-title">Recent work and research</h2>
+                <div class="current-grid">
                     
-                    <article class="ai-card">
-                        <h3 class="ai-card-title">aps-rag <span class="ai-card-loc">1,731 LOC</span></h3>
-                        <p class="ai-card-desc">AST-based code analysis wired into a hybrid retrieval RAG, exposed to Claude Code through 10 MCP tools.</p>
-                        <ul class="ai-card-details">
+                    <article class="current-card">
+                        <h3 class="current-card-title">Deterministic simulation engine in Rust <span class="current-card-loc">Personal R&D · v0.1.0</span></h3>
+                        <p class="current-card-desc">A private project that separates policy from physical execution and lowers validated components into a reusable atom graph.</p>
+                        <ul class="current-card-details">
                             
-                            <li>Indexes classes, functions, inheritance, and call graphs into three ChromaDB collections</li>
+                            <li>Integer time and a total event order make two runs of the same input byte-identical at the event-log level</li>
                             
-                            <li>70% semantic + 30% keyword hybrid search</li>
+                            <li>540 tests and 200 generated networks check determinism, quantity conservation, and Little's Law</li>
                             
-                            <li>A three-tier knowledge base covering 183 internal documents</li>
+                            <li>The prepared branch plan is complete; runtime lowering is still next, so I do not present it as a finished product</li>
                             
                         </ul>
                     </article>
                     
-                    <article class="ai-card">
-                        <h3 class="ai-card-title">dooray-mcp <span class="ai-card-loc">349 LOC</span></h3>
-                        <p class="ai-card-desc">An MCP server that lets AI agents talk to a project management tool directly.</p>
-                        <ul class="ai-card-details">
+                    <article class="current-card">
+                        <h3 class="current-card-title">Kubernetes execution boundary and image supply chain <span class="current-card-loc">Phase 1 merged</span></h3>
+                        <p class="current-card-desc">I designed and cluster-tested a boundary that moves long calculations out of the web process and into an isolated Kubernetes Job per run.</p>
+                        <ul class="current-card-details">
                             
-                            <li>Eight tools plus two workflow prompts</li>
+                            <li>Kept the server as a control plane and separated execution state from artifact lifecycle</li>
                             
-                            <li>Async-first, two-layer error handling</li>
+                            <li>A real k3s spike exposed a 12-hour pull-secret expiry that would have broken long-lived operation, prompting a credential-boundary redesign</li>
                             
-                        </ul>
-                    </article>
-                    
-                    <article class="ai-card">
-                        <h3 class="ai-card-title">auto-issue <span class="ai-card-loc">762 LOC</span></h3>
-                        <p class="ai-card-desc">Watches git commits and keeps the relevant docs in sync automatically.</p>
-                        <ul class="ai-card-details">
-                            
-                            <li>Commit polling → file/doc mapping → LLM generates the update</li>
-                            
-                            <li>Syncs to git and wiki at the same time; output is idempotent</li>
+                            <li>Added immutable tags and OCI labels and reduced the image from 708MB to 357MB; the follow-up phase remains in progress</li>
                             
                         </ul>
                     </article>
                     
-                    <article class="ai-card">
-                        <h3 class="ai-card-title">ALM Agent <span class="ai-card-loc">In progress</span></h3>
-                        <p class="ai-card-desc">A release and process automation agent, unifying changelog, CI, and deploy flows into a single event layer. Still being built.</p>
-                        <ul class="ai-card-details">
+                    <article class="current-card">
+                        <h3 class="current-card-title">Domain IR and execution semantics <span class="current-card-loc">Experimental</span></h3>
+                        <p class="current-card-desc">Research into expressing complex calculation rules as a smaller language of tokens, actions, and schedulers.</p>
+                        <ul class="current-card-details">
                             
-                            <li>Changelog, release PR, hotfix detection, deploy reports, requirement structuring</li>
+                            <li>Kept the experiment separate from the production V2 path so failed ideas cannot destabilize the current system</li>
                             
-                            <li>Polling trigger → event router → use-case handlers → LLM integration</li>
+                            <li>Defines state transitions and verification boundaries before optimizing stage output</li>
+                            
+                            <li>Leaves incomplete semantics visible as blockers instead of silently approximating them</li>
                             
                         </ul>
                     </article>
@@ -243,10 +283,10 @@
 
         <section id="writing" class="writing-section">
             <div class="container">
-                <h2 class="section-title">Mentoring & Writing</h2>
+                <h2 class="section-title">Mentoring and writing</h2>
                 <div class="writing-content">
-                    <p><a href="https://jae-heo.github.io/tech/en/posts/python-lecture-00.html" class="writing-link" target="_blank">Python Deep-Dive Series</a> — A Python deep-dive series I wrote for onboarding junior engineers. Less about syntax, more about why the language behaves the way it does — object model, descriptors, iterators, generators, decorators, tied together.</p>
-                    <p>A long-form technical blog on Python internals, compilers, Linux, computer architecture, GPU systems, and MLOps. I tend to sit on one topic for a while. <a href="https://jae-heo.github.io/tech/en/" class="writing-link" target="_blank">Visit the blog →</a></p>
+                    <p><a href="https://jae-heo.github.io/tech/en/posts/python-lecture-00.html" class="writing-link" target="_blank" rel="noopener noreferrer">Python deep-dive series</a> — A series written for junior-engineer onboarding. It explains why Python's object model, containers, generators, and descriptors behave the way they do rather than stopping at syntax.</p>
+                    <p>Long-form notes on compilers, Linux, computer architecture, and Python internals. <a href="https://jae-heo.github.io/tech/en/" class="writing-link" target="_blank" rel="noopener noreferrer">Read the tech blog →</a></p>
                 </div>
             </div>
         </section>
@@ -255,10 +295,10 @@
             <div class="container">
                 <h2 class="section-title">Contact</h2>
                 <div class="contact-content">
-                    <p>If you work on simulation systems, performance engineering, decision infrastructure, or agentic tooling — I'm happy to chat.</p>
+                    <p>I am always glad to talk about backend systems, domain architecture, runtimes, performance, and observability.</p>
                     <div class="contact-links">
                         
-                        <a href="https://github.com/jae-heo" class="contact-link" target="_blank">GitHub</a>
+                        <a href="https://github.com/jae-heo" class="contact-link" target="_blank" rel="noopener noreferrer">GitHub</a>
                         
                         
                     </div>
@@ -269,11 +309,12 @@
 
     <footer class="portfolio-footer">
         <div class="footer-content">
-            <p>&copy; 2025 Jae</p>
+            <p>&copy; 2026 Jaeyoung Heo</p>
         </div>
     </footer>
 
     <script src="/assets/js/portfolio.js"></script>
+    <script src="/assets/js/mobile-nav.js"></script>
     <script src="/assets/js/theme-switcher.js"></script>
     <script src="/assets/js/wood-scrollbar.js" defer></script>
 </body>

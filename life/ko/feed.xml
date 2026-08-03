@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jae's Life Blog</title>
+    <link>https://jae-heo.github.io/life/ko/</link>
+    <description>Personal stories, travel adventures, and life experiences beyond the code</description>
+    <language>ko</language>
+    <atom:link href="https://jae-heo.github.io/life/ko/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Aug 2026 06:22:39 GMT</lastBuildDate>
+    
+    <item>
+      <title><![CDATA[행동하는 사람]]></title>
+      <link>https://jae-heo.github.io/life/posts/instant-action-builds-trust.html</link>
+      <guid>https://jae-heo.github.io/life/posts/instant-action-builds-trust.html</guid>
+      <pubDate>Sun, 26 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[행동으로 의사소통 하게되면]]></description>
+    </item>
+    <item>
+      <title><![CDATA[동료들과의 아침 러닝]]></title>
+      <link>https://jae-heo.github.io/life/posts/running-in-the-morning.html</link>
+      <guid>https://jae-heo.github.io/life/posts/running-in-the-morning.html</guid>
+      <pubDate>Fri, 24 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[동료들과 함께하는 러닝. 2주가 지나며 느낀 변화.]]></description>
+    </item>
+    <item>
+      <title><![CDATA[머리의 기복]]></title>
+      <link>https://jae-heo.github.io/life/posts/fluctuations-of-the-mind.html</link>
+      <guid>https://jae-heo.github.io/life/posts/fluctuations-of-the-mind.html</guid>
+      <pubDate>Wed, 22 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[나에게는 왜 기복이 있을까?]]></description>
+    </item>
+    <item>
+      <title><![CDATA[침대와 소파의 유혹]]></title>
+      <link>https://jae-heo.github.io/life/posts/temptation-of-bed-and-sofa.html</link>
+      <guid>https://jae-heo.github.io/life/posts/temptation-of-bed-and-sofa.html</guid>
+      <pubDate>Sun, 19 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[주말을 효율적으로 보내기 위해 밖으로 나가야겠다는 다짐]]></description>
+    </item>
+    <item>
+      <title><![CDATA[아침이 주는 휴식]]></title>
+      <link>https://jae-heo.github.io/life/posts/morning-as-rest.html</link>
+      <guid>https://jae-heo.github.io/life/posts/morning-as-rest.html</guid>
+      <pubDate>Sat, 18 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[바쁜 삶 속에서 아침 루틴이 만들어준 여유]]></description>
+    </item>
+    <item>
+      <title><![CDATA[나 자신을 모르는 순간]]></title>
+      <link>https://jae-heo.github.io/life/posts/moment-of-not-knowing-myself.html</link>
+      <guid>https://jae-heo.github.io/life/posts/moment-of-not-knowing-myself.html</guid>
+      <pubDate>Fri, 17 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[하기 싫다는 마음이 들었을 때,나의 동기를 돌아보다]]></description>
+    </item>
+    <item>
+      <title><![CDATA[루틴과 마음 사이]]></title>
+      <link>https://jae-heo.github.io/life/posts/routine-and-heart.html</link>
+      <guid>https://jae-heo.github.io/life/posts/routine-and-heart.html</guid>
+      <pubDate>Thu, 16 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[늦잠을 자게 된 이유와 루틴 속에서 찾는 균형]]></description>
+    </item>
+    <item>
+      <title><![CDATA[루틴을 정하다]]></title>
+      <link>https://jae-heo.github.io/life/posts/setting-a-routine.html</link>
+      <guid>https://jae-heo.github.io/life/posts/setting-a-routine.html</guid>
+      <pubDate>Sat, 11 Oct 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[새로운 하루를 만들어가는 나의 일과]]></description>
+    </item>
+  </channel>
+</rss>

@@ -402,6 +402,52 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-first-gate-of-the-compiler">The First Gate of the Compiler</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#tokens-lexemes-and-patterns">Tokens, Lexemes, and Patterns</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#where-automata-theory-meets-practice">Where Automata Theory Meets Practice</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-maximal-munch-rule">The Maximal Munch Rule</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#handling-whitespace-and-comments">Handling Whitespace and Comments</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#implementing-a-simple-lexer">Implementing a Simple Lexer</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#lexer-generators">Lexer Generators</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#error-handling">Error Handling</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-lexer-39-s-place-in-the-pipeline">The Lexer&#39;s Place in the Pipeline</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="the-first-gate-of-the-compiler">The First Gate of the Compiler</h2>
@@ -487,7 +533,7 @@ def tokenize(code):
 <p>When the lexer encounters a character that does not match any token pattern, a lexical error occurs. Several strategies can be employed at this point.</p>
 <p>The simplest approach is to report the error immediately and halt compilation. But this means only one error can be discovered at a time when the source code contains multiple errors, which is inefficient. Practical compilers adopt a strategy of skipping the offending character and continuing, reporting as many errors as possible in a single pass. This is called panic mode recovery, and at the lexer level, it is relatively straightforward to implement.</p>
 <p>Error messages should include the file name, line number, and column number so that developers can quickly locate the problem. To provide this information, the lexer must track position data while recognizing tokens, and this information is used for error reporting throughout all subsequent phases of the compiler.</p>
-<h2 id="the-lexer39s-place-in-the-pipeline">The Lexer&#39;s Place in the Pipeline</h2>
+<h2 id="the-lexer-39-s-place-in-the-pipeline">The Lexer&#39;s Place in the Pipeline</h2>
 <p>The lexer&#39;s position within the overall compiler pipeline can be summarized as follows.</p>
 <pre><code>Source Code → [Lexer] → Token Stream → [Parser] → Syntax Tree → [Semantic Analysis] → ...</code></pre>
 <p>The lexer operates in close coordination with the parser. In most implementations, the parser requests tokens one at a time and the lexer produces them on demand — a demand-driven approach. Rather than tokenizing the entire source at once, the lexer hands over one token each time the parser asks for one.</p>
@@ -574,7 +620,7 @@ def tokenize(code):
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

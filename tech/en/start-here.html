@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Start Here - Jae's Tech Blog</title>
-    <meta name="description" content="A practical guide to where to begin on the tech blog based on what you want to learn.">
+    <meta name="description" content="A practical guide to the published study paths on this tech blog.">
     <meta name="author" content="Jae">
 
     <!-- Canonical URL -->
@@ -17,7 +17,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://jae-heo.github.io" />
     <meta property="og:title" content="Start Here">
-    <meta property="og:description" content="A practical guide to where to begin on the tech blog based on what you want to learn.">
+    <meta property="og:description" content="A practical guide to the published study paths on this tech blog.">
     <meta property="og:site_name" content="Jae's Tech Blog">
     <meta property="og:locale" content="en_US">
     
@@ -29,7 +29,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://jae-heo.github.io">
     <meta name="twitter:title" content="Start Here">
-    <meta name="twitter:description" content="A practical guide to where to begin on the tech blog based on what you want to learn.">
+    <meta name="twitter:description" content="A practical guide to the published study paths on this tech blog.">
     
     <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
     
@@ -128,57 +128,30 @@
         <div class="page-wrapper">
     <div class="page-header">
         <h1>Start Here</h1>
-        <p class="subtitle">A practical guide to where to begin on the tech blog based on what you want to learn.</p>
+        <p class="subtitle">A practical guide to the published study paths on this tech blog.</p>
     </div>
     <article class="page">
         <div class="page-content">
-            <p>This blog is broad enough that jumping in randomly is often the wrong way to read it.</p>
-<p>The easier way is to pick a direction first:</p>
-<ul class="ul-list">
-<li>stronger systems intuition</li><li>ML systems and large-model infrastructure</li><li>language and compiler foundations</li><li>developer platform and production engineering</li></ul>
-<h2 id="if-you-want-stronger-systems-intuition">If You Want Stronger Systems Intuition</h2>
-<p>Start with:</p>
-<ul class="ul-list">
-<li><a href="/tech/en/series/linux.html">Linux</a></li><li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li><li><a href="/tech/en/series/compiler.html">Compiler</a></li></ul>
-<p>Why this path:</p>
-<p>These series make the rest of the blog easier to read. They build the kind of mental model that helps with performance, runtime behavior, memory, scheduling, and lower-level debugging.</p>
-<p>Suggested order:</p>
+            <p>This blog is easier to read as a set of study paths than as one long archive.</p>
+<p>Pick the question you want to answer first.</p>
+<h2 id="i-want-stronger-systems-intuition">I Want Stronger Systems Intuition</h2>
+<p>Read these in order:</p>
 <ol class="ol-list">
-<li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li><li><a href="/tech/en/series/linux.html">Linux</a></li><li><a href="/tech/en/series/compiler.html">Compiler</a></li></ol>
-<h2 id="if-you-want-to-study-gpu-llm-infrastructure">If You Want To Study GPU / LLM Infrastructure</h2>
+<li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li><li><a href="/tech/en/series/linux.html">Linux Internals</a></li><li><a href="/tech/en/series/compiler.html">Compiler</a></li></ol>
+<p>Computer architecture gives you the hardware model. Linux shows how an operating system manages that machine. The compiler series connects source code to the representations and transformations that eventually run on it.</p>
+<h2 id="i-want-to-understand-languages-and-runtimes">I Want To Understand Languages And Runtimes</h2>
 <p>Start with:</p>
 <ul class="ul-list">
-<li><a href="/tech/en/series/gpu-systems.html">GPU Systems</a></li><li><a href="/tech/en/series/pytorch-internals.html">PyTorch Internals</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a></li></ul>
-<p>Why this path:</p>
-<p>These three series are meant to fit together. <code class="inline-code">GPU Systems</code> explains how the hardware and kernels behave. <code class="inline-code">PyTorch Internals</code> explains how those kernels meet real training code. <code class="inline-code">Distributed LLM Training</code> explains what happens once the training system spreads across many GPUs and nodes.</p>
-<p>Suggested order:</p>
+<li><a href="/tech/en/series/compiler.html">Compiler</a></li><li><a href="/tech/en/series/python-lecture.html">Python Deep Dive</a></li></ul>
+<p>The compiler path covers automata, parsing, ASTs, IR, optimization, and code generation. The Python path stays closer to everyday code and explains containers, generators, classes, and descriptors from the language model underneath them.</p>
+<h2 id="i-want-a-gentler-entry-point">I Want A Gentler Entry Point</h2>
+<p>Begin with the <a href="/tech/en/series/python-lecture.html">Python Deep-Dive Series</a>. It assumes practical programming experience but does not require the lower-level background of the other paths.</p>
+<p>Then move to <a href="/tech/en/series/linux.html">Linux Internals</a> if you want to connect language behavior to processes, memory, files, and system calls.</p>
+<h2 id="one-general-reading-order">One General Reading Order</h2>
+<p>If you want one coherent route through everything currently published:</p>
 <ol class="ol-list">
-<li><a href="/tech/en/series/gpu-systems.html">GPU Systems</a></li><li><a href="/tech/en/series/pytorch-internals.html">PyTorch Internals</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a></li></ol>
-<h2 id="if-you-care-about-ml-in-production">If You Care About ML In Production</h2>
-<p>Start with:</p>
-<ul class="ul-list">
-<li><a href="/tech/en/series/mlops.html">MLOps</a></li><li><a href="/tech/en/series/platform-engineering.html">Platform Engineering</a></li></ul>
-<p>Why this path:</p>
-<p>These series are less about model math and more about operating real systems: pipelines, deployment, observability, self-service, platform constraints, and production tradeoffs.</p>
-<p>Suggested order:</p>
-<ol class="ol-list">
-<li><a href="/tech/en/series/mlops.html">MLOps</a></li><li><a href="/tech/en/series/platform-engineering.html">Platform Engineering</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a> if you want to move toward large-scale training systems</li></ol>
-<h2 id="if-you-want-language-compiler-foundations">If You Want Language / Compiler Foundations</h2>
-<p>Start with:</p>
-<ul class="ul-list">
-<li><a href="/tech/en/series/compiler.html">Compiler</a></li><li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li></ul>
-<p>Why this path:</p>
-<p>Compiler work becomes much easier to understand when you can connect formal language ideas to runtime and hardware behavior instead of treating them as separate textbooks.</p>
-<h2 id="if-you-prefer-a-gentler-entry-point">If You Prefer A Gentler Entry Point</h2>
-<p>Start with:</p>
-<ul class="ul-list">
-<li><a href="/tech/en/series/python-lecture.html">Python Lecture Series</a></li><li><a href="/tech/en/series/platform-engineering.html">Platform Engineering</a></li></ul>
-<p>These two are easier entry points than the heavier systems tracks, while still connecting well to the deeper material later.</p>
-<h2 id="a-good-general-reading-order">A Good General Reading Order</h2>
-<p>If you want one reasonable long-term path through the blog:</p>
-<ol class="ol-list">
-<li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li><li><a href="/tech/en/series/linux.html">Linux</a></li><li><a href="/tech/en/series/compiler.html">Compiler</a></li><li><a href="/tech/en/series/gpu-systems.html">GPU Systems</a></li><li><a href="/tech/en/series/pytorch-internals.html">PyTorch Internals</a></li><li><a href="/tech/en/series/distributed-llm-training.html">Distributed LLM Training</a></li><li><a href="/tech/en/series/mlops.html">MLOps</a></li><li><a href="/tech/en/series/platform-engineering.html">Platform Engineering</a></li></ol>
-<p>That is not the only order, but it is a coherent one.</p>
+<li><a href="/tech/en/series/python-lecture.html">Python Deep Dive</a></li><li><a href="/tech/en/series/computer-architecture.html">Computer Architecture</a></li><li><a href="/tech/en/series/linux.html">Linux Internals</a></li><li><a href="/tech/en/series/compiler.html">Compiler</a></li></ol>
+<p>More series are in preparation, but this page only points to material that is available now.</p>
 
         </div>
     </article>
@@ -188,7 +161,7 @@
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

@@ -381,6 +381,48 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#why-scheduling-matters">Why Scheduling Matters</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#preemptive-vs-cooperative">Preemptive vs Cooperative</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#history-of-the-o-1-scheduler">History of the O(1) Scheduler</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#cfs-the-completely-fair-scheduler">CFS: The Completely Fair Scheduler</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#nice-values-and-priorities">Nice Values and Priorities</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#real-time-scheduling">Real-Time Scheduling</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-cost-of-context-switching">The Cost of Context Switching</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#cpu-affinity">CPU Affinity</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="why-scheduling-matters">Why Scheduling Matters</h2>
@@ -389,7 +431,7 @@
 <h2 id="preemptive-vs-cooperative">Preemptive vs Cooperative</h2>
 <p>Scheduling approaches fall into two broad categories. In cooperative (non-preemptive) scheduling, other processes must wait until the running process voluntarily yields the CPU. If a single process refuses to yield, every other process waits indefinitely and the entire system appears frozen. Early versions of Windows and Mac OS used this approach, which is why a single hung program often required rebooting the entire system.</p>
 <p>In preemptive scheduling, the kernel can forcibly interrupt a running process and hand the CPU to another. Linux uses preemptive scheduling. Each process is assigned a time slice of CPU usage, and when that time is exhausted, the kernel intervenes and runs a different process. This ensures that even if one process enters an infinite loop, the rest of the system continues to function normally.</p>
-<h2 id="history-of-the-o1-scheduler">History of the O(1) Scheduler</h2>
+<h2 id="history-of-the-o-1-scheduler">History of the O(1) Scheduler</h2>
 <p>Linux scheduling has evolved through several iterations. The early Linux scheduler was simple in structure but suffered performance degradation as the number of processes grew. In 2003, Ingo Molnar introduced the O(1) scheduler in Linux 2.6. As its name implies, this scheduler could select the next process to run in constant time regardless of how many processes existed.</p>
 <p>The O(1) scheduler used two priority arrays called the active queue and the expired queue. Each array had 140 priority levels, and a bitmap allowed the process with the highest priority to be found instantly. When all processes in the active queue exhausted their time slices, the scheduler simply swapped the pointers of the two queues. This design worked well in server environments but had responsiveness problems with interactive processes on the desktop. The heuristics for identifying interactive processes were complex and difficult to predict.</p>
 <h2 id="cfs-the-completely-fair-scheduler">CFS: The Completely Fair Scheduler</h2>
@@ -516,7 +558,7 @@ taskset -c 2 ./my_program</code></pre>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

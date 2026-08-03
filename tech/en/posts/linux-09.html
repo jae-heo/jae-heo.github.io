@@ -381,6 +381,52 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#structure-of-the-linux-networking-stack">Structure of the Linux Networking Stack</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-socket-api">The Socket API</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-packet-receive-path">The Packet Receive Path</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#sk-buff-the-packet-container">sk_buff: The Packet Container</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#tcp-ip-implementation">TCP/IP Implementation</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#netfilter-and-packet-filtering">Netfilter and Packet Filtering</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#network-namespaces">Network Namespaces</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#virtual-network-devices">Virtual Network Devices</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#performance-optimizations-in-linux-networking">Performance Optimizations in Linux Networking</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="structure-of-the-linux-networking-stack">Structure of the Linux Networking Stack</h2>
@@ -410,7 +456,7 @@
 <p>When a packet arrives at the NIC, it is copied into a ring buffer in kernel memory via DMA (Direct Memory Access). The NIC then raises an interrupt to notify the CPU of the packet&#39;s arrival. In early Linux, every packet triggered an interrupt, but on high-speed networks where millions of packets can arrive per second, interrupt processing itself became the bottleneck.</p>
 <p>NAPI (New API) was introduced to solve this problem. NAPI combines interrupts with polling. When the first packet arrives, an interrupt fires, but subsequent interrupts are disabled and the system switches to polling mode to batch-process packets from the ring buffer. When there are no more packets to process, it returns to interrupt mode. This adaptive approach provides the low latency of interrupts under light traffic and the high throughput of polling under heavy traffic.</p>
 <p>Once the NIC driver processes a packet, it is placed in an <code class="inline-code">sk_buff</code> structure and passed to higher layers. The Ethernet header is parsed at the link layer, the IP header is processed at the network layer, and a routing decision is made. Whether the packet is destined for the local host or needs to be forwarded is determined here. Local packets ascend to the transport layer for TCP or UDP processing, and are ultimately placed in the socket&#39;s receive queue, from which the <code class="inline-code">recv()</code> system call delivers them to user space.</p>
-<h2 id="sk_buff-the-packet-container">sk_buff: The Packet Container</h2>
+<h2 id="sk-buff-the-packet-container">sk_buff: The Packet Container</h2>
 <p>The <code class="inline-code">sk_buff</code> (socket buffer) is the most important data structure in the Linux networking stack. Every packet is represented as an <code class="inline-code">sk_buff</code> structure, containing not only the packet data but also metadata such as the receiving interface, protocol information, and timestamps.</p>
 <p>A notable aspect of <code class="inline-code">sk_buff</code>&#39;s design is that no data is copied when each layer adds or removes headers. Instead, pointers are manipulated to change where the header begins. During transmission, each layer prepends its header to the data (using headroom), and during reception, each layer skips past its header to point at the next layer&#39;s payload. This zero-copy approach makes a critical contribution to networking performance.</p>
 <pre><code>sk_buff structure:
@@ -419,7 +465,7 @@
 └──────────┴───────────────┴──────────┴──────────┴─────────┘
             ↑                                      ↑
       parse direction (rx) →            prepend headers (tx) ←</code></pre>
-<h2 id="tcpip-implementation">TCP/IP Implementation</h2>
+<h2 id="tcp-ip-implementation">TCP/IP Implementation</h2>
 <p>The Linux TCP implementation is among the most complex code in the kernel. It goes well beyond simple reliable delivery to include congestion control, flow control, Selective Acknowledgment (SACK), timestamps, window scaling, and decades of accumulated optimizations and extensions.</p>
 <p>TCP connection establishment uses a 3-way handshake. On the server side, calling <code class="inline-code">listen()</code> creates a SYN queue (half-open connection queue) and an Accept queue (completed connection queue). When a SYN packet arrives, it enters the SYN queue and a SYN+ACK is sent. When the client&#39;s ACK arrives, the connection is complete and moves to the Accept queue, from which the <code class="inline-code">accept()</code> system call retrieves it.</p>
 <p>Do the sizes of these two queues matter? Very much so. If the SYN queue fills up, new connections cannot be accepted, and this is also the target of SYN flood attacks. Linux provides a defense mechanism called SYN cookies that allows normal connections to be established without using the SYN queue at all. The Accept queue size is controlled by the backlog parameter of <code class="inline-code">listen()</code>, and it directly determines how quickly the server can accept connections.</p>
@@ -545,7 +591,7 @@ Packet send path:
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

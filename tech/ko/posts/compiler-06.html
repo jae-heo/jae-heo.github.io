@@ -402,12 +402,58 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">바로 가기</p>
+                <h2>목차</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#컴파일러의-첫-관문">컴파일러의 첫 관문</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#토큰-렉심-패턴">토큰, 렉심, 패턴</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#오토마타-이론이-만나는-지점">오토마타 이론이 만나는 지점</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#최대-일치-규칙">최대 일치 규칙</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#공백과-주석-처리">공백과 주석 처리</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#간단한-렉서-구현">간단한 렉서 구현</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#렉서-생성기">렉서 생성기</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#오류-처리">오류 처리</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#렉서의-위치">렉서의 위치</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
-            <h2 id="-">컴파일러의 첫 관문</h2>
+            <h2 id="컴파일러의-첫-관문">컴파일러의 첫 관문</h2>
 <p>소스 코드가 컴파일러에 들어오면 가장 먼저 거치는 단계가 어휘 분석(Lexical Analysis)이다. 사람이 보기에 소스 코드는 의미 있는 단어와 기호의 나열이지만, 컴파일러 입장에서 입력은 단순한 문자 스트림에 불과하다. 이 문자 스트림을 의미 있는 단위로 잘라내는 것이 어휘 분석기, 즉 렉서(Lexer)의 역할이다.</p>
 <p>렉서가 왜 별도의 단계로 분리되어 있는지 궁금할 수 있다. 파서가 직접 문자 스트림을 읽으면 되지 않겠는가? 이론적으로는 가능하지만, 그렇게 하면 파서의 복잡도가 크게 증가한다. 공백, 주석, 개행 문자 같은 것들을 파서 문법에 포함시켜야 하기 때문이다. 렉서가 이런 세부사항을 미리 처리하여 깔끔한 토큰 스트림을 파서에게 전달하면, 파서는 언어의 구조적인 문법에만 집중할 수 있게 된다.</p>
-<h2 id="-">토큰, 렉심, 패턴</h2>
+<h2 id="토큰-렉심-패턴">토큰, 렉심, 패턴</h2>
 <p>어휘 분석에서 핵심적인 세 가지 개념이 있다.</p>
 <table>
 <thead>
@@ -427,21 +473,21 @@
 &lt;NUMBER, &quot;42&quot;&gt;
 &lt;RPAREN, &quot;)&quot;&gt;</code></pre>
 <p>각 토큰은 종류(토큰 타입)와 실제 값(렉심)의 쌍으로 구성된다. 파서는 토큰 타입만 보고 문법 규칙을 적용하고, 의미 분석 단계에서 렉심 값을 활용하게 된다.</p>
-<h2 id="-">오토마타 이론이 만나는 지점</h2>
+<h2 id="오토마타-이론이-만나는-지점">오토마타 이론이 만나는 지점</h2>
 <p>이전 포스트들에서 다룬 정규 표현식, NFA, DFA가 실제로 적용되는 곳이 바로 렉서이다. 각 토큰의 패턴은 정규 표현식으로 기술할 수 있고, 이 정규 표현식은 NFA로 변환된 뒤 DFA로 변환되어 실제 렉서의 엔진이 된다.</p>
 <p>과정을 정리하면 다음과 같다.</p>
 <pre><code>정규 표현식 → (Thompson 구성법) → NFA → (부분집합 구성법) → DFA → (최소화) → 최적 DFA</code></pre>
 <p>예를 들어 식별자를 인식하는 정규 표현식 <code class="inline-code">[a-zA-Z_][a-zA-Z0-9_]*</code>는 먼저 NFA로 변환된다. 이 NFA는 ε-전이를 포함하고 있어 직접 실행하기에는 비효율적이므로, 부분집합 구성법을 통해 DFA로 변환한다. 최종적으로 이 DFA가 렉서에서 식별자를 인식하는 상태 기계로 동작한다.</p>
 <p>이론에서 배운 것들이 그대로 실전에 적용되는 셈이다. 정규 언어의 닫힘 성질 덕분에 여러 토큰 패턴을 하나의 결합된 DFA로 합칠 수 있으며, 이것이 렉서가 단일 패스로 여러 종류의 토큰을 동시에 인식할 수 있는 이유이다.</p>
-<h2 id="-">최대 일치 규칙</h2>
+<h2 id="최대-일치-규칙">최대 일치 규칙</h2>
 <p>렉서가 토큰을 인식할 때 적용하는 중요한 원칙이 최대 일치 규칙(Maximal Munch Rule)이다. 가능한 한 가장 긴 렉심을 만들어낸다.</p>
 <p><code class="inline-code">ifcount</code>라는 입력이 들어왔을 때, 렉서는 처음 두 글자 <code class="inline-code">if</code>에서 키워드 <code class="inline-code">IF</code>를 인식할 수 있다. 하지만 최대 일치 규칙에 따라 더 읽어 나가면 <code class="inline-code">ifcount</code> 전체가 식별자 패턴에 매칭되므로, 최종적으로 <code class="inline-code">&lt;IDENTIFIER, &quot;ifcount&quot;&gt;</code>라는 하나의 토큰을 생성한다.</p>
 <p>이 규칙이 없다면 <code class="inline-code">ifcount</code>를 <code class="inline-code">if</code> + <code class="inline-code">count</code>로 잘못 분리할 수 있다. 최대 일치 규칙은 DFA 기반 렉서에서 자연스럽게 구현된다. 현재 상태가 수락 상태이더라도 다음 문자를 읽어 전이가 가능하면 계속 진행하고, 더 이상 전이가 불가능할 때 마지막으로 수락 상태였던 지점까지를 토큰으로 반환한다.</p>
-<h2 id="-">공백과 주석 처리</h2>
+<h2 id="공백과-주석-처리">공백과 주석 처리</h2>
 <p>렉서의 중요한 역할 중 하나는 공백, 탭, 개행, 주석처럼 파서에게 불필요한 요소를 걸러내는 것이다. 대부분의 언어에서 이들은 토큰을 구분하는 역할만 할 뿐, 문법적 의미를 갖지 않는다.</p>
 <p>다만 모든 언어가 그런 것은 아니다. Python은 들여쓰기가 문법적 의미를 가지므로 렉서가 <code class="inline-code">INDENT</code>와 <code class="inline-code">DEDENT</code> 토큰을 생성해야 한다. 이를 위해 렉서가 들여쓰기 깊이를 스택으로 관리하는데, 순수한 정규 언어의 범위를 넘어서는 처리가 필요하다.</p>
 <p>주석 처리도 단순하지 않다. 한 줄 주석은 <code class="inline-code">//</code>부터 줄 끝까지로 간단하지만, 블록 주석 <code class="inline-code">/* ... */</code>은 중첩을 허용하는 언어에서는 정규 표현식만으로 처리할 수 없다. 이런 경우에는 렉서에 별도의 로직을 추가해야 한다.</p>
-<h2 id="-">간단한 렉서 구현</h2>
+<h2 id="간단한-렉서-구현">간단한 렉서 구현</h2>
 <p>핵심 원리를 이해하기 위해 정수와 식별자, 그리고 몇 가지 연산자를 인식하는 간단한 렉서를 살펴보자.</p>
 <pre><code class="language-python">import re
 
@@ -472,7 +518,7 @@ def tokenize(code):
             tokens.append((kind, value))
     return tokens</code></pre>
 <p>이 구현은 정규 표현식 엔진에 토큰 인식을 위임하고 있다. 각 토큰 패턴을 하나의 결합된 정규 표현식으로 합치고, 매칭된 그룹 이름으로 토큰 타입을 결정하는 방식이다. 우선순위는 패턴이 나열된 순서에 의해 결정되므로, 키워드를 식별자보다 먼저 배치해야 올바르게 동작한다.</p>
-<h2 id="-">렉서 생성기</h2>
+<h2 id="렉서-생성기">렉서 생성기</h2>
 <p>실제 프로덕션 컴파일러에서 렉서를 매번 수동으로 작성하는 것은 비효율적이다. 렉서 생성기(Lexer Generator)는 토큰 패턴의 명세를 입력으로 받아 렉서 코드를 자동으로 생성해 주는 도구이다.</p>
 <p>가장 대표적인 것이 Lex와 그 오픈소스 구현인 Flex이다. 이들은 <code class="inline-code">.l</code> 파일에 정규 표현식과 대응하는 액션을 작성하면, 이를 DFA 기반의 C 코드로 변환해 준다.</p>
 <pre><code>%%
@@ -483,11 +529,11 @@ def tokenize(code):
 .           { error(&quot;unexpected character&quot;); }
 %%</code></pre>
 <p>내부적으로 렉서 생성기는 앞서 설명한 정규 표현식 → NFA → DFA → 최소 DFA의 파이프라인을 자동으로 수행한다. 오토마타 이론이 도구의 형태로 개발자에게 제공된다.</p>
-<h2 id="-">오류 처리</h2>
+<h2 id="오류-처리">오류 처리</h2>
 <p>렉서가 어떤 토큰 패턴에도 매칭되지 않는 문자를 만나면 어휘 오류가 발생한다. 이때 취할 수 있는 전략은 여러 가지이다.</p>
 <p>가장 단순한 방법은 즉시 오류를 보고하고 컴파일을 중단한다. 하지만 이렇게 하면 소스 코드에 여러 오류가 있을 때 한 번에 하나씩만 발견할 수 있어 비효율적이다. 실용적인 컴파일러에서는 오류 지점의 문자를 건너뛰고 계속 진행하여 가능한 많은 오류를 한 번에 보고하는 전략을 채택한다. 이를 패닉 모드 복구(Panic Mode Recovery)라고 부르며, 렉서 수준에서는 비교적 구현이 간단하다.</p>
 <p>오류 메시지에는 파일 이름, 줄 번호, 열 번호를 포함해야 개발자가 문제 지점을 빠르게 찾을 수 있다. 이를 위해 렉서는 토큰을 인식하면서 동시에 위치 정보를 추적해야 하며, 이 정보는 이후 컴파일러의 모든 단계에서 오류 보고에 활용된다.</p>
-<h2 id="-">렉서의 위치</h2>
+<h2 id="렉서의-위치">렉서의 위치</h2>
 <p>컴파일러의 전체 파이프라인에서 렉서의 위치를 정리하면 다음과 같다.</p>
 <pre><code>소스 코드 → [렉서] → 토큰 스트림 → [파서] → 구문 트리 → [의미 분석] → ...</code></pre>
 <p>렉서는 파서와 밀접하게 연결되어 동작한다. 대부분의 구현에서 파서가 토큰을 요청할 때마다 렉서가 다음 토큰을 생성하는 방식을 취하는데, 이를 요청 기반(demand-driven) 방식이라 한다. 전체 소스를 한꺼번에 토큰화하는 것이 아니라, 파서가 필요로 할 때마다 하나씩 토큰을 넘겨주는 것이다.</p>
@@ -574,7 +620,7 @@ def tokenize(code):
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 

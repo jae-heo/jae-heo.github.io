@@ -345,6 +345,60 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#what-is-lexical-structure">What is Lexical Structure?</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#tokens-the-smallest-units-of-meaning">Tokens: The Smallest Units of Meaning</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#lexical-analysis-breaking-into-tokens">Lexical Analysis: Breaking into Tokens</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#how-lexical-analyzers-work">How Lexical Analyzers Work</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#state-machine-examples">State Machine Examples</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#lexical-analysis-state-machine">Lexical Analysis State Machine</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#python-39-s-lexical-rules">Python&#39;s Lexical Rules</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#1-indentation-is-a-token">1. Indentation is a Token</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#2-many-ways-to-write-strings">2. Many Ways to Write Strings</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#3-many-ways-to-write-numbers">3. Many Ways to Write Numbers</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#4-python-39-s-built-in-tokenizer">4. Python&#39;s Built-in Tokenizer</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="what-is-lexical-structure">What is Lexical Structure?</h2>
@@ -464,7 +518,7 @@ Tokens: [NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42]</code></pre>
 <li><code class="inline-code">x</code> -&gt; letter -&gt; reading identifier -&gt; space -&gt; <strong>NAME: &#39;x&#39;</strong></li><li><code class="inline-code">=</code> -&gt; operator -&gt; <strong>OP: &#39;=&#39;</strong></li><li><code class="inline-code">42</code> -&gt; digits -&gt; space -&gt; <strong>NUMBER: 42</strong></li><li><code class="inline-code">+</code> -&gt; operator -&gt; <strong>OP: &#39;+&#39;</strong></li><li><code class="inline-code">y</code> -&gt; letter -&gt; end -&gt; <strong>NAME: &#39;y&#39;</strong></li></ol>
 <p><strong>Final result</strong>: <code class="inline-code">[NAME:&#39;x&#39;, OP:&#39;=&#39;, NUMBER:42, OP:&#39;+&#39;, NAME:&#39;y&#39;]</code></p>
 <p>State machines let you systematically break complex code into tokens.</p>
-<h2 id="python39s-lexical-rules">Python&#39;s Lexical Rules</h2>
+<h2 id="python-39-s-lexical-rules">Python&#39;s Lexical Rules</h2>
 <p>Let&#39;s look at what makes Python&#39;s lexical structure unique.</p>
 <h3 id="1-indentation-is-a-token">1. Indentation is a Token</h3>
 <p>Python&#39;s most distinctive feature -- <strong>indentation is syntax</strong>.</p>
@@ -527,7 +581,7 @@ f = 1_000_000  # 1000000
 
 # Complex numbers
 g = 3 + 4j</code></pre>
-<h3 id="4-python39s-built-in-tokenizer">4. Python&#39;s Built-in Tokenizer</h3>
+<h3 id="4-python-39-s-built-in-tokenizer">4. Python&#39;s Built-in Tokenizer</h3>
 <p>Python has a <code class="inline-code">tokenize</code> module that lets you see token analysis directly.</p>
 <p>Tokenizing <code class="inline-code">x = 42</code> gives you:</p>
 <pre><code>NAME       : &#39;x&#39;
@@ -619,7 +673,7 @@ ENDMARKER  : &#39;&#39;</code></pre>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

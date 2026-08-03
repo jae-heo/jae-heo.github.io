@@ -9,6 +9,19 @@ class PostFilter {
         };
         this.allTags = new Set();
         this.allCategories = new Set();
+        this.locale = document.documentElement.lang === 'ko' ? 'ko' : 'en';
+        this.copy = {
+            en: {
+                filters: 'Filters', title: 'Filter posts', clearAll: 'Clear all',
+                search: 'Search by title or content…', categories: 'Categories', tags: 'Tags',
+                noResults: 'No posts match your filters.', clearFilters: 'Clear filters'
+            },
+            ko: {
+                filters: '필터', title: '글 필터', clearAll: '모두 지우기',
+                search: '제목이나 내용으로 검색…', categories: '카테고리', tags: '태그',
+                noResults: '조건에 맞는 글이 없습니다.', clearFilters: '필터 지우기'
+            }
+        }[this.locale];
 
         this.init();
     }
@@ -66,7 +79,7 @@ class PostFilter {
         toggleButton.id = 'filter-toggle';
         toggleButton.innerHTML = `
             <span class="filter-icon">⚡</span>
-            <span class="filter-text">Filters</span>
+            <span class="filter-text">${this.copy.filters}</span>
             <span class="filter-count" id="filter-count"></span>
         `;
 
@@ -76,22 +89,23 @@ class PostFilter {
         filterPanel.id = 'filter-panel';
         filterPanel.innerHTML = `
             <div class="filter-header">
-                <h3>🔍 Filter Posts</h3>
-                <button class="filter-clear" id="filter-clear">Clear All</button>
+                <h3>🔍 ${this.copy.title}</h3>
+                <button class="filter-clear" id="filter-clear">${this.copy.clearAll}</button>
             </div>
 
             <div class="filter-search-bar">
                 <input
                     type="text"
                     id="search-input"
-                    placeholder="Search by title or content..."
+                    placeholder="${this.copy.search}"
+                    aria-label="${this.copy.search}"
                     class="filter-search"
                 >
             </div>
 
             ${this.allCategories.size > 0 ? `
             <div class="filter-group">
-                <h4>Categories</h4>
+                <h4>${this.copy.categories}</h4>
                 <div class="filter-buttons">
                     ${Array.from(this.allCategories).sort().map(cat => `
                         <button class="filter-btn" data-filter-type="category" data-value="${cat}">
@@ -104,7 +118,7 @@ class PostFilter {
 
             ${this.allTags.size > 0 ? `
             <div class="filter-group">
-                <h4>Tags</h4>
+                <h4>${this.copy.tags}</h4>
                 <div class="filter-buttons">
                     ${Array.from(this.allTags).sort().map(tag => `
                         <button class="filter-btn" data-filter-type="tag" data-value="${tag}">
@@ -203,7 +217,8 @@ class PostFilter {
             const isVisible = matchesSearch && matchesCategory && matchesTags;
 
             // Update grid view elements
-            post.gridElement.style.display = isVisible ? '' : 'none';
+            post.gridElement.classList.toggle('is-filtered-out', !isVisible);
+            post.gridElement.hidden = !isVisible;
             if (isVisible) visibleCount++;
         });
 
@@ -243,8 +258,8 @@ class PostFilter {
                 noResultsMsg.id = 'no-results-message';
                 noResultsMsg.className = 'no-results';
                 noResultsMsg.innerHTML = `
-                    <p>No posts match your filters.</p>
-                    <button onclick="window.postFilter.clearFilters()">Clear Filters</button>
+                    <p>${this.copy.noResults}</p>
+                    <button onclick="window.postFilter.clearFilters()">${this.copy.clearFilters}</button>
                 `;
                 gridView.parentNode.insertBefore(noResultsMsg, gridView);
             }

@@ -346,12 +346,58 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#why-is-python-so-popular">Why is Python So Popular?</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#an-insight-from-quot-python-in-a-nutshell-quot">An Insight from &quot;Python in a Nutshell&quot;</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-eternal-dilemma">The Eternal Dilemma</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#python-39-s-answer-progressive-disclosure">Python&#39;s Answer: Progressive Disclosure</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#layered-architecture">Layered Architecture</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#rich-standard-library-batteries-included">Rich Standard Library (Batteries Included)</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#dynamic-typing-and-type-hints-together">Dynamic Typing and Type Hints Together</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#trade-offs-didn-39-t-disappear-they-moved">Trade-offs Didn&#39;t Disappear -- They Moved</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-real-innovation">The Real Innovation</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="why-is-python-so-popular">Why is Python So Popular?</h2>
 <p>Python is one of the most popular programming languages out there.<br />It consistently ranks near the top in every popularity survey.</p>
 <p>So what makes it special?</p>
-<h2 id="an-insight-from-quotpython-in-a-nutshellquot">An Insight from &quot;Python in a Nutshell&quot;</h2>
+<h2 id="an-insight-from-quot-python-in-a-nutshell-quot">An Insight from &quot;Python in a Nutshell&quot;</h2>
 <p>O&#39;Reilly&#39;s &quot;Python in a Nutshell&quot; explains Python&#39;s success in a way I find fascinating:</p>
 <blockquote><p>&quot;Python makes it seem as though it solves the typical trade-offs of programming languages.&quot;</p>
 </blockquote>
@@ -361,7 +407,7 @@
 <p><strong>Simplicity vs Power</strong> -- the easier a language is to learn, the more limited its expressiveness.<br /><strong>Abstraction vs Detail</strong> -- high-level abstraction makes low-level control difficult.<br /><strong>Cleanliness vs Practicality</strong> -- there&#39;s always a gap between ideal code and realistic code.</p>
 <p>These tensions are fundamentally unsolvable.<br />It looks like a zero-sum game where choosing one means giving up the other.</p>
 <p>So how does Python make this dilemma &quot;seem solved&quot;?</p>
-<h2 id="python39s-answer-progressive-disclosure">Python&#39;s Answer: Progressive Disclosure</h2>
+<h2 id="python-39-s-answer-progressive-disclosure">Python&#39;s Answer: Progressive Disclosure</h2>
 <p>Python tackles this through a design philosophy called &quot;progressive disclosure.&quot;<br />The idea is simple -- you only face as much complexity as you need.</p>
 <h3 id="layered-architecture">Layered Architecture</h3>
 <p>Python wraps complexity in multiple layers of abstraction. Here&#39;s what I mean.</p>
@@ -488,7 +534,7 @@ def process_users(users: List[str], limit: Optional[int] = None) -&gt; List[str]
         users = users[:limit]
     return [greet(user) for user in users]</code></pre>
 <p>In early development, you skip types and move fast.<br />As the project grows, you add type hints to make things more robust.</p>
-<h2 id="trade-offs-didn39t-disappear-they-moved">Trade-offs Didn&#39;t Disappear -- They Moved</h2>
+<h2 id="trade-offs-didn-39-t-disappear-they-moved">Trade-offs Didn&#39;t Disappear -- They Moved</h2>
 <p>So did Python magically solve trade-offs? No.<br />They didn&#39;t disappear. They <strong>moved elsewhere</strong>.</p>
 <p>Python pays a price for all this convenience.<br />It&#39;s 10-100x slower than compiled languages like C/C++ or Rust.<br />It uses more memory for the same tasks.<br />The GIL (Global Interpreter Lock) limits true multithreading.</p>
 <p>But here&#39;s the thing -- modern computing environments make these costs acceptable.</p>
@@ -585,7 +631,7 @@ cimport cython  # Optimize with Cython</code></pre>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 

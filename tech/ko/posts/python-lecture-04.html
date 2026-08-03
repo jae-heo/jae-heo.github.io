@@ -357,11 +357,137 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">바로 가기</p>
+                <h2>목차</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#클래스의-내부-구조">클래스의 내부 구조</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#dict-속성이-사는-곳">__dict__ : 속성이 사는 곳</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#클래스-변수-vs-인스턴스-변수">클래스 변수 vs 인스턴스 변수</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#class-자기가-어디서-왔는지-아는-법">__class__ : 자기가 어디서 왔는지 아는 법</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#속성-찾기-순서">속성 찾기 순서</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#바운드-메서드">바운드 메서드</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#메서드의-두-얼굴">메서드의 두 얼굴</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#바운드-메서드란">바운드 메서드란?</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#바인딩의-비밀">바인딩의 비밀</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#바운드-메서드-내부">바운드 메서드 내부</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#실전-예제-콜백">실전 예제: 콜백</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#디스크립터">디스크립터</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#디스크립터란">디스크립터란?</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#디스크립터-프로토콜">디스크립터 프로토콜</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#데이터-디스크립터-vs-비데이터-디스크립터">데이터 디스크립터 vs 비데이터 디스크립터</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#실전-예제-1-타입-검증">실전 예제 1: 타입 검증</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#실전-예제-2-값-범위-검증">실전 예제 2: 값 범위 검증</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#실전-예제-3-로깅-디스크립터">실전 예제 3: 로깅 디스크립터</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#프로퍼티-간편한-디스크립터">프로퍼티: 간편한 디스크립터</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#property-데코레이터">@property 데코레이터</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#property의-정체">property의 정체</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#계산된-속성">계산된 속성</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#메서드도-디스크립터다">메서드도 디스크립터다</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#함수는-디스크립터">함수는 디스크립터</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#전체-그림">전체 그림</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#클래스-내부-구조">클래스 내부 구조</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#속성-찾기-우선순위">속성 찾기 우선순위</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#디스크립터-프로토콜-2">디스크립터 프로토콜</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#언제-뭘-쓸까">언제 뭘 쓸까</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
-            <h2 id="-">클래스의 내부 구조</h2>
+            <h2 id="클래스의-내부-구조">클래스의 내부 구조</h2>
 <p>파이썬에서 &quot;모든 것은 객체&quot;라고 한다. 그렇다면 클래스 내부는 어떻게 생겼을까?</p>
-<h3 id="__dict__-"><code class="inline-code">__dict__</code>: 속성이 사는 곳</h3>
+<h3 id="dict-속성이-사는-곳"><code class="inline-code">__dict__</code>: 속성이 사는 곳</h3>
 <p>파이썬에서 객체의 속성들은 <strong>딕셔너리</strong>로 저장된다.</p>
 <pre><code class="language-python">class Person:
     def __init__(self, name, age):
@@ -384,7 +510,7 @@ print(person.name)
 
 # 실제로 파이썬이 하는 일
 print(person.__dict__[&#39;name&#39;])</code></pre>
-<h3 id="-vs-">클래스 변수 vs 인스턴스 변수</h3>
+<h3 id="클래스-변수-vs-인스턴스-변수">클래스 변수 vs 인스턴스 변수</h3>
 <pre><code class="language-python">class Dog:
     # 클래스 변수: 모든 개가 공유
     species = &quot;Canis familiaris&quot;
@@ -416,7 +542,7 @@ print(dog2.species)  # &quot;Canis lupus&quot;</code></pre>
     style C fill:#e8f5e9
     style A fill:#e3f2fd
     style B fill:#e3f2fd</pre>
-<h3 id="__class__-"><code class="inline-code">__class__</code>: 자기가 어디서 왔는지 아는 법</h3>
+<h3 id="class-자기가-어디서-왔는지-아는-법"><code class="inline-code">__class__</code>: 자기가 어디서 왔는지 아는 법</h3>
 <p>모든 객체는 자신이 어떤 클래스에서 만들어졌는지 알고 있다.</p>
 <pre><code class="language-python">print(dog1.__class__)              # &lt;class &#39;__main__.Dog&#39;&gt;
 print(dog1.__class__.__name__)     # &quot;Dog&quot;
@@ -426,7 +552,7 @@ print(dog1.__class__ is dog2.__class__)  # True
 
 # 클래스 변수 접근
 print(dog1.__class__.species)      # &quot;Canis familiaris&quot;</code></pre>
-<h3 id="-">속성 찾기 순서</h3>
+<h3 id="속성-찾기-순서">속성 찾기 순서</h3>
 <p>파이썬이 속성을 어떻게 찾는지 보자.</p>
 <pre><code class="language-python">class Animal:
     species = &quot;Unknown&quot;
@@ -461,9 +587,9 @@ print(cat.speak())   # &quot;...&quot;</code></pre>
 <pre><code class="language-python"># MRO 확인하기
 print(Cat.__mro__)
 # (&lt;class &#39;Cat&#39;&gt;, &lt;class &#39;Animal&#39;&gt;, &lt;class &#39;object&#39;&gt;)</code></pre>
-<h2 id="-">바운드 메서드</h2>
+<h2 id="바운드-메서드">바운드 메서드</h2>
 <p><code class="inline-code">__dict__</code>와 <code class="inline-code">__class__</code>로 클래스의 내부 구조를 봤다. 이제 메서드가 내부적으로 어떻게 작동하는지 알아보자.</p>
-<h3 id="-">메서드의 두 얼굴</h3>
+<h3 id="메서드의-두-얼굴">메서드의 두 얼굴</h3>
 <p>놀라운 사실이 하나 있다. 클래스의 메서드는 <strong>두 가지 형태</strong>를 갖고 있다.</p>
 <pre><code class="language-python">class Calculator:
     def __init__(self, value):
@@ -479,7 +605,7 @@ calc = Calculator(10)
 print(type(Calculator.add))  # &lt;class &#39;function&#39;&gt;
 print(type(calc.add))         # &lt;class &#39;method&#39;&gt;</code></pre>
 <p>클래스에서 보면 <strong>함수</strong>고, 인스턴스에서 보면 <strong>메서드</strong>다. 같은 건데 관점이 다르다.</p>
-<h3 id="-">바운드 메서드란?</h3>
+<h3 id="바운드-메서드란">바운드 메서드란?</h3>
 <p><strong>바운드 메서드</strong>는 특정 인스턴스에 &quot;묶인&quot; 메서드다.</p>
 <pre><code class="language-python">calc = Calculator(10)
 
@@ -491,7 +617,7 @@ print(calc.add)
 add_method = calc.add
 add_method(5)  # calc.value가 15가 됨
 print(calc.value)  # 15</code></pre>
-<h3 id="-">바인딩의 비밀</h3>
+<h3 id="바인딩의-비밀">바인딩의 비밀</h3>
 <pre><code class="language-python">class MyClass:
     def method(self, x):
         return f&quot;값: {x}&quot;
@@ -509,7 +635,7 @@ result = obj.method(42)
 method_func = MyClass.method    # 1. 함수를 가져옴
 result = method_func(obj, 42)   # 2. obj를 첫 번째 인자로 전달</code></pre>
 <p>이것이 <code class="inline-code">self</code>의 정체다. 파이썬이 자동으로 인스턴스를 첫 번째 인자로 넘겨준다.</p>
-<h3 id="-">바운드 메서드 내부</h3>
+<h3 id="바운드-메서드-내부">바운드 메서드 내부</h3>
 <p>더 깊이 들어가보자.</p>
 <pre><code class="language-python">class Counter:
     def __init__(self):
@@ -527,7 +653,7 @@ print(bound.__func__)    # Counter.increment 함수를 가리킴
 
 # 바운드 메서드는 내부적으로 이렇게 작동:
 # bound() → bound.__func__(bound.__self__)</code></pre>
-<h3 id="-">실전 예제: 콜백</h3>
+<h3 id="실전-예제-콜백">실전 예제: 콜백</h3>
 <p>바운드 메서드는 콜백으로 자주 쓰인다.</p>
 <pre><code class="language-python">class Button:
     def __init__(self, label):
@@ -550,9 +676,9 @@ callbacks[0]()  # &quot;저장 버튼 클릭됨 (1번)&quot;
 callbacks[0]()  # &quot;저장 버튼 클릭됨 (2번)&quot;
 callbacks[1]()  # &quot;취소 버튼 클릭됨 (1번)&quot;</code></pre>
 <p>각 바운드 메서드가 자기 인스턴스를 기억하고 있기 때문에 콜백이 그냥 작동한다.</p>
-<h2 id="디스크립터">디스크립터</h2>
+<h2 id="디스크립터">디스크립터</h2>
 <p>바운드 메서드의 원리를 이해했으니, 이제 그 뒤에 있는 더 근본적인 메커니즘을 보자. 디스크립터는 잘 알려지지 않았지만 엄청나게 강력하다.</p>
-<h3 id="디스크립터란">디스크립터란?</h3>
+<h3 id="디스크립터란">디스크립터란?</h3>
 <p><strong>디스크립터</strong>는 속성 접근을 제어하는 객체다.</p>
 <pre><code class="language-python">class Descriptor:
     def __get__(self, obj, objtype=None):
@@ -577,7 +703,7 @@ obj = MyClass()
 obj.attr = 10      # &quot;__set__ 호출됨: 10&quot;
 print(obj.attr)    # &quot;__get__ 호출됨&quot; → 10
 del obj.attr       # &quot;__delete__ 호출됨&quot;</code></pre>
-<h3 id="-">디스크립터 프로토콜</h3>
+<h3 id="디스크립터-프로토콜">디스크립터 프로토콜</h3>
 <p>디스크립터는 세 가지 특수 메서드를 구현한다.</p>
 <pre><code class="language-python">class Descriptor:
     def __get__(self, instance, owner):
@@ -599,7 +725,7 @@ del obj.attr       # &quot;__delete__ 호출됨&quot;</code></pre>
         instance: 속성을 삭제하는 객체
         &quot;&quot;&quot;
         pass</code></pre>
-<h3 id="-vs-">데이터 디스크립터 vs 비데이터 디스크립터</h3>
+<h3 id="데이터-디스크립터-vs-비데이터-디스크립터">데이터 디스크립터 vs 비데이터 디스크립터</h3>
 <p>이 구분이 우선순위에 영향을 준다.</p>
 <pre><code class="language-python"># 데이터 디스크립터: __set__ 또는 __delete__가 있음
 class DataDescriptor:
@@ -627,7 +753,7 @@ print(obj.non_data_desc)  # &quot;instance attr&quot; (인스턴스가 이김)
 obj.__dict__[&#39;data_desc&#39;] = &quot;instance attr&quot;
 print(obj.data_desc)  # &quot;data descriptor&quot; (데이터 디스크립터가 이김)</code></pre>
 <p>데이터 디스크립터는 인스턴스 속성을 이기고, 비데이터 디스크립터는 인스턴스 속성에 진다. 이 우선순위가 파이썬 속성 시스템의 핵심이다.</p>
-<h3 id="-1-">실전 예제 1: 타입 검증</h3>
+<h3 id="실전-예제-1-타입-검증">실전 예제 1: 타입 검증</h3>
 <pre><code class="language-python">class TypedProperty:
     &quot;&quot;&quot;타입을 강제하는 디스크립터&quot;&quot;&quot;
     def __init__(self, name, expected_type):
@@ -664,7 +790,7 @@ try:
     person.age = &quot;스물다섯&quot;
 except TypeError as e:
     print(e)  # &quot;age은(는) int 타입이어야 합니다. str이(가) 주어졌습니다.&quot;</code></pre>
-<h3 id="-2-">실전 예제 2: 값 범위 검증</h3>
+<h3 id="실전-예제-2-값-범위-검증">실전 예제 2: 값 범위 검증</h3>
 <pre><code class="language-python">class RangeValue:
     &quot;&quot;&quot;값의 범위를 제한하는 디스크립터&quot;&quot;&quot;
     def __init__(self, name, min_value=None, max_value=None):
@@ -710,7 +836,7 @@ try:
     game.take_damage(80)  # health가 -10이 되려고 함
 except ValueError as e:
     print(e)  # &quot;health은(는) 0 이상이어야 합니다&quot;</code></pre>
-<h3 id="-3-">실전 예제 3: 로깅 디스크립터</h3>
+<h3 id="실전-예제-3-로깅-디스크립터">실전 예제 3: 로깅 디스크립터</h3>
 <pre><code class="language-python">class LoggedProperty:
     &quot;&quot;&quot;속성 접근을 로깅하는 디스크립터&quot;&quot;&quot;
     def __init__(self, name):
@@ -747,8 +873,8 @@ print(account.balance)
 account.deposit(500)
 # [GET] balance = 1000
 # [SET] balance = 1500</code></pre>
-<h2 id="-">프로퍼티: 간편한 디스크립터</h2>
-<h3 id="property-"><code class="inline-code">@property</code> 데코레이터</h3>
+<h2 id="프로퍼티-간편한-디스크립터">프로퍼티: 간편한 디스크립터</h2>
+<h3 id="property-데코레이터"><code class="inline-code">@property</code> 데코레이터</h3>
 <p>디스크립터를 매번 클래스로 만들기는 귀찮다. <code class="inline-code">@property</code>는 같은 기능을 적은 코드로 제공한다.</p>
 <pre><code class="language-python">class Circle:
     def __init__(self, radius):
@@ -791,7 +917,7 @@ print(circle.area)     # 314.159
 # diameter를 설정하면 radius가 자동 계산
 circle.diameter = 20
 print(circle.radius)   # 10.0</code></pre>
-<h3 id="property-">property의 정체</h3>
+<h3 id="property의-정체">property의 정체</h3>
 <p><code class="inline-code">@property</code>는 사실 디스크립터다.</p>
 <pre><code class="language-python">class MyProperty:
     &quot;&quot;&quot;property의 간단한 구현&quot;&quot;&quot;
@@ -831,7 +957,7 @@ class Temperature:
 # 동작 확인
 temp = Temperature(25)
 print(temp.celsius)  # 25</code></pre>
-<h3 id="-">계산된 속성</h3>
+<h3 id="계산된-속성">계산된 속성</h3>
 <p>프로퍼티의 강력한 활용법은 <strong>계산된 속성</strong>이다.</p>
 <pre><code class="language-python">class Rectangle:
     def __init__(self, width, height):
@@ -856,9 +982,9 @@ print(rect.perimeter) # 60
 rect.width = 15
 print(rect.area)      # 300</code></pre>
 <p><code class="inline-code">area</code>를 일반 속성처럼 접근하지만, 매번 새로 계산된다. 따로 업데이트할 필요가 없다.</p>
-<h2 id="-">메서드도 디스크립터다</h2>
+<h2 id="메서드도-디스크립터다">메서드도 디스크립터다</h2>
 <p>퍼즐의 마지막 조각이다. 앞에서 배운 바운드 메서드가 어떻게 만들어지는지, 디스크립터로 완전히 설명할 수 있다.</p>
-<h3 id="-">함수는 디스크립터</h3>
+<h3 id="함수는-디스크립터">함수는 디스크립터</h3>
 <pre><code class="language-python">class Function:
     &quot;&quot;&quot;메서드의 간단한 구현&quot;&quot;&quot;
     def __init__(self, func):
@@ -891,8 +1017,8 @@ print(obj.method(42))        # 작동함!</code></pre>
 # 함수는 디스크립터!
 print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
 <p><code class="inline-code">obj.method(x)</code>를 호출하면, 파이썬이 클래스에서 함수를 찾고, <code class="inline-code">__get__</code>을 호출해 바운드 메서드를 만들고, 그걸 실행한다. 밑바닥까지 전부 디스크립터다.</p>
-<h2 id="-">전체 그림</h2>
-<h3 id="-">클래스 내부 구조</h3>
+<h2 id="전체-그림">전체 그림</h2>
+<h3 id="클래스-내부-구조">클래스 내부 구조</h3>
 <pre class="mermaid">graph TD
     A["인스턴스<br/>obj"]
     B["obj.__dict__<br/>인스턴스 속성들"]
@@ -909,12 +1035,12 @@ print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
     style B fill:#fff3e0
     style C fill:#f3e5f5
     style D fill:#e8f5e9</pre>
-<h3 id="-">속성 찾기 우선순위</h3>
+<h3 id="속성-찾기-우선순위">속성 찾기 우선순위</h3>
 <ol class="ol-list">
 <li><strong>데이터 디스크립터</strong> (클래스/부모 클래스에서 <code class="inline-code">__set__</code>이 있는 디스크립터)</li><li><strong>인스턴스 `__dict__`</strong> (인스턴스 변수)</li><li><strong>비데이터 디스크립터 및 일반 클래스 변수</strong> (클래스/부모 클래스에서 <code class="inline-code">__get__</code>만 있거나 디스크립터가 아닌 변수)</li></ol>
 <blockquote><p>각 단계에서 현재 클래스, 그다음 부모 클래스 순서(MRO)로 탐색한다.</p>
 </blockquote>
-<h3 id="-">디스크립터 프로토콜</h3>
+<h3 id="디스크립터-프로토콜-2">디스크립터 프로토콜</h3>
 <table>
 <thead>
 <tr><th>메서드</th><th>호출 시점</th><th>용도</th></tr>
@@ -925,7 +1051,7 @@ print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
 <tr><td><code class="inline-code"><strong>delete</strong>(self, instance)</code></td><td><code class="inline-code">del obj.attr</code></td><td>속성 삭제</td></tr>
 </tbody>
 </table>
-<h3 id="-">언제 뭘 쓸까</h3>
+<h3 id="언제-뭘-쓸까">언제 뭘 쓸까</h3>
 <p>간단한 getter/setter가 필요하면 <code class="inline-code">@property</code>를 쓴다. 깔끔하고 간편하다.<br />같은 검증 로직을 여러 클래스에서 재사용하려면 디스크립터 클래스를 만든다. DRY 원칙이다.<br />계산된 속성이 일반 속성처럼 보여야 하면 <code class="inline-code">@property</code>가 딱이다.<br />로깅이나 캐싱 같은 횡단 관심사에는 디스크립터가 행동을 투명하게 추가해준다.</p>
 <p>파이썬에서 클래스도, 함수도, 메서드도 전부 객체다. 디스크립터는 속성 접근을 제어하는 프로토콜이다. 바운드 메서드는 디스크립터로 구현된다. 그리고 <code class="inline-code">@property</code>는 같은 메커니즘을 편리하게 감싼 것일 뿐이다.</p>
 <p>이걸 이해하고 나면 <code class="inline-code">@staticmethod</code>나 <code class="inline-code">@classmethod</code>도 더 이상 마법이 아니다. 전부 같은 일관된 프로토콜 위에 만들어져 있다.</p>
@@ -1011,7 +1137,7 @@ print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/ko/feed.xml">RSS</a>
                 

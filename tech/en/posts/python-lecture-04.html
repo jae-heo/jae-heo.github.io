@@ -357,11 +357,137 @@
 
     <div class="post-body-layout">
         
+        <aside class="post-toc">
+            <div class="post-toc-card">
+                <p class="post-toc-label">Jump to section</p>
+                <h2>Table of Contents</h2>
+                <ol class="post-toc-list">
+                    
+                    <li class="post-toc-item ">
+                        <a href="#class-internals">Class Internals</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#dict-where-attributes-live">__dict__ : Where Attributes Live</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#class-variables-vs-instance-variables">Class Variables vs Instance Variables</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#class-knowing-your-origin">__class__ : Knowing Your Origin</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#how-python-finds-attributes">How Python Finds Attributes</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#bound-methods">Bound Methods</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#two-faces-of-a-method">Two Faces of a Method</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#what-is-a-bound-method">What is a Bound Method?</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#how-binding-actually-works">How Binding Actually Works</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#inside-a-bound-method">Inside a Bound Method</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#real-example-callbacks">Real Example: Callbacks</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#descriptors">Descriptors</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#what-is-a-descriptor">What is a Descriptor?</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#the-descriptor-protocol">The Descriptor Protocol</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#data-vs-non-data-descriptors">Data vs Non-Data Descriptors</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#real-example-1-type-validation">Real Example 1: Type Validation</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#real-example-2-value-range-validation">Real Example 2: Value Range Validation</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#real-example-3-logging-descriptor">Real Example 3: Logging Descriptor</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#properties-the-easy-way">Properties: The Easy Way</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#the-property-decorator">The @property Decorator</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#property-is-a-descriptor">Property IS a Descriptor</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#computed-attributes">Computed Attributes</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#methods-are-descriptors-too">Methods Are Descriptors Too</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#functions-are-descriptors">Functions Are Descriptors</a>
+                    </li>
+                    
+                    <li class="post-toc-item ">
+                        <a href="#the-big-picture">The Big Picture</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#class-internals-2">Class Internals</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#attribute-lookup-priority">Attribute Lookup Priority</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#descriptor-protocol">Descriptor Protocol</a>
+                    </li>
+                    
+                    <li class="post-toc-item is-sub-item">
+                        <a href="#when-to-use-what">When to Use What</a>
+                    </li>
+                    
+                </ol>
+            </div>
+        </aside>
+        
 
         <div class="post-content">
             <h2 id="class-internals">Class Internals</h2>
 <p>In Python, &quot;everything is an object.&quot; So what does the inside of a class actually look like?</p>
-<h3 id="__dict__-where-attributes-live"><code class="inline-code">__dict__</code>: Where Attributes Live</h3>
+<h3 id="dict-where-attributes-live"><code class="inline-code">__dict__</code>: Where Attributes Live</h3>
 <p>Object attributes in Python are stored as a <strong>dictionary</strong>.</p>
 <pre><code class="language-python">class Person:
     def __init__(self, name, age):
@@ -416,7 +542,7 @@ print(dog2.species)  # &quot;Canis lupus&quot;</code></pre>
     style C fill:#e8f5e9
     style A fill:#e3f2fd
     style B fill:#e3f2fd</pre>
-<h3 id="__class__-knowing-your-origin"><code class="inline-code">__class__</code>: Knowing Your Origin</h3>
+<h3 id="class-knowing-your-origin"><code class="inline-code">__class__</code>: Knowing Your Origin</h3>
 <p>Every object knows which class created it.</p>
 <pre><code class="language-python">print(dog1.__class__)              # &lt;class &#39;__main__.Dog&#39;&gt;
 print(dog1.__class__.__name__)     # &quot;Dog&quot;
@@ -892,7 +1018,7 @@ print(obj.method(42))        # Works!</code></pre>
 print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
 <p>When you call <code class="inline-code">obj.method(x)</code>, Python finds the function in the class, calls its <code class="inline-code">__get__</code> to create a bound method, and then calls that. It&#39;s descriptors all the way down.</p>
 <h2 id="the-big-picture">The Big Picture</h2>
-<h3 id="class-internals">Class Internals</h3>
+<h3 id="class-internals-2">Class Internals</h3>
 <pre class="mermaid">graph TD
     A["Instance<br/>obj"]
     B["obj.__dict__<br/>Instance attributes"]
@@ -1011,7 +1137,7 @@ print(hasattr(my_function, &#39;__get__&#39;))  # True</code></pre>
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Jae · Notes on systems, software, and building things carefully.</p>
+            <p>&copy; 2026 Jae · Notes on systems, software, and building things carefully.</p>
             <div class="footer-links">
                 <a href="/tech/en/feed.xml">RSS</a>
                 
