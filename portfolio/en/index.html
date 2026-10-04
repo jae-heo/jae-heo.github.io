@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jaeyoung Heo — Backend Systems & Domain Architecture</title>
+    <title>Jaeyoung Heo — Backend Engineer</title>
     <link rel="canonical" href="https://jae-heo.github.io/portfolio/en/">
     <link rel="alternate" hreflang="en" href="https://jae-heo.github.io/portfolio/en/">
     <link rel="alternate" hreflang="ko" href="https://jae-heo.github.io/portfolio/ko/">
     <link rel="alternate" hreflang="x-default" href="https://jae-heo.github.io/portfolio/en/">
-    <meta name="description" content="Portfolio of Jaeyoung Heo, a software engineer who turns tangled domains into explicit, verifiable structures.">
+    <meta name="description" content="Backend engineer focused on understanding complex systems and modernizing them through better abstractions, domain models, and architecture.">
     <meta name="author" content="Jaeyoung Heo">
 
 
 <meta property="og:type" content="profile">
     <meta property="og:url" content="https://jae-heo.github.io/portfolio/en/">
-    <meta property="og:title" content="Jaeyoung Heo — Backend Systems & Domain Architecture">
-    <meta property="og:description" content="Portfolio of Jaeyoung Heo, a software engineer who turns tangled domains into explicit, verifiable structures.">
+    <meta property="og:title" content="Jaeyoung Heo — Backend Engineer">
+    <meta property="og:description" content="Backend engineer focused on understanding complex systems and modernizing them through better abstractions, domain models, and architecture.">
     <meta property="og:image" content="https://jae-heo.github.io/assets/default-og-image.png" />
     <meta property="og:locale" content="en_US">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Jaeyoung Heo — Backend Systems & Domain Architecture">
-    <meta name="twitter:description" content="Portfolio of Jaeyoung Heo, a software engineer who turns tangled domains into explicit, verifiable structures.">
+    <meta name="twitter:url" content="https://jae-heo.github.io/portfolio/en/">
+    <meta name="twitter:title" content="Jaeyoung Heo — Backend Engineer">
+    <meta name="twitter:description" content="Backend engineer focused on understanding complex systems and modernizing them through better abstractions, domain models, and architecture.">
     <meta name="twitter:image" content="https://jae-heo.github.io/assets/default-og-image.png">
     <script type="application/ld+json">
     {
@@ -29,296 +30,97 @@
       "name": "Jaeyoung Heo",
       "url": "https://jae-heo.github.io/portfolio/en/",
       "sameAs": ["https://github.com/jae-heo"],
-      "jobTitle": "Software Engineer — Backend Systems & Domain Architecture"
+      "jobTitle": "Backend Engineer"
     }
     </script>
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Gowun+Batang:wght@400;700&family=JetBrains+Mono:wght@300..500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/style.css">
     <link rel="stylesheet" href="/assets/portfolio.css">
     <script>
-        const theme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', theme);
-        const lang = localStorage.getItem('lang') || 'en';
+        try {
+            document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+        } catch (_) {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
     </script>
-    <meta name="twitter:url" content="https://jae-heo.github.io/portfolio/en/">
 </head>
 <body class="portfolio-page">
+    <a class="portfolio-skip" href="#main">Skip to content</a>
     <header class="portfolio-header">
-        <nav class="portfolio-nav">
-            <a href="/portfolio/en/" class="site-title">Jaeyoung Heo</a>
-            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav-links">
-                <span></span><span></span><span></span>
+        <nav class="portfolio-nav" aria-label="Menu">
+            <a href="/portfolio/en/" class="portfolio-brand">Jaeyoung Heo<span aria-hidden="true">.</span></a>
+            <button class="portfolio-menu-toggle" id="mobile-menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav-links" hidden>
+                <span></span><span></span>
             </button>
-            <div class="nav-links" id="site-nav-links">
-                <a href="#principles" data-nav-link>Principles</a>
-                <a href="#projects" data-nav-link>Cases</a>
-                <a href="#current" data-nav-link>Current work</a>
-                <a href="#writing" data-nav-link>Writing</a>
+            <div class="portfolio-nav-links" id="site-nav-links">
+                <a href="#approach" data-nav-link>Approach</a>
                 <a href="#contact" data-nav-link>Contact</a>
-                <select id="lang-select" aria-label="Select language">
-                    <option value="en">English</option>
-                    <option value="ko">한국어</option>
-                </select>
-                <button id="theme-toggle" aria-label="Toggle dark mode">
-                    <span id="theme-icon">🌙</span>
-                </button>
+                <div class="portfolio-controls">
+                    <select id="lang-select" aria-label="Select language">
+                        <option value="en">EN</option>
+                        <option value="ko">KO</option>
+                    </select>
+                    <button id="theme-toggle" aria-label="Toggle color theme"><span id="theme-icon" aria-hidden="true">◐</span></button>
+                </div>
             </div>
         </nav>
     </header>
 
-    <main class="portfolio-main">
-        <section class="hero">
-            <div class="hero-content">
-                <h1 class="hero-title">Jaeyoung Heo</h1>
-                <p class="hero-subtitle">Software Engineer — Backend Systems & Domain Architecture</p>
-                <p class="hero-intro">I turn tangled domains into explicit, verifiable structure. My work is about modeling real constraints and decisions as executable systems, then changing those systems without losing their meaning.</p>
-                <p class="hero-tech">Backend systems · Domain architecture · Runtime & orchestration · Performance & observability</p>
-            </div>
+    <main id="main" class="portfolio-main">
+        <section class="portfolio-hero" aria-labelledby="hero-heading">
+            <p class="portfolio-eyebrow">Backend Engineer</p>
+            <h1 id="hero-heading">Jaeyoung Heo</h1>
+            <p class="portfolio-intro">I’m a backend engineer focused on understanding complex systems and modernizing them through better abstractions, domain models, and architecture.</p>
+            <ul class="portfolio-focus-areas" aria-label="Backend Engineer">
+                
+                <li>System Modernization</li>
+                
+                <li>Architecture</li>
+                
+                <li>Domain Modeling</li>
+                
+            </ul>
         </section>
 
-        <section id="principles" class="principles-section">
-            <div class="container">
-                <ol class="principles-list">
+        <section id="approach" class="portfolio-approach" aria-labelledby="approach-title">
+            <h2 id="approach-title">Finding the right structure</h2>
+            <div class="portfolio-approach-body">
+                <div class="portfolio-approach-notes">
                     
-                    <li class="principle">
-                        <span class="principle-title">Build structures other engineers can extend.</span>
-                        <p class="principle-text">Complex rules should not live in one person's head. I separate responsibilities and boundaries so new requirements do not destabilize the existing flow.</p>
-                    </li>
+                    <p>I start by identifying the concepts and constraints embedded in a system. I decide which concepts belong in a shared model, where responsibilities should be separated, and how those choices shape interfaces and architecture.</p>
                     
-                    <li class="principle">
-                        <span class="principle-title">Make execution order visible.</span>
-                        <p class="principle-text">I prefer schedulers, DAGs, and queues that can be read and verified over implicit callback chains. The same input should produce the same result.</p>
-                    </li>
-                    
-                    <li class="principle">
-                        <span class="principle-title">Treat correctness as a design property.</span>
-                        <p class="principle-text">I establish trial, commit, and rollback boundaries early. Failed attempts should be unable to leave partial state behind.</p>
-                    </li>
-                    
-                    <li class="principle">
-                        <span class="principle-title">Preserve domain meaning in types and models.</span>
-                        <p class="principle-text">I lift hardcoded branches into formal structure. Decision context and lineage should survive all the way down to execution.</p>
-                    </li>
-                    
-                    <li class="principle">
-                        <span class="principle-title">Observe first, measure, then change.</span>
-                        <p class="principle-text">Profiles and traces decide where I optimize. If the evidence cannot justify the complexity, I roll the change back.</p>
-                    </li>
-                    
-                </ol>
-            </div>
-        </section>
-
-        <section id="projects" class="projects-section">
-            <div class="container">
-                
-                <article class="case-study">
-                    <h2 class="case-study-title">Procedural calculation flow → 16-stage DAG engine</h2>
-                    <div class="before-after">
-                        <div class="before">
-                            <span class="ba-label">Before</span>
-                            <p>Calculation rules and execution order were tangled across procedures, making individual stages hard to verify or replace safely.</p>
-                        </div>
-                        <div class="after">
-                            <span class="ba-label">After</span>
-                            <p>I built a 16-stage dependency graph and a new execution module, then migrated the full workflow behind continuous result comparison.</p>
-                        </div>
-                    </div>
-                    <ul class="case-study-details">
-                        
-                        <li>Designed and implemented the new 123-file V2 module from the ground up</li>
-                        
-                        <li>Regression-checked 1,092 demands; all 964 comparable results matched the existing engine exactly</li>
-                        
-                        <li>Combined snapshot restore, stage execution, result comparison, and rollback boundaries so the migration itself stayed verifiable</li>
-                        
-                    </ul>
-                </article>
-                
-                <article class="case-study">
-                    <h2 class="case-study-title">12 event sources → one deterministic scheduler</h2>
-                    <div class="before-after">
-                        <div class="before">
-                            <span class="ba-label">Before</span>
-                            <p>Each event source calculated its next time independently, while conditionals and side effects obscured the system-wide order.</p>
-                        </div>
-                        <div class="after">
-                            <span class="ba-label">After</span>
-                            <p>I moved scheduling into one heap and channel metadata, then made tie-breaking and time monotonicity explicit contracts.</p>
-                        </div>
-                    </div>
-                    <ul class="case-study-details">
-                        
-                        <li>Defined same-time priority, stale-entry cleanup, and rescheduling rules in one place</li>
-                        
-                        <li>Preserved behavior and test parity while reducing the implementation by roughly 940 net lines</li>
-                        
-                        <li>Separated scheduling from domain behavior so new event sources fit the same boundary</li>
-                        
-                    </ul>
-                </article>
-                
-                <article class="case-study">
-                    <h2 class="case-study-title">God object → 15 components and an explicit Facade</h2>
-                    <div class="before-after">
-                        <div class="before">
-                            <span class="ba-label">Before</span>
-                            <p>A 3,800-line class held 114 attributes and several concerns, while proxies hid who actually owned each piece of state.</p>
-                        </div>
-                        <div class="after">
-                            <span class="ba-label">After</span>
-                            <p>I moved state into 15 components and exposed it through an explicit Facade, making ownership and change paths visible.</p>
-                        </div>
-                    </div>
-                    <ul class="case-study-details">
-                        
-                        <li>Migrated in stages: reclaim state ownership, move call sites, then remove the proxies</li>
-                        
-                        <li>Implemented and evaluated ECS, then chose the simpler Facade boundary when ECS made lookups too indirect</li>
-                        
-                        <li>Separated extension points so new features no longer need direct access to core internals</li>
-                        
-                    </ul>
-                </article>
-                
-                <article class="case-study">
-                    <h2 class="case-study-title">Multi-resource reservation → trial, commit, rollback</h2>
-                    <div class="before-after">
-                        <div class="before">
-                            <span class="ba-label">Before</span>
-                            <p>If one resource failed halfway through a route, earlier mutations could survive and corrupt the next calculation.</p>
-                        </div>
-                        <div class="after">
-                            <span class="ba-label">After</span>
-                            <p>I made the whole route provisional, committed it atomically, and restored every related state on failure.</p>
-                        </div>
-                    </div>
-                    <ul class="case-study-details">
-                        
-                        <li>Kept resource-specific constraints separate while committing the route through one transaction boundary</li>
-                        
-                        <li>Tracked state by chain so rollback order remains correct through nested routes and partial failures</li>
-                        
-                        <li>This contract became part of the foundation for the V2 engine's 964/964 result parity</li>
-                        
-                    </ul>
-                </article>
-                
-                <article class="case-study">
-                    <h2 class="case-study-title">A traceable engine and evidence-led performance work</h2>
-                    <div class="before-after">
-                        <div class="before">
-                            <span class="ba-label">Before</span>
-                            <p>Logging was expensive on hot paths, but removing it made unexpected decisions nearly impossible to explain.</p>
-                        </div>
-                        <div class="after">
-                            <span class="ba-label">After</span>
-                            <p>I standardized structured traces across the engine and made them disappear at compile time in optimized production runs.</p>
-                        </div>
-                    </div>
-                    <ul class="case-study-details">
-                        
-                        <li>Used Python's __debug__ gating to separate development traceability from production hot-path cost</li>
-                        
-                        <li>Changed data structures and repeated operations only after profiling showed where time was going</li>
-                        
-                        <li>Rolled back asynchronous logging and database parallelism experiments when their gains did not justify their complexity</li>
-                        
-                    </ul>
-                </article>
-                
-            </div>
-        </section>
-
-        <section id="current" class="current-section">
-            <div class="container">
-                <h2 class="section-title">Recent work and research</h2>
-                <div class="current-grid">
-                    
-                    <article class="current-card">
-                        <h3 class="current-card-title">Deterministic simulation engine in Rust <span class="current-card-loc">Personal R&D · v0.1.0</span></h3>
-                        <p class="current-card-desc">A private project that separates policy from physical execution and lowers validated components into a reusable atom graph.</p>
-                        <ul class="current-card-details">
-                            
-                            <li>Integer time and a total event order make two runs of the same input byte-identical at the event-log level</li>
-                            
-                            <li>540 tests and 200 generated networks check determinism, quantity conservation, and Little's Law</li>
-                            
-                            <li>The prepared branch plan is complete; runtime lowering is still next, so I do not present it as a finished product</li>
-                            
-                        </ul>
-                    </article>
-                    
-                    <article class="current-card">
-                        <h3 class="current-card-title">Kubernetes execution boundary and image supply chain <span class="current-card-loc">Phase 1 merged</span></h3>
-                        <p class="current-card-desc">I designed and cluster-tested a boundary that moves long calculations out of the web process and into an isolated Kubernetes Job per run.</p>
-                        <ul class="current-card-details">
-                            
-                            <li>Kept the server as a control plane and separated execution state from artifact lifecycle</li>
-                            
-                            <li>A real k3s spike exposed a 12-hour pull-secret expiry that would have broken long-lived operation, prompting a credential-boundary redesign</li>
-                            
-                            <li>Added immutable tags and OCI labels and reduced the image from 708MB to 357MB; the follow-up phase remains in progress</li>
-                            
-                        </ul>
-                    </article>
-                    
-                    <article class="current-card">
-                        <h3 class="current-card-title">Domain IR and execution semantics <span class="current-card-loc">Experimental</span></h3>
-                        <p class="current-card-desc">Research into expressing complex calculation rules as a smaller language of tokens, actions, and schedulers.</p>
-                        <ul class="current-card-details">
-                            
-                            <li>Kept the experiment separate from the production V2 path so failed ideas cannot destabilize the current system</li>
-                            
-                            <li>Defines state transitions and verification boundaries before optimizing stage output</li>
-                            
-                            <li>Leaves incomplete semantics visible as blockers instead of silently approximating them</li>
-                            
-                        </ul>
-                    </article>
+                    <p>I also work through the migration: what can change first, what must remain compatible, and how to verify each step.</p>
                     
                 </div>
+                <ul class="portfolio-design-questions">
+                    
+                    <li>What needs an explicit model?</li>
+                    
+                    <li>How much abstraction is appropriate?</li>
+                    
+                    <li>What should the platform or infrastructure handle?</li>
+                    
+                </ul>
             </div>
         </section>
 
-        <section id="writing" class="writing-section">
-            <div class="container">
-                <h2 class="section-title">Mentoring and writing</h2>
-                <div class="writing-content">
-                    <p><a href="https://jae-heo.github.io/tech/en/posts/python-lecture-00.html" class="writing-link" target="_blank" rel="noopener noreferrer">Python deep-dive series</a> — A series written for junior-engineer onboarding. It explains why Python's object model, containers, generators, and descriptors behave the way they do rather than stopping at syntax.</p>
-                    <p>Long-form notes on compilers, Linux, computer architecture, and Python internals. <a href="https://jae-heo.github.io/tech/en/" class="writing-link" target="_blank" rel="noopener noreferrer">Read the tech blog →</a></p>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="contact-section">
-            <div class="container">
-                <h2 class="section-title">Contact</h2>
-                <div class="contact-content">
-                    <p>I am always glad to talk about backend systems, domain architecture, runtimes, performance, and observability.</p>
-                    <div class="contact-links">
-                        
-                        <a href="https://github.com/jae-heo" class="contact-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-                        
-                        
-                    </div>
-                </div>
+        <section id="contact" class="portfolio-contact" aria-labelledby="contact-title">
+            <h2 id="contact-title">Writing and contact</h2>
+            <div class="portfolio-contact-links">
+                <a class="portfolio-text-link" href="/tech/en/">Technical blog <span aria-hidden="true">↗</span></a>
+                <a class="portfolio-text-link" href="https://github.com/jae-heo">GitHub <span aria-hidden="true">↗</span></a>
+                <a class="portfolio-text-link" href="mailto:gjwodud119@gmail.com">gjwodud119@gmail.com <span aria-hidden="true">↗</span></a>
             </div>
         </section>
     </main>
 
     <footer class="portfolio-footer">
-        <div class="footer-content">
-            <p>&copy; 2026 Jaeyoung Heo</p>
-        </div>
+        <p>© 2026 Jaeyoung Heo</p>
+        <p>Updated <time datetime="2026-10-04">Oct 2026</time></p>
     </footer>
-
     <script src="/assets/js/portfolio.js"></script>
-    <script src="/assets/js/mobile-nav.js"></script>
-    <script src="/assets/js/theme-switcher.js"></script>
-    <script src="/assets/js/wood-scrollbar.js" defer></script>
 </body>
 </html>

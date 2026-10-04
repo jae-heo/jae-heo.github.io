@@ -1,141 +1,85 @@
-// Portfolio JavaScript
+// Progressive enhancement: all portfolio content and section links work without JS.
+(function () {
+  'use strict';
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Smooth scrolling for navigation links
-    const navLinks = document.querySelectorAll('a[href^="#"]');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-            if (targetElement) {
-                const headerHeight = document.querySelector('.portfolio-header').offsetHeight;
-                const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
+  const header = document.querySelector('.portfolio-header');
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const links = document.getElementById('site-nav-links');
+  const language = document.getElementById('lang-select');
+  const themeButton = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+
+  function savePreference(key, value) {
+    try { localStorage.setItem(key, value); } catch (_) { /* Preferences are optional. */ }
+  }
+
+  function closeMenu(restoreFocus) {
+    links.classList.remove('active');
+    toggle.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) toggle.focus();
+  }
+
+  if (header && toggle && links) {
+    toggle.hidden = false;
+    header.classList.add('nav-ready');
+    toggle.addEventListener('click', function () {
+      const open = links.classList.toggle('active');
+      toggle.setAttribute('aria-expanded', String(open));
     });
-
-    // Active section highlighting
-    const sections = document.querySelectorAll('section[id]');
-    const navItems = document.querySelectorAll('[data-nav-link]');
-
-    function highlightActiveSection() {
-        const scrollY = window.pageYOffset;
-        const headerHeight = document.querySelector('.portfolio-header').offsetHeight;
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.documentElement.scrollHeight;
-
-        // Check if we're at the bottom of the page
-        const isAtBottom = (windowHeight + scrollY) >= documentHeight - 50;
-
-        let currentSection = null;
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - headerHeight - 100;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-
-            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-                currentSection = sectionId;
-            }
-        });
-
-        // If we're at the bottom, highlight the last section (contact)
-        if (isAtBottom && sections.length > 0) {
-            currentSection = sections[sections.length - 1].getAttribute('id');
-        }
-
-        // Update active states
-        if (currentSection) {
-            navItems.forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('href') === `#${currentSection}`) {
-                    item.classList.add('active');
-                }
-            });
-        }
-    }
-
-    window.addEventListener('scroll', highlightActiveSection);
-    highlightActiveSection(); // Initial call
-
-    // Intersection Observer for fade-in animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in-up');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observe all project cards and skill categories
-    const animatedElements = document.querySelectorAll('.case-study, .stat-item, .writing-content');
-    animatedElements.forEach(el => {
-        el.classList.add('animate-on-scroll');
-        observer.observe(el);
+    links.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () { closeMenu(false); });
     });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && links.classList.contains('active')) closeMenu(true);
+    });
+    document.addEventListener('click', function (event) {
+      if (!header.contains(event.target)) closeMenu(false);
+    });
+  }
 
-    // Language switcher
-    const langSelect = document.getElementById('lang-select');
-    if (langSelect) {
-        const currentPath = window.location.pathname;
-        const currentLang = currentPath.includes('/ko/') ? 'ko' : 'en';
-        langSelect.value = currentLang;
+  if (language) {
+    language.value = document.documentElement.lang;
+    language.addEventListener('change', function () {
+      savePreference('lang', language.value);
+      window.location.assign('/portfolio/' + language.value + '/' + window.location.hash);
+    });
+  }
 
-        langSelect.addEventListener('change', function() {
-            const newLang = this.value;
-            localStorage.setItem('lang', newLang);
+  function updateThemeButton() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (themeButton) themeButton.setAttribute('aria-pressed', String(dark));
+    if (themeIcon) themeIcon.textContent = dark ? '◐' : '◑';
+  }
+  if (themeButton) {
+    updateThemeButton();
+    themeButton.addEventListener('click', function () {
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      savePreference('theme', next);
+      updateThemeButton();
+    });
+  }
 
-            let newPath;
-            if (currentLang === 'en') {
-                newPath = currentPath.replace('/en/', '/ko/');
-            } else {
-                newPath = currentPath.replace('/ko/', '/en/');
-            }
-
-            window.location.href = newPath;
-        });
-    }
-
-    // Add animation classes
-    const style = document.createElement('style');
-    style.textContent = `
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .animate-on-scroll.fade-in-up {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        [data-nav-link].active {
-            color: var(--portfolio-primary, var(--accent));
-            position: relative;
-        }
-
-        [data-nav-link].active::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--portfolio-primary, var(--accent));
-            border-radius: 1px;
-        }
-    `;
-    document.head.appendChild(style);
-});
+  const navLinks = Array.from(document.querySelectorAll('[data-nav-link]'));
+  const sections = navLinks.map(function (link) { return document.querySelector(link.getAttribute('href')); });
+  let scheduled = false;
+  function updateCurrentSection() {
+    scheduled = false;
+    let current = -1;
+    const offset = header ? header.offsetHeight + 36 : 36;
+    sections.forEach(function (section, index) {
+      if (section && section.getBoundingClientRect().top <= offset) current = index;
+    });
+    if (window.scrollY > 0 && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10) current = navLinks.length - 1;
+    navLinks.forEach(function (link, index) {
+      if (index === current) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  }
+  function scheduleUpdate() {
+    if (!scheduled) { scheduled = true; requestAnimationFrame(updateCurrentSection); }
+  }
+  window.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', scheduleUpdate, { passive: true });
+  updateCurrentSection();
+})();
